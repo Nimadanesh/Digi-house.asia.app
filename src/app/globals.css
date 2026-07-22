@@ -1,0 +1,183 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  /* Telegram renders in the device's native system font (SF Pro Text on iOS,
+     Roboto on Android, Segoe UI on Windows). We mirror that for a native feel. */
+  --font-sans: -apple-system, BlinkMacSystemFont, ui-sans-serif, system-ui,
+    "Segoe UI", Roboto, "Helvetica Neue", "Apple Color Emoji", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Roboto Mono", monospace;
+  --font-heading: var(--font-sans);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-danger: var(--danger);
+  --color-danger-foreground: var(--danger-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   DigiHouse — Telegram-native dark theme (default for the Mini App)
+
+   Token values mirror the official Telegram Mini Apps themeParams "dark"
+   palette (hex shown in comments), expressed in oklch for Tailwind v4.
+     bg_color        #17212b   secondary_bg_color #232e3c
+     text_color      #ffffff   hint_color         #708499
+     button_color    #3390ec   button_text_color  #ffffff
+     link_color      #6ab3f3   accent_text_color  #6ab3f3
+     destructive     #e53935
+   App canvas (background) = bg_color (darkest). Grouped "blocks"/cards =
+   secondary_bg_color (the lighter raised panel — Telegram's signature look).
+   Green/red are reserved strictly for finance up/down and bid/ask.
+   ───────────────────────────────────────────────────────────────────────── */
+:root,
+.dark {
+  --background: oklch(0.225 0.025 256);          /* #17212b Telegram bg_color  */
+  --foreground: oklch(1 0 0);                    /* #ffffff text_color        */
+  --card: oklch(0.267 0.027 256);                /* #232e3c Telegram block bg */
+  --card-foreground: oklch(1 0 0);
+  --surface: oklch(0.267 0.027 256);             /* #232e3c grouped block / sheet */
+  --surface-2: oklch(0.31 0.027 256);            /* #2b3744 inset / nested row   */
+  --popover: oklch(0.267 0.027 256);             /* #232e3c modal / menu bg     */
+  --popover-foreground: oklch(1 0 0);
+  --primary: oklch(0.625 0.177 250);             /* #3390ec Telegram blue accent*/
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.31 0.027 256);            /* #2b3744 subtle button bg    */
+  --secondary-foreground: oklch(1 0 0);
+  --muted: oklch(0.243 0.026 256);               /* #1c2733 inset / segmented   */
+  --muted-foreground: oklch(0.588 0.019 250);    /* #708499 Telegram hint_color  */
+  --accent: oklch(0.625 0.177 250 / 0.14);       /* selected-row blue tint      */
+  --accent-foreground: oklch(1 0 0);
+  --destructive: oklch(0.62 0.22 25);            /* #e53935 Telegram destructive */
+  --border: oklch(1 0 0 / 0.08);                 /* #fff 8% hairline separator  */
+  --input: oklch(1 0 0 / 0.1);                    /* field fill                  */
+  --ring: oklch(0.625 0.177 250);                /* focus ring = Telegram blue  */
+  --success: oklch(0.72 0.17 145);               /* up / ask / paid (finance)   */
+  --success-foreground: oklch(0.12 0.02 145);
+  --danger: oklch(0.62 0.22 25);                 /* down / bid / error          */
+  --danger-foreground: oklch(1 0 0);
+  --warning: oklch(0.79 0.16 70);                /* pending earnings            */
+  --warning-foreground: oklch(0.2 0.02 70);
+  --chart-1: oklch(0.625 0.177 250);             /* Telegram blue              */
+  --chart-2: oklch(0.72 0.17 145);               /* up green                   */
+  --chart-3: oklch(0.79 0.16 70);                /* amber                      */
+  --chart-4: oklch(0.62 0.22 25);                /* down red                   */
+  --chart-5: oklch(0.588 0.019 250);             /* hint gray                  */
+  --radius: 0.75rem;                             /* 12px — Telegram block radius */
+  --sidebar: oklch(0.267 0.027 256);
+  --sidebar-foreground: oklch(1 0 0);
+  --sidebar-primary: oklch(0.625 0.177 250);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.625 0.177 250 / 0.14);
+  --sidebar-accent-foreground: oklch(1 0 0);
+  --sidebar-border: oklch(1 0 0 / 0.08);
+  --sidebar-ring: oklch(0.625 0.177 250);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   DigiHouse — Telegram-native light theme.
+     bg_color #f4f4f5 (canvas)  secondary_bg #ffffff (blocks)
+     text_color #000000  hint_color #707579
+   ───────────────────────────────────────────────────────────────────────── */
+.light {
+  --background: oklch(0.965 0 0);                 /* #f4f4f5 canvas between blocks */
+  --foreground: oklch(0.18 0.004 256);            /* near #000 Telegram text_color */
+  --card: oklch(1 0 0);                           /* #ffffff block bg              */
+  --card-foreground: oklch(0.18 0.004 256);
+  --surface: oklch(1 0 0);                        /* #ffffff block / sheet          */
+  --surface-2: oklch(0.96 0 0);                   /* #f4f4f5 inset / nested row     */
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.18 0.004 256);
+  --primary: oklch(0.58 0.19 250);                /* Telegram blue on light         */
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.96 0 0);
+  --secondary-foreground: oklch(0.18 0.004 256);
+  --muted: oklch(0.93 0 0);                       /* #ededed segmented              */
+  --muted-foreground: oklch(0.58 0.006 250);      /* #707579 Telegram hint_color    */
+  --accent: oklch(0.58 0.19 250 / 0.12);          /* selected-row blue tint         */
+  --accent-foreground: oklch(0.18 0.004 256);
+  --destructive: oklch(0.58 0.22 25);
+  --border: oklch(0 0 0 / 0.08);                  /* #000 8% hairline               */
+  --input: oklch(0 0 0 / 0.06);
+  --ring: oklch(0.58 0.19 250);
+  --success: oklch(0.6 0.17 145);
+  --success-foreground: oklch(1 0 0);
+  --danger: oklch(0.58 0.22 25);
+  --danger-foreground: oklch(1 0 0);
+  --warning: oklch(0.75 0.16 70);
+  --warning-foreground: oklch(0.2 0.02 70);
+  --chart-1: oklch(0.58 0.19 250);
+  --chart-2: oklch(0.6 0.17 145);
+  --chart-3: oklch(0.75 0.16 70);
+  --chart-4: oklch(0.58 0.22 25);
+  --chart-5: oklch(0.58 0.006 250);
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0.18 0.004 256);
+  --sidebar-primary: oklch(0.58 0.19 250);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.58 0.19 250 / 0.12);
+  --sidebar-accent-foreground: oklch(0.18 0.004 256);
+  --sidebar-border: oklch(0 0 0 / 0.08);
+  --sidebar-ring: oklch(0.58 0.19 250);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+  /* Telegram-like block typography: numbers must read clean on a finance app. */
+  .tnum {
+    font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
+  }
+}
