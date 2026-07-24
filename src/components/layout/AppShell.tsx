@@ -2,8 +2,10 @@
 import { Header } from "./Header";
 import { BottomTabBar } from "./BottomTabBar";
 import { MainButtonBridge } from "./MainButtonBridge";
+import { useTheme } from "@/hooks/useTheme";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
+  useTheme();
   return (
     <div className="mx-auto flex min-h-svh max-w-[480px] flex-col bg-background">
       <Header />
