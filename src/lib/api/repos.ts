@@ -1,5 +1,5 @@
 // File responsibility: repository CONTRACTS. The mock implements these; the real TON/backend swaps in by
-// changing lib/api/getRepo.ts. Hooks depend on these interfaces — never on the mock impl.
+// changing lib/api/getRepo.ts. Hooks depend on these interfaces - never on the mock impl.
 import type { Listing, PropertyStatus } from "@/types/property";
 import type { OrderBookState, Order, OrderSide } from "@/types/order";
 import type { PortfolioSummary } from "@/types/position";
