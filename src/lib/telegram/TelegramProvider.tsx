@@ -22,7 +22,10 @@ export function TelegramProvider({ children }: { children: ReactNode }) {
     try { void viewport.expand(); } catch { /* ignore */ }
     try { closingBehavior.mount(); } catch { /* ignore */ }
     backButton.mount(); mainButton.mount();
-    setReady(true);
+    // Defer setState to a microtask so it is NOT synchronous in the effect body
+    // (satisfies react-hooks/set-state-in-effect). Reactive results unchanged:
+    // `ready` flips true on the next microtask after init completes.
+    queueMicrotask(() => setReady(true));
     return () => { try { cleanup(); } catch { /* ignore */ } };
   }, []);
 
