@@ -5,3 +5,5 @@ export * from "./nano";
 export * from "./network";
 export * from "./sendTx";
 export * from "./manifest";
+export type { TonApiClient } from "./client";
+export { createTonApiClient } from "./tonapi-client";
