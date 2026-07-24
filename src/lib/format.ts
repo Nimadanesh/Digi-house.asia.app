@@ -43,6 +43,12 @@ export function projectedYield(weeklyRentUsdCents: number, sharesOwned: number, 
   return totalShares > 0 ? Math.floor(weeklyRentUsdCents * (sharesOwned / totalShares)) : 0;
 }
 
+/** Estimate nanoTON for a USD-cents total using a fixed (MVP) TON price. Real quote is post-MVP. */
+export function estimateNanoTon(usdCents: number, tonUsdPriceCents: number): bigint {
+  if (tonUsdPriceCents <= 0) return 0n;
+  return BigInt(Math.floor((usdCents * 1_000_000_000) / tonUsdPriceCents));
+}
+
 /** Return "in Xd Yh" / "in Xh" / "in Xm" relative to the next Friday 00:00 UTC after now. */
 export function payoutCountdown(nowMs: number, _opts?: { payoutDay?: "Friday" }): string {
   const now = new Date(nowMs);

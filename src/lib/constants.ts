@@ -22,3 +22,5 @@ export const TABS: readonly TabDef[] = [
 export const PAYOUT_DISCLAIMER = "simulated weekly payout · on-chain verifiable post-MVP";
 
 export const DEFAULTS = { payoutTickMs: 60_000 } as const;
+
+export const TON_PRICE_USD_CENTS = 200; // $2.00 per TON (MVP display-only estimate; real quote is post-MVP)
