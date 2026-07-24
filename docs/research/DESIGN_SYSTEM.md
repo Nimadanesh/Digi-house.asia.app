@@ -184,10 +184,12 @@ When the user enables **"Use Telegram theme"** (Settings, default OFF — we shi
 Rows: `min-h-[48px] px-4 gap-2` left label, right value/meta, optional trailing `ChevronRight` (nav) or control. Separator: `border-t border-border` **inset-left 16px** (`mx-4`). Selected/tapped row: `bg-accent`. Section label above a block: uppercase `.muted-foreground`. Whole-row tap → row scales to 0.97 for 120ms.
 
 ### Telegram Header (title bar)
-Prefer the SDK's native title bar when present; otherwise custom `h-[44px] bg-background/95 backdrop-blur px-4 flex items-center`, centered title 17px/600, leading slot for `BackButton` chevron, trailing for actions (gear/avatar). Top safe-area as page pad.
+> Tailwind v4 `box-sizing: border-box`: bar height grows by the iOS safe-area inset, so the safe-area strip stays a separate bg band (not eating the 44/52px content band).
+Prefer the SDK's native title bar when present; otherwise custom `h-[calc(44px+max(env(safe-area-inset-top),0px))] pt-[max(env(safe-area-inset-top),0px)] bg-background/95 backdrop-blur px-4 flex items-center`, centered title 17px/600, leading slot for `BackButton` chevron, trailing for actions (gear/avatar). Top safe-area as page pad.
 
 ### Bottom Tab Bar (app-owned)
-`fixed bottom-0 inset-x-0 max-w-[480px] mx-auto h-[52px] pb-[env(safe-area-inset-bottom)] bg-card/95 backdrop-blur border-t border-border grid grid-cols-4`. Each tab: icon 24 + label 10px, `gap-1 items-center`. Active = `--primary` (icon + label); inactive = `--muted-foreground`. Tap → `selectionChanged` haptic.
+> Tailwind v4 `box-sizing: border-box`: bar height grows by the iOS safe-area inset, so the safe-area strip stays a separate bg band (not eating the 44/52px content band).
+`fixed bottom-0 inset-x-0 max-w-[480px] mx-auto h-[calc(52px+env(safe-area-inset-bottom))] pb-[env(safe-area-inset-bottom)] bg-card/95 backdrop-blur border-t border-border grid grid-cols-4`. Each tab: icon 24 + label 10px, `gap-1 items-center`. Active = `--primary` (icon + label); inactive = `--muted-foreground`. Tap → `selectionChanged` haptic.
 
 ### MainButton (Telegram native)
 When a screen has a single primary action, surface it via the Telegram `MainButton`: full-width bottom, `h-[50px]`, `--primary` bg, `--primary-foreground` 600 text 0.9375rem, sits above the safe-area. Hide the app tab bar's chrome conflict (MainButton is bottom-most). Do **not** also render an in-page primary button on those screens.
