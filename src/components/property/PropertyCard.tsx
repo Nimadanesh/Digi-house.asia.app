@@ -9,7 +9,17 @@ import type { Listing } from "@/types/property";
 import { FundingBar } from "./FundingBar";
 import { WeeklyYieldCallout } from "./WeeklyYieldCallout";
 
-export function PropertyCard({ listing, variant = "list", className }: { listing: Listing; variant?: "list" | "mini"; className?: string }) {
+export function PropertyCard({
+  listing,
+  variant = "list",
+  holding,
+  className,
+}: {
+  listing: Listing;
+  variant?: "list" | "mini";
+  holding?: { sharesOwned: number; currentValueUsd: number; pendingWeekEarningsUsd: number };
+  className?: string;
+}) {
   const weeklyPerShare = projectedYield(weeklyRent(listing.annualRentUsd), 1, listing.totalShares);
   const funded = listing.fundingProgressRatio >= 1;
 
@@ -49,15 +59,22 @@ export function PropertyCard({ listing, variant = "list", className }: { listing
           </div>
         </>
       ) : (
-        // mini variant (Home my-properties row) — used by Task 6 Home only; not rendered in Task 2.
+        // mini variant (Home my-properties row). When `holding` is supplied, render holding-relative info
+        // (shares owned / current value / pending this week). DESIGN_SYSTEM §"My-properties card (Home)".
         <div className="flex items-center gap-3 p-4">
           <div className="size-12 rounded-[10px] bg-surface-2 shrink-0" aria-hidden />
           <div className="flex-1 min-w-0">
             <h2 className="text-[0.9375rem] font-semibold text-foreground truncate">{listing.title}</h2>
-            <p className="text-xs text-muted-foreground truncate tnum">{listing.totalShares} shares total</p>
-            <div className="mt-1">
-              <WeeklyYieldCallout weeklyPerShare={weeklyPerShare} />
-            </div>
+            {holding ? (
+              <>
+                <p className="text-xs text-muted-foreground truncate tnum">
+                  {holding.sharesOwned} / {listing.totalShares} shares · {usd(holding.currentValueUsd)}
+                </p>
+                <p className="text-xs text-success tnum mt-0.5">+{usd(holding.pendingWeekEarningsUsd)} pending this week</p>
+              </>
+            ) : (
+              <p className="text-xs text-muted-foreground truncate tnum">{listing.totalShares} shares total</p>
+            )}
           </div>
         </div>
       )}
