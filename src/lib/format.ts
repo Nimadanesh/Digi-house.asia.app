@@ -42,3 +42,21 @@ export function weeklyRent(annualRentUsdCents: number): number {
 export function projectedYield(weeklyRentUsdCents: number, sharesOwned: number, totalShares: number): number {
   return totalShares > 0 ? Math.floor(weeklyRentUsdCents * (sharesOwned / totalShares)) : 0;
 }
+
+/** Return "in Xd Yh" / "in Xh" / "in Xm" relative to the next Friday 00:00 UTC after now. */
+export function payoutCountdown(nowMs: number, _opts?: { payoutDay?: "Friday" }): string {
+  const now = new Date(nowMs);
+  // ISO day: 5 = Friday (0 Sun..6 Sat). Find the next Friday 00:00 UTC strictly after now (rollover if already past).
+  const day = now.getUTCDay();
+  const daysUntilFri = (5 - day + 7) % 7;
+  const nextFriMs = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + daysUntilFri, 0, 0, 0);
+  let diffMs = nextFriMs - nowMs;
+  if (diffMs <= 0) diffMs += 7 * 24 * 60 * 60 * 1000; // already Friday past midnight → next week
+  const totalMin = Math.floor(diffMs / 60_000);
+  const days = Math.floor(totalMin / (60 * 24));
+  const hours = Math.floor((totalMin % (60 * 24)) / 60);
+  const minutes = totalMin % 60;
+  if (days >= 1) return `in ${days}d ${hours}h`;
+  if (hours >= 1) return `in ${hours}h`;
+  return `in ${minutes}m`;
+}

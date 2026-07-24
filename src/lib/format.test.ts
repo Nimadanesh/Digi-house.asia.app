@@ -1,6 +1,7 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi, afterEach } from "vitest";
 import {
   usd, ton, shortAddr, pct, weekLabel, weeklyRent, projectedYield,
+  payoutCountdown,
 } from "@/lib/format";
 
 describe("format", () => {
@@ -41,5 +42,32 @@ describe("format", () => {
     expect(projectedYield(10_000, 5, 1000)).toBe(50);
     expect(projectedYield(10_000, 0, 1000)).toBe(0);
     expect(projectedYield(10_000, 5, 0)).toBe(0);   // totalShares=0 guard
+  });
+});
+
+describe("format.payoutCountdown", () => {
+  afterEach(() => vi.useRealTimers());
+
+  it("returns days+hours when the next Friday is >=1 day away", () => {
+    // 2026-07-22 is a Wednesday; next Friday = 2026-07-24 00:00 UTC
+    const wed: number = Date.UTC(2026, 6, 22, 10, 0, 0);
+    expect(payoutCountdown(wed)).toBe("in 1d 14h");
+  });
+
+  it("returns hours-only when under 24h to Friday", () => {
+    // 2026-07-23 22:00 UTC -> next Friday 2026-07-24 00:00 = 2h away
+    const near: number = Date.UTC(2026, 6, 23, 22, 0, 0);
+    expect(payoutCountdown(near)).toBe("in 2h");
+  });
+
+  it("returns minutes-only when under 1h to Friday", () => {
+    const t: number = Date.UTC(2026, 6, 23, 23, 48, 0);
+    expect(payoutCountdown(t)).toBe("in 12m");
+  });
+
+  it("rolls over to next week if now is Friday after midnight", () => {
+    // 2026-07-24 02:00 UTC (Friday, after payout). Next Friday = 2026-07-31 00:00.
+    const after: number = Date.UTC(2026, 6, 24, 2, 0, 0);
+    expect(payoutCountdown(after)).toBe("in 6d 22h");
   });
 });
