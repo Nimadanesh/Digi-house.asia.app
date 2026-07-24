@@ -1,0 +1,45 @@
+import { describe, expect, it } from "vitest";
+import {
+  usd, ton, shortAddr, pct, weekLabel, weeklyRent, projectedYield,
+} from "@/lib/format";
+
+describe("format", () => {
+  it("usd formats cents to $X.XX with tabular-nums-aligned precision", () => {
+    expect(usd(12500)).toBe("$125.00");
+    expect(usd(0)).toBe("$0.00");
+    expect(usd(5)).toBe("$0.05");
+  });
+
+  it("ton formats nanoTON as decimal TON, 2–4 fractional digits", () => {
+    expect(ton(1_000_000_000n)).toBe("1.00 TON");
+    expect(ton(10_500_000n)).toBe("0.0105 TON");
+    expect(ton(0n)).toBe("0.00 TON");
+  });
+
+  it("shortAddr truncates long addresses and preserves short ones", () => {
+    expect(shortAddr("EQARULx2r6JmOuMoQn7jVr8m9Rrjv0s4kq5t8s7q5t8s4kq5")).toBe("EQAR…4kq5");
+    expect(shortAddr("EQAB")).toBe("EQAB");
+  });
+
+  it("pct renders a 0..1 ratio with 1 decimal under 10% else 0", () => {
+    expect(pct(0.005)).toBe("0.5%");
+    expect(pct(0.5)).toBe("50%");
+    expect(pct(1)).toBe("100%");
+  });
+
+  it("weekLabel renders 'Mon D' from an ISO Monday", () => {
+    expect(weekLabel("2026-07-20")).toBe("Jul 20");
+  });
+
+  it("weeklyRent floors annual rent / 52 to integer cents", () => {
+    expect(weeklyRent(52_0000)).toBe(1_0000);     // $5,200 / 52 = $100.00 -> 10000 cents
+    expect(weeklyRent(52_0001)).toBe(1_0000);     // floor
+  });
+
+  it("projectedYield floors weekly × share ratio to cents", () => {
+    // weekly 10000 cents * 5 shares / 1000 total = 50 cents
+    expect(projectedYield(10_000, 5, 1000)).toBe(50);
+    expect(projectedYield(10_000, 0, 1000)).toBe(0);
+    expect(projectedYield(10_000, 5, 0)).toBe(0);   // totalShares=0 guard
+  });
+});
