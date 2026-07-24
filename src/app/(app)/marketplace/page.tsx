@@ -1,5 +1,4 @@
 "use client";
-import { EmptyState } from "@/components/common/EmptyState";
 import { Block } from "@/components/common/Block";
 import { Skeleton } from "@/components/common/Skeleton";
 
@@ -13,7 +12,6 @@ export default function MarketplacePage() {
           <Skeleton className="h-4 w-1/2" />
         </Block>
       ))}
-      <EmptyState title="No properties yet" message="Fetching the marketplace…" />
     </div>
   );
 }

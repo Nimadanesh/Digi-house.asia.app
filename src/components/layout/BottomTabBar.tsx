@@ -9,7 +9,7 @@ export function BottomTabBar() {
   const pathname = usePathname();
   const { haptics } = useTelegram();
   return (
-    <nav className="fixed bottom-0 inset-x-0 mx-auto max-w-[480px] h-[52px] pb-[env(safe-area-inset-bottom)] bg-card/95 backdrop-blur border-t border-border grid grid-cols-4">
+    <nav className="fixed bottom-0 inset-x-0 mx-auto max-w-[480px] h-[calc(52px+env(safe-area-inset-bottom))] pb-[env(safe-area-inset-bottom)] bg-card/95 backdrop-blur border-t border-border grid grid-cols-4">
       {TABS.map(({ href, label, icon: Icon }) => {
         const active = pathname === href || pathname.startsWith(href + "/");
         return (

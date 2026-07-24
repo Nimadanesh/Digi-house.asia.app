@@ -12,9 +12,15 @@ export function useEarnings() {
     staleTime: 0,
   });
   useEffect(() => {
-    const id = setInterval(async () => {
-      const r = await getRepo().earnings.tickPayout();
-      if (r.paidEntries > 0) qc.invalidateQueries({ queryKey: ["earnings"] });
+    const id = setInterval(() => {
+      void getRepo()
+        .earnings.tickPayout()
+        .then((r) => {
+          if (r.paidEntries > 0) qc.invalidateQueries({ queryKey: ["earnings"] });
+        })
+        .catch(() => {
+          /* mock tickPayout never throws in MVP, but guard anyway */
+        });
     }, env.payoutTickMs);
     return () => clearInterval(id);
   }, [qc]);
