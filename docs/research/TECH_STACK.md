@@ -2,27 +2,27 @@
 
 > Exact stack, versions, and integration boundaries. Agents: read this *before* installing or wiring anything.
 > Don't guess versions; prefer the installed version in `package.json`. Log every dependency change in the **Decisions log** at the bottom.
+>
+> **Three selection criteria, in order:** (1) **Telegram-native fidelity** — anything that fights the platform's look/feel is rejected even if technically faster; (2) **Fast MVP** — must let a small team ship a competition-ready demo in weeks, not months; (3) **Real TON swap-in** — the mock layer must be replaceable with on-chain calls without touching components.
 
 ## Runtime / Build
-| Concern | Choice | Notes |
+| Concern | Choice | Justification |
 |---|---|---|
-| Framework | **Next.js 16** (App Router) | `output: "standalone"` in `next.config.ts` (self-host friendly) |
-| Language | **TypeScript** strict, `noEmit` | no `any`; `@/*` → `./src/*` |
-| React | **19.2** | server components by default; `"use client"` for the interactive Mini App shell |
-| Styling | **Tailwind CSS v4** (PostCSS) | oklch tokens in `src/app/globals.css` per [DESIGN_SYSTEM](./DESIGN_SYSTEM.md) |
-| UI primitives | **shadcn/ui** (base-nova style) + `lucide-react` | components in `src/components/ui/` — **restyled to native-Telegram look** (see DESIGN_SYSTEM) |
-| Animation | **Framer Motion** | per DESIGN_SYSTEM motion rules |
-| Node | 24 | `.nvmrc` = `24` |
-| Deploy | **Vercel** + **Telegram Mini App** (BotFather) | `next build` must pass |
-
-> **Next.js note (per AGENTS.md):** This is the latest Next.js with breaking changes vs. training data. Before writing App Router code, read the relevant guide in `node_modules/next/dist/docs/`. Heed deprecation notices.
+| Framework | **Next.js 16** (App Router), `output: "standalone"` | Best-in-class React framework; App Router gives per-route metadata + file-based routing for a 6-screen Mini App; `standalone` keeps Vercel deploy + future self-host option. Required by AGENTS.md as the in-repo Next (different from training data — read `node_modules/next/dist/docs/` before writing). |
+| Language | **TypeScript** strict, `noEmit`, `noImplicitAny` | Finance app: a misplaced decimal is catastrophic. TS strict catches the unit-mixing bugs (cents vs nanoTON vs shares) at compile time. No `any` is a hard rule. |
+| React | **19.2** | Server components by default; we opt into `"use client"` only for the interactive Mini App shell. 19's `use()` + actions simplify loading states, which matters for skeleton accuracy. |
+| Styling | **Tailwind CSS v4** (PostCSS, oklch tokens) | Tailwind v4 ships oklch out of the box (matches our token system in [DESIGN_SYSTEM](./DESIGN_SYSTEM.md)); zero-config theme via `@theme`, faster builds, smallest viable CSS for a 480px mobile app. |
+| UI primitives | **shadcn/ui** (base-nova style) + `lucide-react` | shadcn/ui = copy-in components we fully own and restyle to Telegram-native (no version-blackbox dependency). `lucide-react` matches the 1.75-stroke rounded Telegram-ish icon set we want. We rejected `@telegram-apps/telegram-ui` (React 18 only — see Decisions log). |
+| Animation | **Framer Motion** + WAAPI + CSS transitions | Framer Motion for interruptible gestures (sheet drag, sheet) and predictable UI motion; raw CSS transitions for toasts/rapid UI per emil-design-eng; WAAPI for programmatic one-shot reveals. Springs with `{ duration: 0.5, bounce: 0.2 }` for sheets. |
+| Node | 24 | `.nvmrc` = `24`; matches Vercel default runtime. |
+| Deploy | **Vercel** + **Telegram Mini App** (BotFather) | Vercel for edge global CDN (Telegram users are global), zero-config Next deploy, instant preview URLs for BotFather staging. BotFather hosts the Mini App URL binding. |
 
 ## TON / Blockchain
 | Concern | Package | Purpose |
 |---|---|---|
-| Wallet connect | `@tonconnect/ui-react` | `<TonConnectUIProvider>`, restore, button, send TX |
-| Cell / contract typing | `@ton/core` | add when needed — build messages, parse jettons |
-| Crypto | `@ton/crypto` | only if signature/key helpers are needed (not MVP) |
+| Wallet connect | `@tonconnect/ui-react` | `<TonConnectUIProvider>`, restore, button, send TX. TonConnect is the standard in the TON ecosystem, supports Tonkeeper/MyTonWallet, and crucially works inside a WebView (no extension model). |
+| Cell / contract typing | `@ton/core` | Add when needed — build messages, parse jettons. Not required for MVP. |
+| Crypto | `@ton/crypto` | Only if signature/key helpers are needed (not MVP). |
 
 > **No on-chain property contract in MVP.** Listing/fractionalization is simulated by the mock repository. The only real on-chain touchpoint is **wallet connection** and a **"buy" transaction stub** (a minimal TON tx as proof of intent; real fraction minting is post-MVP). Never invent real smart-contract calls.
 
@@ -36,7 +36,7 @@
 ## Telegram Mini App
 | Concern | Package | Notes |
 |---|---|---|
-| SDK | `@telegram-apps/sdk-react` | `init()` + `restoreInit()` in a client provider; `useLaunchParams`, theme params, viewport, `backButton`, `mainButton`, `hapticFeedback` |
+| SDK | `@telegram-apps/sdk-react` | `init()` + `restoreInit()` in a client provider; `useLaunchParams`, theme params, viewport, `backButton`, `mainButton`, `hapticFeedback`. The maintained SDK for Telegram Mini App integration. |
 | Validate | `@telegram-apps/sdk` is flagged deprecated in sub-deps | still works for MVP; acceptable. If it breaks, migrate to `@tma.js/react` (drop-in-ish) and **log it here.** |
 
 ### Telegram integration boundaries (native-first)
@@ -49,15 +49,25 @@
 ## State
 | Layer | Tool | Boundary |
 |---|---|---|
-| Server / async cache | **TanStack Query** | all listing/portfolio/earnings/order-book data. `src/lib/query/client.ts` + hooks in `src/hooks/*` |
-| Local UI state | **Zustand** | role, settings, sheet flags, selected property. `src/stores/*` — keep minimal |
-| Form state | React 19 native (`useState`) or valibot if needed | add libs only if proven necessary; **log it** |
+| Server / async cache | **TanStack Query** | all listing/portfolio/earnings/order-book data. `src/lib/query/client.ts` + hooks in `src/hooks/*`. Default `staleTime: 30s` for marketplace; `0` for portfolio/earnings (always fresh). Optimistic update on buy/cancel. |
+| Local UI state | **Zustand** | role, settings, sheet flags, selected property, **next payout countdown cursor**. `src/stores/*` — keep minimal. Persist only `role`, `onboarded`, `useTelegramTheme`. |
+| Form state | React 19 native (`useState`) | add `valibot` only if validation grows; **log it** if added. |
+
+> **Why TanStack Query + Zustand over a single Redux?** Two clear layers = less boilerplate, better dev ergonomics. Server cache (Query) and ephemeral UI (Zustand) have different invalidation lifecycles — conflating them is what makes Redux codebases rot. The mock-first architecture leans on Query's cache contract — when the real backend lands, the hooks stay, only the repo impl changes.
 
 ## Data layer & mocking (important for parallel agents)
 - Define repository **interfaces** in `src/lib/api/*.ts` (`MarketplaceRepo`, `OrderBookRepo`, `PortfolioRepo`, `EarningsRepo`, `TxRepo`) — see contracts in [DATA_MODELS](./DATA_MODELS.md).
-- Implement a **mock** backend in `src/lib/mock/*.ts` returning typed data with realistic delays.
+- Implement a **mock** backend in `src/lib/mock/*.ts` returning typed data with realistic delays (`await sleep(n)` — 250–700ms to mimic mobile latency).
 - Single `getRepo()` injection point → real TON/backend swap-in is a one-folder change.
 - Mock seed must cover every UI state (see [DATA_MODELS](./DATA_MODELS.md) "Mock seed invariants").
+- **Weekly-yield simulation:** the mock `EarningsRepo.tickPayout()` flips `pending` → `paid` entries on a configurable cadence (default every 60s in dev so the demo shows the payoff live; real cadence is Friday UTC). It stamps a synthetic `txHash` placeholder.
+
+## Performance budget (R-9.13 enforcement)
+- **First meaningful paint** on a cached Telegram cold start: **≤ 1.5s** on a mid-range phone (Pixel 5a / iPhone 11 class). Lighthouse Mobile target.
+- **Bundle:** initial JS ≤ 250 KB gzipped; Framer Motion is tree-shaken per-import; Animations limited per DESIGN_SYSTEM motion budget.
+- **No layout shift (CLS < 0.05):** skeletons match final shape; images have explicit `aspect-ratio`; tabular-nums everywhere.
+- **No horizontal scroll** at any viewport ≤ 480px — audited in `/design-review`.
+- **Reduced-motion** path: a complete, parallel experience without transform animations, auditable via `prefers-reduced-motion: reduce`.
 
 ## Project layout (target)
 ```
@@ -74,12 +84,12 @@ src/
     icons.tsx                            # brand/property custom SVGs
     layout/                              # AppShell, Header, BottomTabBar, MainButtonBridge
     property/                            # PropertyCard, PropertyDetail, OrderBook, BuyControl, SellSheet
-    earnings/                           # EarningsTimeline, EarningsSummary
+    earnings/                           # EarningsTimeline, EarningsSummary, EarningsEntry
     wallet/                             # ConnectWallet, WalletBadge, DisconnectedState
     common/                             # Block, Row, StatusPill, Skeleton, EmptyState, ProgressBar, Sheet, Toast
   hooks/                                # useMarketplace, usePortfolio, useEarnings, useOrderBook, useTelegram, useTonConnect, useHaptics
   lib/
-    utils.ts (cn), format.ts (usd/ton/shortAddr/pct/weekLabel)
+    utils.ts (cn), format.ts (usd/ton/shortAddr/pct/weekLabel/weeklyRent/projectedYield)
     query/client.ts, api/ (repo interfaces), mock/ (impl + seed), ton/ (sendTx, manifest), telegram/ (TelegramProvider, useTelegram)
   stores/                                # zustand stores
   types/                                 # mirrors DATA_MODELS.md
@@ -96,10 +106,29 @@ docs/research/                           # spec docs (source of truth)
 - `npm run check` — lint + typecheck + build. Run before declaring a phase done.
 - A screen that passes `check` but fails a `/design-review` against [DESIGN_SYSTEM](./DESIGN_SYSTEM.md) is **not done**.
 
+## Environment & secrets
+- `.env.local` only; never commit. Required keys:
+  - `NEXT_PUBLIC_TONCONNECT_MANIFEST_URL` (auto-resolved to `${origin}` if unset).
+  - `NEXT_PUBLIC_TON_NETWORK` (`testnet` in MVP; flip to `mainnet` post-MVP).
+  - `NEXT_PUBLIC_PAYOUT_TICK_MS` (mock scheduler cadence; default `60000`).
+- BotFather token kept out of the repo (configure Mini App URL via the live bot, not a baked-in secret).
+
 ## Decisions log (append-only)
-- **Dropped `@telegram-apps/telegram-ui`** — requires React 18; conflicts with React 19. We use shadcn + DESIGN_SYSTEM instead, restyled to native-Telegram.
+- **Dropped `@telegram-apps/telegram-ui`** — requires React 18; conflicts with React 19. We use shadcn + DESIGN_SYSTEM instead, restyled to native-Telegram. Strong preference for owned copy-in components over a pinned UI lib anyway (full control of native fidelity).
 - **Kept `@telegram-apps/sdk-react`** even with the deprecation warning; acceptable for MVP; swap to `@tma.js/react` only if it breaks.
 - **System font over Geist** — Telegram renders in the device native font; switched `--font-sans` to the system stack for native fidelity (see [DESIGN_SYSTEM](./DESIGN_SYSTEM.md)).
 - **Flat, hairline design** — no drop shadows on blocks; color separation + hairlines only, to match Telegram (per DESIGN_SYSTEM).
 - **`MainButton` for screen-primary actions** — not an in-page duplicate; only app tab bar on read screens.
-- **Mock-first** — no real on-chain fraction contract in MVP; only the wallet + a minimal buy TON tx stub are real.
+- **Mock-first** — no real on-chain fraction contract in MVP; only the wallet + a minimal buy TON tx stub are real. Lets the weekly-yield loop ship demoable in weeks.
+- **TanStack Query + Zustand (no Redux)** — clear boundary between server cache and local UI; lower boilerplate; better fits the mock-repo hook architecture.
+- **Tailwind v4 over v3** — oklch and `@theme` first-class; smaller build; aligns with DESIGN_SYSTEM token system.
+- **WAAPI + CSS transitions reserved for hot paths** — toasts/orders/list items animate via transitions so they stay smooth when the main thread is busy loading new screens (emil-design-eng principle: CSS animations beat JS under load).
+- **`NEXT_PUBLIC_PAYOUT_TICK_MS` mock cadence** — short so the demo visibly "pays out" while a judge watches; real Friday-UTC distribution is a future on-chain job.
+- **Added `@ton/core@^0.63` (Phase 2 TON foundation)** — Address parse/validate/format + Cell/message builders. Small; required now for address utilities and the SC skeleton.
+- **`@ton/crypto@^3.3` and `@ton/ton@^16.3` installed but deferred** — present on disk for future use; Phase 2 TON foundation does NOT call them (no client-side signing, no ADNL client — `@ton/ton`'s `TonClient` doesn't run cleanly inside the Telegram WebView). Kept for Phase 6+ real-contract work.
+- **TonAPI HTTP over `@ton/ton` ADNL client** — ADNL doesn't run cleanly inside the Telegram WebView; a fetch-based HTTP client (TonAPI.io, testnet at `https://testnet.tonapi.io`) is lighter and WebView-safe. The `TonApiClient` interface is the swap-in point for the real backend.
+- **TON buy stub = 0.01 TON testnet tx** — `sendTx` sends a real (testnet) tx to `NEXT_PUBLIC_TON_RELAY_ADDRESS` (or the property's `ownerWalletAddress` when seeded); `txHash` returned is a **synthetic placeholder** (`"simulated:" + id`). No on-chain share minting; never claim on-chain settlement in MVP.
+- **`@telegram-apps/sdk-react` is 3.x signal-based** — IMPORTANT correction: the installed 3.3.9 SDK does NOT export `useThemeParams/useBackButton/useMainButton/useHapticFeedback/useViewport` hooks. Correct pattern: `init()` returns a cleanup fn; the singleton components (`backButton`, `mainButton`, `viewport`, `themeParams`, `hapticFeedback`, `closingBehavior`, `miniApp`) hold methods + signals, read via the React binding `useSignal()`. Wired by the Telegram foundation subset of Phase 2 (separate plan).
+- **System font over Geist** — scaffold `layout.tsx` still uses `next/font/google` Geist; corrected by the foundation-subset plan to the system stack per the original decision.
+- **TypeScript bumped to 7.0.2** during manual Bun install — major version above the `^5` baseline; no Phase 2 usage relies on 7-specific features yet. Monitor for breaking changes.
+- **Vitest 4 + jsdom 29 + @testing-library added** — pure-utility TDD for `lib/ton/**` (address, nano conversions, sendTx logic). No component tests in Phase 2.
