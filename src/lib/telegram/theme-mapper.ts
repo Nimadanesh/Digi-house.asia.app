@@ -4,21 +4,21 @@ import type { ThemeParams } from "./signals";
 
 // Telegram themeParams key -> our css var name
 const MAP: Record<keyof ThemeParams, string> = {
-  backgroundColor: "--tg-bg-color",
-  textColor: "--tg-text-color",
-  hintColor: "--tg-hint-color",
-  buttonColor: "--tg-button-color",
-  buttonTextColor: "--tg-button-text-color",
-  secondaryBackgroundColor: "--tg-secondary-bg-color",
-  sectionBgColor: "--tg-section-bg-color",
-  sectionHeaderTextColor: "--tg-section-header-text-color",
-  subtitleTextColor: "--tg-subtitle-text-color",
-  accentTextColor: "--tg-accent-text-color",
-  destructiveTextColor: "--tg-destructive-text-color",
-  headerBackgroundColor: "--tg-header-bg-color",
-  linkColor: "--tg-link-color",
-  bottomBarBgColor: "--tg-bottom-bar-bg-color",
-  sectionSeparatorColor: "--tg-section-separator-color",
+  bg_color: "--tg-bg-color",
+  text_color: "--tg-text-color",
+  hint_color: "--tg-hint-color",
+  button_color: "--tg-button-color",
+  button_text_color: "--tg-button-text-color",
+  secondary_bg_color: "--tg-secondary-bg-color",
+  section_bg_color: "--tg-section-bg-color",
+  section_header_text_color: "--tg-section-header-text-color",
+  subtitle_text_color: "--tg-subtitle-text-color",
+  accent_text_color: "--tg-accent-text-color",
+  destructive_text_color: "--tg-destructive-text-color",
+  header_bg_color: "--tg-header-bg-color",
+  link_color: "--tg-link-color",
+  bottom_bar_bg_color: "--tg-bottom-bar-bg-color",
+  section_separator_color: "--tg-section-separator-color",
 } as Record<keyof ThemeParams, string>;
 
 export function applyTelegramThemeParams(params: ThemeParams): void {
