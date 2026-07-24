@@ -47,3 +47,7 @@ next-env.d.ts
 
 # Local temp files
 temp/
+
+# Superpowers SDD scratch (per-process working dir)
+.superpowers/
+
