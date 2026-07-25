@@ -17,7 +17,10 @@ export function BottomTabBar() {
             key={href}
             href={href}
             onClick={() => haptics.selection()}
-            className={cn("flex flex-col items-center justify-center gap-1", active ? "text-primary" : "text-muted-foreground")}
+            className={cn(
+              "flex flex-col items-center justify-center gap-1 active:scale-[0.97] transition-transform duration-[120ms] ease-out",
+              active ? "text-primary" : "text-muted-foreground",
+            )}
           >
             <Icon size={24} strokeWidth={1.75} />
             <span className="text-[10px]">{label}</span>
