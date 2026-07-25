@@ -6,6 +6,8 @@ import { useOrderBook } from "@/hooks/useOrderBook";
 import { useTelegram } from "@/hooks/useTelegram";
 import { useTonConnect } from "@/hooks/useTonConnect";
 import { useBuyShares, type BuyInput } from "@/hooks/useBuyShares";
+import { useRouter } from "next/navigation";
+import { useUiStore } from "@/stores/ui.store";
 import { PropertyDetail } from "@/components/property/PropertyDetail";
 import { Toast } from "@/components/common/Toast";
 import { Block } from "@/components/common/Block";
@@ -26,6 +28,8 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
   const tg = useTelegram();
   const ton = useTonConnect();
   const buy = useBuyShares();
+  const router = useRouter();
+  const setMainButtonActive = useUiStore((s) => s.setMainButtonActive);
   const [qty, setQty] = useState<number>(1);
   const [toast, setToast] = useState<ToastState | null>(null);
 
@@ -43,10 +47,15 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toast?.tone, toast?.title, toast?.sub]);
 
-  // BackButton lifecycle — show on detail, hide on unmount (USER_FLOW §"Route ↔ screen").
+  // BackButton lifecycle (USER_FLOW §"Route ↔ screen"): show + wire to router.back() so the TG
+  // on-screen back chevron actually navigates. Outside Telegram the Header's in-app chevron handles it.
   useEffect(() => {
     tg.backButton.show();
-    return () => tg.backButton.hide();
+    const off = tg.backButton.onClick(() => router.back());
+    return () => {
+      off();
+      tg.backButton.hide();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -57,6 +66,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
     const listing = property.data;
     if (!listing) {
       tg.mainButton.hide();
+      setMainButtonActive(false);
       return;
     }
     const remaining = listing.sharesRemaining;
@@ -64,8 +74,10 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
     // primary action) or when no primary shares remain (Fully-funded/resale state).
     if (!ton.connected || remaining <= 0) {
       tg.mainButton.hide();
+      setMainButtonActive(false);
       return;
     }
+    setMainButtonActive(true);
     const valid = qty >= 1 && qty <= remaining;
     const totalUsd = qty * listing.sharePriceUsd;
     tg.mainButton.setParams({
@@ -103,9 +115,14 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [property.data, qty, ton.connected]);
 
-  // Hide MainButton when leaving the route (root tabs own the bottom bar elsewhere).
+  // Hide MainButton + release the shell's mainButtonActive flag when leaving the route
+  // (root tabs own the bottom bar elsewhere). Order: clear the flag first so AppShell restores
+  // the tab bar before the native MainButton finishes hiding — avoids a flash of empty bottom padding.
   useEffect(() => {
-    return () => tg.mainButton.hide();
+    return () => {
+      setMainButtonActive(false);
+      tg.mainButton.hide();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
