@@ -14,7 +14,7 @@ export default function MarketplacePage() {
       <div className="mt-3 space-y-3">
         {Array.from({ length: 6 }).map((_, i) => (
           <Block key={i} className="overflow-hidden">
-            <Skeleton className="h-32 w-full rounded-none" />
+            <Skeleton className="aspect-[16/10] w-full rounded-none" />
             <div className="p-4 space-y-3">
               <Skeleton className="h-4 w-2/3" />
               <Skeleton className="h-4 w-1/2" />

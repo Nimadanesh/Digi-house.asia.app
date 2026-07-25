@@ -55,17 +55,19 @@ export function BuyControl({
             type="button"
             onClick={() => onQtyChange(Math.max(1, qty - 1))}
             disabled={qty <= 1}
-            className="size-11 rounded-[10px] bg-surface-2 flex items-center justify-center active:scale-95 transition-transform disabled:opacity-40"
+            className="size-11 rounded-[10px] bg-surface-2 flex items-center justify-center active:scale-[0.97] transition-transform duration-[120ms] ease-out disabled:opacity-40"
             aria-label="decrease quantity"
           >
             <Minus size={18} strokeWidth={1.75} />
           </button>
-          <div className="min-w-[80px] text-center text-lg font-semibold tnum">{qty}</div>
+          <div className="min-w-[80px] text-center text-lg font-semibold tnum">
+            <span key={qty} className="inline-block transition-transform duration-200 ease-out">{qty}</span>
+          </div>
           <button
             type="button"
             onClick={() => onQtyChange(Math.min(remaining, qty + 1))}
             disabled={qty >= remaining}
-            className="size-11 rounded-[10px] bg-surface-2 flex items-center justify-center active:scale-95 transition-transform disabled:opacity-40"
+            className="size-11 rounded-[10px] bg-surface-2 flex items-center justify-center active:scale-[0.97] transition-transform duration-[120ms] ease-out disabled:opacity-40"
             aria-label="increase quantity"
           >
             <Plus size={18} strokeWidth={1.75} />
