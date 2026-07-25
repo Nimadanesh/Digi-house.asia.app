@@ -76,7 +76,7 @@ export function PropertyCard({
                 <p className="text-xs text-muted-foreground truncate tnum">
                   {holding.sharesOwned} / {listing.totalShares} shares · {usd(holding.currentValueUsd)}
                 </p>
-                <p className="text-xs text-success tnum mt-0.5">+{usd(holding.pendingWeekEarningsUsd)} pending this week</p>
+                <p className="text-xs text-warning tnum mt-0.5">{usd(holding.pendingWeekEarningsUsd)} pending this week</p>
               </>
             ) : (
               <p className="text-xs text-muted-foreground truncate tnum">{listing.totalShares} shares total</p>

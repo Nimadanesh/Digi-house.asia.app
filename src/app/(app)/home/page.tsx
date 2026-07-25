@@ -93,7 +93,7 @@ export default function HomePage() {
           <span className="text-sm text-muted-foreground">Next rent</span>
           <PayoutCountdown />
         </div>
-        <p className="text-[1.0625rem] font-semibold tnum text-success mt-1">+{usd(pendingTotal)}</p>
+        <p className="text-[1.625rem] font-bold tracking-[-0.02em] tnum text-foreground mt-1">{usd(pendingTotal)}</p>
       </Block>
 
       {/* My Properties section */}
