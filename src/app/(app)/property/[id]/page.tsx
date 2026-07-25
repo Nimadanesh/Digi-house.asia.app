@@ -83,6 +83,8 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
     tg.mainButton.setParams({
       text: `Buy ${qty} — $${(totalUsd / 100).toFixed(2)}`,
       isEnabled: valid,
+      color: "#3390ec",       // Telegram blue (--primary) — explicit in real TG so the Buy confirm matches brand.
+      textColor: "#ffffff",  // --primary-foreground. Telegram renders this natively; explicit avoids TG-theme drift.
     });
     const off = tg.mainButton.onClick(async () => {
       if (!valid || !listing) return;
