@@ -10,7 +10,7 @@ export const HOLDINGS: Holding[] = [
     propertyId: "prop-bayside-marina-penthouse",
     sharesOwned: 60,
     avgCostUsd: 25000,
-    currentValueUsd: 60 * 25000,
+    currentValueUsd: 60 * 26000, // ~+4% unrealized (market value > cost basis)
     pendingWeekEarningsUsd: 1500,
     shareRatio: 0.075,
   },
@@ -18,7 +18,7 @@ export const HOLDINGS: Holding[] = [
     propertyId: "prop-alfama-terrace-flat",
     sharesOwned: 75,
     avgCostUsd: 10000,
-    currentValueUsd: 75 * 10000,
+    currentValueUsd: 75 * 10500, // ~+5% unrealized (market value > cost basis)
     pendingWeekEarningsUsd: 1875,
     shareRatio: 0.075,
   },
