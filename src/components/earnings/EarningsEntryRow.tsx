@@ -57,7 +57,7 @@ export function EarningsEntryRow({
       {open ? (
         // Proportional-math disclosure (R-6.6 display). Static expand — no keyframe animation (DESIGN_SYSTEM
         // §"What we do NOT animate" prohibits keyframes on rapidly triggered elements).
-        <div className="px-4 py-3 mx-4 border-t border-border text-xs space-y-1.5">
+        <div className="mx-4 py-3 border-t border-border text-xs space-y-1.5">
           <div className="flex justify-between">
             <span className="text-muted-foreground">Your share</span>
             <span className="tnum text-foreground">{pct(entry.shareRatio)}</span>
