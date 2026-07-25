@@ -76,6 +76,12 @@
    ───────────────────────────────────────────────────────────────────────── */
 :root,
 .dark {
+  /* DESIGN_SYSTEM §"Motion" — custom easings (never default ease-in on UI).
+     Plain CSS vars for inline-style use (e.g. FundingBar). Scoped names avoid
+     overriding Tailwind's default ease-out utility. */
+  --ease-tg-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-tg-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-tg-drawer: cubic-bezier(0.32, 0.72, 0, 1);
   --background: oklch(0.225 0.025 256);          /* #17212b Telegram bg_color  */
   --foreground: oklch(1 0 0);                    /* #ffffff text_color        */
   --card: oklch(0.267 0.027 256);                /* #232e3c Telegram block bg */
@@ -179,6 +185,13 @@
   .tnum {
     font-feature-settings: "tnum";
     font-variant-numeric: tabular-nums;
+  }
+  /* Reduced motion (DESIGN_SYSTEM §"Motion" rule 9): drop transform-based motion; keep color/opacity.
+     FundingBar's scaleX is the main transform-trigger animation — render it instantly. */
+  @media (prefers-reduced-motion: reduce) {
+    .funding-bar-fill {
+      transition: none !important;
+    }
   }
 }
 
