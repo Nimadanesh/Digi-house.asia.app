@@ -8,5 +8,9 @@ export {
   viewport,
   miniApp,
   closingBehavior,
+  isTMA,
+  mockTelegramEnv,
+  retrieveLaunchParams,
+  isLaunchParamsRetrieveError,
 } from "@telegram-apps/sdk";
 export type { SafeAreaInsets, ThemeParams } from "@telegram-apps/sdk";
