@@ -55,26 +55,32 @@ export function EarningsEntryRow({
         </button>
       </Row>
       {open ? (
-        // Proportional-math disclosure (R-6.6 display). Static expand — no keyframe animation (DESIGN_SYSTEM
-        // §"What we do NOT animate" prohibits keyframes on rapidly triggered elements).
-        <div className="mx-4 py-3 border-t border-border text-xs space-y-1.5">
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Your share</span>
-            <span className="tnum text-foreground">{pct(entry.shareRatio)}</span>
+        // Proportional-math disclosure (R-6.6 display). The 48px lead spacer mirrors the row's
+        // thumb (size-9=36) + gap-3 (12) so the disclosure content aligns with the property NAME
+        // column (native iOS expandable-row pattern). The border-t hairline stays full-width-inset
+        // (mx-4 = 16px), matching the sibling rows. Static expand — no keyframe animation
+        // (DESIGN_SYSTEM §"What we do NOT animate").
+        <div className="mx-4 flex border-t border-border">
+          <div className="w-[48px] shrink-0" aria-hidden />
+          <div className="flex-1 py-3 text-xs space-y-1.5">
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Your share</span>
+              <span className="tnum text-foreground">{pct(entry.shareRatio)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Weekly rent pool</span>
+              <span className="tnum text-foreground">{usd(weeklyRentPoolUsd)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Your payout (pool × share)</span>
+              <span className="tnum text-foreground font-semibold">{usd(entry.amountUsd)}</span>
+            </div>
+            {entry.status === "paid" && entry.txHash ? (
+              <p className="pt-1 text-muted-foreground">
+                Simulated payout · tx hash is a placeholder <span className="tnum">({entry.txHash.slice(0, 28)}…)</span>
+              </p>
+            ) : null}
           </div>
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Weekly rent pool</span>
-            <span className="tnum text-foreground">{usd(weeklyRentPoolUsd)}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Your payout (pool × share)</span>
-            <span className="tnum text-foreground font-semibold">{usd(entry.amountUsd)}</span>
-          </div>
-          {entry.status === "paid" && entry.txHash ? (
-            <p className="pt-1 text-muted-foreground">
-              Simulated payout · tx hash is a placeholder <span className="tnum">({entry.txHash.slice(0, 28)}…)</span>
-            </p>
-          ) : null}
         </div>
       ) : null}
     </>

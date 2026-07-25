@@ -7,6 +7,7 @@ import { useMarketplace } from "@/hooks/useMarketplace";
 import { PAYOUT_DISCLAIMER, ROUTES } from "@/lib/constants";
 import { weeklyRent } from "@/lib/format";
 import { Block } from "@/components/common/Block";
+import { Row } from "@/components/common/Row";
 import { Skeleton } from "@/components/common/Skeleton";
 import { EmptyState } from "@/components/common/EmptyState";
 import { Button } from "@/components/ui/button";
@@ -30,20 +31,38 @@ export default function EarningsPage() {
       <p className="text-xs text-muted-foreground">{PAYOUT_DISCLAIMER}</p>
       {earnings.isLoading ? (
         <>
-          <Block className="p-4 space-y-2">
-            <Skeleton className="h-5 w-2/3" />
-            <Skeleton className="h-4 w-1/2" />
+          {/* Hero sub-block skeleton — matches EarningsSummaryBlock hero (label+pill row, then amount). */}
+          <Block className="p-4">
+            <div className="flex items-center justify-between">
+              <Skeleton className="h-3.5 w-28" />
+              <Skeleton className="h-5 w-20 rounded-full" />
+            </div>
+            <Skeleton className="mt-2 h-7 w-40" />
           </Block>
-          {Array.from({ length: 3 }).map((_, i) => (
-            <Block key={i} className="p-3 flex items-center gap-3">
-              <Skeleton className="size-9 rounded-full" />
-              <div className="flex-1 space-y-2">
-                <Skeleton className="h-4 w-2/3" />
-                <Skeleton className="h-3 w-1/3" />
-              </div>
-              <Skeleton className="h-6 w-14 rounded-full" />
-            </Block>
-          ))}
+          {/* Secondary readout block skeleton — 2 rows (All-time earned / Payout). */}
+          <Block>
+            <Row>
+              <Skeleton className="h-4 w-28" />
+              <Skeleton className="ml-auto h-4 w-24" />
+            </Row>
+            <Row>
+              <Skeleton className="h-4 w-20" />
+              <Skeleton className="ml-auto h-4 w-32" />
+            </Row>
+          </Block>
+          {/* Timeline block skeleton — ONE Block with 3 rows matching EarningsEntryRow (thumb+name+pill). */}
+          <Block>
+            {Array.from({ length: 3 }).map((_, i) => (
+              <Row key={i} className="!min-h-[56px]">
+                <Skeleton className="size-9 rounded-[10px] shrink-0" />
+                <div className="flex-1 space-y-2">
+                  <Skeleton className="h-4 w-2/3" />
+                  <Skeleton className="h-3 w-1/3" />
+                </div>
+                <Skeleton className="h-6 w-14 rounded-full" />
+              </Row>
+            ))}
+          </Block>
         </>
       ) : earnings.isError ? (
         <Block className="p-4 text-center">
