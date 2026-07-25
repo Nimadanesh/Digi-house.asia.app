@@ -1,9 +1,13 @@
+import { Building2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+// DESIGN_SYSTEM §"Empty state": ~120px monochrome line-illustration in --muted-foreground,
+// headline H2 (0.9375rem/600), one muted sentence, one Primary button.
 export function EmptyState({ title, message, action, className }: { title: string; message: string; action?: React.ReactNode; className?: string }) {
   return (
     <div className={cn("flex flex-col items-center justify-center px-6 py-16 text-center", className)}>
-      <h2 className="text-lg font-semibold text-foreground">{title}</h2>
+      <Building2 size={120} strokeWidth={1.75} className="text-muted-foreground" aria-hidden />
+      <h2 className="mt-4 text-[0.9375rem] font-semibold text-foreground">{title}</h2>
       <p className="mt-1 max-w-xs text-sm text-muted-foreground">{message}</p>
       {action ? <div className="mt-4">{action}</div> : null}
     </div>
