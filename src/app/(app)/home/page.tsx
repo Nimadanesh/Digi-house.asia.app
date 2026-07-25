@@ -8,6 +8,7 @@ import { useMarketplace } from "@/hooks/useMarketplace";
 import { ROUTES, TON_PRICE_USD_CENTS } from "@/lib/constants";
 import { usd, ton, estimateNanoTon } from "@/lib/format";
 import { Block } from "@/components/common/Block";
+import { SectionLabel } from "@/components/common/SectionLabel";
 import { Skeleton } from "@/components/common/Skeleton";
 import { EmptyState } from "@/components/common/EmptyState";
 import { PropertyCard } from "@/components/property/PropertyCard";
@@ -79,8 +80,8 @@ export default function HomePage() {
     <div className="mt-3 space-y-3">
       {/* Balance block (DESIGN_SYSTEM §"Balance card (Home hero)") */}
       <Block className="p-4">
-        <p className="text-xs uppercase tracking-wide text-muted-foreground">Portfolio value</p>
-        <p className="text-[1.625rem] font-bold tnum text-foreground mt-1">{usd(data.totalValueUsd)}</p>
+        <SectionLabel>Portfolio value</SectionLabel>
+        <p className="text-[1.625rem] font-bold tracking-[-0.02em] tnum text-foreground mt-1">{usd(data.totalValueUsd)}</p>
         <p className="text-xs text-muted-foreground tnum mt-0.5">
           ≈ {ton(estimateNanoTon(data.totalValueUsd, TON_PRICE_USD_CENTS))}
         </p>
@@ -96,7 +97,7 @@ export default function HomePage() {
       </Block>
 
       {/* My Properties section */}
-      <p className="text-xs uppercase tracking-wide text-muted-foreground mt-2">My properties</p>
+      <SectionLabel className="mt-2">My properties</SectionLabel>
       {data.holdings.map((h) => {
         const listing = propertyById.get(h.propertyId);
         if (!listing) return null;

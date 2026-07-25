@@ -27,7 +27,7 @@ export default function EarningsPage() {
 
   return (
     <div className="mt-3 space-y-3">
-      <p className="px-1 text-xs text-muted-foreground">{PAYOUT_DISCLAIMER}</p>
+      <p className="text-xs text-muted-foreground">{PAYOUT_DISCLAIMER}</p>
       {earnings.isLoading ? (
         <>
           <Block className="p-4 space-y-2">

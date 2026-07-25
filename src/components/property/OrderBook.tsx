@@ -1,14 +1,16 @@
 // File responsibility: read-only order book. DESIGN_SYSTEM §"Order book". Static; no entrance animation.
 // All money routed through format.usd (no raw toFixed in components — ownership guard).
 import { Block } from "@/components/common/Block";
+import { SectionLabel } from "@/components/common/SectionLabel";
 import { usd } from "@/lib/format";
 import type { OrderBookState } from "@/types/order";
 
 export function OrderBook({ state }: { state: OrderBookState }) {
   return (
     <Block className="overflow-hidden">
-      <div className="px-4 py-2 text-xs uppercase tracking-wide text-muted-foreground flex justify-between">
-        <span>Bids</span><span>Asks</span>
+      <div className="px-4 py-2 flex justify-between">
+        <SectionLabel>Bids</SectionLabel>
+        <SectionLabel>Asks</SectionLabel>
       </div>
       <div className="grid grid-cols-2 gap-2 px-4 pb-4 text-xs font-mono">
         <OrderColumn levels={state.bids} tint="text-success" />
