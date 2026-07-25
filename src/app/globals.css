@@ -181,3 +181,25 @@
     font-variant-numeric: tabular-nums;
   }
 }
+
+/* Toast enter/exit — DESIGN_SYSTEM §"Toast / Snackbar".
+   Enter 200ms ease-out via @starting-style (nested form); exit 160ms (faster, driven by the
+   `leaving` prop toggling --toast-duration + the visible classes). Interruptible CSS transitions,
+   never keyframes. Reduced-motion: keep opacity, drop the transform. */
+.toast-card {
+  transition: opacity var(--toast-duration, 200ms) cubic-bezier(0.23, 1, 0.32, 1),
+    transform var(--toast-duration, 200ms) cubic-bezier(0.23, 1, 0.32, 1);
+  @starting-style {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .toast-card {
+    transition: opacity var(--toast-duration, 200ms) linear;
+    transform: none;
+    @starting-style {
+      transform: none;
+    }
+  }
+}

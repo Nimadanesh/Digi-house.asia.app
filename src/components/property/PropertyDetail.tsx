@@ -12,11 +12,13 @@ import { BuyControl } from "./BuyControl";
 export function PropertyDetail({
   listing,
   orderBook,
-  onConfirm,
+  qty,
+  onQtyChange,
 }: {
   listing: Listing;
   orderBook?: OrderBookState;
-  onConfirm?: (qty: number) => void;
+  qty: number;
+  onQtyChange: (q: number) => void;
 }) {
   const funded = listing.fundingProgressRatio >= 1;
   const weeklyPool = weeklyRent(listing.annualRentUsd);
@@ -51,7 +53,7 @@ export function PropertyDetail({
       {orderBook ? <OrderBook state={orderBook} /> : null}
 
       <Block className="p-4">
-        <BuyControl listing={listing} onConfirm={onConfirm} />
+        <BuyControl listing={listing} qty={qty} onQtyChange={onQtyChange} />
       </Block>
     </div>
   );

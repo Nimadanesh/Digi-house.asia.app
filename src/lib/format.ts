@@ -50,7 +50,7 @@ export function estimateNanoTon(usdCents: number, tonUsdPriceCents: number): big
 }
 
 /** Return "in Xd Yh" / "in Xh" / "in Xm" relative to the next Friday 00:00 UTC after now. */
-export function payoutCountdown(nowMs: number, _opts?: { payoutDay?: "Friday" }): string {
+export function payoutCountdown(nowMs: number): string {
   const now = new Date(nowMs);
   // ISO day: 5 = Friday (0 Sun..6 Sat). Find the next Friday 00:00 UTC strictly after now (rollover if already past).
   const day = now.getUTCDay();

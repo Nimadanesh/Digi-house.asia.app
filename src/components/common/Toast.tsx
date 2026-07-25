@@ -7,7 +7,21 @@ const TONE: Record<Tone, { icon: typeof Check; bar: string; fg: string }> = {
   error: { icon: AlertCircle, bar: "border-l-2 border-l-danger", fg: "text-foreground" },
 };
 
-export function Toast({ tone, title, sub }: { tone: Tone; title: string; sub?: string }) {
+// Toast — DESIGN_SYSTEM §"Toast / Snackbar". Presentational; the caller owns mount + auto-dismiss.
+// Enter via CSS @starting-style (200ms ease-out); exit driven by the `leaving` prop switching the
+// visible state (160ms). See `.toast-card` in globals.css. Caller owns the two-stage timer so this
+// component stays free of any lifetime logic.
+export function Toast({
+  tone,
+  title,
+  sub,
+  leaving = false,
+}: {
+  tone: Tone;
+  title: string;
+  sub?: string;
+  leaving?: boolean;
+}) {
   const { icon: Icon, bar, fg } = TONE[tone];
   return (
     <div
@@ -20,10 +34,13 @@ export function Toast({ tone, title, sub }: { tone: Tone; title: string; sub?: s
     >
       <div
         className={cn(
-          "pointer-events-auto flex items-start gap-2 bg-card border border-border rounded-[10px] px-4 py-3 text-sm shadow-[0_2px_12px_rgba(0,0,0,0.18)]",
+          "toast-card pointer-events-auto flex items-start gap-2 bg-card border border-border rounded-[10px] px-4 py-3 text-sm shadow-[0_2px_12px_rgba(0,0,0,0.18)]",
+          "opacity-100 translate-y-0",
+          leaving && "opacity-0 -translate-y-1",
           bar,
           fg,
         )}
+        style={{ ["--toast-duration" as string]: leaving ? "160ms" : "200ms" }}
       >
         <Icon
           size={18}

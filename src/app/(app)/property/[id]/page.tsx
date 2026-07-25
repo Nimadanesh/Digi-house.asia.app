@@ -4,6 +4,7 @@ import { use } from "react";
 import { useProperty } from "@/hooks/useProperty";
 import { useOrderBook } from "@/hooks/useOrderBook";
 import { useTelegram } from "@/hooks/useTelegram";
+import { useTonConnect } from "@/hooks/useTonConnect";
 import { useBuyShares, type BuyInput } from "@/hooks/useBuyShares";
 import { PropertyDetail } from "@/components/property/PropertyDetail";
 import { Toast } from "@/components/common/Toast";
@@ -15,6 +16,7 @@ interface ToastState {
   tone: "success" | "error";
   title: string;
   sub?: string;
+  leaving: boolean;
 }
 
 export default function PropertyDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -22,16 +24,24 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
   const property = useProperty(id);
   const orderBook = useOrderBook(id);
   const tg = useTelegram();
+  const ton = useTonConnect();
   const buy = useBuyShares();
   const [qty, setQty] = useState<number>(1);
   const [toast, setToast] = useState<ToastState | null>(null);
 
-  // Toast auto-dismiss after 3s (DESIGN_SYSTEM §"Toast / Snackbar").
+  // Toast lifecycle (DESIGN_SYSTEM §"Toast / Snackbar"): show 3s, then enter the 160ms leaving
+  // state, then unmount. Two-stage timer so the CSS exit transition actually runs before unmount.
+  // Deps keyed on toast identity (tone/title/sub) so the timers don't reset when `leaving` flips.
   useEffect(() => {
     if (!toast) return;
-    const t = setTimeout(() => setToast(null), 3000);
-    return () => clearTimeout(t);
-  }, [toast]);
+    const leaveTimer = setTimeout(() => setToast((t) => (t ? { ...t, leaving: true } : null)), 3000);
+    const unmountTimer = setTimeout(() => setToast(null), 3160);
+    return () => {
+      clearTimeout(leaveTimer);
+      clearTimeout(unmountTimer);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [toast?.tone, toast?.title, toast?.sub]);
 
   // BackButton lifecycle — show on detail, hide on unmount (USER_FLOW §"Route ↔ screen").
   useEffect(() => {
@@ -50,7 +60,9 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
       return;
     }
     const remaining = listing.sharesRemaining;
-    if (remaining <= 0) {
+    // Hide MainButton when wallet disconnected (so BuyControl's Connect-Wallet CTA is the sole
+    // primary action) or when no primary shares remain (Fully-funded/resale state).
+    if (!ton.connected || remaining <= 0) {
       tg.mainButton.hide();
       return;
     }
@@ -73,15 +85,15 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
         const res = await buy.mutateAsync(input);
         if (res.ok) {
           // MVP honesty contract (PLAN §"MVP payout honesty"): exact toast text, synthetic txHash sub.
-          setToast({ tone: "success", title: "Buy confirmed (simulated)", sub: `tx: ${res.txHash}` });
+          setToast({ tone: "success", title: "Buy confirmed (simulated)", sub: `tx: ${res.txHash}`, leaving: false });
           tg.haptics.notification("success");
         } else {
-          setToast({ tone: "error", title: "Buy failed", sub: res.error });
+          setToast({ tone: "error", title: "Buy failed", sub: res.error, leaving: false });
           tg.haptics.notification("error");
         }
       } catch (e) {
         const message = e instanceof Error ? e.message : "transaction rejected";
-        setToast({ tone: "error", title: "Buy failed", sub: message });
+        setToast({ tone: "error", title: "Buy failed", sub: message, leaving: false });
         tg.haptics.notification("error");
       }
     });
@@ -89,7 +101,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
       off();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [property.data, qty]);
+  }, [property.data, qty, ton.connected]);
 
   // Hide MainButton when leaving the route (root tabs own the bottom bar elsewhere).
   useEffect(() => {
@@ -123,11 +135,12 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
 
   return (
     <>
-      {toast ? <Toast tone={toast.tone} title={toast.title} sub={toast.sub} /> : null}
+      {toast ? <Toast tone={toast.tone} title={toast.title} sub={toast.sub} leaving={toast.leaving} /> : null}
       <PropertyDetail
         listing={property.data}
         orderBook={orderBook.data}
-        onConfirm={(q: number) => setQty(q)}
+        qty={qty}
+        onQtyChange={setQty}
       />
     </>
   );

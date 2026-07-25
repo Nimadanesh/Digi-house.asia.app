@@ -1,7 +1,8 @@
 "use client";
 // File responsibility: Quantity stepper + total + live projected weekly yield. Connect-Wallet CTA
-// when wallet disconnected (R-2.4). Confirm wired to onConfirm prop (Task 4 calls useBuyShares).
-import { useState } from "react";
+// when wallet disconnected (R-2.4). Purely controlled — the page owns `qty` so the Telegram
+// MainButton (the screen-primary action, per DESIGN_SYSTEM §"One primary action per screen") reads
+// the same qty and carries confirm. No in-page duplicate primary button (design-review fix).
 import { Minus, Plus } from "lucide-react";
 import { usd, ton, weeklyRent, projectedYield, estimateNanoTon } from "@/lib/format";
 import { TON_PRICE_USD_CENTS } from "@/lib/constants";
@@ -9,11 +10,17 @@ import type { Listing } from "@/types/property";
 import { useTonConnect } from "@/hooks/useTonConnect";
 import { WalletConnectButton } from "@/components/wallet/TonConnectButton";
 import { WeeklyYieldCallout } from "./WeeklyYieldCallout";
-import { cn } from "@/lib/utils";
 
-export function BuyControl({ listing, onConfirm }: { listing: Listing; onConfirm?: (qty: number) => void }) {
+export function BuyControl({
+  listing,
+  qty,
+  onQtyChange,
+}: {
+  listing: Listing;
+  qty: number;
+  onQtyChange: (q: number) => void;
+}) {
   const tonc = useTonConnect();
-  const [qty, setQty] = useState(1);
   const remaining = listing.sharesRemaining;
   const invalid = qty < 1 || qty > remaining;
   const totalUsd = qty * listing.sharePriceUsd;
@@ -46,7 +53,7 @@ export function BuyControl({ listing, onConfirm }: { listing: Listing; onConfirm
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => setQty((q) => Math.max(1, q - 1))}
+            onClick={() => onQtyChange(Math.max(1, qty - 1))}
             disabled={qty <= 1}
             className="size-11 rounded-[10px] bg-surface-2 flex items-center justify-center active:scale-95 transition-transform disabled:opacity-40"
             aria-label="decrease quantity"
@@ -56,7 +63,7 @@ export function BuyControl({ listing, onConfirm }: { listing: Listing; onConfirm
           <div className="min-w-[80px] text-center text-lg font-semibold tnum">{qty}</div>
           <button
             type="button"
-            onClick={() => setQty((q) => Math.min(remaining, q + 1))}
+            onClick={() => onQtyChange(Math.min(remaining, qty + 1))}
             disabled={qty >= remaining}
             className="size-11 rounded-[10px] bg-surface-2 flex items-center justify-center active:scale-95 transition-transform disabled:opacity-40"
             aria-label="increase quantity"
@@ -76,18 +83,6 @@ export function BuyControl({ listing, onConfirm }: { listing: Listing; onConfirm
         <div className="flex justify-between text-sm"><span className="text-muted-foreground">Total</span><span className="tnum font-medium">{usd(totalUsd)} · {ton(estimateNanoTon(totalUsd, TON_PRICE_USD_CENTS))}</span></div>
       </div>
       <WeeklyYieldCallout weeklyPerShare={weeklyPerShare} />
-      {/* In-Page confirm button — Task 4 wires to MainButton. Disabled state intentional until wiring. */}
-      <button
-        type="button"
-        disabled={invalid || !onConfirm}
-        onClick={() => onConfirm?.(qty)}
-        className={cn(
-          "w-full h-[48px] rounded-[10px] font-semibold text-sm",
-          invalid || !onConfirm ? "bg-secondary text-muted-foreground" : "bg-primary text-primary-foreground",
-        )}
-      >
-        {invalid ? "Enter a valid quantity" : `Buy ${qty} — ${usd(totalUsd)}`}
-      </button>
     </div>
   );
 }

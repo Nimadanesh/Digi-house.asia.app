@@ -9,6 +9,12 @@ import type { Listing } from "@/types/property";
 import { FundingBar } from "./FundingBar";
 import { WeeklyYieldCallout } from "./WeeklyYieldCallout";
 
+const STATUS_LABEL: Record<Listing["status"], string> = {
+  funding: "Funding",
+  funded: "Funded",
+  resale: "Resale",
+};
+
 export function PropertyCard({
   listing,
   variant = "list",
@@ -51,7 +57,7 @@ export function PropertyCard({
             <WeeklyYieldCallout weeklyPerShare={weeklyPerShare} />
             <div className="pt-1">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-xs text-muted-foreground">{listing.status === "resale" ? "Resale" : "Funded"}</span>
+                <span className="text-xs text-muted-foreground">{STATUS_LABEL[listing.status]}</span>
                 <span className="text-xs text-foreground tnum">{pct(listing.fundingProgressRatio)}</span>
               </div>
               <FundingBar progress={listing.fundingProgressRatio} funded={funded} />
