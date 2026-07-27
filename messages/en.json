@@ -145,6 +145,7 @@
     "language": "Language",
     "languageHint": "App language",
     "languageAuto": "Auto (Telegram)",
+    "chooseLanguage": "Choose language",
     "useTelegramTheme": "Use Telegram theme",
     "useTelegramThemeHint": "Match Telegram colors",
     "showDemoBadge": "Show Demo badge",

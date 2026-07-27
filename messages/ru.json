@@ -157,6 +157,7 @@
     "aboutAdvice": "Это не финансовый совет. Документы и токенизация — демонстрация до продакшен-контрактов.",
     "aboutCopyright": "© DigiHouse · MVP",
     "demoTxDisclaimer": "Это демо — транзакции симулируются",
-    "payoutDisclaimer": "симулированная еженедельная выплата · on-chain после MVP"
+    "payoutDisclaimer": "симулированная еженедельная выплата · on-chain после MVP",
+    "chooseLanguage": "Выберите язык"
   }
 }

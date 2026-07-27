@@ -125,11 +125,7 @@ export function SettingsSheet() {
                 </div>
                 <CurrencySegment value={displayCurrency} onChange={setDisplayCurrency} />
               </Row>
-              <div className="space-y-2 border-t border-border px-4 py-3">
-                <div>
-                  <div className="text-sm text-foreground">{t("language")}</div>
-                  <div className="text-xs text-muted-foreground">{t("languageHint")}</div>
-                </div>
+              <div className="border-t border-border">
                 <LanguageSelector />
               </div>
               <Row className="!min-h-[56px]">

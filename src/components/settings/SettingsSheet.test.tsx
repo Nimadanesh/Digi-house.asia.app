@@ -79,17 +79,23 @@ describe("SettingsSheet", () => {
     expect(useSettingsStore.getState().displayCurrency).toBe("ton");
   });
 
-  it("shows language selector with Auto + English", () => {
+  it("shows language row with Auto default and opens picker sheet", () => {
     render(<SettingsSheet />);
     expect(screen.getByText("Language")).toBeInTheDocument();
     expect(screen.getByTestId("language-selector")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /auto \(telegram\)/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "English" })).toBeInTheDocument();
+    expect(screen.getByTestId("language-current")).toHaveTextContent(/auto \(telegram\)/i);
+    fireEvent.click(screen.getByTestId("language-selector"));
+    expect(screen.getByTestId("language-picker-sheet")).toBeInTheDocument();
+    expect(screen.getByTestId("lang-option-auto")).toBeInTheDocument();
+    expect(screen.getByTestId("lang-option-en")).toBeInTheDocument();
+    expect(screen.getByTestId("lang-option-fa")).toBeInTheDocument();
+    expect(screen.getByTestId("lang-option-zh")).toBeInTheDocument();
   });
 
-  it("persists explicit locale choice", () => {
+  it("persists explicit locale choice from picker", () => {
     render(<SettingsSheet />);
-    fireEvent.click(screen.getByRole("button", { name: "فارسی" }));
+    fireEvent.click(screen.getByTestId("language-selector"));
+    fireEvent.click(screen.getByTestId("lang-option-fa"));
     expect(useSettingsStore.getState().locale).toBe("fa");
   });
 

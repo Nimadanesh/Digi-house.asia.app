@@ -157,6 +157,7 @@
     "aboutAdvice": "Keine Finanzberatung. Immobiliendokumente und Tokenisierung sind Demonstration bis Produktionsverträge.",
     "aboutCopyright": "© DigiHouse · MVP",
     "demoTxDisclaimer": "Dies ist eine Demo – Transaktionen werden simuliert",
-    "payoutDisclaimer": "simulierte wöchentliche Auszahlung · on-chain nach MVP"
+    "payoutDisclaimer": "simulierte wöchentliche Auszahlung · on-chain nach MVP",
+    "chooseLanguage": "Sprache wählen"
   }
 }

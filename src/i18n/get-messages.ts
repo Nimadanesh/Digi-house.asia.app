@@ -10,6 +10,12 @@ const loaders: Record<AppLocale, () => Promise<Messages>> = {
   ru: () => import("../../messages/ru.json").then((m) => m.default),
   de: () => import("../../messages/de.json").then((m) => m.default),
   tr: () => import("../../messages/tr.json").then((m) => m.default),
+  fr: () => import("../../messages/fr.json").then((m) => m.default),
+  es: () => import("../../messages/es.json").then((m) => m.default),
+  pt: () => import("../../messages/pt.json").then((m) => m.default),
+  zh: () => import("../../messages/zh.json").then((m) => m.default),
+  hi: () => import("../../messages/hi.json").then((m) => m.default),
+  id: () => import("../../messages/id.json").then((m) => m.default),
 };
 
 export async function getMessages(locale: AppLocale): Promise<Messages> {

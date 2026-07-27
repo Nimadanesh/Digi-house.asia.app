@@ -1,0 +1,163 @@
+{
+  "common": {
+    "appName": "DigiHouse",
+    "buyShare": "Acheter une part",
+    "browseMarketplace": "Parcourir le marché",
+    "viewAll": "Tout voir",
+    "refresh": "Actualiser",
+    "clearFilters": "Effacer les filtres",
+    "tryAgain": "Réessayer",
+    "retry": "Réessayer",
+    "skip": "Passer",
+    "continue": "Continuer",
+    "getStarted": "Commencer",
+    "settings": "Paramètres",
+    "connectWallet": "Connecter le portefeuille",
+    "walletConnected": "Portefeuille connecté",
+    "disconnectWallet": "Déconnecter le portefeuille",
+    "share": "part",
+    "shares": "parts",
+    "of": "sur",
+    "from": "À partir de",
+    "est": "Est.",
+    "apy": "APY",
+    "pending": "En attente",
+    "paid": "Payé",
+    "hot": "Populaire",
+    "new": "Nouveau",
+    "soldPct": "{pct} % vendu",
+    "week": "semaine",
+    "weeks": "semaines",
+    "demoMode": "Mode démo · données de test · transactions simulées",
+    "somethingWentWrong": "Une erreur s’est produite"
+  },
+  "tabs": {
+    "home": "Accueil",
+    "marketplace": "Marché",
+    "earnings": "Revenus",
+    "portfolio": "Portefeuille"
+  },
+  "header": {
+    "greeting": "Bonjour, {name}"
+  },
+  "onboarding": {
+    "skip": "Passer",
+    "continue": "Continuer",
+    "getStarted": "Commencer",
+    "slideProgress": "{current} / {total}",
+    "slideAria": "Diapositive {n}",
+    "own": {
+      "headline": "Devenez propriétaire d’un bien réel",
+      "subtitle": "À partir d’environ 80 $"
+    },
+    "yield": {
+      "headline": "Recevez votre part de loyer chaque semaine",
+      "subtitle": "Consultez votre part chaque vendredi dans Revenus"
+    },
+    "sell": {
+      "headline": "Vendez quand vous voulez",
+      "subtitle": "Listez vos parts sur le marché DigiHouse quand vous êtes prêt à sortir.",
+      "trustLine": "Ceci est une version démo ; les transactions sont simulées"
+    }
+  },
+  "home": {
+    "loadError": "Impossible de charger l’accueil.",
+    "portfolioValue": "Valeur du portefeuille",
+    "totalInvested": "Total investi",
+    "totalEarningsReceived": "Revenus totaux reçus",
+    "nextPayout": "Prochain versement",
+    "myProperties": "Mes biens",
+    "myPropertiesCount": "Mes biens ({count})",
+    "buyFirstShare": "Achetez votre première part",
+    "buyFirstShareHint": "Possédez une part — gagnez un loyer projeté chaque vendredi.",
+    "todaysHighlight": "Coup de cœur du jour",
+    "hotThisWeek": "Populaire cette semaine",
+    "weeklyPerShare": "Hebdo / part",
+    "pendingThisWeek": "{amount} en attente cette semaine"
+  },
+  "marketplace": {
+    "searchPlaceholder": "Rechercher des biens",
+    "searchAria": "Rechercher des biens",
+    "clearSearch": "Effacer la recherche",
+    "filtersAria": "Filtres du marché",
+    "loadError": "Impossible de charger les biens.",
+    "emptyTitle": "Aucun bien pour l’instant",
+    "emptyMessage": "De nouvelles offres fractionnées chaque semaine — revenez bientôt.",
+    "noMatchesTitle": "Aucun résultat",
+    "noMatchesMessage": "Essayez une autre recherche ou un autre filtre.",
+    "chips": {
+      "all": "Tous",
+      "highest_yield": "Meilleur rendement",
+      "new": "Nouveau",
+      "almost_sold": "Presque vendu",
+      "low_price": "Prix bas"
+    },
+    "pricePerShare": "Prix / part",
+    "weeklyPerShare": "Hebdo / part",
+    "minPurchase": "Achat min.",
+    "sharesSold": "{sold} sur {total} parts vendues"
+  },
+  "property": {
+    "buyShare": "Acheter une part",
+    "about": "À propos",
+    "metrics": "Indicateurs",
+    "trust": "Confiance et transparence",
+    "rentalHistory": "Historique locatif",
+    "incomeCalculator": "Calculateur de revenus",
+    "salesProgress": "Progression des ventes",
+    "gallery": "Galerie"
+  },
+  "earnings": {
+    "loadError": "Impossible de charger les revenus.",
+    "emptyTitle": "Pas encore de revenus",
+    "emptyMessage": "Achetez votre première part et commencez à gagner la semaine prochaine.",
+    "thisWeek": "Revenus de cette semaine",
+    "nextPayoutIn": "Prochain versement dans",
+    "totalReceived": "Revenus totaux reçus",
+    "consecutivePaid": "Semaines payées consécutives",
+    "streak": "{count} {unit} d’affilée ✓",
+    "noStreak": "Pas encore de série",
+    "timeline": "Historique",
+    "disclaimer": "versement hebdomadaire simulé · vérifiable on-chain après MVP"
+  },
+  "portfolio": {
+    "loadError": "Impossible de charger votre portefeuille.",
+    "emptyTitle": "Votre portefeuille est vide",
+    "emptyMessage": "Commencez vers 80 $ — achetez votre première part sur le marché.",
+    "totalValue": "Valeur totale du portefeuille",
+    "totalInvested": "Total investi",
+    "totalEarningsReceived": "Revenus totaux reçus",
+    "unrealizedProfit": "Plus-value latente",
+    "nextPayout": "Prochain versement",
+    "myPropertiesCount": "Mes biens ({count})",
+    "openOrders": "Ordres ouverts",
+    "allocation": "Répartition"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "wallet": "Portefeuille",
+    "connectTitle": "Connecter un portefeuille TON",
+    "connectHint": "Requis pour acheter des parts et recevoir le rendement hebdomadaire.",
+    "disconnect": "Déconnecter le portefeuille",
+    "preferences": "Préférences",
+    "displayCurrency": "Devise d’affichage",
+    "displayCurrencyHint": "Les montants restent en USD ; estimation TON à l’achat",
+    "language": "Langue",
+    "languageHint": "Langue de l’application",
+    "languageAuto": "Auto (Telegram)",
+    "chooseLanguage": "Choisir la langue",
+    "useTelegramTheme": "Thème Telegram",
+    "useTelegramThemeHint": "Couleurs Telegram",
+    "showDemoBadge": "Afficher le badge Démo",
+    "showDemoBadgeHint": "Libellé MVP honnête flottant",
+    "help": "Aide",
+    "howItWorks": "Comment fonctionne DigiHouse",
+    "aboutLegal": "À propos / Mentions légales",
+    "demoFooter": "Mode démo · données de test · transactions simulées",
+    "aboutBody": "DigiHouse est une Mini App Telegram pour des parts immobilières fractionnées sur TON. Le rendement locatif hebdomadaire est affiché au prorata de votre propriété.",
+    "aboutAdvice": "Ceci n’est pas un conseil financier. Documents et tokenisation sont démonstratifs jusqu’aux contrats de production.",
+    "aboutCopyright": "© DigiHouse · MVP",
+    "demoTxDisclaimer": "Ceci est une démo – les transactions sont simulées",
+    "payoutDisclaimer": "versement hebdomadaire simulé · vérifiable on-chain après MVP"
+  }
+}

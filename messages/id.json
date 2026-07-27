@@ -1,0 +1,163 @@
+{
+  "common": {
+    "appName": "DigiHouse",
+    "buyShare": "Beli saham",
+    "browseMarketplace": "Jelajahi pasar",
+    "viewAll": "Lihat semua",
+    "refresh": "Muat ulang",
+    "clearFilters": "Hapus filter",
+    "tryAgain": "Coba lagi",
+    "retry": "Ulangi",
+    "skip": "Lewati",
+    "continue": "Lanjut",
+    "getStarted": "Mulai",
+    "settings": "Pengaturan",
+    "connectWallet": "Hubungkan dompet",
+    "walletConnected": "Dompet terhubung",
+    "disconnectWallet": "Putuskan dompet",
+    "share": "saham",
+    "shares": "saham",
+    "of": "dari",
+    "from": "Dari",
+    "est": "Perkir.",
+    "apy": "APY",
+    "pending": "Menunggu",
+    "paid": "Dibayar",
+    "hot": "Populer",
+    "new": "Baru",
+    "soldPct": "{pct}% terjual",
+    "week": "minggu",
+    "weeks": "minggu",
+    "demoMode": "Mode demo · data contoh · transaksi disimulasikan",
+    "somethingWentWrong": "Terjadi kesalahan"
+  },
+  "tabs": {
+    "home": "Beranda",
+    "marketplace": "Pasar",
+    "earnings": "Pendapatan",
+    "portfolio": "Portofolio"
+  },
+  "header": {
+    "greeting": "Hai, {name}"
+  },
+  "onboarding": {
+    "skip": "Lewati",
+    "continue": "Lanjut",
+    "getStarted": "Mulai",
+    "slideProgress": "{current} / {total}",
+    "slideAria": "Slide {n}",
+    "own": {
+      "headline": "Jadi pemilik properti nyata",
+      "subtitle": "Mulai dari sekitar $80"
+    },
+    "yield": {
+      "headline": "Terima bagian sewa setiap minggu",
+      "subtitle": "Lihat bagianmu setiap Jumat di Pendapatan"
+    },
+    "sell": {
+      "headline": "Jual kapan saja",
+      "subtitle": "Cantumkan saham di pasar DigiHouse saat siap keluar.",
+      "trustLine": "Ini versi demo dan transaksi disimulasikan"
+    }
+  },
+  "home": {
+    "loadError": "Tidak dapat memuat beranda.",
+    "portfolioValue": "Nilai portofolio",
+    "totalInvested": "Total investasi",
+    "totalEarningsReceived": "Total pendapatan diterima",
+    "nextPayout": "Pembayaran berikutnya",
+    "myProperties": "Properti saya",
+    "myPropertiesCount": "Properti saya ({count})",
+    "buyFirstShare": "Beli saham pertamamu",
+    "buyFirstShareHint": "Miliki sepotong — dapatkan sewa proyeksi setiap Jumat.",
+    "todaysHighlight": "Sorotan hari ini",
+    "hotThisWeek": "Populer minggu ini",
+    "weeklyPerShare": "Mingguan / saham",
+    "pendingThisWeek": "{amount} menunggu minggu ini"
+  },
+  "marketplace": {
+    "searchPlaceholder": "Cari properti",
+    "searchAria": "Cari properti",
+    "clearSearch": "Hapus pencarian",
+    "filtersAria": "Filter pasar",
+    "loadError": "Tidak dapat memuat properti.",
+    "emptyTitle": "Belum ada properti",
+    "emptyMessage": "Listing fraksional baru setiap minggu — cek lagi nanti.",
+    "noMatchesTitle": "Tidak ada hasil",
+    "noMatchesMessage": "Coba pencarian atau filter lain.",
+    "chips": {
+      "all": "Semua",
+      "highest_yield": "Imbal hasil tertinggi",
+      "new": "Baru",
+      "almost_sold": "Hampir habis",
+      "low_price": "Harga rendah"
+    },
+    "pricePerShare": "Harga / saham",
+    "weeklyPerShare": "Mingguan / saham",
+    "minPurchase": "Min. beli",
+    "sharesSold": "{sold} dari {total} saham terjual"
+  },
+  "property": {
+    "buyShare": "Beli saham",
+    "about": "Tentang",
+    "metrics": "Metrik",
+    "trust": "Kepercayaan & transparansi",
+    "rentalHistory": "Riwayat sewa",
+    "incomeCalculator": "Kalkulator pendapatan",
+    "salesProgress": "Progres penjualan",
+    "gallery": "Galeri"
+  },
+  "earnings": {
+    "loadError": "Tidak dapat memuat pendapatan.",
+    "emptyTitle": "Belum ada pendapatan",
+    "emptyMessage": "Beli saham pertama dan mulai hasilkan minggu depan.",
+    "thisWeek": "Pendapatan minggu ini",
+    "nextPayoutIn": "Pembayaran berikutnya dalam",
+    "totalReceived": "Total pendapatan diterima",
+    "consecutivePaid": "Minggu dibayar beruntun",
+    "streak": "{count} {unit} beruntun ✓",
+    "noStreak": "Belum ada streak",
+    "timeline": "Riwayat",
+    "disclaimer": "pembayaran mingguan simulasi · dapat diverifikasi on-chain pasca-MVP"
+  },
+  "portfolio": {
+    "loadError": "Tidak dapat memuat portofolio.",
+    "emptyTitle": "Portofoliomu kosong",
+    "emptyMessage": "Mulai dari sekitar $80 — beli saham pertama di pasar.",
+    "totalValue": "Total nilai portofolio",
+    "totalInvested": "Total investasi",
+    "totalEarningsReceived": "Total pendapatan diterima",
+    "unrealizedProfit": "Laba belum terealisasi",
+    "nextPayout": "Pembayaran berikutnya",
+    "myPropertiesCount": "Properti saya ({count})",
+    "openOrders": "Order terbuka",
+    "allocation": "Alokasi"
+  },
+  "settings": {
+    "title": "Pengaturan",
+    "wallet": "Dompet",
+    "connectTitle": "Hubungkan dompet TON",
+    "connectHint": "Diperlukan untuk membeli saham dan menerima imbal hasil mingguan.",
+    "disconnect": "Putuskan dompet",
+    "preferences": "Preferensi",
+    "displayCurrency": "Mata uang tampilan",
+    "displayCurrencyHint": "Angka tetap USD; estimasi TON saat beli",
+    "language": "Bahasa",
+    "languageHint": "Bahasa aplikasi",
+    "languageAuto": "Otomatis (Telegram)",
+    "chooseLanguage": "Pilih bahasa",
+    "useTelegramTheme": "Gunakan tema Telegram",
+    "useTelegramThemeHint": "Sesuaikan warna Telegram",
+    "showDemoBadge": "Tampilkan lencana Demo",
+    "showDemoBadgeHint": "Label MVP jujur mengambang",
+    "help": "Bantuan",
+    "howItWorks": "Cara kerja DigiHouse",
+    "aboutLegal": "Tentang / Legal",
+    "demoFooter": "Mode demo · data contoh · transaksi disimulasikan",
+    "aboutBody": "DigiHouse adalah Mini App Telegram untuk saham real estat fraksional di TON. Imbal hasil sewa mingguan ditampilkan proporsional dengan kepemilikanmu.",
+    "aboutAdvice": "Tidak ada di sini yang merupakan nasihat keuangan. Dokumen properti dan tokenisasi bersifat demonstrasi hingga kontrak produksi.",
+    "aboutCopyright": "© DigiHouse · MVP",
+    "demoTxDisclaimer": "Ini demo – transaksi disimulasikan",
+    "payoutDisclaimer": "pembayaran mingguan simulasi · dapat diverifikasi on-chain pasca-MVP"
+  }
+}
