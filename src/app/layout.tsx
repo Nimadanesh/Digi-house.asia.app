@@ -25,7 +25,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   // children, so genuine hydration mismatches elsewhere still surface. See React docs:
   // https://react.dev/reference/react-dom/components/common#suppressing-unavoidable-hydration-mismatch-errors
   return (
-    <html lang="en" className="dark h-full antialiased" suppressHydrationWarning>
+    <html lang="en" dir="ltr" className="dark h-full antialiased" suppressHydrationWarning>
       <body className="min-h-full bg-background text-foreground font-sans">
         <Providers>{children}</Providers>
       </body>

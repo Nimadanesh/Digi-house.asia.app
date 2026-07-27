@@ -1,6 +1,7 @@
 "use client";
 // File responsibility: Home portfolio value hero card (Fable Home §Portfolio Value).
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { usd, ton, estimateNanoTon, pct } from "@/lib/format";
 import { ROUTES, TON_PRICE_USD_CENTS } from "@/lib/constants";
 import type { PortfolioSummary } from "@/types/position";
@@ -14,6 +15,7 @@ export function PortfolioValueCard({
   summary: PortfolioSummary;
   onNavigateHaptic?: () => void;
 }) {
+  const t = useTranslations("home");
   const change = summary.dayChangeRatio;
   const up = change >= 0;
 
@@ -25,7 +27,7 @@ export function PortfolioValueCard({
       data-testid="portfolio-value-card"
     >
       <Block className="p-4 space-y-3">
-        <p className="text-xs font-medium text-muted-foreground">Portfolio Value</p>
+        <p className="text-xs font-medium text-muted-foreground">{t("portfolioValue")}</p>
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <p className="text-[1.75rem] font-bold tracking-[-0.02em] tnum text-foreground leading-none">
@@ -48,11 +50,11 @@ export function PortfolioValueCard({
         </div>
         <div className="grid grid-cols-2 gap-3 border-t border-border pt-3">
           <div>
-            <p className="text-[0.6875rem] text-muted-foreground">Total Invested</p>
+            <p className="text-[0.6875rem] text-muted-foreground">{t("totalInvested")}</p>
             <p className="mt-0.5 text-sm font-semibold tnum text-foreground">{usd(summary.totalInvestedUsd)}</p>
           </div>
           <div>
-            <p className="text-[0.6875rem] text-muted-foreground">Total Earnings Received</p>
+            <p className="text-[0.6875rem] text-muted-foreground">{t("totalEarningsReceived")}</p>
             <p className="mt-0.5 text-sm font-semibold tnum text-success">{usd(summary.totalEarningsUsd)}</p>
           </div>
         </div>

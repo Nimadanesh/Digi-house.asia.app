@@ -4,6 +4,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { use } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useProperty } from "@/hooks/useProperty";
 import { useOrderBook } from "@/hooks/useOrderBook";
 import { useTelegram } from "@/hooks/useTelegram";
@@ -29,6 +30,8 @@ interface ToastState {
 
 export default function PropertyDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
+  const tCommon = useTranslations("common");
+  const tOnboarding = useTranslations("onboarding");
   const property = useProperty(id);
   const orderBook = useOrderBook(id);
   const tg = useTelegram();
@@ -164,7 +167,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
       }
       setMainButtonActive(true);
       tg.mainButton.setParams({
-        text: "Buy Share",
+        text: tCommon("buyShare"),
         isEnabled: true,
         color: "#3390ec",
         textColor: "#ffffff",
@@ -185,7 +188,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
 
     if (!ton.connected) {
       tg.mainButton.setParams({
-        text: "Connect Wallet",
+        text: tCommon("connectWallet"),
         isEnabled: true,
         color: "#3390ec",
         textColor: "#ffffff",
@@ -202,7 +205,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
     if (step === "qty") {
       const valid = qty >= 1 && qty <= remaining;
       tg.mainButton.setParams({
-        text: "Continue",
+        text: tOnboarding("continue"),
         isEnabled: valid && remaining > 0,
         color: "#3390ec",
         textColor: "#ffffff",
@@ -248,6 +251,8 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
     previewShares,
     buy.isPending,
     confirmBuy,
+    tCommon,
+    tOnboarding,
   ]);
 
   useEffect(() => {

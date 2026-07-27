@@ -1,6 +1,7 @@
 "use client";
 // File responsibility: Home screen composition (Fable Home). GlobalHeader is provided by AppShell.
 import { useMemo } from "react";
+import { useTranslations } from "next-intl";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { useEarnings } from "@/hooks/useEarnings";
 import { useMarketplace } from "@/hooks/useMarketplace";
@@ -25,6 +26,7 @@ const EMPTY_SUMMARY: PortfolioSummary = {
 };
 
 export default function HomePage() {
+  const t = useTranslations("home");
   const portfolio = usePortfolio();
   const earnings = useEarnings();
   const marketplace = useMarketplace();
@@ -48,7 +50,7 @@ export default function HomePage() {
     return (
       <div className="space-y-3" data-testid="home-error">
         <ErrorState
-          message="Couldn't load your home."
+          message={t("loadError")}
           onRetry={() => {
             haptics.impact("light");
             void portfolio.refetch();

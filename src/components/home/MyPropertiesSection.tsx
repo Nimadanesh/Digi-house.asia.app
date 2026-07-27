@@ -2,6 +2,7 @@
 // File responsibility: My Properties row — title + View All + horizontal chips or empty CTA (Fable).
 import Link from "next/link";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import type { Listing } from "@/types/property";
 import type { Holding } from "@/types/position";
 import { ROUTES } from "@/lib/constants";
@@ -17,18 +18,23 @@ export function MyPropertiesSection({
   listingById: Map<string, Listing>;
   onNavigateHaptic?: () => void;
 }) {
+  const t = useTranslations("home");
+  const tCommon = useTranslations("common");
+
   return (
     <section className="space-y-2" data-testid="my-properties-section">
       <div className="flex items-center justify-between px-0.5">
         <h2 className="text-[0.9375rem] font-semibold text-foreground">
-          My Properties{holdings.length > 0 ? ` (${holdings.length})` : ""}
+          {holdings.length > 0
+            ? t("myPropertiesCount", { count: holdings.length })
+            : t("myProperties")}
         </h2>
         <Link
           href={ROUTES.portfolio}
           onClick={() => onNavigateHaptic?.()}
           className="text-sm font-medium text-primary min-h-[44px] inline-flex items-center"
         >
-          View All
+          {tCommon("viewAll")}
         </Link>
       </div>
 
@@ -45,16 +51,14 @@ export function MyPropertiesSection({
             <div className="absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent" />
           </div>
           <div className="space-y-3 p-4 -mt-6 relative">
-            <p className="text-[0.9375rem] font-semibold text-foreground">Buy your first share</p>
-            <p className="text-sm text-muted-foreground">
-              Own a slice — earn projected rent every Friday.
-            </p>
+            <p className="text-[0.9375rem] font-semibold text-foreground">{t("buyFirstShare")}</p>
+            <p className="text-sm text-muted-foreground">{t("buyFirstShareHint")}</p>
             <Link
               href={ROUTES.marketplace}
               onClick={() => onNavigateHaptic?.()}
               className="inline-flex h-[44px] w-full items-center justify-center rounded-[10px] bg-primary text-sm font-semibold text-primary-foreground active:scale-[0.97] transition-transform duration-[120ms] ease-out"
             >
-              Browse Marketplace
+              {tCommon("browseMarketplace")}
             </Link>
           </div>
         </Block>

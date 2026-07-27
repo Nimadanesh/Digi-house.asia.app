@@ -1,0 +1,162 @@
+{
+  "common": {
+    "appName": "DigiHouse",
+    "buyShare": "Купить долю",
+    "browseMarketplace": "Открыть маркетплейс",
+    "viewAll": "Все",
+    "refresh": "Обновить",
+    "clearFilters": "Сбросить фильтры",
+    "tryAgain": "Повторить",
+    "retry": "Ещё раз",
+    "skip": "Пропустить",
+    "continue": "Далее",
+    "getStarted": "Начать",
+    "settings": "Настройки",
+    "connectWallet": "Подключить кошелёк",
+    "walletConnected": "Кошелёк подключён",
+    "disconnectWallet": "Отключить кошелёк",
+    "share": "доля",
+    "shares": "доли",
+    "of": "из",
+    "from": "От",
+    "est": "Оценка",
+    "apy": "APY",
+    "pending": "Ожидание",
+    "paid": "Выплачено",
+    "hot": "Хит",
+    "new": "Новое",
+    "soldPct": "{pct}% продано",
+    "week": "неделя",
+    "weeks": "недель",
+    "demoMode": "Демо · тестовые данные · транзакции симулируются",
+    "somethingWentWrong": "Что-то пошло не так"
+  },
+  "tabs": {
+    "home": "Главная",
+    "marketplace": "Маркет",
+    "earnings": "Доход",
+    "portfolio": "Портфель"
+  },
+  "header": {
+    "greeting": "Привет, {name}"
+  },
+  "onboarding": {
+    "skip": "Пропустить",
+    "continue": "Далее",
+    "getStarted": "Начать",
+    "slideProgress": "{current} / {total}",
+    "slideAria": "Слайд {n}",
+    "own": {
+      "headline": "Станьте владельцем доли недвижимости",
+      "subtitle": "Начните примерно с $80"
+    },
+    "yield": {
+      "headline": "Получайте долю аренды каждую неделю",
+      "subtitle": "Смотрите долю каждую пятницу в Доходе"
+    },
+    "sell": {
+      "headline": "Продавайте в любой момент",
+      "subtitle": "Выставляйте доли на маркетплейсе DigiHouse, когда готовы выйти.",
+      "trustLine": "Это демо-версия, транзакции симулируются"
+    }
+  },
+  "home": {
+    "loadError": "Не удалось загрузить главную.",
+    "portfolioValue": "Стоимость портфеля",
+    "totalInvested": "Всего вложено",
+    "totalEarningsReceived": "Всего получено",
+    "nextPayout": "Следующая выплата",
+    "myProperties": "Мои объекты",
+    "myPropertiesCount": "Мои объекты ({count})",
+    "buyFirstShare": "Купите первую долю",
+    "buyFirstShareHint": "Владейте частью — получайте прогноз аренды каждую пятницу.",
+    "todaysHighlight": "Сегодня в фокусе",
+    "hotThisWeek": "Хит недели",
+    "weeklyPerShare": "В неделю / доля",
+    "pendingThisWeek": "{amount} ожидает на этой неделе"
+  },
+  "marketplace": {
+    "searchPlaceholder": "Поиск объектов",
+    "searchAria": "Поиск объектов",
+    "clearSearch": "Очистить поиск",
+    "filtersAria": "Фильтры маркетплейса",
+    "loadError": "Не удалось загрузить объекты.",
+    "emptyTitle": "Пока нет объектов",
+    "emptyMessage": "Новые доли появляются каждую неделю — загляните позже.",
+    "noMatchesTitle": "Ничего не найдено",
+    "noMatchesMessage": "Попробуйте другой поиск или фильтр.",
+    "chips": {
+      "all": "Все",
+      "highest_yield": "Высший доход",
+      "new": "Новые",
+      "almost_sold": "Почти продано",
+      "low_price": "Низкая цена"
+    },
+    "pricePerShare": "Цена / доля",
+    "weeklyPerShare": "В неделю / доля",
+    "minPurchase": "Мин. покупка",
+    "sharesSold": "{sold} из {total} долей продано"
+  },
+  "property": {
+    "buyShare": "Купить долю",
+    "about": "О объекте",
+    "metrics": "Показатели",
+    "trust": "Доверие и прозрачность",
+    "rentalHistory": "История аренды",
+    "incomeCalculator": "Калькулятор дохода",
+    "salesProgress": "Прогресс продаж",
+    "gallery": "Галерея"
+  },
+  "earnings": {
+    "loadError": "Не удалось загрузить доход.",
+    "emptyTitle": "Пока нет дохода",
+    "emptyMessage": "Купите первую долю и начните зарабатывать со следующей недели.",
+    "thisWeek": "Доход за эту неделю",
+    "nextPayoutIn": "До следующей выплаты",
+    "totalReceived": "Всего получено",
+    "consecutivePaid": "Подряд выплаченных недель",
+    "streak": "{count} {unit} подряд ✓",
+    "noStreak": "Пока без серии",
+    "timeline": "История",
+    "disclaimer": "симулированная еженедельная выплата · on-chain после MVP"
+  },
+  "portfolio": {
+    "loadError": "Не удалось загрузить портфель.",
+    "emptyTitle": "Портфель пуст",
+    "emptyMessage": "Начните примерно с $80 — купите первую долю на маркетплейсе.",
+    "totalValue": "Общая стоимость портфеля",
+    "totalInvested": "Всего вложено",
+    "totalEarningsReceived": "Всего получено",
+    "unrealizedProfit": "Нереализованная прибыль",
+    "nextPayout": "Следующая выплата",
+    "myPropertiesCount": "Мои объекты ({count})",
+    "openOrders": "Открытые ордера",
+    "allocation": "Распределение"
+  },
+  "settings": {
+    "title": "Настройки",
+    "wallet": "Кошелёк",
+    "connectTitle": "Подключите TON-кошелёк",
+    "connectHint": "Нужен для покупки долей и еженедельного дохода.",
+    "disconnect": "Отключить кошелёк",
+    "preferences": "Предпочтения",
+    "displayCurrency": "Валюта отображения",
+    "displayCurrencyHint": "Суммы в USD; оценка TON при покупке",
+    "language": "Язык",
+    "languageHint": "Язык приложения",
+    "languageAuto": "Авто (Telegram)",
+    "useTelegramTheme": "Тема Telegram",
+    "useTelegramThemeHint": "Цвета как в Telegram",
+    "showDemoBadge": "Показать бейдж Demo",
+    "showDemoBadgeHint": "Честная метка MVP",
+    "help": "Помощь",
+    "howItWorks": "Как работает DigiHouse",
+    "aboutLegal": "О приложении / Правовая информация",
+    "demoFooter": "Демо · тестовые данные · транзакции симулируются",
+    "aboutBody": "DigiHouse — мини-приложение Telegram для долей недвижимости на TON. Еженедельный арендный доход показывается пропорционально вашей доле.",
+    "aboutAdvice": "Это не финансовый совет. Документы и токенизация — демонстрация до продакшен-контрактов.",
+    "aboutCopyright": "© DigiHouse · MVP",
+    "demoTxDisclaimer": "Это демо — транзакции симулируются",
+    "payoutDisclaimer": "симулированная еженедельная выплата · on-chain после MVP"
+  }
+}

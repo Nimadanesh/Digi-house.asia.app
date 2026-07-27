@@ -1,4 +1,6 @@
-﻿// File responsibility: horizontal allocation bar + legend (Fable Portfolio).
+﻿"use client";
+// File responsibility: horizontal allocation bar + legend (Fable Portfolio).
+import { useTranslations } from "next-intl";
 import { ALLOCATION_COLORS, type AllocationSlice } from "@/lib/portfolio-math";
 import { pct } from "@/lib/format";
 import { Block } from "@/components/common/Block";
@@ -11,10 +13,11 @@ export function AllocationBar({
   slices: AllocationSlice[];
   nameById: Record<string, string>;
 }) {
+  const t = useTranslations("portfolio");
   if (slices.length === 0) return null;
   return (
     <section className="space-y-2" data-testid="portfolio-allocation">
-      <h2 className="px-0.5 text-[0.9375rem] font-semibold text-foreground">Allocation</h2>
+      <h2 className="px-0.5 text-[0.9375rem] font-semibold text-foreground">{t("allocation")}</h2>
       <Block className="p-4 space-y-3">
         <div className="flex h-3 w-full overflow-hidden rounded-full bg-surface-2">
           {slices.map((s, i) => (
@@ -35,7 +38,7 @@ export function AllocationBar({
               />
               <span className="min-w-0 flex-1 truncate text-foreground">
                 {nameById[s.propertyId] ?? s.propertyId}
-                </span>
+              </span>
               <span className="tnum text-muted-foreground">{pct(s.ratio)}</span>
             </li>
           ))}

@@ -1,17 +1,21 @@
 "use client";
 // File responsibility: primary empty-state CTA → Marketplace with selection haptic.
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { ROUTES } from "@/lib/constants";
 import { haptics } from "@/lib/telegram/haptics";
 import { cn } from "@/lib/utils";
 
 export function BrowseMarketplaceCta({
   className,
-  label = "Browse Marketplace",
+  label,
 }: {
   className?: string;
   label?: string;
 }) {
+  const t = useTranslations("common");
+  const text = label ?? t("browseMarketplace");
+
   return (
     <Link
       href={ROUTES.marketplace}
@@ -21,7 +25,7 @@ export function BrowseMarketplaceCta({
         className,
       )}
     >
-      {label}
+      {text}
     </Link>
   );
 }

@@ -1,0 +1,162 @@
+{
+  "common": {
+    "appName": "DigiHouse",
+    "buyShare": "Buy Share",
+    "browseMarketplace": "Browse Marketplace",
+    "viewAll": "View All",
+    "refresh": "Refresh",
+    "clearFilters": "Clear filters",
+    "tryAgain": "Try Again",
+    "retry": "Retry",
+    "skip": "Skip",
+    "continue": "Continue",
+    "getStarted": "Get Started",
+    "settings": "Settings",
+    "connectWallet": "Connect wallet",
+    "walletConnected": "Wallet connected",
+    "disconnectWallet": "Disconnect Wallet",
+    "share": "share",
+    "shares": "shares",
+    "of": "of",
+    "from": "From",
+    "est": "Est.",
+    "apy": "APY",
+    "pending": "Pending",
+    "paid": "Paid",
+    "hot": "Hot",
+    "new": "New",
+    "soldPct": "{pct}% Sold",
+    "week": "week",
+    "weeks": "weeks",
+    "demoMode": "Demo mode · seed data · transactions simulated",
+    "somethingWentWrong": "Something went wrong"
+  },
+  "tabs": {
+    "home": "Home",
+    "marketplace": "Marketplace",
+    "earnings": "Earnings",
+    "portfolio": "Portfolio"
+  },
+  "header": {
+    "greeting": "Hi, {name}"
+  },
+  "onboarding": {
+    "skip": "Skip",
+    "continue": "Continue",
+    "getStarted": "Get Started",
+    "slideProgress": "{current} / {total}",
+    "slideAria": "Slide {n}",
+    "own": {
+      "headline": "Become owner of a real property",
+      "subtitle": "Start from as little as $80"
+    },
+    "yield": {
+      "headline": "Receive your rental share every week",
+      "subtitle": "See your share every Friday in Earnings"
+    },
+    "sell": {
+      "headline": "Sell anytime you want",
+      "subtitle": "List shares on the DigiHouse marketplace when you’re ready to exit.",
+      "trustLine": "This is a demo version and transactions are simulated"
+    }
+  },
+  "home": {
+    "loadError": "Couldn't load your home.",
+    "portfolioValue": "Portfolio Value",
+    "totalInvested": "Total Invested",
+    "totalEarningsReceived": "Total Earnings Received",
+    "nextPayout": "Next Payout",
+    "myProperties": "My Properties",
+    "myPropertiesCount": "My Properties ({count})",
+    "buyFirstShare": "Buy your first share",
+    "buyFirstShareHint": "Own a slice — earn projected rent every Friday.",
+    "todaysHighlight": "Today's Highlight",
+    "hotThisWeek": "Hot this week",
+    "weeklyPerShare": "Weekly / share",
+    "pendingThisWeek": "{amount} pending this week"
+  },
+  "marketplace": {
+    "searchPlaceholder": "Search properties",
+    "searchAria": "Search properties",
+    "clearSearch": "Clear search",
+    "filtersAria": "Marketplace filters",
+    "loadError": "Couldn't load properties.",
+    "emptyTitle": "No properties yet",
+    "emptyMessage": "New fractional listings land every week — check back soon.",
+    "noMatchesTitle": "No matches",
+    "noMatchesMessage": "Try another search or filter chip.",
+    "chips": {
+      "all": "All",
+      "highest_yield": "Highest Yield",
+      "new": "New",
+      "almost_sold": "Almost Sold",
+      "low_price": "Low Price"
+    },
+    "pricePerShare": "Price / share",
+    "weeklyPerShare": "Weekly / share",
+    "minPurchase": "Min. purchase",
+    "sharesSold": "{sold} of {total} shares sold"
+  },
+  "property": {
+    "buyShare": "Buy Share",
+    "about": "About",
+    "metrics": "Metrics",
+    "trust": "Trust & transparency",
+    "rentalHistory": "Rental history",
+    "incomeCalculator": "Income calculator",
+    "salesProgress": "Sales progress",
+    "gallery": "Gallery"
+  },
+  "earnings": {
+    "loadError": "Couldn't load earnings.",
+    "emptyTitle": "You haven't earned yet",
+    "emptyMessage": "Buy your first share and start earning next week.",
+    "thisWeek": "This Week's Earnings",
+    "nextPayoutIn": "Next payout in",
+    "totalReceived": "Total Earnings Received",
+    "consecutivePaid": "Consecutive Paid Weeks",
+    "streak": "{count} {unit} in a row ✓",
+    "noStreak": "No streak yet",
+    "timeline": "History",
+    "disclaimer": "simulated weekly payout · on-chain verifiable post-MVP"
+  },
+  "portfolio": {
+    "loadError": "Couldn't load your portfolio.",
+    "emptyTitle": "Your portfolio is empty",
+    "emptyMessage": "Start from about $80 — buy your first share on the marketplace.",
+    "totalValue": "Total Portfolio Value",
+    "totalInvested": "Total Invested",
+    "totalEarningsReceived": "Total Earnings Received",
+    "unrealizedProfit": "Unrealized Profit",
+    "nextPayout": "Next Payout",
+    "myPropertiesCount": "My Properties ({count})",
+    "openOrders": "Open Orders",
+    "allocation": "Allocation"
+  },
+  "settings": {
+    "title": "Settings",
+    "wallet": "Wallet",
+    "connectTitle": "Connect a TON wallet",
+    "connectHint": "Required to buy shares and receive weekly yield.",
+    "disconnect": "Disconnect Wallet",
+    "preferences": "Preferences",
+    "displayCurrency": "Display currency",
+    "displayCurrencyHint": "Figures stay in USD; TON estimates show on buy",
+    "language": "Language",
+    "languageHint": "App language",
+    "languageAuto": "Auto (Telegram)",
+    "useTelegramTheme": "Use Telegram theme",
+    "useTelegramThemeHint": "Match Telegram colors",
+    "showDemoBadge": "Show Demo badge",
+    "showDemoBadgeHint": "Floating honest MVP label",
+    "help": "Help",
+    "howItWorks": "How DigiHouse Works",
+    "aboutLegal": "About / Legal",
+    "demoFooter": "Demo mode · seed data · transactions simulated",
+    "aboutBody": "DigiHouse is a Telegram Mini App for fractional real-estate shares on TON. Weekly rental yield is shown proportional to your ownership.",
+    "aboutAdvice": "Nothing here is financial advice. Property documents and tokenization disclosures are for demonstration until production contracts ship.",
+    "aboutCopyright": "© DigiHouse · MVP",
+    "demoTxDisclaimer": "This is a demo – transactions are simulated",
+    "payoutDisclaimer": "simulated weekly payout · on-chain verifiable post-MVP"
+  }
+}

@@ -1,6 +1,7 @@
 "use client";
 // File responsibility: Portfolio summary hero — large value centered, PnL badge below.
 import { ArrowUp, ArrowDown } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Block } from "@/components/common/Block";
 import { PayoutCountdown } from "@/components/earnings/PayoutCountdown";
 import { usd, pct } from "@/lib/format";
@@ -12,6 +13,7 @@ import type { PortfolioSummary } from "@/types/position";
 import { cn } from "@/lib/utils";
 
 export function PortfolioSummaryCard({ summary }: { summary: PortfolioSummary }) {
+  const t = useTranslations("portfolio");
   const unrealized = portfolioUnrealizedUsd(summary.totalValueUsd, summary.totalInvestedUsd);
   const ratio = portfolioUnrealizedRatio(summary.totalValueUsd, summary.totalInvestedUsd);
   const up = unrealized >= 0;
@@ -20,7 +22,7 @@ export function PortfolioSummaryCard({ summary }: { summary: PortfolioSummary })
   return (
     <Block className="p-4 space-y-4" data-testid="portfolio-summary">
       <div className="text-center space-y-2">
-        <p className="text-xs font-medium text-muted-foreground">Total Portfolio Value</p>
+        <p className="text-xs font-medium text-muted-foreground">{t("totalValue")}</p>
         <p
           className="text-[1.75rem] font-bold tracking-[-0.02em] tnum text-foreground leading-none"
           data-testid="portfolio-total-value"
@@ -47,21 +49,21 @@ export function PortfolioSummaryCard({ summary }: { summary: PortfolioSummary })
       </div>
 
       <div className="grid grid-cols-2 gap-3 border-t border-border pt-3">
-        <Stat label="Total Invested" value={usd(summary.totalInvestedUsd)} />
+        <Stat label={t("totalInvested")} value={usd(summary.totalInvestedUsd)} />
         <Stat
-          label="Total Earnings Received"
+          label={t("totalEarningsReceived")}
           value={usd(summary.totalEarningsUsd)}
           valueClass="text-success"
           testId="portfolio-total-earnings"
         />
         <Stat
-          label="Unrealized Profit"
+          label={t("unrealizedProfit")}
           value={sign + usd(Math.abs(unrealized))}
           valueClass={up ? "text-success" : "text-danger"}
           testId="portfolio-unrealized"
         />
         <div>
-          <p className="text-[0.6875rem] text-muted-foreground">Next Payout</p>
+          <p className="text-[0.6875rem] text-muted-foreground">{t("nextPayout")}</p>
           <p
             className="mt-0.5 text-sm font-semibold tnum text-foreground"
             data-testid="portfolio-next-payout"

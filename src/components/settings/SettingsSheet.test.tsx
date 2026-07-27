@@ -8,7 +8,8 @@ const disconnect = vi.fn();
 const push = vi.fn();
 const backShow = vi.fn();
 const backHide = vi.fn();
-const backOnClick = vi.fn(() => () => {});
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const backOnClick = vi.fn((..._args: unknown[]) => () => {});
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ push, replace: vi.fn() }),
@@ -59,6 +60,7 @@ describe("SettingsSheet", () => {
       useTelegramTheme: false,
       onboarded: true,
       showDemoBadge: true,
+      locale: null,
     });
   });
 
@@ -77,10 +79,18 @@ describe("SettingsSheet", () => {
     expect(useSettingsStore.getState().displayCurrency).toBe("ton");
   });
 
-  it("shows language placeholder (English)", () => {
+  it("shows language selector with Auto + English", () => {
     render(<SettingsSheet />);
     expect(screen.getByText("Language")).toBeInTheDocument();
-    expect(screen.getByText("English")).toBeInTheDocument();
+    expect(screen.getByTestId("language-selector")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /auto \(telegram\)/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "English" })).toBeInTheDocument();
+  });
+
+  it("persists explicit locale choice", () => {
+    render(<SettingsSheet />);
+    fireEvent.click(screen.getByRole("button", { name: "فارسی" }));
+    expect(useSettingsStore.getState().locale).toBe("fa");
   });
 
   it("How DigiHouse Works sets onboarding replay and navigates", () => {

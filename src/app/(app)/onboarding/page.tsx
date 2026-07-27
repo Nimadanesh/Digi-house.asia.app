@@ -3,6 +3,7 @@
 // MainButton: Continue (slides 1–2) / Get Started (last). In-page Start on last slide. Skip top-right.
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useTelegram } from "@/hooks/useTelegram";
 import { useTelegramBackButton } from "@/hooks/useTelegramBackButton";
 import { useSettingsStore } from "@/stores/settings.store";
@@ -12,6 +13,7 @@ import { ONBOARDING_SLIDE_COUNT } from "@/lib/onboarding-slides";
 import { OnboardingCarousel } from "@/components/onboarding/OnboardingCarousel";
 
 export default function OnboardingPage() {
+  const t = useTranslations("onboarding");
   const router = useRouter();
   const tg = useTelegram();
   const setOnboarded = useSettingsStore((s) => s.setOnboarded);
@@ -29,17 +31,15 @@ export default function OnboardingPage() {
     router.replace(ROUTES.home);
   }, [router, setOnboarded, setOnboardingReplay, setMainButtonActive, tg]);
 
-  // BackButton: hidden on slide 0; show + previous slide on later steps.
   useTelegramBackButton(
     index,
     useCallback(() => setIndex((i) => Math.max(0, i - 1)), []),
   );
 
-  // MainButton: Continue on early slides; Get Started on last (safe outside Mini Apps).
   useEffect(() => {
     setMainButtonActive(true);
     tg.mainButton.setParams({
-      text: isLast ? "Get Started" : "Continue",
+      text: isLast ? t("getStarted") : t("continue"),
       isEnabled: true,
       color: "#3390ec",
       textColor: "#ffffff",
@@ -52,7 +52,7 @@ export default function OnboardingPage() {
     return () => {
       off();
     };
-  }, [complete, isLast, setMainButtonActive, tg]);
+  }, [complete, isLast, setMainButtonActive, t, tg]);
 
   useEffect(() => {
     return () => {
@@ -75,7 +75,7 @@ export default function OnboardingPage() {
           className="min-h-[44px] px-2 text-sm font-medium text-primary active:opacity-80"
           data-testid="onboarding-skip"
         >
-          Skip
+          {t("skip")}
         </button>
       </div>
 
@@ -96,13 +96,13 @@ export default function OnboardingPage() {
             className="inline-flex h-[52px] w-full items-center justify-center rounded-[12px] bg-primary text-[0.9375rem] font-semibold text-primary-foreground active:scale-[0.98] transition-transform duration-[120ms] ease-out"
             data-testid="onboarding-start"
           >
-            Get Started
+            {t("getStarted")}
           </button>
         </div>
       ) : null}
 
       <p className="pb-2 text-center text-[0.6875rem] text-muted-foreground tnum">
-        {index + 1} / {ONBOARDING_SLIDE_COUNT}
+        {t("slideProgress", { current: index + 1, total: ONBOARDING_SLIDE_COUNT })}
       </p>
     </div>
   );

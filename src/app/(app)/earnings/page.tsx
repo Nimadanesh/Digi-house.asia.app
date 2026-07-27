@@ -2,6 +2,7 @@
 // File responsibility: Earnings hero page (Fable Earnings polish).
 // UI via hooks only. Row expand holds the single discrete demo disclaimer (not on collapsed rows).
 import { useMemo } from "react";
+import { useTranslations } from "next-intl";
 import { useEarnings } from "@/hooks/useEarnings";
 import { useMarketplace } from "@/hooks/useMarketplace";
 import { usePortfolio } from "@/hooks/usePortfolio";
@@ -16,6 +17,7 @@ import { EarningsTimeline } from "@/components/earnings/EarningsTimeline";
 import { EarningsSkeleton } from "@/components/earnings/EarningsSkeleton";
 
 export default function EarningsPage() {
+  const t = useTranslations("earnings");
   const earnings = useEarnings();
   const marketplace = useMarketplace();
   const portfolio = usePortfolio();
@@ -52,7 +54,7 @@ export default function EarningsPage() {
     return (
       <ErrorState
         className="mt-4"
-        message="Couldn't load earnings."
+        message={t("loadError")}
         onRetry={() => {
           haptics.impact("light");
           void earnings.refetch();
@@ -65,8 +67,8 @@ export default function EarningsPage() {
   if (!earnings.data || earnings.data.entries.length === 0) {
     return (
       <EmptyState
-        title="You haven't earned yet"
-        message="Buy your first share and start earning next week."
+        title={t("emptyTitle")}
+        message={t("emptyMessage")}
         action={<BrowseMarketplaceCta />}
         className="mt-12"
         data-testid="earnings-empty"

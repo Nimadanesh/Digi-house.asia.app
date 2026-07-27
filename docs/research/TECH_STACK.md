@@ -113,6 +113,14 @@ docs/research/                           # spec docs (source of truth)
   - `NEXT_PUBLIC_PAYOUT_TICK_MS` (mock scheduler cadence; default `60000`).
 - BotFather token kept out of the repo (configure Mini App URL via the live bot, not a baked-in secret).
 
+## Internationalization
+| Concern | Choice | Notes |
+|---|---|---|
+| Library | **`next-intl`** | App Router–friendly; client provider only (no `[locale]` URL segment — TMA start URLs stay stable). |
+| Catalogs | `messages/{en,fa,ar,ru,de,tr}.json` | English is source of truth. Namespaced keys. |
+| Detection | Telegram `language_code` → `detectLocaleFromCode`; optional user override in Settings | Persisted on `settings.store.locale` (`null` = Auto). |
+| RTL | `fa`, `ar` via `document.documentElement.dir` + logical CSS | See `docs/i18n.md`. |
+
 ## Decisions log (append-only)
 - **Dropped `@telegram-apps/telegram-ui`** — requires React 18; conflicts with React 19. We use shadcn + DESIGN_SYSTEM instead, restyled to native-Telegram. Strong preference for owned copy-in components over a pinned UI lib anyway (full control of native fidelity).
 - **Kept `@telegram-apps/sdk-react`** even with the deprecation warning; acceptable for MVP; swap to `@tma.js/react` only if it breaks.
@@ -133,3 +141,4 @@ docs/research/                           # spec docs (source of truth)
 - **TypeScript bumped to 7.0.2** during manual Bun install — major version above the `^5` baseline; no Phase 2 usage relies on 7-specific features yet. Monitor for breaking changes.
 - **Vitest 4 + jsdom 29 + @testing-library added** — pure-utility TDD for `lib/ton/**` (address, nano conversions, sendTx logic). No component tests in Phase 2.
 - **`three@0.185` for onboarding only** — removed in favor of CSS fraction-house animation (Telegram WebView perf / stability).
+- **`next-intl` for i18n (no locale URL prefix)** — client `NextIntlClientProvider` + `messages/*.json` for en/fa/ar/ru/de/tr; locale from Settings override or Telegram `language_code`; RTL via `dir` on `<html>`. Avoids breaking TMA fixed start URLs. Guide: `docs/i18n.md`.

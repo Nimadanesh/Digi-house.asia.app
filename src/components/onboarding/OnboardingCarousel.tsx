@@ -1,8 +1,10 @@
 "use client";
 // File responsibility: swipeable onboarding carousel + pagination dots (Fable Onboarding §Carousel).
-// Swipe or tap content to advance; dots jump to slide.
+// Swipe or tap content to advance; dots jump to slide. RTL flips swipe direction.
 import { useCallback, useRef, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { ONBOARDING_SLIDES, ONBOARDING_SLIDE_COUNT } from "@/lib/onboarding-slides";
+import { isRtlLocale, type AppLocale } from "@/i18n/config";
 import { cn } from "@/lib/utils";
 import { OnboardingSlide } from "./OnboardingSlide";
 
@@ -15,6 +17,9 @@ export function OnboardingCarousel({
   onIndexChange: (i: number) => void;
   onSwipeHaptic?: () => void;
 }) {
+  const t = useTranslations("onboarding");
+  const locale = useLocale() as AppLocale;
+  const rtl = isRtlLocale(locale);
   const startX = useRef<number | null>(null);
   const [dragging, setDragging] = useState(false);
 
@@ -27,6 +32,10 @@ export function OnboardingCarousel({
     },
     [index, onIndexChange, onSwipeHaptic],
   );
+
+  const trackTransform = rtl
+    ? `translateX(${index * 100}%)`
+    : `translateX(-${index * 100}%)`;
 
   return (
     <div className="flex flex-1 flex-col min-h-0" data-testid="onboarding-carousel">
@@ -52,7 +61,9 @@ export function OnboardingCarousel({
           const wasDrag = Math.abs(dx) >= 48;
           setDragging(false);
           if (!wasDrag) return;
-          go(dx < 0 ? index + 1 : index - 1);
+          // LTR: swipe left (dx < 0) → next. RTL: swipe right (dx > 0) → next.
+          const goNext = rtl ? dx > 0 : dx < 0;
+          go(goNext ? index + 1 : index - 1);
         }}
         onTouchCancel={() => {
           startX.current = null;
@@ -62,9 +73,10 @@ export function OnboardingCarousel({
         <div
           className={cn(
             "flex h-full w-full",
+            rtl && "flex-row-reverse",
             !dragging && "transition-transform duration-[280ms] ease-[var(--ease-tg-out)]",
           )}
-          style={{ transform: `translateX(-${index * 100}%)` }}
+          style={{ transform: trackTransform }}
           data-testid="onboarding-track"
         >
           {ONBOARDING_SLIDES.map((slide) => (
@@ -79,7 +91,7 @@ export function OnboardingCarousel({
             key={slide.id}
             type="button"
             role="tab"
-            aria-label={`Slide ${i + 1}`}
+            aria-label={t("slideAria", { n: i + 1 })}
             aria-selected={i === index}
             onClick={(e) => {
               e.stopPropagation();

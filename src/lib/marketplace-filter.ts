@@ -4,6 +4,16 @@ import { annualYieldRatio } from "@/lib/format";
 
 export type MarketplaceChip = "all" | "highest_yield" | "new" | "almost_sold" | "low_price";
 
+/** Chip ids only — labels live in messages via i18n (`marketplace.chips.*`). */
+export const MARKETPLACE_CHIP_IDS: readonly MarketplaceChip[] = [
+  "all",
+  "highest_yield",
+  "new",
+  "almost_sold",
+  "low_price",
+] as const;
+
+/** @deprecated Prefer MARKETPLACE_CHIP_IDS + i18n labels */
 export const MARKETPLACE_CHIPS: readonly { id: MarketplaceChip; label: string }[] = [
   { id: "all", label: "All" },
   { id: "highest_yield", label: "Highest Yield" },
@@ -55,7 +65,12 @@ export function filterMarketplaceListings(
   }
 }
 
-export type CardStatusBadge = { kind: "new" | "sold_pct" | "hot"; label: string };
+export type CardStatusBadge = {
+  kind: "new" | "sold_pct" | "hot";
+  /** English fallback for tests / pure callers; UI should i18n via kind + soldPct. */
+  label: string;
+  soldPct?: number;
+};
 
 /**
  * Left-image badge: New (recent), scarcity % Sold when progressive, Hot when mid-scramble funding.
@@ -69,7 +84,7 @@ export function listingStatusBadge(listing: Listing, nowMs: number): CardStatusB
   }
   if (listing.status === "funding" && listing.fundingProgressRatio >= 0.8 && listing.sharesRemaining > 0) {
     const soldPct = Math.round(listing.fundingProgressRatio * 100);
-    return { kind: "sold_pct", label: `${soldPct}% Sold` };
+    return { kind: "sold_pct", label: `${soldPct}% Sold`, soldPct };
   }
   if (
     listing.status === "funding" &&
@@ -81,7 +96,7 @@ export function listingStatusBadge(listing: Listing, nowMs: number): CardStatusB
   }
   if (listing.fundingProgressRatio > 0) {
     const soldPct = Math.round(listing.fundingProgressRatio * 100);
-    return { kind: "sold_pct", label: `${soldPct}% Sold` };
+    return { kind: "sold_pct", label: `${soldPct}% Sold`, soldPct };
   }
   return { kind: "new", label: "New" };
 }

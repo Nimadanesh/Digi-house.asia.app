@@ -2,6 +2,7 @@
 // File responsibility: Marketplace screen — search, filter chips, listing stack (Fable Marketplace).
 // Data via useMarketplace; client filter/sort via pure filterMarketplaceListings.
 import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { useMarketplace } from "@/hooks/useMarketplace";
 import { useTelegram } from "@/hooks/useTelegram";
 import { filterMarketplaceListings, type MarketplaceChip } from "@/lib/marketplace-filter";
@@ -14,6 +15,8 @@ import { ErrorState } from "@/components/common/ErrorState";
 import { Button } from "@/components/ui/button";
 
 export default function MarketplacePage() {
+  const t = useTranslations("marketplace");
+  const tCommon = useTranslations("common");
   const { data, isLoading, isError, refetch } = useMarketplace();
   const { haptics } = useTelegram();
   const [query, setQuery] = useState("");
@@ -36,7 +39,7 @@ export default function MarketplacePage() {
     return (
       <ErrorState
         className="mt-4"
-        message="Couldn't load properties."
+        message={t("loadError")}
         onRetry={() => {
           haptics.impact("light");
           void refetch();
@@ -66,8 +69,8 @@ export default function MarketplacePage() {
 
       {emptyAll ? (
         <EmptyState
-          title="No properties yet"
-          message="New fractional listings land every week — check back soon."
+          title={t("emptyTitle")}
+          message={t("emptyMessage")}
           className="mt-8"
           action={
             <Button
@@ -77,14 +80,14 @@ export default function MarketplacePage() {
                 void refetch();
               }}
             >
-              Refresh
+              {tCommon("refresh")}
             </Button>
           }
         />
       ) : emptyFiltered ? (
         <EmptyState
-          title="No matches"
-          message="Try another search or filter chip."
+          title={t("noMatchesTitle")}
+          message={t("noMatchesMessage")}
           className="mt-8"
           action={
             <Button
@@ -95,7 +98,7 @@ export default function MarketplacePage() {
                 haptics.selection();
               }}
             >
-              Clear filters
+              {tCommon("clearFilters")}
             </Button>
           }
         />

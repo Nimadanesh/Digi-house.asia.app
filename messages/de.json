@@ -1,0 +1,162 @@
+{
+  "common": {
+    "appName": "DigiHouse",
+    "buyShare": "Anteil kaufen",
+    "browseMarketplace": "Marktplatz öffnen",
+    "viewAll": "Alle anzeigen",
+    "refresh": "Aktualisieren",
+    "clearFilters": "Filter löschen",
+    "tryAgain": "Erneut versuchen",
+    "retry": "Wiederholen",
+    "skip": "Überspringen",
+    "continue": "Weiter",
+    "getStarted": "Loslegen",
+    "settings": "Einstellungen",
+    "connectWallet": "Wallet verbinden",
+    "walletConnected": "Wallet verbunden",
+    "disconnectWallet": "Wallet trennen",
+    "share": "Anteil",
+    "shares": "Anteile",
+    "of": "von",
+    "from": "Ab",
+    "est": "Ca.",
+    "apy": "APY",
+    "pending": "Ausstehend",
+    "paid": "Ausgezahlt",
+    "hot": "Beliebt",
+    "new": "Neu",
+    "soldPct": "{pct}% verkauft",
+    "week": "Woche",
+    "weeks": "Wochen",
+    "demoMode": "Demo-Modus · Seed-Daten · Transaktionen simuliert",
+    "somethingWentWrong": "Etwas ist schiefgelaufen"
+  },
+  "tabs": {
+    "home": "Start",
+    "marketplace": "Marktplatz",
+    "earnings": "Erträge",
+    "portfolio": "Portfolio"
+  },
+  "header": {
+    "greeting": "Hallo, {name}"
+  },
+  "onboarding": {
+    "skip": "Überspringen",
+    "continue": "Weiter",
+    "getStarted": "Loslegen",
+    "slideProgress": "{current} / {total}",
+    "slideAria": "Folie {n}",
+    "own": {
+      "headline": "Werde Miteigentümer einer Immobilie",
+      "subtitle": "Starte ab etwa 80 $"
+    },
+    "yield": {
+      "headline": "Erhalte deinen Mietanteil jede Woche",
+      "subtitle": "Sieh deinen Anteil jeden Freitag unter Erträge"
+    },
+    "sell": {
+      "headline": "Jederzeit verkaufen",
+      "subtitle": "Stelle Anteile auf dem DigiHouse-Marktplatz ein, wenn du aussteigen willst.",
+      "trustLine": "Dies ist eine Demo-Version; Transaktionen werden simuliert"
+    }
+  },
+  "home": {
+    "loadError": "Startseite konnte nicht geladen werden.",
+    "portfolioValue": "Portfoliowert",
+    "totalInvested": "Gesamt investiert",
+    "totalEarningsReceived": "Erhaltene Erträge gesamt",
+    "nextPayout": "Nächste Auszahlung",
+    "myProperties": "Meine Immobilien",
+    "myPropertiesCount": "Meine Immobilien ({count})",
+    "buyFirstShare": "Kaufe deinen ersten Anteil",
+    "buyFirstShareHint": "Besitze einen Anteil — erhalte projizierte Miete jeden Freitag.",
+    "todaysHighlight": "Highlight des Tages",
+    "hotThisWeek": "Beliebt diese Woche",
+    "weeklyPerShare": "Wöchentlich / Anteil",
+    "pendingThisWeek": "{amount} ausstehend diese Woche"
+  },
+  "marketplace": {
+    "searchPlaceholder": "Immobilien suchen",
+    "searchAria": "Immobilien suchen",
+    "clearSearch": "Suche löschen",
+    "filtersAria": "Marktplatz-Filter",
+    "loadError": "Immobilien konnten nicht geladen werden.",
+    "emptyTitle": "Noch keine Immobilien",
+    "emptyMessage": "Neue fraktionierte Angebote jede Woche — schau bald wieder vorbei.",
+    "noMatchesTitle": "Keine Treffer",
+    "noMatchesMessage": "Andere Suche oder anderen Filter versuchen.",
+    "chips": {
+      "all": "Alle",
+      "highest_yield": "Höchste Rendite",
+      "new": "Neu",
+      "almost_sold": "Fast ausverkauft",
+      "low_price": "Günstiger Preis"
+    },
+    "pricePerShare": "Preis / Anteil",
+    "weeklyPerShare": "Wöchentlich / Anteil",
+    "minPurchase": "Mindestkauf",
+    "sharesSold": "{sold} von {total} Anteilen verkauft"
+  },
+  "property": {
+    "buyShare": "Anteil kaufen",
+    "about": "Über",
+    "metrics": "Kennzahlen",
+    "trust": "Vertrauen & Transparenz",
+    "rentalHistory": "Mietverlauf",
+    "incomeCalculator": "Ertragsrechner",
+    "salesProgress": "Verkaufsfortschritt",
+    "gallery": "Galerie"
+  },
+  "earnings": {
+    "loadError": "Erträge konnten nicht geladen werden.",
+    "emptyTitle": "Noch keine Erträge",
+    "emptyMessage": "Kaufe deinen ersten Anteil und verdiene ab nächster Woche.",
+    "thisWeek": "Erträge dieser Woche",
+    "nextPayoutIn": "Nächste Auszahlung in",
+    "totalReceived": "Erhaltene Erträge gesamt",
+    "consecutivePaid": "Aufeinanderfolgende Auszahlungswochen",
+    "streak": "{count} {unit} in Folge ✓",
+    "noStreak": "Noch keine Serie",
+    "timeline": "Verlauf",
+    "disclaimer": "simulierte wöchentliche Auszahlung · on-chain nach MVP"
+  },
+  "portfolio": {
+    "loadError": "Portfolio konnte nicht geladen werden.",
+    "emptyTitle": "Dein Portfolio ist leer",
+    "emptyMessage": "Starte ab etwa 80 $ — kaufe deinen ersten Anteil auf dem Marktplatz.",
+    "totalValue": "Gesamter Portfoliowert",
+    "totalInvested": "Gesamt investiert",
+    "totalEarningsReceived": "Erhaltene Erträge gesamt",
+    "unrealizedProfit": "Unrealisierter Gewinn",
+    "nextPayout": "Nächste Auszahlung",
+    "myPropertiesCount": "Meine Immobilien ({count})",
+    "openOrders": "Offene Orders",
+    "allocation": "Allokation"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "wallet": "Wallet",
+    "connectTitle": "TON-Wallet verbinden",
+    "connectHint": "Erforderlich zum Kauf von Anteilen und wöchentlicher Rendite.",
+    "disconnect": "Wallet trennen",
+    "preferences": "Einstellungen",
+    "displayCurrency": "Anzeigewährung",
+    "displayCurrencyHint": "Beträge bleiben in USD; TON-Schätzung beim Kauf",
+    "language": "Sprache",
+    "languageHint": "App-Sprache",
+    "languageAuto": "Auto (Telegram)",
+    "useTelegramTheme": "Telegram-Theme nutzen",
+    "useTelegramThemeHint": "Telegram-Farben übernehmen",
+    "showDemoBadge": "Demo-Badge anzeigen",
+    "showDemoBadgeHint": "Ehrliches schwebendes MVP-Label",
+    "help": "Hilfe",
+    "howItWorks": "So funktioniert DigiHouse",
+    "aboutLegal": "Über / Rechtliches",
+    "demoFooter": "Demo-Modus · Seed-Daten · Transaktionen simuliert",
+    "aboutBody": "DigiHouse ist eine Telegram Mini App für fraktionierte Immobilienanteile auf TON. Wöchentliche Mietrendite wird anteilig angezeigt.",
+    "aboutAdvice": "Keine Finanzberatung. Immobiliendokumente und Tokenisierung sind Demonstration bis Produktionsverträge.",
+    "aboutCopyright": "© DigiHouse · MVP",
+    "demoTxDisclaimer": "Dies ist eine Demo – Transaktionen werden simuliert",
+    "payoutDisclaimer": "simulierte wöchentliche Auszahlung · on-chain nach MVP"
+  }
+}

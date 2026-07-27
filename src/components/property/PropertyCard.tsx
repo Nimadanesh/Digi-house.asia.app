@@ -4,6 +4,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { MapPin, Flame } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import {
   usd,
@@ -36,6 +37,10 @@ export function PropertyCard({
   /** LCP hint for the first marketplace card. */
   priority?: boolean;
 }) {
+  const t = useTranslations("marketplace");
+  const tHome = useTranslations("home");
+  const tCommon = useTranslations("common");
+
   if (variant === "mini") {
     return (
       <Link
@@ -63,10 +68,10 @@ export function PropertyCard({
             {holding ? (
               <>
                 <p className="text-xs text-muted-foreground truncate tnum">
-                  {holding.sharesOwned} / {listing.totalShares} shares · {usd(holding.currentValueUsd)}
+                  {holding.sharesOwned} / {listing.totalShares} {tCommon("shares")} · {usd(holding.currentValueUsd)}
                 </p>
                 <p className="text-xs text-warning tnum mt-0.5">
-                  {usd(holding.pendingWeekEarningsUsd)} pending this week
+                  {tHome("pendingThisWeek", { amount: usd(holding.pendingWeekEarningsUsd) })}
                 </p>
               </>
             ) : (
@@ -87,6 +92,13 @@ export function PropertyCard({
   const clock = nowMs > 0 ? nowMs : Date.UTC(2026, 6, 26);
   const badge = listingStatusBadge(listing, clock);
 
+  const badgeLabel =
+    badge.kind === "new"
+      ? tCommon("new")
+      : badge.kind === "hot"
+        ? tCommon("hot")
+        : tCommon("soldPct", { pct: badge.soldPct ?? 0 });
+
   return (
     <Link
       href={ROUTES.property(listing.id)}
@@ -97,7 +109,6 @@ export function PropertyCard({
       )}
       data-testid="property-card"
     >
-      {/* Fable §Image + badges */}
       <div className="relative aspect-[16/10] bg-surface-2">
         <Image
           src={cover}
@@ -109,7 +120,7 @@ export function PropertyCard({
         />
         <span
           className={cn(
-            "absolute top-2.5 left-2.5 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[0.6875rem] font-semibold backdrop-blur-sm",
+            "absolute top-2.5 start-2.5 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[0.6875rem] font-semibold backdrop-blur-sm",
             badge.kind === "hot"
               ? "bg-danger/90 text-white"
               : "bg-black/55 text-white",
@@ -117,18 +128,17 @@ export function PropertyCard({
           data-testid="card-status-badge"
         >
           {badge.kind === "hot" ? <Flame size={12} strokeWidth={2.25} aria-hidden /> : null}
-          {badge.label}
+          {badgeLabel}
         </span>
         <span
-          className="absolute top-2.5 right-2.5 rounded-full bg-success px-2.5 py-1 text-xs font-semibold text-white tnum shadow-sm"
+          className="absolute top-2.5 end-2.5 rounded-full bg-success px-2.5 py-1 text-xs font-semibold text-white tnum shadow-sm"
           data-testid="card-apy-badge"
         >
-          {pct(apy)} APY
+          {pct(apy)} {tCommon("apy")}
         </span>
       </div>
 
       <div className="p-4 space-y-3">
-        {/* Fable §Name + location */}
         <div>
           <h2 className="text-[0.9375rem] font-semibold text-foreground leading-snug">{listing.title}</h2>
           <p className="mt-0.5 flex items-center gap-1 text-sm text-muted-foreground">
@@ -137,18 +147,16 @@ export function PropertyCard({
           </p>
         </div>
 
-        {/* Fable §3-column metrics */}
         <div className="grid grid-cols-3 gap-2" data-testid="card-metrics">
-          <Metric label="Price / share" value={usd(listing.sharePriceUsd)} />
-          <Metric label="Weekly / share" value={usd(weeklyPerShare)} accent />
-          <Metric label="Min. purchase" value={usd(minPurchase)} />
+          <Metric label={t("pricePerShare")} value={usd(listing.sharePriceUsd)} />
+          <Metric label={t("weeklyPerShare")} value={usd(weeklyPerShare)} accent />
+          <Metric label={t("minPurchase")} value={usd(minPurchase)} />
         </div>
 
-        {/* Fable §Sales progress + absolute scarcity */}
         <div className="space-y-1.5">
           <FundingBar progress={listing.fundingProgressRatio} funded={funded} />
           <p className="text-xs text-muted-foreground tnum" data-testid="card-sold-label">
-            {listing.sharesSold} of {listing.totalShares} shares sold
+            {t("sharesSold", { sold: listing.sharesSold, total: listing.totalShares })}
           </p>
         </div>
       </div>

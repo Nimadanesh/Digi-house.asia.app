@@ -1,6 +1,7 @@
 "use client";
 // File responsibility: Telegram-style marketplace search field (Fable §Header search).
 import { Search, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 
 export function MarketplaceSearch({
@@ -12,6 +13,8 @@ export function MarketplaceSearch({
   onChange: (v: string) => void;
   className?: string;
 }) {
+  const t = useTranslations("marketplace");
+
   return (
     <div
       className={cn(
@@ -25,14 +28,14 @@ export function MarketplaceSearch({
         type="search"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder="Search properties"
-        aria-label="Search properties"
+        placeholder={t("searchPlaceholder")}
+        aria-label={t("searchAria")}
         className="min-w-0 flex-1 bg-transparent text-[0.9375rem] text-foreground placeholder:text-muted-foreground outline-none"
       />
       {value ? (
         <button
           type="button"
-          aria-label="Clear search"
+          aria-label={t("clearSearch")}
           onClick={() => onChange("")}
           className="flex size-8 shrink-0 items-center justify-center rounded-full text-muted-foreground active:scale-[0.97] transition-transform duration-[120ms] ease-out"
         >

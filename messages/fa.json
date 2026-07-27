@@ -1,0 +1,162 @@
+{
+  "common": {
+    "appName": "دیجی‌هاوس",
+    "buyShare": "خرید سهم",
+    "browseMarketplace": "مشاهده بازار",
+    "viewAll": "مشاهده همه",
+    "refresh": "بازنشانی",
+    "clearFilters": "پاک کردن فیلترها",
+    "tryAgain": "تلاش دوباره",
+    "retry": "تلاش مجدد",
+    "skip": "رد شدن",
+    "continue": "ادامه",
+    "getStarted": "شروع کنید",
+    "settings": "تنظیمات",
+    "connectWallet": "اتصال کیف پول",
+    "walletConnected": "کیف پول متصل است",
+    "disconnectWallet": "قطع اتصال کیف پول",
+    "share": "سهم",
+    "shares": "سهم",
+    "of": "از",
+    "from": "از",
+    "est": "تقریبی",
+    "apy": "بازده سالانه",
+    "pending": "در انتظار",
+    "paid": "پرداخت‌شده",
+    "hot": "داغ",
+    "new": "جدید",
+    "soldPct": "{pct}٪ فروخته‌شده",
+    "week": "هفته",
+    "weeks": "هفته",
+    "demoMode": "حالت دمو · داده آزمایشی · تراکنش‌ها شبیه‌سازی‌شده",
+    "somethingWentWrong": "مشکلی پیش آمد"
+  },
+  "tabs": {
+    "home": "خانه",
+    "marketplace": "بازار",
+    "earnings": "درآمد",
+    "portfolio": "سبد"
+  },
+  "header": {
+    "greeting": "سلام، {name}"
+  },
+  "onboarding": {
+    "skip": "رد شدن",
+    "continue": "ادامه",
+    "getStarted": "شروع کنید",
+    "slideProgress": "{current} / {total}",
+    "slideAria": "اسلاید {n}",
+    "own": {
+      "headline": "مالک بخشی از یک ملک واقعی شوید",
+      "subtitle": "از حدود ۸۰ دلار شروع کنید"
+    },
+    "yield": {
+      "headline": "هر هفته سهم اجاره خود را دریافت کنید",
+      "subtitle": "هر جمعه سهم خود را در بخش درآمد ببینید"
+    },
+    "sell": {
+      "headline": "هر زمان خواستید بفروشید",
+      "subtitle": "وقتی آماده خروج بودید، سهم‌ها را در بازار دیجی‌هاوس فهرست کنید.",
+      "trustLine": "این نسخه دمو است و تراکنش‌ها شبیه‌سازی می‌شوند"
+    }
+  },
+  "home": {
+    "loadError": "بارگذاری خانه ممکن نشد.",
+    "portfolioValue": "ارزش سبد",
+    "totalInvested": "کل سرمایه‌گذاری",
+    "totalEarningsReceived": "کل درآمد دریافتی",
+    "nextPayout": "پرداخت بعدی",
+    "myProperties": "املاک من",
+    "myPropertiesCount": "املاک من ({count})",
+    "buyFirstShare": "اولین سهم خود را بخرید",
+    "buyFirstShareHint": "بخشی را مالک شوید — هر جمعه اجاره پیش‌بینی‌شده دریافت کنید.",
+    "todaysHighlight": "برجسته امروز",
+    "hotThisWeek": "داغ این هفته",
+    "weeklyPerShare": "هفتگی / سهم",
+    "pendingThisWeek": "{amount} در انتظار این هفته"
+  },
+  "marketplace": {
+    "searchPlaceholder": "جستجوی املاک",
+    "searchAria": "جستجوی املاک",
+    "clearSearch": "پاک کردن جستجو",
+    "filtersAria": "فیلترهای بازار",
+    "loadError": "بارگذاری املاک ممکن نشد.",
+    "emptyTitle": "هنوز ملکی نیست",
+    "emptyMessage": "فهرست‌های کسری جدید هر هفته اضافه می‌شوند — به‌زودی سر بزنید.",
+    "noMatchesTitle": "موردی یافت نشد",
+    "noMatchesMessage": "جستجو یا فیلتر دیگری را امتحان کنید.",
+    "chips": {
+      "all": "همه",
+      "highest_yield": "بیشترین بازده",
+      "new": "جدید",
+      "almost_sold": "تقریباً فروخته",
+      "low_price": "قیمت پایین"
+    },
+    "pricePerShare": "قیمت / سهم",
+    "weeklyPerShare": "هفتگی / سهم",
+    "minPurchase": "حداقل خرید",
+    "sharesSold": "{sold} از {total} سهم فروخته‌شده"
+  },
+  "property": {
+    "buyShare": "خرید سهم",
+    "about": "درباره",
+    "metrics": "شاخص‌ها",
+    "trust": "اعتماد و شفافیت",
+    "rentalHistory": "سابقه اجاره",
+    "incomeCalculator": "ماشین‌حساب درآمد",
+    "salesProgress": "پیشرفت فروش",
+    "gallery": "گالری"
+  },
+  "earnings": {
+    "loadError": "بارگذاری درآمد ممکن نشد.",
+    "emptyTitle": "هنوز درآمدی ندارید",
+    "emptyMessage": "اولین سهم را بخرید و از هفته بعد درآمد کسب کنید.",
+    "thisWeek": "درآمد این هفته",
+    "nextPayoutIn": "پرداخت بعدی تا",
+    "totalReceived": "کل درآمد دریافتی",
+    "consecutivePaid": "هفته‌های پرداخت متوالی",
+    "streak": "{count} {unit} پشت سر هم ✓",
+    "noStreak": "هنوز رگباری نیست",
+    "timeline": "تاریخچه",
+    "disclaimer": "پرداخت هفتگی شبیه‌سازی‌شده · قابل تأیید روی زنجیره پس از MVP"
+  },
+  "portfolio": {
+    "loadError": "بارگذاری سبد ممکن نشد.",
+    "emptyTitle": "سبد شما خالی است",
+    "emptyMessage": "از حدود ۸۰ دلار شروع کنید — اولین سهم را در بازار بخرید.",
+    "totalValue": "کل ارزش سبد",
+    "totalInvested": "کل سرمایه‌گذاری",
+    "totalEarningsReceived": "کل درآمد دریافتی",
+    "unrealizedProfit": "سود تحقق‌نیافته",
+    "nextPayout": "پرداخت بعدی",
+    "myPropertiesCount": "املاک من ({count})",
+    "openOrders": "سفارش‌های باز",
+    "allocation": "تخصیص"
+  },
+  "settings": {
+    "title": "تنظیمات",
+    "wallet": "کیف پول",
+    "connectTitle": "اتصال کیف پول TON",
+    "connectHint": "برای خرید سهم و دریافت بازده هفتگی لازم است.",
+    "disconnect": "قطع اتصال کیف پول",
+    "preferences": "ترجیحات",
+    "displayCurrency": "ارز نمایش",
+    "displayCurrencyHint": "ارقام به دلار می‌مانند؛ تخمین TON هنگام خرید",
+    "language": "زبان",
+    "languageHint": "زبان برنامه",
+    "languageAuto": "خودکار (تلگرام)",
+    "useTelegramTheme": "استفاده از تم تلگرام",
+    "useTelegramThemeHint": "هماهنگ با رنگ‌های تلگرام",
+    "showDemoBadge": "نمایش نشان دمو",
+    "showDemoBadgeHint": "برچسب صادقانه MVP",
+    "help": "راهنما",
+    "howItWorks": "دیجی‌هاوس چگونه کار می‌کند",
+    "aboutLegal": "درباره / حقوقی",
+    "demoFooter": "حالت دمو · داده آزمایشی · تراکنش‌ها شبیه‌سازی‌شده",
+    "aboutBody": "دیجی‌هاوس یک مینی‌اپ تلگرام برای سهام کسری املاک روی TON است. بازده اجاره هفتگی متناسب با مالکیت شما نمایش داده می‌شود.",
+    "aboutAdvice": "هیچ‌چیز اینجا مشاوره مالی نیست. اسناد ملک و افشای توکن‌سازی تا زمان قراردادهای تولید، نمایشی هستند.",
+    "aboutCopyright": "© دیجی‌هاوس · MVP",
+    "demoTxDisclaimer": "این یک دمو است – تراکنش‌ها شبیه‌سازی می‌شوند",
+    "payoutDisclaimer": "پرداخت هفتگی شبیه‌سازی‌شده · قابل تأیید روی زنجیره پس از MVP"
+  }
+}

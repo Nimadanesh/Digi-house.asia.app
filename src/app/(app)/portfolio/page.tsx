@@ -1,6 +1,7 @@
 ﻿"use client";
 // File responsibility: Portfolio screen (Fable redesign). Summary, allocation, holdings + detail sheet.
 import { useMemo, useState, useCallback, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { useMarketplace } from "@/hooks/useMarketplace";
 import { useTelegram } from "@/hooks/useTelegram";
@@ -18,6 +19,7 @@ import type { Holding } from "@/types/position";
 import type { Listing } from "@/types/property";
 
 export default function PortfolioPage() {
+  const t = useTranslations("portfolio");
   const portfolio = usePortfolio();
   const marketplace = useMarketplace();
   const { haptics, backButton } = useTelegram();
@@ -66,7 +68,7 @@ export default function PortfolioPage() {
     return (
       <ErrorState
         className="mt-4"
-        message="Couldn't load your portfolio."
+        message={t("loadError")}
         onRetry={() => {
           haptics.impact("light");
           void portfolio.refetch();
@@ -80,8 +82,8 @@ export default function PortfolioPage() {
   if (!data || data.holdings.length === 0) {
     return (
       <EmptyState
-        title="Your portfolio is empty"
-        message="Start from about $80 — buy your first share on the marketplace."
+        title={t("emptyTitle")}
+        message={t("emptyMessage")}
         action={<BrowseMarketplaceCta />}
         className="mt-12"
         data-testid="portfolio-empty"
@@ -99,7 +101,7 @@ export default function PortfolioPage() {
 
       <section className="space-y-2" data-testid="portfolio-holdings">
         <h2 className="px-0.5 text-[0.9375rem] font-semibold text-foreground">
-          My Properties ({data.holdings.length})
+          {t("myPropertiesCount", { count: data.holdings.length })}
         </h2>
         <div className="space-y-2.5">
           {data.holdings.map((h) => {

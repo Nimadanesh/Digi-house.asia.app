@@ -2,6 +2,7 @@
 // File responsibility: Home next-rent card with live DHMS countdown (Fable Home §Next Rent).
 import Link from "next/link";
 import { CalendarClock } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { usd } from "@/lib/format";
 import { ROUTES } from "@/lib/constants";
 import { usePayoutCountdownDhms } from "@/hooks/usePayoutCountdownDhms";
@@ -14,6 +15,8 @@ export function NextPayoutCard({
   projectedUsd: number;
   onNavigateHaptic?: () => void;
 }) {
+  const t = useTranslations("home");
+  const tCommon = useTranslations("common");
   const countdown = usePayoutCountdownDhms();
 
   return (
@@ -30,7 +33,7 @@ export function NextPayoutCard({
               <CalendarClock size={20} strokeWidth={1.75} aria-hidden />
             </div>
             <div className="min-w-0">
-              <p className="text-xs font-medium text-muted-foreground">Next Payout</p>
+              <p className="text-xs font-medium text-muted-foreground">{t("nextPayout")}</p>
               <p
                 className="mt-0.5 text-[0.9375rem] font-semibold tnum text-foreground leading-snug tracking-tight"
                 data-testid="next-payout-timer"
@@ -39,8 +42,8 @@ export function NextPayoutCard({
               </p>
             </div>
           </div>
-          <div className="shrink-0 text-right">
-            <p className="text-[0.6875rem] text-muted-foreground">Est.</p>
+          <div className="shrink-0 text-end">
+            <p className="text-[0.6875rem] text-muted-foreground">{tCommon("est")}</p>
             <p className="text-[1.0625rem] font-bold tnum text-success" data-testid="next-payout-amount">
               ≈ {usd(projectedUsd)}
             </p>

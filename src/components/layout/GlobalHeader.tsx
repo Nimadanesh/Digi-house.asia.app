@@ -3,6 +3,7 @@
 import { memo, useCallback } from "react";
 import Image from "next/image";
 import { Settings, Wallet } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useTelegramUser } from "@/hooks/useTelegramUser";
 import { useTonConnect } from "@/hooks/useTonConnect";
 import { useUiStore } from "@/stores/ui.store";
@@ -10,6 +11,8 @@ import { haptics } from "@/lib/telegram/haptics";
 import { cn } from "@/lib/utils";
 
 function GlobalHeaderInner() {
+  const t = useTranslations("header");
+  const tCommon = useTranslations("common");
   const { firstName, photoUrl } = useTelegramUser();
   const { connected, openModal } = useTonConnect();
   const openSettings = useUiStore((s) => s.openSettings);
@@ -42,14 +45,14 @@ function GlobalHeaderInner() {
             )}
           </div>
           <p className="truncate text-[1.0625rem] font-semibold text-foreground" data-testid="global-greeting">
-            Hi, {firstName}{" "}
+            {t("greeting", { name: firstName })}{" "}
             <span aria-hidden>👋</span>
           </p>
         </div>
         <div className="flex shrink-0 items-center gap-0.5">
           <button
             type="button"
-            aria-label={connected ? "Wallet connected" : "Connect wallet"}
+            aria-label={connected ? tCommon("walletConnected") : tCommon("connectWallet")}
             onClick={() => {
               haptics.selection();
               openModal();
@@ -60,7 +63,7 @@ function GlobalHeaderInner() {
             <Wallet size={22} strokeWidth={1.75} />
             <span
               className={cn(
-                "absolute top-2 right-2 size-2 rounded-full ring-2 ring-background",
+                "absolute top-2 end-2 size-2 rounded-full ring-2 ring-background",
                 connected ? "bg-success" : "bg-muted-foreground/50",
               )}
               data-testid="global-wallet-dot"
@@ -69,7 +72,7 @@ function GlobalHeaderInner() {
           </button>
           <button
             type="button"
-            aria-label="Settings"
+            aria-label={tCommon("settings")}
             onClick={onSettingsClick}
             className="relative z-10 flex size-11 items-center justify-center rounded-full active:scale-[0.97] transition-transform duration-[120ms] ease-out text-foreground"
             data-testid="global-settings-btn"
