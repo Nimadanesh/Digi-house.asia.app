@@ -1,7 +1,7 @@
 import { describe, expect, it, vi, afterEach } from "vitest";
 import {
   usd, ton, shortAddr, pct, weekLabel, weeklyRent, projectedYield,
-  payoutCountdown,
+  annualYieldRatio, annualFromWeekly, payoutCountdown, payoutCountdownLong, payoutCountdownDhms,
 } from "@/lib/format";
 
 describe("format", () => {
@@ -43,6 +43,15 @@ describe("format", () => {
     expect(projectedYield(10_000, 0, 1000)).toBe(0);
     expect(projectedYield(10_000, 5, 0)).toBe(0);   // totalShares=0 guard
   });
+
+  it("annualYieldRatio is rent / total value", () => {
+    expect(annualYieldRatio(520_000, 12_500_000)).toBeCloseTo(0.0416, 4);
+    expect(annualYieldRatio(100, 0)).toBe(0);
+  });
+
+  it("annualFromWeekly multiplies by 52", () => {
+    expect(annualFromWeekly(500)).toBe(26_000);
+  });
 });
 
 describe("format.payoutCountdown", () => {
@@ -69,5 +78,19 @@ describe("format.payoutCountdown", () => {
     // 2026-07-24 02:00 UTC (Friday, after payout). Next Friday = 2026-07-31 00:00.
     const after: number = Date.UTC(2026, 6, 24, 2, 0, 0);
     expect(payoutCountdown(after)).toBe("in 6d 22h");
+  });
+});
+
+describe("format.payoutCountdownLong", () => {
+  it("returns long English units for Home card", () => {
+    const wed: number = Date.UTC(2026, 6, 22, 10, 0, 0);
+    expect(payoutCountdownLong(wed)).toBe("1 day 14 hours");
+  });
+});
+
+describe("format.payoutCountdownDhms", () => {
+  it("returns d-h-m-s countdown", () => {
+    const wed: number = Date.UTC(2026, 6, 22, 10, 0, 0);
+    expect(payoutCountdownDhms(wed)).toBe("1d - 14h - 00m - 00s");
   });
 });

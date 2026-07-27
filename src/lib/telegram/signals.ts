@@ -12,5 +12,6 @@ export {
   mockTelegramEnv,
   retrieveLaunchParams,
   isLaunchParamsRetrieveError,
+  initDataUser,
 } from "@telegram-apps/sdk";
 export type { SafeAreaInsets, ThemeParams } from "@telegram-apps/sdk";

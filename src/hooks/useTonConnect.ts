@@ -7,6 +7,7 @@
 // Wraps TonConnect UI hooks + the sendTx service into one typed facade. Keeps
 // MVP honesty intact: any "send" returns a SendTxResult with a synthetic txHash
 // ("simulated:<id>"); real on-chain settlement is post-MVP.
+import { useCallback, useMemo } from "react";
 import {
   useTonConnectUI,
   useTonAddress,
@@ -40,29 +41,36 @@ export function useTonConnect(): TonConnectState {
   const restored = useIsConnectionRestored();
 
   const connected = Boolean(address);
+  const short = address ? shortAddress(address, { prefix: 6, suffix: 4 }) : "";
 
-  async function send(input: BuyMessageInput): Promise<SendTxResult> {
-    const request = buildBuyMessage(input);
-    return sendTx(tonConnectUI, request);
-  }
+  const send = useCallback(
+    async (input: BuyMessageInput): Promise<SendTxResult> => {
+      const request = buildBuyMessage(input);
+      return sendTx(tonConnectUI, request);
+    },
+    [tonConnectUI],
+  );
 
-  async function disconnect(): Promise<void> {
+  const disconnect = useCallback(async (): Promise<void> => {
     if (!tonConnectUI) return;
     await tonConnectUI.disconnect();
-  }
+  }, [tonConnectUI]);
 
-  function openModal(): void {
+  const openModal = useCallback((): void => {
     void tonConnectUI?.openModal();
-  }
+  }, [tonConnectUI]);
 
-  return {
-    address: address || null,
-    short: address ? shortAddress(address, { prefix: 6, suffix: 4 }) : "",
-    connected,
-    restoring: !restored,
-    network: env.network,
-    openModal,
-    disconnect,
-    send,
-  };
+  return useMemo(
+    () => ({
+      address: address || null,
+      short,
+      connected,
+      restoring: !restored,
+      network: env.network,
+      openModal,
+      disconnect,
+      send,
+    }),
+    [address, short, connected, restored, openModal, disconnect, send],
+  );
 }

@@ -1,12 +1,22 @@
 "use client";
 // File responsibility: the ONLY Telegram SDK surface components/hooks may call.
-// Returns reactive viewport + safe-area insets (via useSignal), BackButton/MainButton API,
-// haptics, and theme params. Components never import @telegram-apps/* directly.
-import { useCallback } from "react";
+// Chrome (Back/Main) + haptics are stable. Avoid subscribing to high-frequency viewport
+// signals here — that re-rendered every interactive component on every tick.
+import { useCallback, useMemo } from "react";
 import { useSignal } from "@telegram-apps/sdk-react";
-import { viewport, backButton, mainButton, themeParams, type SafeAreaInsets } from "@/lib/telegram/signals";
+import { themeParams, type SafeAreaInsets } from "@/lib/telegram/signals";
 import { haptics } from "@/lib/telegram/haptics";
+import { safeBackButton, safeMainButton, type MainButtonParams } from "@/lib/telegram/chrome";
 import { useTelegramReady } from "@/lib/telegram/TelegramProvider";
+
+const STATIC_VIEWPORT = {
+  width: 390,
+  height: 844,
+  stableHeight: 844,
+  isExpanded: true,
+} as const;
+
+const STATIC_INSETS: SafeAreaInsets = { top: 0, bottom: 0, left: 0, right: 0 };
 
 export interface TelegramSurface {
   ready: boolean;
@@ -14,40 +24,52 @@ export interface TelegramSurface {
   viewport: { width: number; height: number; stableHeight: number; isExpanded: boolean };
   safeAreaInsets: SafeAreaInsets;
   backButton: { show: () => void; hide: () => void; onClick: (fn: () => void) => () => void };
-  mainButton: { setParams: (p: { text?: string; color?: string; textColor?: string; isEnabled?: boolean }) => void; hide: () => void; onClick: (fn: () => void) => () => void };
+  mainButton: {
+    setParams: (p: MainButtonParams) => void;
+    hide: () => void;
+    onClick: (fn: () => void) => () => void;
+  };
   haptics: typeof haptics;
-  themeParams: ReturnType<typeof themeParams.state>;
+  themeParams: ReturnType<typeof themeParams.state> | Record<string, never>;
 }
 
 export function useTelegram(): TelegramSurface {
   const ready = useTelegramReady();
+  // isDark rarely changes — safe to subscribe once.
   const isDark = useSignal(themeParams.isDark);
-  const width = useSignal(viewport.width);
-  const height = useSignal(viewport.height);
-  const stableHeight = useSignal(viewport.stableHeight);
-  const isExpanded = useSignal(viewport.isExpanded);
-  const safeAreaInsets = useSignal(viewport.safeAreaInsets);
-  const themeParamsValue = useSignal(themeParams.state);
 
-  const onClickBack = useCallback((fn: () => void) => {
-    backButton.onClick(fn);
-    return () => backButton.offClick(fn);
-  }, []);
-  const onClickMain = useCallback((fn: () => void) => {
-    mainButton.onClick(fn);
-    return () => mainButton.offClick(fn);
-  }, []);
-  const hideMain = useCallback(() => {
-    try { mainButton.setParams({ isVisible: false } as never); } catch { /* ignore */ }
-  }, []);
+  const onClickBack = useCallback((fn: () => void) => safeBackButton.onClick(fn), []);
+  const onClickMain = useCallback((fn: () => void) => safeMainButton.onClick(fn), []);
 
-  return {
-    ready, isDark,
-    viewport: { width, height, stableHeight, isExpanded },
-    safeAreaInsets,
-    backButton: { show: backButton.show, hide: backButton.hide, onClick: onClickBack },
-    mainButton: { setParams: (p) => mainButton.setParams(p as never), hide: hideMain, onClick: onClickMain },
-    haptics,
-    themeParams: themeParamsValue,
-  };
+  const backButton = useMemo(
+    () => ({
+      show: safeBackButton.show,
+      hide: safeBackButton.hide,
+      onClick: onClickBack,
+    }),
+    [onClickBack],
+  );
+
+  const mainButton = useMemo(
+    () => ({
+      setParams: safeMainButton.setParams,
+      hide: safeMainButton.hide,
+      onClick: onClickMain,
+    }),
+    [onClickMain],
+  );
+
+  return useMemo(
+    () => ({
+      ready,
+      isDark,
+      viewport: STATIC_VIEWPORT,
+      safeAreaInsets: STATIC_INSETS,
+      backButton,
+      mainButton,
+      haptics,
+      themeParams: {},
+    }),
+    [ready, isDark, backButton, mainButton],
+  );
 }

@@ -1,98 +1,90 @@
 "use client";
-// File responsibility: Earnings hero page. Loaded | loading | error | empty states per DESIGN_SYSTEM.
-// The PAYOUT_DISCLAIMER renders exactly once at the top (MVP honesty contract).
-import Link from "next/link";
+// File responsibility: Earnings hero page (Fable Earnings polish).
+// UI via hooks only. Row expand holds the single discrete demo disclaimer (not on collapsed rows).
+import { useMemo } from "react";
 import { useEarnings } from "@/hooks/useEarnings";
 import { useMarketplace } from "@/hooks/useMarketplace";
-import { PAYOUT_DISCLAIMER, ROUTES } from "@/lib/constants";
+import { usePortfolio } from "@/hooks/usePortfolio";
+import { useTelegram } from "@/hooks/useTelegram";
 import { weeklyRent } from "@/lib/format";
-import { Block } from "@/components/common/Block";
-import { Row } from "@/components/common/Row";
-import { Skeleton } from "@/components/common/Skeleton";
 import { EmptyState } from "@/components/common/EmptyState";
-import { Button } from "@/components/ui/button";
-import { EarningsSummaryBlock } from "@/components/earnings/EarningsSummaryBlock";
+import { ErrorState } from "@/components/common/ErrorState";
+import { BrowseMarketplaceCta } from "@/components/common/BrowseMarketplaceCta";
+import { EarningsHeroCard } from "@/components/earnings/EarningsHeroCard";
+import { WeeklyEarningsChart } from "@/components/earnings/WeeklyEarningsChart";
 import { EarningsTimeline } from "@/components/earnings/EarningsTimeline";
+import { EarningsSkeleton } from "@/components/earnings/EarningsSkeleton";
 
 export default function EarningsPage() {
   const earnings = useEarnings();
-  const marketplace = useMarketplace(); // property-name + weekly-rent-pool lookups (no lib/mock from rows).
+  const marketplace = useMarketplace();
+  const portfolio = usePortfolio();
+  const { haptics } = useTelegram();
 
-  const properties = marketplace.data ?? [];
-  const propertyNameById: Record<string, string> = Object.fromEntries(
-    properties.map((p) => [p.id, p.title]),
+  const properties = marketplace.data;
+  const propertyNameById = useMemo(
+    () => Object.fromEntries((properties ?? []).map((p) => [p.id, p.title])),
+    [properties],
   );
-  const weeklyRentPoolUsdById: Record<string, number> = Object.fromEntries(
-    properties.map((p) => [p.id, weeklyRent(p.annualRentUsd)]),
+  const propertyImageById = useMemo(
+    () => Object.fromEntries((properties ?? []).map((p) => [p.id, p.images[0] ?? ""])),
+    [properties],
   );
+  const weeklyRentPoolUsdById = useMemo(
+    () => Object.fromEntries((properties ?? []).map((p) => [p.id, weeklyRent(p.annualRentUsd)])),
+    [properties],
+  );
+  const holdings = portfolio.data?.holdings;
+  const sharesOwnedById = useMemo(
+    () => Object.fromEntries((holdings ?? []).map((h) => [h.propertyId, h.sharesOwned])),
+    [holdings],
+  );
+
+  if (earnings.isLoading && !earnings.data) {
+    return (
+      <div className="mt-3">
+        <EarningsSkeleton />
+      </div>
+    );
+  }
+
+  if (earnings.isError && !earnings.data) {
+    return (
+      <ErrorState
+        className="mt-4"
+        message="Couldn't load earnings."
+        onRetry={() => {
+          haptics.impact("light");
+          void earnings.refetch();
+        }}
+        data-testid="earnings-error"
+      />
+    );
+  }
+
+  if (!earnings.data || earnings.data.entries.length === 0) {
+    return (
+      <EmptyState
+        title="You haven't earned yet"
+        message="Buy your first share and start earning next week."
+        action={<BrowseMarketplaceCta />}
+        className="mt-12"
+        data-testid="earnings-empty"
+      />
+    );
+  }
 
   return (
-    <div className="mt-3 space-y-3">
-      <p className="text-xs text-muted-foreground">{PAYOUT_DISCLAIMER}</p>
-      {earnings.isLoading ? (
-        <>
-          {/* Hero sub-block skeleton — matches EarningsSummaryBlock hero (label+pill row, then amount). */}
-          <Block className="p-4">
-            <div className="flex items-center justify-between">
-              <Skeleton className="h-3.5 w-28" />
-              <Skeleton className="h-5 w-20 rounded-full" />
-            </div>
-            <Skeleton className="mt-2 h-7 w-40" />
-          </Block>
-          {/* Secondary readout block skeleton — 2 rows (All-time earned / Payout). */}
-          <Block>
-            <Row>
-              <Skeleton className="h-4 w-28" />
-              <Skeleton className="ml-auto h-4 w-24" />
-            </Row>
-            <Row>
-              <Skeleton className="h-4 w-20" />
-              <Skeleton className="ml-auto h-4 w-32" />
-            </Row>
-          </Block>
-          {/* Timeline block skeleton — ONE Block with 3 rows matching EarningsEntryRow (thumb+name+pill). */}
-          <Block>
-            {Array.from({ length: 3 }).map((_, i) => (
-              <Row key={i} className="!min-h-[56px]">
-                <Skeleton className="size-9 rounded-[10px] shrink-0" />
-                <div className="flex-1 space-y-2">
-                  <Skeleton className="h-4 w-2/3" />
-                  <Skeleton className="h-3 w-1/3" />
-                </div>
-                <Skeleton className="h-6 w-14 rounded-full" />
-              </Row>
-            ))}
-          </Block>
-        </>
-      ) : earnings.isError ? (
-        <Block className="p-4 text-center">
-          <p className="text-sm text-muted-foreground mb-3">Couldn&apos;t load earnings.</p>
-          <Button onClick={() => earnings.refetch()}>Retry</Button>
-        </Block>
-      ) : !earnings.data || earnings.data.entries.length === 0 ? (
-        <EmptyState
-          title="No earnings yet"
-          message="Own a slice of a property — get rent every Friday."
-          action={
-            <Link
-              href={ROUTES.marketplace}
-              className="inline-flex items-center justify-center h-[44px] rounded-[10px] bg-primary text-primary-foreground px-4 text-sm font-semibold"
-            >
-              Explore Marketplace
-            </Link>
-          }
-          className="mt-12"
-        />
-      ) : (
-        <>
-          <EarningsSummaryBlock summary={earnings.data} />
-          <EarningsTimeline
-            entries={earnings.data.entries}
-            propertyNameById={propertyNameById}
-            weeklyRentPoolUsdById={weeklyRentPoolUsdById}
-          />
-        </>
-      )}
+    <div className="mt-3 space-y-4 pb-2" data-testid="earnings-page">
+      <EarningsHeroCard summary={earnings.data} />
+      <WeeklyEarningsChart entries={earnings.data.entries} />
+      <EarningsTimeline
+        entries={earnings.data.entries}
+        propertyNameById={propertyNameById}
+        propertyImageById={propertyImageById}
+        weeklyRentPoolUsdById={weeklyRentPoolUsdById}
+        sharesOwnedById={sharesOwnedById}
+      />
     </div>
   );
 }

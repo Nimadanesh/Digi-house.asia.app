@@ -1,29 +1,40 @@
 "use client";
-// File responsibility: the app shell — fixed max-width canvas, Header, scroll main, optional BottomTabBar.
-// When a screen owns the Telegram MainButton (mainButtonActive=true), we drop the in-app tab bar so the
-// native MainButton is the sole bottom chrome (DESIGN_SYSTEM: "Hide the app tab bar's chrome conflict —
-// MainButton is bottom-most") and shrink the main bottom pad to the MainButton's 50px + safe-area.
+// File responsibility: the app shell — fixed max-width canvas, GlobalHeader on tabs, optional title Header on nested routes.
+import { usePathname } from "next/navigation";
 import { Header } from "./Header";
+import { GlobalHeader } from "./GlobalHeader";
 import { BottomTabBar } from "./BottomTabBar";
+import { OnboardingGate } from "@/components/onboarding/OnboardingGate";
+import { SettingsSheet } from "@/components/settings/SettingsSheet";
+import { DemoModeBadge } from "@/components/common/DemoModeBadge";
 import { useTheme } from "@/hooks/useTheme";
 import { useUiStore } from "@/stores/ui.store";
+import { ROUTES, TABS } from "@/lib/constants";
+
+const TAB_HREFS = new Set(TABS.map((t) => t.href));
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   useTheme();
   const mainButtonActive = useUiStore((s) => s.mainButtonActive);
+  const pathname = usePathname();
+  const isOnboarding = pathname === ROUTES.onboarding;
+  const isTab = TAB_HREFS.has(pathname);
+
   return (
     <div className="mx-auto flex min-h-svh max-w-[480px] flex-col bg-background">
-      <Header />
+      {isOnboarding ? null : isTab ? <GlobalHeader /> : <Header />}
       <main
         className={
           mainButtonActive
-            ? "flex-1 px-4 pb-[calc(50px+env(safe-area-inset-bottom))]"
-            : "flex-1 px-4 pb-[calc(52px+env(safe-area-inset-bottom))]"
+            ? "flex-1 px-4 pb-[calc(72px+env(safe-area-inset-bottom))]"
+            : "flex-1 px-4 pb-[calc(72px+env(safe-area-inset-bottom))]"
         }
       >
-        {children}
+        <OnboardingGate>{children}</OnboardingGate>
       </main>
-      {mainButtonActive ? null : <BottomTabBar />}
+      {mainButtonActive || isOnboarding ? null : <BottomTabBar />}
+      <DemoModeBadge />
+      <SettingsSheet />
     </div>
   );
 }

@@ -8,6 +8,7 @@ export const ROUTES = {
   earnings: "/earnings",
   portfolio: "/portfolio",
   settings: "/settings",
+  onboarding: "/onboarding",
 } as const;
 
 export interface TabDef { href: string; label: string; icon: typeof Home }
@@ -20,6 +21,9 @@ export const TABS: readonly TabDef[] = [
 ] as const;
 
 export const PAYOUT_DISCLAIMER = "simulated weekly payout · on-chain verifiable post-MVP";
+
+/** Shown once on Property detail About and Buy success (MVP honesty). */
+export const DEMO_TX_DISCLAIMER = "This is a demo – transactions are simulated";
 
 export const DEFAULTS = { payoutTickMs: 60_000 } as const;
 

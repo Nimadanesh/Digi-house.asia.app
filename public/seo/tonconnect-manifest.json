@@ -1,7 +1,7 @@
 {
-  "url": "https://github.com/Nimadanesh/miniApp",
+  "url": "https://YOUR_DEPLOYMENT.vercel.app",
   "name": "DigiHouse",
-  "iconUrl": "/seo/icon.svg",
-  "termsOfUseUrl": "https://github.com/Nimadanesh/miniApp#terms",
-  "privacyPolicyUrl": "https://github.com/Nimadanesh/miniApp#privacy"
+  "iconUrl": "https://YOUR_DEPLOYMENT.vercel.app/seo/icon.svg",
+  "termsOfUseUrl": "https://YOUR_DEPLOYMENT.vercel.app",
+  "privacyPolicyUrl": "https://YOUR_DEPLOYMENT.vercel.app"
 }

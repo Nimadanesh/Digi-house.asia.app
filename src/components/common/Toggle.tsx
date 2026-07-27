@@ -1,15 +1,17 @@
 "use client";
-// File responsibility: accessible iOS-style switch presentational primitive. Pure — no hooks, no domain imports.
-// DESIGN_SYSTEM §"Buttons" tap ≥44×44 + press scale 0.97; §"Motion" 200ms ease-out on transform/color.
+// File responsibility: accessible iOS-style switch presentational primitive.
+// Optional onHaptic keeps domain out — callers pass selection feedback.
 import { cn } from "@/lib/utils";
 
 export function Toggle({
   on,
   onChange,
+  onHaptic,
   "aria-label": ariaLabel,
 }: {
   on: boolean;
   onChange: (v: boolean) => void;
+  onHaptic?: () => void;
   "aria-label"?: string;
 }) {
   return (
@@ -18,16 +20,25 @@ export function Toggle({
       role="switch"
       aria-checked={on}
       aria-label={ariaLabel}
-      onClick={() => onChange(!on)}
+      data-state={on ? "on" : "off"}
+      onClick={() => {
+        onHaptic?.();
+        onChange(!on);
+      }}
       className={cn(
-        "relative h-[26px] w-[44px] shrink-0 rounded-full transition-colors duration-200 ease-out active:scale-[0.97]",
-        on ? "bg-primary" : "bg-surface-2",
+        "relative inline-flex h-[28px] w-[48px] shrink-0 items-center rounded-full p-[2px]",
+        "transition-colors duration-200 ease-out active:scale-[0.97]",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40",
+        on ? "bg-primary justify-end" : "bg-surface-2 justify-start",
       )}
     >
       <span
+        aria-hidden
+        data-testid="toggle-thumb"
         className={cn(
-          "absolute top-[2px] size-[22px] rounded-full bg-white transition-transform duration-200 ease-out",
-          on ? "translate-x-[20px]" : "translate-x-[2px]",
+          "pointer-events-none block size-[24px] shrink-0 rounded-full bg-white",
+          "shadow-[0_1px_2px_rgba(0,0,0,0.28)]",
+          "transition-transform duration-200 ease-out",
         )}
       />
     </button>

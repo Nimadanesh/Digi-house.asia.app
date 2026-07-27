@@ -1,18 +1,24 @@
 "use client";
-import { useEffect, useState } from "react";
+// File responsibility: Property detail route — data load, Telegram chrome (Back/Main), Buy sheet flow.
+// UI sections stay in components/property; wizard step + qty state live here.
+import { useCallback, useEffect, useState } from "react";
 import { use } from "react";
+import { useRouter } from "next/navigation";
 import { useProperty } from "@/hooks/useProperty";
 import { useOrderBook } from "@/hooks/useOrderBook";
 import { useTelegram } from "@/hooks/useTelegram";
 import { useTonConnect } from "@/hooks/useTonConnect";
 import { useBuyShares, type BuyInput } from "@/hooks/useBuyShares";
-import { useRouter } from "next/navigation";
 import { useUiStore } from "@/stores/ui.store";
+import { usd } from "@/lib/format";
 import { PropertyDetail } from "@/components/property/PropertyDetail";
+import { PropertyDetailSkeleton } from "@/components/property/PropertyDetailSkeleton";
+import { BuySheet, type BuySheetStep } from "@/components/property/buy/BuySheet";
 import { Toast } from "@/components/common/Toast";
-import { Block } from "@/components/common/Block";
-import { Skeleton } from "@/components/common/Skeleton";
-import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/common/EmptyState";
+import { ErrorState } from "@/components/common/ErrorState";
+import { BrowseMarketplaceCta } from "@/components/common/BrowseMarketplaceCta";
+import { StickyBuyBar } from "@/components/property/StickyBuyBar";
 
 interface ToastState {
   tone: "success" | "error";
@@ -30,12 +36,26 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
   const buy = useBuyShares();
   const router = useRouter();
   const setMainButtonActive = useUiStore((s) => s.setMainButtonActive);
-  const [qty, setQty] = useState<number>(1);
-  const [toast, setToast] = useState<ToastState | null>(null);
+  const settingsOpen = useUiStore((s) => s.settingsOpen);
 
-  // Toast lifecycle (DESIGN_SYSTEM §"Toast / Snackbar"): show 3s, then enter the 160ms leaving
-  // state, then unmount. Two-stage timer so the CSS exit transition actually runs before unmount.
-  // Deps keyed on toast identity (tone/title/sub) so the timers don't reset when `leaving` flips.
+  const [previewShares, setPreviewShares] = useState(10);
+  const [qty, setQty] = useState(10);
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [step, setStep] = useState<BuySheetStep>("qty");
+  const [toast, setToast] = useState<ToastState | null>(null);
+  const [buyError, setBuyError] = useState<string | null>(null);
+
+  const listing = property.data;
+  const remaining = listing?.sharesRemaining ?? 0;
+  const canBuy = Boolean(listing && remaining > 0);
+
+  const closeSheet = useCallback(() => {
+    setSheetOpen(false);
+    setStep("qty");
+    setBuyError(null);
+  }, []);
+
+  // Toast lifecycle — DESIGN_SYSTEM §Toast.
   useEffect(() => {
     if (!toast) return;
     const leaveTimer = setTimeout(() => setToast((t) => (t ? { ...t, leaving: true } : null)), 3000);
@@ -47,79 +67,189 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toast?.tone, toast?.title, toast?.sub]);
 
-  // BackButton lifecycle (USER_FLOW §"Route ↔ screen"): show + wire to router.back() so the TG
-  // on-screen back chevron actually navigates. Outside Telegram the Header's in-app chevron handles it.
+  // BackButton — safe chrome never throws (even if TG unavailable).
   useEffect(() => {
-    tg.backButton.show();
-    const off = tg.backButton.onClick(() => router.back());
+    if (settingsOpen) return;
+    const { backButton, haptics } = tg;
+    try {
+      backButton.show();
+    } catch {
+      /* ignore */
+    }
+    let off: () => void = () => {};
+    try {
+      off = backButton.onClick(() => {
+        haptics.selection();
+        if (sheetOpen) {
+          if (step === "summary") {
+            setStep("qty");
+            return;
+          }
+          closeSheet();
+          return;
+        }
+        router.back();
+      });
+    } catch {
+      /* ignore */
+    }
     return () => {
-      off();
-      tg.backButton.hide();
+      try {
+        off();
+      } catch {
+        /* ignore */
+      }
+    };
+  }, [sheetOpen, step, closeSheet, router, tg, settingsOpen]);
+
+  useEffect(() => {
+    return () => {
+      try {
+        tg.backButton.hide();
+      } catch {
+        /* ignore */
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // MainButton wiring (USER_FLOW §"MainButton lifecycle"):
-  // shown only on Property detail when there is a single primary action (Buy confirm)
-  // AND sharesRemaining > 0. Hidden on root tabs and on fully-funded/resale detail.
+  const confirmBuy = useCallback(async () => {
+    if (!listing) return;
+    setBuyError(null);
+    tg.haptics.impact("medium");
+    const input: BuyInput = {
+      propertyId: listing.id,
+      quantity: qty,
+      priceUsdPerShare: listing.sharePriceUsd,
+      toFriendlyAddress: listing.ownerWalletAddress,
+    };
+    try {
+      const res = await buy.mutateAsync(input);
+      if (res.ok) {
+        setStep("success");
+        tg.haptics.notification("success");
+      } else {
+        setBuyError(res.error || "Buy failed");
+        setToast({ tone: "error", title: "Buy failed", sub: res.error, leaving: false });
+        tg.haptics.notification("error");
+      }
+    } catch (e) {
+      const message = e instanceof Error ? e.message : "transaction rejected";
+      setBuyError(message);
+      setToast({ tone: "error", title: "Buy failed", sub: message, leaving: false });
+      tg.haptics.notification("error");
+    }
+  }, [listing, qty, buy, tg]);
+
+  // MainButton — Fable: closed → "Buy Share"; sheet qty → Continue; summary → Confirm & Pay; success → hidden.
   useEffect(() => {
-    const listing = property.data;
     if (!listing) {
       tg.mainButton.hide();
       setMainButtonActive(false);
       return;
     }
-    const remaining = listing.sharesRemaining;
-    // Hide MainButton when wallet disconnected (so BuyControl's Connect-Wallet CTA is the sole
-    // primary action) or when no primary shares remain (Fully-funded/resale state).
-    if (!ton.connected || remaining <= 0) {
+
+    if (sheetOpen && step === "success") {
       tg.mainButton.hide();
-      setMainButtonActive(false);
+      // Keep tab bar suppressed while success sheet is open (match sheet chrome).
+      setMainButtonActive(true);
       return;
     }
-    setMainButtonActive(true);
-    const valid = qty >= 1 && qty <= remaining;
-    const totalUsd = qty * listing.sharePriceUsd;
-    tg.mainButton.setParams({
-      text: `Buy ${qty} — $${(totalUsd / 100).toFixed(2)}`,
-      isEnabled: valid,
-      color: "#3390ec",       // Telegram blue (--primary) — explicit in real TG so the Buy confirm matches brand.
-      textColor: "#ffffff",  // --primary-foreground. Telegram renders this natively; explicit avoids TG-theme drift.
-    });
-    const off = tg.mainButton.onClick(async () => {
-      if (!valid || !listing) return;
-      tg.haptics.impact("medium");
-      const input: BuyInput = {
-        propertyId: listing.id,
-        quantity: qty,
-        priceUsdPerShare: listing.sharePriceUsd,
-        toFriendlyAddress: listing.ownerWalletAddress,
-      };
-      try {
-        const res = await buy.mutateAsync(input);
-        if (res.ok) {
-          // MVP honesty contract (PLAN §"MVP payout honesty"): exact toast text, synthetic txHash sub.
-          setToast({ tone: "success", title: "Buy confirmed (simulated)", sub: `tx: ${res.txHash}`, leaving: false });
-          tg.haptics.notification("success");
-        } else {
-          setToast({ tone: "error", title: "Buy failed", sub: res.error, leaving: false });
-          tg.haptics.notification("error");
-        }
-      } catch (e) {
-        const message = e instanceof Error ? e.message : "transaction rejected";
-        setToast({ tone: "error", title: "Buy failed", sub: message, leaving: false });
-        tg.haptics.notification("error");
-      }
-    });
-    return () => {
-      off();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [property.data, qty, ton.connected]);
 
-  // Hide MainButton + release the shell's mainButtonActive flag when leaving the route
-  // (root tabs own the bottom bar elsewhere). Order: clear the flag first so AppShell restores
-  // the tab bar before the native MainButton finishes hiding — avoids a flash of empty bottom padding.
+    if (!sheetOpen) {
+      if (!canBuy) {
+        tg.mainButton.hide();
+        setMainButtonActive(false);
+        return;
+      }
+      setMainButtonActive(true);
+      tg.mainButton.setParams({
+        text: "Buy Share",
+        isEnabled: true,
+        color: "#3390ec",
+        textColor: "#ffffff",
+      });
+      const off = tg.mainButton.onClick(() => {
+        tg.haptics.impact("light");
+        setQty(Math.min(remaining, Math.max(1, previewShares)));
+        setStep("qty");
+        setSheetOpen(true);
+      });
+      return () => {
+        off();
+      };
+    }
+
+    // Sheet open — qty / summary
+    setMainButtonActive(true);
+
+    if (!ton.connected) {
+      tg.mainButton.setParams({
+        text: "Connect Wallet",
+        isEnabled: true,
+        color: "#3390ec",
+        textColor: "#ffffff",
+      });
+      const off = tg.mainButton.onClick(() => {
+        tg.haptics.impact("light");
+        ton.openModal();
+      });
+      return () => {
+        off();
+      };
+    }
+
+    if (step === "qty") {
+      const valid = qty >= 1 && qty <= remaining;
+      tg.mainButton.setParams({
+        text: "Continue",
+        isEnabled: valid && remaining > 0,
+        color: "#3390ec",
+        textColor: "#ffffff",
+      });
+      const off = tg.mainButton.onClick(() => {
+        if (!valid) return;
+        tg.haptics.selection();
+        setStep("summary");
+      });
+      return () => {
+        off();
+      };
+    }
+
+    if (step === "summary") {
+      const valid = qty >= 1 && qty <= remaining;
+      const totalUsd = qty * listing.sharePriceUsd;
+      const pending = buy.isPending;
+      tg.mainButton.setParams({
+        text: pending ? "Confirming…" : `Confirm & Pay — ${usd(totalUsd)}`,
+        isEnabled: valid && !pending,
+        color: "#3390ec",
+        textColor: "#ffffff",
+        isLoaderVisible: pending,
+      });
+      const off = tg.mainButton.onClick(() => {
+        if (!valid || buy.isPending) return;
+        void confirmBuy();
+      });
+      return () => {
+        off();
+      };
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    listing,
+    canBuy,
+    sheetOpen,
+    step,
+    qty,
+    remaining,
+    ton.connected,
+    previewShares,
+    buy.isPending,
+    confirmBuy,
+  ]);
+
   useEffect(() => {
     return () => {
       setMainButtonActive(false);
@@ -128,38 +258,68 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (property.isLoading) {
+  if (property.isLoading && !property.data) {
+    return <PropertyDetailSkeleton />;
+  }
+
+  if (property.isError && !property.data) {
     return (
-      <div className="space-y-3 mt-3">
-        <Skeleton className="h-48 w-full rounded-[12px]" />
-        <Block className="p-4 space-y-2">
-          <Skeleton className="h-5 w-2/3" />
-          <Skeleton className="h-4 w-1/3" />
-          <Skeleton className="h-4 w-full" />
-        </Block>
-        <Block className="p-4 space-y-2">
-          <Skeleton className="h-10 w-full" />
-        </Block>
-      </div>
+      <ErrorState
+        className="mt-4"
+        message="Couldn't load this property."
+        onRetry={() => {
+          tg.haptics.impact("light");
+          void property.refetch();
+        }}
+        data-testid="property-error"
+      />
     );
   }
-  if (property.isError || !property.data) {
+
+  if (!listing) {
     return (
-      <Block className="mt-3 p-4 text-center">
-        <p className="text-sm text-muted-foreground mb-3">Couldn&apos;t load this property.</p>
-        <Button onClick={() => property.refetch()}>Retry</Button>
-      </Block>
+      <EmptyState
+        title="Property not found"
+        message="This listing may have been removed or the link is wrong."
+        action={<BrowseMarketplaceCta />}
+      />
     );
   }
 
   return (
     <>
       {toast ? <Toast tone={toast.tone} title={toast.title} sub={toast.sub} leaving={toast.leaving} /> : null}
-      <PropertyDetail
-        listing={property.data}
-        orderBook={orderBook.data}
+      <div className={canBuy && !sheetOpen ? "pb-20" : undefined}>
+        <PropertyDetail
+          listing={listing}
+          orderBook={orderBook.data}
+          previewShares={previewShares}
+          onPreviewSharesChange={setPreviewShares}
+        />
+      </div>
+      {canBuy && !sheetOpen ? (
+        <StickyBuyBar
+          onClick={() => {
+            tg.haptics.impact("light");
+            setQty(Math.min(remaining, Math.max(10, previewShares)));
+            setStep("qty");
+            setSheetOpen(true);
+          }}
+        />
+      ) : null}
+      <BuySheet
+        open={sheetOpen}
+        onClose={closeSheet}
+        listing={listing}
+        step={step}
         qty={qty}
-        onQtyChange={setQty}
+        onQtyChange={(q) => {
+          setBuyError(null);
+          setQty(q);
+        }}
+        walletConnected={ton.connected}
+        buyError={buyError}
+        buyPending={buy.isPending}
       />
     </>
   );

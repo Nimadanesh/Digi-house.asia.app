@@ -43,6 +43,16 @@ export function projectedYield(weeklyRentUsdCents: number, sharesOwned: number, 
   return totalShares > 0 ? Math.floor(weeklyRentUsdCents * (sharesOwned / totalShares)) : 0;
 }
 
+/** Annual rent / total property value as 0..1 ratio. 0 when value is 0. */
+export function annualYieldRatio(annualRentUsdCents: number, totalValueUsdCents: number): number {
+  return totalValueUsdCents > 0 ? annualRentUsdCents / totalValueUsdCents : 0;
+}
+
+/** floor(weeklyUsdCents * 52) — projected annual from weekly (display helper). */
+export function annualFromWeekly(weeklyUsdCents: number): number {
+  return weeklyUsdCents * 52;
+}
+
 /** Estimate nanoTON for a USD-cents total using a fixed (MVP) TON price. Real quote is post-MVP. */
 export function estimateNanoTon(usdCents: number, tonUsdPriceCents: number): bigint {
   if (tonUsdPriceCents <= 0) return 0n;
@@ -51,18 +61,47 @@ export function estimateNanoTon(usdCents: number, tonUsdPriceCents: number): big
 
 /** Return "in Xd Yh" / "in Xh" / "in Xm" relative to the next Friday 00:00 UTC after now. */
 export function payoutCountdown(nowMs: number): string {
+  const { days, hours, minutes } = nextFridayParts(nowMs);
+  if (days >= 1) return `in ${days}d ${hours}h`;
+  if (hours >= 1) return `in ${hours}h`;
+  return `in ${minutes}m`;
+}
+
+/** Long form for Home Next Payout card — "2 days 14 hours" / "14 hours" / "12 minutes". */
+export function payoutCountdownLong(nowMs: number): string {
+  const { days, hours, minutes } = nextFridayParts(nowMs);
+  if (days >= 1) {
+    const d = `${days} ${days === 1 ? "day" : "days"}`;
+    const h = `${hours} ${hours === 1 ? "hour" : "hours"}`;
+    return `${d} ${h}`;
+  }
+  if (hours >= 1) return `${hours} ${hours === 1 ? "hour" : "hours"}`;
+  return `${minutes} ${minutes === 1 ? "minute" : "minutes"}`;
+}
+
+export function nextFridayParts(nowMs: number): {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+} {
   const now = new Date(nowMs);
-  // ISO day: 5 = Friday (0 Sun..6 Sat). Find the next Friday 00:00 UTC strictly after now (rollover if already past).
   const day = now.getUTCDay();
   const daysUntilFri = (5 - day + 7) % 7;
   const nextFriMs = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + daysUntilFri, 0, 0, 0);
   let diffMs = nextFriMs - nowMs;
-  if (diffMs <= 0) diffMs += 7 * 24 * 60 * 60 * 1000; // already Friday past midnight → next week
-  const totalMin = Math.floor(diffMs / 60_000);
-  const days = Math.floor(totalMin / (60 * 24));
-  const hours = Math.floor((totalMin % (60 * 24)) / 60);
-  const minutes = totalMin % 60;
-  if (days >= 1) return `in ${days}d ${hours}h`;
-  if (hours >= 1) return `in ${hours}h`;
-  return `in ${minutes}m`;
+  if (diffMs <= 0) diffMs += 7 * 24 * 60 * 60 * 1000;
+  const totalSec = Math.floor(diffMs / 1000);
+  const days = Math.floor(totalSec / 86_400);
+  const hours = Math.floor((totalSec % 86_400) / 3600);
+  const minutes = Math.floor((totalSec % 3600) / 60);
+  const seconds = totalSec % 60;
+  return { days, hours, minutes, seconds };
+}
+
+/** Live home countdown — "2d - 14h - 30m - 05s". */
+export function payoutCountdownDhms(nowMs: number): string {
+  const { days, hours, minutes, seconds } = nextFridayParts(nowMs);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${days}d - ${hours}h - ${pad(minutes)}m - ${pad(seconds)}s`;
 }

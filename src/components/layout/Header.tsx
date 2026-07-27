@@ -1,10 +1,11 @@
 "use client";
-// File responsibility: the Telegram-style header bar — centered title, leading back-chevron
-// fallback only when running OUTSIDE Telegram (the native BackButton covers it inside TG),
-// trailing slot reserved for future actions. DESIGN_SYSTEM §"Telegram Header".
+// File responsibility: the Telegram-style header bar — title on nested routes + reliable back chevron.
+// Always shows an in-app back control on nested routes (property, etc.) so UX works even when
+// native Telegram BackButton is unavailable; pairs with page-level tg.backButton.show().
 import { usePathname, useRouter } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { useTelegram } from "@/hooks/useTelegram";
+import { cn } from "@/lib/utils";
 
 const TITLES: Record<string, string> = {
   "/home": "DigiHouse",
@@ -12,32 +13,54 @@ const TITLES: Record<string, string> = {
   "/earnings": "Earnings",
   "/portfolio": "Portfolio",
   "/settings": "Settings",
+  "/onboarding": "Welcome",
 };
 
-const ROOT_PATHS = new Set(["/home", "/marketplace", "/earnings", "/portfolio", "/settings"]);
+const ROOT_PATHS = new Set(["/home", "/marketplace", "/earnings", "/portfolio", "/settings", "/onboarding"]);
 
 export function Header() {
   const pathname = usePathname();
   const router = useRouter();
-  const { ready } = useTelegram();
+  const { haptics } = useTelegram();
   const title = TITLES[pathname] ?? (pathname.startsWith("/property/") ? "Property" : "DigiHouse");
-  // Show the in-app back chevron only outside Telegram (native BackButton handles it inside TG)
-  // and only on non-root routes (detail/sheet).
-  const showBack = !ready && !ROOT_PATHS.has(pathname);
+  const isRoot = ROOT_PATHS.has(pathname);
+  // Nested routes always get an in-app back control (native Telegram BackButton is additive).
+  const showBack = !isRoot;
+
   return (
-    <header className="h-[calc(44px+max(env(safe-area-inset-top),0px))] shrink-0 bg-background/95 backdrop-blur px-4 pt-[max(env(safe-area-inset-top),0px)]">
-      <div className="relative flex h-[44px] items-center justify-center">
+    <header
+      className="h-[calc(44px+max(env(safe-area-inset-top),0px))] shrink-0 bg-background/95 backdrop-blur px-4 pt-[max(env(safe-area-inset-top),0px)]"
+      data-testid="app-header"
+    >
+      <div
+        className={cn(
+          "relative flex h-[44px] items-center",
+          isRoot ? "justify-start" : "justify-center",
+        )}
+      >
         {showBack ? (
           <button
             type="button"
-            onClick={() => router.back()}
+            onClick={() => {
+              haptics.selection();
+              router.back();
+            }}
             aria-label="Back"
+            data-testid="header-back"
             className="absolute left-0 flex items-center justify-center size-[44px] -ml-2 active:scale-[0.97] transition-transform duration-[120ms] ease-out text-foreground"
           >
             <ChevronLeft size={24} strokeWidth={1.75} />
           </button>
         ) : null}
-        <span className="text-[1.0625rem] font-semibold text-foreground">{title}</span>
+        <span
+          className={cn(
+            "text-[1.0625rem] font-semibold text-foreground",
+            !isRoot && "text-center",
+          )}
+          data-testid="header-title"
+        >
+          {title}
+        </span>
       </div>
     </header>
   );

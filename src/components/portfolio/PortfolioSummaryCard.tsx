@@ -1,0 +1,99 @@
+"use client";
+// File responsibility: Portfolio summary hero — large value centered, PnL badge below.
+import { ArrowUp, ArrowDown } from "lucide-react";
+import { Block } from "@/components/common/Block";
+import { PayoutCountdown } from "@/components/earnings/PayoutCountdown";
+import { usd, pct } from "@/lib/format";
+import {
+  portfolioUnrealizedRatio,
+  portfolioUnrealizedUsd,
+} from "@/lib/portfolio-math";
+import type { PortfolioSummary } from "@/types/position";
+import { cn } from "@/lib/utils";
+
+export function PortfolioSummaryCard({ summary }: { summary: PortfolioSummary }) {
+  const unrealized = portfolioUnrealizedUsd(summary.totalValueUsd, summary.totalInvestedUsd);
+  const ratio = portfolioUnrealizedRatio(summary.totalValueUsd, summary.totalInvestedUsd);
+  const up = unrealized >= 0;
+  const sign = up ? "+" : "-";
+
+  return (
+    <Block className="p-4 space-y-4" data-testid="portfolio-summary">
+      <div className="text-center space-y-2">
+        <p className="text-xs font-medium text-muted-foreground">Total Portfolio Value</p>
+        <p
+          className="text-[1.75rem] font-bold tracking-[-0.02em] tnum text-foreground leading-none"
+          data-testid="portfolio-total-value"
+        >
+          {usd(summary.totalValueUsd)}
+        </p>
+        <div className="flex justify-center">
+          <span
+            className={cn(
+              "inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-xs font-semibold tnum",
+              up ? "bg-success/12 text-success" : "bg-danger/12 text-danger",
+            )}
+            data-testid="portfolio-pnl-badge"
+          >
+            {up ? (
+              <ArrowUp size={12} strokeWidth={2.25} aria-hidden />
+            ) : (
+              <ArrowDown size={12} strokeWidth={2.25} aria-hidden />
+            )}
+            {sign}
+            {usd(Math.abs(unrealized))} · {pct(Math.abs(ratio))}
+          </span>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3 border-t border-border pt-3">
+        <Stat label="Total Invested" value={usd(summary.totalInvestedUsd)} />
+        <Stat
+          label="Total Earnings Received"
+          value={usd(summary.totalEarningsUsd)}
+          valueClass="text-success"
+          testId="portfolio-total-earnings"
+        />
+        <Stat
+          label="Unrealized Profit"
+          value={sign + usd(Math.abs(unrealized))}
+          valueClass={up ? "text-success" : "text-danger"}
+          testId="portfolio-unrealized"
+        />
+        <div>
+          <p className="text-[0.6875rem] text-muted-foreground">Next Payout</p>
+          <p
+            className="mt-0.5 text-sm font-semibold tnum text-foreground"
+            data-testid="portfolio-next-payout"
+          >
+            {usd(summary.weeklyProjectedUsd)}
+          </p>
+          <div className="mt-0.5 text-[0.6875rem] text-muted-foreground">
+            <PayoutCountdown variant="long" />
+          </div>
+        </div>
+      </div>
+    </Block>
+  );
+}
+
+function Stat({
+  label,
+  value,
+  valueClass = "text-foreground",
+  testId,
+}: {
+  label: string;
+  value: string;
+  valueClass?: string;
+  testId?: string;
+}) {
+  return (
+    <div>
+      <p className="text-[0.6875rem] text-muted-foreground">{label}</p>
+      <p className={cn("mt-0.5 text-sm font-semibold tnum", valueClass)} data-testid={testId}>
+        {value}
+      </p>
+    </div>
+  );
+}

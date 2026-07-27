@@ -1,4 +1,6 @@
 import { describe, it, expect } from "vitest";
+import { existsSync, statSync } from "node:fs";
+import { join } from "node:path";
 import { seed } from "../seed";
 
 describe("mock seed", () => {
@@ -16,6 +18,22 @@ describe("mock seed", () => {
     for (const p of seed.properties) {
       expect(p.annualRentUsd).toBeGreaterThan(0);
     }
+  });
+
+  it("ships non-empty local property cover images", () => {
+    const root = join(process.cwd(), "public");
+    const covers = seed.properties.flatMap((p) => p.images);
+    expect(covers.length).toBeGreaterThanOrEqual(6);
+    for (const src of covers) {
+      const file = join(root, src.replace(/^\//, ""));
+      expect(existsSync(file)).toBe(true);
+      expect(statSync(file).size).toBeGreaterThan(500);
+    }
+  });
+
+  it("has holdings and at least one open order", () => {
+    expect(seed.holdings.length).toBeGreaterThanOrEqual(2);
+    expect(seed.openOrders.length).toBeGreaterThanOrEqual(1);
   });
 
   it("has at least 4 earnings entries spanning >=4 distinct weeks", () => {

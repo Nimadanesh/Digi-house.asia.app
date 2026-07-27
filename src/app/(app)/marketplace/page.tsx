@@ -1,55 +1,116 @@
 "use client";
+// File responsibility: Marketplace screen — search, filter chips, listing stack (Fable Marketplace).
+// Data via useMarketplace; client filter/sort via pure filterMarketplaceListings.
+import { useMemo, useState } from "react";
 import { useMarketplace } from "@/hooks/useMarketplace";
+import { useTelegram } from "@/hooks/useTelegram";
+import { filterMarketplaceListings, type MarketplaceChip } from "@/lib/marketplace-filter";
 import { PropertyCard } from "@/components/property/PropertyCard";
-import { Block } from "@/components/common/Block";
-import { Skeleton } from "@/components/common/Skeleton";
+import { MarketplaceSearch } from "@/components/marketplace/MarketplaceSearch";
+import { MarketplaceFilterChips } from "@/components/marketplace/MarketplaceFilterChips";
+import { MarketplaceSkeleton } from "@/components/marketplace/MarketplaceSkeleton";
 import { EmptyState } from "@/components/common/EmptyState";
+import { ErrorState } from "@/components/common/ErrorState";
 import { Button } from "@/components/ui/button";
 
 export default function MarketplacePage() {
   const { data, isLoading, isError, refetch } = useMarketplace();
+  const { haptics } = useTelegram();
+  const [query, setQuery] = useState("");
+  const [chip, setChip] = useState<MarketplaceChip>("all");
 
-  if (isLoading) {
+  const listings = useMemo(
+    () => filterMarketplaceListings(data ?? [], { query, chip }),
+    [data, query, chip],
+  );
+
+  if (isLoading && !data) {
     return (
-      <div className="mt-3 space-y-3">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <Block key={i} className="overflow-hidden">
-            <Skeleton className="aspect-[16/10] w-full rounded-none" />
-            <div className="p-4 space-y-3">
-              <Skeleton className="h-4 w-2/3" />
-              <Skeleton className="h-4 w-1/2" />
-              <Skeleton className="h-2 w-full" />
-            </div>
-          </Block>
-        ))}
+      <div className="mt-2 pb-2">
+        <MarketplaceSkeleton />
       </div>
     );
   }
 
-  if (isError) {
+  if (isError && !data) {
     return (
-      <Block className="mt-3 p-4 text-center">
-        <p className="text-sm text-muted-foreground mb-3">Couldn&apos;t load properties.</p>
-        <Button onClick={() => refetch()}>Retry</Button>
-      </Block>
-    );
-  }
-
-  if (!data || data.length === 0) {
-    return (
-      <EmptyState
-        title="No properties yet"
-        message="New listings land every week."
-        className="mt-12"
+      <ErrorState
+        className="mt-4"
+        message="Couldn't load properties."
+        onRetry={() => {
+          haptics.impact("light");
+          void refetch();
+        }}
+        data-testid="marketplace-error"
       />
     );
   }
 
+  const emptyAll = !data || data.length === 0;
+  const emptyFiltered = !emptyAll && listings.length === 0;
+
   return (
-    <div className="mt-3 space-y-3">
-      {data.map((listing) => (
-        <PropertyCard key={listing.id} listing={listing} />
-      ))}
+    <div className="mt-2 space-y-3 pb-2" data-testid="marketplace-page">
+      <MarketplaceSearch
+        value={query}
+        onChange={(v) => {
+          setQuery(v);
+        }}
+      />
+
+      <MarketplaceFilterChips
+        value={chip}
+        onChange={setChip}
+        onSelectHaptic={() => haptics.selection()}
+      />
+
+      {emptyAll ? (
+        <EmptyState
+          title="No properties yet"
+          message="New fractional listings land every week — check back soon."
+          className="mt-8"
+          action={
+            <Button
+              type="button"
+              onClick={() => {
+                haptics.selection();
+                void refetch();
+              }}
+            >
+              Refresh
+            </Button>
+          }
+        />
+      ) : emptyFiltered ? (
+        <EmptyState
+          title="No matches"
+          message="Try another search or filter chip."
+          className="mt-8"
+          action={
+            <Button
+              type="button"
+              onClick={() => {
+                setQuery("");
+                setChip("all");
+                haptics.selection();
+              }}
+            >
+              Clear filters
+            </Button>
+          }
+        />
+      ) : (
+        <div className="space-y-3 pt-0.5" data-testid="marketplace-list">
+          {listings.map((listing, i) => (
+            <PropertyCard
+              key={listing.id}
+              listing={listing}
+              priority={i === 0}
+              onNavigateHaptic={() => haptics.selection()}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

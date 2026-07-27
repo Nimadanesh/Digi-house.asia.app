@@ -1,85 +1,130 @@
 "use client";
-// File responsibility: one Earnings entry row, tap-expandable to reveal the proportional-math line
-// (R-6.6 integrity display) and the simulated-payout disclosure. DESIGN_SYSTEM §"Earnings row".
-// Property name + weekly rent pool are passed in (page builds the lookup maps) — components never
-// import lib/mock.
+// File responsibility: one Payments list row — collapse shows photo/name/date/amount/Paid stipend;
+// expand shows integrity math + discrete demo disclaimer (Fable Earnings §Payments).
+// NO “simulated” pill on collapsed row (MVP honesty lives only in details).
 import { useState } from "react";
+import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 import { Row } from "@/components/common/Row";
 import { StatusPill } from "@/components/common/StatusPill";
 import { usd, ton, weekLabel, pct } from "@/lib/format";
+import { DEMO_TX_DISCLAIMER } from "@/lib/constants";
 import type { EarningsEntry } from "@/types/earnings";
+import { useTelegram } from "@/hooks/useTelegram";
+import { cn } from "@/lib/utils";
+
+const THUMB = "size-9 shrink-0 rounded-[10px] overflow-hidden bg-surface-2 relative";
 
 export function EarningsEntryRow({
   entry,
   propertyName,
+  propertyImage,
   weeklyRentPoolUsd,
+  sharesOwned,
 }: {
   entry: EarningsEntry;
   propertyName: string;
+  propertyImage?: string;
   weeklyRentPoolUsd: number;
+  sharesOwned?: number;
 }) {
   const [open, setOpen] = useState(false);
+  const { haptics } = useTelegram();
+
   return (
     <>
-      <Row className="!min-h-[56px]">
+      <Row className="!min-h-[56px] py-2">
         <button
           type="button"
-          onClick={() => setOpen((v) => !v)}
-          className="flex-1 flex items-center gap-3 text-left"
+          onClick={() => {
+            haptics.selection();
+            setOpen((v) => !v);
+          }}
+          className="flex w-full min-w-0 flex-1 items-center gap-3 text-left"
           aria-expanded={open}
+          data-testid={`earnings-row-${entry.id}`}
         >
-          <div className="size-9 rounded-[10px] bg-surface-2 shrink-0" aria-hidden />
-          <div className="flex-1 min-w-0">
-            <div className="text-sm font-medium text-foreground truncate">{propertyName}</div>
-            <div className="text-xs text-muted-foreground">{weekLabel(entry.weekOf)}</div>
+          <div className={THUMB} aria-hidden>
+            {propertyImage ? (
+              <Image src={propertyImage} alt="" fill className="object-cover" sizes="36px" />
+            ) : null}
           </div>
-          <div className="text-right">
-            <div className="text-[0.9375rem] font-semibold tnum text-foreground">{usd(entry.amountUsd)}</div>
-            <div className="text-xs text-muted-foreground tnum">{ton(BigInt(entry.tonAmount))}</div>
+          <div className="min-w-0 flex-1">
+            <div className="truncate text-[0.9375rem] font-medium leading-tight text-foreground">
+              {propertyName}
+            </div>
+            <div className="mt-0.5 text-[0.8125rem] leading-snug text-muted-foreground">
+              {weekLabel(entry.weekOf)}
+            </div>
           </div>
-          <div className="ml-2 shrink-0">
+          <div className="shrink-0 text-right space-y-0.5">
+            <div className="tnum text-[0.9375rem] font-semibold leading-tight text-foreground">
+              {usd(entry.amountUsd)}
+            </div>
             {entry.status === "paid" ? (
-              // MVP honesty: every Paid pill carries the muted "simulated" sibling capsule, never finance-colored.
-              <StatusPill label="Paid" variant="success" simulated />
+              <StatusPill label="Paid" variant="success" />
             ) : (
               <StatusPill label="Pending" variant="warning" />
             )}
           </div>
           <ChevronDown
-            size={20}
+            size={18}
             strokeWidth={1.75}
-            className={`text-muted-foreground transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+            className={cn(
+              "shrink-0 text-muted-foreground transition-transform duration-200 ease-out",
+              open && "rotate-180",
+            )}
             aria-hidden
           />
         </button>
       </Row>
       {open ? (
-        // Proportional-math disclosure (R-6.6 display). The 48px lead spacer mirrors the row's
-        // thumb (size-9=36) + gap-3 (12) so the disclosure content aligns with the property NAME
-        // column (native iOS expandable-row pattern). The border-t hairline stays full-width-inset
-        // (mx-4 = 16px), matching the sibling rows. Static expand — no keyframe animation
-        // (DESIGN_SYSTEM §"What we do NOT animate").
-        <div className="mx-4 flex border-t border-border">
-          <div className="w-[48px] shrink-0" aria-hidden />
-          <div className="flex-1 py-3 text-xs space-y-1.5">
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Your share</span>
-              <span className="tnum text-foreground">{pct(entry.shareRatio)}</span>
+        <div className="mx-4 border-t border-border" data-testid="earnings-disclosure">
+          <div className="flex gap-3 py-3">
+            <div className={THUMB} aria-hidden data-testid="earnings-disclosure-lead" />
+            <div className="min-w-0 flex-1 space-y-2 text-[0.8125rem]">
+              {sharesOwned != null ? (
+                <div className="flex items-baseline justify-between gap-3">
+                  <span className="text-muted-foreground">Shares owned</span>
+                  <span className="tnum shrink-0 text-foreground">{sharesOwned}</span>
+                </div>
+              ) : null}
+              <div className="flex items-baseline justify-between gap-3">
+                <span className="text-muted-foreground">Your share</span>
+                <span className="tnum shrink-0 text-foreground">{pct(entry.shareRatio)}</span>
+              </div>
+              <div className="flex items-baseline justify-between gap-3">
+                <span className="text-muted-foreground">Rental pool</span>
+                <span className="tnum shrink-0 text-foreground">{usd(weeklyRentPoolUsd)}</span>
+              </div>
+              <div className="flex items-baseline justify-between gap-3">
+                <span className="text-muted-foreground">Calculation</span>
+                <span className="tnum shrink-0 text-foreground text-right">
+                  {usd(weeklyRentPoolUsd)} × {pct(entry.shareRatio)}
+                </span>
+              </div>
+              <div className="flex items-baseline justify-between gap-3">
+                <span className="text-muted-foreground">Your payout</span>
+                <span className="tnum shrink-0 font-semibold text-foreground">{usd(entry.amountUsd)}</span>
+              </div>
+              <div className="flex items-baseline justify-between gap-3">
+                <span className="text-muted-foreground">TON equivalent</span>
+                <span className="tnum shrink-0 text-foreground">{ton(BigInt(entry.tonAmount))}</span>
+              </div>
+              {entry.status === "paid" && entry.txHash ? (
+                <div className="space-y-1 pt-0.5">
+                  <div className="flex items-baseline justify-between gap-3">
+                    <span className="text-muted-foreground">Tx hash</span>
+                    <span className="tnum shrink-0 text-foreground max-w-[55%] truncate">
+                      {entry.txHash}
+                    </span>
+                  </div>
+                  <p className="leading-snug text-muted-foreground text-[0.6875rem]" data-testid="earnings-row-disclaimer">
+                    {DEMO_TX_DISCLAIMER}. Simulated payout · tx hash is a placeholder.
+                  </p>
+                </div>
+              ) : null}
             </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Weekly rent pool</span>
-              <span className="tnum text-foreground">{usd(weeklyRentPoolUsd)}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Your payout (pool × share)</span>
-              <span className="tnum text-foreground font-semibold">{usd(entry.amountUsd)}</span>
-            </div>
-            {entry.status === "paid" && entry.txHash ? (
-              <p className="pt-1 text-muted-foreground">
-                Simulated payout · tx hash is a placeholder <span className="tnum">({entry.txHash.slice(0, 28)}…)</span>
-              </p>
-            ) : null}
           </div>
         </div>
       ) : null}

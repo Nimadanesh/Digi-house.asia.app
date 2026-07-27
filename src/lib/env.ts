@@ -22,4 +22,6 @@ export const env = {
   relayAddress: readString("TON_RELAY_ADDRESS"),
   /** Mock payout scheduler cadence (ms). Short so a judge sees a payout live; real Friday-UTC distribution is post-MVP. */
   payoutTickMs: Number(readString("PAYOUT_TICK_MS", "60000")) || 60000,
+  /** Telegram bot username without @ — used for share deep links. */
+  botUsername: readString("TG_BOT_USERNAME"),
 } as const;

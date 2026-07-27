@@ -1,74 +1,63 @@
 "use client";
-// File responsibility: Marketplace listing card. DESIGN_SYSTEM "Property card (Marketplace)".
-// Whole-card tap -> Property detail. Press scale 0.98 on :active. No drop shadow, no border.
+// File responsibility: Marketplace listing card — Fable vertical card (image badges, 3 metrics, scarcity bar).
+// Whole-card tap → Property detail. Press scale 0.98. Flat block (no drop shadow).
 import Link from "next/link";
+import Image from "next/image";
+import { MapPin, Flame } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { usd, weeklyRent, projectedYield, pct } from "@/lib/format";
+import {
+  usd,
+  weeklyRent,
+  projectedYield,
+  annualYieldRatio,
+  pct,
+} from "@/lib/format";
 import { ROUTES } from "@/lib/constants";
+import { listingStatusBadge } from "@/lib/marketplace-filter";
 import type { Listing } from "@/types/property";
 import { FundingBar } from "./FundingBar";
-import { WeeklyYieldCallout } from "./WeeklyYieldCallout";
-
-const STATUS_LABEL: Record<Listing["status"], string> = {
-  funding: "Funding",
-  funded: "Funded",
-  resale: "Resale",
-};
 
 export function PropertyCard({
   listing,
   variant = "list",
   holding,
   className,
+  nowMs = 0,
+  onNavigateHaptic,
+  priority = false,
 }: {
   listing: Listing;
   variant?: "list" | "mini";
   holding?: { sharesOwned: number; currentValueUsd: number; pendingWeekEarningsUsd: number };
   className?: string;
+  /** Epoch ms for status badge age (inject in tests; 0 → skip "New" age window). */
+  nowMs?: number;
+  onNavigateHaptic?: () => void;
+  /** LCP hint for the first marketplace card. */
+  priority?: boolean;
 }) {
-  const weeklyPerShare = projectedYield(weeklyRent(listing.annualRentUsd), 1, listing.totalShares);
-  const funded = listing.fundingProgressRatio >= 1;
-
-  return (
-    <Link
-      href={ROUTES.property(listing.id)}
-      className={cn(
-        "block bg-card rounded-[12px] active:scale-[0.98] transition-transform duration-[120ms] ease-out",
-        className,
-      )}
-    >
-      {variant === "list" ? (
-        <>
-          {/* Phase 3: real <Image> lands when /public/images/properties has webp files. Placeholder bg-surface-2 div only — no <img> with a missing src. */}
-          <div className="aspect-[16/10] rounded-t-[12px] bg-surface-2" aria-hidden>
-            <span className="sr-only">{listing.title}</span>
-          </div>
-          <div className="p-4 space-y-3">
-            <div>
-              <h2 className="text-[0.9375rem] font-semibold text-foreground leading-tight">{listing.title}</h2>
-              <p className="text-xs text-muted-foreground mt-0.5">{listing.location}</p>
-            </div>
-            <div className="grid grid-cols-2 gap-y-1.5 text-xs">
-              <div className="text-muted-foreground">Total</div>
-              <div className="text-right text-foreground tnum">{usd(listing.sharePriceUsd * listing.totalShares)}</div>
-              <div className="text-muted-foreground">Per share</div>
-              <div className="text-right text-foreground tnum">{usd(listing.sharePriceUsd)}</div>
-            </div>
-            <WeeklyYieldCallout weeklyPerShare={weeklyPerShare} />
-            <div className="pt-1">
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-xs text-muted-foreground">{STATUS_LABEL[listing.status]}</span>
-                <span className="text-xs text-foreground tnum">{pct(listing.fundingProgressRatio)}</span>
-              </div>
-              <FundingBar progress={listing.fundingProgressRatio} funded={funded} />
-            </div>
-          </div>
-        </>
-      ) : (
-        // mini variant (Home my-properties row). When `holding` is supplied, render holding-relative info
-        // (shares owned / current value / pending this week). DESIGN_SYSTEM §"My-properties card (Home)".
+  if (variant === "mini") {
+    return (
+      <Link
+        href={ROUTES.property(listing.id)}
+        onClick={() => onNavigateHaptic?.()}
+        className={cn(
+          "block bg-card rounded-[12px] active:scale-[0.98] transition-transform duration-[120ms] ease-out",
+          className,
+        )}
+      >
         <div className="flex items-center gap-3 p-4">
-          <div className="size-12 rounded-[10px] bg-surface-2 shrink-0" aria-hidden />
+          <div className="relative size-12 rounded-[10px] bg-surface-2 shrink-0 overflow-hidden">
+            {listing.images[0] ? (
+              <Image
+                src={listing.images[0]}
+                alt=""
+                fill
+                className="object-cover"
+                sizes="48px"
+              />
+            ) : null}
+          </div>
           <div className="flex-1 min-w-0">
             <h2 className="text-[0.9375rem] font-semibold text-foreground truncate">{listing.title}</h2>
             {holding ? (
@@ -76,14 +65,117 @@ export function PropertyCard({
                 <p className="text-xs text-muted-foreground truncate tnum">
                   {holding.sharesOwned} / {listing.totalShares} shares · {usd(holding.currentValueUsd)}
                 </p>
-                <p className="text-xs text-warning tnum mt-0.5">{usd(holding.pendingWeekEarningsUsd)} pending this week</p>
+                <p className="text-xs text-warning tnum mt-0.5">
+                  {usd(holding.pendingWeekEarningsUsd)} pending this week
+                </p>
               </>
             ) : (
-              <p className="text-xs text-muted-foreground truncate tnum">{listing.totalShares} shares total</p>
+              <p className="text-xs text-muted-foreground truncate">{listing.location}</p>
             )}
           </div>
         </div>
+      </Link>
+    );
+  }
+
+  const cover = listing.images[0] ?? "/images/properties/p1.png";
+  const totalValue = listing.sharePriceUsd * listing.totalShares;
+  const apy = annualYieldRatio(listing.annualRentUsd, totalValue);
+  const weeklyPerShare = projectedYield(weeklyRent(listing.annualRentUsd), 1, listing.totalShares);
+  const minPurchase = listing.sharePriceUsd; // 1 share
+  const funded = listing.fundingProgressRatio >= 1;
+  const clock = nowMs > 0 ? nowMs : Date.UTC(2026, 6, 26);
+  const badge = listingStatusBadge(listing, clock);
+
+  return (
+    <Link
+      href={ROUTES.property(listing.id)}
+      onClick={() => onNavigateHaptic?.()}
+      className={cn(
+        "block bg-card rounded-[12px] overflow-hidden active:scale-[0.98] transition-transform duration-[120ms] ease-out",
+        className,
       )}
+      data-testid="property-card"
+    >
+      {/* Fable §Image + badges */}
+      <div className="relative aspect-[16/10] bg-surface-2">
+        <Image
+          src={cover}
+          alt={listing.title}
+          fill
+          priority={priority}
+          className="object-cover"
+          sizes="(max-width: 480px) 100vw, 480px"
+        />
+        <span
+          className={cn(
+            "absolute top-2.5 left-2.5 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[0.6875rem] font-semibold backdrop-blur-sm",
+            badge.kind === "hot"
+              ? "bg-danger/90 text-white"
+              : "bg-black/55 text-white",
+          )}
+          data-testid="card-status-badge"
+        >
+          {badge.kind === "hot" ? <Flame size={12} strokeWidth={2.25} aria-hidden /> : null}
+          {badge.label}
+        </span>
+        <span
+          className="absolute top-2.5 right-2.5 rounded-full bg-success px-2.5 py-1 text-xs font-semibold text-white tnum shadow-sm"
+          data-testid="card-apy-badge"
+        >
+          {pct(apy)} APY
+        </span>
+      </div>
+
+      <div className="p-4 space-y-3">
+        {/* Fable §Name + location */}
+        <div>
+          <h2 className="text-[0.9375rem] font-semibold text-foreground leading-snug">{listing.title}</h2>
+          <p className="mt-0.5 flex items-center gap-1 text-sm text-muted-foreground">
+            <MapPin size={14} strokeWidth={1.75} className="shrink-0" aria-hidden />
+            <span className="truncate">{listing.location}</span>
+          </p>
+        </div>
+
+        {/* Fable §3-column metrics */}
+        <div className="grid grid-cols-3 gap-2" data-testid="card-metrics">
+          <Metric label="Price / share" value={usd(listing.sharePriceUsd)} />
+          <Metric label="Weekly / share" value={usd(weeklyPerShare)} accent />
+          <Metric label="Min. purchase" value={usd(minPurchase)} />
+        </div>
+
+        {/* Fable §Sales progress + absolute scarcity */}
+        <div className="space-y-1.5">
+          <FundingBar progress={listing.fundingProgressRatio} funded={funded} />
+          <p className="text-xs text-muted-foreground tnum" data-testid="card-sold-label">
+            {listing.sharesSold} of {listing.totalShares} shares sold
+          </p>
+        </div>
+      </div>
     </Link>
+  );
+}
+
+function Metric({
+  label,
+  value,
+  accent = false,
+}: {
+  label: string;
+  value: string;
+  accent?: boolean;
+}) {
+  return (
+    <div className="min-w-0">
+      <div className="text-[0.625rem] uppercase tracking-wide text-muted-foreground leading-tight">{label}</div>
+      <div
+        className={cn(
+          "mt-0.5 text-[0.8125rem] font-semibold tnum truncate",
+          accent ? "text-success" : "text-foreground",
+        )}
+      >
+        {value}
+      </div>
+    </div>
   );
 }

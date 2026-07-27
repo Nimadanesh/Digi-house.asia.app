@@ -51,6 +51,10 @@ export const seedPortfolioSummary = (): PortfolioSummary => {
     totalInvestedUsd,
     totalEarningsUsd,
     weeklyProjectedUsd,
+    // Simulated day change for Home badge (demo — not live market data).
+    dayChangeRatio: totalInvestedUsd > 0
+      ? Math.max(-0.05, Math.min(0.08, (totalValueUsd - totalInvestedUsd) / totalInvestedUsd * 0.15))
+      : 0,
     holdings: [...HOLDINGS],
     openOrders: [...OPEN_ORDERS],
   };

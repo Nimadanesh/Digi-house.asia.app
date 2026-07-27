@@ -14,6 +14,8 @@ export interface PortfolioSummary {
   totalInvestedUsd: number;
   totalEarningsUsd: number;
   weeklyProjectedUsd: number;
+  /** Simulated 24h portfolio change ratio (e.g. 0.023 = +2.3%). MVP demo only. */
+  dayChangeRatio: number;
   holdings: Holding[];
   openOrders: Order[];
 }

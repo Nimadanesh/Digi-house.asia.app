@@ -132,3 +132,4 @@ docs/research/                           # spec docs (source of truth)
 - **System font over Geist** — scaffold `layout.tsx` still uses `next/font/google` Geist; corrected by the foundation-subset plan to the system stack per the original decision.
 - **TypeScript bumped to 7.0.2** during manual Bun install — major version above the `^5` baseline; no Phase 2 usage relies on 7-specific features yet. Monitor for breaking changes.
 - **Vitest 4 + jsdom 29 + @testing-library added** — pure-utility TDD for `lib/ton/**` (address, nano conversions, sendTx logic). No component tests in Phase 2.
+- **`three@0.185` for onboarding only** — removed in favor of CSS fraction-house animation (Telegram WebView perf / stability).

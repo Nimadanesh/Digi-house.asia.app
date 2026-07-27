@@ -1,0 +1,55 @@
+import { describe, it, expect } from "vitest";
+import { pickFeaturedListing } from "@/lib/home-featured";
+import type { Listing } from "@/types/property";
+
+function L(over: Partial<Listing> & Pick<Listing, "id" | "title" | "status" | "sharePriceUsd" | "annualRentUsd" | "fundingProgressRatio" | "sharesRemaining" | "totalShares">): Listing {
+  return {
+    location: "X",
+    description: "d",
+    images: ["/images/properties/p1.png"],
+    ownerWalletAddress: "EQ",
+    createdAt: "2026-01-01T00:00:00Z",
+    sharesSold: 0,
+    meta: {
+      sizeSqm: 1,
+      yearBuilt: 2020,
+      propertyType: "A",
+      rentalStatus: "rented",
+      leaseUntil: "2026-12-31",
+      activeTenant: true,
+      tokenizationDocUrl: "#",
+    },
+    rentalHistory: [],
+    ...over,
+  };
+}
+
+describe("pickFeaturedListing", () => {
+  it("returns null on empty", () => {
+    expect(pickFeaturedListing([])).toBeNull();
+  });
+
+  it("prefers funding with highest APY", () => {
+    const high = L({
+      id: "hi",
+      title: "Hi",
+      status: "funding",
+      sharePriceUsd: 10_000,
+      totalShares: 100,
+      annualRentUsd: 50_000,
+      fundingProgressRatio: 0.2,
+      sharesRemaining: 80,
+    });
+    const low = L({
+      id: "lo",
+      title: "Lo",
+      status: "funding",
+      sharePriceUsd: 10_000,
+      totalShares: 100,
+      annualRentUsd: 5_000,
+      fundingProgressRatio: 0.9,
+      sharesRemaining: 10,
+    });
+    expect(pickFeaturedListing([low, high])?.id).toBe("hi");
+  });
+});

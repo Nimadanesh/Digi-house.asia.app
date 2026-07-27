@@ -186,11 +186,18 @@
     font-feature-settings: "tnum";
     font-variant-numeric: tabular-nums;
   }
-  /* Reduced motion (DESIGN_SYSTEM §"Motion" rule 9): drop transform-based motion; keep color/opacity.
-     FundingBar's scaleX is the main transform-trigger animation — render it instantly. */
+  /* Reduced motion (DESIGN_SYSTEM §"Motion" rule 9): drop transform-based motion; keep color/opacity. */
   @media (prefers-reduced-motion: reduce) {
     .funding-bar-fill {
       transition: none !important;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
     }
   }
 }
@@ -214,5 +221,52 @@
     @starting-style {
       transform: none;
     }
+  }
+}
+
+/* Bottom sheet enter (Sheet.tsx — CSS only, TG WebView-friendly). */
+@keyframes dh-sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes dh-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Onboarding CSS fraction-house (replaces heavy Three.js on low-end devices). */
+@keyframes dh-tile-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+.dh-fraction-house {
+  animation: dh-house-spin 12s linear infinite;
+  transform-style: preserve-3d;
+}
+@keyframes dh-house-spin {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dh-fraction-house,
+  .dh-tile-bob {
+    animation: none !important;
   }
 }

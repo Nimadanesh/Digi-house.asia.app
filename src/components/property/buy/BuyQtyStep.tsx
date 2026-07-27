@@ -1,0 +1,154 @@
+"use client";
+// File responsibility: Quantity step of Buy sheet — balance, available shares, qty steppers + live total.
+import { Minus, Plus } from "lucide-react";
+import { usd, ton, weeklyRent, projectedYield, estimateNanoTon } from "@/lib/format";
+import { TON_PRICE_USD_CENTS } from "@/lib/constants";
+import type { Listing } from "@/types/property";
+import { WalletConnectButton } from "@/components/wallet/TonConnectButton";
+import { useTelegram } from "@/hooks/useTelegram";
+import { useTonConnect } from "@/hooks/useTonConnect";
+import { Block } from "@/components/common/Block";
+import { Row } from "@/components/common/Row";
+
+const QUICK = [10, 25, 50] as const;
+
+export function BuyQtyStep({
+  listing,
+  qty,
+  onQtyChange,
+  walletConnected,
+}: {
+  listing: Listing;
+  qty: number;
+  onQtyChange: (q: number) => void;
+  walletConnected: boolean;
+}) {
+  const { haptics } = useTelegram();
+  const tonc = useTonConnect();
+  const remaining = listing.sharesRemaining;
+  const max = remaining;
+  const totalUsd = qty * listing.sharePriceUsd;
+  const weekly = projectedYield(weeklyRent(listing.annualRentUsd), qty, listing.totalShares);
+  const invalid = qty < 1 || qty > remaining;
+
+  function setQty(next: number) {
+    haptics.selection();
+    onQtyChange(next);
+  }
+
+  if (!walletConnected) {
+    return (
+      <div className="space-y-3 pb-2" data-testid="buy-qty-step">
+        <h2 id="buy-sheet-title" className="text-[1.0625rem] font-semibold text-foreground">
+          Connect wallet
+        </h2>
+        <p className="text-sm text-muted-foreground">
+          Connect a TON wallet to buy shares and receive weekly rental yield.
+        </p>
+        <WalletConnectButton className="w-full" />
+      </div>
+    );
+  }
+
+  if (remaining <= 0) {
+    return (
+      <div className="space-y-2 pb-2" data-testid="buy-qty-step">
+        <h2 id="buy-sheet-title" className="text-[1.0625rem] font-semibold text-foreground">
+          Fully funded
+        </h2>
+        <p className="text-sm text-muted-foreground">All primary shares are sold. Resale lands next.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4 pb-2" data-testid="buy-qty-step">
+      <h2 id="buy-sheet-title" className="text-[1.0625rem] font-semibold text-foreground">
+        Buy shares
+      </h2>
+
+      <Block>
+        <Row className="!min-h-[48px]">
+          <span className="text-sm text-muted-foreground">Wallet</span>
+          <span className="ml-auto text-sm tnum text-foreground">{tonc.short || "Connected"}</span>
+        </Row>
+        <Row className="!min-h-[48px]">
+          <span className="text-sm text-muted-foreground">Wallet balance</span>
+          <span className="ml-auto text-sm tnum text-muted-foreground" data-testid="buy-wallet-balance">
+            — · shown when chain linked
+          </span>
+        </Row>
+        <Row className="!min-h-[48px]">
+          <span className="text-sm text-muted-foreground">Available shares</span>
+          <span className="ml-auto text-sm tnum font-semibold text-foreground" data-testid="buy-available">
+            {remaining}
+          </span>
+        </Row>
+      </Block>
+
+      <div className="flex items-center justify-center gap-4">
+        <button
+          type="button"
+          aria-label="Decrease quantity"
+          disabled={qty <= 1}
+          onClick={() => setQty(Math.max(1, qty - 1))}
+          className="size-12 rounded-[12px] bg-surface-2 flex items-center justify-center active:scale-[0.97] transition-transform duration-[120ms] ease-out disabled:opacity-40"
+        >
+          <Minus size={22} strokeWidth={1.75} />
+        </button>
+        <div className="min-w-[88px] text-center text-3xl font-semibold tnum" data-testid="buy-qty">
+          {qty}
+        </div>
+        <button
+          type="button"
+          aria-label="Increase quantity"
+          disabled={qty >= max}
+          onClick={() => setQty(Math.min(max, qty + 1))}
+          className="size-12 rounded-[12px] bg-surface-2 flex items-center justify-center active:scale-[0.97] transition-transform duration-[120ms] ease-out disabled:opacity-40"
+        >
+          <Plus size={22} strokeWidth={1.75} />
+        </button>
+      </div>
+      <div className="flex flex-wrap justify-center gap-2">
+        {QUICK.map((n) => (
+          <button
+            key={n}
+            type="button"
+            disabled={n > max}
+            onClick={() => setQty(Math.min(max, n))}
+            className="min-h-[44px] min-w-[52px] rounded-full bg-surface-2 px-3 text-sm font-medium text-foreground active:scale-[0.97] transition-transform duration-[120ms] ease-out disabled:opacity-40"
+          >
+            {n}
+          </button>
+        ))}
+        <button
+          type="button"
+          onClick={() => setQty(max)}
+          className="min-h-[44px] min-w-[52px] rounded-full bg-primary/15 px-3 text-sm font-semibold text-primary active:scale-[0.97] transition-transform duration-[120ms] ease-out"
+        >
+          Max
+        </button>
+      </div>
+      {invalid ? (
+        <p className="text-xs text-danger text-center" role="alert">
+          Quantity must be between 1 and {remaining}.
+        </p>
+      ) : null}
+      <div className="rounded-[12px] bg-surface-2 p-3 space-y-1.5">
+        <div className="flex justify-between text-sm">
+          <span className="text-muted-foreground">Total</span>
+          <span className="tnum font-semibold text-foreground" data-testid="buy-qty-total">
+            {usd(totalUsd)} · {ton(estimateNanoTon(totalUsd, TON_PRICE_USD_CENTS))}
+          </span>
+        </div>
+        <div className="flex justify-between text-sm">
+          <span className="text-muted-foreground">Est. weekly yield</span>
+          <span className="tnum font-medium text-success">{usd(weekly)}</span>
+        </div>
+      </div>
+      <p className="text-[0.6875rem] text-center text-muted-foreground">
+        Ready for real TON payment wiring post-MVP.
+      </p>
+    </div>
+  );
+}

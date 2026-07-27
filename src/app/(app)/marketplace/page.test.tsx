@@ -1,0 +1,138 @@
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { render, screen, fireEvent } from "@testing-library/react";
+import type { Listing } from "@/types/property";
+
+vi.mock("next/image", () => ({
+  default: (props: { alt: string; src: string }) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img alt={props.alt} src={props.src} />
+  ),
+}));
+
+const listings: Listing[] = [
+  {
+    id: "prop-a",
+    title: "Alpha Marina",
+    location: "Dubai",
+    description: "A",
+    images: ["/images/properties/p1.png"],
+    totalShares: 400,
+    sharePriceUsd: 12500,
+    status: "funding",
+    ownerWalletAddress: "EQA",
+    annualRentUsd: 900000,
+    createdAt: "2026-07-20T00:00:00Z",
+    sharesSold: 320,
+    sharesRemaining: 80,
+    fundingProgressRatio: 0.8,
+    meta: {
+      sizeSqm: 70,
+      yearBuilt: 2020,
+      propertyType: "Apt",
+      rentalStatus: "rented",
+      leaseUntil: "2026-12-31",
+      activeTenant: true,
+      tokenizationDocUrl: "#",
+    },
+    rentalHistory: [],
+  },
+  {
+    id: "prop-b",
+    title: "Beta Loft",
+    location: "Lisbon",
+    description: "B",
+    images: ["/images/properties/p2.png"],
+    totalShares: 800,
+    sharePriceUsd: 5000,
+    status: "funding",
+    ownerWalletAddress: "EQB",
+    annualRentUsd: 200000,
+    createdAt: "2026-01-01T00:00:00Z",
+    sharesSold: 100,
+    sharesRemaining: 700,
+    fundingProgressRatio: 0.125,
+    meta: {
+      sizeSqm: 40,
+      yearBuilt: 2021,
+      propertyType: "Studio",
+      rentalStatus: "rented",
+      leaseUntil: "2027-01-01",
+      activeTenant: true,
+      tokenizationDocUrl: "#",
+    },
+    rentalHistory: [],
+  },
+];
+
+const useMarketplace = vi.fn();
+vi.mock("@/hooks/useMarketplace", () => ({
+  useMarketplace: () => useMarketplace(),
+}));
+vi.mock("@/hooks/useTelegram", () => ({
+  useTelegram: () => ({
+    haptics: { selection: vi.fn(), impact: vi.fn(), notification: vi.fn() },
+  }),
+}));
+
+import MarketplacePage from "@/app/(app)/marketplace/page";
+
+describe("Marketplace page", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("loading: skeleton for search chips and cards", () => {
+    useMarketplace.mockReturnValue({ data: undefined, isLoading: true, isError: false, refetch: vi.fn() });
+    render(<MarketplacePage />);
+    expect(screen.getByTestId("marketplace-skeleton")).toBeInTheDocument();
+    expect(document.querySelectorAll(".animate-pulse").length).toBeGreaterThan(0);
+  });
+
+  it("error: Retry", () => {
+    useMarketplace.mockReturnValue({ data: undefined, isLoading: false, isError: true, refetch: vi.fn() });
+    render(<MarketplacePage />);
+    expect(screen.getByRole("button", { name: /try again/i })).toBeInTheDocument();
+  });
+
+  it("empty company list", () => {
+    useMarketplace.mockReturnValue({ data: [], isLoading: false, isError: false, refetch: vi.fn() });
+    render(<MarketplacePage />);
+    expect(screen.getByText("No properties yet")).toBeInTheDocument();
+  });
+
+  it("loaded: search + chips + cards", () => {
+    useMarketplace.mockReturnValue({ data: listings, isLoading: false, isError: false, refetch: vi.fn() });
+    render(<MarketplacePage />);
+    expect(screen.getByTestId("marketplace-search")).toBeInTheDocument();
+    expect(screen.getByTestId("marketplace-filters")).toBeInTheDocument();
+    expect(screen.getByText("Alpha Marina")).toBeInTheDocument();
+    expect(screen.getByText("Beta Loft")).toBeInTheDocument();
+    expect(screen.getByText(/320 of 400 shares sold/)).toBeInTheDocument();
+  });
+
+  it("search filters the list client-side", () => {
+    useMarketplace.mockReturnValue({ data: listings, isLoading: false, isError: false, refetch: vi.fn() });
+    render(<MarketplacePage />);
+    fireEvent.change(screen.getByLabelText("Search properties"), { target: { value: "lisbon" } });
+    expect(screen.queryByText("Alpha Marina")).not.toBeInTheDocument();
+    expect(screen.getByText("Beta Loft")).toBeInTheDocument();
+  });
+
+  it("Low Price chip reorders by share price", () => {
+    useMarketplace.mockReturnValue({ data: listings, isLoading: false, isError: false, refetch: vi.fn() });
+    render(<MarketplacePage />);
+    fireEvent.click(screen.getByRole("tab", { name: "Low Price" }));
+    const cards = screen.getAllByTestId("property-card");
+    expect(cards[0]).toHaveTextContent("Beta Loft");
+    expect(cards[1]).toHaveTextContent("Alpha Marina");
+  });
+
+  it("no-match empty state clears filters", () => {
+    useMarketplace.mockReturnValue({ data: listings, isLoading: false, isError: false, refetch: vi.fn() });
+    render(<MarketplacePage />);
+    fireEvent.change(screen.getByLabelText("Search properties"), { target: { value: "zzzz" } });
+    expect(screen.getByText("No matches")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /clear filters/i }));
+    expect(screen.getByText("Alpha Marina")).toBeInTheDocument();
+  });
+});
