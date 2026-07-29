@@ -35,6 +35,9 @@ const envSchema = z
     /** Redis for BullMQ payout worker (optional for API process). */
     REDIS_URL: z.string().optional(),
     /** P4-06: Order rate limit max requests per window (default 30). */
+    /** P4-09: Auth rate limit max requests per window (default 10). */
+    AUTH_RATE_LIMIT_MAX: z.coerce.number().int().positive().default(10),
+    /** P4-06: Order rate limit max requests per window (default 30). */
     ORDER_RATE_LIMIT_MAX: z.coerce.number().int().positive().default(30),
     /** P4-06: Order rate limit window in ms (default 60s). */
     ORDER_RATE_LIMIT_WINDOW_MS: z.coerce.number().int().positive().default(60_000),
@@ -102,6 +105,7 @@ const envSchema = z
       BUY_STUB_NANOTON: val.BUY_STUB_NANOTON,
       BUY_INTENT_TTL_SECONDS: val.BUY_INTENT_TTL_SECONDS,
       REDIS_URL: val.REDIS_URL,
+      AUTH_RATE_LIMIT_MAX: val.AUTH_RATE_LIMIT_MAX,
       ORDER_RATE_LIMIT_MAX: val.ORDER_RATE_LIMIT_MAX,
       ORDER_RATE_LIMIT_WINDOW_MS: val.ORDER_RATE_LIMIT_WINDOW_MS,
       PAYOUT_TICK_MS: val.PAYOUT_TICK_MS,

@@ -15,6 +15,7 @@ export type AuthRouteDeps = {
   botToken: string;
   session: SessionConfig;
   users: UserStore;
+  rateLimitMax?: number;
 };
 
 export function createAuthRoutes(deps: AuthRouteDeps) {
@@ -24,7 +25,7 @@ export function createAuthRoutes(deps: AuthRouteDeps) {
     "/v1/auth/telegram",
     slidingWindowRateLimit({
       windowMs: 60_000,
-      max: 10,
+      max: deps.rateLimitMax ?? 10,
       key: ipKey,
     }),
     async (c) => {

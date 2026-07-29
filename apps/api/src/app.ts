@@ -175,6 +175,7 @@ export function createApp(opts: CreateAppOptions) {
         botToken: env.TELEGRAM_BOT_TOKEN,
         session,
         users,
+        rateLimitMax: env.AUTH_RATE_LIMIT_MAX,
       }),
     );
   }

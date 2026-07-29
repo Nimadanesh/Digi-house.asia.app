@@ -28,6 +28,7 @@ function testEnv(over: Partial<ApiEnv> = {}): ApiEnv {
     TELEGRAM_BOT_TOKEN: FIXTURE_BOT_TOKEN,
     SESSION_SECRET: "test-session-secret-at-least-32-chars",
     SESSION_TTL_SECONDS: 3600,
+    AUTH_RATE_LIMIT_MAX: 100,
     CORS_ORIGIN: "http://localhost:3000",
     TON_RELAY_ADDRESS: undefined,
     BUY_STUB_NANOTON: "10000000",
@@ -195,5 +196,124 @@ describe("POST /v1/auth/telegram + GET /v1/me", () => {
     const body = (await res.json()) as { user: { displayName: string } };
     expect(body.user.displayName).toBe("Second");
     expect(users._rows.size).toBe(1);
+  });
+
+  describe("referral attribution", () => {
+    it("sets referred_by when start_param=ref_<existing_user>", async () => {
+      const users = createMemoryUserStore();
+      const refUser = await users.upsertFromTelegram({
+        userId: "111",
+        displayName: "Referrer",
+      });
+      const { app } = makeApp(users);
+
+      const initData = buildInitDataForTests(FIXTURE_BOT_TOKEN, {
+        authDate: Math.floor(Date.now() / 1000) - 5,
+        user: { id: 222, first_name: "NewUser" },
+        extra: { start_param: "ref_111" },
+      });
+
+      const res = await app.request("/v1/auth/telegram", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ initData }),
+      });
+      expect(res.status).toBe(200);
+      const body = (await res.json()) as { user: { id: string; referredByUserId?: string } };
+      expect(body.user.referredByUserId).toBe("111");
+    });
+
+    it("ignores self-referral (start_param=ref_<own_id>)", async () => {
+      const users = createMemoryUserStore();
+      const { app } = makeApp(users);
+
+      const userId = "333";
+      const initData = buildInitDataForTests(FIXTURE_BOT_TOKEN, {
+        authDate: Math.floor(Date.now() / 1000) - 5,
+        user: { id: Number(userId), first_name: "SelfRef" },
+        extra: { start_param: `ref_${userId}` },
+      });
+
+      const res = await app.request("/v1/auth/telegram", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ initData }),
+      });
+      expect(res.status).toBe(200);
+      const body = (await res.json()) as { user: { referredByUserId?: string } };
+      expect(body.user.referredByUserId).toBeUndefined();
+    });
+
+    it("ignores start_param=ref_<nonexistent_user>", async () => {
+      const { app } = makeApp();
+      const initData = buildInitDataForTests(FIXTURE_BOT_TOKEN, {
+        authDate: Math.floor(Date.now() / 1000) - 5,
+        user: { id: 444, first_name: "NoRef" },
+        extra: { start_param: "ref_99999" },
+      });
+
+      const res = await app.request("/v1/auth/telegram", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ initData }),
+      });
+      expect(res.status).toBe(200);
+      const body = (await res.json()) as { user: { referredByUserId?: string } };
+      expect(body.user.referredByUserId).toBeUndefined();
+    });
+
+    it("first-write-wins — second auth with different ref is ignored", async () => {
+      const users = createMemoryUserStore();
+      await users.upsertFromTelegram({ userId: "aaa", displayName: "RefA" });
+      await users.upsertFromTelegram({ userId: "bbb", displayName: "RefB" });
+
+      const { app } = makeApp(users);
+      const userId = 555;
+      const now = Math.floor(Date.now() / 1000);
+
+      const first = buildInitDataForTests(FIXTURE_BOT_TOKEN, {
+        authDate: now - 5,
+        user: { id: userId, first_name: "Target" },
+        extra: { start_param: "ref_aaa" },
+      });
+      const r1 = await app.request("/v1/auth/telegram", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ initData: first }),
+      });
+      expect(r1.status).toBe(200);
+      expect(((await r1.json()) as { user: { referredByUserId: string } }).user.referredByUserId).toBe("aaa");
+
+      const second = buildInitDataForTests(FIXTURE_BOT_TOKEN, {
+        authDate: now - 4,
+        user: { id: userId, first_name: "Target" },
+        extra: { start_param: "ref_bbb" },
+      });
+      const r2 = await app.request("/v1/auth/telegram", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ initData: second }),
+      });
+      expect(r2.status).toBe(200);
+      const body2 = (await r2.json()) as { user: { referredByUserId: string } };
+      expect(body2.user.referredByUserId).toBe("aaa"); // unchanged
+    });
+
+    it("ignores referredByUserId in body when initData has no start_param", async () => {
+      const { app } = makeApp();
+      const initData = buildInitDataForTests(FIXTURE_BOT_TOKEN, {
+        authDate: Math.floor(Date.now() / 1000) - 5,
+        user: { id: 666, first_name: "SpoofTest" },
+      });
+
+      const res = await app.request("/v1/auth/telegram", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ initData, referredByUserId: "111" }),
+      });
+      expect(res.status).toBe(200);
+      const body = (await res.json()) as { user: { referredByUserId?: string } };
+      expect(body.user.referredByUserId).toBeUndefined();
+    });
   });
 });
