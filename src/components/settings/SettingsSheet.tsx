@@ -21,6 +21,9 @@ import { useUiStore } from "@/stores/ui.store";
 import { ROUTES } from "@/lib/constants";
 import { haptics } from "@/lib/telegram/haptics";
 import { safeBackButton } from "@/lib/telegram/chrome";
+import { env } from "@/lib/env";
+import { useAuthStore } from "@/stores/auth.store";
+import { Copy, Check } from "lucide-react";
 
 /** Preference / wallet rows: taller touch target + vertical padding for title+hint stacks. */
 const SETTINGS_ROW = "!min-h-[64px] items-center py-3.5";
@@ -53,6 +56,9 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
   const showDemoBadge = useSettingsStore((s) => s.showDemoBadge);
   const setShowDemoBadge = useSettingsStore((s) => s.setShowDemoBadge);
   const [aboutOpen, setAboutOpen] = useState(false);
+
+  const user = useAuthStore((s) => s.user);
+  const [copied, setCopied] = useState(false);
 
   const closeAll = useCallback(() => {
     setAboutOpen(false);
@@ -92,6 +98,19 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
     setOnboardingReplay(true);
     onClose();
     router.push(ROUTES.onboarding);
+  }
+
+  async function onInviteFriends() {
+    haptics.selection();
+    if (!env.botUsername || !user) return;
+    const link = `https://t.me/${env.botUsername}?startapp=ref_${user.id}`;
+    try {
+      await navigator.clipboard.writeText(link);
+    } catch {
+      // fallback for privacy-restricted contexts — silently ignore
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   }
 
   return (
@@ -169,6 +188,28 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
                 aria-label={t("showDemoBadge")}
               />
             </Row>
+          </Block>
+        </section>
+
+        <section className="space-y-2">
+          <SectionLabel className="px-0.5">Referrals</SectionLabel>
+          <Block>
+            <button
+              type="button"
+              onClick={() => void onInviteFriends()}
+              className="flex w-full min-h-[56px] items-center gap-2 px-4 py-3.5 text-start active:bg-surface-2/60"
+              data-testid="settings-invite-friends"
+              disabled={!env.botUsername}
+            >
+              <span className="flex-1 text-sm font-medium leading-snug text-foreground">
+                {copied ? "Copied!" : "Invite friends"}
+              </span>
+              {copied ? (
+                <Check size={20} strokeWidth={1.75} className="shrink-0 text-success" aria-hidden />
+              ) : (
+                <Copy size={20} strokeWidth={1.75} className="shrink-0 text-muted-foreground" aria-hidden />
+              )}
+            </button>
           </Block>
         </section>
 
