@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import type { Db } from "../db/client.js";
 import { users, type UserRow } from "../db/schema/users.js";
 import {
@@ -27,7 +27,7 @@ export function createDbUserStore(db: Db): UserStore {
           walletAddress: null,
           onboarded: false,
           useTelegramTheme: false,
-          referredByUserId: null,
+          referredByUserId: input.referredByUserId ?? null,
           createdAt: now,
           updatedAt: now,
         })
@@ -37,6 +37,8 @@ export function createDbUserStore(db: Db): UserStore {
             displayName: input.displayName,
             username: input.username ?? null,
             photoUrl: input.photoUrl ?? null,
+            referredByUserId:
+              sql`CASE WHEN ${users.referredByUserId} IS NULL THEN ${input.referredByUserId ?? null} ELSE ${users.referredByUserId} END`,
             updatedAt: now,
             // do not clobber role, onboarded, walletAddress, useTelegramTheme
           },
@@ -75,7 +77,7 @@ export function createMemoryUserStore(
           walletAddress: null,
           onboarded: false,
           useTelegramTheme: false,
-          referredByUserId: null,
+          referredByUserId: input.referredByUserId ?? null,
           createdAt: now,
           updatedAt: now,
         };
@@ -87,6 +89,7 @@ export function createMemoryUserStore(
         displayName: input.displayName,
         username: input.username ?? null,
         photoUrl: input.photoUrl ?? null,
+        referredByUserId: existing.referredByUserId ?? (input.referredByUserId ?? null),
         updatedAt: now,
       };
       map.set(input.userId, updated);
