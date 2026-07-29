@@ -1,5 +1,7 @@
+import { desc, eq, sql } from "drizzle-orm";
 import type { Db } from "../db/client.js";
 import { transactions } from "../db/schema/transactions.js";
+import { properties } from "../db/schema/properties.js";
 
 export type TxKind = "buy" | "sell" | "earnings" | "withdraw";
 export type TxStatus = "pending" | "success" | "failed";
@@ -17,6 +19,8 @@ export type TransactionRecord = {
   error: string | null;
   buyIntentId: string | null;
   createdAt: Date;
+  propertyTitle?: string;
+  propertyImage?: string;
 };
 
 export type TransactionPublic = {
@@ -31,6 +35,8 @@ export type TransactionPublic = {
   txHash?: string;
   error?: string;
   createdAt: string;
+  propertyTitle?: string;
+  propertyImage?: string;
 };
 
 export type TxStore = {
@@ -47,6 +53,7 @@ export type TxStore = {
     error?: string | null;
     buyIntentId?: string | null;
   }): Promise<TransactionRecord>;
+  listByUserId(userId: string, opts?: { limit?: number; offset?: number }): Promise<TransactionRecord[]>;
 };
 
 export function mapTransactionPublic(r: TransactionRecord): TransactionPublic {
@@ -63,6 +70,8 @@ export function mapTransactionPublic(r: TransactionRecord): TransactionPublic {
   if (r.tonAmount != null) out.tonAmount = r.tonAmount;
   if (r.txHash) out.txHash = r.txHash;
   if (r.error) out.error = r.error;
+  if (r.propertyTitle) out.propertyTitle = r.propertyTitle;
+  if (r.propertyImage) out.propertyImage = r.propertyImage;
   return out;
 }
 
@@ -76,6 +85,42 @@ function mapKind(s: string): TxKind {
 function mapStatus(s: string): TxStatus {
   if (s === "pending" || s === "success" || s === "failed") return s;
   return "failed";
+}
+
+type TxQueryRow = {
+  id: string;
+  userId: string;
+  kind: string;
+  propertyId: string | null;
+  shares: number | null;
+  amountUsd: number;
+  tonAmount: number | null;
+  status: string;
+  txHash: string | null;
+  error: string | null;
+  buyIntentId: string | null;
+  createdAt: Date;
+  propertyTitle: string | null;
+  propertyImage: string | null;
+};
+
+function mapRow(row: TxQueryRow): TransactionRecord {
+  return {
+    id: row.id,
+    userId: row.userId,
+    kind: mapKind(row.kind),
+    propertyId: row.propertyId,
+    shares: row.shares,
+    amountUsd: Number(row.amountUsd),
+    tonAmount: row.tonAmount != null ? Number(row.tonAmount) : null,
+    status: mapStatus(row.status),
+    txHash: row.txHash,
+    error: row.error,
+    buyIntentId: row.buyIntentId,
+    createdAt: row.createdAt,
+    ...(row.propertyTitle ? { propertyTitle: row.propertyTitle } : {}),
+    ...(row.propertyImage ? { propertyImage: row.propertyImage } : {}),
+  };
 }
 
 export function createDbTxStore(db: Db): TxStore {
@@ -116,6 +161,34 @@ export function createDbTxStore(db: Db): TxStore {
         createdAt: row.createdAt,
       };
     },
+    async listByUserId(userId, opts = {}) {
+      const limit = Math.min(opts.limit ?? 50, 100);
+      const offset = opts.offset ?? 0;
+      const rows = await db
+        .select({
+          id: transactions.id,
+          userId: transactions.userId,
+          kind: transactions.kind,
+          propertyId: transactions.propertyId,
+          shares: transactions.shares,
+          amountUsd: transactions.amountUsd,
+          tonAmount: transactions.tonAmount,
+          status: transactions.status,
+          txHash: transactions.txHash,
+          error: transactions.error,
+          buyIntentId: transactions.buyIntentId,
+          createdAt: transactions.createdAt,
+          propertyTitle: properties.title,
+          propertyImage: sql<string>`${properties.images}->>0`,
+        })
+        .from(transactions)
+        .leftJoin(properties, eq(transactions.propertyId, properties.id))
+        .where(eq(transactions.userId, userId))
+        .orderBy(desc(transactions.createdAt))
+        .limit(limit)
+        .offset(offset);
+      return rows.map(mapRow);
+    },
   };
 }
 
@@ -148,6 +221,14 @@ export function createMemoryTxStore(
       };
       rows.push(record);
       return { ...record };
+    },
+    async listByUserId(userId, opts = {}) {
+      const limit = Math.min(opts.limit ?? 50, 100);
+      const offset = opts.offset ?? 0;
+      return rows
+        .filter((r) => r.userId === userId)
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+        .slice(offset, offset + limit);
     },
   };
 }

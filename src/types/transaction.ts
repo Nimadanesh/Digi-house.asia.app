@@ -13,4 +13,6 @@ export interface Transaction {
   txHash?: string;
   error?: string;
   createdAt: string;
+  propertyTitle?: string;
+  propertyImage?: string;
 }
