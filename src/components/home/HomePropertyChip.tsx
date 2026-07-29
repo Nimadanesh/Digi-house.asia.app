@@ -27,9 +27,11 @@ export function HomePropertyChip({
       <div className="relative aspect-[4/3] bg-surface-2">
         <Image src={cover} alt="" fill className="object-cover" sizes="148px" />
       </div>
-      <div className="space-y-0.5 p-2.5">
-        <p className="truncate text-sm font-semibold text-foreground">{listing.title}</p>
-        <p className="text-xs text-muted-foreground tnum">{holding.sharesOwned} shares</p>
+      <div className="space-y-1 p-2.5">
+        <p className="truncate text-sm font-semibold leading-snug text-foreground">{listing.title}</p>
+        <p className="text-xs leading-relaxed text-muted-foreground tnum">
+          {holding.sharesOwned} shares
+        </p>
         <p className="text-xs font-medium text-success tnum">
           {usd(holding.pendingWeekEarningsUsd)}/wk
         </p>

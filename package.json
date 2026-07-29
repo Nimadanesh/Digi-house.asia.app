@@ -30,15 +30,35 @@
   "engines": {
     "node": ">=24"
   },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "dev": "next dev",
+    "dev:api": "npm run dev -w @digihouse/api",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
+    "typecheck:api": "npm run typecheck -w @digihouse/api",
+    "typecheck:shared": "npm run typecheck -w @digihouse/shared",
     "check": "npm run lint && npm run typecheck && npm run build",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "infra:up": "docker compose -f docker-compose.infra.yml up -d",
+    "infra:down": "docker compose -f docker-compose.infra.yml down",
+    "infra:down:v": "docker compose -f docker-compose.infra.yml down -v",
+    "infra:ps": "docker compose -f docker-compose.infra.yml ps",
+    "infra:logs": "docker compose -f docker-compose.infra.yml logs -f",
+    "db:generate": "npm run db:generate -w @digihouse/api",
+    "db:migrate": "npm run db:migrate -w @digihouse/api",
+    "db:seed": "npm run db:seed -w @digihouse/api",
+    "test:api": "npm run test -w @digihouse/api",
+    "phase1:verify": "npm run test:api && npm run check",
+    "phase1:smoke-api": "bash scripts/smoke-marketplace.sh",
+    "phase1:smoke-rate-limit": "echo 'Run: for i in $(seq 1 11); do curl -s -o /dev/null -w \"%{http_code}\n\" -X POST http://localhost:8787/v1/auth/telegram -H \"content-type: application/json\" -d \"{\\\"initData\\\":\\\"test\\\"}\"; done | sort | uniq -c'",
+    "phase1:check-all": "npm run phase1:verify && npm run phase1:smoke-api"
   },
   "dependencies": {
     "@base-ui/react": "^1.3.0",
@@ -50,7 +70,6 @@
     "@tonconnect/ui-react": "^3.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "framer-motion": "^12.42.2",
     "lucide-react": "^1.6.0",
     "next": "16.2.1",
     "next-intl": "^4.13.4",

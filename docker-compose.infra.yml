@@ -1,0 +1,59 @@
+# DigiHouse local infra — Postgres 16 + Redis (P1-02)
+# Does NOT start the legacy Next app containers in docker-compose.yml.
+# DEV ONLY credentials — never use these passwords in staging/prod.
+#
+#   npm run infra:up
+#   npm run infra:ps
+#   npm run infra:down
+#   npm run infra:down:v   # wipe volumes
+
+name: digihouse-infra
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: digihouse-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: digihouse
+      POSTGRES_PASSWORD: digihouse # DEV ONLY
+      POSTGRES_DB: digihouse
+    volumes:
+      - digihouse_pg_data:/var/lib/postgresql/data
+    networks:
+      - digihouse
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U digihouse -d digihouse"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  redis:
+    image: redis:7-alpine
+    container_name: digihouse-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - digihouse_redis_data:/data
+    networks:
+      - digihouse
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+
+volumes:
+  digihouse_pg_data:
+  digihouse_redis_data:
+
+networks:
+  digihouse:
+    name: digihouse-net
+    driver: bridge

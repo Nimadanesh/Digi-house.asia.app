@@ -53,11 +53,14 @@ export function BuySummaryStep({
           <span className="ml-auto text-sm tnum text-success font-medium">{usd(weekly)}</span>
         </Row>
       </Block>
-      <p className="text-[0.6875rem] text-muted-foreground px-0.5">
+      <p className="mt-0.5 px-0.5 pb-0.5 text-[0.6875rem] leading-relaxed text-muted-foreground">
         No hidden fees. Total equals quantity × price per share.
       </p>
       {pending ? (
-        <p className="text-sm text-muted-foreground text-center" data-testid="buy-pending">
+        <p
+          className="text-center text-sm leading-relaxed text-muted-foreground"
+          data-testid="buy-pending"
+        >
           Confirming in your wallet…
         </p>
       ) : null}

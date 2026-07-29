@@ -6,6 +6,6 @@ export function usePortfolio() {
   return useQuery({
     queryKey: ["portfolio"],
     queryFn: () => getRepo().portfolio.summary(),
-    staleTime: 0,
+    staleTime: 60_000,
   });
 }

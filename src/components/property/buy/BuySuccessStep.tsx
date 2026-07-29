@@ -3,11 +3,15 @@
 // honesty disclaimer once, muted.
 import { useEffect, useState } from "react";
 import { Check } from "lucide-react";
-import { useReducedMotion } from "framer-motion";
 import { DEMO_TX_DISCLAIMER, ROUTES } from "@/lib/constants";
 import { env } from "@/lib/env";
 import { payoutCountdown } from "@/lib/format";
 import { useRouter } from "next/navigation";
+
+function prefersReducedMotion(): boolean {
+  if (typeof window === "undefined" || typeof window.matchMedia !== "function") return true;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
 
 export function BuySuccessStep({
   propertyTitle,
@@ -22,14 +26,13 @@ export function BuySuccessStep({
   onClose: () => void;
 }) {
   const router = useRouter();
-  const reduce = useReducedMotion();
-  const [burst, setBurst] = useState(!reduce);
+  const [burst, setBurst] = useState(() => !prefersReducedMotion());
 
   useEffect(() => {
-    if (reduce) return;
+    if (!burst) return;
     const t = setTimeout(() => setBurst(false), 900);
     return () => clearTimeout(t);
-  }, [reduce]);
+  }, [burst]);
 
   const nextPay = nowMs != null ? payoutCountdown(nowMs) : "Every Friday";
 
@@ -71,18 +74,20 @@ export function BuySuccessStep({
       <div className="mx-auto flex size-16 items-center justify-center rounded-full bg-success/15">
         <Check size={32} strokeWidth={2.25} className="text-success" aria-hidden />
       </div>
-      <div className="space-y-1.5">
-        <h2 id="buy-sheet-title" className="text-[1.0625rem] font-semibold text-foreground">
+      <div className="space-y-2.5">
+        <h2 id="buy-sheet-title" className="text-[1.0625rem] font-semibold leading-snug text-foreground">
           Congratulations!
         </h2>
-        <p className="text-sm text-foreground leading-relaxed" data-testid="buy-success-message">
+        <p className="text-sm leading-relaxed text-foreground" data-testid="buy-success-message">
           You now own <span className="font-semibold tnum">{qty}</span>{" "}
           {qty === 1 ? "share" : "shares"} of {propertyTitle}
         </p>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm leading-relaxed text-muted-foreground">
           Next payout <span className="tnum">{nextPay}</span>
         </p>
-        <p className="text-[0.6875rem] text-muted-foreground pt-1">{DEMO_TX_DISCLAIMER}</p>
+        <p className="pt-1 text-[0.6875rem] leading-relaxed text-muted-foreground pb-0.5">
+          {DEMO_TX_DISCLAIMER}
+        </p>
       </div>
       <div className="flex flex-col gap-2 pt-1">
         <button

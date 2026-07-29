@@ -79,17 +79,31 @@ describe("SettingsSheet", () => {
     expect(useSettingsStore.getState().displayCurrency).toBe("ton");
   });
 
-  it("shows language row with Auto default and opens picker sheet", () => {
+  it("shows language row with Auto default and opens picker in configured order", () => {
     render(<SettingsSheet />);
     expect(screen.getByText("Language")).toBeInTheDocument();
     expect(screen.getByTestId("language-selector")).toBeInTheDocument();
     expect(screen.getByTestId("language-current")).toHaveTextContent(/auto \(telegram\)/i);
     fireEvent.click(screen.getByTestId("language-selector"));
     expect(screen.getByTestId("language-picker-sheet")).toBeInTheDocument();
-    expect(screen.getByTestId("lang-option-auto")).toBeInTheDocument();
-    expect(screen.getByTestId("lang-option-en")).toBeInTheDocument();
-    expect(screen.getByTestId("lang-option-fa")).toBeInTheDocument();
-    expect(screen.getByTestId("lang-option-zh")).toBeInTheDocument();
+    expect(screen.getByTestId("language-picker-list")).toBeInTheDocument();
+    const options = screen.getAllByTestId(/^lang-option-/);
+    // Auto first, then LOCALES: en, ar, ru, de, tr, fr, es, pt, zh, hi, fa, id
+    expect(options.map((el) => el.getAttribute("data-testid"))).toEqual([
+      "lang-option-auto",
+      "lang-option-en",
+      "lang-option-ar",
+      "lang-option-ru",
+      "lang-option-de",
+      "lang-option-tr",
+      "lang-option-fr",
+      "lang-option-es",
+      "lang-option-pt",
+      "lang-option-zh",
+      "lang-option-hi",
+      "lang-option-fa",
+      "lang-option-id",
+    ]);
   });
 
   it("persists explicit locale choice from picker", () => {

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import type { Listing } from "@/types/property";
 
 vi.mock("next/image", () => ({
@@ -110,11 +110,13 @@ describe("Marketplace page", () => {
     expect(screen.getByText(/320 of 400 shares sold/)).toBeInTheDocument();
   });
 
-  it("search filters the list client-side", () => {
+  it("search filters the list client-side", async () => {
     useMarketplace.mockReturnValue({ data: listings, isLoading: false, isError: false, refetch: vi.fn() });
     render(<MarketplacePage />);
     fireEvent.change(screen.getByLabelText("Search properties"), { target: { value: "lisbon" } });
-    expect(screen.queryByText("Alpha Marina")).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByText("Alpha Marina")).not.toBeInTheDocument();
+    });
     expect(screen.getByText("Beta Loft")).toBeInTheDocument();
   });
 
@@ -127,12 +129,16 @@ describe("Marketplace page", () => {
     expect(cards[1]).toHaveTextContent("Alpha Marina");
   });
 
-  it("no-match empty state clears filters", () => {
+  it("no-match empty state clears filters", async () => {
     useMarketplace.mockReturnValue({ data: listings, isLoading: false, isError: false, refetch: vi.fn() });
     render(<MarketplacePage />);
     fireEvent.change(screen.getByLabelText("Search properties"), { target: { value: "zzzz" } });
-    expect(screen.getByText("No matches")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText("No matches")).toBeInTheDocument();
+    });
     fireEvent.click(screen.getByRole("button", { name: /clear filters/i }));
-    expect(screen.getByText("Alpha Marina")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText("Alpha Marina")).toBeInTheDocument();
+    });
   });
 });

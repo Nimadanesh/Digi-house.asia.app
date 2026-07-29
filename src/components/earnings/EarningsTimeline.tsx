@@ -22,9 +22,12 @@ export function EarningsTimeline({
 
   return (
     <section className="space-y-2" data-testid="earnings-payments">
-      <div className="px-0.5">
-        <h2 className="text-[0.9375rem] font-semibold text-foreground">Payments</h2>
-        <p className="mt-0.5 text-xs text-muted-foreground tnum" data-testid="payments-summary">
+      <div className="space-y-1.5 px-0.5">
+        <h2 className="text-[0.9375rem] font-semibold leading-snug text-foreground">Payments</h2>
+        <p
+          className="pb-0.5 text-xs leading-relaxed text-muted-foreground tnum"
+          data-testid="payments-summary"
+        >
           {received} Payments Received · Total {total} Payments
         </p>
       </div>

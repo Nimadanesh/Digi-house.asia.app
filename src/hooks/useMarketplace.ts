@@ -7,6 +7,6 @@ export function useMarketplace(filter?: { status?: PropertyStatus; query?: strin
   return useQuery({
     queryKey: ["marketplace", filter ?? null],
     queryFn: () => getRepo().marketplace.list(filter),
-    staleTime: 30_000,
+    staleTime: 60_000,
   });
 }

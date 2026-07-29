@@ -38,7 +38,10 @@ export function RentalHistory({ listing }: { listing: Listing }) {
           </Row>
         ))}
       </Block>
-      <p className="px-1 text-[0.6875rem] text-muted-foreground" data-testid="rental-history-disclaimer">
+      <p
+        className="mt-0.5 px-1 pb-0.5 text-[0.6875rem] leading-relaxed text-muted-foreground"
+        data-testid="rental-history-disclaimer"
+      >
         {DEMO_TX_DISCLAIMER}
       </p>
     </div>

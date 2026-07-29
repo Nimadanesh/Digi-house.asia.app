@@ -1,6 +1,7 @@
 "use client";
 // File responsibility: Marketplace listing card — Fable vertical card (image badges, 3 metrics, scarcity bar).
 // Whole-card tap → Property detail. Press scale 0.98. Flat block (no drop shadow).
+import { memo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { MapPin, Flame } from "lucide-react";
@@ -18,7 +19,7 @@ import { listingStatusBadge } from "@/lib/marketplace-filter";
 import type { Listing } from "@/types/property";
 import { FundingBar } from "./FundingBar";
 
-export function PropertyCard({
+function PropertyCardInner({
   listing,
   variant = "list",
   holding,
@@ -120,7 +121,7 @@ export function PropertyCard({
         />
         <span
           className={cn(
-            "absolute top-2.5 start-2.5 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[0.6875rem] font-semibold backdrop-blur-sm",
+            "absolute top-2.5 start-2.5 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[0.6875rem] font-semibold",
             badge.kind === "hot"
               ? "bg-danger/90 text-white"
               : "bg-black/55 text-white",
@@ -140,8 +141,8 @@ export function PropertyCard({
 
       <div className="p-4 space-y-3">
         <div>
-          <h2 className="text-[0.9375rem] font-semibold text-foreground leading-snug">{listing.title}</h2>
-          <p className="mt-0.5 flex items-center gap-1 text-sm text-muted-foreground">
+          <h2 className="text-[0.9375rem] font-semibold leading-snug text-foreground">{listing.title}</h2>
+          <p className="mt-1.5 flex items-center gap-1 text-sm leading-relaxed text-muted-foreground">
             <MapPin size={14} strokeWidth={1.75} className="shrink-0" aria-hidden />
             <span className="truncate">{listing.location}</span>
           </p>
@@ -155,7 +156,10 @@ export function PropertyCard({
 
         <div className="space-y-1.5">
           <FundingBar progress={listing.fundingProgressRatio} funded={funded} />
-          <p className="text-xs text-muted-foreground tnum" data-testid="card-sold-label">
+          <p
+            className="text-xs leading-relaxed text-muted-foreground tnum pt-0.5"
+            data-testid="card-sold-label"
+          >
             {t("sharesSold", { sold: listing.sharesSold, total: listing.totalShares })}
           </p>
         </div>
@@ -163,6 +167,8 @@ export function PropertyCard({
     </Link>
   );
 }
+
+export const PropertyCard = memo(PropertyCardInner);
 
 function Metric({
   label,
@@ -175,10 +181,12 @@ function Metric({
 }) {
   return (
     <div className="min-w-0">
-      <div className="text-[0.625rem] uppercase tracking-wide text-muted-foreground leading-tight">{label}</div>
+      <div className="mb-1 text-[0.625rem] uppercase tracking-wide leading-tight text-muted-foreground">
+        {label}
+      </div>
       <div
         className={cn(
-          "mt-0.5 text-[0.8125rem] font-semibold tnum truncate",
+          "truncate text-[0.8125rem] font-semibold tnum",
           accent ? "text-success" : "text-foreground",
         )}
       >

@@ -24,4 +24,10 @@ export const env = {
   payoutTickMs: Number(readString("PAYOUT_TICK_MS", "60000")) || 60000,
   /** Telegram bot username without @ — used for share deep links. */
   botUsername: readString("TG_BOT_USERNAME"),
+  /** Data source: "mock" (default, in-memory) or "api" (HTTP behind getRepo). */
+  dataSource: readString("DATA_SOURCE", "mock") as "mock" | "api",
+  /** API base URL for HTTP repos. Required when dataSource === "api". */
+  apiBaseUrl: readString("API_BASE_URL", ""),
+  /** Dev-only: pre-set JWT to skip POST /v1/auth/telegram. Empty = normal auth. */
+  devToken: readString("DEV_TOKEN", ""),
 } as const;

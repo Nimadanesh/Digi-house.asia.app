@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { useEarnings } from "@/hooks/useEarnings";
 import { useMarketplace } from "@/hooks/useMarketplace";
 import { usePortfolio } from "@/hooks/usePortfolio";
-import { useTelegram } from "@/hooks/useTelegram";
+import { haptics } from "@/lib/telegram/haptics";
 import { weeklyRent } from "@/lib/format";
 import { EmptyState } from "@/components/common/EmptyState";
 import { ErrorState } from "@/components/common/ErrorState";
@@ -21,7 +21,6 @@ export default function EarningsPage() {
   const earnings = useEarnings();
   const marketplace = useMarketplace();
   const portfolio = usePortfolio();
-  const { haptics } = useTelegram();
 
   const properties = marketplace.data;
   const propertyNameById = useMemo(

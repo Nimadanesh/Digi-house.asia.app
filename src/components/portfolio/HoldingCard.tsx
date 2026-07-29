@@ -1,5 +1,6 @@
 "use client";
 // File responsibility: portfolio holding list card (Fable Portfolio My Properties).
+import { memo } from "react";
 import Image from "next/image";
 import { ArrowUp, ArrowDown } from "lucide-react";
 import { usd, pct } from "@/lib/format";
@@ -7,7 +8,7 @@ import { holdingPnl } from "@/lib/portfolio-math";
 import type { Holding } from "@/types/position";
 import { cn } from "@/lib/utils";
 
-export function HoldingCard({
+function HoldingCardInner({
   holding,
   title,
   location,
@@ -38,13 +39,13 @@ export function HoldingCard({
         </div>
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-2">
-            <div className="min-w-0">
-              <p className="truncate text-[0.9375rem] font-semibold text-foreground">{title}</p>
-              <p className="truncate text-xs text-muted-foreground">{location}</p>
+            <div className="min-w-0 space-y-1">
+              <p className="truncate text-[0.9375rem] font-semibold leading-snug text-foreground">{title}</p>
+              <p className="truncate text-xs leading-relaxed text-muted-foreground">{location}</p>
             </div>
             <div
               className={cn(
-                "shrink-0 text-right text-xs font-semibold tnum",
+                "shrink-0 text-end text-xs font-semibold tnum",
                 up ? "text-success" : "text-danger",
               )}
               data-testid="holding-pnl"
@@ -75,3 +76,5 @@ export function HoldingCard({
     </button>
   );
 }
+
+export const HoldingCard = memo(HoldingCardInner);

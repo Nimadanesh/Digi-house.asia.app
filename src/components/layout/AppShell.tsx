@@ -23,13 +23,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="mx-auto flex min-h-svh max-w-[480px] flex-col bg-background">
       {isOnboarding ? null : isTab ? <GlobalHeader /> : <Header />}
-      <main
-        className={
-          mainButtonActive
-            ? "flex-1 px-4 pb-[calc(72px+env(safe-area-inset-bottom))]"
-            : "flex-1 px-4 pb-[calc(72px+env(safe-area-inset-bottom))]"
-        }
-      >
+      <main className="flex-1 px-4 pb-[calc(88px+env(safe-area-inset-bottom))]">
         <OnboardingGate>{children}</OnboardingGate>
       </main>
       {mainButtonActive || isOnboarding ? null : <BottomTabBar />}

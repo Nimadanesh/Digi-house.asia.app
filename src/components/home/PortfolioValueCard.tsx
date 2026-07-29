@@ -48,14 +48,16 @@ export function PortfolioValueCard({
             {pct(Math.abs(change))}
           </span>
         </div>
-        <div className="grid grid-cols-2 gap-3 border-t border-border pt-3">
+        <div className="grid grid-cols-2 gap-3 border-t border-border pt-3.5">
           <div>
-            <p className="text-[0.6875rem] text-muted-foreground">{t("totalInvested")}</p>
-            <p className="mt-0.5 text-sm font-semibold tnum text-foreground">{usd(summary.totalInvestedUsd)}</p>
+            <p className="mb-1 text-[0.6875rem] leading-snug text-muted-foreground">{t("totalInvested")}</p>
+            <p className="text-sm font-semibold tnum text-foreground">{usd(summary.totalInvestedUsd)}</p>
           </div>
           <div>
-            <p className="text-[0.6875rem] text-muted-foreground">{t("totalEarningsReceived")}</p>
-            <p className="mt-0.5 text-sm font-semibold tnum text-success">{usd(summary.totalEarningsUsd)}</p>
+            <p className="mb-1 text-[0.6875rem] leading-snug text-muted-foreground">
+              {t("totalEarningsReceived")}
+            </p>
+            <p className="text-sm font-semibold tnum text-success">{usd(summary.totalEarningsUsd)}</p>
           </div>
         </div>
       </Block>

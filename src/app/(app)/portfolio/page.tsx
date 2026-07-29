@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { useMarketplace } from "@/hooks/useMarketplace";
 import { useTelegram } from "@/hooks/useTelegram";
+import { haptics } from "@/lib/telegram/haptics";
 import { portfolioAllocation } from "@/lib/portfolio-math";
 import { EmptyState } from "@/components/common/EmptyState";
 import { ErrorState } from "@/components/common/ErrorState";
@@ -22,7 +23,8 @@ export default function PortfolioPage() {
   const t = useTranslations("portfolio");
   const portfolio = usePortfolio();
   const marketplace = useMarketplace();
-  const { haptics, backButton } = useTelegram();
+  // Only need backButton chrome here — haptics imported directly to avoid theme/ready churn.
+  const { backButton } = useTelegram();
   const [selected, setSelected] = useState<Holding | null>(null);
 
   const listingById = useMemo(() => {
@@ -39,7 +41,7 @@ export default function PortfolioPage() {
   const closeSheet = useCallback(() => {
     haptics.selection();
     setSelected(null);
-  }, [haptics]);
+  }, []);
 
   useEffect(() => {
     if (!selected) {

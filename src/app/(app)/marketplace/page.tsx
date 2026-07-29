@@ -1,10 +1,11 @@
 "use client";
 // File responsibility: Marketplace screen — search, filter chips, listing stack (Fable Marketplace).
 // Data via useMarketplace; client filter/sort via pure filterMarketplaceListings.
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useMarketplace } from "@/hooks/useMarketplace";
-import { useTelegram } from "@/hooks/useTelegram";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
+import { haptics } from "@/lib/telegram/haptics";
 import { filterMarketplaceListings, type MarketplaceChip } from "@/lib/marketplace-filter";
 import { PropertyCard } from "@/components/property/PropertyCard";
 import { MarketplaceSearch } from "@/components/marketplace/MarketplaceSearch";
@@ -18,14 +19,17 @@ export default function MarketplacePage() {
   const t = useTranslations("marketplace");
   const tCommon = useTranslations("common");
   const { data, isLoading, isError, refetch } = useMarketplace();
-  const { haptics } = useTelegram();
   const [query, setQuery] = useState("");
   const [chip, setChip] = useState<MarketplaceChip>("all");
+  const debouncedQuery = useDebouncedValue(query, 150);
 
   const listings = useMemo(
-    () => filterMarketplaceListings(data ?? [], { query, chip }),
-    [data, query, chip],
+    () => filterMarketplaceListings(data ?? [], { query: debouncedQuery, chip }),
+    [data, debouncedQuery, chip],
   );
+
+  const onNavigateHaptic = useCallback(() => haptics.selection(), []);
+  const onChipHaptic = useCallback(() => haptics.selection(), []);
 
   if (isLoading && !data) {
     return (
@@ -54,17 +58,12 @@ export default function MarketplacePage() {
 
   return (
     <div className="mt-2 space-y-3 pb-2" data-testid="marketplace-page">
-      <MarketplaceSearch
-        value={query}
-        onChange={(v) => {
-          setQuery(v);
-        }}
-      />
+      <MarketplaceSearch value={query} onChange={setQuery} />
 
       <MarketplaceFilterChips
         value={chip}
         onChange={setChip}
-        onSelectHaptic={() => haptics.selection()}
+        onSelectHaptic={onChipHaptic}
       />
 
       {emptyAll ? (
@@ -109,7 +108,7 @@ export default function MarketplacePage() {
               key={listing.id}
               listing={listing}
               priority={i === 0}
-              onNavigateHaptic={() => haptics.selection()}
+              onNavigateHaptic={onNavigateHaptic}
             />
           ))}
         </div>

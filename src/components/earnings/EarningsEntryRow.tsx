@@ -10,7 +10,7 @@ import { StatusPill } from "@/components/common/StatusPill";
 import { usd, ton, weekLabel, pct } from "@/lib/format";
 import { DEMO_TX_DISCLAIMER } from "@/lib/constants";
 import type { EarningsEntry } from "@/types/earnings";
-import { useTelegram } from "@/hooks/useTelegram";
+import { haptics } from "@/lib/telegram/haptics";
 import { cn } from "@/lib/utils";
 
 const THUMB = "size-9 shrink-0 rounded-[10px] overflow-hidden bg-surface-2 relative";
@@ -29,7 +29,6 @@ export function EarningsEntryRow({
   sharesOwned?: number;
 }) {
   const [open, setOpen] = useState(false);
-  const { haptics } = useTelegram();
 
   return (
     <>

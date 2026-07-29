@@ -7,14 +7,13 @@ import type { EarningsEntry } from "@/types/earnings";
 import { Block } from "@/components/common/Block";
 import { weekLabel } from "@/lib/format";
 import { cn } from "@/lib/utils";
-import { useTelegram } from "@/hooks/useTelegram";
+import { haptics } from "@/lib/telegram/haptics";
 
 const RANGES = [1, 2, 3, 4, 8, 12] as const;
 export type ChartWeekRange = (typeof RANGES)[number];
 type ChartMode = "bar" | "line";
 
 export function WeeklyEarningsChart({ entries }: { entries: EarningsEntry[] }) {
-  const { haptics } = useTelegram();
   const [weeks, setWeeks] = useState<ChartWeekRange>(8);
   const [mode, setMode] = useState<ChartMode>("bar");
   const [menuOpen, setMenuOpen] = useState(false);

@@ -33,22 +33,22 @@ export function EarningsHeroCard({ summary }: { summary: EarningsSummary }) {
             <StatusPill label={tCommon("paid")} variant="success" />
           )}
         </div>
-        <div className="pt-1">
-          <p className="text-[0.6875rem] text-muted-foreground mb-0.5">{t("nextPayoutIn")}</p>
+        <div className="pt-1.5">
+          <p className="mb-1 text-[0.6875rem] leading-snug text-muted-foreground">{t("nextPayoutIn")}</p>
           <PayoutCountdown variant="long" />
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 border-t border-border pt-3">
+      <div className="grid grid-cols-2 gap-3 border-t border-border pt-3.5">
         <div className="text-center sm:text-start">
-          <p className="text-[0.6875rem] text-muted-foreground">{t("totalReceived")}</p>
-          <p className="mt-0.5 text-sm font-semibold tnum text-success" data-testid="earnings-all-time">
+          <p className="mb-1 text-[0.6875rem] leading-snug text-muted-foreground">{t("totalReceived")}</p>
+          <p className="text-sm font-semibold tnum text-success" data-testid="earnings-all-time">
             {usd(summary.allTimeUsd)}
           </p>
         </div>
         <div className="text-center sm:text-start">
-          <p className="text-[0.6875rem] text-muted-foreground">{t("consecutivePaid")}</p>
-          <p className="mt-0.5 text-sm font-semibold text-foreground" data-testid="earnings-streak">
+          <p className="mb-1 text-[0.6875rem] leading-snug text-muted-foreground">{t("consecutivePaid")}</p>
+          <p className="text-sm font-semibold leading-snug text-foreground" data-testid="earnings-streak">
             {streak > 0 ? (
               t("streak", {
                 count: streak,

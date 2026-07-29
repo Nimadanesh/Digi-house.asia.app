@@ -1,0 +1,80 @@
+export type OrderBookLevelPublic = {
+  priceUsd: number;
+  quantity: number;
+  cumulative: number;
+};
+
+export type OrderBookStatePublic = {
+  propertyId: string;
+  bids: OrderBookLevelPublic[];
+  asks: OrderBookLevelPublic[];
+  bestBidUsd?: number;
+  bestAskUsd?: number;
+};
+
+export type OpenOrderForBook = {
+  side: "buy" | "sell";
+  priceUsd: number;
+  quantity: number;
+  filledQuantity: number;
+};
+
+/**
+ * Aggregate open orders into bid/ask levels.
+ * bids DESC by price, asks ASC; cumulative = running sum along sort order.
+ * remaining = quantity - filledQuantity; skip remaining <= 0.
+ * lastTradeUsd omitted (no fills table in P1-11).
+ */
+export function buildOrderBookState(
+  propertyId: string,
+  openOrders: OpenOrderForBook[],
+): OrderBookStatePublic {
+  const bidQty = new Map<number, number>();
+  const askQty = new Map<number, number>();
+
+  for (const o of openOrders) {
+    const remaining = o.quantity - o.filledQuantity;
+    if (remaining <= 0) continue;
+    const map = o.side === "buy" ? bidQty : askQty;
+    map.set(o.priceUsd, (map.get(o.priceUsd) ?? 0) + remaining);
+  }
+
+  const bidPrices = [...bidQty.keys()].sort((a, b) => b - a);
+  const askPrices = [...askQty.keys()].sort((a, b) => a - b);
+
+  const bids = withCumulative(
+    bidPrices.map((priceUsd) => ({
+      priceUsd,
+      quantity: bidQty.get(priceUsd)!,
+    })),
+  );
+  const asks = withCumulative(
+    askPrices.map((priceUsd) => ({
+      priceUsd,
+      quantity: askQty.get(priceUsd)!,
+    })),
+  );
+
+  const state: OrderBookStatePublic = {
+    propertyId,
+    bids,
+    asks,
+  };
+  if (bids[0]) state.bestBidUsd = bids[0].priceUsd;
+  if (asks[0]) state.bestAskUsd = asks[0].priceUsd;
+  return state;
+}
+
+function withCumulative(
+  levels: Array<{ priceUsd: number; quantity: number }>,
+): OrderBookLevelPublic[] {
+  let cum = 0;
+  return levels.map((l) => {
+    cum += l.quantity;
+    return {
+      priceUsd: l.priceUsd,
+      quantity: l.quantity,
+      cumulative: cum,
+    };
+  });
+}

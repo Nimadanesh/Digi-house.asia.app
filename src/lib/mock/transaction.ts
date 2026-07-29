@@ -7,7 +7,7 @@ import type { Listing } from "@/types/property";
 import { seed } from "./seed";
 import { PROPERTIES } from "./seed/properties";
 import { sleep, jitter } from "./sleep";
-import { makeSyntheticTxHash } from "@/lib/ton/sendTx";
+import { makeSyntheticTxHash } from "@/lib/ton/synthetic-tx";
 import { weeklyRent, projectedYield } from "@/lib/format";
 
 export function MockTxRepo(): TxRepo {

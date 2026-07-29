@@ -63,14 +63,14 @@ export function PortfolioSummaryCard({ summary }: { summary: PortfolioSummary })
           testId="portfolio-unrealized"
         />
         <div>
-          <p className="text-[0.6875rem] text-muted-foreground">{t("nextPayout")}</p>
+          <p className="mb-1 text-[0.6875rem] leading-snug text-muted-foreground">{t("nextPayout")}</p>
           <p
-            className="mt-0.5 text-sm font-semibold tnum text-foreground"
+            className="text-sm font-semibold tnum text-foreground"
             data-testid="portfolio-next-payout"
           >
             {usd(summary.weeklyProjectedUsd)}
           </p>
-          <div className="mt-0.5 text-[0.6875rem] text-muted-foreground">
+          <div className="mt-1 text-[0.6875rem] leading-snug text-muted-foreground">
             <PayoutCountdown variant="long" />
           </div>
         </div>
@@ -92,8 +92,8 @@ function Stat({
 }) {
   return (
     <div>
-      <p className="text-[0.6875rem] text-muted-foreground">{label}</p>
-      <p className={cn("mt-0.5 text-sm font-semibold tnum", valueClass)} data-testid={testId}>
+      <p className="mb-1 text-[0.6875rem] leading-snug text-muted-foreground">{label}</p>
+      <p className={cn("text-sm font-semibold tnum", valueClass)} data-testid={testId}>
         {value}
       </p>
     </div>

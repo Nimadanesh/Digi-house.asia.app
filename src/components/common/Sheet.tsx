@@ -19,12 +19,15 @@ export function Sheet({
   onClose,
   children,
   className,
+  bodyClassName,
   labelledBy,
 }: {
   open: boolean;
   onClose: () => void;
   children: React.ReactNode;
   className?: string;
+  /** Override the default scroll body (e.g. language picker owns its own single scroller). */
+  bodyClassName?: string;
   labelledBy?: string;
 }) {
   const mounted = useSyncExternalStore(subscribe, clientOk, serverNo);
@@ -72,8 +75,13 @@ export function Sheet({
         style={{ animation: "dh-sheet-up 280ms cubic-bezier(0.23, 1, 0.32, 1)" }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="mx-auto mt-1 h-[5px] w-[36px] rounded-full bg-border" aria-hidden />
-        <div className="max-h-[min(85svh,680px)] overflow-y-auto overscroll-contain px-4 pt-3">
+        <div className="mx-auto mt-1 h-[5px] w-[36px] shrink-0 rounded-full bg-border" aria-hidden />
+        <div
+          className={cn(
+            "max-h-[min(85svh,680px)] overflow-y-auto overscroll-contain px-4 pt-3",
+            bodyClassName,
+          )}
+        >
           {children}
         </div>
       </div>

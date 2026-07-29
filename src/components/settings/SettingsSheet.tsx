@@ -1,5 +1,5 @@
 "use client";
-// File responsibility: Settings bottom sheet — always subscribed for open state; never crashes.
+// File responsibility: Settings bottom sheet shell — body (TON/settings) mounts only while open.
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -13,6 +13,7 @@ import { WalletBadge } from "@/components/wallet/WalletBadge";
 import { WalletConnectButton } from "@/components/wallet/TonConnectButton";
 import { CurrencySegment } from "@/components/settings/CurrencySegment";
 import { LanguageSelector } from "@/components/settings/LanguageSelector";
+import { SettingsLabelStack } from "@/components/settings/SettingsLabelStack";
 import { AboutLegalSheet } from "@/components/settings/AboutLegalSheet";
 import { useTonConnect } from "@/hooks/useTonConnect";
 import { useSettingsStore } from "@/stores/settings.store";
@@ -21,12 +22,29 @@ import { ROUTES } from "@/lib/constants";
 import { haptics } from "@/lib/telegram/haptics";
 import { safeBackButton } from "@/lib/telegram/chrome";
 
+/** Preference / wallet rows: taller touch target + vertical padding for title+hint stacks. */
+const SETTINGS_ROW = "!min-h-[64px] items-center py-3.5";
+
 export function SettingsSheet() {
+  const open = useUiStore((s) => s.settingsOpen);
+  const closeSettings = useUiStore((s) => s.closeSettings);
+
+  const close = useCallback(() => {
+    closeSettings();
+    haptics.selection();
+  }, [closeSettings]);
+
+  return (
+    <Sheet open={open} onClose={close} labelledBy="settings-sheet-title">
+      {open ? <SettingsSheetBody onClose={close} /> : null}
+    </Sheet>
+  );
+}
+
+function SettingsSheetBody({ onClose }: { onClose: () => void }) {
   const t = useTranslations("settings");
   const router = useRouter();
   const tonc = useTonConnect();
-  const open = useUiStore((s) => s.settingsOpen);
-  const closeSettings = useUiStore((s) => s.closeSettings);
   const setOnboardingReplay = useUiStore((s) => s.setOnboardingReplay);
   const displayCurrency = useSettingsStore((s) => s.displayCurrency);
   const setDisplayCurrency = useSettingsStore((s) => s.setDisplayCurrency);
@@ -36,14 +54,12 @@ export function SettingsSheet() {
   const setShowDemoBadge = useSettingsStore((s) => s.setShowDemoBadge);
   const [aboutOpen, setAboutOpen] = useState(false);
 
-  const close = useCallback(() => {
+  const closeAll = useCallback(() => {
     setAboutOpen(false);
-    closeSettings();
-    haptics.selection();
-  }, [closeSettings]);
+    onClose();
+  }, [onClose]);
 
   useEffect(() => {
-    if (!open) return;
     safeBackButton.show();
     const off = safeBackButton.onClick(() => {
       if (aboutOpen) {
@@ -51,7 +67,7 @@ export function SettingsSheet() {
         haptics.selection();
         return;
       }
-      close();
+      closeAll();
     });
     return () => {
       off();
@@ -64,7 +80,7 @@ export function SettingsSheet() {
         safeBackButton.hide();
       }
     };
-  }, [open, aboutOpen, close]);
+  }, [aboutOpen, closeAll]);
 
   async function onDisconnect() {
     haptics.impact("medium");
@@ -74,129 +90,138 @@ export function SettingsSheet() {
   function openHowItWorks() {
     haptics.selection();
     setOnboardingReplay(true);
-    closeSettings();
+    onClose();
     router.push(ROUTES.onboarding);
   }
 
   return (
     <>
-      <Sheet open={open} onClose={close} labelledBy="settings-sheet-title">
-        {open ? (
-          <div className="space-y-3 pb-2" data-testid="settings-sheet">
-            <h2 id="settings-sheet-title" className="text-[1.0625rem] font-semibold text-foreground">
-              {t("title")}
-            </h2>
+      <div className="space-y-5 pb-4" data-testid="settings-sheet">
+        <h2
+          id="settings-sheet-title"
+          className="text-[1.0625rem] font-semibold leading-snug text-foreground"
+        >
+          {t("title")}
+        </h2>
 
-            <SectionLabel>{t("wallet")}</SectionLabel>
-            <Block>
-              {tonc.connected ? (
-                <>
-                  <Row className="!min-h-[56px]">
-                    <WalletBadge />
-                  </Row>
-                  <Row className="!min-h-[52px]">
-                    <button
-                      type="button"
-                      onClick={() => void onDisconnect()}
-                      className="w-full py-2 text-start text-sm font-medium text-danger active:opacity-80"
-                      data-testid="settings-disconnect"
-                    >
-                      {t("disconnect")}
-                    </button>
-                  </Row>
-                </>
-              ) : (
-                <Row className="!min-h-[64px]">
-                  <div className="min-w-0 flex-1">
-                    <div className="text-sm font-medium text-foreground">{t("connectTitle")}</div>
-                    <div className="text-xs text-muted-foreground">{t("connectHint")}</div>
-                  </div>
-                  <WalletConnectButton />
+        <section className="space-y-2">
+          <SectionLabel className="px-0.5">{t("wallet")}</SectionLabel>
+          <Block>
+            {tonc.connected ? (
+              <>
+                <Row className={SETTINGS_ROW}>
+                  <WalletBadge />
                 </Row>
-              )}
-            </Block>
-
-            <SectionLabel>{t("preferences")}</SectionLabel>
-            <Block>
-              <Row className="!min-h-[56px]">
-                <div className="min-w-0 flex-1">
-                  <div className="text-sm text-foreground">{t("displayCurrency")}</div>
-                  <div className="text-xs text-muted-foreground">{t("displayCurrencyHint")}</div>
-                </div>
-                <CurrencySegment value={displayCurrency} onChange={setDisplayCurrency} />
+                <Row className="!min-h-[52px] py-2.5">
+                  <button
+                    type="button"
+                    onClick={() => void onDisconnect()}
+                    className="w-full py-1.5 text-start text-sm font-medium text-danger active:opacity-80"
+                    data-testid="settings-disconnect"
+                  >
+                    {t("disconnect")}
+                  </button>
+                </Row>
+              </>
+            ) : (
+              <Row className={SETTINGS_ROW}>
+                <SettingsLabelStack title={t("connectTitle")} hint={t("connectHint")} />
+                <WalletConnectButton />
               </Row>
-              <div className="border-t border-border">
-                <LanguageSelector />
-              </div>
-              <Row className="!min-h-[56px]">
-                <div className="min-w-0 flex-1">
-                  <div className="text-sm text-foreground">{t("useTelegramTheme")}</div>
-                  <div className="text-xs text-muted-foreground">{t("useTelegramThemeHint")}</div>
-                </div>
-                <Toggle
-                  on={useTelegramTheme}
-                  onChange={setUseTelegramTheme}
-                  onHaptic={() => haptics.selection()}
-                  aria-label={t("useTelegramTheme")}
-                />
-              </Row>
-              <Row className="!min-h-[56px]">
-                <div className="min-w-0 flex-1">
-                  <div className="text-sm text-foreground">{t("showDemoBadge")}</div>
-                  <div className="text-xs text-muted-foreground">{t("showDemoBadgeHint")}</div>
-                </div>
-                <Toggle
-                  on={showDemoBadge}
-                  onChange={setShowDemoBadge}
-                  onHaptic={() => haptics.selection()}
-                  aria-label={t("showDemoBadge")}
-                />
-              </Row>
-            </Block>
+            )}
+          </Block>
+        </section>
 
-            <SectionLabel>{t("help")}</SectionLabel>
-            <Block>
-              <button
-                type="button"
-                onClick={openHowItWorks}
-                className="flex w-full min-h-[48px] items-center gap-2 px-4 text-start active:bg-surface-2/60"
-                data-testid="settings-how-it-works"
-              >
-                <span className="flex-1 text-sm text-foreground">{t("howItWorks")}</span>
-                <ChevronRight
-                  size={20}
-                  strokeWidth={1.75}
-                  className="shrink-0 text-muted-foreground rtl:rotate-180"
-                  aria-hidden
-                />
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  haptics.selection();
-                  setAboutOpen(true);
-                }}
-                className="flex w-full min-h-[48px] items-center gap-2 border-t border-border mx-0 px-4 text-start active:bg-surface-2/60"
-                data-testid="settings-about-legal"
-              >
-                <span className="flex-1 text-sm text-foreground">{t("aboutLegal")}</span>
-                <ChevronRight
-                  size={20}
-                  strokeWidth={1.75}
-                  className="shrink-0 text-muted-foreground rtl:rotate-180"
-                  aria-hidden
-                />
-              </button>
-            </Block>
+        <section className="space-y-2">
+          <SectionLabel className="px-0.5">{t("preferences")}</SectionLabel>
+          <Block>
+            <Row className={SETTINGS_ROW}>
+              <SettingsLabelStack
+                title={t("displayCurrency")}
+                hint={t("displayCurrencyHint")}
+              />
+              <CurrencySegment value={displayCurrency} onChange={setDisplayCurrency} />
+            </Row>
+            <div className="border-t border-border">
+              <LanguageSelector />
+            </div>
+            <Row className={SETTINGS_ROW}>
+              <SettingsLabelStack
+                title={t("useTelegramTheme")}
+                hint={t("useTelegramThemeHint")}
+              />
+              <Toggle
+                on={useTelegramTheme}
+                onChange={setUseTelegramTheme}
+                onHaptic={() => haptics.selection()}
+                aria-label={t("useTelegramTheme")}
+              />
+            </Row>
+            <Row className={SETTINGS_ROW}>
+              <SettingsLabelStack
+                title={t("showDemoBadge")}
+                hint={t("showDemoBadgeHint")}
+              />
+              <Toggle
+                on={showDemoBadge}
+                onChange={setShowDemoBadge}
+                onHaptic={() => haptics.selection()}
+                aria-label={t("showDemoBadge")}
+              />
+            </Row>
+          </Block>
+        </section>
 
-            <p className="px-1 pt-1 text-center text-[0.6875rem] text-muted-foreground" data-testid="settings-demo-badge">
-              {t("demoFooter")}
-            </p>
-          </div>
-        ) : null}
-      </Sheet>
+        <section className="space-y-2">
+          <SectionLabel className="px-0.5">{t("help")}</SectionLabel>
+          <Block>
+            <button
+              type="button"
+              onClick={openHowItWorks}
+              className="flex w-full min-h-[56px] items-center gap-2 px-4 py-3.5 text-start active:bg-surface-2/60"
+              data-testid="settings-how-it-works"
+            >
+              <span className="flex-1 text-sm font-medium leading-snug text-foreground">
+                {t("howItWorks")}
+              </span>
+              <ChevronRight
+                size={20}
+                strokeWidth={1.75}
+                className="shrink-0 text-muted-foreground rtl:rotate-180"
+                aria-hidden
+              />
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                haptics.selection();
+                setAboutOpen(true);
+              }}
+              className="flex w-full min-h-[56px] items-center gap-2 border-t border-border px-4 py-3.5 text-start active:bg-surface-2/60"
+              data-testid="settings-about-legal"
+            >
+              <span className="flex-1 text-sm font-medium leading-snug text-foreground">
+                {t("aboutLegal")}
+              </span>
+              <ChevronRight
+                size={20}
+                strokeWidth={1.75}
+                className="shrink-0 text-muted-foreground rtl:rotate-180"
+                aria-hidden
+              />
+            </button>
+          </Block>
+        </section>
 
-      <AboutLegalSheet open={aboutOpen && open} onClose={() => setAboutOpen(false)} />
+        <p
+          className="px-2 pt-1 pb-1 text-center text-[0.6875rem] leading-relaxed text-muted-foreground"
+          data-testid="settings-demo-badge"
+        >
+          {t("demoFooter")}
+        </p>
+      </div>
+
+      <AboutLegalSheet open={aboutOpen} onClose={() => setAboutOpen(false)} />
     </>
   );
 }

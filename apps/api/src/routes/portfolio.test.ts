@@ -1,0 +1,214 @@
+import { describe, expect, it } from "vitest";
+import { createApp } from "../app.js";
+import { signSessionToken } from "../auth/session.js";
+import { createMemoryUserStore } from "../auth/user-store.js";
+import { toPropertyInsert } from "../db/seed/map-property.js";
+import { SEED_PROPERTIES } from "../db/seed/properties-data.js";
+import type { ApiEnv } from "../env.js";
+import type { Logger } from "../logger.js";
+import { createMemoryPropertyStore } from "../marketplace/property-store.js";
+import {
+  createMemoryHoldingStore,
+  type HoldingRowInput,
+} from "../portfolio/holding-store.js";
+import type { PortfolioSummaryPublic } from "../portfolio/map-portfolio.js";
+import { projectedYieldUsd, weeklyRentUsd } from "../portfolio/math.js";
+
+const silentLog = {
+  info: () => {},
+  warn: () => {},
+  error: () => {},
+  fatal: () => {},
+  debug: () => {},
+  trace: () => {},
+  child: () => silentLog,
+} as unknown as Logger;
+
+const SESSION = {
+  secret: "test-session-secret-at-least-32-chars",
+  ttlSeconds: 3600,
+};
+
+function testEnv(): ApiEnv {
+  return {
+    NODE_ENV: "test",
+    PORT: 8787,
+    LOG_LEVEL: "silent",
+    SETTLEMENT_MODE: undefined,
+    DATABASE_URL: undefined,
+    TELEGRAM_BOT_TOKEN: "",
+    SESSION_SECRET: SESSION.secret,
+    SESSION_TTL_SECONDS: SESSION.ttlSeconds,
+    CORS_ORIGIN: "http://localhost:3000",
+    TON_RELAY_ADDRESS: undefined,
+    BUY_STUB_NANOTON: "10000000",
+    BUY_INTENT_TTL_SECONDS: 900,
+    REDIS_URL: undefined,
+    PAYOUT_TICK_MS: 60000,
+    PAYOUT_WORKER_ENABLED: false,
+    ALLOW_MANUAL_PAYOUT_TICK: false,
+    PAYOUT_TICK_SECRET: undefined,
+  };
+}
+
+function seedUser(id: string, displayName: string) {
+  return {
+    id,
+    displayName,
+    username: null,
+    photoUrl: null,
+    role: "investor" as const,
+    walletAddress: null,
+    onboarded: false,
+    useTelegramTheme: false,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+}
+
+async function bearerFor(userId: string): Promise<string> {
+  const { token } = await signSessionToken(userId, SESSION);
+  return `Bearer ${token}`;
+}
+
+function makeApp(holdingSeed: HoldingRowInput[] = []) {
+  const users = createMemoryUserStore([
+    seedUser("user-a", "Alice"),
+    seedUser("user-b", "Bob"),
+  ]);
+  const properties = createMemoryPropertyStore(
+    SEED_PROPERTIES.map(toPropertyInsert),
+  );
+  const holdings = createMemoryHoldingStore(holdingSeed);
+  const app = createApp({
+    env: testEnv(),
+    log: silentLog,
+    users,
+    properties,
+    holdings,
+  });
+  return app;
+}
+
+const BAYSIDE = "prop-bayside-marina-penthouse";
+const ALFAMA = "prop-alfama-terrace-flat";
+
+function holding(
+  userId: string,
+  propertyId: string,
+  sharesOwned: number,
+  avgCostUsd: number,
+): HoldingRowInput {
+  return {
+    userId,
+    propertyId,
+    sharesOwned,
+    avgCostUsd,
+    updatedAt: new Date(),
+  };
+}
+
+describe("GET /v1/portfolio", () => {
+  it("returns 401 without Authorization", async () => {
+    const app = makeApp();
+    const res = await app.request("/v1/portfolio");
+    expect(res.status).toBe(401);
+    const body = (await res.json()) as { code: string };
+    expect(body.code).toBe("unauthorized");
+  });
+
+  it("returns empty summary for user with zero holdings", async () => {
+    const app = makeApp();
+    const res = await app.request("/v1/portfolio", {
+      headers: { Authorization: await bearerFor("user-a") },
+    });
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as PortfolioSummaryPublic;
+    expect(body).toEqual({
+      totalValueUsd: 0,
+      totalInvestedUsd: 0,
+      totalEarningsUsd: 0,
+      weeklyProjectedUsd: 0,
+      dayChangeRatio: 0,
+      holdings: [],
+      openOrders: [],
+    });
+  });
+
+  it("returns derived holdings math for seeded user A", async () => {
+    const app = makeApp([
+      holding("user-a", BAYSIDE, 160, 25_000),
+      holding("user-a", ALFAMA, 200, 10_000),
+    ]);
+    const res = await app.request("/v1/portfolio", {
+      headers: { Authorization: await bearerFor("user-a") },
+    });
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as PortfolioSummaryPublic;
+
+    expect(body.holdings).toHaveLength(2);
+    expect(body.totalEarningsUsd).toBe(0);
+    expect(body.openOrders).toEqual([]);
+
+    const seedProps = Object.fromEntries(
+      SEED_PROPERTIES.map((p) => [p.id, p]),
+    );
+    const bay = seedProps[BAYSIDE]!;
+    const alf = seedProps[ALFAMA]!;
+
+    for (const h of body.holdings) {
+      expect(Number.isInteger(h.sharesOwned)).toBe(true);
+      expect(Number.isInteger(h.avgCostUsd)).toBe(true);
+      expect(Number.isInteger(h.currentValueUsd)).toBe(true);
+      expect(Number.isInteger(h.pendingWeekEarningsUsd)).toBe(true);
+    }
+
+    const hBay = body.holdings.find((h) => h.propertyId === BAYSIDE)!;
+    const hAlf = body.holdings.find((h) => h.propertyId === ALFAMA)!;
+    expect(hBay).toBeDefined();
+    expect(hAlf).toBeDefined();
+
+    expect(hBay.currentValueUsd).toBe(160 * bay.sharePriceUsd);
+    expect(hBay.pendingWeekEarningsUsd).toBe(
+      projectedYieldUsd(
+        weeklyRentUsd(bay.annualRentUsd),
+        160,
+        bay.totalShares,
+      ),
+    );
+    expect(hAlf.currentValueUsd).toBe(200 * alf.sharePriceUsd);
+    expect(hAlf.pendingWeekEarningsUsd).toBe(
+      projectedYieldUsd(
+        weeklyRentUsd(alf.annualRentUsd),
+        200,
+        alf.totalShares,
+      ),
+    );
+
+    expect(body.totalInvestedUsd).toBe(160 * 25_000 + 200 * 10_000);
+    expect(body.totalValueUsd).toBe(
+      hBay.currentValueUsd + hAlf.currentValueUsd,
+    );
+    expect(body.weeklyProjectedUsd).toBe(
+      hBay.pendingWeekEarningsUsd + hAlf.pendingWeekEarningsUsd,
+    );
+    expect(Number.isInteger(body.totalValueUsd)).toBe(true);
+    expect(Number.isInteger(body.totalInvestedUsd)).toBe(true);
+    expect(Number.isInteger(body.weeklyProjectedUsd)).toBe(true);
+  });
+
+  it("does not leak user A holdings to user B (IDOR)", async () => {
+    const app = makeApp([
+      holding("user-a", BAYSIDE, 160, 25_000),
+      holding("user-a", ALFAMA, 200, 10_000),
+    ]);
+    const res = await app.request("/v1/portfolio", {
+      headers: { Authorization: await bearerFor("user-b") },
+    });
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as PortfolioSummaryPublic;
+    expect(body.holdings).toEqual([]);
+    expect(body.totalValueUsd).toBe(0);
+    expect(body.totalInvestedUsd).toBe(0);
+  });
+});

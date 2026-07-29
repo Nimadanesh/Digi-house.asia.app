@@ -4,7 +4,7 @@ import { Minus, Plus } from "lucide-react";
 import { usd, weeklyRent, projectedYield, annualFromWeekly } from "@/lib/format";
 import type { Listing } from "@/types/property";
 import { Block } from "@/components/common/Block";
-import { useTelegram } from "@/hooks/useTelegram";
+import { haptics } from "@/lib/telegram/haptics";
 
 export function IncomeCalculator({
   listing,
@@ -15,7 +15,6 @@ export function IncomeCalculator({
   shares: number;
   onSharesChange: (n: number) => void;
 }) {
-  const { haptics } = useTelegram();
   const max = Math.max(1, listing.sharesRemaining > 0 ? listing.sharesRemaining : listing.totalShares);
   const clamped = Math.min(max, Math.max(1, shares));
   const week = projectedYield(weeklyRent(listing.annualRentUsd), clamped, listing.totalShares);

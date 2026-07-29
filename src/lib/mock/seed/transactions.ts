@@ -1,6 +1,6 @@
 // File responsibility: user on-chain transactions (>=1 success + >=1 pending + >=1 failed).
 import type { Transaction } from "@/types/transaction";
-import { makeSyntheticTxHash } from "@/lib/ton/sendTx";
+import { makeSyntheticTxHash } from "@/lib/ton/synthetic-tx";
 import { USER } from "./user";
 
 // >=1 success + >=1 pending + >=1 failed.

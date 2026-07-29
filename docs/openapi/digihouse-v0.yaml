@@ -1,0 +1,1058 @@
+# DigiHouse API — Phase 0 skeleton (OpenAPI 3.1)
+# Parity: src/lib/api/repos.ts + ROADMAP §1.4 + EXECUTION-PLAN P0-05
+# Settlement: hybrid buy prepare/confirm until SETTLEMENT_MODE=onchain (ADR-001)
+# tickPayout is a worker (P1-13), not a public Mini App route
+# Units: money = USD cents (int); TON = nanoTON (int); shares = int; ratios = 0..1
+openapi: 3.1.0
+info:
+  title: DigiHouse API
+  version: 0.1.0-p0
+  description: |
+    Skeleton HTTP contract for Phase 1. Not final.
+
+    **Parity target:** `HttpRepos` behind `getRepo()` when `NEXT_PUBLIC_DATA_SOURCE=api` (P1-15).
+    Repo maps: MarketplaceRepo, OrderBookRepo, PortfolioRepo, EarningsRepo; mock `TxRepo.buy`
+    splits into `POST /v1/buys/prepare` + `POST /v1/buys/confirm`.
+
+    **Settlement (ADR-001):** prepare/confirm = hybrid DB settlement by default; responses must not
+    require real jetton mint fields as mandatory in v0. Honesty badges remain client-side policy.
+
+    **Auth (ADR-004):** user session from `POST /v1/auth/telegram` only — not admin/deployer keys.
+
+    **IDOR:** cancel/portfolio/earnings are caller-scoped (expanded in P0-06 threat model).
+
+    **Workers:** `EarningsRepo.tickPayout` is BullMQ/internal (P1-13), not a public user button.
+  contact:
+    name: DigiHouse eng
+servers:
+  - url: http://localhost:8787
+    description: Local API (Phase 1 placeholder)
+  - url: https://api-staging.digihouse.example
+    description: Staging placeholder (fictional host)
+tags:
+  - name: Ops
+  - name: Auth
+  - name: Marketplace
+  - name: Orders
+  - name: Portfolio
+  - name: Earnings
+  - name: Buys
+
+paths:
+  /healthz:
+    get:
+      tags: [Ops]
+      operationId: getHealthz
+      summary: Liveness / readiness probe
+      security: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthzResponse"
+              example:
+                status: ok
+                ts: "2026-07-29T12:00:00.000Z"
+
+  /v1/auth/telegram:
+    post:
+      tags: [Auth]
+      operationId: postAuthTelegram
+      summary: Validate Telegram initData and issue session
+      description: |
+        Validates bot-signed `initData` (HMAC). Upserts user. Issues bearer JWT and/or
+        httpOnly session cookie. Alias note: ROADMAP mentions `/auth/telegram`; canonical is `/v1/auth/telegram`.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthTelegramRequest"
+            example:
+              initData: "user=%7B%22id%22%3A1%7D&auth_date=1710000000&hash=abc"
+      responses:
+        "200":
+          description: Session issued
+          headers:
+            Set-Cookie:
+              description: Optional httpOnly session cookie (`cookieAuth`)
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthTelegramResponse"
+              example:
+                token: "eyJhbGciOiJIUzI1NiJ9.example.signature"
+                user:
+                  id: "123456789"
+                  displayName: "Aria"
+                  username: "aria"
+                  role: investor
+                  walletAddress: null
+                  onboarded: true
+                  useTelegramTheme: true
+                  createdAt: "2026-07-01T00:00:00.000Z"
+                expiresAt: "2026-07-30T12:00:00.000Z"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /v1/marketplace:
+    get:
+      tags: [Marketplace]
+      operationId: listMarketplace
+      summary: List property listings
+      description: Maps to `MarketplaceRepo.list`
+      security: []
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            $ref: "#/components/schemas/PropertyStatus"
+        - name: query
+          in: query
+          required: false
+          description: Free-text search (title/location)
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Listings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Listing"
+              example:
+                - id: "prop_dubai_marina_01"
+                  title: "Marina View Residence"
+                  location: "Dubai Marina, UAE"
+                  description: "Fractional coastal unit."
+                  images:
+                    - "/images/properties/marina.jpg"
+                  totalShares: 10000
+                  sharePriceUsd: 5000
+                  status: funding
+                  ownerWalletAddress: "EQDexampleOwnerWalletAddress000000000000000"
+                  annualRentUsd: 5200000
+                  createdAt: "2026-06-01T00:00:00.000Z"
+                  meta:
+                    sizeSqm: 85
+                    yearBuilt: 2019
+                    propertyType: apartment
+                    rentalStatus: rented
+                    leaseUntil: "2027-01-01"
+                    activeTenant: true
+                    tokenizationDocUrl: "https://example.com/docs/demo.pdf"
+                  rentalHistory:
+                    - id: "rp_1"
+                      paidAt: "2026-07-01"
+                      status: paid
+                  sharesSold: 2500
+                  sharesRemaining: 7500
+                  fundingProgressRatio: 0.25
+
+  /v1/properties/{id}:
+    get:
+      tags: [Marketplace]
+      operationId: getProperty
+      summary: Get one listing by id
+      description: Maps to `MarketplaceRepo.get`
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/PropertyId"
+      responses:
+        "200":
+          description: Listing
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Listing"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /v1/properties/{id}/order-book:
+    get:
+      tags: [Orders]
+      operationId: getOrderBook
+      summary: Order book for a property
+      description: Maps to `OrderBookRepo.get`
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/PropertyId"
+      responses:
+        "200":
+          description: Book state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderBookState"
+              example:
+                propertyId: "prop_dubai_marina_01"
+                bids:
+                  - priceUsd: 4900
+                    quantity: 10
+                    cumulative: 10
+                asks:
+                  - priceUsd: 5100
+                    quantity: 5
+                    cumulative: 5
+                bestBidUsd: 4900
+                bestAskUsd: 5100
+                lastTradeUsd: 5000
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /v1/orders:
+    post:
+      tags: [Orders]
+      operationId: placeOrder
+      summary: Place limit order
+      description: Maps to `OrderBookRepo.placeOrder`. Caller-scoped maker.
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlaceOrderRequest"
+            example:
+              propertyId: "prop_dubai_marina_01"
+              side: sell
+              priceUsd: 5200
+              quantity: 3
+      responses:
+        "201":
+          description: Order created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+              example:
+                id: "ord_01HZX"
+                propertyId: "prop_dubai_marina_01"
+                makerAddress: "EQDexampleUserWallet000000000000000000000"
+                side: sell
+                priceUsd: 5200
+                quantity: 3
+                filledQuantity: 0
+                status: open
+                createdAt: "2026-07-29T12:00:00.000Z"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /v1/orders/{id}:
+    delete:
+      tags: [Orders]
+      operationId: cancelOrder
+      summary: Cancel own open order
+      description: |
+        Maps to `OrderBookRepo.cancelOrder`. **Own orders only** (IDOR-sensitive).
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Cancelled
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          description: Not the maker
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+              example:
+                code: forbidden
+                message: "Not allowed to cancel this order"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /v1/portfolio:
+    get:
+      tags: [Portfolio]
+      operationId: getPortfolio
+      summary: Portfolio summary for session user
+      description: Maps to `PortfolioRepo.summary`. Caller-scoped.
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PortfolioSummary"
+              example:
+                totalValueUsd: 25000
+                totalInvestedUsd: 24000
+                totalEarningsUsd: 1200
+                weeklyProjectedUsd: 50
+                dayChangeRatio: 0.012
+                holdings:
+                  - propertyId: "prop_dubai_marina_01"
+                    sharesOwned: 5
+                    avgCostUsd: 5000
+                    currentValueUsd: 25000
+                    pendingWeekEarningsUsd: 50
+                    shareRatio: 0.0005
+                openOrders: []
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /v1/earnings:
+    get:
+      tags: [Earnings]
+      operationId: getEarnings
+      summary: Earnings summary and timeline entries
+      description: |
+        Maps to `EarningsRepo.summary` (includes `entries`). Caller-scoped.
+        Projected fields are not paid. Hybrid/mock txHash may be `simulated:…` (ADR-001).
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Summary + entries
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EarningsSummary"
+              example:
+                allTimeUsd: 1200
+                thisWeekProjectedUsd: 50
+                projectedNextWeekUsd: 50
+                entries:
+                  - id: "ee_01"
+                    userId: "123456789"
+                    propertyId: "prop_dubai_marina_01"
+                    weekOf: "2026-07-21"
+                    amountUsd: 48
+                    tonAmount: 120000000
+                    shareRatio: 0.0005
+                    status: paid
+                    txHash: "simulated:demo-ee-01"
+                  - id: "ee_02"
+                    userId: "123456789"
+                    propertyId: "prop_dubai_marina_01"
+                    weekOf: "2026-07-28"
+                    amountUsd: 50
+                    tonAmount: 125000000
+                    shareRatio: 0.0005
+                    status: pending
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /v1/buys/prepare:
+    post:
+      tags: [Buys]
+      operationId: prepareBuy
+      summary: Prepare primary buy intent
+      description: |
+        Hybrid (ADR-001): returns client payload for TonConnect (optional stub TX) and a
+        server-side intent id. Does **not** require jetton mint fields in v0.
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BuyPrepareRequest"
+            example:
+              propertyId: "prop_dubai_marina_01"
+              quantity: 5
+              priceUsdPerShare: 5000
+      responses:
+        "200":
+          description: Intent ready
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BuyPrepareResponse"
+              example:
+                intentId: "buy_intent_01HZX"
+                propertyId: "prop_dubai_marina_01"
+                quantity: 5
+                priceUsdPerShare: 5000
+                totalUsd: 25000
+                tonConnectMessages:
+                  - address: "EQDexampleRelay00000000000000000000000000"
+                    amount: "10000000"
+                    payload: null
+                expiresAt: "2026-07-29T12:15:00.000Z"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /v1/buys/confirm:
+    post:
+      tags: [Buys]
+      operationId: confirmBuy
+      summary: Confirm buy after wallet action
+      description: |
+        Hybrid (ADR-001): persists holding + app ledger in Postgres after client confirms
+        (boc optional). Shares need not be minted on-chain. Response Transaction may carry
+        synthetic `txHash` (`simulated:…`) until SETTLEMENT_MODE=onchain.
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BuyConfirmRequest"
+            example:
+              intentId: "buy_intent_01HZX"
+              boc: null
+      responses:
+        "200":
+          description: Buy settled in DB (hybrid)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BuyConfirmResponse"
+              example:
+                transaction:
+                  id: "tx_01HZX"
+                  kind: buy
+                  propertyId: "prop_dubai_marina_01"
+                  userId: "123456789"
+                  shares: 5
+                  amountUsd: 25000
+                  tonAmount: 10000000
+                  status: success
+                  txHash: "simulated:buy-01HZX"
+                  createdAt: "2026-07-29T12:01:00.000Z"
+                holding:
+                  propertyId: "prop_dubai_marina_01"
+                  sharesOwned: 5
+                  avgCostUsd: 5000
+                  currentValueUsd: 25000
+                  pendingWeekEarningsUsd: 50
+                  shareRatio: 0.0005
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          description: Intent expired or already confirmed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+              example:
+                code: conflict
+                message: "Buy intent already confirmed or expired"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        Session JWT from `POST /v1/auth/telegram`. User session only — not admin/deployer
+        keys (ADR-004).
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: digihouse_session
+      description: |
+        Optional httpOnly session cookie issued by auth. Equivalent principal to bearerAuth.
+
+  parameters:
+    PropertyId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Stable off-chain property id
+
+  responses:
+    Unauthorized:
+      description: Missing or invalid session
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetails"
+          example:
+            code: unauthorized
+            message: "Authentication required"
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetails"
+          example:
+            code: not_found
+            message: "Resource not found"
+    BadRequest:
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetails"
+          example:
+            code: validation_error
+            message: "quantity must be a positive integer"
+
+  schemas:
+    ProblemDetails:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+          description: Machine-readable error code
+        message:
+          type: string
+          description: Human-readable message
+        details:
+          type: object
+          additionalProperties: true
+
+    HealthzResponse:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          enum: [ok]
+        ts:
+          type: string
+          format: date-time
+
+    PropertyStatus:
+      type: string
+      enum: [funding, funded, resale]
+
+    PropertyMeta:
+      type: object
+      required:
+        - sizeSqm
+        - yearBuilt
+        - propertyType
+        - rentalStatus
+        - leaseUntil
+        - activeTenant
+        - tokenizationDocUrl
+      properties:
+        sizeSqm:
+          type: integer
+        yearBuilt:
+          type: integer
+        propertyType:
+          type: string
+        rentalStatus:
+          type: string
+          enum: [rented, vacant]
+        leaseUntil:
+          type: ["string", "null"]
+          description: ISO date YYYY-MM-DD while leased
+        activeTenant:
+          type: boolean
+        tokenizationDocUrl:
+          type: string
+          format: uri
+
+    RentalPayment:
+      type: object
+      required: [id, paidAt, status]
+      properties:
+        id:
+          type: string
+        paidAt:
+          type: string
+        status:
+          type: string
+          enum: [paid]
+
+    Listing:
+      type: object
+      description: |
+        Marketplace listing = Property + funding fields (DATA_MODELS / src/types/property.ts).
+        Money fields are integer **USD cents**. Shares are integers. Ratios 0..1.
+      required:
+        - id
+        - title
+        - location
+        - description
+        - images
+        - totalShares
+        - sharePriceUsd
+        - status
+        - ownerWalletAddress
+        - annualRentUsd
+        - createdAt
+        - meta
+        - rentalHistory
+        - sharesSold
+        - sharesRemaining
+        - fundingProgressRatio
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        location:
+          type: string
+        description:
+          type: string
+        images:
+          type: array
+          items:
+            type: string
+        totalShares:
+          type: integer
+          minimum: 1
+        sharePriceUsd:
+          type: integer
+          description: USD cents per share
+        status:
+          $ref: "#/components/schemas/PropertyStatus"
+        ownerWalletAddress:
+          type: string
+        annualRentUsd:
+          type: integer
+          description: USD cents per year
+        createdAt:
+          type: string
+          format: date-time
+        meta:
+          $ref: "#/components/schemas/PropertyMeta"
+        rentalHistory:
+          type: array
+          items:
+            $ref: "#/components/schemas/RentalPayment"
+        sharesSold:
+          type: integer
+          minimum: 0
+        sharesRemaining:
+          type: integer
+          minimum: 0
+        fundingProgressRatio:
+          type: number
+          minimum: 0
+          maximum: 1
+          description: Ratio 0..1
+
+    OrderSide:
+      type: string
+      enum: [buy, sell]
+
+    OrderStatus:
+      type: string
+      enum: [open, filled, cancelled, rejected]
+
+    Order:
+      type: object
+      required:
+        - id
+        - propertyId
+        - makerAddress
+        - side
+        - priceUsd
+        - quantity
+        - filledQuantity
+        - status
+        - createdAt
+      properties:
+        id:
+          type: string
+        propertyId:
+          type: string
+        makerAddress:
+          type: string
+        side:
+          $ref: "#/components/schemas/OrderSide"
+        priceUsd:
+          type: integer
+          description: USD cents per share
+        quantity:
+          type: integer
+          minimum: 1
+        filledQuantity:
+          type: integer
+          minimum: 0
+        status:
+          $ref: "#/components/schemas/OrderStatus"
+        createdAt:
+          type: string
+          format: date-time
+
+    OrderBookLevel:
+      type: object
+      required: [priceUsd, quantity, cumulative]
+      properties:
+        priceUsd:
+          type: integer
+          description: USD cents per share
+        quantity:
+          type: integer
+        cumulative:
+          type: integer
+
+    OrderBookState:
+      type: object
+      required: [propertyId, bids, asks]
+      properties:
+        propertyId:
+          type: string
+        bids:
+          type: array
+          description: DESC by price
+          items:
+            $ref: "#/components/schemas/OrderBookLevel"
+        asks:
+          type: array
+          description: ASC by price
+          items:
+            $ref: "#/components/schemas/OrderBookLevel"
+        bestBidUsd:
+          type: integer
+          description: USD cents
+        bestAskUsd:
+          type: integer
+          description: USD cents
+        lastTradeUsd:
+          type: integer
+          description: USD cents
+
+    PlaceOrderRequest:
+      type: object
+      required: [propertyId, side, priceUsd, quantity]
+      properties:
+        propertyId:
+          type: string
+        side:
+          $ref: "#/components/schemas/OrderSide"
+        priceUsd:
+          type: integer
+          description: USD cents per share
+          minimum: 1
+        quantity:
+          type: integer
+          minimum: 1
+
+    Holding:
+      type: object
+      required:
+        - propertyId
+        - sharesOwned
+        - avgCostUsd
+        - currentValueUsd
+        - pendingWeekEarningsUsd
+        - shareRatio
+      properties:
+        propertyId:
+          type: string
+        sharesOwned:
+          type: integer
+          minimum: 0
+        avgCostUsd:
+          type: integer
+          description: USD cents per share (average)
+        currentValueUsd:
+          type: integer
+          description: USD cents total
+        pendingWeekEarningsUsd:
+          type: integer
+          description: USD cents next distribution
+        shareRatio:
+          type: number
+          minimum: 0
+          maximum: 1
+
+    PortfolioSummary:
+      type: object
+      required:
+        - totalValueUsd
+        - totalInvestedUsd
+        - totalEarningsUsd
+        - weeklyProjectedUsd
+        - dayChangeRatio
+        - holdings
+        - openOrders
+      properties:
+        totalValueUsd:
+          type: integer
+          description: USD cents
+        totalInvestedUsd:
+          type: integer
+          description: USD cents
+        totalEarningsUsd:
+          type: integer
+          description: USD cents all-time
+        weeklyProjectedUsd:
+          type: integer
+          description: USD cents projected (not paid)
+        dayChangeRatio:
+          type: number
+          description: e.g. 0.023 = +2.3% (demo field OK)
+        holdings:
+          type: array
+          items:
+            $ref: "#/components/schemas/Holding"
+        openOrders:
+          type: array
+          items:
+            $ref: "#/components/schemas/Order"
+
+    EarningsStatus:
+      type: string
+      enum: [paid, pending]
+
+    EarningsEntry:
+      type: object
+      required:
+        - id
+        - userId
+        - propertyId
+        - weekOf
+        - amountUsd
+        - tonAmount
+        - shareRatio
+        - status
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        propertyId:
+          type: string
+        weekOf:
+          type: string
+          description: ISO Monday date
+          examples: ["2026-07-21"]
+        amountUsd:
+          type: integer
+          description: USD cents
+        tonAmount:
+          type: integer
+          description: nanoTON
+        shareRatio:
+          type: number
+          minimum: 0
+          maximum: 1
+        status:
+          $ref: "#/components/schemas/EarningsStatus"
+        txHash:
+          type: string
+          description: Real chain hash or synthetic simulated:… (ADR-001)
+
+    EarningsSummary:
+      type: object
+      required:
+        - allTimeUsd
+        - thisWeekProjectedUsd
+        - projectedNextWeekUsd
+        - entries
+      properties:
+        allTimeUsd:
+          type: integer
+          description: USD cents
+        thisWeekProjectedUsd:
+          type: integer
+          description: USD cents projected — not paid
+        projectedNextWeekUsd:
+          type: integer
+          description: USD cents projected — not paid
+        entries:
+          type: array
+          items:
+            $ref: "#/components/schemas/EarningsEntry"
+
+    TxKind:
+      type: string
+      enum: [buy, sell, earnings, withdraw]
+
+    TxStatus:
+      type: string
+      enum: [pending, success, failed]
+
+    Transaction:
+      type: object
+      required: [id, kind, userId, amountUsd, status, createdAt]
+      properties:
+        id:
+          type: string
+        kind:
+          $ref: "#/components/schemas/TxKind"
+        propertyId:
+          type: string
+        userId:
+          type: string
+        shares:
+          type: integer
+        amountUsd:
+          type: integer
+          description: USD cents
+        tonAmount:
+          type: integer
+          description: nanoTON
+        status:
+          $ref: "#/components/schemas/TxStatus"
+        txHash:
+          type: string
+        error:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    UserRole:
+      type: string
+      enum: [investor, owner]
+
+    UserProfile:
+      type: object
+      required:
+        - id
+        - displayName
+        - role
+        - walletAddress
+        - onboarded
+        - useTelegramTheme
+        - createdAt
+      properties:
+        id:
+          type: string
+          description: Telegram user id string
+        displayName:
+          type: string
+        username:
+          type: string
+        photoUrl:
+          type: string
+        role:
+          $ref: "#/components/schemas/UserRole"
+        walletAddress:
+          type: ["string", "null"]
+        onboarded:
+          type: boolean
+        useTelegramTheme:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+
+    AuthTelegramRequest:
+      type: object
+      required: [initData]
+      properties:
+        initData:
+          type: string
+          description: Raw Telegram WebApp initData string
+
+    AuthTelegramResponse:
+      type: object
+      required: [user]
+      properties:
+        token:
+          type: string
+          description: Bearer JWT when not cookie-only
+        user:
+          $ref: "#/components/schemas/UserProfile"
+        expiresAt:
+          type: string
+          format: date-time
+
+    BuyPrepareRequest:
+      type: object
+      required: [propertyId, quantity, priceUsdPerShare]
+      properties:
+        propertyId:
+          type: string
+        quantity:
+          type: integer
+          minimum: 1
+        priceUsdPerShare:
+          type: integer
+          description: USD cents per share
+          minimum: 1
+
+    TonConnectMessage:
+      type: object
+      required: [address, amount]
+      properties:
+        address:
+          type: string
+        amount:
+          type: string
+          description: nanoTON as decimal string for TonConnect
+        payload:
+          type: ["string", "null"]
+          description: Optional base64 BOC body
+
+    BuyPrepareResponse:
+      type: object
+      required:
+        - intentId
+        - propertyId
+        - quantity
+        - priceUsdPerShare
+        - totalUsd
+        - expiresAt
+      properties:
+        intentId:
+          type: string
+        propertyId:
+          type: string
+        quantity:
+          type: integer
+        priceUsdPerShare:
+          type: integer
+          description: USD cents
+        totalUsd:
+          type: integer
+          description: USD cents
+        tonConnectMessages:
+          type: array
+          items:
+            $ref: "#/components/schemas/TonConnectMessage"
+        expiresAt:
+          type: string
+          format: date-time
+
+    BuyConfirmRequest:
+      type: object
+      required: [intentId]
+      properties:
+        intentId:
+          type: string
+        boc:
+          type: ["string", "null"]
+          description: Optional signed BOC / proof; may be null in hybrid stub path
+
+    BuyConfirmResponse:
+      type: object
+      required: [transaction, holding]
+      properties:
+        transaction:
+          $ref: "#/components/schemas/Transaction"
+        holding:
+          $ref: "#/components/schemas/Holding"

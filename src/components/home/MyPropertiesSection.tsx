@@ -50,9 +50,15 @@ export function MyPropertiesSection({
             />
             <div className="absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent" />
           </div>
-          <div className="space-y-3 p-4 -mt-6 relative">
-            <p className="text-[0.9375rem] font-semibold text-foreground">{t("buyFirstShare")}</p>
-            <p className="text-sm text-muted-foreground">{t("buyFirstShareHint")}</p>
+          <div className="relative -mt-6 space-y-3.5 p-4">
+            <div className="space-y-1.5">
+              <p className="text-[0.9375rem] font-semibold leading-snug text-foreground">
+                {t("buyFirstShare")}
+              </p>
+              <p className="text-sm leading-relaxed text-muted-foreground pb-0.5">
+                {t("buyFirstShareHint")}
+              </p>
+            </div>
             <Link
               href={ROUTES.marketplace}
               onClick={() => onNavigateHaptic?.()}

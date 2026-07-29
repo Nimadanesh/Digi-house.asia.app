@@ -12,9 +12,11 @@ export function PropertyAbout({ listing }: { listing: Listing }) {
   const { meta } = listing;
   return (
     <Block data-testid="property-about">
-      <div className="p-4 space-y-2">
-        <h2 className="text-[0.9375rem] font-semibold text-foreground">About</h2>
-        <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">{listing.description}</p>
+      <div className="space-y-2 p-4 pb-3.5">
+        <h2 className="text-[0.9375rem] font-semibold leading-snug text-foreground">About</h2>
+        <p className="text-sm leading-relaxed text-muted-foreground line-clamp-3 pb-0.5">
+          {listing.description}
+        </p>
       </div>
       <button
         type="button"

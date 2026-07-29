@@ -30,7 +30,7 @@ function GlobalHeaderInner() {
 
   return (
     <header
-      className="relative z-30 shrink-0 bg-background/95 backdrop-blur px-4 pt-[max(env(safe-area-inset-top),0px)]"
+      className="relative z-30 shrink-0 bg-background px-4 pt-[max(env(safe-area-inset-top),0px)]"
       data-testid="global-header"
     >
       <div className="flex h-[52px] items-center justify-between gap-3">

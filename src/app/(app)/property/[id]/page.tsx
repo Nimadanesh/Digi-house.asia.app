@@ -11,6 +11,7 @@ import { useTelegram } from "@/hooks/useTelegram";
 import { useTonConnect } from "@/hooks/useTonConnect";
 import { useBuyShares, type BuyInput } from "@/hooks/useBuyShares";
 import { useUiStore } from "@/stores/ui.store";
+import { haptics } from "@/lib/telegram/haptics";
 import { usd } from "@/lib/format";
 import { PropertyDetail } from "@/components/property/PropertyDetail";
 import { PropertyDetailSkeleton } from "@/components/property/PropertyDetailSkeleton";
@@ -34,7 +35,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
   const tOnboarding = useTranslations("onboarding");
   const property = useProperty(id);
   const orderBook = useOrderBook(id);
-  const tg = useTelegram();
+  const { backButton, mainButton } = useTelegram();
   const ton = useTonConnect();
   const buy = useBuyShares();
   const router = useRouter();
@@ -73,7 +74,6 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
   // BackButton — safe chrome never throws (even if TG unavailable).
   useEffect(() => {
     if (settingsOpen) return;
-    const { backButton, haptics } = tg;
     try {
       backButton.show();
     } catch {
@@ -103,23 +103,22 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
         /* ignore */
       }
     };
-  }, [sheetOpen, step, closeSheet, router, tg, settingsOpen]);
+  }, [sheetOpen, step, closeSheet, router, backButton, settingsOpen]);
 
   useEffect(() => {
     return () => {
       try {
-        tg.backButton.hide();
+        backButton.hide();
       } catch {
         /* ignore */
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [backButton]);
 
   const confirmBuy = useCallback(async () => {
     if (!listing) return;
     setBuyError(null);
-    tg.haptics.impact("medium");
+    haptics.impact("medium");
     const input: BuyInput = {
       propertyId: listing.id,
       quantity: qty,
@@ -130,30 +129,30 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
       const res = await buy.mutateAsync(input);
       if (res.ok) {
         setStep("success");
-        tg.haptics.notification("success");
+        haptics.notification("success");
       } else {
         setBuyError(res.error || "Buy failed");
         setToast({ tone: "error", title: "Buy failed", sub: res.error, leaving: false });
-        tg.haptics.notification("error");
+        haptics.notification("error");
       }
     } catch (e) {
       const message = e instanceof Error ? e.message : "transaction rejected";
       setBuyError(message);
       setToast({ tone: "error", title: "Buy failed", sub: message, leaving: false });
-      tg.haptics.notification("error");
+      haptics.notification("error");
     }
-  }, [listing, qty, buy, tg]);
+  }, [listing, qty, buy]);
 
   // MainButton — Fable: closed → "Buy Share"; sheet qty → Continue; summary → Confirm & Pay; success → hidden.
   useEffect(() => {
     if (!listing) {
-      tg.mainButton.hide();
+      mainButton.hide();
       setMainButtonActive(false);
       return;
     }
 
     if (sheetOpen && step === "success") {
-      tg.mainButton.hide();
+      mainButton.hide();
       // Keep tab bar suppressed while success sheet is open (match sheet chrome).
       setMainButtonActive(true);
       return;
@@ -161,19 +160,19 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
 
     if (!sheetOpen) {
       if (!canBuy) {
-        tg.mainButton.hide();
+        mainButton.hide();
         setMainButtonActive(false);
         return;
       }
       setMainButtonActive(true);
-      tg.mainButton.setParams({
+      mainButton.setParams({
         text: tCommon("buyShare"),
         isEnabled: true,
         color: "#3390ec",
         textColor: "#ffffff",
       });
-      const off = tg.mainButton.onClick(() => {
-        tg.haptics.impact("light");
+      const off = mainButton.onClick(() => {
+        haptics.impact("light");
         setQty(Math.min(remaining, Math.max(1, previewShares)));
         setStep("qty");
         setSheetOpen(true);
@@ -187,14 +186,14 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
     setMainButtonActive(true);
 
     if (!ton.connected) {
-      tg.mainButton.setParams({
+      mainButton.setParams({
         text: tCommon("connectWallet"),
         isEnabled: true,
         color: "#3390ec",
         textColor: "#ffffff",
       });
-      const off = tg.mainButton.onClick(() => {
-        tg.haptics.impact("light");
+      const off = mainButton.onClick(() => {
+        haptics.impact("light");
         ton.openModal();
       });
       return () => {
@@ -204,15 +203,15 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
 
     if (step === "qty") {
       const valid = qty >= 1 && qty <= remaining;
-      tg.mainButton.setParams({
+      mainButton.setParams({
         text: tOnboarding("continue"),
         isEnabled: valid && remaining > 0,
         color: "#3390ec",
         textColor: "#ffffff",
       });
-      const off = tg.mainButton.onClick(() => {
+      const off = mainButton.onClick(() => {
         if (!valid) return;
-        tg.haptics.selection();
+        haptics.selection();
         setStep("summary");
       });
       return () => {
@@ -224,14 +223,14 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
       const valid = qty >= 1 && qty <= remaining;
       const totalUsd = qty * listing.sharePriceUsd;
       const pending = buy.isPending;
-      tg.mainButton.setParams({
+      mainButton.setParams({
         text: pending ? "Confirming…" : `Confirm & Pay — ${usd(totalUsd)}`,
         isEnabled: valid && !pending,
         color: "#3390ec",
         textColor: "#ffffff",
         isLoaderVisible: pending,
       });
-      const off = tg.mainButton.onClick(() => {
+      const off = mainButton.onClick(() => {
         if (!valid || buy.isPending) return;
         void confirmBuy();
       });
@@ -253,15 +252,15 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
     confirmBuy,
     tCommon,
     tOnboarding,
+    mainButton,
   ]);
 
   useEffect(() => {
     return () => {
       setMainButtonActive(false);
-      tg.mainButton.hide();
+      mainButton.hide();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [mainButton, setMainButtonActive]);
 
   if (property.isLoading && !property.data) {
     return <PropertyDetailSkeleton />;
@@ -273,7 +272,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
         className="mt-4"
         message="Couldn't load this property."
         onRetry={() => {
-          tg.haptics.impact("light");
+          haptics.impact("light");
           void property.refetch();
         }}
         data-testid="property-error"
@@ -305,7 +304,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
       {canBuy && !sheetOpen ? (
         <StickyBuyBar
           onClick={() => {
-            tg.haptics.impact("light");
+            haptics.impact("light");
             setQty(Math.min(remaining, Math.max(10, previewShares)));
             setStep("qty");
             setSheetOpen(true);

@@ -32,18 +32,18 @@ export function NextPayoutCard({
             <div className="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-primary/12 text-primary">
               <CalendarClock size={20} strokeWidth={1.75} aria-hidden />
             </div>
-            <div className="min-w-0">
-              <p className="text-xs font-medium text-muted-foreground">{t("nextPayout")}</p>
+            <div className="min-w-0 space-y-1">
+              <p className="text-xs font-medium leading-snug text-muted-foreground">{t("nextPayout")}</p>
               <p
-                className="mt-0.5 text-[0.9375rem] font-semibold tnum text-foreground leading-snug tracking-tight"
+                className="text-[0.9375rem] font-semibold tnum leading-snug tracking-tight text-foreground"
                 data-testid="next-payout-timer"
               >
                 {countdown}
               </p>
             </div>
           </div>
-          <div className="shrink-0 text-end">
-            <p className="text-[0.6875rem] text-muted-foreground">{tCommon("est")}</p>
+          <div className="shrink-0 space-y-1 text-end">
+            <p className="text-[0.6875rem] leading-snug text-muted-foreground">{tCommon("est")}</p>
             <p className="text-[1.0625rem] font-bold tnum text-success" data-testid="next-payout-amount">
               ≈ {usd(projectedUsd)}
             </p>

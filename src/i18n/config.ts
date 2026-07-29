@@ -1,17 +1,18 @@
 // File responsibility: supported locales, RTL set, and display metadata for DigiHouse i18n.
+// LOCALES order = Settings language picker order (do not sort alphabetically).
 export const LOCALES = [
-  "en",
-  "fa",
-  "ar",
-  "ru",
-  "de",
-  "tr",
-  "fr",
-  "es",
-  "pt",
-  "zh",
-  "hi",
-  "id",
+  "en", // 1. English
+  "ar", // 2. Arabic
+  "ru", // 3. Russian
+  "de", // 4. German
+  "tr", // 5. Turkish
+  "fr", // 6. French
+  "es", // 7. Spanish
+  "pt", // 8. Portuguese
+  "zh", // 9. Chinese (Simplified)
+  "hi", // 10. Hindi
+  "fa", // 11. Persian (Farsi)
+  "id", // 12. Indonesian
 ] as const;
 
 export type AppLocale = (typeof LOCALES)[number];
@@ -19,7 +20,7 @@ export type AppLocale = (typeof LOCALES)[number];
 export const DEFAULT_LOCALE: AppLocale = "en";
 
 /** Locales that require right-to-left document direction. */
-export const RTL_LOCALES: readonly AppLocale[] = ["fa", "ar"] as const;
+export const RTL_LOCALES: readonly AppLocale[] = ["ar", "fa"] as const;
 
 export function isAppLocale(value: string): value is AppLocale {
   return (LOCALES as readonly string[]).includes(value);
@@ -35,7 +36,6 @@ export const LOCALE_META: Record<
   { nativeLabel: string; englishLabel: string }
 > = {
   en: { nativeLabel: "English", englishLabel: "English" },
-  fa: { nativeLabel: "فارسی", englishLabel: "Persian" },
   ar: { nativeLabel: "العربية", englishLabel: "Arabic" },
   ru: { nativeLabel: "Русский", englishLabel: "Russian" },
   de: { nativeLabel: "Deutsch", englishLabel: "German" },
@@ -45,6 +45,7 @@ export const LOCALE_META: Record<
   pt: { nativeLabel: "Português", englishLabel: "Portuguese" },
   zh: { nativeLabel: "简体中文", englishLabel: "Chinese" },
   hi: { nativeLabel: "हिन्दी", englishLabel: "Hindi" },
+  fa: { nativeLabel: "فارسی", englishLabel: "Persian" },
   id: { nativeLabel: "Bahasa Indonesia", englishLabel: "Indonesian" },
 };
 

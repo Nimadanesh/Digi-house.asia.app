@@ -21,9 +21,9 @@ export function EmptyState({
       {...rest}
     >
       <Building2 size={120} strokeWidth={1.75} className="text-muted-foreground" aria-hidden />
-      <h2 className="mt-4 text-[0.9375rem] font-semibold text-foreground">{title}</h2>
-      <p className="mt-1 max-w-xs text-sm text-muted-foreground">{message}</p>
-      {action ? <div className="mt-4">{action}</div> : null}
+      <h2 className="mt-4 text-[0.9375rem] font-semibold leading-snug text-foreground">{title}</h2>
+      <p className="mt-2 mb-0.5 max-w-xs text-sm leading-relaxed text-muted-foreground">{message}</p>
+      {action ? <div className="mt-5">{action}</div> : null}
     </div>
   );
 }

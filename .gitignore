@@ -15,6 +15,11 @@ dist/
 .env.development.local
 .env.test.local
 .env.production.local
+apps/api/.env
+apps/*/.env
+
+# API build (if compiled later)
+apps/api/dist/
 
 # Debug
 npm-debug.log*

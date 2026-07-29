@@ -1,0 +1,215 @@
+/**
+ * Frozen copy of Mini App mock listings (src/lib/mock/seed/properties.ts).
+ * API must not import @/ paths from the Next app.
+ */
+import type { PropertyMetaJson, RentalPaymentJson } from "../schema/properties.js";
+
+export type SeedProperty = {
+  id: string;
+  title: string;
+  location: string;
+  description: string;
+  images: string[];
+  totalShares: number;
+  sharePriceUsd: number;
+  status: "funding" | "funded" | "resale";
+  ownerWalletAddress: string;
+  annualRentUsd: number;
+  sharesSold: number;
+  meta: PropertyMetaJson;
+  rentalHistory: RentalPaymentJson[];
+  createdAt: string;
+};
+
+function history(prefix: string, dates: string[]): RentalPaymentJson[] {
+  return dates.map((paidAt, i) => ({
+    id: `${prefix}-rent-${i + 1}`,
+    paidAt,
+    status: "paid" as const,
+  }));
+}
+
+export const SEED_PROPERTIES: SeedProperty[] = [
+  {
+    id: "prop-marina-vista-4b",
+    title: "Marina Vista Apt 4B",
+    location: "Dubai Marina, UAE",
+    description:
+      "Waterfront one-bedroom with marina view and 24h concierge. Fully furnished, high floor, leased to a long-term corporate tenant.",
+    images: [
+      "/images/properties/p1.png",
+      "/images/properties/p2.png",
+      "/images/properties/p3.png",
+    ],
+    totalShares: 1000,
+    sharePriceUsd: 12500,
+    status: "funding",
+    ownerWalletAddress: "EQARULx2r6JmOuMoQn7jVr8m9Rrjv0s4kq5t8s7q5t8s4kq5",
+    annualRentUsd: 520000,
+    sharesSold: 920,
+    createdAt: "2026-07-10T09:00:00Z",
+    meta: {
+      sizeSqm: 72,
+      yearBuilt: 2019,
+      propertyType: "Apartment",
+      rentalStatus: "rented",
+      leaseUntil: "2026-12-31",
+      activeTenant: true,
+      tokenizationDocUrl: "#tokenization-demo",
+    },
+    rentalHistory: history("marina", [
+      "2026-07-04",
+      "2026-06-06",
+      "2026-05-02",
+      "2026-04-04",
+    ]),
+  },
+  {
+    id: "prop-soho-loft-studio",
+    title: "Soho Loft Studio",
+    location: "Lisbon, Portugal",
+    description:
+      "Renovated Alfama studio steps from the Tagus riverside promenade. Bright open plan with original beam details.",
+    images: ["/images/properties/p2.png", "/images/properties/p4.png"],
+    totalShares: 800,
+    sharePriceUsd: 15000,
+    status: "funding",
+    ownerWalletAddress: "EQBQbP3KsN8tVq2WdTeHcYx4Zp1mK0vR7nAeL9fS2hBkR8sT",
+    annualRentUsd: 624000,
+    sharesSold: 320,
+    createdAt: "2026-07-20T10:30:00Z",
+    meta: {
+      sizeSqm: 48,
+      yearBuilt: 2021,
+      propertyType: "Studio",
+      rentalStatus: "rented",
+      leaseUntil: "2027-03-15",
+      activeTenant: true,
+      tokenizationDocUrl: "#tokenization-demo",
+    },
+    rentalHistory: history("soho", ["2026-07-11", "2026-06-13", "2026-05-16"]),
+  },
+  {
+    id: "prop-bayside-marina-penthouse",
+    title: "Bayside Marina Penthouse",
+    location: "São Paulo, Brazil",
+    description:
+      "Top-floor two-bedroom penthouse overlooking the Pinheiros marina. Private terrace and exclusive lift lobby.",
+    images: [
+      "/images/properties/p3.png",
+      "/images/properties/p5.png",
+      "/images/properties/p1.png",
+    ],
+    totalShares: 800,
+    sharePriceUsd: 25000,
+    status: "funded",
+    ownerWalletAddress: "EQCDf8Kq2tYpR7vWnL3xJmH0bZ5sAeN9oVgB4uTr6pXkMdH1",
+    annualRentUsd: 1040000,
+    sharesSold: 800,
+    createdAt: "2026-03-04T08:15:00Z",
+    meta: {
+      sizeSqm: 148,
+      yearBuilt: 2018,
+      propertyType: "Penthouse",
+      rentalStatus: "rented",
+      leaseUntil: "2026-11-30",
+      activeTenant: true,
+      tokenizationDocUrl: "#tokenization-demo",
+    },
+    rentalHistory: history("bayside", [
+      "2026-07-18",
+      "2026-06-20",
+      "2026-05-23",
+      "2026-04-25",
+    ]),
+  },
+  {
+    id: "prop-alfama-terrace-flat",
+    title: "Alfama Terrace Flat",
+    location: "Lisbon's Alfama district, Portugal",
+    description:
+      "Charming renovated flat with a private terrace above Alfama's lanes. Historic shell, modern interior systems.",
+    images: ["/images/properties/p4.png", "/images/properties/p6.png"],
+    totalShares: 1000,
+    sharePriceUsd: 10000,
+    status: "funded",
+    ownerWalletAddress: "EQDr5YpN3vKq8tWcRx2mH0kJbZ4sAeF1oVgB7uTr9pXkMdH2",
+    annualRentUsd: 1300000,
+    sharesSold: 1000,
+    createdAt: "2026-04-18T11:45:00Z",
+    meta: {
+      sizeSqm: 86,
+      yearBuilt: 2014,
+      propertyType: "Flat",
+      rentalStatus: "rented",
+      leaseUntil: "2026-09-01",
+      activeTenant: true,
+      tokenizationDocUrl: "#tokenization-demo",
+    },
+    rentalHistory: history("alfama", ["2026-07-01", "2026-06-01", "2026-05-01"]),
+  },
+  {
+    id: "prop-tbilisi-riverhouse-loft",
+    title: "Tbilisi Riverhouse Loft",
+    location: "Tbilisi, Georgia",
+    description:
+      "Open-plan loft on the Mtkvari riverfront with skyline views. Exposed concrete, double-height living room.",
+    images: ["/images/properties/p5.png", "/images/properties/p2.png"],
+    totalShares: 600,
+    sharePriceUsd: 8000,
+    status: "resale",
+    ownerWalletAddress: "EQFw6TqL4yNvRp8cQx1mK0jHbZ3sAeF2oVgB5uTr7pXkMdH3",
+    annualRentUsd: 468000,
+    sharesSold: 600,
+    createdAt: "2025-12-02T07:20:00Z",
+    meta: {
+      sizeSqm: 110,
+      yearBuilt: 2022,
+      propertyType: "Loft",
+      rentalStatus: "rented",
+      leaseUntil: "2027-03-01",
+      activeTenant: true,
+      tokenizationDocUrl: "#tokenization-demo",
+    },
+    rentalHistory: history("tbilisi", [
+      "2026-07-07",
+      "2026-06-07",
+      "2026-05-10",
+      "2026-04-08",
+    ]),
+  },
+  {
+    id: "prop-canggu-surf-villa",
+    title: "Canggu Surf Villa",
+    location: "Bali, Indonesia",
+    description:
+      "Four-bedroom villa minutes from Batu Bolong beach and rice paddies. Private pool and staff quarters.",
+    images: [
+      "/images/properties/p6.png",
+      "/images/properties/p3.png",
+      "/images/properties/p4.png",
+    ],
+    totalShares: 1200,
+    sharePriceUsd: 20000,
+    status: "resale",
+    ownerWalletAddress: "EQGp9UrM6xNwTs7dSy3nK1lHcZ5sAeF3oVgB6uTr8pXkMdH4",
+    annualRentUsd: 936000,
+    sharesSold: 1200,
+    createdAt: "2026-01-30T14:10:00Z",
+    meta: {
+      sizeSqm: 320,
+      yearBuilt: 2020,
+      propertyType: "Villa",
+      rentalStatus: "rented",
+      leaseUntil: "2027-01-15",
+      activeTenant: true,
+      tokenizationDocUrl: "#tokenization-demo",
+    },
+    rentalHistory: history("canggu", [
+      "2026-07-12",
+      "2026-06-14",
+      "2026-05-17",
+      "2026-04-19",
+    ]),
+  },
+];

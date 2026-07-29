@@ -10,8 +10,8 @@ export function PropertyHero({ listing }: { listing: Listing }) {
     <div className="space-y-2">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <h1 className="text-[1.0625rem] font-semibold text-foreground leading-snug">{listing.title}</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">{listing.location}</p>
+          <h1 className="text-[1.0625rem] font-semibold leading-snug text-foreground">{listing.title}</h1>
+          <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{listing.location}</p>
         </div>
         <span
           className="shrink-0 rounded-full bg-success/12 px-2.5 py-1 text-xs font-semibold text-success tnum"

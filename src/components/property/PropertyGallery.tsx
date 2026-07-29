@@ -3,22 +3,18 @@
 import { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { useTelegram } from "@/hooks/useTelegram";
+import { haptics } from "@/lib/telegram/haptics";
 
 export function PropertyGallery({ images, title }: { images: string[]; title: string }) {
   const slides = images.length > 0 ? images : ["/images/properties/p1.png"];
   const [index, setIndex] = useState(0);
   const startX = useRef<number | null>(null);
-  const { haptics } = useTelegram();
 
-  const go = useCallback(
-    (next: number) => {
-      const n = slides.length;
-      setIndex(((next % n) + n) % n);
-      haptics.selection();
-    },
-    [slides.length, haptics],
-  );
+  const go = useCallback((next: number) => {
+    const n = slides.length;
+    setIndex(((next % n) + n) % n);
+    haptics.selection();
+  }, [slides.length]);
 
   return (
     <div

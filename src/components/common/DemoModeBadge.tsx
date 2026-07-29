@@ -29,7 +29,7 @@ export function DemoModeBadge() {
           haptics.selection();
           openSettings();
         }}
-        className="pointer-events-auto inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card/95 px-3 text-[0.6875rem] font-medium text-muted-foreground backdrop-blur active:scale-[0.97] transition-transform duration-[120ms] ease-out"
+        className="pointer-events-auto inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-[0.6875rem] font-medium text-muted-foreground active:scale-[0.97] transition-transform duration-[120ms] ease-out"
         aria-label="Demo mode — open settings"
       >
         <span className="size-1.5 rounded-full bg-warning" aria-hidden />

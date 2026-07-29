@@ -7,6 +7,6 @@ export function useOrderBook(propertyId: string | null) {
     queryKey: ["orderBook", propertyId],
     queryFn: () => getRepo().orderBook.get(propertyId!),
     enabled: Boolean(propertyId),
-    staleTime: 30_000,
+    staleTime: 60_000,
   });
 }

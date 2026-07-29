@@ -8,6 +8,7 @@ import { useTelegram } from "@/hooks/useTelegram";
 import { useTelegramBackButton } from "@/hooks/useTelegramBackButton";
 import { useSettingsStore } from "@/stores/settings.store";
 import { useUiStore } from "@/stores/ui.store";
+import { haptics } from "@/lib/telegram/haptics";
 import { ROUTES } from "@/lib/constants";
 import { ONBOARDING_SLIDE_COUNT } from "@/lib/onboarding-slides";
 import { OnboardingCarousel } from "@/components/onboarding/OnboardingCarousel";
@@ -15,7 +16,7 @@ import { OnboardingCarousel } from "@/components/onboarding/OnboardingCarousel";
 export default function OnboardingPage() {
   const t = useTranslations("onboarding");
   const router = useRouter();
-  const tg = useTelegram();
+  const { mainButton, backButton } = useTelegram();
   const setOnboarded = useSettingsStore((s) => s.setOnboarded);
   const setMainButtonActive = useUiStore((s) => s.setMainButtonActive);
   const setOnboardingReplay = useUiStore((s) => s.setOnboardingReplay);
@@ -23,13 +24,13 @@ export default function OnboardingPage() {
   const isLast = index >= ONBOARDING_SLIDE_COUNT - 1;
 
   const complete = useCallback(() => {
-    tg.haptics.notification("success");
+    haptics.notification("success");
     setOnboarded(true);
     setOnboardingReplay(false);
     setMainButtonActive(false);
-    tg.mainButton.hide();
+    mainButton.hide();
     router.replace(ROUTES.home);
-  }, [router, setOnboarded, setOnboardingReplay, setMainButtonActive, tg]);
+  }, [router, setOnboarded, setOnboardingReplay, setMainButtonActive, mainButton]);
 
   useTelegramBackButton(
     index,
@@ -38,30 +39,29 @@ export default function OnboardingPage() {
 
   useEffect(() => {
     setMainButtonActive(true);
-    tg.mainButton.setParams({
+    mainButton.setParams({
       text: isLast ? t("getStarted") : t("continue"),
       isEnabled: true,
       color: "#3390ec",
       textColor: "#ffffff",
     });
-    const off = tg.mainButton.onClick(() => {
-      tg.haptics.impact("medium");
+    const off = mainButton.onClick(() => {
+      haptics.impact("medium");
       if (isLast) complete();
       else setIndex((i) => Math.min(ONBOARDING_SLIDE_COUNT - 1, i + 1));
     });
     return () => {
       off();
     };
-  }, [complete, isLast, setMainButtonActive, t, tg]);
+  }, [complete, isLast, setMainButtonActive, t, mainButton]);
 
   useEffect(() => {
     return () => {
       setMainButtonActive(false);
-      tg.mainButton.hide();
-      tg.backButton.hide();
+      mainButton.hide();
+      backButton.hide();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [mainButton, backButton, setMainButtonActive]);
 
   return (
     <div className="flex min-h-[calc(100svh-120px)] flex-col" data-testid="onboarding-page">
@@ -69,7 +69,7 @@ export default function OnboardingPage() {
         <button
           type="button"
           onClick={() => {
-            tg.haptics.selection();
+            haptics.selection();
             complete();
           }}
           className="min-h-[44px] px-2 text-sm font-medium text-primary active:opacity-80"
@@ -82,7 +82,7 @@ export default function OnboardingPage() {
       <OnboardingCarousel
         index={index}
         onIndexChange={setIndex}
-        onSwipeHaptic={() => tg.haptics.selection()}
+        onSwipeHaptic={() => haptics.selection()}
       />
 
       {isLast ? (
@@ -90,7 +90,7 @@ export default function OnboardingPage() {
           <button
             type="button"
             onClick={() => {
-              tg.haptics.impact("medium");
+              haptics.impact("medium");
               complete();
             }}
             className="inline-flex h-[52px] w-full items-center justify-center rounded-[12px] bg-primary text-[0.9375rem] font-semibold text-primary-foreground active:scale-[0.98] transition-transform duration-[120ms] ease-out"

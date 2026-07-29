@@ -27,7 +27,7 @@ export function OpenOrdersBlock({
               <div className="truncate text-sm font-medium text-foreground">
                 {nameById[o.propertyId] ?? o.propertyId}
               </div>
-              <div className="text-xs text-muted-foreground capitalize">
+              <div className="mt-1 text-xs leading-relaxed text-muted-foreground capitalize">
                 {o.side} · {o.quantity} {tCommon("shares")}
               </div>
             </div>

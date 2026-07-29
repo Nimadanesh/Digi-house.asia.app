@@ -1,5 +1,7 @@
-// File responsibility: injection point. Phase 6+ replaces this body with the real TON/backend repos.
+// File responsibility: single injection point for repo implementations.
+// Returns Mock* repos by default; Http* repos when env.dataSource === "api".
 import type { Repos } from "./repos";
+import { env } from "@/lib/env";
 import {
   MockMarketplaceRepo,
   MockOrderBookRepo,
@@ -7,16 +9,38 @@ import {
   MockEarningsRepo,
   MockTxRepo,
 } from "@/lib/mock";
+import { createHttpClient } from "@/lib/api/http/client";
+import { createHttpRepos } from "@/lib/api/http/http-repos";
+import { getApiAccessToken } from "@/lib/api/session-token";
 
 let cached: Repos | null = null;
+
 export function getRepo(): Repos {
   if (cached) return cached;
-  cached = {
-    marketplace: MockMarketplaceRepo(),
-    orderBook: MockOrderBookRepo(),
-    portfolio: MockPortfolioRepo(),
-    earnings: MockEarningsRepo(),
-    tx: MockTxRepo(),
-  };
+  if (env.dataSource === "api") {
+    if (!env.apiBaseUrl) {
+      throw new Error(
+        "NEXT_PUBLIC_API_BASE_URL is required when NEXT_PUBLIC_DATA_SOURCE=api",
+      );
+    }
+    const client = createHttpClient({
+      baseUrl: env.apiBaseUrl,
+      getToken: getApiAccessToken,
+    });
+    cached = createHttpRepos(client);
+  } else {
+    cached = {
+      marketplace: MockMarketplaceRepo(),
+      orderBook: MockOrderBookRepo(),
+      portfolio: MockPortfolioRepo(),
+      earnings: MockEarningsRepo(),
+      tx: MockTxRepo(),
+    };
+  }
   return cached;
+}
+
+/** Test-only: reset singleton so next getRepo() call re-evaluates env. */
+export function __resetRepoCacheForTests(): void {
+  cached = null;
 }

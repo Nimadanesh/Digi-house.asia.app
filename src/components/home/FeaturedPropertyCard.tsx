@@ -52,9 +52,9 @@ export function FeaturedPropertyCard({
             </span>
           </div>
           <div className="space-y-2 p-4">
-            <div>
-              <p className="text-[0.9375rem] font-semibold text-foreground">{listing.title}</p>
-              <p className="text-sm text-muted-foreground">{listing.location}</p>
+            <div className="space-y-1.5">
+              <p className="text-[0.9375rem] font-semibold leading-snug text-foreground">{listing.title}</p>
+              <p className="text-sm leading-relaxed text-muted-foreground">{listing.location}</p>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">{tCommon("from")}</span>

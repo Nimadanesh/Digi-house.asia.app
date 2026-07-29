@@ -8,7 +8,7 @@ import { Block } from "@/components/common/Block";
 import { usd, pct } from "@/lib/format";
 import { ROUTES } from "@/lib/constants";
 import { holdingPnl } from "@/lib/portfolio-math";
-import { useTelegram } from "@/hooks/useTelegram";
+import { haptics } from "@/lib/telegram/haptics";
 import type { Holding } from "@/types/position";
 import { cn } from "@/lib/utils";
 
@@ -21,7 +21,6 @@ export function HoldingDetailSheet(props: {
   image?: string;
 }) {
   const { open, onClose, holding, title, location, image } = props;
-  const { haptics } = useTelegram();
   if (!holding) {
     return (
       <Sheet open={open} onClose={onClose} labelledBy="holding-sheet-title">
@@ -41,11 +40,11 @@ export function HoldingDetailSheet(props: {
           <div className="relative size-14 shrink-0 overflow-hidden rounded-[12px] bg-surface-2">
             <Image src={cover} alt="" fill className="object-cover" sizes="56px" />
           </div>
-          <div className="min-w-0">
-            <h2 id="holding-sheet-title" className="text-[1.0625rem] font-semibold text-foreground truncate">
+          <div className="min-w-0 space-y-1.5">
+            <h2 id="holding-sheet-title" className="truncate text-[1.0625rem] font-semibold leading-snug text-foreground">
               {title}
             </h2>
-            <p className="text-sm text-muted-foreground truncate">{location}</p>
+            <p className="truncate text-sm leading-relaxed text-muted-foreground">{location}</p>
           </div>
         </div>
 

@@ -4,12 +4,11 @@
 // (openModal dispatch) comes through the sanctioned useTonConnect hook; this component NEVER imports
 // @tonconnect/* directly (telegram-ton-ownership hard rule). DESIGN_SYSTEM §"Buttons (in-page)" Primary.
 import { useTonConnect } from "@/hooks/useTonConnect";
-import { useTelegram } from "@/hooks/useTelegram";
+import { haptics } from "@/lib/telegram/haptics";
 import { cn } from "@/lib/utils";
 
 export function WalletConnectButton({ className }: { className?: string }) {
   const { openModal } = useTonConnect();
-  const { haptics } = useTelegram();
   return (
     <button
       type="button"

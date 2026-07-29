@@ -4,7 +4,7 @@
 // native Telegram BackButton is unavailable; pairs with page-level tg.backButton.show().
 import { usePathname, useRouter } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
-import { useTelegram } from "@/hooks/useTelegram";
+import { haptics } from "@/lib/telegram/haptics";
 import { cn } from "@/lib/utils";
 
 const TITLES: Record<string, string> = {
@@ -21,7 +21,6 @@ const ROOT_PATHS = new Set(["/home", "/marketplace", "/earnings", "/portfolio", 
 export function Header() {
   const pathname = usePathname();
   const router = useRouter();
-  const { haptics } = useTelegram();
   const title = TITLES[pathname] ?? (pathname.startsWith("/property/") ? "Property" : "DigiHouse");
   const isRoot = ROOT_PATHS.has(pathname);
   // Nested routes always get an in-app back control (native Telegram BackButton is additive).
@@ -29,7 +28,7 @@ export function Header() {
 
   return (
     <header
-      className="h-[calc(44px+max(env(safe-area-inset-top),0px))] shrink-0 bg-background/95 backdrop-blur px-4 pt-[max(env(safe-area-inset-top),0px)]"
+      className="h-[calc(44px+max(env(safe-area-inset-top),0px))] shrink-0 bg-background px-4 pt-[max(env(safe-area-inset-top),0px)]"
       data-testid="app-header"
     >
       <div

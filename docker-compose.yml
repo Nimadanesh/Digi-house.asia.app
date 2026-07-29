@@ -1,3 +1,5 @@
+# Legacy Next.js Mini App containers (optional).
+# Local Postgres + Redis: docker-compose.infra.yml → npm run infra:up
 services:
   app:
     build:

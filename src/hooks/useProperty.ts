@@ -8,6 +8,6 @@ export function useProperty(propertyId: string | null) {
     queryKey: ["property", propertyId],
     queryFn: () => getRepo().marketplace.get(propertyId!),
     enabled: Boolean(propertyId),
-    staleTime: 30_000,
+    staleTime: 60_000,
   });
 }

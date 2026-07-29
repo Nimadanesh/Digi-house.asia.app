@@ -3,7 +3,7 @@ import type { EarningsRepo } from "@/lib/api/repos";
 import type { EarningsSummary } from "@/types/earnings";
 import { seed } from "./seed";
 import { sleep, jitter } from "./sleep";
-import { makeSyntheticTxHash } from "@/lib/ton/sendTx";
+import { makeSyntheticTxHash } from "@/lib/ton/synthetic-tx";
 
 export function MockEarningsRepo(): EarningsRepo {
   let entries = [...seed.earnings];

@@ -19,11 +19,14 @@ export function OnboardingSlide({ slide }: { slide: OnboardingSlideDef }) {
       <h1 className="mt-6 max-w-[20rem] text-[1.375rem] font-semibold leading-snug text-foreground">
         {headline}
       </h1>
-      <p className="mt-2 max-w-[18rem] text-[0.9375rem] leading-relaxed text-muted-foreground">
+      <p className="mt-3 max-w-[18rem] text-[0.9375rem] leading-relaxed text-muted-foreground">
         {subtitle}
       </p>
       {showTrust ? (
-        <p className="mt-4 max-w-[18rem] text-[0.75rem] leading-snug text-muted-foreground" data-testid="onboarding-trust">
+        <p
+          className="mt-5 max-w-[18rem] text-[0.75rem] leading-relaxed text-muted-foreground"
+          data-testid="onboarding-trust"
+        >
           {t("sell.trustLine")}
         </p>
       ) : null}

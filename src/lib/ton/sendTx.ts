@@ -9,17 +9,9 @@ import {
 } from "@tonconnect/sdk";
 import type { BuyMessageInput, SendTxResult } from "@/types/ton";
 import { env } from "@/lib/env";
+import { makeSyntheticTxHash } from "@/lib/ton/synthetic-tx";
 
-const SYNTHETIC_PREFIX = "simulated:";
-
-/** Produce a synthetic placeholder tx hash ("simulated:<uuid>"). MVP never returns a real on-chain hash. */
-export function makeSyntheticTxHash(): string {
-  const id =
-    typeof crypto !== "undefined" && "randomUUID" in crypto
-      ? crypto.randomUUID()
-      : Math.random().toString(36).slice(2);
-  return `${SYNTHETIC_PREFIX}${id}`;
-}
+export { makeSyntheticTxHash } from "@/lib/ton/synthetic-tx";
 
 /** Build a TonConnect SendTransactionRequest for a single outbound value message. */
 export function buildBuyMessage(input: BuyMessageInput): SendTransactionRequestWithMessages {

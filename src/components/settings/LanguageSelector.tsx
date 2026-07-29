@@ -1,16 +1,16 @@
 "use client";
-// File responsibility: Settings language row + Telegram-style picker sheet (12 locales + Auto).
+// File responsibility: Settings language row + single-scroll picker sheet (picker order = LOCALES).
 import { useState } from "react";
 import { Check, ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Sheet } from "@/components/common/Sheet";
-import { Block } from "@/components/common/Block";
 import {
   LOCALES,
   LOCALE_META,
   localePickerLabel,
   type AppLocale,
 } from "@/i18n/config";
+import { SettingsLabelStack } from "@/components/settings/SettingsLabelStack";
 import { useSettingsStore } from "@/stores/settings.store";
 import { haptics } from "@/lib/telegram/haptics";
 import { cn } from "@/lib/utils";
@@ -40,17 +40,14 @@ export function LanguageSelector() {
           haptics.selection();
           setOpen(true);
         }}
-        className="flex w-full min-h-[56px] items-center gap-2 px-4 text-start active:bg-surface-2/60"
+        className="flex w-full min-h-[64px] items-center gap-2 px-4 py-3.5 text-start active:bg-surface-2/60"
         data-testid="language-selector"
         aria-haspopup="dialog"
         aria-expanded={open}
       >
-        <div className="min-w-0 flex-1">
-          <div className="text-sm text-foreground">{t("language")}</div>
-          <div className="text-xs text-muted-foreground">{t("languageHint")}</div>
-        </div>
+        <SettingsLabelStack title={t("language")} hint={t("languageHint")} />
         <span
-          className="shrink-0 text-sm text-muted-foreground"
+          className="shrink-0 text-sm leading-snug text-muted-foreground"
           data-testid="language-current"
         >
           {currentLabel}
@@ -63,38 +60,51 @@ export function LanguageSelector() {
         />
       </button>
 
+      {/*
+        Single scrollbar only: Sheet’s default inner scroller is disabled via bodyClassName
+        overflow-hidden; this panel owns the only overflow-y-auto region (list).
+      */}
       <Sheet
         open={open}
         onClose={() => setOpen(false)}
         labelledBy="language-picker-title"
-        className="max-h-[85svh] overflow-y-auto"
+        className="flex max-h-[min(85svh,680px)] flex-col overflow-hidden"
+        bodyClassName="!max-h-none flex min-h-0 flex-1 flex-col overflow-hidden !px-0 !pt-0"
       >
-        <div className="space-y-3 pb-2" data-testid="language-picker-sheet">
+        <div
+          className="flex min-h-0 flex-1 flex-col"
+          data-testid="language-picker-sheet"
+        >
           <h2
             id="language-picker-title"
-            className="text-[1.0625rem] font-semibold text-foreground"
+            className="shrink-0 px-4 pb-2 pt-3 text-[1.0625rem] font-semibold text-foreground"
           >
             {t("chooseLanguage")}
           </h2>
 
-          <Block>
-            <LangRow
-              label={t("languageAuto")}
-              sub="Telegram · browser"
-              selected={preferred === null}
-              onClick={() => pick(null)}
-              testId="lang-option-auto"
-            />
-            {LOCALES.map((code) => (
+          <div
+            className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 pb-2 [-webkit-overflow-scrolling:touch]"
+            data-testid="language-picker-list"
+          >
+            <div className="overflow-hidden rounded-[12px] bg-card">
               <LangRow
-                key={code}
-                label={localePickerLabel(code)}
-                selected={preferred === code}
-                onClick={() => pick(code)}
-                testId={`lang-option-${code}`}
+                label={t("languageAuto")}
+                sub="Telegram · browser"
+                selected={preferred === null}
+                onClick={() => pick(null)}
+                testId="lang-option-auto"
               />
-            ))}
-          </Block>
+              {LOCALES.map((code) => (
+                <LangRow
+                  key={code}
+                  label={localePickerLabel(code)}
+                  selected={preferred === code}
+                  onClick={() => pick(code)}
+                  testId={`lang-option-${code}`}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </Sheet>
     </>
@@ -124,16 +134,18 @@ function LangRow({
         selected && "bg-primary/8",
       )}
     >
-      <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1 space-y-1 py-1">
         <div
           className={cn(
-            "text-sm",
-            selected ? "font-semibold text-primary" : "text-foreground",
+            "text-sm leading-snug",
+            selected ? "font-semibold text-primary" : "font-medium text-foreground",
           )}
         >
           {label}
         </div>
-        {sub ? <div className="text-xs text-muted-foreground">{sub}</div> : null}
+        {sub ? (
+          <div className="text-xs leading-relaxed text-muted-foreground pb-0.5">{sub}</div>
+        ) : null}
       </div>
       {selected ? (
         <Check size={18} strokeWidth={2.25} className="shrink-0 text-primary" aria-hidden />

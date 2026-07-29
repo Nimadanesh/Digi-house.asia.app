@@ -48,9 +48,11 @@ export function Toast({
           className={cn("mt-0.5 shrink-0", tone === "success" ? "text-success" : "text-danger")}
           aria-hidden
         />
-        <div className="flex flex-col">
-          <span className="font-medium">{title}</span>
-          {sub ? <span className="text-xs text-muted-foreground tnum">{sub}</span> : null}
+        <div className="flex flex-col gap-1">
+          <span className="font-medium leading-snug">{title}</span>
+          {sub ? (
+            <span className="text-xs leading-relaxed text-muted-foreground tnum">{sub}</span>
+          ) : null}
         </div>
       </div>
     </div>

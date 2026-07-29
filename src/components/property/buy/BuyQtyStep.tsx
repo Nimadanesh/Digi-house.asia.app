@@ -5,7 +5,7 @@ import { usd, ton, weeklyRent, projectedYield, estimateNanoTon } from "@/lib/for
 import { TON_PRICE_USD_CENTS } from "@/lib/constants";
 import type { Listing } from "@/types/property";
 import { WalletConnectButton } from "@/components/wallet/TonConnectButton";
-import { useTelegram } from "@/hooks/useTelegram";
+import { haptics } from "@/lib/telegram/haptics";
 import { useTonConnect } from "@/hooks/useTonConnect";
 import { Block } from "@/components/common/Block";
 import { Row } from "@/components/common/Row";
@@ -23,7 +23,6 @@ export function BuyQtyStep({
   onQtyChange: (q: number) => void;
   walletConnected: boolean;
 }) {
-  const { haptics } = useTelegram();
   const tonc = useTonConnect();
   const remaining = listing.sharesRemaining;
   const max = remaining;
@@ -38,13 +37,15 @@ export function BuyQtyStep({
 
   if (!walletConnected) {
     return (
-      <div className="space-y-3 pb-2" data-testid="buy-qty-step">
-        <h2 id="buy-sheet-title" className="text-[1.0625rem] font-semibold text-foreground">
-          Connect wallet
-        </h2>
-        <p className="text-sm text-muted-foreground">
-          Connect a TON wallet to buy shares and receive weekly rental yield.
-        </p>
+      <div className="space-y-3.5 pb-2" data-testid="buy-qty-step">
+        <div className="space-y-1.5">
+          <h2 id="buy-sheet-title" className="text-[1.0625rem] font-semibold leading-snug text-foreground">
+            Connect wallet
+          </h2>
+          <p className="text-sm leading-relaxed text-muted-foreground pb-0.5">
+            Connect a TON wallet to buy shares and receive weekly rental yield.
+          </p>
+        </div>
         <WalletConnectButton className="w-full" />
       </div>
     );
@@ -52,11 +53,13 @@ export function BuyQtyStep({
 
   if (remaining <= 0) {
     return (
-      <div className="space-y-2 pb-2" data-testid="buy-qty-step">
-        <h2 id="buy-sheet-title" className="text-[1.0625rem] font-semibold text-foreground">
+      <div className="space-y-1.5 pb-2" data-testid="buy-qty-step">
+        <h2 id="buy-sheet-title" className="text-[1.0625rem] font-semibold leading-snug text-foreground">
           Fully funded
         </h2>
-        <p className="text-sm text-muted-foreground">All primary shares are sold. Resale lands next.</p>
+        <p className="text-sm leading-relaxed text-muted-foreground pb-0.5">
+          All primary shares are sold. Resale lands next.
+        </p>
       </div>
     );
   }

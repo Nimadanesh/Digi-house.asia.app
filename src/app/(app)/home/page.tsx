@@ -1,11 +1,11 @@
 "use client";
 // File responsibility: Home screen composition (Fable Home). GlobalHeader is provided by AppShell.
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { useEarnings } from "@/hooks/useEarnings";
 import { useMarketplace } from "@/hooks/useMarketplace";
-import { useTelegram } from "@/hooks/useTelegram";
+import { haptics } from "@/lib/telegram/haptics";
 import { pickFeaturedListing } from "@/lib/home-featured";
 import { PortfolioValueCard } from "@/components/home/PortfolioValueCard";
 import { NextPayoutCard } from "@/components/home/NextPayoutCard";
@@ -30,7 +30,6 @@ export default function HomePage() {
   const portfolio = usePortfolio();
   const earnings = useEarnings();
   const marketplace = useMarketplace();
-  const { haptics } = useTelegram();
 
   const listingById = useMemo(() => {
     const map = new Map((marketplace.data ?? []).map((p) => [p.id, p]));
@@ -41,6 +40,8 @@ export default function HomePage() {
     () => pickFeaturedListing(marketplace.data ?? []),
     [marketplace.data],
   );
+
+  const tap = useCallback(() => haptics.selection(), []);
 
   if (portfolio.isLoading && !portfolio.data) {
     return <HomeSkeleton />;
@@ -63,8 +64,6 @@ export default function HomePage() {
   const summary = portfolio.data ?? EMPTY_SUMMARY;
   const projectedNext =
     earnings.data?.thisWeekProjectedUsd ?? summary.weeklyProjectedUsd;
-
-  const tap = () => haptics.selection();
 
   return (
     <div className="mt-1 space-y-3 pb-2" data-testid="home-page">

@@ -1,6 +1,6 @@
 // File responsibility: weekly earnings entries (paid with synthetic txHash; pending without).
 import type { EarningsEntry } from "@/types/earnings";
-import { makeSyntheticTxHash } from "@/lib/ton/sendTx";
+import { makeSyntheticTxHash } from "@/lib/ton/synthetic-tx";
 import { USER } from "./user";
 import { PAYOUT_BAYSIDE, PAYOUT_ALFAMA, TON_BAYSIDE, TON_ALFAMA, WEEKS } from "./holdings";
 

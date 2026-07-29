@@ -1,0 +1,134 @@
+import { and, eq } from "drizzle-orm";
+import type { Db } from "../db/client.js";
+import { holdings } from "../db/schema/holdings.js";
+
+export type HoldingRowInput = {
+  userId: string;
+  propertyId: string;
+  sharesOwned: number;
+  avgCostUsd: number;
+  updatedAt: Date;
+};
+
+export type HoldingStore = {
+  listByUserId(userId: string): Promise<HoldingRowInput[]>;
+  get(userId: string, propertyId: string): Promise<HoldingRowInput | null>;
+  upsert(input: {
+    userId: string;
+    propertyId: string;
+    sharesOwned: number;
+    avgCostUsd: number;
+  }): Promise<HoldingRowInput>;
+};
+
+function mapRow(r: {
+  userId: string;
+  propertyId: string;
+  sharesOwned: number;
+  avgCostUsd: number;
+  updatedAt: Date;
+}): HoldingRowInput {
+  return {
+    userId: r.userId,
+    propertyId: r.propertyId,
+    sharesOwned: r.sharesOwned,
+    avgCostUsd: Number(r.avgCostUsd),
+    updatedAt: r.updatedAt,
+  };
+}
+
+export function createDbHoldingStore(db: Db): HoldingStore {
+  return {
+    async listByUserId(userId) {
+      const rows = await db
+        .select()
+        .from(holdings)
+        .where(eq(holdings.userId, userId));
+      return rows.map(mapRow);
+    },
+
+    async get(userId, propertyId) {
+      const rows = await db
+        .select()
+        .from(holdings)
+        .where(
+          and(
+            eq(holdings.userId, userId),
+            eq(holdings.propertyId, propertyId),
+          ),
+        )
+        .limit(1);
+      const row = rows[0];
+      return row ? mapRow(row) : null;
+    },
+
+    async upsert(input) {
+      const now = new Date();
+      const rows = await db
+        .insert(holdings)
+        .values({
+          userId: input.userId,
+          propertyId: input.propertyId,
+          sharesOwned: input.sharesOwned,
+          avgCostUsd: input.avgCostUsd,
+          updatedAt: now,
+        })
+        .onConflictDoUpdate({
+          target: [holdings.userId, holdings.propertyId],
+          set: {
+            sharesOwned: input.sharesOwned,
+            avgCostUsd: input.avgCostUsd,
+            updatedAt: now,
+          },
+        })
+        .returning();
+      const row = rows[0];
+      if (!row) throw new Error("upsert holding returned no row");
+      return mapRow(row);
+    },
+  };
+}
+
+/** In-memory store for unit tests (no Postgres). */
+export function createMemoryHoldingStore(
+  seed: HoldingRowInput[] = [],
+): HoldingStore & { _rows: HoldingRowInput[] } {
+  const rows = seed.map((r) => ({ ...r }));
+  return {
+    _rows: rows,
+
+    async listByUserId(userId) {
+      return rows
+        .filter((r) => r.userId === userId)
+        .map((r) => ({ ...r }));
+    },
+
+    async get(userId, propertyId) {
+      const row = rows.find(
+        (r) => r.userId === userId && r.propertyId === propertyId,
+      );
+      return row ? { ...row } : null;
+    },
+
+    async upsert(input) {
+      const now = new Date();
+      const idx = rows.findIndex(
+        (r) =>
+          r.userId === input.userId && r.propertyId === input.propertyId,
+      );
+      const record: HoldingRowInput = {
+        userId: input.userId,
+        propertyId: input.propertyId,
+        sharesOwned: input.sharesOwned,
+        avgCostUsd: input.avgCostUsd,
+        updatedAt: now,
+      };
+      if (idx >= 0) {
+        rows[idx] = record;
+      } else {
+        rows.push(record);
+      }
+      return { ...record };
+    },
+  };
+}

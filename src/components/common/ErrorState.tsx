@@ -28,9 +28,9 @@ export function ErrorState({
       role="alert"
     >
       <AlertCircle size={64} strokeWidth={1.5} className="text-muted-foreground" aria-hidden />
-      <h2 className="mt-4 text-[0.9375rem] font-semibold text-foreground">{resolvedTitle}</h2>
-      <p className="mt-1 max-w-xs text-sm text-muted-foreground">{message}</p>
-      <div className="mt-4">
+      <h2 className="mt-4 text-[0.9375rem] font-semibold leading-snug text-foreground">{resolvedTitle}</h2>
+      <p className="mt-2 mb-0.5 max-w-xs text-sm leading-relaxed text-muted-foreground">{message}</p>
+      <div className="mt-5">
         <Button
           type="button"
           onClick={onRetry}
