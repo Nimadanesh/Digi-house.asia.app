@@ -9,6 +9,9 @@ import { createDbOrderStore } from "./orders/order-store.js";
 import { createDbIntentStore } from "./buys/intent-store.js";
 import { createDbTxStore } from "./buys/tx-store.js";
 import { createDbAuditStore } from "./audit/audit-store.js";
+import { createDbDocumentStore } from "./marketplace/document-store.js";
+import { propertyDocuments } from "./db/schema/property-documents.js";
+import { SEED_DOCUMENTS } from "./db/seed/documents-data.js";
 import { loadEnv } from "./env.js";
 import { createLogger } from "./logger.js";
 
@@ -23,6 +26,7 @@ let orders = null as ReturnType<typeof createDbOrderStore> | null;
 let intents = null as ReturnType<typeof createDbIntentStore> | null;
 let transactions = null as ReturnType<typeof createDbTxStore> | null;
 let audit = null as ReturnType<typeof createDbAuditStore> | null;
+let documents = null as ReturnType<typeof createDbDocumentStore> | null;
 if (env.DATABASE_URL) {
   try {
     const db = createDb(requireDatabaseUrl({ DATABASE_URL: env.DATABASE_URL }));
@@ -34,8 +38,22 @@ if (env.DATABASE_URL) {
     intents = createDbIntentStore(db);
     transactions = createDbTxStore(db);
     audit = createDbAuditStore(db);
+    documents = createDbDocumentStore(db);
+    // Seed demo documents if table is empty
+    if (env.NODE_ENV !== "production") {
+      (async () => {
+        const existing = await documents!.listByProperty("prop-marina-vista-4b");
+        if (existing.length === 0) {
+          for (const doc of SEED_DOCUMENTS) {
+            await db.insert(propertyDocuments).values(doc);
+          }
+        }
+      })().catch((err) => {
+        log.warn({ err }, "failed to seed documents");
+      });
+    }
     log.info(
-      "database stores enabled (users + properties + holdings + earnings + orders + buys + audit)",
+      "database stores enabled (users + properties + holdings + earnings + orders + buys + audit + documents)",
     );
   } catch (err) {
     log.fatal({ err }, "failed to init database");
@@ -55,9 +73,12 @@ const app = createApp({
   holdings,
   earnings,
   orders,
+  documents,
   intents,
   transactions,
   audit,
+  orderRateLimitMax: env.ORDER_RATE_LIMIT_MAX,
+  orderRateLimitWindowMs: env.ORDER_RATE_LIMIT_WINDOW_MS,
 });
 
 const server = serve(
