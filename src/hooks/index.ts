@@ -10,3 +10,4 @@ export { usePayoutCountdown } from "./usePayoutCountdown";
 export { usePayoutCountdownLong } from "./usePayoutCountdownLong";
 export { useTelegramUser } from "./useTelegramUser";
 export { useTelegramBackButton } from "./useTelegramBackButton";
+export { usePropertyDocuments } from "./usePropertyDocuments";
