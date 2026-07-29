@@ -10,6 +10,7 @@ import { useOrderBook } from "@/hooks/useOrderBook";
 import { useTelegram } from "@/hooks/useTelegram";
 import { useTonConnect } from "@/hooks/useTonConnect";
 import { useBuyShares, type BuyInput } from "@/hooks/useBuyShares";
+import { usePropertyDocuments } from "@/hooks/usePropertyDocuments";
 import { useUiStore } from "@/stores/ui.store";
 import { haptics } from "@/lib/telegram/haptics";
 import { usd } from "@/lib/format";
@@ -35,6 +36,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
   const tOnboarding = useTranslations("onboarding");
   const property = useProperty(id);
   const orderBook = useOrderBook(id);
+  const { documents, download: docDownload } = usePropertyDocuments(id);
   const { backButton, mainButton } = useTelegram();
   const ton = useTonConnect();
   const buy = useBuyShares();
@@ -299,6 +301,9 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
           orderBook={orderBook.data}
           previewShares={previewShares}
           onPreviewSharesChange={setPreviewShares}
+          documents={documents}
+          onDownloadDoc={(docId) => docDownload.mutate(docId)}
+          downloadingDocId={docDownload.isPending ? String(docDownload.variables) : null}
         />
       </div>
       {canBuy && !sheetOpen ? (

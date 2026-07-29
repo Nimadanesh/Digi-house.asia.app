@@ -12,17 +12,25 @@ import { PropertyAbout } from "./PropertyAbout";
 import { PropertyTrust } from "./PropertyTrust";
 import { RentalHistory } from "./RentalHistory";
 import { OrderBook } from "./OrderBook";
+import { PropertyDocumentsList } from "@/components/documents/PropertyDocumentsList";
+import type { DocumentMeta } from "@/types/property-document";
 
 export function PropertyDetail({
   listing,
   orderBook,
   previewShares,
   onPreviewSharesChange,
+  documents = [],
+  onDownloadDoc,
+  downloadingDocId,
 }: {
   listing: Listing;
   orderBook?: OrderBookState;
   previewShares: number;
   onPreviewSharesChange: (n: number) => void;
+  documents?: DocumentMeta[];
+  onDownloadDoc?: (docId: string) => void;
+  downloadingDocId?: string | null;
 }) {
   return (
     <div className="space-y-4 pb-6" data-testid="property-detail">
@@ -46,6 +54,14 @@ export function PropertyDetail({
       <PropertyTrust listing={listing} />
       {/* Fable §Rental history */}
       <RentalHistory listing={listing} />
+      {/* P4-04: Documents */}
+      {onDownloadDoc ? (
+        <PropertyDocumentsList
+          documents={documents}
+          onDownload={onDownloadDoc}
+          downloadingId={downloadingDocId}
+        />
+      ) : null}
       {orderBook ? <OrderBook state={orderBook} /> : null}
     </div>
   );
