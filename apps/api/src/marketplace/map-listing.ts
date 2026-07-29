@@ -4,7 +4,7 @@ import type {
   RentalPaymentJson,
 } from "../db/schema/properties.js";
 
-export type PropertyStatus = "funding" | "funded" | "resale";
+export type PropertyStatus = "draft" | "funding" | "funded" | "resale";
 
 /** Public Listing JSON — matches Mini App `Listing` / OpenAPI. */
 export type ListingPublic = {
@@ -24,6 +24,8 @@ export type ListingPublic = {
   sharesSold: number;
   sharesRemaining: number;
   fundingProgressRatio: number;
+  salePaused: boolean;
+  distributionPaused: boolean;
 };
 
 export function mapPropertyToListing(row: PropertyRow): ListingPublic {
@@ -51,16 +53,18 @@ export function mapPropertyToListing(row: PropertyRow): ListingPublic {
     sharesSold,
     sharesRemaining,
     fundingProgressRatio,
+    salePaused: row.salePaused,
+    distributionPaused: row.distributionPaused,
   };
 }
 
 function normalizeStatus(s: string): PropertyStatus {
-  if (s === "funding" || s === "funded" || s === "resale") return s;
-  // Should not happen if DB check holds; fail closed to funding for type safety
+  if (s === "draft" || s === "funding" || s === "funded" || s === "resale") return s;
   return "funding";
 }
 
 export const PROPERTY_STATUSES: readonly PropertyStatus[] = [
+  "draft",
   "funding",
   "funded",
   "resale",
