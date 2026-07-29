@@ -14,6 +14,7 @@ import { createPortfolioRoutes } from "./routes/portfolio.js";
 import { createEarningsRoutes } from "./routes/earnings.js";
 import { createOrderRoutes } from "./routes/orders.js";
 import { createBuyRoutes } from "./routes/buys.js";
+import { createTransactionRoutes } from "./routes/transactions.js";
 import type { UserStore } from "./auth/user-store.js";
 import type { PropertyStore } from "./marketplace/property-store.js";
 import type { HoldingStore } from "./portfolio/holding-store.js";
@@ -250,6 +251,17 @@ export function createApp(opts: CreateAppOptions) {
         tonRelayAddress: env.TON_RELAY_ADDRESS,
         buyStubNanoTon: env.BUY_STUB_NANOTON,
         buyIntentTtlSeconds: env.BUY_INTENT_TTL_SECONDS,
+      }),
+    );
+  }
+
+  if (transactions && users) {
+    app.route(
+      "/",
+      createTransactionRoutes({
+        session,
+        users: users!,
+        transactions,
       }),
     );
   }
