@@ -47,4 +47,17 @@ export {
   type AuditEventRow,
   type NewAuditEventRow,
 } from "./audit-events.js";
+export {
+  chainEvents,
+  indexerCursors,
+  type ChainEventRow,
+  type NewChainEventRow,
+  type IndexerCursorRow,
+  type NewIndexerCursorRow,
+} from "./chain-events.js";
+export {
+  propertyDocuments,
+  type PropertyDocumentRow,
+  type NewPropertyDocumentRow,
+} from "./property-documents.js";
 
