@@ -45,7 +45,7 @@ describe("admin routes", () => {
       const app = new Hono().route("/", createAdminRoutes(makeDeps()));
       const res = await app.request("/v1/admin/properties", { method: "POST" });
       expect(res.status).toBe(401);
-      const body = await res.json();
+      const body = (await res.json()) as { code: string };
       expect(body.code).toBe("unauthorized");
     });
 
@@ -80,7 +80,10 @@ describe("admin routes", () => {
         }),
       });
       expect(res.status).toBe(201);
-      const body = await res.json();
+      const body = (await res.json()) as {
+        ok: boolean;
+        property: { status: string; id: string };
+      };
       expect(body.ok).toBe(true);
       expect(body.property.status).toBe("draft");
       expect(body.property.id).toMatch(/^prop-new-test-property-/);
@@ -147,7 +150,7 @@ describe("admin routes", () => {
           meta: {},
         }),
       });
-      const created = (await createRes.json()).property;
+      const created = ((await createRes.json()) as { property: { id: string } }).property;
 
       // Publish
       const patchRes = await app.request(`/v1/admin/properties/${created.id}`, {
@@ -159,7 +162,7 @@ describe("admin routes", () => {
         body: JSON.stringify({ status: "funding" }),
       });
       expect(patchRes.status).toBe(200);
-      const patched = await patchRes.json();
+      const patched = (await patchRes.json()) as { property: { status: string } };
       expect(patched.property.status).toBe("funding");
     });
 
@@ -200,7 +203,7 @@ describe("admin routes", () => {
           meta: {},
         }),
       });
-      const created = (await createRes.json()).property;
+      const created = ((await createRes.json()) as { property: { id: string } }).property;
 
       const signRes = await app.request(
         `/v1/admin/properties/${created.id}/media/sign`,
@@ -217,7 +220,11 @@ describe("admin routes", () => {
         },
       );
       expect(signRes.status).toBe(200);
-      const body = await signRes.json();
+      const body = (await signRes.json()) as {
+        signedUrl: string;
+        publicUrl: string;
+        key: string;
+      };
       expect(body.signedUrl).toContain("X-Amz-Signature=");
       expect(body.publicUrl).toBe(
         `https://media.example.com/${body.key}`,
