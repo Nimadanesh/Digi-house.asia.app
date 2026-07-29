@@ -7,6 +7,7 @@ import type { ApiEnv } from "./env.js";
 import IORedis from "ioredis";
 import type { Logger } from "./logger.js";
 import { createAdminRoutes } from "./routes/admin.js";
+import { createDocumentRoutes, type DocumentRouteDeps } from "./routes/documents.js";
 import { createAuthRoutes } from "./routes/auth.js";
 import { createMarketplaceRoutes } from "./routes/marketplace.js";
 import { createPortfolioRoutes } from "./routes/portfolio.js";
@@ -23,6 +24,7 @@ import type { TxStore } from "./buys/tx-store.js";
 import type { AuditStore } from "./audit/audit-store.js";
 import { createRedisTokenBucket } from "./lib/rate-limit-redis.js";
 import { S3Signer } from "./lib/s3-sign.js";
+import { createDbDocumentStore, type DocumentStore } from "./marketplace/document-store.js";
 
 export type AppVariables = {
   requestId: string;
@@ -36,6 +38,7 @@ export type CreateAppOptions = {
   holdings?: HoldingStore | null;
   earnings?: EarningsStore | null;
   orders?: OrderStore | null;
+  documents?: DocumentStore | null;
   intents?: IntentStore | null;
   transactions?: TxStore | null;
   audit?: AuditStore | null;
@@ -52,6 +55,7 @@ export function createApp(opts: CreateAppOptions) {
     holdings = null,
     earnings = null,
     orders = null,
+    documents = null,
     intents = null,
     transactions = null,
     audit = null,
@@ -136,6 +140,19 @@ export function createApp(opts: CreateAppOptions) {
       bucket: env.R2_BUCKET,
       publicBaseUrl: env.R2_PUBLIC_BASE_URL,
     });
+  }
+
+  // P4-04: Property documents
+  if (documents && session && users) {
+    app.route(
+      "/",
+      createDocumentRoutes({
+        documents,
+        session,
+        users: users!,
+        s3Signer,
+      }),
+    );
   }
 
   if (env.ADMIN_API_SECRET?.trim() && properties) {
