@@ -29,6 +29,7 @@ export interface EarningsRepo {
 
 export interface TxRepo {
   buy(input: { propertyId: string; quantity: number; priceUsdPerShare: number }): Promise<Transaction>;
+  listTransactions(opts?: { limit?: number; offset?: number }): Promise<{ transactions: Transaction[]; hasMore: boolean }>;
 }
 
 export type DocumentsRepo = {

@@ -12,6 +12,16 @@ import { weeklyRent, projectedYield } from "@/lib/format";
 
 export function MockTxRepo(): TxRepo {
   return {
+    async listTransactions(opts = {}) {
+      await sleep(jitter());
+      const limit = Math.min(opts.limit ?? 50, 100);
+      const offset = opts.offset ?? 0;
+      const sorted = [...seed.transactions]
+        .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+        .slice(offset, offset + limit);
+      const hasMore = seed.transactions.length > offset + limit;
+      return { transactions: sorted, hasMore };
+    },
     async buy(input: { propertyId: string; quantity: number; priceUsdPerShare: number }) {
       await sleep(jitter());
       const property: Listing | undefined = PROPERTIES.find((p) => p.id === input.propertyId)

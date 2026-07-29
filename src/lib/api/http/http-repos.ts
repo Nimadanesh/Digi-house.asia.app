@@ -10,6 +10,7 @@ import type {
 } from "@/lib/api/repos";
 import type { HttpClient } from "@/lib/api/http/client";
 import type { DocumentMeta, DocumentDownloadUrl } from "@/types/property-document";
+import type { Transaction } from "@/types/transaction";
 
 interface BuyPrepareResponse {
   intentId: string;
@@ -78,6 +79,12 @@ export function createHttpRepos(client: HttpClient): Repos {
         boc: null,
       });
       return conf.transaction;
+    },
+    async listTransactions(opts) {
+      return client.get<{ transactions: Transaction[]; hasMore: boolean }>("/v1/transactions", {
+        limit: String(opts?.limit ?? 50),
+        offset: String(opts?.offset ?? 0),
+      });
     },
   };
 

@@ -3,8 +3,8 @@ import type { Transaction } from "@/types/transaction";
 import { makeSyntheticTxHash } from "@/lib/ton/synthetic-tx";
 import { USER } from "./user";
 
-// >=1 success + >=1 pending + >=1 failed.
 export const TRANSACTIONS: Transaction[] = [
+  // --- Buys ---
   {
     id: "tx-bayside-buy-success",
     kind: "buy",
@@ -48,5 +48,57 @@ export const TRANSACTIONS: Transaction[] = [
     status: "failed",
     error: "wallet rejected the buy transaction",
     createdAt: "2026-07-15T10:20:00Z",
+  },
+  // --- Sell ---
+  {
+    id: "tx-alfama-sell-success",
+    kind: "sell",
+    propertyId: "prop-alfama-terrace-flat",
+    userId: USER.id,
+    shares: -25,
+    amountUsd: -25 * 10500,
+    status: "success",
+    txHash: makeSyntheticTxHash(),
+    createdAt: "2026-06-01T14:30:00Z",
+  },
+  // --- Earnings ---
+  {
+    id: "tx-weekly-earnings-jun28",
+    kind: "earnings",
+    userId: USER.id,
+    amountUsd: 4200,
+    status: "success",
+    txHash: "simulated:dist-jun28",
+    createdAt: "2026-06-28T00:00:00Z",
+  },
+  {
+    id: "tx-weekly-earnings-jul05",
+    kind: "earnings",
+    userId: USER.id,
+    amountUsd: 4200,
+    status: "success",
+    txHash: "simulated:dist-jul05",
+    createdAt: "2026-07-05T00:00:00Z",
+  },
+  // --- Withdraw ---
+  {
+    id: "tx-withdraw-jul01",
+    kind: "withdraw",
+    userId: USER.id,
+    amountUsd: -1000000,
+    tonAmount: 5000000000,
+    status: "success",
+    txHash: makeSyntheticTxHash(),
+    createdAt: "2026-07-01T09:00:00Z",
+  },
+  {
+    id: "tx-withdraw-pending",
+    kind: "withdraw",
+    userId: USER.id,
+    amountUsd: -500000,
+    tonAmount: 2500000000,
+    status: "pending",
+    txHash: makeSyntheticTxHash(),
+    createdAt: "2026-07-25T11:15:00Z",
   },
 ];
