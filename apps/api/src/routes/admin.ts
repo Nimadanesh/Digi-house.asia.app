@@ -228,9 +228,9 @@ export function createAdminRoutes(deps: AdminRouteDeps) {
     }
 
     const patch: Record<string, unknown> = {};
-    const allowedFields = ["title", "location", "description", "images", "totalShares", "sharePriceUsd", "annualRentUsd", "ownerWalletAddress", "meta", "status", "sharesSold"] as const;
+    const numericFields = ["totalShares", "sharePriceUsd", "annualRentUsd", "sharesSold"] as const;
 
-    for (const field of allowedFields) {
+    for (const field of ["title", "location", "description", "images", "totalShares", "sharePriceUsd", "annualRentUsd", "ownerWalletAddress", "meta", "status", "sharesSold"] as const) {
       if (body[field] !== undefined) {
         if (field === "status") {
           const s = String(body[field]);
@@ -238,6 +238,12 @@ export function createAdminRoutes(deps: AdminRouteDeps) {
             return c.json({ code: "validation_error", message: `Invalid status "${s}"` }, 400);
           }
           patch[field] = s;
+        } else if ((numericFields as readonly string[]).includes(field)) {
+          const v = body[field];
+          if (typeof v !== "number" || v <= 0 || !Number.isInteger(v)) {
+            return c.json({ code: "validation_error", message: `${field} must be a positive integer` }, 400);
+          }
+          patch[field] = v;
         } else {
           patch[field] = body[field];
         }
