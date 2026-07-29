@@ -49,10 +49,23 @@ function testEnv(): ApiEnv {
     BUY_STUB_NANOTON: "10000000",
     BUY_INTENT_TTL_SECONDS: 900,
     REDIS_URL: undefined,
+    ORDER_RATE_LIMIT_MAX: 30,
+    ORDER_RATE_LIMIT_WINDOW_MS: 60000,
     PAYOUT_TICK_MS: 60000,
     PAYOUT_WORKER_ENABLED: false,
     ALLOW_MANUAL_PAYOUT_TICK: false,
     PAYOUT_TICK_SECRET: undefined,
+    NOTIFY_EARNINGS_PAID: false,
+    TON_API_URL: "https://testnet.tonapi.io",
+    TON_API_KEY: undefined,
+    INDEXER_POLL_MS: 10_000,
+    INDEXER_ENABLED: false,
+    ADMIN_API_SECRET: undefined,
+    R2_ACCOUNT_ID: undefined,
+    R2_ACCESS_KEY_ID: undefined,
+    R2_SECRET_ACCESS_KEY: undefined,
+    R2_BUCKET: undefined,
+    R2_PUBLIC_BASE_URL: undefined,
   };
 }
 
@@ -78,10 +91,14 @@ async function bearerFor(userId: string): Promise<string> {
 
 function makeApp(opts: {
   holdings?: HoldingRowInput[];
+  extraUsers?: Array<{ id: string; name: string; wallet?: string }>;
 } = {}) {
   const users = createMemoryUserStore([
     seedUser("user-a", "Alice", "EQAliceWallet"),
     seedUser("user-b", "Bob", "EQBobWallet"),
+    ...(opts.extraUsers ?? []).map((u) =>
+      seedUser(u.id, u.name, u.wallet),
+    ),
   ]);
   const properties = createMemoryPropertyStore(
     SEED_PROPERTIES.map(toPropertyInsert),
@@ -378,5 +395,99 @@ describe("POST /v1/orders + DELETE + book", () => {
     const body = (await res.json()) as { code: string; message: string };
     expect(body.code).toBe("validation_error");
     expect(body.message).toMatch(/Insufficient shares/i);
+  });
+
+  describe("rate limiting (in-memory)", () => {
+    it("under max → 201", async () => {
+      const { app } = makeApp({
+        extraUsers: [{ id: "rl-under", name: "Under" }],
+      });
+      for (let i = 0; i < 3; i++) {
+        const res = await app.request("/v1/orders", {
+          method: "POST",
+          headers: {
+            Authorization: await bearerFor("rl-under"),
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({
+            propertyId: PROP,
+            side: "buy",
+            priceUsd: 10_001 + i,
+            quantity: 1,
+          }),
+        });
+        expect(res.status).toBe(201);
+      }
+    });
+
+    it("exceeds max → 429", async () => {
+      const { app } = makeApp({
+        extraUsers: [{ id: "rl-exceed", name: "Exceed" }],
+      });
+
+      for (let i = 0; i < 31; i++) {
+        const res = await app.request("/v1/orders", {
+          method: "POST",
+          headers: {
+            Authorization: await bearerFor("rl-exceed"),
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({
+            propertyId: PROP,
+            side: "buy",
+            priceUsd: 10_000,
+            quantity: 1,
+          }),
+        });
+        if (res.status === 429) {
+          const body = (await res.json()) as { code: string };
+          expect(body.code).toBe("rate_limit_exceeded");
+          return;
+        }
+      }
+      throw new Error("expected 429 but all 31 requests succeeded");
+    });
+
+    it("is per-user (other unaffected)", async () => {
+      const { app } = makeApp({
+        extraUsers: [
+          { id: "rl-heavy", name: "Heavy" },
+          { id: "rl-light", name: "Light" },
+        ],
+      });
+
+      // Exhaust rl-heavy
+      for (let i = 0; i < 31; i++) {
+        await app.request("/v1/orders", {
+          method: "POST",
+          headers: {
+            Authorization: await bearerFor("rl-heavy"),
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({
+            propertyId: PROP,
+            side: "buy",
+            priceUsd: 10_000,
+            quantity: 1,
+          }),
+        });
+      }
+
+      // rl-light still works
+      const res = await app.request("/v1/orders", {
+        method: "POST",
+        headers: {
+          Authorization: await bearerFor("rl-light"),
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          propertyId: PROP,
+          side: "buy",
+          priceUsd: 10_000,
+          quantity: 1,
+        }),
+      });
+      expect(res.status).toBe(201);
+    });
   });
 });

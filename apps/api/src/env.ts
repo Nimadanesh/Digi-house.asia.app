@@ -34,6 +34,10 @@ const envSchema = z
     BUY_INTENT_TTL_SECONDS: z.coerce.number().int().positive().default(900),
     /** Redis for BullMQ payout worker (optional for API process). */
     REDIS_URL: z.string().optional(),
+    /** P4-06: Order rate limit max requests per window (default 30). */
+    ORDER_RATE_LIMIT_MAX: z.coerce.number().int().positive().default(30),
+    /** P4-06: Order rate limit window in ms (default 60s). */
+    ORDER_RATE_LIMIT_WINDOW_MS: z.coerce.number().int().positive().default(60_000),
     /**
      * Demo payout cadence in ms (default 60s).
      * NOT production Friday calendar — ADR-003.
@@ -43,7 +47,26 @@ const envSchema = z
     PAYOUT_WORKER_ENABLED: boolish,
     /** Optional manual tick route (not mounted in P1-13 by default). */
     ALLOW_MANUAL_PAYOUT_TICK: boolish,
+    /** P4-01: Telegram notify on earnings paid (default true in staging docs).
+     *  Only active when PAYOUT_WORKER_ENABLED=true + TELEGRAM_BOT_TOKEN set. */
+    NOTIFY_EARNINGS_PAID: boolish,
+    /** P4-03: Admin API secret for /v1/admin/* routes (optional — routes not mounted if unset). */
+    ADMIN_API_SECRET: z.string().optional(),
+    R2_ACCOUNT_ID: z.string().optional(),
+    R2_ACCESS_KEY_ID: z.string().optional(),
+    R2_SECRET_ACCESS_KEY: z.string().optional(),
+    R2_BUCKET: z.string().optional(),
+    R2_PUBLIC_BASE_URL: z.string().optional(),
     PAYOUT_TICK_SECRET: z.string().optional(),
+
+    /** Indexer (Phase 3A) — TonAPI configuration. */
+    TON_API_URL: z.string().default("https://testnet.tonapi.io"),
+    TON_API_KEY: z.string().optional(),
+
+    /** Indexer worker poll interval in ms (default 10s). */
+    INDEXER_POLL_MS: z.coerce.number().int().positive().default(10_000),
+    /** Kill switch — indexer process no-ops when false (default). */
+    INDEXER_ENABLED: boolish,
   })
   .superRefine((val, ctx) => {
     const secret = val.SESSION_SECRET ?? val.JWT_SECRET;
@@ -79,10 +102,23 @@ const envSchema = z
       BUY_STUB_NANOTON: val.BUY_STUB_NANOTON,
       BUY_INTENT_TTL_SECONDS: val.BUY_INTENT_TTL_SECONDS,
       REDIS_URL: val.REDIS_URL,
+      ORDER_RATE_LIMIT_MAX: val.ORDER_RATE_LIMIT_MAX,
+      ORDER_RATE_LIMIT_WINDOW_MS: val.ORDER_RATE_LIMIT_WINDOW_MS,
       PAYOUT_TICK_MS: val.PAYOUT_TICK_MS,
       PAYOUT_WORKER_ENABLED: val.PAYOUT_WORKER_ENABLED,
       ALLOW_MANUAL_PAYOUT_TICK: val.ALLOW_MANUAL_PAYOUT_TICK,
       PAYOUT_TICK_SECRET: val.PAYOUT_TICK_SECRET,
+      ADMIN_API_SECRET: val.ADMIN_API_SECRET,
+      R2_ACCOUNT_ID: val.R2_ACCOUNT_ID,
+      R2_ACCESS_KEY_ID: val.R2_ACCESS_KEY_ID,
+      R2_SECRET_ACCESS_KEY: val.R2_SECRET_ACCESS_KEY,
+      R2_BUCKET: val.R2_BUCKET,
+      R2_PUBLIC_BASE_URL: val.R2_PUBLIC_BASE_URL,
+      NOTIFY_EARNINGS_PAID: val.NOTIFY_EARNINGS_PAID,
+      TON_API_URL: val.TON_API_URL,
+      TON_API_KEY: val.TON_API_KEY,
+      INDEXER_POLL_MS: val.INDEXER_POLL_MS,
+      INDEXER_ENABLED: val.INDEXER_ENABLED,
     };
   });
 

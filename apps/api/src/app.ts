@@ -1,9 +1,12 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { HTTPException } from "hono/http-exception";
+import type { MiddlewareHandler } from "hono";
 import { HEALTH_OK, SERVICE_NAME } from "@digihouse/shared";
 import type { ApiEnv } from "./env.js";
+import IORedis from "ioredis";
 import type { Logger } from "./logger.js";
+import { createAdminRoutes } from "./routes/admin.js";
 import { createAuthRoutes } from "./routes/auth.js";
 import { createMarketplaceRoutes } from "./routes/marketplace.js";
 import { createPortfolioRoutes } from "./routes/portfolio.js";
@@ -18,6 +21,8 @@ import type { OrderStore } from "./orders/order-store.js";
 import type { IntentStore } from "./buys/intent-store.js";
 import type { TxStore } from "./buys/tx-store.js";
 import type { AuditStore } from "./audit/audit-store.js";
+import { createRedisTokenBucket } from "./lib/rate-limit-redis.js";
+import { S3Signer } from "./lib/s3-sign.js";
 
 export type AppVariables = {
   requestId: string;
@@ -34,6 +39,8 @@ export type CreateAppOptions = {
   intents?: IntentStore | null;
   transactions?: TxStore | null;
   audit?: AuditStore | null;
+  orderRateLimitMax?: number;
+  orderRateLimitWindowMs?: number;
 };
 
 export function createApp(opts: CreateAppOptions) {
@@ -48,6 +55,8 @@ export function createApp(opts: CreateAppOptions) {
     intents = null,
     transactions = null,
     audit = null,
+    orderRateLimitMax = 30,
+    orderRateLimitWindowMs = 60_000,
   } = opts;
   const app = new Hono<{ Variables: AppVariables }>();
 
@@ -112,6 +121,35 @@ export function createApp(opts: CreateAppOptions) {
     });
   });
 
+  let s3Signer: S3Signer | null = null;
+  if (
+    env.R2_ACCOUNT_ID?.trim() &&
+    env.R2_ACCESS_KEY_ID?.trim() &&
+    env.R2_SECRET_ACCESS_KEY?.trim() &&
+    env.R2_BUCKET?.trim() &&
+    env.R2_PUBLIC_BASE_URL?.trim()
+  ) {
+    s3Signer = new S3Signer({
+      accountId: env.R2_ACCOUNT_ID,
+      accessKeyId: env.R2_ACCESS_KEY_ID,
+      secretAccessKey: env.R2_SECRET_ACCESS_KEY,
+      bucket: env.R2_BUCKET,
+      publicBaseUrl: env.R2_PUBLIC_BASE_URL,
+    });
+  }
+
+  if (env.ADMIN_API_SECRET?.trim() && properties) {
+    app.route(
+      "/",
+      createAdminRoutes({
+        adminSecret: env.ADMIN_API_SECRET,
+        properties,
+        audit,
+        s3Signer,
+      }),
+    );
+  }
+
   if (users) {
     app.route(
       "/",
@@ -151,6 +189,21 @@ export function createApp(opts: CreateAppOptions) {
     );
   }
 
+  let orderRateLimiter: MiddlewareHandler | undefined;
+  if (env.REDIS_URL?.trim()) {
+    const redis = new IORedis(env.REDIS_URL, {
+      maxRetriesPerRequest: null,
+      enableOfflineQueue: false,
+      lazyConnect: true,
+    });
+    orderRateLimiter = createRedisTokenBucket({
+      redis,
+      max: orderRateLimitMax,
+      windowMs: orderRateLimitWindowMs,
+      key: (c) => c.get("userId") as string,
+    });
+  }
+
   if (users && properties && orders) {
     app.route(
       "/",
@@ -161,6 +214,7 @@ export function createApp(opts: CreateAppOptions) {
         orders,
         holdings,
         audit,
+        rateLimiter: orderRateLimiter,
       }),
     );
   }
