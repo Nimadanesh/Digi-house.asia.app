@@ -8,6 +8,7 @@ export const ROUTES = {
   earnings: "/earnings",
   portfolio: "/portfolio",
   settings: "/settings",
+  transactions: "/transactions",
   onboarding: "/onboarding",
 } as const;
 
