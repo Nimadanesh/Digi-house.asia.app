@@ -4,4 +4,5 @@ export { MockOrderBookRepo } from "./orderbook";
 export { MockPortfolioRepo } from "./portfolio";
 export { MockEarningsRepo } from "./earnings";
 export { MockTxRepo } from "./transaction";
+export { MockDocumentsRepo } from "./documents";
 export { seed } from "./seed";

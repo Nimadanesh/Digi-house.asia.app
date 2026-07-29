@@ -5,6 +5,7 @@ import type { OrderBookState, Order, OrderSide } from "@/types/order";
 import type { PortfolioSummary } from "@/types/position";
 import type { EarningsSummary } from "@/types/earnings";
 import type { Transaction } from "@/types/transaction";
+import type { DocumentMeta, DocumentDownloadUrl } from "@/types/property-document";
 
 export interface MarketplaceRepo {
   list(filter?: { status?: PropertyStatus; query?: string }): Promise<Listing[]>;
@@ -30,10 +31,16 @@ export interface TxRepo {
   buy(input: { propertyId: string; quantity: number; priceUsdPerShare: number }): Promise<Transaction>;
 }
 
+export type DocumentsRepo = {
+  list(propertyId: string): Promise<DocumentMeta[]>;
+  getDownloadUrl(propertyId: string, docId: string): Promise<DocumentDownloadUrl>;
+};
+
 export interface Repos {
   marketplace: MarketplaceRepo;
   orderBook: OrderBookRepo;
   portfolio: PortfolioRepo;
   earnings: EarningsRepo;
   tx: TxRepo;
+  documents: DocumentsRepo;
 }

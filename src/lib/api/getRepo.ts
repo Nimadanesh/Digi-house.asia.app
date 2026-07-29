@@ -8,6 +8,7 @@ import {
   MockPortfolioRepo,
   MockEarningsRepo,
   MockTxRepo,
+  MockDocumentsRepo,
 } from "@/lib/mock";
 import { createHttpClient } from "@/lib/api/http/client";
 import { createHttpRepos } from "@/lib/api/http/http-repos";
@@ -35,6 +36,7 @@ export function getRepo(): Repos {
       portfolio: MockPortfolioRepo(),
       earnings: MockEarningsRepo(),
       tx: MockTxRepo(),
+      documents: MockDocumentsRepo(),
     };
   }
   return cached;

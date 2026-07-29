@@ -6,8 +6,10 @@ import type {
   EarningsRepo,
   TxRepo,
   Repos,
+  DocumentsRepo,
 } from "@/lib/api/repos";
 import type { HttpClient } from "@/lib/api/http/client";
+import type { DocumentMeta, DocumentDownloadUrl } from "@/types/property-document";
 
 interface BuyPrepareResponse {
   intentId: string;
@@ -79,5 +81,18 @@ export function createHttpRepos(client: HttpClient): Repos {
     },
   };
 
-  return { marketplace, orderBook, portfolio, earnings, tx };
+  const documents: DocumentsRepo = {
+    async list(propertyId) {
+      return client.get<{ documents: DocumentMeta[] }>(
+        `/v1/properties/${encodeURIComponent(propertyId)}/documents`,
+      ).then((r) => r.documents);
+    },
+    async getDownloadUrl(propertyId, docId) {
+      return client.get<DocumentDownloadUrl>(
+        `/v1/properties/${encodeURIComponent(propertyId)}/documents/${encodeURIComponent(docId)}/url`,
+      );
+    },
+  };
+
+  return { marketplace, orderBook, portfolio, earnings, tx, documents };
 }
