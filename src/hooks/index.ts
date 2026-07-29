@@ -1,5 +1,6 @@
 export { useTelegram, type TelegramSurface } from "./useTelegram";
 export { useTonConnect } from "./useTonConnect";
+export { useTransactions } from "./useTransactions";
 export { useMarketplace } from "./useMarketplace";
 export { usePortfolio } from "./usePortfolio";
 export { useEarnings } from "./useEarnings";
