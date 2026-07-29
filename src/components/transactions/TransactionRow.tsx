@@ -1,29 +1,29 @@
 "use client";
 
 import { useState } from "react";
-import type { Transaction } from "@/types/transaction";
+import type { Transaction, TxKind } from "@/types/transaction";
 import { Row } from "@/components/common/Row";
 import { StatusPill } from "@/components/common/StatusPill";
 import { isRealTxHash, canShowExplorerLink, buildExplorerTxUrl } from "@/lib/settlement/honesty";
 import { env } from "@/lib/env";
-import { usd } from "@/lib/format";
+import { usd, ton } from "@/lib/format";
 import { ArrowDownCircle, ArrowUpCircle, DollarSign, ArrowLeft, ChevronDown, ChevronUp, ExternalLink } from "lucide-react";
 
-const KIND_ICON: Record<string, typeof ArrowDownCircle> = {
+const KIND_ICON: Record<TxKind, typeof ArrowDownCircle> = {
   buy: ArrowDownCircle,
   sell: ArrowUpCircle,
   earnings: DollarSign,
   withdraw: ArrowLeft,
 };
 
-const KIND_COLOR: Record<string, string> = {
+const KIND_COLOR: Record<TxKind, string> = {
   buy: "text-success",
   sell: "text-destructive",
   earnings: "text-primary",
   withdraw: "text-muted-foreground",
 };
 
-const KIND_LABEL: Record<string, string> = {
+const KIND_LABEL: Record<TxKind, string> = {
   buy: "Buy",
   sell: "Sell",
   earnings: "Earnings",
@@ -47,8 +47,8 @@ export function TransactionRow({ transaction }: TransactionRowProps) {
   const [expanded, setExpanded] = useState(false);
   const tx = transaction;
   const network = env.network;
-  const Icon = KIND_ICON[tx.kind] ?? ArrowDownCircle;
-  const color = KIND_COLOR[tx.kind] ?? "text-muted-foreground";
+  const Icon = KIND_ICON[tx.kind];
+  const color = KIND_COLOR[tx.kind];
   const simulated = showSimulatedTxBadge(tx.txHash, tx.status);
   const showExplorer = tx.txHash ? canShowExplorerLink(tx.txHash, network) : false;
   const explorerUrl = tx.txHash ? buildExplorerTxUrl(tx.txHash, network) : null;
@@ -112,6 +112,12 @@ export function TransactionRow({ transaction }: TransactionRowProps) {
               <div className="flex justify-between">
                 <span>Shares</span>
                 <span className="tabular-nums text-foreground">{tx.shares}</span>
+              </div>
+            )}
+            {tx.tonAmount != null && (
+              <div className="flex justify-between">
+                <span>TON amount</span>
+                <span className="tabular-nums text-foreground">{ton(BigInt(tx.tonAmount))}</span>
               </div>
             )}
             <div className="flex justify-between">
