@@ -1,6 +1,6 @@
 import { and, desc, eq, ilike, or, sql, type SQL } from "drizzle-orm";
 import type { Db } from "../db/client.js";
-import { properties, type PropertyRow } from "../db/schema/properties.js";
+import { properties, type PropertyMetaJson, type PropertyRow } from "../db/schema/properties.js";
 import {
   mapPropertyToListing,
   type ListingPublic,
@@ -12,6 +12,23 @@ export type ListMarketplaceFilter = {
   query?: string;
 };
 
+export type PauseScope = "sale" | "distribution" | "all";
+
+export type CreatePropertyInput = {
+  id: string;
+  title: string;
+  location: string;
+  description: string;
+  images?: string[];
+  totalShares: number;
+  sharePriceUsd: number;
+  annualRentUsd: number;
+  ownerWalletAddress: string;
+  meta: Record<string, unknown>;
+  status?: "draft" | "funding" | "funded" | "resale";
+  sharesSold?: number;
+};
+
 export type PropertyStore = {
   list(filter?: ListMarketplaceFilter): Promise<ListingPublic[]>;
   getById(id: string): Promise<ListingPublic | null>;
@@ -19,6 +36,21 @@ export type PropertyStore = {
   getByIds(ids: string[]): Promise<Map<string, ListingPublic>>;
   /** Race-safe: true if shares_sold incremented; false if would exceed total. */
   tryIncrementSharesSold(id: string, qty: number): Promise<boolean>;
+  /**
+   * Set pause flags for a property.
+   * Returns the updated listing or null if property not found.
+   */
+  setPauseFlags(
+    id: string,
+    flags: { salePaused?: boolean; distributionPaused?: boolean },
+  ): Promise<ListingPublic | null>;
+
+  create(input: CreatePropertyInput): Promise<ListingPublic>;
+
+  update(
+    id: string,
+    patch: Partial<CreatePropertyInput>,
+  ): Promise<ListingPublic | null>;
 };
 
 export function createDbPropertyStore(db: Db): PropertyStore {
@@ -27,6 +59,9 @@ export function createDbPropertyStore(db: Db): PropertyStore {
       const clauses: SQL[] = [];
       if (filter.status) {
         clauses.push(eq(properties.status, filter.status));
+      }
+      if (!filter.status) {
+        clauses.push(sql`${properties.status} != 'draft'`);
       }
       const q = filter.query?.trim();
       if (q) {
@@ -94,6 +129,74 @@ export function createDbPropertyStore(db: Db): PropertyStore {
         .returning({ id: properties.id });
       return rows.length > 0;
     },
+
+    async setPauseFlags(id, flags) {
+      const updates: Record<string, unknown> = { updatedAt: new Date() };
+      if (flags.salePaused !== undefined) updates.salePaused = flags.salePaused;
+      if (flags.distributionPaused !== undefined)
+        updates.distributionPaused = flags.distributionPaused;
+
+      const rows = await db
+        .update(properties)
+        .set(updates)
+        .where(eq(properties.id, id))
+        .returning();
+      const row = rows[0];
+      return row ? mapPropertyToListing(row) : null;
+    },
+
+    async create(input) {
+      const now = new Date();
+      const row = {
+        id: input.id,
+        title: input.title,
+        location: input.location,
+        description: input.description,
+        images: input.images ?? [],
+        totalShares: input.totalShares,
+        sharePriceUsd: input.sharePriceUsd,
+        annualRentUsd: input.annualRentUsd,
+        ownerWalletAddress: input.ownerWalletAddress,
+        meta: input.meta as PropertyMetaJson,
+        status: input.status ?? "draft",
+        sharesSold: input.sharesSold ?? 0,
+        tokenizationStatus: "pending" as const,
+        rentalHistory: [],
+        jettonDecimals: 9,
+        salePaused: false,
+        distributionPaused: false,
+        onchainMaster: null,
+        distributionAddress: null,
+        createdAt: now,
+        updatedAt: now,
+      };
+      const rows = await db.insert(properties).values(row).returning();
+      return mapPropertyToListing(rows[0]!);
+    },
+
+    async update(id, patch) {
+      const now = new Date();
+      const updates: Record<string, unknown> = { updatedAt: now };
+      if (patch.title !== undefined) updates.title = patch.title;
+      if (patch.location !== undefined) updates.location = patch.location;
+      if (patch.description !== undefined) updates.description = patch.description;
+      if (patch.images !== undefined) updates.images = patch.images;
+      if (patch.totalShares !== undefined) updates.totalShares = patch.totalShares;
+      if (patch.sharePriceUsd !== undefined) updates.sharePriceUsd = patch.sharePriceUsd;
+      if (patch.annualRentUsd !== undefined) updates.annualRentUsd = patch.annualRentUsd;
+      if (patch.ownerWalletAddress !== undefined) updates.ownerWalletAddress = patch.ownerWalletAddress;
+      if (patch.meta !== undefined) updates.meta = patch.meta;
+      if (patch.status !== undefined) updates.status = patch.status;
+      if (patch.sharesSold !== undefined) updates.sharesSold = patch.sharesSold;
+
+      const rows = await db
+        .update(properties)
+        .set(updates)
+        .where(eq(properties.id, id))
+        .returning();
+      const row = rows[0];
+      return row ? mapPropertyToListing(row) : null;
+    },
   };
 }
 
@@ -110,6 +213,9 @@ export function createMemoryPropertyStore(
       let list = [...rows];
       if (filter.status) {
         list = list.filter((p) => p.status === filter.status);
+      }
+      if (!filter.status) {
+        list = list.filter((p) => p.status !== "draft");
       }
       const q = filter.query?.trim().toLowerCase();
       if (q) {
@@ -149,6 +255,63 @@ export function createMemoryPropertyStore(
       row.sharesSold += qty;
       row.updatedAt = new Date();
       return true;
+    },
+
+    async setPauseFlags(id, flags) {
+      const row = rows.find((p) => p.id === id);
+      if (!row) return null;
+      if (flags.salePaused !== undefined) row.salePaused = flags.salePaused;
+      if (flags.distributionPaused !== undefined)
+        row.distributionPaused = flags.distributionPaused;
+      row.updatedAt = new Date();
+      return mapPropertyToListing(row);
+    },
+
+    async create(input) {
+      const now = new Date();
+      const row: PropertyRow = {
+        id: input.id,
+        title: input.title,
+        location: input.location,
+        description: input.description,
+        images: input.images ?? [],
+        totalShares: input.totalShares,
+        sharePriceUsd: input.sharePriceUsd,
+        annualRentUsd: input.annualRentUsd,
+        ownerWalletAddress: input.ownerWalletAddress,
+        meta: input.meta as PropertyMetaJson,
+        status: input.status ?? "draft",
+        sharesSold: input.sharesSold ?? 0,
+        tokenizationStatus: "pending",
+        rentalHistory: [],
+        jettonDecimals: 9,
+        onchainMaster: null,
+        distributionAddress: null,
+        salePaused: false,
+        distributionPaused: false,
+        createdAt: now,
+        updatedAt: now,
+      };
+      rows.push(row);
+      return mapPropertyToListing(row);
+    },
+
+    async update(id, patch) {
+      const row = rows.find((p) => p.id === id);
+      if (!row) return null;
+      if (patch.title !== undefined) row.title = patch.title;
+      if (patch.location !== undefined) row.location = patch.location;
+      if (patch.description !== undefined) row.description = patch.description;
+      if (patch.images !== undefined) row.images = patch.images;
+      if (patch.totalShares !== undefined) row.totalShares = patch.totalShares;
+      if (patch.sharePriceUsd !== undefined) row.sharePriceUsd = patch.sharePriceUsd;
+      if (patch.annualRentUsd !== undefined) row.annualRentUsd = patch.annualRentUsd;
+      if (patch.ownerWalletAddress !== undefined) row.ownerWalletAddress = patch.ownerWalletAddress;
+      if (patch.meta !== undefined) row.meta = patch.meta as PropertyMetaJson;
+      if (patch.status !== undefined) row.status = patch.status;
+      if (patch.sharesSold !== undefined) row.sharesSold = patch.sharesSold;
+      row.updatedAt = new Date();
+      return mapPropertyToListing(row);
     },
   };
 }
