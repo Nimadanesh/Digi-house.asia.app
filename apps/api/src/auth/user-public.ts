@@ -10,6 +10,7 @@ export type UserPublic = {
   walletAddress: string | null;
   onboarded: boolean;
   useTelegramTheme: boolean;
+  referredByUserId?: string;
   createdAt: string;
 };
 
@@ -24,6 +25,7 @@ export function toUserPublic(row: UserRow): UserPublic {
     walletAddress: row.walletAddress ?? null,
     onboarded: row.onboarded,
     useTelegramTheme: row.useTelegramTheme,
+    ...(row.referredByUserId ? { referredByUserId: row.referredByUserId } : {}),
     createdAt: row.createdAt.toISOString(),
   };
 }
@@ -33,4 +35,5 @@ export type TelegramProfileInput = {
   displayName: string;
   username?: string;
   photoUrl?: string;
+  referredByUserId?: string;
 };

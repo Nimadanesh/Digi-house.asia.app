@@ -27,6 +27,7 @@ export function createDbUserStore(db: Db): UserStore {
           walletAddress: null,
           onboarded: false,
           useTelegramTheme: false,
+          referredByUserId: null,
           createdAt: now,
           updatedAt: now,
         })
@@ -74,6 +75,7 @@ export function createMemoryUserStore(
           walletAddress: null,
           onboarded: false,
           useTelegramTheme: false,
+          referredByUserId: null,
           createdAt: now,
           updatedAt: now,
         };

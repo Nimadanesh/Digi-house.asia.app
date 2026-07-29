@@ -24,6 +24,7 @@ export const users = pgTable(
     walletAddress: text("wallet_address"),
     onboarded: boolean("onboarded").notNull().default(false),
     useTelegramTheme: boolean("use_telegram_theme").notNull().default(false),
+    referredByUserId: text("referred_by_user_id"),
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
       .defaultNow(),

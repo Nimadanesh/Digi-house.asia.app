@@ -9,5 +9,6 @@ export interface UserProfile {
   walletAddress: string | null;
   onboarded: boolean;
   useTelegramTheme: boolean;
+  referredByUserId?: string;
   createdAt: string;
 }

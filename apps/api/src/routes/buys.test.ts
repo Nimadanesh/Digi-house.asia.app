@@ -86,6 +86,7 @@ function seedUser(id: string, displayName: string) {
     walletAddress: null,
     onboarded: false,
     useTelegramTheme: false,
+    referredByUserId: null,
     createdAt: new Date(),
     updatedAt: new Date(),
   };

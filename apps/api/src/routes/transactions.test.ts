@@ -11,7 +11,7 @@ function seedUser(id: string, displayName: string) {
   return {
     id, displayName, username: null, photoUrl: null,
     role: "investor" as const, walletAddress: null, onboarded: false,
-    useTelegramTheme: false, createdAt: new Date(), updatedAt: new Date(),
+    useTelegramTheme: false, referredByUserId: null, createdAt: new Date(), updatedAt: new Date(),
   };
 }
 
