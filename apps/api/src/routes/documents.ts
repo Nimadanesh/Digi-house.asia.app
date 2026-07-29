@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { requireSession, type SessionVariables } from "../auth/require-session.js";
+import { requireSession } from "../auth/require-session.js";
 import type { SessionConfig } from "../auth/session.js";
 import type { UserStore } from "../auth/user-store.js";
 import type { S3Signer } from "../lib/s3-sign.js";

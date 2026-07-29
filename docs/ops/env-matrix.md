@@ -73,6 +73,7 @@ Web must **never** set: `TELEGRAM_BOT_TOKEN`, `DATABASE_URL`, `SESSION_SECRET`, 
 | `CORS_ORIGIN` | P | api | `http://localhost:3000` | staging Mini App origin(s) | prod Mini App origin(s) | Allowlist |
 | `PORT` | P | api | `8787` | platform | platform | OpenAPI local server |
 | `LOG_LEVEL` | P | api | `debug` | `info` | `info` | P1-01 logger |
+| `NOTIFY_EARNINGS_PAID` | P | api | unset (false) | `true` if TELEGRAM_BOT_TOKEN set | `true` | **P4-01** — Telegram notify on earnings paid; fail-open; default false |
 | `NODE_ENV` | P | api | `development` | `production` | `production` | |
 | `SENTRY_DSN` | **S**† | api | optional | SM | SM | †DSN often treated as semi-public; still keep server-side |
 

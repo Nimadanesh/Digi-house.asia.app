@@ -149,6 +149,16 @@ Phase 5 dependency: secret scanning + dependency audit (`P5` area). A leaked sec
 | **Committing encrypted key files in-repo** | Still leaks with passphrase / history; SM is the standard |
 | **Admin keys in Mini App “for convenience”** | Violates UI boundary; trivial extract |
 
+### 9. Admin API path prefix & auth (P4-03)
+
+| Decision | Detail |
+|---|---|
+| **Path prefix** | All admin ops live under `/v1/admin/*` — separate from user routes. |
+| **Auth mechanism** | `X-Admin-Key` header matching `ADMIN_API_SECRET` env var (server-only). |
+| **Session token rejection** | User JWTs are rejected on admin routes (admin middleware runs first, only checks header). |
+| **Optional mount** | If `ADMIN_API_SECRET` is unset, the entire admin route group is not mounted — no 404 leak. |
+| **Future allowlist** | `ADMIN_TELEGRAM_IDS` (optional) for Telegram-based admin identification. |
+
 ### 10. Out of scope
 
 | Topic | Where |

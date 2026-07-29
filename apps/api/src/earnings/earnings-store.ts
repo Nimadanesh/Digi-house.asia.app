@@ -1,4 +1,4 @@
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, isNull } from "drizzle-orm";
 import type { Db } from "../db/client.js";
 import { earningsEntries } from "../db/schema/earnings-entries.js";
 import type { EarningsEntryInput } from "./map-earnings.js";
@@ -18,6 +18,12 @@ export type EarningsStore = {
     txHashFor: (entryId: string) => string;
   }): Promise<{ entryIds: string[] }>;
   countPendingByDistribution(distributionId: string): Promise<number>;
+  /** Fetch a single entry by id (used by notify). */
+  getEntry(entryId: string): Promise<EarningsEntryInput | null>;
+  /** Check if an entry has been notified (notified_at != null). */
+  wasNotified(entryId: string): Promise<boolean>;
+  /** Mark an entry as notified (set notified_at). */
+  markNotified(entryId: string): Promise<void>;
 };
 
 function mapStatus(s: string): "paid" | "pending" {
@@ -35,6 +41,22 @@ function toPublic(r: EarningsEntryRowInput): EarningsEntryInput {
     shareRatio: r.shareRatio,
     status: r.status,
     txHash: r.txHash,
+  };
+}
+
+function toPublicFromDb(
+  r: typeof earningsEntries.$inferSelect,
+): EarningsEntryInput {
+  return {
+    id: r.id,
+    userId: r.userId,
+    propertyId: r.propertyId,
+    weekOf: r.weekOf,
+    amountUsd: Number(r.amountUsd),
+    tonAmount: Number(r.tonAmount),
+    shareRatio: r.shareRatio,
+    status: mapStatus(r.status),
+    txHash: r.txHash ?? null,
   };
 }
 
@@ -98,6 +120,37 @@ export function createDbEarningsStore(db: Db): EarningsStore {
         );
       return rows.length;
     },
+
+    async getEntry(entryId) {
+      const rows = await db
+        .select()
+        .from(earningsEntries)
+        .where(eq(earningsEntries.id, entryId))
+        .limit(1);
+      const row = rows[0];
+      return row ? toPublicFromDb(row) : null;
+    },
+
+    async wasNotified(entryId) {
+      const rows = await db
+        .select({ notifiedAt: earningsEntries.notifiedAt })
+        .from(earningsEntries)
+        .where(eq(earningsEntries.id, entryId))
+        .limit(1);
+      return rows.length > 0 && rows[0]!.notifiedAt !== null;
+    },
+
+    async markNotified(entryId) {
+      await db
+        .update(earningsEntries)
+        .set({ notifiedAt: new Date() })
+        .where(
+          and(
+            eq(earningsEntries.id, entryId),
+            isNull(earningsEntries.notifiedAt),
+          ),
+        );
+    },
   };
 }
 
@@ -106,6 +159,7 @@ export function createMemoryEarningsStore(
   seed: EarningsEntryRowInput[] = [],
 ): EarningsStore & { _rows: EarningsEntryRowInput[] } {
   const rows = seed.map((r) => ({ ...r }));
+  const notified = new Set<string>();
   return {
     _rows: rows,
 
@@ -144,6 +198,19 @@ export function createMemoryEarningsStore(
       return rows.filter(
         (r) => r.distributionId === distributionId && r.status === "pending",
       ).length;
+    },
+
+    async getEntry(entryId) {
+      const r = rows.find((e) => e.id === entryId);
+      return r ? toPublic(r) : null;
+    },
+
+    async wasNotified(entryId) {
+      return notified.has(entryId);
+    },
+
+    async markNotified(entryId) {
+      notified.add(entryId);
     },
   };
 }

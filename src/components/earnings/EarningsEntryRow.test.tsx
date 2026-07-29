@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { EarningsEntryRow } from "@/components/earnings/EarningsEntryRow";
 import type { EarningsEntry } from "@/types/earnings";
@@ -6,13 +6,16 @@ import { DEMO_TX_DISCLAIMER } from "@/lib/constants";
 
 vi.mock("next/image", () => ({
   default: (props: { alt: string; src: string }) => (
-    // eslint-disable-next-line @next/next/no-img-element
     <img alt={props.alt} src={props.src} />
   ),
 }));
 
 vi.mock("@/hooks/useTelegram", () => ({
   useTelegram: () => ({ haptics: { selection: vi.fn(), impact: vi.fn(), notification: vi.fn() } }),
+}));
+
+vi.mock("@/lib/env", () => ({
+  env: { network: "testnet" },
 }));
 
 const paidEntry: EarningsEntry = {
@@ -27,6 +30,12 @@ const paidEntry: EarningsEntry = {
   txHash: "simulated:abc-def-12345",
 };
 
+const realTxEntry: EarningsEntry = {
+  ...paidEntry,
+  id: "e3",
+  txHash: "a1b2c3d4e5f678901234567890abcdef1234567890abcdef1234567890abcdef",
+};
+
 const pendingEntry: EarningsEntry = {
   ...paidEntry,
   id: "e2",
@@ -35,7 +44,11 @@ const pendingEntry: EarningsEntry = {
 };
 
 describe("EarningsEntryRow — Fable payments + honesty", () => {
-  it("paid collapsed: Paid pill WITHOUT simulated sibling on the row", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("paid collapsed with simulated hash: shows Paid pill WITH simulated capsule", () => {
     render(
       <EarningsEntryRow
         entry={paidEntry}
@@ -45,10 +58,22 @@ describe("EarningsEntryRow — Fable payments + honesty", () => {
       />,
     );
     expect(screen.getByText("Paid")).toHaveClass("text-success");
+    expect(screen.getByText("simulated")).toHaveClass("text-muted-foreground");
+  });
+
+  it("paid collapsed with real hash: shows Paid pill WITHOUT simulated capsule", () => {
+    render(
+      <EarningsEntryRow
+        entry={realTxEntry}
+        propertyName="Bayside"
+        weeklyRentPoolUsd={20000}
+      />,
+    );
+    expect(screen.getByText("Paid")).toHaveClass("text-success");
     expect(screen.queryByText("simulated")).not.toBeInTheDocument();
   });
 
-  it("paid expanded: details + discrete demo disclaimer", () => {
+  it("paid expanded with simulated hash: details + discrete demo disclaimer", () => {
     render(
       <EarningsEntryRow
         entry={paidEntry}
@@ -65,6 +90,21 @@ describe("EarningsEntryRow — Fable payments + honesty", () => {
     expect(screen.getByText("TON equivalent")).toBeInTheDocument();
     expect(screen.getByTestId("earnings-row-disclaimer")).toHaveTextContent(DEMO_TX_DISCLAIMER);
     expect(screen.getByText(/tx hash is a placeholder/i)).toBeInTheDocument();
+  });
+
+  it("paid expanded with real hash: shows explorer link and NO disclaimer", () => {
+    render(
+      <EarningsEntryRow
+        entry={realTxEntry}
+        propertyName="Bayside"
+        weeklyRentPoolUsd={20000}
+      />,
+    );
+    fireEvent.click(screen.getByRole("button"));
+    expect(screen.getByTestId("earnings-explorer-link")).toBeInTheDocument();
+    expect(screen.getByTestId("earnings-explorer-link")).toHaveAttribute("href");
+    expect(screen.getByTestId("earnings-explorer-link")).toHaveAttribute("target", "_blank");
+    expect(screen.queryByTestId("earnings-row-disclaimer")).not.toBeInTheDocument();
   });
 
   it("pending: Pending pill; expanded has no demo tx disclaimer", () => {

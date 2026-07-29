@@ -1,10 +1,10 @@
 "use client";
 // File responsibility: one Payments list row — collapse shows photo/name/date/amount/Paid stipend;
 // expand shows integrity math + discrete demo disclaimer (Fable Earnings §Payments).
-// NO “simulated” pill on collapsed row (MVP honesty lives only in details).
+// "simulated" capsule appears on collapsed row only when the hash is synthetic AND per ADR-001 §4.
 import { useState } from "react";
 import Image from "next/image";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ExternalLink } from "lucide-react";
 import { Row } from "@/components/common/Row";
 import { StatusPill } from "@/components/common/StatusPill";
 import { usd, ton, weekLabel, pct } from "@/lib/format";
@@ -12,6 +12,12 @@ import { DEMO_TX_DISCLAIMER } from "@/lib/constants";
 import type { EarningsEntry } from "@/types/earnings";
 import { haptics } from "@/lib/telegram/haptics";
 import { cn } from "@/lib/utils";
+import {
+  canShowExplorerLink,
+  shouldShowSimulatedBadge,
+  buildExplorerTxUrl,
+} from "@/lib/settlement/honesty";
+import { env } from "@/lib/env";
 
 const THUMB = "size-9 shrink-0 rounded-[10px] overflow-hidden bg-surface-2 relative";
 
@@ -29,6 +35,10 @@ export function EarningsEntryRow({
   sharesOwned?: number;
 }) {
   const [open, setOpen] = useState(false);
+  const network = env.network;
+  const showSimulated = shouldShowSimulatedBadge(entry.txHash, entry.status, network);
+  const showExplorer = canShowExplorerLink(entry.txHash, network);
+  const explorerUrl = entry.txHash ? buildExplorerTxUrl(entry.txHash, network) : null;
 
   return (
     <>
@@ -61,7 +71,7 @@ export function EarningsEntryRow({
               {usd(entry.amountUsd)}
             </div>
             {entry.status === "paid" ? (
-              <StatusPill label="Paid" variant="success" />
+              <StatusPill label="Paid" variant="success" simulated={showSimulated} />
             ) : (
               <StatusPill label="Pending" variant="warning" />
             )}
@@ -114,13 +124,28 @@ export function EarningsEntryRow({
                 <div className="space-y-1 pt-0.5">
                   <div className="flex items-baseline justify-between gap-3">
                     <span className="text-muted-foreground">Tx hash</span>
-                    <span className="tnum shrink-0 text-foreground max-w-[55%] truncate">
-                      {entry.txHash}
-                    </span>
+                    {showExplorer && explorerUrl ? (
+                      <a
+                        href={explorerUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="tnum shrink-0 max-w-[55%] truncate text-primary inline-flex items-center gap-1 hover:underline"
+                        data-testid="earnings-explorer-link"
+                      >
+                        {entry.txHash}
+                        <ExternalLink size={12} strokeWidth={1.75} aria-hidden />
+                      </a>
+                    ) : (
+                      <span className="tnum shrink-0 text-foreground max-w-[55%] truncate">
+                        {entry.txHash}
+                      </span>
+                    )}
                   </div>
-                  <p className="leading-snug text-muted-foreground text-[0.6875rem]" data-testid="earnings-row-disclaimer">
-                    {DEMO_TX_DISCLAIMER}. Simulated payout · tx hash is a placeholder.
-                  </p>
+                  {!showExplorer ? (
+                    <p className="leading-snug text-muted-foreground text-[0.6875rem]" data-testid="earnings-row-disclaimer">
+                      {DEMO_TX_DISCLAIMER}. Simulated payout · tx hash is a placeholder.
+                    </p>
+                  ) : null}
                 </div>
               ) : null}
             </div>

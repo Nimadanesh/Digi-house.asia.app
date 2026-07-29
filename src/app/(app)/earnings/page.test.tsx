@@ -140,7 +140,7 @@ describe("Earnings page Fable polish and states", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("row expand shows shares and demo disclaimer; collapsed has no simulated label", () => {
+  it("row expand shows shares and demo disclaimer; collapsed shows simulated label for simulated hash", () => {
     vi.mocked(useEarnings).mockReturnValue({
       data: loadedSummary,
       isLoading: false,
@@ -148,7 +148,7 @@ describe("Earnings page Fable polish and states", () => {
       refetch: vi.fn(),
     } as never);
     render(<EarningsPage />);
-    expect(screen.queryByText("simulated")).not.toBeInTheDocument();
+    expect(screen.getByText("simulated")).toBeInTheDocument();
     fireEvent.click(screen.getByTestId("earnings-row-e1"));
     expect(screen.getByTestId("earnings-disclosure")).toBeInTheDocument();
     expect(screen.getByText("60")).toBeInTheDocument();

@@ -15,6 +15,8 @@ export function toPropertyInsert(s: (typeof SEED_PROPERTIES)[number]) {
     annualRentUsd: s.annualRentUsd,
     sharesSold: s.sharesSold,
     jettonDecimals: 9,
+    salePaused: false,
+    distributionPaused: false,
     tokenizationStatus: "pending" as const,
     meta: s.meta,
     rentalHistory: s.rentalHistory,

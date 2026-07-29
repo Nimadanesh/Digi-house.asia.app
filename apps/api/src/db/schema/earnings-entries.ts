@@ -33,6 +33,7 @@ export const earningsEntries = pgTable(
     shareRatio: doublePrecision("share_ratio").notNull(),
     status: text("status").notNull(),
     txHash: text("tx_hash"),
+    notifiedAt: timestamp("notified_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
       .defaultNow(),

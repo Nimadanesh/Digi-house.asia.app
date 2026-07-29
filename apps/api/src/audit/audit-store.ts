@@ -6,7 +6,7 @@ import { hashAuditPayload } from "./hash-payload.js";
 
 export type AuditEventInput = {
   action: AuditAction;
-  actorType: "user" | "system";
+  actorType: "user" | "system" | "admin";
   actorUserId?: string | null;
   actorLabel?: string | null;
   resourceType: string;
@@ -19,7 +19,7 @@ export type AuditEventInput = {
 export type AuditEventRecord = {
   id: string;
   action: string;
-  actorType: "user" | "system";
+  actorType: "user" | "system" | "admin";
   actorUserId: string | null;
   actorLabel: string | null;
   resourceType: string;
@@ -57,7 +57,7 @@ function mapRow(r: {
   return {
     id: r.id,
     action: r.action,
-    actorType: r.actorType === "system" ? "system" : "user",
+    actorType: r.actorType === "system" ? "system" : r.actorType === "admin" ? "admin" : "user",
     actorUserId: r.actorUserId,
     actorLabel: r.actorLabel,
     resourceType: r.resourceType,

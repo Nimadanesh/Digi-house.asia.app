@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import type { MiddlewareHandler } from "hono";
 import type { AuditStore } from "../audit/audit-store.js";
 import { writeAuditEvent } from "../audit/write-audit.js";
 import { requireSession } from "../auth/require-session.js";
@@ -18,6 +19,7 @@ export type OrderRouteDeps = {
   orders: OrderStore;
   holdings?: HoldingStore | null;
   audit?: AuditStore | null;
+  rateLimiter?: MiddlewareHandler;
 };
 
 function isOrderSide(v: unknown): v is OrderSide {
@@ -60,14 +62,18 @@ export function createOrderRoutes(deps: OrderRouteDeps) {
     return c.json(book);
   });
 
-  app.post(
-    "/v1/orders",
-    requireSession({ session: deps.session, users: deps.users }),
+  const orderRateLimit =
+    deps.rateLimiter ??
     slidingWindowRateLimit({
       windowMs: 60_000,
       max: 30,
-      key: (c) => c.get("userId"),
-    }),
+      key: (c) => c.get("userId") as string,
+    });
+
+  app.post(
+    "/v1/orders",
+    requireSession({ session: deps.session, users: deps.users }),
+    orderRateLimit,
     async (c) => {
       let body: unknown;
       try {

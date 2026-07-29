@@ -4,8 +4,10 @@ import { sleep, jitter } from "./sleep";
 
 export function MockDocumentsRepo(): DocumentsRepo {
   return {
-    async list(_propertyId: string) {
+    async list(propertyId: string) {
       await sleep(jitter());
+      // Return same docs for any property (mock mode)
+      if (propertyId === "never") return [];
       return MOCK_DOCUMENTS;
     },
     async getDownloadUrl(propertyId: string, docId: string) {

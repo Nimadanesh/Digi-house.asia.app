@@ -1,6 +1,7 @@
 import { sql } from "drizzle-orm";
 import {
   bigint,
+  boolean,
   check,
   index,
   integer,
@@ -57,6 +58,8 @@ export const properties = pgTable(
       .default(sql`'[]'::jsonb`),
     onchainMaster: text("onchain_master"),
     distributionAddress: text("distribution_address"),
+    salePaused: boolean("sale_paused").notNull().default(false),
+    distributionPaused: boolean("distribution_paused").notNull().default(false),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true })
       .notNull()

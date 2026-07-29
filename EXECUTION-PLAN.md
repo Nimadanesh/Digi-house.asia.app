@@ -49,18 +49,18 @@
 **Phase 1 gate:** all above `[x]` + exit criteria in §4.3 + improvements (rate limit, error handler, atomic cancel, portfolio N+1, schema prep) verified.
 
 ### Phase 2 — TON contracts & tokenization *(summarized)*
-- [ ] **P2** design freeze (jetton factory, distribute/claim) — P2-01…02
-- [ ] **P2** implement + test jetton + distribution — P2-03…07
-- [ ] **P2** testnet deploy + TS clients + QA/pause docs — P2-08…12
+- [x] **P2** design freeze (jetton factory, distribute/claim) — P2-01…02
+- [x] **P2** implement + test jetton + distribution — P2-03…07
+- [x] **P2** testnet deploy + TS clients + QA/pause docs — P2-08…12
 
 ### Phase 3 — Integration (web + API + chain) *(summarized)*
-- [ ] **P3** indexer + holdings/earnings from chain events — P3-01…03
-- [ ] **P3** buy prepare/confirm on real contracts — P3-04…05
-- [ ] **P3** reconciliation, explorer links, honesty cutover — P3-06…07, P3-10
-- [ ] **P3** E2E two-wallet payout demo + runbooks — P3-08…09, P3-11…12
+- [x] **P3** indexer + holdings/earnings from chain events — P3-01…03
+- [x] **P3** buy prepare/confirm on real contracts — P3-04…05
+- [x] **P3** reconciliation, explorer links, honesty cutover — P3-06…07, P3-10
+- [x] **P3** E2E two-wallet payout demo + runbooks — P3-08…09, P3-11…12
 
 ### Phase 4 — Advanced features *(summarized)*
-- [ ] **P4** P0: bot notify, admin pause, docs vault, tx history, rate limits — P4-01…06
+- [x] **P4** P0: bot notify, admin pause, docs vault, tx history, rate limits — P4-01…06
 - [ ] **P4** P1+: owner flow, optional USDT, referral, CSV export — P4-07…10
 
 ### Phase 5 — Security, testing, mainnet *(summarized)*
@@ -462,6 +462,6 @@ phase 1 gate
 
 ---
 
-**Current Phase:** Phase 1 ✅ — Gate ready for sign-off  
-**Last Completed Task:** Improvements pack — atomic cancel, error handler, portfolio N+1, rate limiting, schema prep  
-**Next Recommended Task:** Phase 2 — TON contracts & tokenization (P2-01 onward)
+**Current Phase:** Phase 4 — Advanced features  
+**Last Completed Task:** P4-06 — Redis token bucket rate limit on placeOrder  
+**Next Recommended Task:** P4-03 — Admin pause — or P4-02 — Admin create property

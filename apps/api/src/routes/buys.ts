@@ -103,6 +103,15 @@ export function createBuyRoutes(deps: BuyRouteDeps) {
           404,
         );
       }
+      if (listing.salePaused) {
+        return c.json(
+          {
+            code: "sale_paused",
+            message: "Primary sale is paused by admin",
+          },
+          409,
+        );
+      }
       if (listing.status !== "funding") {
         return c.json(
           {
@@ -237,6 +246,15 @@ export function createBuyRoutes(deps: BuyRouteDeps) {
         return c.json(
           { code: "not_found", message: "Property not found" },
           404,
+        );
+      }
+      if (listing.salePaused) {
+        return c.json(
+          {
+            code: "sale_paused",
+            message: "Primary sale is paused by admin",
+          },
+          409,
         );
       }
 

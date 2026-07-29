@@ -1,6 +1,8 @@
 import type { AuditStore } from "../audit/audit-store.js";
 import { writeAuditEvent } from "../audit/write-audit.js";
 import type { EarningsStore } from "../earnings/earnings-store.js";
+import type { PropertyStore } from "../marketplace/property-store.js";
+import { notifyUsersForDistribution, type NotifyDeps } from "../notify/notify-utils.js";
 import type { DistributionStore } from "./distribution-store.js";
 import {
   payoutIdempotencyKey,
@@ -11,7 +13,9 @@ export type TickPayoutDeps = {
   distributions: DistributionStore;
   earnings: EarningsStore;
   ticks: PayoutTickStore;
+  properties?: PropertyStore | null;
   audit?: AuditStore | null;
+  notify?: NotifyDeps | null;
 };
 
 /** Hybrid paid stamp — ADR-001 simulated honesty (no explorer hash). */
@@ -46,6 +50,20 @@ export async function tickPayout(
   const dist = await deps.distributions.getById(distributionId);
   if (!dist) {
     return { ok: false, reason: "not_found", distributionId };
+  }
+
+  // P4-03: skip payout if distribution is paused for this property
+  if (deps.properties) {
+    const prop = await deps.properties.getById(dist.propertyId);
+    if (prop?.distributionPaused) {
+      return {
+        distributionId,
+        paidEntries: 0,
+        entryIds: [],
+        idempotent: true,
+        idempotencyKey: payoutIdempotencyKey(dist.propertyId, dist.weekOf),
+      };
+    }
   }
 
   const key = payoutIdempotencyKey(dist.propertyId, dist.weekOf);
@@ -123,6 +141,25 @@ export async function tickPayout(
         entryIds: cappedIds,
       },
     });
+  }
+
+  // P4-01: Telegram notify after paid transition. Fail-open.
+  const notifyDeps = deps.notify;
+  if (paidEntries > 0 && notifyDeps) {
+    const notified = await notifyUsersForDistribution({
+      entryIds,
+      distributionId,
+      deps: notifyDeps,
+    }).catch((err) => {
+      notifyDeps.log.warn({ err, distributionId }, "notify failed (non-fatal)");
+      return 0;
+    });
+    if (notified < paidEntries) {
+      notifyDeps.log.warn(
+        { distributionId, notified, total: paidEntries },
+        "partial notify",
+      );
+    }
   }
 
   return {

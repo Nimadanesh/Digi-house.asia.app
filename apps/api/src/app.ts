@@ -7,7 +7,7 @@ import type { ApiEnv } from "./env.js";
 import IORedis from "ioredis";
 import type { Logger } from "./logger.js";
 import { createAdminRoutes } from "./routes/admin.js";
-import { createDocumentRoutes, type DocumentRouteDeps } from "./routes/documents.js";
+import { createDocumentRoutes } from "./routes/documents.js";
 import { createAuthRoutes } from "./routes/auth.js";
 import { createMarketplaceRoutes } from "./routes/marketplace.js";
 import { createPortfolioRoutes } from "./routes/portfolio.js";
@@ -24,7 +24,7 @@ import type { TxStore } from "./buys/tx-store.js";
 import type { AuditStore } from "./audit/audit-store.js";
 import { createRedisTokenBucket } from "./lib/rate-limit-redis.js";
 import { S3Signer } from "./lib/s3-sign.js";
-import { createDbDocumentStore, type DocumentStore } from "./marketplace/document-store.js";
+import type { DocumentStore } from "./marketplace/document-store.js";
 
 export type AppVariables = {
   requestId: string;

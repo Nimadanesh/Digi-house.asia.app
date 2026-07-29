@@ -1,0 +1,264 @@
+import { and, eq, inArray, sql } from "drizzle-orm";
+import type { Db } from "../db/client.js";
+import { chainEvents } from "../db/schema/chain-events.js";
+
+export type EventStatus = "new" | "processing" | "done" | "failed" | "dead";
+export type EventType =
+  | "jetton_transfer"
+  | "distribution_claim"
+  | "distribution_funded"
+  | "unknown";
+
+export type ChainEventRecord = {
+  eventId: string;
+  contractAddress: string;
+  eventType: EventType;
+  blockLt: number;
+  txHash: string;
+  logicalTime: number | null;
+  fromAddress: string | null;
+  toAddress: string | null;
+  amount: string | null;
+  rawData: Record<string, unknown> | null;
+  status: EventStatus;
+  retryCount: number;
+  error: string | null;
+  processedAt: Date | null;
+  createdAt: Date;
+};
+
+export type EventStore = {
+  tryInsert(event: {
+    eventId: string;
+    contractAddress: string;
+    eventType: EventType;
+    blockLt: number;
+    txHash: string;
+    logicalTime?: number | null;
+    fromAddress?: string | null;
+    toAddress?: string | null;
+    amount?: string | null;
+    rawData?: Record<string, unknown> | null;
+  }): Promise<"inserted" | "duplicate">;
+  claimBatch(limit?: number): Promise<ChainEventRecord[]>;
+  markDone(eventId: string): Promise<void>;
+  markFailed(eventId: string, error: string): Promise<void>;
+  markDead(eventId: string, error: string): Promise<void>;
+  countByStatus(status: EventStatus): Promise<number>;
+};
+
+function mapStatus(s: string): EventStatus {
+  if (
+    s === "new" ||
+    s === "processing" ||
+    s === "done" ||
+    s === "failed" ||
+    s === "dead"
+  ) {
+    return s;
+  }
+  return "unknown" as EventStatus;
+}
+
+function mapEventType(s: string): EventType {
+  if (
+    s === "jetton_transfer" ||
+    s === "distribution_claim" ||
+    s === "distribution_funded" ||
+    s === "unknown"
+  ) {
+    return s;
+  }
+  return "unknown";
+}
+
+function mapRow(r: {
+  eventId: string;
+  contractAddress: string;
+  eventType: string;
+  blockLt: number;
+  txHash: string;
+  logicalTime: number | null;
+  fromAddress: string | null;
+  toAddress: string | null;
+  amount: string | null;
+  rawData: unknown;
+  status: string;
+  retryCount: number;
+  error: string | null;
+  processedAt: Date | null;
+  createdAt: Date;
+}): ChainEventRecord {
+  return {
+    eventId: r.eventId,
+    contractAddress: r.contractAddress,
+    eventType: mapEventType(r.eventType),
+    blockLt: r.blockLt,
+    txHash: r.txHash,
+    logicalTime: r.logicalTime,
+    fromAddress: r.fromAddress,
+    toAddress: r.toAddress,
+    amount: r.amount,
+    rawData:
+      r.rawData && typeof r.rawData === "object" && !Array.isArray(r.rawData)
+        ? (r.rawData as Record<string, unknown>)
+        : null,
+    status: mapStatus(r.status),
+    retryCount: r.retryCount,
+    error: r.error,
+    processedAt: r.processedAt,
+    createdAt: r.createdAt,
+  };
+}
+
+export function createDbEventStore(db: Db): EventStore {
+  return {
+    async tryInsert(event) {
+      try {
+        await db.insert(chainEvents).values({
+          eventId: event.eventId,
+          contractAddress: event.contractAddress,
+          eventType: event.eventType,
+          blockLt: event.blockLt,
+          txHash: event.txHash,
+          logicalTime: event.logicalTime ?? null,
+          fromAddress: event.fromAddress ?? null,
+          toAddress: event.toAddress ?? null,
+          amount: event.amount ?? null,
+          rawData: event.rawData ?? null,
+          status: "new",
+          retryCount: 0,
+          error: null,
+          processedAt: null,
+          createdAt: new Date(),
+        });
+        return "inserted";
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        if (
+          msg.includes("unique") ||
+          msg.includes("duplicate") ||
+          msg.includes("chain_events_pkey")
+        ) {
+          return "duplicate";
+        }
+        throw err;
+      }
+    },
+
+    async claimBatch(limit = 10) {
+      const rows = await db
+        .select()
+        .from(chainEvents)
+        .where(
+          inArray(chainEvents.status, ["new", "failed"]),
+        )
+        .limit(limit)
+        .orderBy(chainEvents.createdAt);
+      const ids = rows.map((r) => r.eventId);
+      if (ids.length > 0) {
+        await db
+          .update(chainEvents)
+          .set({ status: "processing" })
+          .where(inArray(chainEvents.eventId, ids));
+      }
+      return rows.map(mapRow);
+    },
+
+    async markDone(eventId) {
+      await db
+        .update(chainEvents)
+        .set({ status: "done", processedAt: new Date() })
+        .where(eq(chainEvents.eventId, eventId));
+    },
+
+    async markFailed(eventId, error) {
+      await db
+        .update(chainEvents)
+        .set({
+          status: "failed",
+          error,
+          retryCount: sql`retry_count + 1`,
+        })
+        .where(eq(chainEvents.eventId, eventId));
+    },
+
+    async markDead(eventId, error) {
+      await db
+        .update(chainEvents)
+        .set({ status: "dead", error, processedAt: new Date() })
+        .where(eq(chainEvents.eventId, eventId));
+    },
+
+    async countByStatus(status) {
+      const rows = await db
+        .select({ count: sql<number>`count(*)` })
+        .from(chainEvents)
+        .where(eq(chainEvents.status, status));
+      return Number(rows[0]?.count ?? 0);
+    },
+  };
+}
+
+export function createMemoryEventStore(
+  seed: ChainEventRecord[] = [],
+): EventStore & { _rows: ChainEventRecord[] } {
+  const rows = seed.map((r) => ({ ...r }));
+  return {
+    _rows: rows,
+    async tryInsert(event) {
+      if (rows.some((r) => r.eventId === event.eventId)) return "duplicate";
+      const record: ChainEventRecord = {
+        eventId: event.eventId,
+        contractAddress: event.contractAddress,
+        eventType: event.eventType,
+        blockLt: event.blockLt,
+        txHash: event.txHash,
+        logicalTime: event.logicalTime ?? null,
+        fromAddress: event.fromAddress ?? null,
+        toAddress: event.toAddress ?? null,
+        amount: event.amount ?? null,
+        rawData: event.rawData ?? null,
+        status: "new",
+        retryCount: 0,
+        error: null,
+        processedAt: null,
+        createdAt: new Date(),
+      };
+      rows.push(record);
+      return "inserted";
+    },
+    async claimBatch(limit = 10) {
+      const pending = rows
+        .filter((r) => r.status === "new" || r.status === "failed")
+        .slice(0, limit);
+      for (const r of pending) {
+        const idx = rows.findIndex((x) => x.eventId === r.eventId);
+        if (idx >= 0) rows[idx] = { ...r, status: "processing" };
+      }
+      return pending.map((r) => ({ ...r, status: "processing" as EventStatus }));
+    },
+    async markDone(eventId) {
+      const idx = rows.findIndex((r) => r.eventId === eventId);
+      if (idx >= 0) rows[idx] = { ...rows[idx]!, status: "done", processedAt: new Date() };
+    },
+    async markFailed(eventId, error) {
+      const idx = rows.findIndex((r) => r.eventId === eventId);
+      if (idx >= 0) {
+        rows[idx] = {
+          ...rows[idx]!,
+          status: "failed",
+          error,
+          retryCount: rows[idx]!.retryCount + 1,
+        };
+      }
+    },
+    async markDead(eventId, error) {
+      const idx = rows.findIndex((r) => r.eventId === eventId);
+      if (idx >= 0) rows[idx] = { ...rows[idx]!, status: "dead", error, processedAt: new Date() };
+    },
+    async countByStatus(status) {
+      return rows.filter((r) => r.status === status).length;
+    },
+  };
+}
