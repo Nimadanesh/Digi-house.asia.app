@@ -77,11 +77,24 @@ export function createAuthRoutes(deps: AuthRouteDeps) {
       parsed.username ||
       "User";
 
+    let referredByUserId: string | undefined;
+    const startParam = parsed.raw["start_param"];
+    if (typeof startParam === "string" && startParam.startsWith("ref_")) {
+      const candidate = startParam.slice(4);
+      if (candidate && candidate !== parsed.userId) {
+        const referrer = await deps.users.findById(candidate);
+        if (referrer) {
+          referredByUserId = candidate;
+        }
+      }
+    }
+
     const user = await deps.users.upsertFromTelegram({
       userId: parsed.userId,
       displayName,
       username: parsed.username,
       photoUrl: parsed.photoUrl,
+      referredByUserId,
     });
     const { token, expiresAt } = await signSessionToken(
       user.id,
