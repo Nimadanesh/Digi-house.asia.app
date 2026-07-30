@@ -53,6 +53,13 @@ next-env.d.ts
 # Local temp files
 temp/
 
+# Playwright E2E test reports & test results
+e2e/reports/
+e2e/test-results/
+
 # Superpowers SDD scratch (per-process working dir)
 .superpowers/
+
+# Database backups (P5-04)
+backups/
 
