@@ -119,6 +119,9 @@ export function createPortfolioRoutes(deps: PortfolioRouteDeps) {
 }
 
 function csvEscape(v: string): string {
+  if (/^[=+\-@]/.test(v)) {
+    v = "'" + v;
+  }
   if (v.includes(",") || v.includes('"') || v.includes("\n")) {
     return `"${v.replace(/"/g, '""')}"`;
   }
