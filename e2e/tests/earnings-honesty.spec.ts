@@ -42,8 +42,6 @@ test.describe("Earnings honesty", () => {
 
   test("simulated badge visible on paid entries (if present)", async ({ page }) => {
     await page.waitForTimeout(2000);
-    // Check for simulated badge text
-    const simulatedBadge = page.getByText("simulated");
     // May or may not be present depending on holdings + payout state
     // If no earnings entries exist, this is a pass (empty state)
     const earningsContent = page.locator("body");

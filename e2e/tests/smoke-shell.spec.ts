@@ -29,14 +29,6 @@ test.describe("App shell", () => {
   });
 
   test("viewport respects 480px max-width", async ({ page }) => {
-    const html = page.locator("html");
-    const maxWidth = await html.evaluate((el) => {
-      const style = getComputedStyle(el);
-      // Check the max-width constraint on the main container
-      const main = el.querySelector("main, [class*=max-w]");
-      return main ? getComputedStyle(main).maxWidth : null;
-    });
-    // The app should constrain width — if not, just verify no horizontal scroll
     const scrollWidth = await page.evaluate(() =>
       Math.max(document.documentElement.scrollWidth, document.body.scrollWidth)
     );
