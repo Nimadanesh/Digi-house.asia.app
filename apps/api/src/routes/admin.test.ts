@@ -271,6 +271,102 @@ describe("admin routes", () => {
     });
   });
 
+  describe("POST /v1/admin/properties/:id/pause", () => {
+    it("pauses sale scope", async () => {
+      const deps = makeDeps();
+      const app = new Hono().route("/", createAdminRoutes(deps));
+      const createRes = await app.request("/v1/admin/properties", {
+        method: "POST",
+        headers: { "x-admin-key": ADMIN_SECRET, "content-type": "application/json" },
+        body: JSON.stringify({
+          title: "Pause Test", location: "City", description: "desc",
+          totalShares: 1000, sharePriceUsd: 10000, annualRentUsd: 50000,
+          ownerWalletAddress: "UQFFF", meta: {},
+        }),
+      });
+      const created = ((await createRes.json()) as { property: { id: string } }).property;
+
+      const res = await app.request(`/v1/admin/properties/${created.id}/pause`, {
+        method: "POST",
+        headers: { "x-admin-key": ADMIN_SECRET, "content-type": "application/json" },
+        body: JSON.stringify({ scope: "sale" }),
+      });
+      expect(res.status).toBe(200);
+      const body = (await res.json()) as { ok: boolean; property: { salePaused: boolean; distributionPaused: boolean } };
+      expect(body.ok).toBe(true);
+      expect(body.property.salePaused).toBe(true);
+      expect(body.property.distributionPaused).toBe(false);
+    });
+
+    it("returns 404 for unknown property", async () => {
+      const app = new Hono().route("/", createAdminRoutes(makeDeps()));
+      const res = await app.request("/v1/admin/properties/nonexistent/pause", {
+        method: "POST",
+        headers: { "x-admin-key": ADMIN_SECRET, "content-type": "application/json" },
+        body: JSON.stringify({ scope: "sale" }),
+      });
+      expect(res.status).toBe(404);
+    });
+
+    it("writes audit event on pause", async () => {
+      const audit = createMemoryAuditStore();
+      const deps = makeDeps({ audit });
+      const app = new Hono().route("/", createAdminRoutes(deps));
+      const createRes = await app.request("/v1/admin/properties", {
+        method: "POST",
+        headers: { "x-admin-key": ADMIN_SECRET, "content-type": "application/json" },
+        body: JSON.stringify({
+          title: "Audit Pause", location: "City", description: "desc",
+          totalShares: 1000, sharePriceUsd: 10000, annualRentUsd: 50000,
+          ownerWalletAddress: "UQGGG", meta: {},
+        }),
+      });
+      const created = ((await createRes.json()) as { property: { id: string } }).property;
+
+      await app.request(`/v1/admin/properties/${created.id}/pause`, {
+        method: "POST",
+        headers: { "x-admin-key": ADMIN_SECRET, "content-type": "application/json" },
+        body: JSON.stringify({ scope: "all" }),
+      });
+      const pauseAudits = audit._rows.filter((r: { action: string }) => r.action === "admin.pause");
+      expect(pauseAudits.length).toBe(1);
+      expect(pauseAudits[0].resourceId).toBe(created.id);
+    });
+  });
+
+  describe("POST /v1/admin/properties/:id/unpause", () => {
+    it("unpauses distribution scope", async () => {
+      const deps = makeDeps();
+      const app = new Hono().route("/", createAdminRoutes(deps));
+      const createRes = await app.request("/v1/admin/properties", {
+        method: "POST",
+        headers: { "x-admin-key": ADMIN_SECRET, "content-type": "application/json" },
+        body: JSON.stringify({
+          title: "Unpause Test", location: "City", description: "desc",
+          totalShares: 1000, sharePriceUsd: 10000, annualRentUsd: 50000,
+          ownerWalletAddress: "UQHHH", meta: {},
+        }),
+      });
+      const created = ((await createRes.json()) as { property: { id: string } }).property;
+
+      await app.request(`/v1/admin/properties/${created.id}/pause`, {
+        method: "POST",
+        headers: { "x-admin-key": ADMIN_SECRET, "content-type": "application/json" },
+        body: JSON.stringify({ scope: "all" }),
+      });
+      const res = await app.request(`/v1/admin/properties/${created.id}/unpause`, {
+        method: "POST",
+        headers: { "x-admin-key": ADMIN_SECRET, "content-type": "application/json" },
+        body: JSON.stringify({ scope: "distribution" }),
+      });
+      expect(res.status).toBe(200);
+      const body = (await res.json()) as { ok: boolean; property: { salePaused: boolean; distributionPaused: boolean } };
+      expect(body.ok).toBe(true);
+      expect(body.property.salePaused).toBe(true);
+      expect(body.property.distributionPaused).toBe(false);
+    });
+  });
+
   describe("draft exclusion from marketplace", () => {
     it("draft properties are not in list results", async () => {
       const deps = makeDeps();
