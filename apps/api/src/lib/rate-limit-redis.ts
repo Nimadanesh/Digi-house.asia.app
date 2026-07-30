@@ -1,5 +1,6 @@
 import type { Context, MiddlewareHandler } from "hono";
 import type { Redis } from "ioredis";
+import type { Logger } from "../logger.js";
 
 /**
  * Redis Lua script for token bucket rate limiting.
@@ -62,8 +63,9 @@ export function createRedisTokenBucket(opts: {
   max: number;
   windowMs: number;
   key: (c: Context) => string;
+  log: Logger;
 }): MiddlewareHandler {
-  const { redis, max, windowMs, key } = opts;
+  const { redis, max, windowMs, key, log } = opts;
   const windowSec = Math.ceil(windowMs / 1000);
 
   return async (c, next) => {
@@ -85,9 +87,12 @@ export function createRedisTokenBucket(opts: {
           429,
         );
       }
-    } catch {
-      // Redis failure — fall open to avoid blocking orders
-      // (log would be nice, but we don't have logger here)
+    } catch (err) {
+      log.error({ err, key: k }, "Redis rate limit check failed — denying request");
+      return c.json(
+        { code: "rate_limit_error", message: "Rate limit check failed" },
+        500,
+      );
     }
 
     await next();

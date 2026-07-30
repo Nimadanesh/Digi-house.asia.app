@@ -220,6 +220,7 @@ export function createApp(opts: CreateAppOptions) {
       max: orderRateLimitMax,
       windowMs: orderRateLimitWindowMs,
       key: (c) => c.get("userId") as string,
+      log,
     });
   }
 
