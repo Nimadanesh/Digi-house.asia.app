@@ -106,11 +106,11 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
     const link = `https://t.me/${env.botUsername}?startapp=ref_${user.id}`;
     try {
       await navigator.clipboard.writeText(link);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
     } catch {
       // fallback for privacy-restricted contexts — silently ignore
     }
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
   }
 
   return (
