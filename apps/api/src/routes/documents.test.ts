@@ -3,6 +3,7 @@ import { Hono } from "hono";
 import { createDocumentRoutes, type DocumentRouteDeps } from "./documents.js";
 import { createMemoryDocumentStore, type DocumentRecord } from "../marketplace/document-store.js";
 import { createMemoryUserStore } from "../auth/user-store.js";
+import { createMemoryHoldingStore } from "../portfolio/holding-store.js";
 import { S3Signer } from "../lib/s3-sign.js";
 import { signSessionToken } from "../auth/session.js";
 
@@ -49,6 +50,9 @@ function makeDeps(over: Partial<DocumentRouteDeps> = {}): DocumentRouteDeps {
     session: SESSION,
     users: createMemoryUserStore([
       seedUser("user-a", "Alice"),
+    ]),
+    holdings: createMemoryHoldingStore([
+      { userId: "user-a", propertyId: "prop-abc", sharesOwned: 10, avgCostUsd: 10000, updatedAt: new Date() },
     ]),
     ...over,
   };
@@ -120,6 +124,24 @@ describe("document routes", () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       expect(res.status).toBe(501);
+    });
+
+    it("returns 403 when user does not hold shares in the property", async () => {
+      const users = createMemoryUserStore([
+        seedUser("user-a", "Alice"),
+        seedUser("user-b", "Bob"),
+      ]);
+      const app = new Hono().route(
+        "/",
+        createDocumentRoutes(makeDeps({ users })),
+      );
+      const { token } = await signSessionToken("user-b", SESSION);
+      const res = await app.request("/v1/properties/prop-abc/documents/doc-1/url", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      expect(res.status).toBe(403);
+      const body = (await res.json()) as { code: string };
+      expect(body.code).toBe("forbidden");
     });
   });
 });

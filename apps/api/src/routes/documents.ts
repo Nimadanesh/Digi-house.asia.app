@@ -4,12 +4,14 @@ import type { SessionConfig } from "../auth/session.js";
 import type { UserStore } from "../auth/user-store.js";
 import type { S3Signer } from "../lib/s3-sign.js";
 import type { DocumentStore } from "../marketplace/document-store.js";
+import type { HoldingStore } from "../portfolio/holding-store.js";
 
 export type DocumentRouteDeps = {
   documents: DocumentStore;
   s3Signer: S3Signer | null;
   session: SessionConfig;
   users: UserStore;
+  holdings: HoldingStore | null;
 };
 
 export function createDocumentRoutes(deps: DocumentRouteDeps) {
@@ -48,10 +50,22 @@ export function createDocumentRoutes(deps: DocumentRouteDeps) {
         );
       }
 
-      const { signedUrl, publicUrl } = deps.s3Signer.getSignedGetUrl(doc.storageKey);
+      const userId = c.get("userId");
+
+      if (deps.holdings) {
+        const holding = await deps.holdings.get(userId, id);
+        if (!holding) {
+          return c.json(
+            { code: "forbidden", message: "You do not hold shares in this property" },
+            403,
+          );
+        }
+      }
+
+      const { signedUrl } = deps.s3Signer.getSignedGetUrl(doc.storageKey);
       const expiresAt = new Date(Date.now() + 900_000).toISOString();
 
-      return c.json({ url: signedUrl, publicUrl, expiresAt });
+      return c.json({ url: signedUrl, expiresAt });
     },
   );
 

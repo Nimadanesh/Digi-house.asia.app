@@ -152,6 +152,7 @@ export function createApp(opts: CreateAppOptions) {
         session,
         users: users!,
         s3Signer,
+        holdings,
       }),
     );
   }
