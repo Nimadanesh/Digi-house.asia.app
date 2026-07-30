@@ -20,6 +20,7 @@ export interface OrderBookRepo {
 
 export interface PortfolioRepo {
   summary(): Promise<PortfolioSummary>;
+  exportCsv(): Promise<string>;
 }
 
 export interface EarningsRepo {

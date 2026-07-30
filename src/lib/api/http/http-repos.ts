@@ -55,6 +55,9 @@ export function createHttpRepos(client: HttpClient): Repos {
     async summary() {
       return client.get("/v1/portfolio");
     },
+    async exportCsv() {
+      return client.getText("/v1/portfolio/export.csv");
+    },
   };
 
   const earnings: EarningsRepo = {

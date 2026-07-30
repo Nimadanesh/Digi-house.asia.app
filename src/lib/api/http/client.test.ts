@@ -12,6 +12,7 @@ function mockFetch(status: number, body: unknown, statusText?: string) {
     statusText: statusText ?? "",
     ok: status >= 200 && status < 300,
     json: async () => body,
+    text: async () => String(body ?? ""),
     headers: new Headers(),
   } as unknown as Response);
 }
@@ -132,6 +133,32 @@ describe("createHttpClient", () => {
 
     expect(err).toBeInstanceOf(ApiError);
     expect(err).toMatchObject({ status: 500, message: "Internal Server Error" });
+  });
+
+  it("getText returns raw text from CSV endpoint", async () => {
+    const fetchSpy = mockFetch(200, "a,b,c\n1,2,3");
+    const client = createHttpClient({ baseUrl: "http://localhost:8787", getToken: () => null });
+
+    const result = await client.getText("/v1/portfolio/export.csv");
+
+    expect(result).toBe("a,b,c\n1,2,3");
+    expect(fetchSpy).toHaveBeenCalledWith(
+      "http://localhost:8787/v1/portfolio/export.csv",
+      expect.objectContaining({
+        method: "GET",
+        headers: expect.objectContaining({ Accept: "text/csv" }),
+      }),
+    );
+  });
+
+  it("getText 401 maps to ApiError", async () => {
+    mockFetch(401, { code: "unauthorized", message: "Missing or invalid session" });
+    const client = createHttpClient({ baseUrl: "http://localhost:8787", getToken: () => null });
+
+    const err = await client.getText("/v1/portfolio/export.csv").catch((e) => e);
+
+    expect(err).toBeInstanceOf(ApiError);
+    expect(err).toMatchObject({ status: 401, message: "Missing or invalid session" });
   });
 
   it("strips trailing slash from baseUrl", async () => {

@@ -18,6 +18,7 @@ export interface HttpClient {
   get<T>(path: string, query?: Record<string, string | undefined>): Promise<T>;
   post<T>(path: string, body?: unknown): Promise<T>;
   delete(path: string): Promise<void>;
+  getText(path: string): Promise<string>;
 }
 
 export function createHttpClient(opts: {
@@ -82,6 +83,28 @@ export function createHttpClient(opts: {
     return params ? `${path}?${params}` : path;
   }
 
+  async function requestText(method: string, path: string): Promise<string> {
+    const headers: Record<string, string> = { Accept: "text/csv" };
+    const token = opts.getToken();
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+    const res = await fetch(`${base}${path}`, { method, headers, credentials: "omit" });
+    if (!res.ok) {
+      if (res.status === 401) {
+        setApiAccessToken(null);
+        triggerAuthInvalidated();
+      }
+      let message = res.statusText;
+      try {
+        const err = (await res.json()) as { message?: string };
+        if (err.message) message = err.message;
+      } catch { /* ignore */ }
+      throw new ApiError(res.status, message);
+    }
+    return res.text();
+  }
+
   return {
     get<T>(path: string, query?: Record<string, string | undefined>): Promise<T> {
       return request<T>("GET", buildUrl(path, query));
@@ -91,6 +114,9 @@ export function createHttpClient(opts: {
     },
     delete(path: string): Promise<void> {
       return request<void>("DELETE", path);
+    },
+    getText(path: string): Promise<string> {
+      return requestText("GET", path);
     },
   };
 }

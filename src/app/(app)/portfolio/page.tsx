@@ -16,6 +16,9 @@ import { HoldingCard } from "@/components/portfolio/HoldingCard";
 import { HoldingDetailSheet } from "@/components/portfolio/HoldingDetailSheet";
 import { OpenOrdersBlock } from "@/components/portfolio/OpenOrdersBlock";
 import { PortfolioSkeleton } from "@/components/portfolio/PortfolioSkeleton";
+import { useExportCsv } from "@/hooks/useExportCsv";
+import { Block } from "@/components/common/Block";
+import { Download } from "lucide-react";
 import type { Holding } from "@/types/position";
 import type { Listing } from "@/types/property";
 
@@ -42,6 +45,8 @@ export default function PortfolioPage() {
     haptics.selection();
     setSelected(null);
   }, []);
+
+  const { download: downloadCsv, downloading: csvDownloading } = useExportCsv();
 
   useEffect(() => {
     if (!selected) {
@@ -126,6 +131,23 @@ export default function PortfolioPage() {
       </section>
 
       <OpenOrdersBlock orders={data.openOrders} nameById={nameById} />
+
+      <section className="space-y-2">
+        <Block>
+          <button
+            type="button"
+            onClick={() => void downloadCsv()}
+            disabled={csvDownloading}
+            className="flex w-full min-h-[56px] items-center gap-2 px-4 py-3.5 text-start active:bg-surface-2/60 disabled:opacity-40"
+            data-testid="portfolio-export-csv"
+          >
+            <Download size={20} strokeWidth={1.75} className="shrink-0 text-muted-foreground" aria-hidden />
+            <span className="flex-1 text-sm font-medium leading-snug text-foreground">
+              {csvDownloading ? "Exporting…" : "Export CSV"}
+            </span>
+          </button>
+        </Block>
+      </section>
 
       <HoldingDetailSheet
         open={Boolean(selected)}

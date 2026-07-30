@@ -226,3 +226,83 @@ describe("GET /v1/portfolio", () => {
     expect(body.totalInvestedUsd).toBe(0);
   });
 });
+
+describe("GET /v1/portfolio/export.csv", () => {
+  it("returns 401 without Authorization", async () => {
+    const app = makeApp();
+    const res = await app.request("/v1/portfolio/export.csv");
+    expect(res.status).toBe(401);
+  });
+
+  it("returns CSV with header row and rows for user A holdings", async () => {
+    const app = makeApp([
+      holding("user-a", BAYSIDE, 160, 25_000),
+      holding("user-a", ALFAMA, 200, 10_000),
+    ]);
+    const res = await app.request("/v1/portfolio/export.csv", {
+      headers: { Authorization: await bearerFor("user-a") },
+    });
+    expect(res.status).toBe(200);
+    expect(res.headers.get("content-type")).toMatch(/text\/csv/);
+    expect(res.headers.get("content-disposition")).toMatch(/attachment/);
+    const body = await res.text();
+    const lines = body.trim().split("\n");
+    expect(lines[0]).toBe("propertyId,propertyName,shares,avgCostUsdCents,currentValueUsdCents,pendingWeekEarningsUsdCents,shareRatio");
+    expect(lines.length).toBe(3);
+    const row2 = lines[1].split(",");
+    expect(row2[0]).toBe(BAYSIDE);
+    expect(row2[2]).toBe("160");
+    expect(row2[3]).toBe("25000");
+    expect(Number.isInteger(Number(row2[3]))).toBe(true);
+  });
+
+  it("cents are integers (no decimal formatting)", async () => {
+    const app = makeApp([
+      holding("user-a", BAYSIDE, 160, 25_000),
+    ]);
+    const seedProps = Object.fromEntries(
+      SEED_PROPERTIES.map((p) => [p.id, p]),
+    );
+    const bay = seedProps[BAYSIDE]!;
+    const expectedCurrentValueUsd = 160 * bay.sharePriceUsd;
+    const expectedWeekly = Math.floor(bay.annualRentUsd / 52);
+    const expectedPendingWeekEarnings = Math.floor(expectedWeekly * 160 / bay.totalShares);
+
+    const res = await app.request("/v1/portfolio/export.csv", {
+      headers: { Authorization: await bearerFor("user-a") },
+    });
+    const body = await res.text();
+    const lines = body.trim().split("\n");
+    const cols = lines[1].split(",");
+    expect(cols[3]).toBe("25000");
+    expect(cols[4]).toBe(String(expectedCurrentValueUsd));
+    expect(cols[5]).toBe(String(expectedPendingWeekEarnings));
+    expect(cols[5]).not.toContain(".");
+  });
+
+  it("does not leak user A holdings to user B in CSV (IDOR)", async () => {
+    const app = makeApp([
+      holding("user-a", BAYSIDE, 160, 25_000),
+    ]);
+    const res = await app.request("/v1/portfolio/export.csv", {
+      headers: { Authorization: await bearerFor("user-b") },
+    });
+    expect(res.status).toBe(200);
+    const body = await res.text();
+    const lines = body.trim().split("\n");
+    expect(lines.length).toBe(1);
+    expect(lines[0]).toBe("propertyId,propertyName,shares,avgCostUsdCents,currentValueUsdCents,pendingWeekEarningsUsdCents,shareRatio");
+  });
+
+  it("returns header-only CSV when portfolio is empty", async () => {
+    const app = makeApp();
+    const res = await app.request("/v1/portfolio/export.csv", {
+      headers: { Authorization: await bearerFor("user-a") },
+    });
+    expect(res.status).toBe(200);
+    const body = await res.text();
+    const lines = body.trim().split("\n");
+    expect(lines.length).toBe(1);
+    expect(lines[0]).toBe("propertyId,propertyName,shares,avgCostUsdCents,currentValueUsdCents,pendingWeekEarningsUsdCents,shareRatio");
+  });
+});
