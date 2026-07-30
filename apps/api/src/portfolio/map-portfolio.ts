@@ -4,6 +4,8 @@ import {
   projectedYieldUsd,
   weeklyRentUsd,
 } from "./math.js";
+import type { HoldingStore } from "./holding-store.js";
+import type { PropertyStore } from "../marketplace/property-store.js";
 
 export type HoldingInput = {
   propertyId: string;
@@ -87,4 +89,57 @@ export function buildPortfolioSummary(
     holdings: out,
     openOrders,
   };
+}
+
+export type PortfolioHoldingRow = {
+  propertyId: string;
+  title: string;
+  sharesOwned: number;
+  avgCostUsd: number;
+  totalShares: number;
+  sharePriceUsd: number;
+  annualRentUsd: number;
+  currentValueUsd: number;
+  pendingWeekEarningsUsd: number;
+  shareRatio: number;
+};
+
+export async function fetchPortfolioData(
+  userId: string,
+  deps: {
+    holdings: Pick<HoldingStore, "listByUserId">;
+    properties: Pick<PropertyStore, "getByIds">;
+  },
+): Promise<PortfolioHoldingRow[]> {
+  const rows = await deps.holdings.listByUserId(userId);
+  const uniqueIds = [...new Set(rows.map((r) => r.propertyId))];
+  const listings = await deps.properties.getByIds(uniqueIds);
+
+  const out: PortfolioHoldingRow[] = [];
+  for (const r of rows) {
+    const listing = listings.get(r.propertyId);
+    if (!listing) continue;
+    const weekly = weeklyRentUsd(listing.annualRentUsd);
+    const currentValueUsd = r.sharesOwned * listing.sharePriceUsd;
+    const pendingWeekEarningsUsd = projectedYieldUsd(
+      weekly,
+      r.sharesOwned,
+      listing.totalShares,
+    );
+    const shareRatio =
+      listing.totalShares > 0 ? r.sharesOwned / listing.totalShares : 0;
+    out.push({
+      propertyId: r.propertyId,
+      title: listing.title,
+      sharesOwned: r.sharesOwned,
+      avgCostUsd: r.avgCostUsd,
+      totalShares: listing.totalShares,
+      sharePriceUsd: listing.sharePriceUsd,
+      annualRentUsd: listing.annualRentUsd,
+      currentValueUsd,
+      pendingWeekEarningsUsd,
+      shareRatio,
+    });
+  }
+  return out;
 }

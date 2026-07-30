@@ -65,7 +65,7 @@ describe("createRedisTokenBucket", () => {
 
     await app.request("/test");
     expect(errorSpy).toHaveBeenCalledTimes(1);
-    expect(errorSpy.mock.calls[0][0]).toMatchObject({
+    expect(errorSpy.mock.calls[0]![0]).toMatchObject({
       err: expect.any(Error),
     });
   });

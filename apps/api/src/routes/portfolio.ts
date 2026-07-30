@@ -8,9 +8,8 @@ import type { OrderStore } from "../orders/order-store.js";
 import type { HoldingStore } from "../portfolio/holding-store.js";
 import {
   buildPortfolioSummary,
-  type PropertyMark,
+  fetchPortfolioData,
 } from "../portfolio/map-portfolio.js";
-import { projectedYieldUsd, weeklyRentUsd } from "../portfolio/math.js";
 
 export type PortfolioRouteDeps = {
   session: SessionConfig;
@@ -28,25 +27,23 @@ export function createPortfolioRoutes(deps: PortfolioRouteDeps) {
     requireSession({ session: deps.session, users: deps.users }),
     async (c) => {
       const userId = c.get("userId");
-      const rows = await deps.holdings.listByUserId(userId);
-      const uniqueIds = [...new Set(rows.map((r) => r.propertyId))];
-      const listings = await deps.properties.getByIds(uniqueIds);
-      const propertiesById = new Map<string, PropertyMark>();
-      for (const [id, listing] of listings) {
-        propertiesById.set(id, {
-          totalShares: listing.totalShares,
-          sharePriceUsd: listing.sharePriceUsd,
-          annualRentUsd: listing.annualRentUsd,
-        });
-      }
-
+      const held = await fetchPortfolioData(userId, deps);
+      const propertiesById = new Map(
+        held.map((r) => [
+          r.propertyId,
+          {
+            totalShares: r.totalShares,
+            sharePriceUsd: r.sharePriceUsd,
+            annualRentUsd: r.annualRentUsd,
+          },
+        ]),
+      );
       const openOrderRows = deps.orders
         ? await deps.orders.listOpenByUserId(userId)
         : [];
       const openOrders = openOrderRows.map(mapOrderRecord);
-
       const summary = buildPortfolioSummary(
-        rows.map((r) => ({
+        held.map((r) => ({
           propertyId: r.propertyId,
           sharesOwned: r.sharesOwned,
           avgCostUsd: r.avgCostUsd,
@@ -63,46 +60,20 @@ export function createPortfolioRoutes(deps: PortfolioRouteDeps) {
     requireSession({ session: deps.session, users: deps.users }),
     async (c) => {
       const userId = c.get("userId");
-      const rows = await deps.holdings.listByUserId(userId);
-      const uniqueIds = [...new Set(rows.map((r) => r.propertyId))];
-      const listings = await deps.properties.getByIds(uniqueIds);
-      const propertiesById = new Map<string, PropertyMark>();
-      const nameById = new Map<string, string>();
-      for (const [id, listing] of listings) {
-        propertiesById.set(id, {
-          totalShares: listing.totalShares,
-          sharePriceUsd: listing.sharePriceUsd,
-          annualRentUsd: listing.annualRentUsd,
-        });
-        nameById.set(id, listing.title);
-      }
-
+      const held = await fetchPortfolioData(userId, deps);
       const lines: string[] = [
         "propertyId,propertyName,shares,avgCostUsdCents,currentValueUsdCents,pendingWeekEarningsUsdCents,shareRatio",
       ];
-
-      for (const r of rows) {
-        const prop = propertiesById.get(r.propertyId);
-        if (!prop) continue;
-        const currentValueUsd = r.sharesOwned * prop.sharePriceUsd;
-        const weekly = weeklyRentUsd(prop.annualRentUsd);
-        const pendingWeekEarningsUsd = projectedYieldUsd(
-          weekly,
-          r.sharesOwned,
-          prop.totalShares,
-        );
-        const shareRatio =
-          prop.totalShares > 0 ? r.sharesOwned / prop.totalShares : 0;
-        const name = nameById.get(r.propertyId) ?? r.propertyId;
+      for (const r of held) {
         lines.push(
           [
             csvEscape(r.propertyId),
-            csvEscape(name),
+            csvEscape(r.title),
             String(r.sharesOwned),
             String(r.avgCostUsd),
-            String(currentValueUsd),
-            String(pendingWeekEarningsUsd),
-            shareRatio.toFixed(6),
+            String(r.currentValueUsd),
+            String(r.pendingWeekEarningsUsd),
+            r.shareRatio.toFixed(6),
           ].join(","),
         );
       }
