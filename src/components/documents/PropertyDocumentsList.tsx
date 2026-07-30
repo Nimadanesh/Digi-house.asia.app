@@ -31,10 +31,6 @@ export function PropertyDocumentsList({
   downloadingId,
   error,
 }: PropertyDocumentsListProps) {
-  if (documents.length === 0 && !error) {
-    return null;
-  }
-
   return (
     <section>
       <h2 className="px-1 text-[0.8125rem] font-medium text-muted-foreground">
