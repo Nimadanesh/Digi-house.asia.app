@@ -55,6 +55,8 @@
     "db:migrate": "npm run db:migrate -w @digihouse/api",
     "db:seed": "npm run db:seed -w @digihouse/api",
     "test:api": "npm run test -w @digihouse/api",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
     "phase1:verify": "npm run test:api && npm run check",
     "phase1:smoke-api": "bash scripts/smoke-marketplace.sh",
     "phase1:smoke-rate-limit": "echo 'Run: for i in $(seq 1 11); do curl -s -o /dev/null -w \"%{http_code}\n\" -X POST http://localhost:8787/v1/auth/telegram -H \"content-type: application/json\" -d \"{\\\"initData\\\":\\\"test\\\"}\"; done | sort | uniq -c'",
