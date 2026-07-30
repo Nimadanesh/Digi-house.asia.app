@@ -68,7 +68,7 @@ export const properties = pgTable(
   (t) => [
     check(
       "properties_status_check",
-      sql`${t.status} IN ('funding', 'funded', 'resale')`,
+      sql`${t.status} IN ('draft', 'funding', 'funded', 'resale')`,
     ),
     check("properties_total_shares_pos", sql`${t.totalShares} > 0`),
     check("properties_shares_sold_nonneg", sql`${t.sharesSold} >= 0`),
