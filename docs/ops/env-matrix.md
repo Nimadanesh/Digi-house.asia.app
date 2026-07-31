@@ -65,6 +65,11 @@ Web must **never** set: `TELEGRAM_BOT_TOKEN`, `DATABASE_URL`, `SESSION_SECRET`, 
 | `TON_NETWORK` | P* | api | `testnet` | `testnet` | `testnet`/`mainnet` | Align with web `NEXT_PUBLIC_TON_NETWORK` |
 | `TON_API_URL` | P* | api | TonAPI testnet base | testnet | mainnet URL | Indexer/RPC base |
 | `TONCENTER_API_KEY` / `TON_API_KEY` | **S** | api | optional local | SM | SM | If provider requires key |
+| `ADMIN_TON_WALLET_ADDRESS` | P | api | testnet receive wallet or empty | testnet receive wallet | mainnet receive wallet | Buy payments destination (native TON); fallback admin > TON_RELAY_ADDRESS > listing owner |
+| `ADMIN_USDT_WALLET_ADDRESS` | P | api | testnet USDT receive wallet or empty | testnet | mainnet USDT receive wallet | USDT (Jetton) buy rail (ADR-005) |
+| `USDT_JETTON_MASTER_ADDRESS` | P | api | testnet master `kQDw5tNMBGsM0ZlLGhA9TSV9iX1nMLrfPZ7HnrQMBxgrAhWe` | testnet master | **mainnet** master `EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs` | Must match `TON_API_URL` network; mismatch rejects every settle (`jetton_mismatch`) |
+| `TON_USD_PRICE_CENTS` | P* | api | `200` | current rate | current rate | USD→TON for /v1/buys/prepare payable amount |
+| `BUY_STUB_NANOTON` | P* | api | `10000000` | unset (rate used) | unset (rate used) | Stub only when rate unset |
 | `PAYOUT_TICK_MS` | P* | api | `60000` demo | staging cadence or cron | Friday cron / worker schedule | Hybrid `tickPayout` **P1-13**; not public web |
 | `HOT_WALLET_MAX_TON` | P* | api | `0` or unset | `50` interim | policy cap (§6) | Monitor/enforce; ADR-004 |
 | `HOT_WALLET_MIN_TON` | P* | api | unset | low-water for alerts | next-Friday need | Optional low-water (ADR-004) |
@@ -149,3 +154,23 @@ Monitoring (ADR-004): alert if balance **>** max or **<** min next-Friday need. 
 - [digihouse-v0.yaml](../openapi/digihouse-v0.yaml) — API base URL
 - [ROADMAP.md](../../ROADMAP.md) — `DATABASE_URL`, `REDIS_URL`, `TELEGRAM_BOT_TOKEN`, `TON_*`
 - [EXECUTION-PLAN.md](../../EXECUTION-PLAN.md) — P0-07 acceptance
+
+## 11. Prod dry-run verified
+
+Verified during P5-05 testnet dry-run ([mainnet-dry-run.md](../runbooks/mainnet-dry-run.md)).
+
+| Variable | Prod value | Dry-run verified | Date | Initials |
+|---|---|---|---|---|
+| `SETTLEMENT_MODE` | `hybrid` | | | |
+| `NEXT_PUBLIC_TON_NETWORK` | `testnet` (→mainnet only post P5-09) | | | |
+| `NEXT_PUBLIC_DATA_SOURCE` | `api` | | | |
+| `CORS_ORIGIN` | `https://<prod-mini-app-origin>` | | | |
+| `TELEGRAM_BOT_TOKEN` | SM (prod bot) | | N/A — use test bot for dry-run | |
+| `SESSION_SECRET` | SM (≥32 char random) | | N/A — rotated per drill | |
+| `ADMIN_API_SECRET` | SM (≥32 char random) | | N/A — rotated per drill | |
+| `DATABASE_URL` | SM (managed Postgres) | | N/A — staging DB for dry-run | |
+| `HOT_WALLET_MAX_TON` | policy cap per ADR-004 §3 | | N/A — testnet cap ≤50 TON | |
+| `PAYOUT_WORKER_ENABLED` | `false` (initial) | | | |
+| `TON_NETWORK` (API) | `testnet` | | | |
+
+Fill the table with date and operator initials after each dry-run. Do not copy secret values into this file. N/A entries remain blank when the env was not exercised in the dry-run.

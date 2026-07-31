@@ -1,38 +1,107 @@
-import { Hono } from "hono";
+import { Hono, type MiddlewareHandler } from "hono";
+import { Address, beginCell } from "@ton/core";
 import type { AuditStore } from "../audit/audit-store.js";
 import { writeAuditEvent } from "../audit/write-audit.js";
 import { requireSession } from "../auth/require-session.js";
 import type { SessionConfig } from "../auth/session.js";
 import type { UserStore } from "../auth/user-store.js";
-import type { IntentStore } from "../buys/intent-store.js";
-import {
-  deriveHoldingPublic,
-  nextAvgCostUsd,
-  syntheticBuyTxHash,
-} from "../buys/settle-buy.js";
-import {
-  mapTransactionPublic,
-  type TxStore,
-} from "../buys/tx-store.js";
+import type { BuyCurrency, IntentStore } from "../buys/intent-store.js";
+import { settleVerifiedBuy } from "../buys/settle-verified-buy.js";
+import { usdCentsToNanoTon } from "../buys/settle-buy.js";
+import type { TxStore } from "../buys/tx-store.js";
+import type { Logger } from "../logger.js";
 import type { PropertyStore } from "../marketplace/property-store.js";
 import type { HoldingStore } from "../portfolio/holding-store.js";
 import { slidingWindowRateLimit } from "../lib/rate-limit.js";
+import { requireAllowlist } from "../middleware/require-allowlist.js";
+import type { LaunchMode } from "../launch/allowlist.js";
+import type { TonTxClient } from "../ton/tx-client.js";
+import { verifyBuyPayment } from "../ton/verify-buy-payment.js";
+import { verifyJettonBuyPayment } from "../ton/verify-jetton-payment.js";
+
+/** USDT (Jetton) has 6 decimals — totalUsd is in cents, so base units = cents × 10^4. */
+const USDT_BASE_UNITS_PER_CENT = 10_000n;
+/** Gas value attached to the Jetton transfer message (0.1 TON) — covers the multi-message flow. */
+const JETTON_GAS_NANOTON = "100000000";
+/** jetton_transfer op-code (TEP-74). */
+const JETTON_TRANSFER_OP = 0xf8a7ea5;
 
 export type BuyRouteDeps = {
   session: SessionConfig;
   users: UserStore;
   properties: PropertyStore;
-  holdings: HoldingStore;
   intents: IntentStore;
+  /** Required for /v1/buys/verify-and-settle settlement writes. */
+  holdings: HoldingStore;
   transactions: TxStore;
+  /** On-chain lookup used to verify the wallet-signed payment before settling. */
+  tonTxClient: TonTxClient;
+  log?: Logger;
   audit?: AuditStore | null;
+  /** Admin receive wallet for native-TON primary-sale payments. Preferred over tonRelayAddress. */
+  adminTonWalletAddress?: string;
+  /** Legacy relay/owner fallback for prepare messages when admin wallet is unset. */
   tonRelayAddress?: string;
+  /** Admin receive wallet for USDT (Jetton) primary-sale payments (a regular TON wallet). */
+  adminUsdtWalletAddress?: string;
+  /** USDT jetton master contract address (testnet/mainnet) — token identity for verification. */
+  usdtJettonMasterAddress?: string;
+  /** Deprecated 0.01 TON stub amount — retained only when tonUsdPriceCents is unset. */
   buyStubNanoTon?: string;
+  /** USD-per-TON conversion (cents per TON) for computing prepare amounts. */
+  tonUsdPriceCents?: number;
+  /** Max age of a payment transaction we will settle (default 30 min). */
+  verifyMaxAgeMs?: number;
   buyIntentTtlSeconds?: number;
+  /** Injected for tests; defaults to a per-user in-memory sliding window (max 15/min). */
+  prepareRateLimiter?: MiddlewareHandler;
+  allowlist: Set<string>;
+  launchMode: LaunchMode;
 };
 
 function isPositiveInt(n: unknown): n is number {
   return typeof n === "number" && Number.isInteger(n) && n >= 1;
+}
+
+function parseCurrency(v: unknown): BuyCurrency {
+  return v === "USDT" ? "USDT" : "TON";
+}
+
+/** Parse a decimal string into a BigInt; returns null on malformed input. */
+function safeBigInt(s: string | null | undefined): bigint | null {
+  if (!s) return null;
+  try {
+    return BigInt(s);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Build the TonConnect message that pays for a USDT buy: a jetton_transfer from the buyer's USDT
+ * jetton wallet to the admin USDT wallet. The transfer must be initiated from the buyer's jetton
+ * wallet contract (derived from master + owner), with the admin wallet as destination.
+ */
+function buildJettonMessage(opts: {
+  jettonWalletAddress: string;
+  adminUsdtWalletAddress: string;
+  userWalletAddress: string;
+  jettonAmount: bigint;
+}): { address: string; amount: string; payload: string } {
+  const body = beginCell()
+    .storeUint(JETTON_TRANSFER_OP, 32)
+    .storeUint(0n, 64) // query_id
+    .storeCoins(opts.jettonAmount) // amount in base units (USDT = 6 decimals)
+    .storeAddress(Address.parse(opts.adminUsdtWalletAddress)) // jetton destination = admin wallet
+    .storeAddress(Address.parse(opts.userWalletAddress)) // response/excesses destination = buyer
+    .storeCoins(1n) // forward_ton_amount — 1 nanoTON triggers transfer_notification (docs.ton.org)
+    .storeMaybeRef(null) // forward_payload (no comment needed)
+    .endCell();
+  return {
+    address: opts.jettonWalletAddress,
+    amount: JETTON_GAS_NANOTON,
+    payload: body.toBoc().toString("base64"),
+  };
 }
 
 export function createBuyRoutes(deps: BuyRouteDeps) {
@@ -40,14 +109,22 @@ export function createBuyRoutes(deps: BuyRouteDeps) {
   const ttlSeconds = deps.buyIntentTtlSeconds ?? 900;
   const stubNano = deps.buyStubNanoTon ?? "10000000";
 
+  const allowlistMw = requireAllowlist(
+    deps.allowlist,
+    deps.launchMode,
+    (c) => c.get("user")?.walletAddress ?? "",
+  );
+
   app.post(
     "/v1/buys/prepare",
     requireSession({ session: deps.session, users: deps.users }),
-    slidingWindowRateLimit({
-      windowMs: 60_000,
-      max: 15,
-      key: (c) => c.get("userId"),
-    }),
+    allowlistMw,
+    deps.prepareRateLimiter ??
+      slidingWindowRateLimit({
+        windowMs: 60_000,
+        max: 15,
+        key: (c) => c.get("userId"),
+      }),
     async (c) => {
       let body: unknown;
       try {
@@ -146,7 +223,99 @@ export function createBuyRoutes(deps: BuyRouteDeps) {
       const now = new Date();
       const expiresAt = new Date(now.getTime() + ttlSeconds * 1000);
       const intentId = `intent_${crypto.randomUUID()}`;
+      const currency = parseCurrency(b.currency);
 
+      // Step 4: USDT (Jetton) payment rail. The Jetton transfer must originate from the BUYER's
+      // USDT jetton wallet (derived from master + owner) and credit the admin USDT wallet.
+      if (currency === "USDT") {
+        const adminUsdt = deps.adminUsdtWalletAddress?.trim() || "";
+        const master = deps.usdtJettonMasterAddress?.trim() || "";
+        if (!adminUsdt || !master) {
+          return c.json(
+            {
+              code: "payment_method_unavailable",
+              message: "USDT payments are not configured",
+            },
+            409,
+          );
+        }
+        const userWallet = c.get("user")?.walletAddress ?? "";
+        if (!userWallet) {
+          return c.json(
+            {
+              code: "payment_method_unavailable",
+              message: "Connect a TON wallet to pay with USDT",
+            },
+            409,
+          );
+        }
+
+        // totalUsd is integer cents → USDT base units (6 decimals) = cents × 10^4.
+        const jettonAmount = BigInt(totalUsd) * USDT_BASE_UNITS_PER_CENT;
+
+        const jettonWallet = await deps.tonTxClient.getJettonWalletAddress(master, userWallet);
+        if (jettonWallet.kind !== "found") {
+          return c.json(
+            {
+              code: "payment_method_unavailable",
+              message: "Could not resolve your USDT wallet",
+            },
+            502,
+          );
+        }
+
+        const message = buildJettonMessage({
+          jettonWalletAddress: jettonWallet.address,
+          adminUsdtWalletAddress: adminUsdt,
+          userWalletAddress: userWallet,
+          jettonAmount,
+        });
+
+        // Persist the admin recipient + expected jetton amount so verification compares against this exact intent.
+        await deps.intents.create({
+          id: intentId,
+          userId,
+          propertyId,
+          quantity,
+          priceUsdPerShare,
+          totalUsd,
+          destinationAddress: adminUsdt,
+          paidByWallet: userWallet,
+          currency,
+          expectedNanoTon: null,
+          expectedJettonAmount: jettonAmount.toString(),
+          expiresAt,
+        });
+
+        return c.json({
+          intentId,
+          propertyId,
+          quantity,
+          priceUsdPerShare,
+          totalUsd,
+          currency,
+          tonConnectMessages: [message],
+          expiresAt: expiresAt.toISOString(),
+        });
+      }
+
+      // Native-TON payment rail — unchanged: target the admin receive wallet (never the owner directly).
+      // Fallbacks keep dev/test setups working without an admin wallet configured.
+      const address =
+        deps.adminTonWalletAddress?.trim() ||
+        deps.tonRelayAddress?.trim() ||
+        listing.ownerWalletAddress ||
+        "";
+      // Real payable amount: total USD converted to nanoTON at the configured rate.
+      // (BUY_STUB_NANOTON remains a fallback only when no rate is configured.)
+      const nanoTon =
+        deps.tonUsdPriceCents && deps.tonUsdPriceCents > 0
+          ? usdCentsToNanoTon(totalUsd, deps.tonUsdPriceCents).toString()
+          : stubNano;
+      // Payer recorded at prepare — verify later that the tx originates from THIS wallet.
+      const payerWallet = c.get("user")?.walletAddress ?? null;
+
+      // Persist the destination + expected amount so verification compares against this exact intent.
       await deps.intents.create({
         id: intentId,
         userId,
@@ -154,13 +323,16 @@ export function createBuyRoutes(deps: BuyRouteDeps) {
         quantity,
         priceUsdPerShare,
         totalUsd,
+        destinationAddress: address,
+        paidByWallet: payerWallet,
+        currency,
+        expectedNanoTon: nanoTon,
+        expectedJettonAmount: null,
         expiresAt,
       });
 
-      const address =
-        deps.tonRelayAddress?.trim() || listing.ownerWalletAddress || "";
       const tonConnectMessages = address
-        ? [{ address, amount: stubNano, payload: null as null }]
+        ? [{ address, amount: nanoTon, payload: null as null }]
         : [];
 
       return c.json({
@@ -169,6 +341,7 @@ export function createBuyRoutes(deps: BuyRouteDeps) {
         quantity,
         priceUsdPerShare,
         totalUsd,
+        currency,
         tonConnectMessages,
         expiresAt: expiresAt.toISOString(),
       });
@@ -178,6 +351,7 @@ export function createBuyRoutes(deps: BuyRouteDeps) {
   app.post(
     "/v1/buys/confirm",
     requireSession({ session: deps.session, users: deps.users }),
+    allowlistMw,
     async (c) => {
       let body: unknown;
       try {
@@ -204,6 +378,12 @@ export function createBuyRoutes(deps: BuyRouteDeps) {
           : typeof b.boc === "string"
             ? b.boc
             : null;
+      const txHash =
+        b.txHash === null || b.txHash === undefined
+          ? null
+          : typeof b.txHash === "string"
+            ? b.txHash.trim()
+            : null;
 
       if (!intentId) {
         return c.json(
@@ -212,14 +392,35 @@ export function createBuyRoutes(deps: BuyRouteDeps) {
         );
       }
 
+      // Replay guard: a wallet-signed txHash may be consumed by at most ONE intent. If the txHash
+      // already belongs to another intent, reject — settling it twice would double-issue shares.
+      if (txHash) {
+        const consumedBy = await deps.intents.findByTxHash(txHash);
+        if (consumedBy && consumedBy.id !== intentId) {
+          deps.log?.warn(
+            {
+              intentId,
+              txHash,
+              consumedByIntentId: consumedBy.id,
+            },
+            "buy.confirm.tx_hash_reused",
+          );
+          return c.json(
+            {
+              code: "tx_hash_reused",
+              message: "This payment hash has already been used for another purchase",
+            },
+            409,
+          );
+        }
+      }
+
       const userId = c.get("userId");
       const now = new Date();
-      const claimed = await deps.intents.markConfirmedIfPending(
-        intentId,
-        userId,
-        now,
+      const claimed = await deps.intents.markConfirmedIfPending(intentId, userId, now, {
         boc,
-      );
+        txHash,
+      });
 
       if (!claimed.ok) {
         if (
@@ -258,68 +459,9 @@ export function createBuyRoutes(deps: BuyRouteDeps) {
         );
       }
 
-      const bumped = await deps.properties.tryIncrementSharesSold(
-        intent.propertyId,
-        intent.quantity,
-      );
-      if (!bumped) {
-        return c.json(
-          {
-            code: "conflict",
-            message: "Insufficient shares remaining",
-          },
-          409,
-        );
-      }
-
-      const existing = await deps.holdings.get(
-        userId,
-        intent.propertyId,
-      );
-      const oldShares = existing?.sharesOwned ?? 0;
-      const oldAvg = existing?.avgCostUsd ?? 0;
-      const newShares = oldShares + intent.quantity;
-      const newAvg = nextAvgCostUsd(
-        oldShares,
-        oldAvg,
-        intent.quantity,
-        intent.priceUsdPerShare,
-      );
-
-      const holdingRow = await deps.holdings.upsert({
-        userId,
-        propertyId: intent.propertyId,
-        sharesOwned: newShares,
-        avgCostUsd: newAvg,
-      });
-
-      const txId = `tx_${crypto.randomUUID()}`;
-      const txHash = syntheticBuyTxHash(intent.id);
-      const txRecord = await deps.transactions.insert({
-        id: txId,
-        userId,
-        kind: "buy",
-        propertyId: intent.propertyId,
-        shares: intent.quantity,
-        amountUsd: intent.totalUsd,
-        status: "success",
-        txHash,
-        buyIntentId: intent.id,
-      });
-
-      const holding = deriveHoldingPublic(
-        {
-          propertyId: holdingRow.propertyId,
-          sharesOwned: holdingRow.sharesOwned,
-          avgCostUsd: holdingRow.avgCostUsd,
-        },
-        {
-          totalShares: listing.totalShares,
-          sharePriceUsd: listing.sharePriceUsd,
-          annualRentUsd: listing.annualRentUsd,
-        },
-      );
-
+      // Step 2: confirm ONLY records the user's payment against the intent. Settlement — creating
+      // the holding, bumping shares_sold, and writing the transaction ledger — is deferred until the
+      // on-chain payment is verified (indexer/tonapi, post-MVP). No shares/holdings/ledger change here.
       if (deps.audit) {
         await writeAuditEvent(deps.audit, {
           action: "buy.confirm",
@@ -327,14 +469,14 @@ export function createBuyRoutes(deps: BuyRouteDeps) {
           actorUserId: userId,
           resourceType: "buy_intent",
           resourceId: intent.id,
-          summary: `Buy confirmed ${intent.quantity} shares of ${intent.propertyId}`,
+          summary: `Buy payment recorded for ${intent.quantity} shares of ${intent.propertyId} (settlement pending on-chain verification)`,
           payload: {
             intentId: intent.id,
             propertyId: intent.propertyId,
             quantity: intent.quantity,
             totalUsd: intent.totalUsd,
-            transactionId: txRecord.id,
-            settlementMode: "hybrid",
+            txHash,
+            settlementMode: "pending-verification",
           },
           requestId:
             (c.var as { requestId?: string }).requestId ?? null,
@@ -342,8 +484,334 @@ export function createBuyRoutes(deps: BuyRouteDeps) {
       }
 
       return c.json({
-        transaction: mapTransactionPublic(txRecord),
-        holding,
+        intentId: intent.id,
+        status: "confirmed",
+        message:
+          "Payment recorded. Share settlement follows on-chain verification.",
+      });
+    },
+  );
+
+  // Step 3: verify the recorded on-chain payment, and ONLY then settle the shares. Idempotent —
+  // already-settled intents return status "settled" without re-writing anything.
+  app.post(
+    "/v1/buys/verify-and-settle",
+    requireSession({ session: deps.session, users: deps.users }),
+    allowlistMw,
+    async (c) => {
+      let body: unknown;
+      try {
+        body = await c.req.json();
+      } catch {
+        return c.json(
+          { code: "validation_error", message: "Invalid JSON body" },
+          400,
+        );
+      }
+      if (!body || typeof body !== "object") {
+        return c.json(
+          { code: "validation_error", message: "Invalid request body" },
+          400,
+        );
+      }
+      const b = body as Record<string, unknown>;
+      const intentId =
+        typeof b.intentId === "string" ? b.intentId.trim() : "";
+      if (!intentId) {
+        return c.json(
+          { code: "validation_error", message: "intentId is required" },
+          400,
+        );
+      }
+
+      const userId = c.get("userId");
+      const intent = await deps.intents.getById(intentId);
+      if (!intent || intent.userId !== userId) {
+        return c.json(
+          { code: "not_found", message: "Buy intent not found" },
+          404,
+        );
+      }
+
+      // Idempotent success — already verified and settled.
+      if (intent.status === "settled") {
+        return c.json({
+          intentId: intent.id,
+          status: "settled" as const,
+          txHash: intent.txHash ?? undefined,
+        });
+      }
+      if (intent.status !== "confirmed") {
+        return c.json(
+          {
+            code: "not_confirmed",
+            message: "Buy intent is not confirmed yet",
+            intentStatus: intent.status,
+          },
+          409,
+        );
+      }
+      if (!intent.txHash) {
+        return c.json(
+          { code: "no_tx_hash", message: "No payment recorded for this intent" },
+          409,
+        );
+      }
+
+      // Replay defense-in-depth: even if a conflicting intent was confirmed before the confirm guard
+      // shipped, never settle a txHash that a DIFFERENT intent already consumed.
+      const consumedBy = await deps.intents.findByTxHash(intent.txHash);
+      if (consumedBy && consumedBy.id !== intent.id) {
+        deps.log?.warn(
+          {
+            intentId: intent.id,
+            txHash: intent.txHash,
+            consumedByIntentId: consumedBy.id,
+          },
+          "buy.verify.tx_hash_reused",
+        );
+        return c.json(
+          {
+            code: "tx_hash_reused",
+            message: "This payment hash was already settled for another purchase",
+          },
+          409,
+        );
+      }
+
+      const listing = await deps.properties.getById(intent.propertyId);
+      if (!listing) {
+        return c.json(
+          { code: "not_found", message: "Property not found" },
+          404,
+        );
+      }
+      if (listing.salePaused) {
+        return c.json(
+          { code: "sale_paused", message: "Primary sale is paused by admin" },
+          409,
+        );
+      }
+
+      const destination = intent.destinationAddress ?? "";
+      if (!destination) {
+        return c.json(
+          {
+            code: "verification_unconfigured",
+            message: "Intent has no payable destination",
+          },
+          409,
+        );
+      }
+
+      // Jetton (USDT) rail: verify master, admin recipient and jetton amount from the event trace.
+      // Native-TON rail: verify the value transfer to the admin wallet. Both require their expected
+      // amount to be present on the intent, and both verify against the same on-chain client.
+      let result:
+        | { valid: true; actualAmountNano?: string; actualJettonAmount?: string }
+        | {
+            valid: false;
+            reason: string;
+            actualAmountNano?: string;
+            actualJettonAmount?: string;
+          };
+
+      if (intent.currency === "USDT") {
+        const expectedJettonAmount = safeBigInt(intent.expectedJettonAmount);
+        const jettonMaster = deps.usdtJettonMasterAddress?.trim() || "";
+        if (!jettonMaster || !expectedJettonAmount || expectedJettonAmount <= 0n) {
+          return c.json(
+            {
+              code: "verification_unconfigured",
+              message: "USDT intent is missing jetton configuration",
+            },
+            409,
+          );
+        }
+        const r = await verifyJettonBuyPayment(deps.tonTxClient, {
+          txHash: intent.txHash,
+          expectedJettonMasterAddress: jettonMaster,
+          expectedRecipientAddress: destination,
+          expectedAmount: expectedJettonAmount,
+          expectedPayerWallet: intent.paidByWallet ?? undefined,
+          maxAgeMs: deps.verifyMaxAgeMs,
+        });
+        result = r.valid
+          ? { valid: true, actualJettonAmount: r.actualJettonAmount }
+          : {
+              valid: false,
+              reason: r.reason,
+              actualJettonAmount: r.actualJettonAmount,
+            };
+      } else {
+        const expectedAmountNano = safeBigInt(intent.expectedNanoTon);
+        if (!expectedAmountNano || expectedAmountNano <= 0n) {
+          return c.json(
+            {
+              code: "verification_unconfigured",
+              message: "Intent has no payable amount",
+            },
+            409,
+          );
+        }
+        const r = await verifyBuyPayment(deps.tonTxClient, {
+          txHash: intent.txHash,
+          expectedDestinationAddress: destination,
+          expectedAmountNano: expectedAmountNano,
+          expectedPayerWallet: intent.paidByWallet ?? undefined,
+          maxAgeMs: deps.verifyMaxAgeMs,
+        });
+        result = r.valid
+          ? { valid: true, actualAmountNano: r.actualAmountNano }
+          : { valid: false, reason: r.reason, actualAmountNano: r.actualAmountNano };
+      }
+
+      deps.log?.info(
+        {
+          intentId: intent.id,
+          txHash: intent.txHash,
+          currency: intent.currency,
+          valid: result.valid,
+          ...(result.valid
+            ? { actualAmountNano: result.actualAmountNano, actualJettonAmount: result.actualJettonAmount }
+            : {
+                reason: result.reason,
+                actualAmountNano: result.actualAmountNano,
+                actualJettonAmount: result.actualJettonAmount,
+              }),
+        },
+        "buy.verify",
+      );
+
+      if (deps.audit) {
+        await writeAuditEvent(deps.audit, {
+          action: "buy.verify",
+          actorType: "user",
+          actorUserId: userId,
+          resourceType: "buy_intent",
+          resourceId: intent.id,
+          summary: `Buy payment verification ${result.valid ? "ok" : result.reason} for ${intent.id}`,
+          payload: {
+            intentId: intent.id,
+            txHash: intent.txHash,
+            currency: intent.currency,
+            valid: result.valid,
+            reason: result.valid ? undefined : result.reason,
+            settlementMode: "onchain-verified",
+          },
+          requestId: (c.var as { requestId?: string }).requestId ?? null,
+        });
+      }
+
+      if (!result.valid) {
+        // tx_not_found / api_unavailable are retryable — the frontend keeps polling.
+        const status =
+          result.reason === "tx_not_found" || result.reason === "api_unavailable"
+            ? "pending_confirmation"
+            : "verification_failed";
+        return c.json({
+          intentId: intent.id,
+          status,
+          reason: result.reason,
+          ...(result.actualAmountNano
+            ? { actualAmountNano: result.actualAmountNano }
+            : {}),
+          ...(result.actualJettonAmount
+            ? { actualJettonAmount: result.actualJettonAmount }
+            : {}),
+        });
+      }
+
+      let settled:
+        | { ok: true; alreadySettled?: boolean }
+        | { ok: false; reason: string };
+      try {
+        settled = await settleVerifiedBuy(
+          {
+            intents: deps.intents,
+            properties: deps.properties,
+            holdings: deps.holdings,
+            transactions: deps.transactions,
+          },
+          {
+            intent,
+            actualAmountNano: result.actualAmountNano,
+            actualJettonAmount: result.actualJettonAmount,
+          },
+        );
+      } catch (e) {
+        deps.log?.error(
+          { intentId: intent.id, txHash: intent.txHash, err: e },
+          "buy.settle.failed",
+        );
+        return c.json(
+          {
+            code: "conflict",
+            message: "Buy could not be settled — please contact support",
+          },
+          409,
+        );
+      }
+      if (!settled.ok) {
+        deps.log?.error(
+          { intentId: intent.id, txHash: intent.txHash, reason: settled.reason },
+          "buy.settle.failed",
+        );
+        return c.json(
+          { code: "conflict", message: "Buy intent could not be settled" },
+          409,
+        );
+      }
+
+      deps.log?.info(
+        {
+          intentId: intent.id,
+          txHash: intent.txHash,
+          currency: intent.currency,
+          quantity: intent.quantity,
+          propertyId: intent.propertyId,
+          actualAmountNano: result.actualAmountNano,
+          actualJettonAmount: result.actualJettonAmount,
+          alreadySettled: settled.alreadySettled ?? false,
+        },
+        "buy.settle",
+      );
+
+      if (deps.audit) {
+        await writeAuditEvent(deps.audit, {
+          action: "buy.settle",
+          actorType: "user",
+          actorUserId: userId,
+          resourceType: "buy_intent",
+          resourceId: intent.id,
+          summary: `Shares settled for ${intent.quantity} shares of ${intent.propertyId} after verified on-chain payment`,
+          payload: {
+            intentId: intent.id,
+            propertyId: intent.propertyId,
+            quantity: intent.quantity,
+            totalUsd: intent.totalUsd,
+            txHash: intent.txHash,
+            currency: intent.currency,
+            actualAmountNano: result.actualAmountNano,
+            actualJettonAmount: result.actualJettonAmount,
+            settlementMode: "onchain-verified",
+          },
+          requestId: (c.var as { requestId?: string }).requestId ?? null,
+        });
+      }
+
+      return c.json({
+        intentId: intent.id,
+        status: "settled" as const,
+        txHash: intent.txHash,
+        propertyId: intent.propertyId,
+        shares: intent.quantity,
+        ...(result.actualAmountNano
+          ? { actualAmountNano: result.actualAmountNano }
+          : {}),
+        ...(result.actualJettonAmount
+          ? { actualJettonAmount: result.actualJettonAmount }
+          : {}),
       });
     },
   );

@@ -64,9 +64,10 @@
 - [ ] **P4** P1+: owner flow, optional USDT, referral, CSV export — P4-07…10
 
 ### Phase 5 — Security, testing, mainnet *(summarized)*
-- [ ] **P5** pen-test + contract audit + E2E — P5-01…03
-- [ ] **P5** backup drill, mainnet dry-run, status/incident — P5-04…06
-- [ ] **P5** legal + go/no-go + allowlist launch + on-call week — P5-07…10
+- [x] **P5** pen-test + contract audit + E2E — P5-01…03
+- [x] **P5** backup drill, mainnet dry-run, status/incident — P5-04…06
+- [x] **P5** legal + go/no-go — P5-07…08
+- [ ] **P5** allowlist launch + on-call week — P5-09…10
 
 ---
 
@@ -462,6 +463,6 @@ phase 1 gate
 
 ---
 
-**Current Phase:** Phase 4 — Advanced features  
-**Last Completed Task:** P4-06 — Redis token bucket rate limit on placeOrder  
-**Next Recommended Task:** P4-03 — Admin pause — or P4-02 — Admin create property
+**Current Phase:** Phase 5 — Security, testing, mainnet  
+**Last Completed Task:** P5-08 — Go/no-go meeting checklist + threat-model-v1  
+**Next Recommended Task:** Human meeting: Phase 5 go/no-go. If Go: P5-09 allowlist launch.

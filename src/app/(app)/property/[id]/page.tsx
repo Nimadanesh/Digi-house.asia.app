@@ -9,11 +9,12 @@ import { useProperty } from "@/hooks/useProperty";
 import { useOrderBook } from "@/hooks/useOrderBook";
 import { useTelegram } from "@/hooks/useTelegram";
 import { useTonConnect } from "@/hooks/useTonConnect";
-import { useBuyShares, type BuyInput } from "@/hooks/useBuyShares";
+import { useBuyShares, type BuyInput, UsdtUnavailableError } from "@/hooks/useBuyShares";
 import { usePropertyDocuments } from "@/hooks/usePropertyDocuments";
 import { useUiStore } from "@/stores/ui.store";
 import { haptics } from "@/lib/telegram/haptics";
 import { usd } from "@/lib/format";
+import type { BuyCurrency } from "@/types/buy";
 import { PropertyDetail } from "@/components/property/PropertyDetail";
 import { PropertyDetailSkeleton } from "@/components/property/PropertyDetailSkeleton";
 import { BuySheet, type BuySheetStep } from "@/components/property/buy/BuySheet";
@@ -46,10 +47,13 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
 
   const [previewShares, setPreviewShares] = useState(10);
   const [qty, setQty] = useState(10);
+  const [currency, setCurrency] = useState<BuyCurrency>("TON");
   const [sheetOpen, setSheetOpen] = useState(false);
   const [step, setStep] = useState<BuySheetStep>("qty");
   const [toast, setToast] = useState<ToastState | null>(null);
   const [buyError, setBuyError] = useState<string | null>(null);
+  /** False once the server reports USDT as not configured (409 payment_method_unavailable). */
+  const [usdtAvailable, setUsdtAvailable] = useState(true);
 
   const listing = property.data;
   const remaining = listing?.sharesRemaining ?? 0;
@@ -125,7 +129,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
       propertyId: listing.id,
       quantity: qty,
       priceUsdPerShare: listing.sharePriceUsd,
-      toFriendlyAddress: listing.ownerWalletAddress,
+      currency,
     };
     try {
       const res = await buy.mutateAsync(input);
@@ -138,12 +142,26 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
         haptics.notification("error");
       }
     } catch (e) {
+      // USDT not configured on the server → fall back to TON and tell the user.
+      if (e instanceof UsdtUnavailableError) {
+        setCurrency("TON");
+        setUsdtAvailable(false);
+        setBuyError(e.message);
+        setToast({
+          tone: "error",
+          title: "USDT unavailable",
+          sub: "Switching you to TON for this purchase.",
+          leaving: false,
+        });
+        haptics.notification("error");
+        return;
+      }
       const message = e instanceof Error ? e.message : "transaction rejected";
       setBuyError(message);
       setToast({ tone: "error", title: "Buy failed", sub: message, leaving: false });
       haptics.notification("error");
     }
-  }, [listing, qty, buy]);
+  }, [listing, qty, currency, buy]);
 
   // MainButton — Fable: closed → "Buy Share"; sheet qty → Continue; summary → Confirm & Pay; success → hidden.
   useEffect(() => {
@@ -176,6 +194,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
       const off = mainButton.onClick(() => {
         haptics.impact("light");
         setQty(Math.min(remaining, Math.max(1, previewShares)));
+        setCurrency("TON");
         setStep("qty");
         setSheetOpen(true);
       });
@@ -311,6 +330,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
           onClick={() => {
             haptics.impact("light");
             setQty(Math.min(remaining, Math.max(10, previewShares)));
+            setCurrency("TON");
             setStep("qty");
             setSheetOpen(true);
           }}
@@ -327,8 +347,15 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
           setQty(q);
         }}
         walletConnected={ton.connected}
+        currency={currency}
+        onCurrencyChange={(c) => {
+          setBuyError(null);
+          setCurrency(c);
+        }}
+        usdtAvailable={usdtAvailable}
         buyError={buyError}
         buyPending={buy.isPending}
+        buyVerifying={buy.phase === "verifying"}
       />
     </>
   );

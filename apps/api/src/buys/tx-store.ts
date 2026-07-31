@@ -5,6 +5,7 @@ import { properties } from "../db/schema/properties.js";
 
 export type TxKind = "buy" | "sell" | "earnings" | "withdraw";
 export type TxStatus = "pending" | "success" | "failed";
+export type TxCurrency = "TON" | "USDT";
 
 export type TransactionRecord = {
   id: string;
@@ -13,7 +14,11 @@ export type TransactionRecord = {
   propertyId: string | null;
   shares: number | null;
   amountUsd: number;
+  /** Payment rail (defaults to TON for rows written before USDT support). */
+  currency?: TxCurrency;
   tonAmount: number | null;
+  /** Jetton base units for USDT buys. */
+  tokenAmount?: number | null;
   status: TxStatus;
   txHash: string | null;
   error: string | null;
@@ -30,7 +35,9 @@ export type TransactionPublic = {
   userId: string;
   shares?: number;
   amountUsd: number;
+  currency?: TxCurrency;
   tonAmount?: number;
+  tokenAmount?: number;
   status: TxStatus;
   txHash?: string;
   error?: string;
@@ -47,7 +54,9 @@ export type TxStore = {
     propertyId?: string | null;
     shares?: number | null;
     amountUsd: number;
+    currency?: TxCurrency;
     tonAmount?: number | null;
+    tokenAmount?: number | null;
     status: TxStatus;
     txHash?: string | null;
     error?: string | null;
@@ -67,12 +76,18 @@ export function mapTransactionPublic(r: TransactionRecord): TransactionPublic {
   };
   if (r.propertyId) out.propertyId = r.propertyId;
   if (r.shares != null) out.shares = r.shares;
+  if (r.currency) out.currency = r.currency;
   if (r.tonAmount != null) out.tonAmount = r.tonAmount;
+  if (r.tokenAmount != null) out.tokenAmount = r.tokenAmount;
   if (r.txHash) out.txHash = r.txHash;
   if (r.error) out.error = r.error;
   if (r.propertyTitle) out.propertyTitle = r.propertyTitle;
   if (r.propertyImage) out.propertyImage = r.propertyImage;
   return out;
+}
+
+function mapCurrency(s: string | null): TxCurrency {
+  return s === "USDT" ? "USDT" : "TON";
 }
 
 function mapKind(s: string): TxKind {
@@ -94,7 +109,9 @@ type TxQueryRow = {
   propertyId: string | null;
   shares: number | null;
   amountUsd: number;
+  currency: string | null;
   tonAmount: number | null;
+  tokenAmount: number | null;
   status: string;
   txHash: string | null;
   error: string | null;
@@ -112,7 +129,9 @@ function mapRow(row: TxQueryRow): TransactionRecord {
     propertyId: row.propertyId,
     shares: row.shares,
     amountUsd: Number(row.amountUsd),
+    currency: mapCurrency(row.currency),
     tonAmount: row.tonAmount != null ? Number(row.tonAmount) : null,
+    tokenAmount: row.tokenAmount != null ? Number(row.tokenAmount) : null,
     status: mapStatus(row.status),
     txHash: row.txHash,
     error: row.error,
@@ -136,7 +155,9 @@ export function createDbTxStore(db: Db): TxStore {
           propertyId: input.propertyId ?? null,
           shares: input.shares ?? null,
           amountUsd: input.amountUsd,
+          currency: input.currency ?? "TON",
           tonAmount: input.tonAmount ?? null,
+          tokenAmount: input.tokenAmount ?? null,
           status: input.status,
           txHash: input.txHash ?? null,
           error: input.error ?? null,
@@ -153,7 +174,9 @@ export function createDbTxStore(db: Db): TxStore {
         propertyId: row.propertyId,
         shares: row.shares,
         amountUsd: Number(row.amountUsd),
+        currency: mapCurrency(row.currency),
         tonAmount: row.tonAmount != null ? Number(row.tonAmount) : null,
+        tokenAmount: row.tokenAmount != null ? Number(row.tokenAmount) : null,
         status: mapStatus(row.status),
         txHash: row.txHash,
         error: row.error,
@@ -172,7 +195,9 @@ export function createDbTxStore(db: Db): TxStore {
           propertyId: transactions.propertyId,
           shares: transactions.shares,
           amountUsd: transactions.amountUsd,
+          currency: transactions.currency,
           tonAmount: transactions.tonAmount,
+          tokenAmount: transactions.tokenAmount,
           status: transactions.status,
           txHash: transactions.txHash,
           error: transactions.error,
@@ -212,7 +237,9 @@ export function createMemoryTxStore(
         propertyId: input.propertyId ?? null,
         shares: input.shares ?? null,
         amountUsd: input.amountUsd,
+        currency: input.currency ?? "TON",
         tonAmount: input.tonAmount ?? null,
+        tokenAmount: input.tokenAmount ?? null,
         status: input.status,
         txHash: input.txHash ?? null,
         error: input.error ?? null,

@@ -72,6 +72,15 @@ vi.mock("@/hooks/useProperty", () => ({
 vi.mock("@/hooks/useOrderBook", () => ({
   useOrderBook: () => useOrderBook(),
 }));
+vi.mock("@/hooks/usePropertyDocuments", () => ({
+  usePropertyDocuments: () => ({
+    documents: [],
+    isLoading: false,
+    isError: false,
+    error: null,
+    download: { mutateAsync: vi.fn() },
+  }),
+}));
 vi.mock("@/hooks/useTelegram", () => ({
   useTelegram: () => ({
     ready: true,
@@ -98,7 +107,7 @@ vi.mock("@/hooks/useTonConnect", () => ({
 }));
 const mutateAsync = vi.fn();
 vi.mock("@/hooks/useBuyShares", () => ({
-  useBuyShares: () => ({ mutateAsync, isPending: false }),
+  useBuyShares: () => ({ mutateAsync, isPending: false, phase: "idle" }),
 }));
 vi.mock("@/stores/ui.store", () => ({
   useUiStore: (sel: (s: { setMainButtonActive: (v: boolean) => void }) => unknown) =>

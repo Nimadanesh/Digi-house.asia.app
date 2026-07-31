@@ -1,0 +1,125 @@
+import { describe, expect, it } from "vitest";
+import { createApp } from "../app.js";
+import { createMemoryAuditStore } from "../audit/audit-store.js";
+import { signSessionToken } from "../auth/session.js";
+import { createMemoryUserStore } from "../auth/user-store.js";
+import { createMemoryIntentStore } from "../buys/intent-store.js";
+import { createMemoryTxStore } from "../buys/tx-store.js";
+import { toPropertyInsert } from "../db/seed/map-property.js";
+import { SEED_PROPERTIES } from "../db/seed/properties-data.js";
+import { createMemoryEarningsStore } from "../earnings/earnings-store.js";
+import type { ApiEnv } from "../env.js";
+import type { Logger } from "../logger.js";
+import { createMemoryPropertyStore } from "../marketplace/property-store.js";
+import { createMemoryOrderStore } from "../orders/order-store.js";
+import { createMemoryHoldingStore } from "../portfolio/holding-store.js";
+
+const silentLog = {
+  info: () => {}, warn: () => {}, error: () => {}, fatal: () => {},
+  debug: () => {}, trace: () => {}, child: () => silentLog,
+} as unknown as Logger;
+
+const SESSION = { secret: "test-session-secret-at-least-32-chars", ttlSeconds: 3600 };
+const WRONG_SESSION = { secret: "different-secret-not-matching-at-least-32-chars", ttlSeconds: 3600 };
+
+function testEnv(): ApiEnv {
+  return {
+    NODE_ENV: "test", PORT: 8787, LOG_LEVEL: "silent",
+    SETTLEMENT_MODE: undefined, DATABASE_URL: undefined,
+    TELEGRAM_BOT_TOKEN: "", SESSION_SECRET: SESSION.secret,
+    SESSION_TTL_SECONDS: SESSION.ttlSeconds, CORS_ORIGIN: "http://localhost:3000",
+    TON_RELAY_ADDRESS: undefined, BUY_STUB_NANOTON: "10000000",
+    BUY_INTENT_TTL_SECONDS: 900, REDIS_URL: undefined,
+    AUTH_RATE_LIMIT_MAX: 10, ADMIN_TON_WALLET_ADDRESS: undefined,
+    ADMIN_USDT_WALLET_ADDRESS: undefined, USDT_JETTON_MASTER_ADDRESS: undefined,
+    TON_USD_PRICE_CENTS: 200,
+    ORDER_RATE_LIMIT_MAX: 999, ORDER_RATE_LIMIT_WINDOW_MS: 60000,
+    PAYOUT_TICK_MS: 60000, PAYOUT_WORKER_ENABLED: false,
+    ALLOW_MANUAL_PAYOUT_TICK: false, PAYOUT_TICK_SECRET: undefined,
+    NOTIFY_EARNINGS_PAID: false, TON_API_URL: "https://testnet.tonapi.io",
+    TON_API_KEY: undefined, INDEXER_POLL_MS: 10_000, INDEXER_ENABLED: false,
+    ADMIN_API_SECRET: undefined, R2_ACCOUNT_ID: undefined,
+    R2_ACCESS_KEY_ID: undefined, R2_SECRET_ACCESS_KEY: undefined,
+    R2_BUCKET: undefined, R2_PUBLIC_BASE_URL: undefined,
+    LAUNCH_MODE: "open", ALLOWLIST_WALLETS: undefined,
+  };
+}
+
+function seedUser(id: string, displayName: string) {
+  return {
+    id, displayName, username: null, photoUrl: null,
+    role: "investor" as const, walletAddress: null, onboarded: false,
+    useTelegramTheme: false, referredByUserId: null,
+    createdAt: new Date(), updatedAt: new Date(),
+  };
+}
+
+function makeApp() {
+  const users = createMemoryUserStore([
+    seedUser("user-a", "Alice"),
+    seedUser("user-b", "Bob"),
+  ]);
+  const properties = createMemoryPropertyStore(SEED_PROPERTIES.map(toPropertyInsert));
+  const holdings = createMemoryHoldingStore();
+  const earnings = createMemoryEarningsStore();
+  const orders = createMemoryOrderStore();
+  const intents = createMemoryIntentStore();
+  const transactions = createMemoryTxStore();
+  const audit = createMemoryAuditStore();
+  return createApp({
+    env: testEnv(), log: silentLog, users, properties, holdings, earnings,
+    orders, intents, transactions, audit,
+  });
+}
+
+describe("P5-01 Session: token integrity", () => {
+  it("token signed with wrong secret → 401", async () => {
+    const app = makeApp();
+    const { token } = await signSessionToken("user-a", WRONG_SESSION);
+    const res = await app.request("/v1/me", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    expect(res.status).toBe(401);
+  });
+
+  it("expired token → 401", async () => {
+    const app = makeApp();
+    const hoursAgo = new Date(Date.now() - 3_600_000 * 2); // 2h ago
+    const { token } = await signSessionToken("user-a", { secret: SESSION.secret, ttlSeconds: 60 }, hoursAgo);
+    const res = await app.request("/v1/me", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    expect(res.status).toBe(401);
+  });
+});
+
+describe("P5-01 Session: no fixation via client-supplied userId", () => {
+  it("portfolio ignores ?userId= query param", async () => {
+    const app = makeApp();
+    const { token } = await signSessionToken("user-a", SESSION);
+    const res = await app.request("/v1/portfolio?userId=user-b", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    expect(res.status).toBe(200);
+  });
+
+  it("earnings ignores ?userId= query param", async () => {
+    const app = makeApp();
+    const { token } = await signSessionToken("user-a", SESSION);
+    const res = await app.request("/v1/earnings?userId=user-b", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    expect(res.status).toBe(200);
+  });
+
+  it("transactions ignores ?userId= query param", async () => {
+    const app = makeApp();
+    const { token } = await signSessionToken("user-a", SESSION);
+    const res = await app.request("/v1/transactions?userId=user-b", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as { transactions: unknown[] };
+    expect(body.transactions).toEqual([]);
+  });
+});

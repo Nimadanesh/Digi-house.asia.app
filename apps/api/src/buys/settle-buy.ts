@@ -18,6 +18,19 @@ export function nextAvgCostUsd(
   );
 }
 
+/**
+ * Convert a USD-cents amount to nanoTON at a cents-per-TON price.
+ * Mirrors Mini App estimateNanoTon (floor at nanoTON precision). Returns 0n for non-positive input.
+ */
+export function usdCentsToNanoTon(
+  usdCents: number,
+  tonUsdPriceCents: number,
+): bigint {
+  if (!Number.isFinite(usdCents) || usdCents <= 0) return 0n;
+  if (!Number.isFinite(tonUsdPriceCents) || tonUsdPriceCents <= 0) return 0n;
+  return BigInt(Math.floor((usdCents * 1_000_000_000) / tonUsdPriceCents));
+}
+
 export function syntheticBuyTxHash(intentId: string): string {
   return `simulated:${intentId}`;
 }

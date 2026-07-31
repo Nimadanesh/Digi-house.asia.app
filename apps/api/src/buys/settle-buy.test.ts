@@ -3,7 +3,20 @@ import {
   deriveHoldingPublic,
   nextAvgCostUsd,
   syntheticBuyTxHash,
+  usdCentsToNanoTon,
 } from "./settle-buy.js";
+
+describe("usdCentsToNanoTon", () => {
+  it("converts USD cents to nanoTON at a cents-per-TON price", () => {
+    // 62500¢ at 200¢/TON = 312.5 TON = 312_500_000_000 nanoTON
+    expect(usdCentsToNanoTon(62_500, 200)).toBe(312_500_000_000n);
+  });
+
+  it("returns 0n for non-positive input or price", () => {
+    expect(usdCentsToNanoTon(0, 200)).toBe(0n);
+    expect(usdCentsToNanoTon(62_500, 0)).toBe(0n);
+  });
+});
 
 describe("nextAvgCostUsd", () => {
   it("first buy uses list price", () => {

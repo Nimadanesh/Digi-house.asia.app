@@ -22,10 +22,13 @@ import type { EarningsStore } from "./earnings/earnings-store.js";
 import type { OrderStore } from "./orders/order-store.js";
 import type { IntentStore } from "./buys/intent-store.js";
 import type { TxStore } from "./buys/tx-store.js";
+import { createTonApiTxClient } from "./ton/tonapi-client.js";
+import type { TonTxClient } from "./ton/tx-client.js";
 import type { AuditStore } from "./audit/audit-store.js";
 import { createRedisTokenBucket } from "./lib/rate-limit-redis.js";
 import { S3Signer } from "./lib/s3-sign.js";
 import type { DocumentStore } from "./marketplace/document-store.js";
+import { parseAllowlist } from "./launch/allowlist.js";
 
 export type AppVariables = {
   requestId: string;
@@ -43,6 +46,10 @@ export type CreateAppOptions = {
   intents?: IntentStore | null;
   transactions?: TxStore | null;
   audit?: AuditStore | null;
+  /** Injected for tests; defaults to a live TonAPI client from TON_API_URL/TON_API_KEY. */
+  tonTxClient?: TonTxClient | null;
+  /** Injected for tests; defaults to the per-user in-memory prepare rate limiter. */
+  prepareRateLimiter?: MiddlewareHandler | null;
   orderRateLimitMax?: number;
   orderRateLimitWindowMs?: number;
 };
@@ -60,6 +67,8 @@ export function createApp(opts: CreateAppOptions) {
     intents = null,
     transactions = null,
     audit = null,
+    tonTxClient = null,
+    prepareRateLimiter = null,
     orderRateLimitMax = 30,
     orderRateLimitWindowMs = 60_000,
   } = opts;
@@ -225,6 +234,9 @@ export function createApp(opts: CreateAppOptions) {
     });
   }
 
+  const allowlist = parseAllowlist(env.ALLOWLIST_WALLETS);
+  const launchMode = env.LAUNCH_MODE;
+
   if (users && properties && orders) {
     app.route(
       "/",
@@ -236,24 +248,41 @@ export function createApp(opts: CreateAppOptions) {
         holdings,
         audit,
         rateLimiter: orderRateLimiter,
+        allowlist,
+        launchMode,
       }),
     );
   }
 
-  if (users && properties && holdings && intents && transactions) {
+  if (users && properties && intents && holdings && transactions) {
+    const tonTxClientOrDefault =
+      tonTxClient ??
+      createTonApiTxClient({
+        baseUrl: env.TON_API_URL,
+        apiKey: env.TON_API_KEY,
+      });
     app.route(
       "/",
       createBuyRoutes({
         session,
         users,
         properties,
-        holdings,
         intents,
+        holdings,
         transactions,
+        tonTxClient: tonTxClientOrDefault,
+        log,
         audit,
+        adminTonWalletAddress: env.ADMIN_TON_WALLET_ADDRESS,
         tonRelayAddress: env.TON_RELAY_ADDRESS,
+        adminUsdtWalletAddress: env.ADMIN_USDT_WALLET_ADDRESS,
+        usdtJettonMasterAddress: env.USDT_JETTON_MASTER_ADDRESS,
         buyStubNanoTon: env.BUY_STUB_NANOTON,
+        tonUsdPriceCents: env.TON_USD_PRICE_CENTS,
         buyIntentTtlSeconds: env.BUY_INTENT_TTL_SECONDS,
+        allowlist,
+        launchMode,
+        prepareRateLimiter: prepareRateLimiter ?? undefined,
       }),
     );
   }

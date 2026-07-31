@@ -11,6 +11,8 @@ import { buildOrderBookState } from "../orders/build-order-book.js";
 import { mapOrderRecord, type OrderSide } from "../orders/map-order.js";
 import type { OrderStore } from "../orders/order-store.js";
 import { slidingWindowRateLimit } from "../lib/rate-limit.js";
+import { requireAllowlist } from "../middleware/require-allowlist.js";
+import type { LaunchMode } from "../launch/allowlist.js";
 
 export type OrderRouteDeps = {
   session: SessionConfig;
@@ -20,6 +22,8 @@ export type OrderRouteDeps = {
   holdings?: HoldingStore | null;
   audit?: AuditStore | null;
   rateLimiter?: MiddlewareHandler;
+  allowlist: Set<string>;
+  launchMode: LaunchMode;
 };
 
 function isOrderSide(v: unknown): v is OrderSide {
@@ -70,9 +74,16 @@ export function createOrderRoutes(deps: OrderRouteDeps) {
       key: (c) => c.get("userId") as string,
     });
 
+  const allowlistMw = requireAllowlist(
+    deps.allowlist,
+    deps.launchMode,
+    (c) => c.get("user")?.walletAddress ?? "",
+  );
+
   app.post(
     "/v1/orders",
     requireSession({ session: deps.session, users: deps.users }),
+    allowlistMw,
     orderRateLimit,
     async (c) => {
       let body: unknown;

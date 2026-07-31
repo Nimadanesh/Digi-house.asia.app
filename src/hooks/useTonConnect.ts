@@ -4,9 +4,9 @@
 // Hard boundary (per telegram-ton-ownership skill): components import useTonConnect,
 // never @tonconnect/* or lib/ton/* directly.
 //
-// Wraps TonConnect UI hooks + the sendTx service into one typed facade. Keeps
-// MVP honesty intact: any "send" returns a SendTxResult with a synthetic txHash
-// ("simulated:<id>"); real on-chain settlement is post-MVP.
+// Wraps TonConnect UI hooks + the sendTx service into one typed facade. The payment path returns a
+// REAL txHash derived from the wallet-signed boc; "simulated:<id>" hashes exist only in the mock data
+// path (src/lib/mock). On-chain share settlement remains post-MVP.
 import { useCallback, useMemo } from "react";
 import {
   useTonConnectUI,
@@ -31,7 +31,7 @@ export interface TonConnectState {
   openModal: () => void;
   /** Disconnect the active wallet. */
   disconnect: () => Promise<void>;
-  /** Build + send a buy-style transaction. Result carries a synthetic MVP txHash. */
+  /** Build + send a buy-style transaction. Result carries the real wallet-signed txHash. */
   send: (input: BuyMessageInput) => Promise<SendTxResult>;
 }
 

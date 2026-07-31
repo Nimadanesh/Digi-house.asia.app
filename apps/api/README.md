@@ -115,8 +115,14 @@ Full list of variables consumed by `loadEnv()` in `src/env.ts`. Required vars ar
 | **`CORS_ORIGIN`** | `http://localhost:3000` | No | Allowed origin for CORS |
 | **`SETTLEMENT_MODE`** | unset | No | `mock` / `hybrid` / `onchain` — echoed on `/healthz` |
 | **`TON_RELAY_ADDRESS`** | — | No | TON address for TonConnect stub messages |
-| **`BUY_STUB_NANOTON`** | `10000000` | No | NanoTON amount in prepare response (0.01 TON) |
+| **`ADMIN_TON_WALLET_ADDRESS`** | — | No | Receive destination for native-TON buy payments (fallback: admin > TON_RELAY_ADDRESS > listing owner). Required for real (non-stub) on-chain settlement |
+| **`ADMIN_USDT_WALLET_ADDRESS`** | — | No | Receive wallet for USDT (Jetton) buy payments (ADR-005) |
+| **`USDT_JETTON_MASTER_ADDRESS`** | — | No | USDT jetton master — **must match `TON_API_URL`'s network** (testnet `kQDw5tNMBGsM0ZlLGhA9TSV9iX1nMLrfPZ7HnrQMBxgrAhWe`, mainnet `EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs`). A mismatched master rejects every settle (`jetton_mismatch`) |
+| **`TON_USD_PRICE_CENTS`** | `200` | No | USD→TON rate used by /v1/buys/prepare to derive the payable nanoTON amount |
+| **`BUY_STUB_NANOTON`** | `10000000` | No | NanoTON fallback when TON_USD_PRICE_CENTS is unset (0.01 TON) |
 | **`BUY_INTENT_TTL_SECONDS`** | `900` | No | Buy intent TTL (15 min) |
+| **`TON_API_URL`** | `https://testnet.tonapi.io` | No | TonAPI base URL. Shared: `/v1/buys/verify-and-settle` (on-chain payment verification) + indexer worker. **Mainnet: `https://tonapi.io`** |
+| **`TON_API_KEY`** | — | No | TonAPI API key (sent as `Authorization: Bearer`). Required on mainnet; recommended on testnet (higher rate limits) |
 
 ### Payout Worker
 
@@ -314,8 +320,9 @@ IDOR protection: only the order owner can cancel. Sell orders validate share bal
 
 | Method | Path | Auth | Description |
 |---|---|---|---|
-| `POST` | `/v1/buys/prepare` | Bearer | Create buy intent; returns TonConnect messages |
-| `POST` | `/v1/buys/confirm` | Bearer | Confirm buy intent; persists holding + transaction |
+| `POST` | `/v1/buys/prepare` | Bearer | Create buy intent; returns admin receive address + payable nanoTON (sharePrice × qty at TON_USD_PRICE_CENTS) or the USDT jetton_transfer message |
+| `POST` | `/v1/buys/confirm` | Bearer | Confirm buy intent; records the payment (boc/txHash) — no shares/ledger changes here |
+| `POST` | `/v1/buys/verify-and-settle` | Bearer | Verify the recorded payment on-chain (TonAPI) and settle shares only if it matches the intent (payer + destination + amount + success + ≤30 min old). Idempotent; already-settled intents return `settled` |
 
 ```bash
 # 1) Prepare
@@ -329,9 +336,29 @@ curl -sS -X POST http://localhost:8787/v1/buys/prepare \
 curl -sS -X POST http://localhost:8787/v1/buys/confirm \
   -H "content-type: application/json" \
   -H "Authorization: Bearer <token>" \
-  -d '{"intentId":"intent_<uuid>","boc":null}' | jq .
-# Returns { transaction, holding }
+  -d '{"intentId":"intent_<uuid>","boc":null,"txHash":"<signed-msg-hash>"}' | jq .
+# Returns { intentId, status: "confirmed" } — payment recorded, settlement deferred
+
+# 3) Verify + settle (poll until status != pending_confirmation)
+curl -sS -X POST http://localhost:8787/v1/buys/verify-and-settle \
+  -H "content-type: application/json" \
+  -H "Authorization: Bearer <token>" \
+  -d '{"intentId":"intent_<uuid>"}' | jq .
+# pending_confirmation (tx_not_found / api_unavailable — retry)
+# verification_failed (payer_mismatch / destination_mismatch / amount_insufficient / tx_failed / tx_too_old — final)
+# settled → shares_sold bumped, holding upserted (WAC), transaction ledger row written with the real txHash
 ```
+
+### Buy settlement security invariants
+
+| Invariant | How it is enforced |
+|---|---|
+| **Double settlement** | `settleVerifiedBuy` claims the intent `confirmed → settled` atomically (`markSettled`) before any write; `transactions.buy_intent_id` is UNIQUE, so a second ledger row for the same intent fails |
+| **txHash replay across intents** | `confirm` and `verify-and-settle` both reject a wallet-signed txHash already consumed by another intent → `409 { code: "tx_hash_reused" }` (plus a DB partial unique index on `buy_intents.tx_hash`) |
+| **Intent ownership** | prepare/confirm/verify all bind to `c.get("userId")`; another user's intent → `404` |
+| **Payer wallet** | The connected wallet is stored at prepare (`buy_intents.paid_by_wallet`) and verified on-chain: TON tx must originate from that account; USDT transfer must originate from that owner's jetton wallet (`get_wallet_address`). Mismatch → `verification_failed (payer_mismatch)` |
+| **Immutable expectations** | `expected_nano_ton` / `expected_jetton_amount` / `destination_address` are written only at prepare; `confirm` accepts only `boc` + `txHash` |
+| **Recency** | Both verifiers reject payments older than 30 minutes (`tx_too_old`) |
 
 In hybrid mode, `boc` is optional (`null`). In mock mode, `tonConnectMessages` is empty. Validate: only `funding` status, quantity within remaining shares, price matches list price.
 
@@ -390,6 +417,8 @@ Idempotency key: `${propertyId}#${weekOf}` in `payout_ticks` table. Core unit te
 
 Append-only `audit_events` table (migration `0008`). Writers on:
 - **Buy confirm** (`buy.confirm`)
+- **Buy verify** (`buy.verify`) — every verification outcome (valid / reason)
+- **Buy settle** (`buy.settle`) — verified settlement with the on-chain amounts
 - **Order cancel** (`order.cancel`)
 - **Tick payout** (`payout.tick`) — only when `paidEntries > 0`
 

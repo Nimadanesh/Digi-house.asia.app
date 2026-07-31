@@ -139,59 +139,209 @@ describe("createHttpRepos", () => {
     expect(client.post).not.toHaveBeenCalled();
   });
 
-  it("tx.buy calls prepare then confirm and returns transaction", async () => {
+  it("tx.prepareBuy maps tonConnectMessages into the TON message + currency", async () => {
     const prepResponse = {
       intentId: "intent_1",
       propertyId: "prop_1",
       quantity: 5,
       priceUsdPerShare: 5000,
       totalUsd: 25000,
+      currency: "TON",
+      tonConnectMessages: [
+        { address: "EQD-admin-wallet", amount: "125000000000", payload: null },
+      ],
       expiresAt: "2026-07-29T12:15:00.000Z",
-    };
-    const confirmResponse = {
-      transaction: {
-        id: "tx_1",
-        kind: "buy" as const,
-        propertyId: "prop_1",
-        userId: "user_1",
-        shares: 5,
-        amountUsd: 25000,
-        status: "success" as const,
-        txHash: "simulated:buy-01HZX",
-        createdAt: "2026-07-29T12:01:00.000Z",
-      },
-      holding: {
-        propertyId: "prop_1",
-        sharesOwned: 5,
-        avgCostUsd: 5000,
-        currentValueUsd: 25000,
-        pendingWeekEarningsUsd: 50,
-        shareRatio: 0.0005,
-      },
     };
 
     const client = mockClient();
-    (client.post as ReturnType<typeof vi.fn>)
-      .mockResolvedValueOnce(prepResponse)
-      .mockResolvedValueOnce(confirmResponse);
+    (client.post as ReturnType<typeof vi.fn>).mockResolvedValueOnce(prepResponse);
     const repos = createHttpRepos(client);
 
-    const result = await repos.tx.buy({
+    const result = await repos.tx.prepareBuy({
+      propertyId: "prop_1",
+      quantity: 5,
+      priceUsdPerShare: 5000,
+      currency: "TON",
+    });
+
+    expect(client.post).toHaveBeenCalledWith("/v1/buys/prepare", {
+      propertyId: "prop_1",
+      quantity: 5,
+      priceUsdPerShare: 5000,
+      currency: "TON",
+    });
+    expect(result).toEqual({
+      intentId: "intent_1",
+      propertyId: "prop_1",
+      quantity: 5,
+      priceUsdPerShare: 5000,
+      totalUsd: 25000,
+      currency: "TON",
+      message: { address: "EQD-admin-wallet", amount: "125000000000", payload: null },
+      expiresAt: "2026-07-29T12:15:00.000Z",
+    });
+  });
+
+  it("tx.prepareBuy defaults the payload-less message to TON when currency is absent", async () => {
+    const prepResponse = {
+      intentId: "intent_1",
+      propertyId: "prop_1",
+      quantity: 5,
+      priceUsdPerShare: 5000,
+      totalUsd: 25000,
+      tonConnectMessages: [{ address: "EQD-admin-wallet", amount: "125000000000" }],
+      expiresAt: "2026-07-29T12:15:00.000Z",
+    };
+
+    const client = mockClient();
+    (client.post as ReturnType<typeof vi.fn>).mockResolvedValueOnce(prepResponse);
+    const repos = createHttpRepos(client);
+
+    const result = await repos.tx.prepareBuy({
       propertyId: "prop_1",
       quantity: 5,
       priceUsdPerShare: 5000,
     });
 
-    expect(client.post).toHaveBeenCalledTimes(2);
-    expect(client.post).toHaveBeenNthCalledWith(1, "/v1/buys/prepare", {
+    expect(client.post).toHaveBeenCalledWith("/v1/buys/prepare", {
       propertyId: "prop_1",
       quantity: 5,
       priceUsdPerShare: 5000,
+      currency: "TON",
     });
-    expect(client.post).toHaveBeenNthCalledWith(2, "/v1/buys/confirm", {
+    expect(result.currency).toBe("TON");
+    expect(result.message).toEqual({ address: "EQD-admin-wallet", amount: "125000000000", payload: null });
+  });
+
+  it("tx.prepareBuy keeps the jetton_transfer payload for USDT", async () => {
+    const prepResponse = {
+      intentId: "intent_usdt",
+      propertyId: "prop_1",
+      quantity: 5,
+      priceUsdPerShare: 5000,
+      totalUsd: 25000,
+      currency: "USDT",
+      tonConnectMessages: [
+        { address: "EQD-user-jetton-wallet", amount: "100000000", payload: "te6ccgEBAQEA..." },
+      ],
+      expiresAt: "2026-07-29T12:15:00.000Z",
+    };
+
+    const client = mockClient();
+    (client.post as ReturnType<typeof vi.fn>).mockResolvedValueOnce(prepResponse);
+    const repos = createHttpRepos(client);
+
+    const result = await repos.tx.prepareBuy({
+      propertyId: "prop_1",
+      quantity: 5,
+      priceUsdPerShare: 5000,
+      currency: "USDT",
+    });
+
+    expect(client.post).toHaveBeenCalledWith("/v1/buys/prepare", {
+      propertyId: "prop_1",
+      quantity: 5,
+      priceUsdPerShare: 5000,
+      currency: "USDT",
+    });
+    expect(result.currency).toBe("USDT");
+    expect(result.message).toEqual({
+      address: "EQD-user-jetton-wallet",
+      amount: "100000000",
+      payload: "te6ccgEBAQEA...",
+    });
+  });
+
+  it("tx.prepareBuy throws when prepare returns no payment message", async () => {
+    const prepResponse = {
+      intentId: "intent_1",
+      propertyId: "prop_1",
+      quantity: 5,
+      priceUsdPerShare: 5000,
+      totalUsd: 25000,
+      tonConnectMessages: [],
+      expiresAt: "2026-07-29T12:15:00.000Z",
+    };
+    const client = mockClient();
+    (client.post as ReturnType<typeof vi.fn>).mockResolvedValueOnce(prepResponse);
+    const repos = createHttpRepos(client);
+
+    await expect(
+      repos.tx.prepareBuy({ propertyId: "prop_1", quantity: 5, priceUsdPerShare: 5000 }),
+    ).rejects.toThrow(/payment message/i);
+  });
+
+  it("tx.confirmBuy posts intentId + txHash + boc to /v1/buys/confirm", async () => {
+    const confirmResponse = {
+      intentId: "intent_1",
+      status: "confirmed",
+      message: "Payment recorded. Share settlement follows on-chain verification.",
+    };
+    const client = mockClient();
+    (client.post as ReturnType<typeof vi.fn>).mockResolvedValueOnce(confirmResponse);
+    const repos = createHttpRepos(client);
+
+    const result = await repos.tx.confirmBuy({
+      intentId: "intent_1",
+      txHash: "cafebabedeadbeef",
+      boc: "boc:0001",
+    });
+
+    expect(client.post).toHaveBeenCalledWith("/v1/buys/confirm", {
+      intentId: "intent_1",
+      txHash: "cafebabedeadbeef",
+      boc: "boc:0001",
+    });
+    expect(result).toEqual(confirmResponse);
+  });
+
+  it("tx.confirmBuy omits txHash when not provided", async () => {
+    const client = mockClient();
+    (client.post as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
+      intentId: "intent_1",
+      status: "confirmed",
+    });
+    const repos = createHttpRepos(client);
+
+    await repos.tx.confirmBuy({ intentId: "intent_1" });
+
+    expect(client.post).toHaveBeenCalledWith("/v1/buys/confirm", {
       intentId: "intent_1",
       boc: null,
     });
-    expect(result).toEqual(confirmResponse.transaction);
+  });
+
+  it("tx.verifyAndSettle posts intentId to /v1/buys/verify-and-settle", async () => {
+    const verifyResponse = {
+      intentId: "intent_1",
+      status: "settled" as const,
+      txHash: "cafebabedeadbeef",
+      actualAmountNano: "125000000000",
+    };
+    const client = mockClient();
+    (client.post as ReturnType<typeof vi.fn>).mockResolvedValueOnce(verifyResponse);
+    const repos = createHttpRepos(client);
+
+    const result = await repos.tx.verifyAndSettle("intent_1");
+
+    expect(client.post).toHaveBeenCalledWith("/v1/buys/verify-and-settle", {
+      intentId: "intent_1",
+    });
+    expect(result).toEqual(verifyResponse);
+  });
+
+  it("tx.verifyAndSettle surfaces pending_confirmation verbatim", async () => {
+    const client = mockClient();
+    (client.post as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
+      intentId: "intent_1",
+      status: "pending_confirmation",
+      reason: "tx_not_found",
+    });
+    const repos = createHttpRepos(client);
+
+    const result = await repos.tx.verifyAndSettle("intent_1");
+
+    expect(result.status).toBe("pending_confirmation");
+    expect(result.reason).toBe("tx_not_found");
   });
 });

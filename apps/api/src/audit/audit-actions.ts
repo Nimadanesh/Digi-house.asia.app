@@ -1,5 +1,7 @@
 export const AUDIT_ACTIONS = [
   "buy.confirm",
+  "buy.verify",
+  "buy.settle",
   "order.cancel",
   "payout.tick",
   "admin.pause",

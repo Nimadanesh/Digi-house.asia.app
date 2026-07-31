@@ -1,0 +1,370 @@
+import { describe, expect, it } from "vitest";
+import { createApp } from "../app.js";
+import { signSessionToken } from "../auth/session.js";
+import { createMemoryUserStore } from "../auth/user-store.js";
+import { toPropertyInsert } from "../db/seed/map-property.js";
+import { SEED_PROPERTIES } from "../db/seed/properties-data.js";
+import type { ApiEnv } from "../env.js";
+import type { Logger } from "../logger.js";
+import { createMemoryPropertyStore } from "../marketplace/property-store.js";
+import { createMemoryIntentStore } from "../buys/intent-store.js";
+import { createMemoryTxStore } from "../buys/tx-store.js";
+import { createMemoryHoldingStore } from "../portfolio/holding-store.js";
+import { createMemoryOrderStore } from "../orders/order-store.js";
+
+const silentLog = {
+  info: () => {}, warn: () => {}, error: () => {}, fatal: () => {},
+  debug: () => {}, trace: () => {}, child: () => silentLog,
+} as unknown as Logger;
+
+const SESSION = { secret: "test-session-secret-at-least-32-chars", ttlSeconds: 3600 };
+
+const FUNDING = "prop-marina-vista-4b";
+const PRICE = 12_500;
+const WALLET_A = "eqdwalletauser";
+const WALLET_B = "eqdwalletbuser";
+
+function testEnv(over: Partial<ApiEnv> = {}): ApiEnv {
+  return {
+    NODE_ENV: "test",
+    PORT: 8787,
+    LOG_LEVEL: "silent",
+    SETTLEMENT_MODE: undefined,
+    DATABASE_URL: undefined,
+    TELEGRAM_BOT_TOKEN: "",
+    SESSION_SECRET: SESSION.secret,
+    SESSION_TTL_SECONDS: SESSION.ttlSeconds,
+    CORS_ORIGIN: "http://localhost:3000",
+    TON_RELAY_ADDRESS: undefined,
+    BUY_STUB_NANOTON: "10000000",
+    BUY_INTENT_TTL_SECONDS: 900,
+    AUTH_RATE_LIMIT_MAX: 10,
+    ADMIN_TON_WALLET_ADDRESS: undefined,
+    ADMIN_USDT_WALLET_ADDRESS: undefined,
+    USDT_JETTON_MASTER_ADDRESS: undefined,
+    TON_USD_PRICE_CENTS: 200,
+    REDIS_URL: undefined,
+    ORDER_RATE_LIMIT_MAX: 999,
+    ORDER_RATE_LIMIT_WINDOW_MS: 60000,
+    PAYOUT_TICK_MS: 60000,
+    PAYOUT_WORKER_ENABLED: false,
+    ALLOW_MANUAL_PAYOUT_TICK: false,
+    PAYOUT_TICK_SECRET: undefined,
+    NOTIFY_EARNINGS_PAID: false,
+    TON_API_URL: "https://testnet.tonapi.io",
+    TON_API_KEY: undefined,
+    INDEXER_POLL_MS: 10_000,
+    INDEXER_ENABLED: false,
+    ADMIN_API_SECRET: undefined,
+    R2_ACCOUNT_ID: undefined,
+    R2_ACCESS_KEY_ID: undefined,
+    R2_SECRET_ACCESS_KEY: undefined,
+    R2_BUCKET: undefined,
+    R2_PUBLIC_BASE_URL: undefined,
+    LAUNCH_MODE: "open",
+    ALLOWLIST_WALLETS: undefined,
+    ...over,
+  };
+}
+
+function seedUser(id: string, _name: string, walletAddress: string | null) {
+  return {
+    id,
+    displayName: _name,
+    username: null,
+    photoUrl: null,
+    role: "investor" as const,
+    walletAddress,
+    onboarded: false,
+    useTelegramTheme: false,
+    referredByUserId: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+}
+
+async function bearerFor(userId: string): Promise<string> {
+  const { token } = await signSessionToken(userId, SESSION);
+  return `Bearer ${token}`;
+}
+
+describe("Allowlist enforcement (LAUNCH_MODE=allowlist)", () => {
+  function makeAllowlistedEnv() {
+    const users = createMemoryUserStore([
+      seedUser("user-a", "Alice", WALLET_A),
+      seedUser("user-b", "Bob", WALLET_B),
+    ]);
+    const properties = createMemoryPropertyStore(
+      SEED_PROPERTIES.map(toPropertyInsert),
+    );
+    const holdings = createMemoryHoldingStore();
+    const intents = createMemoryIntentStore();
+    const transactions = createMemoryTxStore();
+    const orders = createMemoryOrderStore();
+
+    const app = createApp({
+      env: testEnv({
+        LAUNCH_MODE: "allowlist",
+        ALLOWLIST_WALLETS: WALLET_A,
+      }),
+      log: silentLog,
+      users,
+      properties,
+      holdings,
+      intents,
+      transactions,
+      orders,
+    });
+    return { app };
+  }
+
+  describe("buys", () => {
+    it("allowlisted wallet can prepare buy → 200", async () => {
+      const { app } = makeAllowlistedEnv();
+      const res = await app.request("/v1/buys/prepare", {
+        method: "POST",
+        headers: {
+          Authorization: await bearerFor("user-a"),
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          propertyId: FUNDING,
+          quantity: 1,
+          priceUsdPerShare: PRICE,
+        }),
+      });
+      expect(res.status).toBe(200);
+    });
+
+    it("non-allowlisted wallet gets 403 on prepare", async () => {
+      const { app } = makeAllowlistedEnv();
+      const res = await app.request("/v1/buys/prepare", {
+        method: "POST",
+        headers: {
+          Authorization: await bearerFor("user-b"),
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          propertyId: FUNDING,
+          quantity: 1,
+          priceUsdPerShare: PRICE,
+        }),
+      });
+      expect(res.status).toBe(403);
+      const body = (await res.json()) as { code: string };
+      expect(body.code).toBe("launch_not_allowlisted");
+    });
+
+    it("allowlisted wallet can confirm → 200", async () => {
+      const { app } = makeAllowlistedEnv();
+      const prep = await app.request("/v1/buys/prepare", {
+        method: "POST",
+        headers: {
+          Authorization: await bearerFor("user-a"),
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          propertyId: FUNDING,
+          quantity: 1,
+          priceUsdPerShare: PRICE,
+        }),
+      });
+      const { intentId } = (await prep.json()) as { intentId: string };
+      const res = await app.request("/v1/buys/confirm", {
+        method: "POST",
+        headers: {
+          Authorization: await bearerFor("user-a"),
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ intentId }),
+      });
+      expect(res.status).toBe(200);
+    });
+  });
+
+  describe("orders", () => {
+    it("allowlisted wallet can place order → 201", async () => {
+      const { app } = makeAllowlistedEnv();
+      const res = await app.request("/v1/orders", {
+        method: "POST",
+        headers: {
+          Authorization: await bearerFor("user-a"),
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          propertyId: FUNDING,
+          side: "buy",
+          priceUsd: 10000,
+          quantity: 5,
+        }),
+      });
+      expect(res.status).toBe(201);
+    });
+
+    it("non-allowlisted wallet gets 403 on order", async () => {
+      const { app } = makeAllowlistedEnv();
+      const res = await app.request("/v1/orders", {
+        method: "POST",
+        headers: {
+          Authorization: await bearerFor("user-b"),
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          propertyId: FUNDING,
+          side: "buy",
+          priceUsd: 10000,
+          quantity: 5,
+        }),
+      });
+      expect(res.status).toBe(403);
+      const body = (await res.json()) as { code: string };
+      expect(body.code).toBe("launch_not_allowlisted");
+    });
+  });
+
+  describe("read routes not gated", () => {
+    it("marketplace get works for non-allowlisted user", async () => {
+      const { app } = makeAllowlistedEnv();
+      const res = await app.request("/v1/marketplace");
+      expect(res.status).toBe(200);
+    });
+
+    it("order-book get works for non-allowlisted user", async () => {
+      const { app } = makeAllowlistedEnv();
+      const res = await app.request(
+        `/v1/properties/${FUNDING}/order-book`,
+      );
+      expect(res.status).toBe(200);
+    });
+  });
+});
+
+describe("Allowlist empty + allowlist mode (fail closed)", () => {
+  function makeFailClosedEnv() {
+    const users = createMemoryUserStore([
+      seedUser("user-a", "Alice", WALLET_A),
+    ]);
+    const properties = createMemoryPropertyStore(
+      SEED_PROPERTIES.map(toPropertyInsert),
+    );
+    const holdings = createMemoryHoldingStore();
+    const intents = createMemoryIntentStore();
+    const transactions = createMemoryTxStore();
+    const orders = createMemoryOrderStore();
+
+    const app = createApp({
+      env: testEnv({
+        LAUNCH_MODE: "allowlist",
+        ALLOWLIST_WALLETS: undefined,
+      }),
+      log: silentLog,
+      users,
+      properties,
+      holdings,
+      intents,
+      transactions,
+      orders,
+    });
+    return { app };
+  }
+
+  it("empty allowlist + mode=allowlist denies all buys", async () => {
+    const { app } = makeFailClosedEnv();
+    const res = await app.request("/v1/buys/prepare", {
+      method: "POST",
+      headers: {
+        Authorization: await bearerFor("user-a"),
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        propertyId: FUNDING,
+        quantity: 1,
+        priceUsdPerShare: PRICE,
+      }),
+    });
+    expect(res.status).toBe(403);
+  });
+
+  it("empty allowlist + mode=allowlist denies all orders", async () => {
+    const { app } = makeFailClosedEnv();
+    const res = await app.request("/v1/orders", {
+      method: "POST",
+      headers: {
+        Authorization: await bearerFor("user-a"),
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        propertyId: FUNDING,
+        side: "buy",
+        priceUsd: 10000,
+        quantity: 1,
+      }),
+    });
+    expect(res.status).toBe(403);
+  });
+});
+
+describe("Allowlist open mode (no restriction)", () => {
+  function makeOpenEnv() {
+    const users = createMemoryUserStore([
+      seedUser("user-a", "Alice", WALLET_A),
+    ]);
+    const properties = createMemoryPropertyStore(
+      SEED_PROPERTIES.map(toPropertyInsert),
+    );
+    const holdings = createMemoryHoldingStore();
+    const intents = createMemoryIntentStore();
+    const transactions = createMemoryTxStore();
+    const orders = createMemoryOrderStore();
+
+    const app = createApp({
+      env: testEnv({
+        LAUNCH_MODE: "open",
+        ALLOWLIST_WALLETS: undefined,
+      }),
+      log: silentLog,
+      users,
+      properties,
+      holdings,
+      intents,
+      transactions,
+      orders,
+    });
+    return { app };
+  }
+
+  it("open mode: anyone can prepare buy", async () => {
+    const { app } = makeOpenEnv();
+    const res = await app.request("/v1/buys/prepare", {
+      method: "POST",
+      headers: {
+        Authorization: await bearerFor("user-a"),
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        propertyId: FUNDING,
+        quantity: 1,
+        priceUsdPerShare: PRICE,
+      }),
+    });
+    expect(res.status).toBe(200);
+  });
+
+  it("open mode: anyone can place order", async () => {
+    const { app } = makeOpenEnv();
+    const res = await app.request("/v1/orders", {
+      method: "POST",
+      headers: {
+        Authorization: await bearerFor("user-a"),
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        propertyId: FUNDING,
+        side: "buy",
+        priceUsd: 10000,
+        quantity: 1,
+      }),
+    });
+    expect(res.status).toBe(201);
+  });
+});

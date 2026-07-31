@@ -66,7 +66,14 @@ describe("Buy flow steps", () => {
   it("qty step: stepper, quick buttons, live total + weekly", () => {
     const onQty = vi.fn();
     render(
-      <BuyQtyStep listing={listing} qty={10} onQtyChange={onQty} walletConnected />,
+      <BuyQtyStep
+        listing={listing}
+        qty={10}
+        onQtyChange={onQty}
+        walletConnected
+        currency="TON"
+        onCurrencyChange={() => {}}
+      />,
     );
     expect(screen.getByTestId("buy-qty")).toHaveTextContent("10");
     fireEvent.click(screen.getByRole("button", { name: "25" }));
@@ -79,13 +86,66 @@ describe("Buy flow steps", () => {
 
   it("qty step: disconnected prompts connect", () => {
     render(
-      <BuyQtyStep listing={listing} qty={1} onQtyChange={() => {}} walletConnected={false} />,
+      <BuyQtyStep
+        listing={listing}
+        qty={1}
+        onQtyChange={() => {}}
+        walletConnected={false}
+        currency="TON"
+        onCurrencyChange={() => {}}
+      />,
     );
     expect(screen.getByRole("button", { name: /connect/i })).toBeInTheDocument();
   });
 
+  it("qty step: currency selector defaults to TON and switches to USDT", () => {
+    const onCurrency = vi.fn();
+    const { rerender } = render(
+      <BuyQtyStep
+        listing={listing}
+        qty={10}
+        onQtyChange={() => {}}
+        walletConnected
+        currency="TON"
+        onCurrencyChange={onCurrency}
+      />,
+    );
+    expect(screen.getByRole("button", { name: "Pay with TON" })).toHaveAttribute("aria-pressed", "true");
+    fireEvent.click(screen.getByRole("button", { name: "Pay with USDT" }));
+    expect(onCurrency).toHaveBeenCalledWith("USDT");
+    // USDT total is shown as the USD value in the selected currency.
+    rerender(
+      <BuyQtyStep
+        listing={listing}
+        qty={10}
+        onQtyChange={() => {}}
+        walletConnected
+        currency="USDT"
+        onCurrencyChange={onCurrency}
+      />,
+    );
+    expect(screen.getByRole("button", { name: "Pay with USDT" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByTestId("buy-qty-total")).toHaveTextContent("$1,250.00 USDT");
+  });
+
+  it("qty step: USDT option disabled + note shown when unavailable", () => {
+    render(
+      <BuyQtyStep
+        listing={listing}
+        qty={10}
+        onQtyChange={() => {}}
+        walletConnected
+        currency="TON"
+        onCurrencyChange={() => {}}
+        usdtAvailable={false}
+      />,
+    );
+    expect(screen.getByRole("button", { name: "Pay with USDT" })).toBeDisabled();
+    expect(screen.getByTestId("usdt-unavailable-note")).toBeInTheDocument();
+  });
+
   it("summary step: property, qty, total, fees", () => {
-    render(<BuySummaryStep listing={listing} qty={10} />);
+    render(<BuySummaryStep listing={listing} qty={10} currency="TON" />);
     expect(screen.getByText("Order summary")).toBeInTheDocument();
     expect(screen.getByText("Marina Vista Apt 4B")).toBeInTheDocument();
     expect(screen.getByText("10")).toBeInTheDocument();
@@ -94,13 +154,25 @@ describe("Buy flow steps", () => {
     expect(screen.getByText(/No hidden fees/i)).toBeInTheDocument();
   });
 
+  it("summary step: shows the USDT total when paying with USDT", () => {
+    render(<BuySummaryStep listing={listing} qty={10} currency="USDT" />);
+    expect(screen.getByTestId("buy-pay-with")).toHaveTextContent("USDT");
+    expect(screen.getByTestId("buy-total")).toHaveTextContent("$1,250.00 USDT");
+  });
+
   it("summary step shows sticky error and pending copy", () => {
     const { rerender } = render(
-      <BuySummaryStep listing={listing} qty={10} error="transaction rejected" />,
+      <BuySummaryStep listing={listing} qty={10} currency="TON" error="transaction rejected" />,
     );
     expect(screen.getByTestId("buy-summary-error")).toHaveTextContent(/transaction rejected/i);
-    rerender(<BuySummaryStep listing={listing} qty={10} pending />);
+    rerender(<BuySummaryStep listing={listing} qty={10} currency="TON" pending />);
     expect(screen.getByTestId("buy-pending")).toBeInTheDocument();
+    expect(screen.getByText(/Confirming in your wallet/i)).toBeInTheDocument();
+  });
+
+  it("summary step: pending + verifying shows on-chain confirmation copy", () => {
+    render(<BuySummaryStep listing={listing} qty={10} currency="TON" pending verifying />);
+    expect(screen.getByTestId("buy-pending")).toHaveTextContent(/Confirming on blockchain/i);
   });
 
   it("success step: congrats message, disclaimer once, portfolio + share", () => {
@@ -133,6 +205,8 @@ describe("Buy flow steps", () => {
         qty={5}
         onQtyChange={() => {}}
         walletConnected
+        currency="TON"
+        onCurrencyChange={() => {}}
       />,
     );
     expect(screen.getByRole("dialog")).toBeInTheDocument();

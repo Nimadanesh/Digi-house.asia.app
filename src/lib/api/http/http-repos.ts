@@ -11,6 +11,7 @@ import type {
 import type { HttpClient } from "@/lib/api/http/client";
 import type { DocumentMeta, DocumentDownloadUrl } from "@/types/property-document";
 import type { Transaction } from "@/types/transaction";
+import type { BuyConfirmResult, BuyPrepareResult, BuyVerifyResult, BuyCurrency } from "@/types/buy";
 
 interface BuyPrepareResponse {
   intentId: string;
@@ -18,12 +19,9 @@ interface BuyPrepareResponse {
   quantity: number;
   priceUsdPerShare: number;
   totalUsd: number;
+  currency?: string;
+  tonConnectMessages: Array<{ address: string; amount: string; payload?: string | null }>;
   expiresAt: string;
-}
-
-interface BuyConfirmResponse {
-  transaction: import("@/types/transaction").Transaction;
-  holding: import("@/types/position").Holding;
 }
 
 export function createHttpRepos(client: HttpClient): Repos {
@@ -71,17 +69,39 @@ export function createHttpRepos(client: HttpClient): Repos {
   };
 
   const tx: TxRepo = {
-    async buy(input) {
+    async prepareBuy(input): Promise<BuyPrepareResult> {
       const prep = await client.post<BuyPrepareResponse>("/v1/buys/prepare", {
         propertyId: input.propertyId,
         quantity: input.quantity,
         priceUsdPerShare: input.priceUsdPerShare,
+        currency: input.currency ?? "TON",
       });
-      const conf = await client.post<BuyConfirmResponse>("/v1/buys/confirm", {
+      const msg = prep.tonConnectMessages[0];
+      if (!msg?.address || !msg.amount) {
+        throw new Error(
+          "prepare returned no payment message — admin wallet not configured",
+        );
+      }
+      return {
         intentId: prep.intentId,
-        boc: null,
+        propertyId: prep.propertyId,
+        quantity: prep.quantity,
+        priceUsdPerShare: prep.priceUsdPerShare,
+        totalUsd: prep.totalUsd,
+        currency: (prep.currency === "USDT" ? "USDT" : "TON") as BuyCurrency,
+        message: { address: msg.address, amount: msg.amount, payload: msg.payload ?? null },
+        expiresAt: prep.expiresAt,
+      };
+    },
+    async confirmBuy(input): Promise<BuyConfirmResult> {
+      return client.post<BuyConfirmResult>("/v1/buys/confirm", {
+        intentId: input.intentId,
+        boc: input.boc ?? null,
+        ...(input.txHash ? { txHash: input.txHash } : {}),
       });
-      return conf.transaction;
+    },
+    async verifyAndSettle(intentId: string): Promise<BuyVerifyResult> {
+      return client.post<BuyVerifyResult>("/v1/buys/verify-and-settle", { intentId });
     },
     async listTransactions(opts) {
       return client.get<{ transactions: Transaction[]; hasMore: boolean }>("/v1/transactions", {

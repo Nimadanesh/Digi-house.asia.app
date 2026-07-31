@@ -1,9 +1,11 @@
 "use client";
-// File responsibility: Quantity step of Buy sheet — balance, available shares, qty steppers + live total.
+// File responsibility: Quantity step of Buy sheet — currency selector, balance, available shares,
+// qty steppers + live total (shown in the selected rail).
 import { Minus, Plus } from "lucide-react";
 import { usd, ton, weeklyRent, projectedYield, estimateNanoTon } from "@/lib/format";
 import { TON_PRICE_USD_CENTS } from "@/lib/constants";
 import type { Listing } from "@/types/property";
+import type { BuyCurrency } from "@/types/buy";
 import { WalletConnectButton } from "@/components/wallet/TonConnectButton";
 import { haptics } from "@/lib/telegram/haptics";
 import { useTonConnect } from "@/hooks/useTonConnect";
@@ -11,17 +13,28 @@ import { Block } from "@/components/common/Block";
 import { Row } from "@/components/common/Row";
 
 const QUICK = [10, 25, 50] as const;
+const PAY_CURRENCIES: Array<{ value: BuyCurrency; label: string }> = [
+  { value: "TON", label: "TON" },
+  { value: "USDT", label: "USDT" },
+];
 
 export function BuyQtyStep({
   listing,
   qty,
   onQtyChange,
   walletConnected,
+  currency,
+  onCurrencyChange,
+  usdtAvailable = true,
 }: {
   listing: Listing;
   qty: number;
   onQtyChange: (q: number) => void;
   walletConnected: boolean;
+  currency: BuyCurrency;
+  onCurrencyChange: (c: BuyCurrency) => void;
+  /** False when the server reports USDT as not configured — the USDT option is disabled. */
+  usdtAvailable?: boolean;
 }) {
   const tonc = useTonConnect();
   const remaining = listing.sharesRemaining;
@@ -69,6 +82,41 @@ export function BuyQtyStep({
       <h2 id="buy-sheet-title" className="text-[1.0625rem] font-semibold text-foreground">
         Buy shares
       </h2>
+
+      <div className="grid grid-cols-2 gap-2" role="group" aria-label="Payment currency">
+        {PAY_CURRENCIES.map((opt) => {
+          const selected = currency === opt.value;
+          const disabled = opt.value === "USDT" && !usdtAvailable;
+          return (
+            <button
+              key={opt.value}
+              type="button"
+              disabled={disabled}
+              aria-pressed={selected}
+              aria-label={`Pay with ${opt.value}`}
+              onClick={() => {
+                haptics.selection();
+                onCurrencyChange(opt.value);
+              }}
+              className={`min-h-[44px] rounded-[12px] text-sm font-semibold transition-colors duration-[120ms] ease-out disabled:opacity-40 ${
+                selected
+                  ? "bg-primary/15 text-primary"
+                  : "bg-surface-2 text-muted-foreground"
+              }`}
+            >
+              {opt.label}
+            </button>
+          );
+        })}
+      </div>
+      {!usdtAvailable ? (
+        <p
+          className="text-[0.6875rem] leading-relaxed text-muted-foreground"
+          data-testid="usdt-unavailable-note"
+        >
+          USDT isn&apos;t available right now — you&apos;ll pay with TON.
+        </p>
+      ) : null}
 
       <Block>
         <Row className="!min-h-[48px]">
@@ -141,7 +189,7 @@ export function BuyQtyStep({
         <div className="flex justify-between text-sm">
           <span className="text-muted-foreground">Total</span>
           <span className="tnum font-semibold text-foreground" data-testid="buy-qty-total">
-            {usd(totalUsd)} · {ton(estimateNanoTon(totalUsd, TON_PRICE_USD_CENTS))}
+            {currency === "USDT" ? `${usd(totalUsd)} USDT` : `${usd(totalUsd)} · ${ton(estimateNanoTon(totalUsd, TON_PRICE_USD_CENTS))}`}
           </span>
         </div>
         <div className="flex justify-between text-sm">
@@ -150,7 +198,7 @@ export function BuyQtyStep({
         </div>
       </div>
       <p className="text-[0.6875rem] text-center text-muted-foreground">
-        Ready for real TON payment wiring post-MVP.
+        Paid in {currency} from your connected wallet.
       </p>
     </div>
   );

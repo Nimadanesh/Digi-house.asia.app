@@ -28,7 +28,7 @@ cp .env.local.example .env.local
 |----------|----------|--------|
 | `NEXT_PUBLIC_TON_NETWORK` | Yes | `testnet` for MVP (`mainnet` only post-MVP) |
 | `NEXT_PUBLIC_TONCONNECT_MANIFEST_URL` | Recommended after first deploy | `https://<your-domain>/seo/tonconnect-manifest.json` |
-| `NEXT_PUBLIC_TON_RELAY_ADDRESS` | Optional | Testnet wallet for 0.01 TON buy stub |
+| `NEXT_PUBLIC_TON_RELAY_ADDRESS` | Optional | Backend fallback receive wallet when no `ADMIN_TON_WALLET_ADDRESS` is set on the API |
 | `NEXT_PUBLIC_PAYOUT_TICK_MS` | Optional | `60000` (live “next payout” tick in demo) |
 | `NEXT_PUBLIC_TG_BOT_USERNAME` | Recommended | Bot username **without** `@` (share links) |
 
@@ -111,9 +111,17 @@ Requirements:
 
 **Do not flip for the university demo** unless contracts and legal copy are ready.
 
-1. Set `NEXT_PUBLIC_TON_NETWORK=mainnet`  
-2. Update relay / owner addresses  
-3. Revisit honesty copy — on-chain payoutsare still post-MVP unless contracts ship  
+1. Set `NEXT_PUBLIC_TON_NETWORK=mainnet`
+2. Update relay / owner addresses
+3. Revisit honesty copy — on-chain payouts are still post-MVP unless contracts ship
+4. **API — buy verification** (`apps/api/.env`, applied in the deploy platform):
+   - `TON_API_URL=https://tonapi.io` (mainnet TonAPI) and `TON_API_KEY=<mainnet key>` (required)
+   - `ADMIN_TON_WALLET_ADDRESS=<mainnet receive wallet>` — the wallet that actually receives buy payments
+   - `USDT_JETTON_MASTER_ADDRESS=EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs` — **mainnet** USDT master (the testnet master `kQDw…AhWe` must never run against mainnet TonAPI)
+   - `ADMIN_USDT_WALLET_ADDRESS=<mainnet USDT receive wallet>` (only if accepting USDT buys)
+   - `TON_USD_PRICE_CENTS=<current USD-per-TON × 100>` — used to derive the payable nanoTON at prepare
+   - Re-run `npm run db:migrate` so migration `0017` (payer wallet + tx-hash replay index) is applied
+5. Verify end-to-end on mainnet testnet-first flow: prepare → wallet send → confirm → `verify-and-settle` settles only when the on-chain payment matches the intent's payer, destination, amount, and ≤30-min recency (`POST /v1/buys/verify-and-settle`, see `apps/api/README.md`).
 
 ## 8. Post-deploy smoke test
 

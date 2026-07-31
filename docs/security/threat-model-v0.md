@@ -1,6 +1,6 @@
 # DigiHouse — Threat Model v0
 
-- Status: Draft
+- Status: Superseded by [threat-model-v1.md](./threat-model-v1.md) (2026-07-30)
 - Date: 2026-07-29
 - Method: STRIDE-lite
 - Scope: Mini App + future API + TON testnet/mainnet path (Phases 0–5)

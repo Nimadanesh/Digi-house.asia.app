@@ -1,20 +1,27 @@
-// File responsibility: order summary step (Fable Buy Flow §Step 2).
+// File responsibility: order summary step (Fable Buy Flow §Step 2) — totals per payment rail.
 import { usd, ton, weeklyRent, projectedYield, estimateNanoTon } from "@/lib/format";
 import { TON_PRICE_USD_CENTS } from "@/lib/constants";
 import type { Listing } from "@/types/property";
+import type { BuyCurrency } from "@/types/buy";
 import { Block } from "@/components/common/Block";
 import { Row } from "@/components/common/Row";
 
 export function BuySummaryStep({
   listing,
   qty,
+  currency,
   error,
   pending,
+  verifying,
 }: {
   listing: Listing;
   qty: number;
+  /** Payment rail chosen in the qty step — changes how the total is shown. */
+  currency: BuyCurrency;
   error?: string | null;
   pending?: boolean;
+  /** Payment sent — waiting for on-chain verification + settlement. */
+  verifying?: boolean;
 }) {
   const totalUsd = qty * listing.sharePriceUsd;
   const weekly = projectedYield(weeklyRent(listing.annualRentUsd), qty, listing.totalShares);
@@ -39,13 +46,19 @@ export function BuySummaryStep({
           <span className="ml-auto text-sm tnum text-foreground">{usd(listing.sharePriceUsd)}</span>
         </Row>
         <Row>
+          <span className="text-sm text-muted-foreground">Pay with</span>
+          <span className="ml-auto text-sm tnum text-foreground" data-testid="buy-pay-with">
+            {currency === "USDT" ? "USDT" : "TON"}
+          </span>
+        </Row>
+        <Row>
           <span className="text-sm text-muted-foreground">Fees</span>
           <span className="ml-auto text-sm tnum text-foreground">{usd(feesUsd)}</span>
         </Row>
         <Row>
           <span className="text-sm font-medium text-foreground">Total</span>
           <span className="ml-auto text-sm tnum font-semibold text-foreground" data-testid="buy-total">
-            {usd(totalUsd)} · {ton(estimateNanoTon(totalUsd, TON_PRICE_USD_CENTS))}
+            {currency === "USDT" ? `${usd(totalUsd)} USDT` : `${usd(totalUsd)} · ${ton(estimateNanoTon(totalUsd, TON_PRICE_USD_CENTS))}`}
           </span>
         </Row>
         <Row>
@@ -61,7 +74,9 @@ export function BuySummaryStep({
           className="text-center text-sm leading-relaxed text-muted-foreground"
           data-testid="buy-pending"
         >
-          Confirming in your wallet…
+          {verifying
+            ? "Confirming on blockchain…"
+            : "Confirming in your wallet…"}
         </p>
       ) : null}
       {error ? (

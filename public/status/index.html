@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DigiHouse Status</title>
+<style>
+  :root {
+    --bg: #17212b;
+    --surface: #232e3c;
+    --surface-2: #2b3744;
+    --text: #ffffff;
+    --muted: #708499;
+    --accent: #3390ec;
+    --border: rgba(255,255,255,0.08);
+    --green: #45ba5e;
+    --amber: #e9a820;
+    --red: #e53935;
+    --radius: 12px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, ui-sans-serif, system-ui, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    padding: 24px 16px;
+    max-width: 480px;
+    margin: 0 auto;
+    min-height: 100vh;
+  }
+  h1 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 24px;
+  }
+  .overall {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .indicator.operational { background: var(--green); }
+  .indicator.degraded { background: var(--amber); }
+  .indicator.outage { background: var(--red); }
+  .overall-text {
+    font-size: 15px;
+    font-weight: 500;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  tr:not(:last-child) {
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    background: var(--surface-2);
+  }
+  td {
+    padding: 14px 16px;
+    vertical-align: middle;
+  }
+  .component-name {
+    font-weight: 500;
+  }
+  .status-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: flex-end;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .status-cell.operational { color: var(--green); }
+  .status-cell.degraded { color: var(--amber); }
+  .status-cell.outage { color: var(--red); }
+  .footer {
+    margin-top: 24px;
+    font-size: 12px;
+    color: var(--muted);
+    text-align: center;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<h1>DigiHouse Status</h1>
+<p class="subtitle" id="last-updated">Last updated: 2026-07-30 15:30 UTC</p>
+
+<div class="overall">
+  <span class="indicator operational" id="overall-indicator"></span>
+  <span class="overall-text" id="overall-text">All Systems Operational</span>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th style="text-align:right">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="component-name">Mini App</td>
+      <td><span class="status-cell operational" data-status="operational"><span class="indicator operational"></span>Operational</span></td>
+    </tr>
+    <tr>
+      <td class="component-name">API</td>
+      <td><span class="status-cell operational" data-status="operational"><span class="indicator operational"></span>Operational</span></td>
+    </tr>
+    <tr>
+      <td class="component-name">Buy</td>
+      <td><span class="status-cell operational" data-status="operational"><span class="indicator operational"></span>Operational</span></td>
+    </tr>
+    <tr>
+      <td class="component-name">Payouts</td>
+      <td><span class="status-cell operational" data-status="operational"><span class="indicator operational"></span>Operational</span></td>
+    </tr>
+    <tr>
+      <td class="component-name">Telemetry</td>
+      <td><span class="status-cell operational" data-status="operational"><span class="indicator operational"></span>Operational</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="footer">
+  <p>Manual status page &mdash; updated by ops during incidents.</p>
+  <p><a href="https://digihouse.app">Back to DigiHouse</a></p>
+</div>
+
+</body>
+</html>

@@ -330,7 +330,7 @@ describe("admin routes", () => {
       });
       const pauseAudits = audit._rows.filter((r: { action: string }) => r.action === "admin.pause");
       expect(pauseAudits.length).toBe(1);
-      expect(pauseAudits[0].resourceId).toBe(created.id);
+      expect(pauseAudits[0]!.resourceId).toBe(created.id);
     });
   });
 

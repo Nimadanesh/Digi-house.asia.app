@@ -26,7 +26,12 @@ export const transactions = pgTable(
     propertyId: text("property_id"),
     shares: integer("shares"),
     amountUsd: bigint("amount_usd", { mode: "number" }).notNull(),
+    /** Payment rail: native TON (default) or a Jetton (USDT). */
+    currency: text("currency").notNull().default("TON"),
+    /** Payable nanoTON for native-TON buys. */
     tonAmount: bigint("ton_amount", { mode: "number" }),
+    /** Payable Jetton amount in base units for USDT buys (USDT has 6 decimals). */
+    tokenAmount: bigint("token_amount", { mode: "number" }),
     status: text("status").notNull(),
     txHash: text("tx_hash"),
     error: text("error"),

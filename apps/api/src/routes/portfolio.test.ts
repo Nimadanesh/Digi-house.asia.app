@@ -43,6 +43,11 @@ function testEnv(): ApiEnv {
     TON_RELAY_ADDRESS: undefined,
     BUY_STUB_NANOTON: "10000000",
     BUY_INTENT_TTL_SECONDS: 900,
+    AUTH_RATE_LIMIT_MAX: 10,
+    ADMIN_TON_WALLET_ADDRESS: undefined,
+    ADMIN_USDT_WALLET_ADDRESS: undefined,
+    USDT_JETTON_MASTER_ADDRESS: undefined,
+    TON_USD_PRICE_CENTS: 200,
     REDIS_URL: undefined,
     ORDER_RATE_LIMIT_MAX: 30,
     ORDER_RATE_LIMIT_WINDOW_MS: 60000,
@@ -61,6 +66,8 @@ function testEnv(): ApiEnv {
     R2_SECRET_ACCESS_KEY: undefined,
     R2_BUCKET: undefined,
     R2_PUBLIC_BASE_URL: undefined,
+    LAUNCH_MODE: "open",
+    ALLOWLIST_WALLETS: undefined,
   };
 }
 
@@ -249,7 +256,7 @@ describe("GET /v1/portfolio/export.csv", () => {
     const lines = body.trim().split("\n");
     expect(lines[0]).toBe("propertyId,propertyName,shares,avgCostUsdCents,currentValueUsdCents,pendingWeekEarningsUsdCents,shareRatio");
     expect(lines.length).toBe(3);
-    const row2 = lines[1].split(",");
+    const row2 = lines[1]!.split(",");
     expect(row2[0]).toBe(BAYSIDE);
     expect(row2[2]).toBe("160");
     expect(row2[3]).toBe("25000");
@@ -273,7 +280,7 @@ describe("GET /v1/portfolio/export.csv", () => {
     });
     const body = await res.text();
     const lines = body.trim().split("\n");
-    const cols = lines[1].split(",");
+    const cols = lines[1]!.split(",");
     expect(cols[3]).toBe("25000");
     expect(cols[4]).toBe(String(expectedCurrentValueUsd));
     expect(cols[5]).toBe(String(expectedPendingWeekEarnings));

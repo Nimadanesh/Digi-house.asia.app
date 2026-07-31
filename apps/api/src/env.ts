@@ -30,11 +30,18 @@ const envSchema = z
     TON_RELAY_ADDRESS: z.string().optional(),
     /** NanoTON amount string in prepare tonConnectMessages (default 0.01 TON). */
     BUY_STUB_NANOTON: z.string().default("10000000"),
+    /** Receive wallet for primary-sale payments (native TON). Overrides TON_RELAY_ADDRESS. */
+    ADMIN_TON_WALLET_ADDRESS: z.string().optional(),
+    /** Receive wallet for future USDT payments (not yet implemented — ADR-005). */
+    ADMIN_USDT_WALLET_ADDRESS: z.string().optional(),
+    /** USDT jetton master address (testnet/mainnet) for future jetton payments (ADR-005). */
+    USDT_JETTON_MASTER_ADDRESS: z.string().optional(),
+    /** USD-per-TON conversion for buy prepare amounts (cents per TON; default 200 = $2.00). */
+    TON_USD_PRICE_CENTS: z.coerce.number().int().positive().default(200),
     /** Buy intent TTL seconds (default 15m). */
     BUY_INTENT_TTL_SECONDS: z.coerce.number().int().positive().default(900),
     /** Redis for BullMQ payout worker (optional for API process). */
     REDIS_URL: z.string().optional(),
-    /** P4-06: Order rate limit max requests per window (default 30). */
     /** P4-09: Auth rate limit max requests per window (default 10). */
     AUTH_RATE_LIMIT_MAX: z.coerce.number().int().positive().default(10),
     /** P4-06: Order rate limit max requests per window (default 30). */
@@ -68,6 +75,11 @@ const envSchema = z
 
     /** Indexer worker poll interval in ms (default 10s). */
     INDEXER_POLL_MS: z.coerce.number().int().positive().default(10_000),
+
+    /** P5-09: Launch mode — allowlist restricts buys/orders to allowlisted wallets. */
+    LAUNCH_MODE: z.enum(["allowlist", "open"]).default("allowlist"),
+    /** P5-09: Comma-separated TON wallet addresses (user-friendly form) allowed when LAUNCH_MODE=allowlist. */
+    ALLOWLIST_WALLETS: z.string().optional(),
     /** Kill switch — indexer process no-ops when false (default). */
     INDEXER_ENABLED: boolish,
   })
@@ -103,6 +115,10 @@ const envSchema = z
       CORS_ORIGIN: val.CORS_ORIGIN,
       TON_RELAY_ADDRESS: val.TON_RELAY_ADDRESS,
       BUY_STUB_NANOTON: val.BUY_STUB_NANOTON,
+      ADMIN_TON_WALLET_ADDRESS: val.ADMIN_TON_WALLET_ADDRESS,
+      ADMIN_USDT_WALLET_ADDRESS: val.ADMIN_USDT_WALLET_ADDRESS,
+      USDT_JETTON_MASTER_ADDRESS: val.USDT_JETTON_MASTER_ADDRESS,
+      TON_USD_PRICE_CENTS: val.TON_USD_PRICE_CENTS,
       BUY_INTENT_TTL_SECONDS: val.BUY_INTENT_TTL_SECONDS,
       REDIS_URL: val.REDIS_URL,
       AUTH_RATE_LIMIT_MAX: val.AUTH_RATE_LIMIT_MAX,
@@ -123,6 +139,8 @@ const envSchema = z
       TON_API_KEY: val.TON_API_KEY,
       INDEXER_POLL_MS: val.INDEXER_POLL_MS,
       INDEXER_ENABLED: val.INDEXER_ENABLED,
+      LAUNCH_MODE: val.LAUNCH_MODE,
+      ALLOWLIST_WALLETS: val.ALLOWLIST_WALLETS,
     };
   });
 

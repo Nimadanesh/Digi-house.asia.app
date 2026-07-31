@@ -106,6 +106,20 @@
       "when": 1788000000000,
       "tag": "0014_property_documents",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1788600000000,
+      "tag": "0016_usdt_payments",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1789000000000,
+      "tag": "0017_buy_payer_guard",
+      "breakpoints": true
     }
   ]
 }
