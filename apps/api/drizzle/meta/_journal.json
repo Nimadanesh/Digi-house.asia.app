@@ -120,6 +120,13 @@
       "when": 1789000000000,
       "tag": "0017_buy_payer_guard",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1789500000000,
+      "tag": "0018_profile_recovery",
+      "breakpoints": true
     }
   ]
 }

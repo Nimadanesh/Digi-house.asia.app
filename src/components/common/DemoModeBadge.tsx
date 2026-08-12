@@ -13,7 +13,14 @@ export function DemoModeBadge() {
   const openSettings = useUiStore((s) => s.openSettings);
   const mainButtonActive = useUiStore((s) => s.mainButtonActive);
 
-  if (!show || pathname === ROUTES.onboarding || mainButtonActive) return null;
+  if (
+    !show ||
+    pathname === ROUTES.onboarding ||
+    pathname === ROUTES.profileSetup ||
+    pathname === ROUTES.recoveryLogin ||
+    mainButtonActive
+  )
+    return null;
 
   return (
     <div

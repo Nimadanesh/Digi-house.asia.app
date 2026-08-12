@@ -175,6 +175,131 @@ describe("POST /v1/auth/telegram + GET /v1/me", () => {
     expect(body.user.id).toBe("99");
   });
 
+  it("POST /v1/me/onboarded marks user onboarded", async () => {
+    const { app } = makeApp();
+    const initData = buildInitDataForTests(FIXTURE_BOT_TOKEN, {
+      authDate: Math.floor(Date.now() / 1000) - 5,
+      user: { id: 55, first_name: "New" },
+    });
+    const authRes = await app.request("/v1/auth/telegram", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ initData }),
+    });
+    const { token, user: before } = (await authRes.json()) as {
+      token: string;
+      user: { onboarded: boolean };
+    };
+    expect(before.onboarded).toBe(false);
+
+    const res = await app.request("/v1/me/onboarded", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as { user: { id: string; onboarded: boolean } };
+    expect(body.user.id).toBe("55");
+    expect(body.user.onboarded).toBe(true);
+  });
+
+  it("telegram auth issues recovery code; GET recovery-code returns it", async () => {
+    const { app, users } = makeApp();
+    const initData = buildInitDataForTests(FIXTURE_BOT_TOKEN, {
+      authDate: Math.floor(Date.now() / 1000) - 5,
+      user: { id: 88, first_name: "Rec" },
+    });
+    const authRes = await app.request("/v1/auth/telegram", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ initData }),
+    });
+    const { token, user } = (await authRes.json()) as {
+      token: string;
+      user: { profileCompleted: boolean; recoveryCode?: string };
+    };
+    expect(user.profileCompleted).toBe(false);
+    expect(user.recoveryCode).toBeUndefined();
+    expect(users._rows.get("88")?.recoveryCode).toMatch(/^DH-/);
+
+    const codeRes = await app.request("/v1/me/recovery-code", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    expect(codeRes.status).toBe(200);
+    const { recoveryCode } = (await codeRes.json()) as { recoveryCode: string };
+    expect(recoveryCode).toMatch(/^DH-[A-Z0-9]{4}-[A-Z0-9]{4}$/);
+  });
+
+  it("PATCH /v1/me updates profile and completes", async () => {
+    const { app } = makeApp();
+    const initData = buildInitDataForTests(FIXTURE_BOT_TOKEN, {
+      authDate: Math.floor(Date.now() / 1000) - 5,
+      user: { id: 66, first_name: "Pat" },
+    });
+    const authRes = await app.request("/v1/auth/telegram", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ initData }),
+    });
+    const { token } = (await authRes.json()) as { token: string };
+
+    const res = await app.request("/v1/me", {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        displayName: "Pat Updated",
+        phone: "+15551234567",
+        completeProfile: true,
+      }),
+    });
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as {
+      user: {
+        displayName: string;
+        phone?: string;
+        profileCompleted: boolean;
+      };
+    };
+    expect(body.user.displayName).toBe("Pat Updated");
+    expect(body.user.phone).toBe("+15551234567");
+    expect(body.user.profileCompleted).toBe(true);
+  });
+
+  it("POST /v1/auth/recovery issues session for valid code", async () => {
+    const { app, users } = makeApp();
+    await users.upsertFromTelegram({
+      userId: "900",
+      displayName: "RecoverMe",
+    });
+    const code = users._rows.get("900")!.recoveryCode!;
+
+    const res = await app.request("/v1/auth/recovery", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ code }),
+    });
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as {
+      token: string;
+      user: { id: string; displayName: string };
+    };
+    expect(body.token.length).toBeGreaterThan(10);
+    expect(body.user.id).toBe("900");
+    expect(body.user.displayName).toBe("RecoverMe");
+  });
+
+  it("POST /v1/auth/recovery rejects unknown code", async () => {
+    const { app } = makeApp();
+    const res = await app.request("/v1/auth/recovery", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ code: "DH-ZZZZ-YYYY" }),
+    });
+    expect(res.status).toBe(401);
+  });
+
   it("second auth upserts same user and updates display name", async () => {
     const { app, users } = makeApp();
     const id = 777;

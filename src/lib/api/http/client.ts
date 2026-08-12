@@ -17,6 +17,7 @@ export class ApiError extends Error {
 export interface HttpClient {
   get<T>(path: string, query?: Record<string, string | undefined>): Promise<T>;
   post<T>(path: string, body?: unknown): Promise<T>;
+  patch<T>(path: string, body?: unknown): Promise<T>;
   delete(path: string): Promise<void>;
   getText(path: string): Promise<string>;
 }
@@ -111,6 +112,9 @@ export function createHttpClient(opts: {
     },
     post<T>(path: string, body?: unknown): Promise<T> {
       return request<T>("POST", path, body);
+    },
+    patch<T>(path: string, body?: unknown): Promise<T> {
+      return request<T>("PATCH", path, body);
     },
     delete(path: string): Promise<void> {
       return request<void>("DELETE", path);

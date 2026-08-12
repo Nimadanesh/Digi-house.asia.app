@@ -61,6 +61,7 @@ const VALID_USER = {
   role: "investor" as const,
   walletAddress: null,
   onboarded: true,
+  profileCompleted: true,
   useTelegramTheme: true,
   createdAt: "2026-01-01T00:00:00.000Z",
 };
@@ -109,9 +110,11 @@ describe("AuthProvider", () => {
     expect(getContext()?.error).toBeTruthy();
   });
 
-  it("mock dataSource → does nothing, status=unauthenticated, no fetch", async () => {
+  it("mock dataSource → seeds session user, status=unauthenticated, no fetch", async () => {
     (globalThis as unknown as Record<string, unknown>)[`${ENV_KEY}_DATA_SOURCE`] = "mock";
     const fetchSpy = vi.spyOn(globalThis, "fetch");
+    const { useAuthStore } = await import("@/stores/auth.store");
+    useAuthStore.setState({ user: null });
 
     const getContext = renderProvider();
 
@@ -121,11 +124,15 @@ describe("AuthProvider", () => {
 
     expect(fetchSpy).not.toHaveBeenCalled();
     expect(getApiAccessToken()).toBeNull();
+    expect(getContext()?.user?.displayName).toBe("Demo Investor");
+    expect(useAuthStore.getState().user?.id).toBe("user-aria-demo");
   });
 
-  it("devToken set → skips fetch, token set, status=authenticated", async () => {
+  it("devToken set → GET /v1/me, token set, status=authenticated + store user", async () => {
     (globalThis as unknown as Record<string, unknown>)[`${ENV_KEY}_DEV_TOKEN`] = "dev-jwt-123";
-    const fetchSpy = vi.spyOn(globalThis, "fetch");
+    mockFetch(200, { user: VALID_USER });
+    const { useAuthStore } = await import("@/stores/auth.store");
+    useAuthStore.setState({ user: null });
 
     const getContext = renderProvider();
 
@@ -133,9 +140,24 @@ describe("AuthProvider", () => {
       expect(getContext()?.status).toBe("authenticated");
     });
 
-    expect(fetchSpy).not.toHaveBeenCalled();
     expect(getApiAccessToken()).toBe("dev-jwt-123");
-    expect(getContext()?.user).toBeNull();
+    expect(getContext()?.user).toMatchObject({ id: "123", displayName: "Test" });
+    expect(useAuthStore.getState().user?.id).toBe("123");
+  });
+
+  it("api mode + success → publishes user to auth store", async () => {
+    vi.mocked(retrieveRawInitData).mockReturnValue("user=%7B%22id%22%3A1%7D&hash=abc");
+    mockFetch(200, { token: "my-jwt", user: VALID_USER, expiresAt: "2026-07-30T12:00:00Z" });
+    const { useAuthStore } = await import("@/stores/auth.store");
+    useAuthStore.setState({ user: null });
+
+    const getContext = renderProvider();
+
+    await waitFor(() => {
+      expect(getContext()?.status).toBe("authenticated");
+    });
+
+    expect(useAuthStore.getState().user).toMatchObject({ id: "123", displayName: "Test" });
   });
 
   it("no initData (outside Telegram) → warn, status=unauthenticated", async () => {

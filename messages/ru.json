@@ -56,8 +56,7 @@
     },
     "sell": {
       "headline": "Продавайте в любой момент",
-      "subtitle": "Выставляйте доли на маркетплейсе DigiHouse, когда готовы выйти.",
-      "trustLine": "Это демо-версия, транзакции симулируются"
+      "subtitle": "Выставляйте доли на маркетплейсе DigiHouse, когда готовы выйти."
     }
   },
   "home": {
@@ -145,19 +144,61 @@
     "language": "Язык",
     "languageHint": "Язык приложения",
     "languageAuto": "Авто (Telegram)",
-    "useTelegramTheme": "Тема Telegram",
+    "useTelegramTheme": "Dark / Light",
     "useTelegramThemeHint": "Цвета как в Telegram",
     "showDemoBadge": "Показать бейдж Demo",
     "showDemoBadgeHint": "Честная метка MVP",
     "help": "Помощь",
     "howItWorks": "Как работает DigiHouse",
     "aboutLegal": "О приложении / Правовая информация",
-    "demoFooter": "Демо · тестовые данные · транзакции симулируются",
     "aboutBody": "DigiHouse — мини-приложение Telegram для долей недвижимости на TON. Еженедельный арендный доход показывается пропорционально вашей доле.",
     "aboutAdvice": "Это не финансовый совет. Документы и токенизация — демонстрация до продакшен-контрактов.",
     "aboutCopyright": "© DigiHouse · MVP",
     "demoTxDisclaimer": "Это демо — транзакции симулируются",
     "payoutDisclaimer": "симулированная еженедельная выплата · on-chain после MVP",
-    "chooseLanguage": "Выберите язык"
+    "chooseLanguage": "Выберите язык",
+    "account": "Аккаунт",
+    "recoverySignIn": "Войти с кодом восстановления",
+    "signOut": "Выйти",
+    "signOutConfirmTitle": "Выйти?",
+    "signOutConfirmBody": "Хотите выйти?"
+  },
+  "profile": {
+    "title": "Заполните профиль",
+    "subtitle": "Несколько данных, чтобы идентифицировать ваш аккаунт.",
+    "settingsSection": "Профиль",
+    "displayName": "Отображаемое имя",
+    "displayNamePlaceholder": "Ваше имя",
+    "phone": "Телефон",
+    "phonePlaceholder": "+7 900 000 00 00",
+    "phoneHint": "Необязательно. Только для поддержки аккаунта.",
+    "phoneEmpty": "Телефон не указан",
+    "useTelegramPhone": "Использовать номер Telegram",
+    "requestingPhone": "Запрос…",
+    "recoveryTitle": "Код восстановления",
+    "recoveryWarn": "Сохраните этот код в надёжном месте. Он понадобится для входа, если Telegram недоступен. Мы не сможем восстановить его за вас.",
+    "recoverySettingsHint": "Храните код в секрете. Любой, у кого он есть, может получить доступ к вашему аккаунту DigiHouse.",
+    "copyCode": "Скопировать код восстановления",
+    "showCode": "Показать код восстановления",
+    "hideCode": "Скрыть код восстановления",
+    "savedConfirm": "Я сохранил(а) код восстановления в надёжном месте",
+    "saveContinue": "Сохранить и продолжить",
+    "saving": "Сохранение…",
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "errors": {
+      "name": "Введите имя (минимум 2 символа)",
+      "phone": "Введите корректный номер телефона",
+      "saveCode": "Подтвердите, что сохранили код восстановления",
+      "save": "Не удалось сохранить профиль"
+    }
+  },
+  "recovery": {
+    "title": "Вход с кодом восстановления",
+    "subtitle": "Используйте код, сохранённый при настройке профиля.",
+    "codeLabel": "Код восстановления",
+    "signIn": "Войти",
+    "signingIn": "Вход…",
+    "backHome": "На главную"
   }
 }

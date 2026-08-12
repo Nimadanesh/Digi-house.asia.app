@@ -5,8 +5,6 @@ export interface OnboardingSlideDef {
   id: "own" | "yield" | "sell";
   headline: string;
   subtitle: string;
-  /** Optional trust line (slide 3 only in Fable). */
-  trustLine?: string;
 }
 
 export const ONBOARDING_SLIDES: readonly OnboardingSlideDef[] = [
@@ -25,7 +23,6 @@ export const ONBOARDING_SLIDES: readonly OnboardingSlideDef[] = [
     id: "sell",
     headline: "Sell anytime you want",
     subtitle: "List shares on the DigiHouse marketplace when you’re ready to exit.",
-    trustLine: "This is a demo version and transactions are simulated",
   },
 ] as const;
 

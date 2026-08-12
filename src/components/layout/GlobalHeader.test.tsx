@@ -6,7 +6,7 @@ vi.mock("next/image", () => ({
   default: (props: { alt: string }) => <span data-testid="img">{props.alt}</span>,
 }));
 vi.mock("@/hooks/useTelegramUser", () => ({
-  useTelegramUser: () => ({ firstName: "Aria", photoUrl: undefined, isDemo: true }),
+  useTelegramUser: () => ({ firstName: "Demo", photoUrl: undefined, isDemo: true }),
 }));
 vi.mock("@/hooks/useTonConnect", () => ({
   useTonConnect: () => ({

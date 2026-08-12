@@ -1,3 +1,8 @@
+/**
+ * Users table — PK is Telegram user id (string).
+ * recovery_code: human-held account id (DH-XXXX-XXXX); unique; shown only to owner.
+ * profile_completed_at: set when light profile setup finishes.
+ */
 import { sql } from "drizzle-orm";
 import {
   boolean,
@@ -6,13 +11,9 @@ import {
   pgTable,
   text,
   timestamp,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
 
-/**
- * App users — PK is Telegram user id (string).
- * `wallet_address` is denormalized primary/display wallet (DATA_MODELS UserProfile).
- * Canonical bind history / multi-wallet lives in `wallets` (source of truth for addresses).
- */
 export const users = pgTable(
   "users",
   {
@@ -22,6 +23,14 @@ export const users = pgTable(
     photoUrl: text("photo_url"),
     role: text("role").notNull().default("investor"),
     walletAddress: text("wallet_address"),
+    phone: text("phone"),
+    recoveryCode: text("recovery_code"),
+    recoveryCodeCreatedAt: timestamp("recovery_code_created_at", {
+      withTimezone: true,
+    }),
+    profileCompletedAt: timestamp("profile_completed_at", {
+      withTimezone: true,
+    }),
     onboarded: boolean("onboarded").notNull().default(false),
     useTelegramTheme: boolean("use_telegram_theme").notNull().default(false),
     referredByUserId: text("referred_by_user_id"),
@@ -34,6 +43,7 @@ export const users = pgTable(
   },
   (t) => [
     index("users_wallet_address_idx").on(t.walletAddress),
+    uniqueIndex("users_recovery_code_uidx").on(t.recoveryCode),
     check("users_role_check", sql`${t.role} IN ('investor', 'owner')`),
   ],
 );

@@ -15,14 +15,18 @@ import { CurrencySegment } from "@/components/settings/CurrencySegment";
 import { LanguageSelector } from "@/components/settings/LanguageSelector";
 import { SettingsLabelStack } from "@/components/settings/SettingsLabelStack";
 import { AboutLegalSheet } from "@/components/settings/AboutLegalSheet";
+import { SettingsProfileSection } from "@/components/settings/SettingsProfileSection";
 import { useTonConnect } from "@/hooks/useTonConnect";
 import { useSettingsStore } from "@/stores/settings.store";
 import { useUiStore } from "@/stores/ui.store";
+import { useApiAuth } from "@/hooks/useApiAuth";
 import { ROUTES } from "@/lib/constants";
 import { haptics } from "@/lib/telegram/haptics";
 import { safeBackButton } from "@/lib/telegram/chrome";
 import { env } from "@/lib/env";
 import { useAuthStore } from "@/stores/auth.store";
+import { setApiAccessToken } from "@/lib/api/session-token";
+import { triggerAuthInvalidated } from "@/lib/api/auth-events";
 import { Copy, Check } from "lucide-react";
 
 /** Preference / wallet rows: taller touch target + vertical padding for title+hint stacks. */
@@ -53,9 +57,10 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
   const setDisplayCurrency = useSettingsStore((s) => s.setDisplayCurrency);
   const useTelegramTheme = useSettingsStore((s) => s.useTelegramTheme);
   const setUseTelegramTheme = useSettingsStore((s) => s.setUseTelegramTheme);
-  const showDemoBadge = useSettingsStore((s) => s.showDemoBadge);
-  const setShowDemoBadge = useSettingsStore((s) => s.setShowDemoBadge);
+  const setOnboarded = useSettingsStore((s) => s.setOnboarded);
+  const { reauthenticate } = useApiAuth();
   const [aboutOpen, setAboutOpen] = useState(false);
+  const [signOutOpen, setSignOutOpen] = useState(false);
 
   const user = useAuthStore((s) => s.user);
   const [copied, setCopied] = useState(false);
@@ -68,6 +73,11 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
   useEffect(() => {
     safeBackButton.show();
     const off = safeBackButton.onClick(() => {
+      if (signOutOpen) {
+        setSignOutOpen(false);
+        haptics.selection();
+        return;
+      }
       if (aboutOpen) {
         setAboutOpen(false);
         haptics.selection();
@@ -86,11 +96,27 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
         safeBackButton.hide();
       }
     };
-  }, [aboutOpen, closeAll]);
+  }, [aboutOpen, signOutOpen, closeAll]);
 
   async function onDisconnect() {
     haptics.impact("medium");
     await tonc.disconnect();
+  }
+
+  function onSignOut() {
+    haptics.impact("medium");
+    setSignOutOpen(false);
+    setApiAccessToken(null);
+    triggerAuthInvalidated();
+    setOnboarded(false);
+    onClose();
+    router.replace(ROUTES.onboarding);
+    void reauthenticate();
+  }
+
+  function onSignOutCancel() {
+    haptics.selection();
+    setSignOutOpen(false);
   }
 
   function openHowItWorks() {
@@ -100,9 +126,11 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
     router.push(ROUTES.onboarding);
   }
 
+  const canInvite = Boolean(env.botUsername && user?.id);
+
   async function onInviteFriends() {
     haptics.selection();
-    if (!env.botUsername || !user) return;
+    if (!env.botUsername || !user?.id) return;
     const link = `https://t.me/${env.botUsername}?startapp=ref_${user.id}`;
     try {
       await navigator.clipboard.writeText(link);
@@ -122,6 +150,36 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
         >
           {t("title")}
         </h2>
+
+        <SettingsProfileSection />
+
+        {!user ? (
+          <section className="space-y-2">
+            <SectionLabel className="px-0.5">{t("account")}</SectionLabel>
+            <Block>
+              <button
+                type="button"
+                onClick={() => {
+                  haptics.selection();
+                  onClose();
+                  router.push(ROUTES.recoveryLogin);
+                }}
+                className="flex w-full min-h-[56px] items-center gap-2 px-4 py-3.5 text-start active:bg-surface-2/60"
+                data-testid="settings-recovery-login"
+              >
+                <span className="flex-1 text-sm font-medium leading-snug text-foreground">
+                  {t("recoverySignIn")}
+                </span>
+                <ChevronRight
+                  size={20}
+                  strokeWidth={1.75}
+                  className="shrink-0 text-muted-foreground"
+                  aria-hidden
+                />
+              </button>
+            </Block>
+          </section>
+        ) : null}
 
         <section className="space-y-2">
           <SectionLabel className="px-0.5">{t("wallet")}</SectionLabel>
@@ -176,18 +234,6 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
                 aria-label={t("useTelegramTheme")}
               />
             </Row>
-            <Row className={SETTINGS_ROW}>
-              <SettingsLabelStack
-                title={t("showDemoBadge")}
-                hint={t("showDemoBadgeHint")}
-              />
-              <Toggle
-                on={showDemoBadge}
-                onChange={setShowDemoBadge}
-                onHaptic={() => haptics.selection()}
-                aria-label={t("showDemoBadge")}
-              />
-            </Row>
           </Block>
         </section>
 
@@ -197,12 +243,13 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
             <button
               type="button"
               onClick={() => void onInviteFriends()}
-              className="flex w-full min-h-[56px] items-center gap-2 px-4 py-3.5 text-start active:bg-surface-2/60"
+              className="flex w-full min-h-[56px] items-center gap-2 px-4 py-3.5 text-start active:bg-surface-2/60 disabled:opacity-50 disabled:pointer-events-none"
               data-testid="settings-invite-friends"
-              disabled={!env.botUsername}
+              disabled={!canInvite}
+              aria-disabled={!canInvite}
             >
               <span className="flex-1 text-sm font-medium leading-snug text-foreground">
-                {copied ? "Copied!" : "Invite friends"}
+                {copied ? "Copied!" : !user?.id ? "Sign in to invite" : "Invite friends"}
               </span>
               {copied ? (
                 <Check size={20} strokeWidth={1.75} className="shrink-0 text-success" aria-hidden />
@@ -274,15 +321,91 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
           </Block>
         </section>
 
-        <p
-          className="px-2 pt-1 pb-1 text-center text-[0.6875rem] leading-relaxed text-muted-foreground"
-          data-testid="settings-demo-badge"
-        >
-          {t("demoFooter")}
-        </p>
+        <section className="space-y-2">
+          <SectionLabel className="px-0.5">{t("signOut")}</SectionLabel>
+          <Block>
+            <button
+              type="button"
+              onClick={() => {
+                haptics.selection();
+                setSignOutOpen(true);
+              }}
+              className="flex w-full min-h-[56px] items-center gap-2 px-4 py-3.5 text-start active:bg-surface-2/60"
+              data-testid="settings-sign-out"
+            >
+              <span className="flex-1 text-sm font-medium leading-snug text-danger">
+                {t("signOut")}
+              </span>
+              <ChevronRight
+                size={20}
+                strokeWidth={1.75}
+                className="shrink-0 text-danger rtl:rotate-180"
+                aria-hidden
+              />
+            </button>
+          </Block>
+        </section>
+
       </div>
 
       <AboutLegalSheet open={aboutOpen} onClose={() => setAboutOpen(false)} />
+      <SignOutConfirmSheet
+        open={signOutOpen}
+        onConfirm={onSignOut}
+        onCancel={onSignOutCancel}
+      />
     </>
+  );
+}
+
+function SignOutConfirmSheet({
+  open,
+  onConfirm,
+  onCancel,
+}: {
+  open: boolean;
+  onConfirm: () => void;
+  onCancel: () => void;
+}) {
+  const t = useTranslations("settings");
+  const tp = useTranslations("profile");
+
+  return (
+    <Sheet
+      open={open}
+      onClose={onCancel}
+      labelledBy="sign-out-confirm-title"
+      className="max-h-[85svh]"
+    >
+      <div className="space-y-4 pb-3" data-testid="sign-out-confirm">
+        <h2
+          id="sign-out-confirm-title"
+          className="text-[1.0625rem] font-semibold leading-snug text-foreground"
+        >
+          {t("signOutConfirmTitle")}
+        </h2>
+        <p className="text-sm leading-relaxed text-muted-foreground">
+          {t("signOutConfirmBody")}
+        </p>
+        <div className="flex gap-2 pt-1">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="h-11 flex-1 rounded-[12px] bg-surface-2 text-sm font-medium text-foreground"
+            data-testid="sign-out-confirm-cancel"
+          >
+            {tp("cancel")}
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            className="h-11 flex-1 rounded-[12px] bg-primary text-sm font-semibold text-primary-foreground"
+            data-testid="sign-out-confirm-submit"
+          >
+            {t("signOut")}
+          </button>
+        </div>
+      </div>
+    </Sheet>
   );
 }

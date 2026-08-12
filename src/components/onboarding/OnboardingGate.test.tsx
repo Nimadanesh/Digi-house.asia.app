@@ -58,6 +58,32 @@ describe("OnboardingGate", () => {
     });
   });
 
+  it("redirects first-time user away from /profile-setup to onboarding", async () => {
+    pathname = "/profile-setup";
+    render(
+      <OnboardingGate>
+        <div>Profile setup UI</div>
+      </OnboardingGate>,
+    );
+    await waitFor(() => {
+      expect(replace).toHaveBeenCalledWith("/onboarding");
+    });
+  });
+
+  it("allows /profile-setup once onboarded", async () => {
+    onboarded = true;
+    pathname = "/profile-setup";
+    render(
+      <OnboardingGate>
+        <div data-testid="child">Profile setup UI</div>
+      </OnboardingGate>,
+    );
+    await waitFor(() => {
+      expect(screen.getByTestId("child")).toBeInTheDocument();
+    });
+    expect(replace).not.toHaveBeenCalled();
+  });
+
   it("allows onboarding route when not onboarded", async () => {
     pathname = "/onboarding";
     render(

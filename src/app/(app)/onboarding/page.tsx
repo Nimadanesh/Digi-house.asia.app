@@ -1,43 +1,49 @@
 "use client";
 // File responsibility: first-launch onboarding screen (Fable Onboarding).
 // MainButton: Continue (slides 1–2) / Get Started (last). In-page Start on last slide. Skip top-right.
+// Plays a brief Braille Flipwave splash once before revealing the carousel.
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useTelegram } from "@/hooks/useTelegram";
 import { useTelegramBackButton } from "@/hooks/useTelegramBackButton";
-import { useSettingsStore } from "@/stores/settings.store";
+import { useMarkOnboarded } from "@/hooks/useMarkOnboarded";
+import { useAuthStore } from "@/stores/auth.store";
 import { useUiStore } from "@/stores/ui.store";
 import { haptics } from "@/lib/telegram/haptics";
 import { ROUTES } from "@/lib/constants";
 import { ONBOARDING_SLIDE_COUNT } from "@/lib/onboarding-slides";
 import { OnboardingCarousel } from "@/components/onboarding/OnboardingCarousel";
+import { OnboardingLoader } from "@/components/onboarding/OnboardingLoader";
 
 export default function OnboardingPage() {
   const t = useTranslations("onboarding");
   const router = useRouter();
   const { mainButton, backButton } = useTelegram();
-  const setOnboarded = useSettingsStore((s) => s.setOnboarded);
+  const markOnboarded = useMarkOnboarded();
+  const profileCompleted = useAuthStore((s) => s.user?.profileCompleted);
   const setMainButtonActive = useUiStore((s) => s.setMainButtonActive);
   const setOnboardingReplay = useUiStore((s) => s.setOnboardingReplay);
   const [index, setIndex] = useState(0);
+  const [splashDone, setSplashDone] = useState(false);
   const isLast = index >= ONBOARDING_SLIDE_COUNT - 1;
 
   const complete = useCallback(() => {
     haptics.notification("success");
-    setOnboarded(true);
+    markOnboarded();
     setOnboardingReplay(false);
     setMainButtonActive(false);
     mainButton.hide();
-    router.replace(ROUTES.home);
-  }, [router, setOnboarded, setOnboardingReplay, setMainButtonActive, mainButton]);
+    router.replace(profileCompleted === false ? ROUTES.profileSetup : ROUTES.home);
+  }, [router, markOnboarded, setOnboardingReplay, setMainButtonActive, mainButton, profileCompleted]);
 
   useTelegramBackButton(
-    index,
+    splashDone ? index : 0,
     useCallback(() => setIndex((i) => Math.max(0, i - 1)), []),
   );
 
   useEffect(() => {
+    if (!splashDone) return;
     setMainButtonActive(true);
     mainButton.setParams({
       text: isLast ? t("getStarted") : t("continue"),
@@ -53,7 +59,7 @@ export default function OnboardingPage() {
     return () => {
       off();
     };
-  }, [complete, isLast, setMainButtonActive, t, mainButton]);
+  }, [complete, isLast, splashDone, setMainButtonActive, t, mainButton]);
 
   useEffect(() => {
     return () => {
@@ -62,6 +68,17 @@ export default function OnboardingPage() {
       backButton.hide();
     };
   }, [mainButton, backButton, setMainButtonActive]);
+
+  if (!splashDone) {
+    return (
+      <div
+        className="flex min-h-[calc(100svh-120px)] flex-col"
+        data-testid="onboarding-page"
+      >
+        <OnboardingLoader onComplete={() => setSplashDone(true)} />
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-[calc(100svh-120px)] flex-col" data-testid="onboarding-page">

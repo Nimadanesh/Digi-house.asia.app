@@ -56,8 +56,7 @@
     },
     "sell": {
       "headline": "Jual kapan saja",
-      "subtitle": "Cantumkan saham di pasar DigiHouse saat siap keluar.",
-      "trustLine": "Ini versi demo dan transaksi disimulasikan"
+      "subtitle": "Cantumkan saham di pasar DigiHouse saat siap keluar."
     }
   },
   "home": {
@@ -146,18 +145,60 @@
     "languageHint": "Bahasa aplikasi",
     "languageAuto": "Otomatis (Telegram)",
     "chooseLanguage": "Pilih bahasa",
-    "useTelegramTheme": "Gunakan tema Telegram",
+    "useTelegramTheme": "Dark / Light",
     "useTelegramThemeHint": "Sesuaikan warna Telegram",
     "showDemoBadge": "Tampilkan lencana Demo",
     "showDemoBadgeHint": "Label MVP jujur mengambang",
     "help": "Bantuan",
     "howItWorks": "Cara kerja DigiHouse",
     "aboutLegal": "Tentang / Legal",
-    "demoFooter": "Mode demo · data contoh · transaksi disimulasikan",
     "aboutBody": "DigiHouse adalah Mini App Telegram untuk saham real estat fraksional di TON. Imbal hasil sewa mingguan ditampilkan proporsional dengan kepemilikanmu.",
     "aboutAdvice": "Tidak ada di sini yang merupakan nasihat keuangan. Dokumen properti dan tokenisasi bersifat demonstrasi hingga kontrak produksi.",
     "aboutCopyright": "© DigiHouse · MVP",
     "demoTxDisclaimer": "Ini demo – transaksi disimulasikan",
-    "payoutDisclaimer": "pembayaran mingguan simulasi · dapat diverifikasi on-chain pasca-MVP"
+    "payoutDisclaimer": "pembayaran mingguan simulasi · dapat diverifikasi on-chain pasca-MVP",
+    "account": "Akun",
+    "recoverySignIn": "Masuk dengan kode pemulihan",
+    "signOut": "Keluar",
+    "signOutConfirmTitle": "Keluar?",
+    "signOutConfirmBody": "Apakah Anda ingin keluar?"
+  },
+  "profile": {
+    "title": "Lengkapi profil Anda",
+    "subtitle": "Beberapa detail agar kami dapat mengidentifikasi akun Anda.",
+    "settingsSection": "Profil",
+    "displayName": "Nama tampilan",
+    "displayNamePlaceholder": "Nama Anda",
+    "phone": "Telepon",
+    "phonePlaceholder": "+62 8XX XXXX XXXX",
+    "phoneHint": "Opsional. Hanya untuk dukungan akun.",
+    "phoneEmpty": "Belum ada nomor telepon",
+    "useTelegramPhone": "Gunakan nomor Telegram",
+    "requestingPhone": "Meminta…",
+    "recoveryTitle": "Kode pemulihan",
+    "recoveryWarn": "Simpan kode ini di tempat aman. Anda membutuhkannya untuk masuk jika Telegram tidak tersedia. Kami tidak dapat memulihkannya untuk Anda.",
+    "recoverySettingsHint": "Jaga kerahasiaan kode ini. Siapa pun yang memilikinya dapat mengakses akun DigiHouse Anda.",
+    "copyCode": "Salin kode pemulihan",
+    "showCode": "Tampilkan kode pemulihan",
+    "hideCode": "Sembunyikan kode pemulihan",
+    "savedConfirm": "Saya telah menyimpan kode pemulihan di tempat aman",
+    "saveContinue": "Simpan & lanjutkan",
+    "saving": "Menyimpan…",
+    "save": "Simpan",
+    "cancel": "Batal",
+    "errors": {
+      "name": "Masukkan nama (minimal 2 karakter)",
+      "phone": "Masukkan nomor telepon yang valid",
+      "saveCode": "Konfirmasi Anda telah menyimpan kode pemulihan",
+      "save": "Tidak dapat menyimpan profil"
+    }
+  },
+  "recovery": {
+    "title": "Masuk dengan kode pemulihan",
+    "subtitle": "Gunakan kode yang Anda simpan saat menyiapkan profil.",
+    "codeLabel": "Kode pemulihan",
+    "signIn": "Masuk",
+    "signingIn": "Sedang masuk…",
+    "backHome": "Kembali ke beranda"
   }
 }

@@ -10,6 +10,8 @@ export const ROUTES = {
   settings: "/settings",
   transactions: "/transactions",
   onboarding: "/onboarding",
+  profileSetup: "/profile-setup",
+  recoveryLogin: "/recovery-login",
 } as const;
 
 export interface TabDef { href: string; label: string; icon: typeof Home }

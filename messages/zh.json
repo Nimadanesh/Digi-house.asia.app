@@ -56,8 +56,7 @@
     },
     "sell": {
       "headline": "随时可以卖出",
-      "subtitle": "准备退出时，可在 DigiHouse 市场挂单出售份额。",
-      "trustLine": "这是演示版本，交易均为模拟"
+      "subtitle": "准备退出时，可在 DigiHouse 市场挂单出售份额。"
     }
   },
   "home": {
@@ -146,18 +145,60 @@
     "languageHint": "应用语言",
     "languageAuto": "自动（Telegram）",
     "chooseLanguage": "选择语言",
-    "useTelegramTheme": "使用 Telegram 主题",
+    "useTelegramTheme": "Dark / Light",
     "useTelegramThemeHint": "匹配 Telegram 颜色",
     "showDemoBadge": "显示演示徽章",
     "showDemoBadgeHint": "浮动的诚实 MVP 标签",
     "help": "帮助",
     "howItWorks": "DigiHouse 如何运作",
     "aboutLegal": "关于 / 法律",
-    "demoFooter": "演示模式 · 示例数据 · 交易为模拟",
     "aboutBody": "DigiHouse 是 Telegram 小程序，用于在 TON 上持有房产份额。每周租金收益按持有比例显示。",
     "aboutAdvice": "此处内容不构成财务建议。房产文件与代币化披露在正式合约上线前仅供演示。",
     "aboutCopyright": "© DigiHouse · MVP",
     "demoTxDisclaimer": "这是演示 – 交易均为模拟",
-    "payoutDisclaimer": "模拟每周发放 · MVP 后可链上验证"
+    "payoutDisclaimer": "模拟每周发放 · MVP 后可链上验证",
+    "account": "账户",
+    "recoverySignIn": "使用恢复码登录",
+    "signOut": "退出登录",
+    "signOutConfirmTitle": "是否退出登录？",
+    "signOutConfirmBody": "您想退出登录吗？"
+  },
+  "profile": {
+    "title": "完善个人资料",
+    "subtitle": "填写少量信息以便识别您的账户。",
+    "settingsSection": "个人资料",
+    "displayName": "显示名称",
+    "displayNamePlaceholder": "您的姓名",
+    "phone": "电话",
+    "phonePlaceholder": "+86 138 0000 0000",
+    "phoneHint": "可选。仅用于账户支持。",
+    "phoneEmpty": "未填写电话",
+    "useTelegramPhone": "使用 Telegram 号码",
+    "requestingPhone": "请求中…",
+    "recoveryTitle": "恢复码",
+    "recoveryWarn": "请将此代码妥善保存。若无法使用 Telegram，登录时需要它。我们无法替您找回。",
+    "recoverySettingsHint": "请保密此代码。任何持有者都可访问您的 DigiHouse 账户。",
+    "copyCode": "复制恢复码",
+    "showCode": "显示恢复码",
+    "hideCode": "隐藏恢复码",
+    "savedConfirm": "我已将恢复码保存在安全的地方",
+    "saveContinue": "保存并继续",
+    "saving": "保存中…",
+    "save": "保存",
+    "cancel": "取消",
+    "errors": {
+      "name": "请输入姓名（至少 2 个字符）",
+      "phone": "请输入有效电话号码",
+      "saveCode": "请确认已保存恢复码",
+      "save": "无法保存资料"
+    }
+  },
+  "recovery": {
+    "title": "使用恢复码登录",
+    "subtitle": "使用设置个人资料时保存的代码。",
+    "codeLabel": "恢复码",
+    "signIn": "登录",
+    "signingIn": "登录中…",
+    "backHome": "返回首页"
   }
 }

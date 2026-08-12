@@ -56,8 +56,7 @@
     },
     "sell": {
       "headline": "Vende cuando quieras",
-      "subtitle": "Lista participaciones en el mercado DigiHouse cuando quieras salir.",
-      "trustLine": "Esta es una versión demo y las transacciones se simulan"
+      "subtitle": "Lista participaciones en el mercado DigiHouse cuando quieras salir."
     }
   },
   "home": {
@@ -146,18 +145,60 @@
     "languageHint": "Idioma de la app",
     "languageAuto": "Auto (Telegram)",
     "chooseLanguage": "Elegir idioma",
-    "useTelegramTheme": "Usar tema de Telegram",
+    "useTelegramTheme": "Dark / Light",
     "useTelegramThemeHint": "Colores de Telegram",
     "showDemoBadge": "Mostrar insignia Demo",
     "showDemoBadgeHint": "Etiqueta MVP honesta flotante",
     "help": "Ayuda",
     "howItWorks": "Cómo funciona DigiHouse",
     "aboutLegal": "Acerca de / Legal",
-    "demoFooter": "Modo demo · datos de prueba · transacciones simuladas",
     "aboutBody": "DigiHouse es una Mini App de Telegram para participaciones inmobiliarias fraccionadas en TON. El rendimiento de alquiler semanal se muestra proporcional a tu propiedad.",
     "aboutAdvice": "Nada de esto es asesoramiento financiero. Documentos y tokenización son demostrativos hasta contratos de producción.",
     "aboutCopyright": "© DigiHouse · MVP",
     "demoTxDisclaimer": "Esto es una demo: las transacciones se simulan",
-    "payoutDisclaimer": "pago semanal simulado · verificable on-chain tras MVP"
+    "payoutDisclaimer": "pago semanal simulado · verificable on-chain tras MVP",
+    "account": "Cuenta",
+    "recoverySignIn": "Iniciar sesión con código de recuperación",
+    "signOut": "Cerrar sesión",
+    "signOutConfirmTitle": "¿Cerrar sesión?",
+    "signOutConfirmBody": "¿Quieres cerrar sesión?"
+  },
+  "profile": {
+    "title": "Completa tu perfil",
+    "subtitle": "Algunos datos para identificar tu cuenta.",
+    "settingsSection": "Perfil",
+    "displayName": "Nombre visible",
+    "displayNamePlaceholder": "Tu nombre",
+    "phone": "Teléfono",
+    "phonePlaceholder": "+34 600 000 000",
+    "phoneHint": "Opcional. Solo para soporte de la cuenta.",
+    "phoneEmpty": "Sin teléfono registrado",
+    "useTelegramPhone": "Usar número de Telegram",
+    "requestingPhone": "Solicitando…",
+    "recoveryTitle": "Código de recuperación",
+    "recoveryWarn": "Guarda este código en un lugar seguro. Lo necesitarás para iniciar sesión si Telegram no está disponible. No podemos recuperarlo por ti.",
+    "recoverySettingsHint": "Mantén este código en privado. Cualquiera con él puede acceder a tu cuenta de DigiHouse.",
+    "copyCode": "Copiar código de recuperación",
+    "showCode": "Mostrar código de recuperación",
+    "hideCode": "Ocultar código de recuperación",
+    "savedConfirm": "Guardé mi código de recuperación en un lugar seguro",
+    "saveContinue": "Guardar y continuar",
+    "saving": "Guardando…",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "errors": {
+      "name": "Introduce un nombre (al menos 2 caracteres)",
+      "phone": "Introduce un teléfono válido",
+      "saveCode": "Confirma que guardaste el código de recuperación",
+      "save": "No se pudo guardar el perfil"
+    }
+  },
+  "recovery": {
+    "title": "Iniciar sesión con código de recuperación",
+    "subtitle": "Usa el código que guardaste al configurar tu perfil.",
+    "codeLabel": "Código de recuperación",
+    "signIn": "Iniciar sesión",
+    "signingIn": "Iniciando sesión…",
+    "backHome": "Volver al inicio"
   }
 }

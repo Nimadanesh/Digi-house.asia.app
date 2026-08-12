@@ -56,8 +56,7 @@
     },
     "sell": {
       "headline": "İstediğin zaman sat",
-      "subtitle": "Çıkmaya hazır olduğunda payları DigiHouse pazarında listele.",
-      "trustLine": "Bu bir demo sürümüdür; işlemler simüle edilir"
+      "subtitle": "Çıkmaya hazır olduğunda payları DigiHouse pazarında listele."
     }
   },
   "home": {
@@ -145,19 +144,61 @@
     "language": "Dil",
     "languageHint": "Uygulama dili",
     "languageAuto": "Otomatik (Telegram)",
-    "useTelegramTheme": "Telegram temasını kullan",
+    "useTelegramTheme": "Dark / Light",
     "useTelegramThemeHint": "Telegram renklerine uy",
     "showDemoBadge": "Demo rozetini göster",
     "showDemoBadgeHint": "Dürüst yüzen MVP etiketi",
     "help": "Yardım",
     "howItWorks": "DigiHouse nasıl çalışır",
     "aboutLegal": "Hakkında / Yasal",
-    "demoFooter": "Demo · örnek veri · işlemler simüle",
     "aboutBody": "DigiHouse, TON üzerinde fraksiyonel gayrimenkul payları için bir Telegram Mini App’tir. Haftalık kira getirisi sahipliğine orantılı gösterilir.",
     "aboutAdvice": "Buradaki hiçbir şey finansal tavsiye değildir. Mülk belgeleri ve tokenizasyon, üretim sözleşmelerine kadar gösterim amaçlıdır.",
     "aboutCopyright": "© DigiHouse · MVP",
     "demoTxDisclaimer": "Bu bir demodur – işlemler simüle edilir",
     "payoutDisclaimer": "simüle haftalık ödeme · MVP sonrası zincir üzerinde doğrulanabilir",
-    "chooseLanguage": "Dil seç"
+    "chooseLanguage": "Dil seç",
+    "account": "Hesap",
+    "recoverySignIn": "Kurtarma koduyla giriş yap",
+    "signOut": "Çıkış yap",
+    "signOutConfirmTitle": "Çıkış yapmak istiyor musunuz?",
+    "signOutConfirmBody": "Çıkış yapmak istediğinizden emin misiniz?"
+  },
+  "profile": {
+    "title": "Profilini tamamla",
+    "subtitle": "Hesabını tanımlamak için birkaç bilgi.",
+    "settingsSection": "Profil",
+    "displayName": "Görünen ad",
+    "displayNamePlaceholder": "Adın",
+    "phone": "Telefon",
+    "phonePlaceholder": "+90 5XX XXX XX XX",
+    "phoneHint": "İsteğe bağlı. Yalnızca hesap desteği için.",
+    "phoneEmpty": "Kayıtlı telefon yok",
+    "useTelegramPhone": "Telegram numarasını kullan",
+    "requestingPhone": "İsteniyor…",
+    "recoveryTitle": "Kurtarma kodu",
+    "recoveryWarn": "Bu kodu güvenli bir yerde sakla. Telegram yoksa giriş için gerekir. Senin için kurtaramayız.",
+    "recoverySettingsHint": "Bu kodu gizli tut. Elinde olan herkes DigiHouse hesabına erişebilir.",
+    "copyCode": "Kurtarma kodunu kopyala",
+    "showCode": "Kurtarma kodunu göster",
+    "hideCode": "Kurtarma kodunu gizle",
+    "savedConfirm": "Kurtarma kodumu güvenli bir yere kaydettim",
+    "saveContinue": "Kaydet ve devam et",
+    "saving": "Kaydediliyor…",
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "errors": {
+      "name": "Bir ad gir (en az 2 karakter)",
+      "phone": "Geçerli bir telefon numarası gir",
+      "saveCode": "Kurtarma kodunu kaydettiğini onayla",
+      "save": "Profil kaydedilemedi"
+    }
+  },
+  "recovery": {
+    "title": "Kurtarma koduyla giriş",
+    "subtitle": "Profil kurulumunda kaydettiğin kodu kullan.",
+    "codeLabel": "Kurtarma kodu",
+    "signIn": "Giriş yap",
+    "signingIn": "Giriş yapılıyor…",
+    "backHome": "Ana sayfaya dön"
   }
 }

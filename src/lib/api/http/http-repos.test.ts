@@ -7,6 +7,7 @@ function mockClient(): HttpClient {
   return {
     get: vi.fn() as HttpClient["get"],
     post: vi.fn() as HttpClient["post"],
+    patch: vi.fn() as HttpClient["patch"],
     delete: vi.fn() as HttpClient["delete"],
     getText: vi.fn() as HttpClient["getText"],
   };

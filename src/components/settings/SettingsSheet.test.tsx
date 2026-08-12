@@ -2,17 +2,19 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { useSettingsStore } from "@/stores/settings.store";
 import { useUiStore } from "@/stores/ui.store";
+import { useAuthStore } from "@/stores/auth.store";
 import { DEMO_TX_DISCLAIMER, PAYOUT_DISCLAIMER } from "@/lib/constants";
 
 const disconnect = vi.fn();
 const push = vi.fn();
+const replace = vi.fn();
 const backShow = vi.fn();
 const backHide = vi.fn();
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const backOnClick = vi.fn((..._args: unknown[]) => () => {});
 
 vi.mock("next/navigation", () => ({
-  useRouter: () => ({ push, replace: vi.fn() }),
+  useRouter: () => ({ push, replace }),
 }));
 
 vi.mock("@/hooks/useTonConnect", () => ({
@@ -34,6 +36,15 @@ vi.mock("@/lib/telegram/haptics", () => ({
     impact: vi.fn(),
     notification: vi.fn(),
   },
+}));
+
+vi.mock("@/hooks/useRecoveryCode", () => ({
+  useRecoveryCode: () => ({
+    code: "DH-TEST-SEED",
+    loading: false,
+    error: null,
+    refresh: vi.fn(),
+  }),
 }));
 
 vi.mock("@/lib/telegram/chrome", () => ({
@@ -62,6 +73,25 @@ describe("SettingsSheet", () => {
       showDemoBadge: true,
       locale: null,
     });
+    useAuthStore.setState({
+      user: {
+        id: "user-42",
+        displayName: "Test User",
+        role: "investor",
+        walletAddress: null,
+        onboarded: true,
+        profileCompleted: true,
+        useTelegramTheme: false,
+        createdAt: "2026-01-01T00:00:00.000Z",
+      },
+    });
+  });
+
+  it("disables invite when session user is missing", () => {
+    useAuthStore.setState({ user: null });
+    render(<SettingsSheet />);
+    expect(screen.getByTestId("settings-invite-friends")).toBeDisabled();
+    expect(screen.getByText(/sign in to invite/i)).toBeInTheDocument();
   });
 
   it("renders wallet status and disconnect when connected", () => {
@@ -134,16 +164,21 @@ describe("SettingsSheet", () => {
     expect(backShow).toHaveBeenCalled();
   });
 
-  it("shows a single demo-mode badge", () => {
+  it("Sign out opens confirmation then signs out and routes to onboarding", () => {
     render(<SettingsSheet />);
-    expect(screen.getByTestId("settings-demo-badge")).toHaveTextContent(/demo mode/i);
+    fireEvent.click(screen.getByTestId("settings-sign-out"));
+    expect(screen.getByTestId("sign-out-confirm")).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId("sign-out-confirm-submit"));
+    expect(useUiStore.getState().settingsOpen).toBe(false);
+    expect(useSettingsStore.getState().onboarded).toBe(false);
+    expect(replace).toHaveBeenCalledWith("/onboarding");
   });
 
-  it("can toggle Show Demo badge off", () => {
+  it("Sign out cancel closes confirmation without signing out", () => {
     render(<SettingsSheet />);
-    const sw = screen.getByRole("switch", { name: "Show Demo badge" });
-    expect(sw).toHaveAttribute("aria-checked", "true");
-    fireEvent.click(sw);
-    expect(useSettingsStore.getState().showDemoBadge).toBe(false);
+    fireEvent.click(screen.getByTestId("settings-sign-out"));
+    fireEvent.click(screen.getByTestId("sign-out-confirm-cancel"));
+    expect(screen.queryByTestId("sign-out-confirm")).not.toBeInTheDocument();
+    expect(replace).not.toHaveBeenCalled();
   });
 });

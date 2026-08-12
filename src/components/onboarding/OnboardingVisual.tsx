@@ -1,45 +1,39 @@
-// File responsibility: decorative slide illustrations (Fable Onboarding visuals). CSS only — no three.js.
-import { CircleDollarSign, Store } from "lucide-react";
+// File responsibility: onboarding slide illustrations — each slide shows a Blue Braille Flipwave
+// dot pattern themed to its copy (house / rising earnings / dollar sign). CSS/DOM, no three.js.
 import type { OnboardingSlideDef } from "@/lib/onboarding-slides";
+import { HOUSE_MASK } from "@/lib/flipwave/house-mask";
+import { BARS_MASK, DOLLAR_MASK } from "@/lib/flipwave/slide-masks";
+import { FlipwaveGrid } from "@/components/flipwave/FlipwaveGrid";
+import type { FlipwaveVariant } from "@/lib/flipwave/flipwave-math";
 import { cn } from "@/lib/utils";
-import { OnboardingHouseScene } from "./OnboardingHouseScene";
 
-export function OnboardingVisual({ slideId, className }: { slideId: OnboardingSlideDef["id"]; className?: string }) {
-  if (slideId === "own") {
-    return (
-      <div className={cn("relative mx-auto w-full", className)} data-testid="onboarding-visual-own">
-        <OnboardingHouseScene />
-      </div>
-    );
-  }
+const CONFIG: Record<
+  OnboardingSlideDef["id"],
+  { mask: readonly (readonly number[])[]; variant: FlipwaveVariant; cycleMs: number }
+> = {
+  own: { mask: HOUSE_MASK, variant: "house", cycleMs: 6200 },
+  yield: { mask: BARS_MASK, variant: "bars", cycleMs: 5600 },
+  sell: { mask: DOLLAR_MASK, variant: "dollar", cycleMs: 4800 },
+};
 
-  if (slideId === "yield") {
-    return (
-      <div
-        className={cn("relative mx-auto flex h-52 w-full max-w-[280px] items-center justify-center", className)}
-        aria-hidden
-        data-testid="onboarding-visual-yield"
-      >
-        <div className="relative flex size-36 items-center justify-center rounded-full bg-success/12 border border-success/25">
-          <CircleDollarSign className="text-success" size={56} strokeWidth={1.5} />
-        </div>
-        <p className="absolute bottom-2 text-xs font-medium text-success tnum">Every Friday</p>
-      </div>
-    );
-  }
-
+export function OnboardingVisual({
+  slideId,
+  className,
+}: {
+  slideId: OnboardingSlideDef["id"];
+  className?: string;
+}) {
+  const conf = CONFIG[slideId];
   return (
     <div
-      className={cn("relative mx-auto flex h-52 w-full max-w-[280px] items-center justify-center", className)}
+      className={cn(
+        "relative mx-auto flex h-52 w-full max-w-[320px] items-center justify-center overflow-hidden",
+        className,
+      )}
       aria-hidden
-      data-testid="onboarding-visual-sell"
+      data-testid={`onboarding-visual-${slideId}`}
     >
-      <div className="relative flex size-36 items-center justify-center rounded-[20px] bg-surface-2 border border-border">
-        <Store className="text-primary" size={56} strokeWidth={1.5} />
-        <span className="absolute -top-2 -right-2 rounded-full bg-primary px-2 py-0.5 text-[0.625rem] font-semibold text-primary-foreground">
-          Sell
-        </span>
-      </div>
+      <FlipwaveGrid {...conf} cellSize={9} gap={2} />
     </div>
   );
 }

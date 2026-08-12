@@ -14,9 +14,20 @@ const TITLES: Record<string, string> = {
   "/portfolio": "Portfolio",
   "/settings": "Settings",
   "/onboarding": "Welcome",
+  "/profile-setup": "Your profile",
+  "/recovery-login": "Recovery sign-in",
 };
 
-const ROOT_PATHS = new Set(["/home", "/marketplace", "/earnings", "/portfolio", "/settings", "/onboarding"]);
+const ROOT_PATHS = new Set([
+  "/home",
+  "/marketplace",
+  "/earnings",
+  "/portfolio",
+  "/settings",
+  "/onboarding",
+  "/profile-setup",
+  "/recovery-login",
+]);
 
 export function Header() {
   const pathname = usePathname();

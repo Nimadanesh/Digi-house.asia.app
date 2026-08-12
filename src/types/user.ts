@@ -7,7 +7,10 @@ export interface UserProfile {
   photoUrl?: string;
   role: UserRole;
   walletAddress: string | null;
+  phone?: string;
   onboarded: boolean;
+  /** Light profile (name/phone + recovery ack) finished. */
+  profileCompleted: boolean;
   useTelegramTheme: boolean;
   referredByUserId?: string;
   createdAt: string;

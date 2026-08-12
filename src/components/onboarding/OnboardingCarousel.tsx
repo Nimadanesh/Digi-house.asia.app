@@ -73,7 +73,6 @@ export function OnboardingCarousel({
         <div
           className={cn(
             "flex h-full w-full",
-            rtl && "flex-row-reverse",
             !dragging && "transition-transform duration-[280ms] ease-[var(--ease-tg-out)]",
           )}
           style={{ transform: trackTransform }}

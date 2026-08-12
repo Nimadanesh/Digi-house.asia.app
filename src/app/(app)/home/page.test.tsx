@@ -12,7 +12,7 @@ vi.mock("next/image", () => ({
 }));
 
 vi.mock("@/hooks/useTelegramUser", () => ({
-  useTelegramUser: () => ({ firstName: "Aria", photoUrl: undefined, isDemo: true }),
+  useTelegramUser: () => ({ firstName: "Demo", photoUrl: undefined, isDemo: true }),
 }));
 vi.mock("@/hooks/useTonConnect", () => ({
   useTonConnect: () => ({

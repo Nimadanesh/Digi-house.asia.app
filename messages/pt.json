@@ -56,8 +56,7 @@
     },
     "sell": {
       "headline": "Venda quando quiser",
-      "subtitle": "Liste cotas no mercado DigiHouse quando estiver pronto para sair.",
-      "trustLine": "Esta é uma versão demo e as transações são simuladas"
+      "subtitle": "Liste cotas no mercado DigiHouse quando estiver pronto para sair."
     }
   },
   "home": {
@@ -146,18 +145,60 @@
     "languageHint": "Idioma do app",
     "languageAuto": "Auto (Telegram)",
     "chooseLanguage": "Escolher idioma",
-    "useTelegramTheme": "Usar tema do Telegram",
+    "useTelegramTheme": "Dark / Light",
     "useTelegramThemeHint": "Cores do Telegram",
     "showDemoBadge": "Mostrar selo Demo",
     "showDemoBadgeHint": "Rótulo MVP honesto flutuante",
     "help": "Ajuda",
     "howItWorks": "Como o DigiHouse funciona",
     "aboutLegal": "Sobre / Legal",
-    "demoFooter": "Modo demo · dados de teste · transações simuladas",
     "aboutBody": "DigiHouse é um Mini App do Telegram para cotas imobiliárias fracionadas na TON. O rendimento de aluguel semanal é mostrado proporcional à sua participação.",
     "aboutAdvice": "Nada aqui é aconselhamento financeiro. Documentos e tokenização são demonstrativos até os contratos de produção.",
     "aboutCopyright": "© DigiHouse · MVP",
     "demoTxDisclaimer": "Isto é uma demo – as transações são simuladas",
-    "payoutDisclaimer": "pagamento semanal simulado · verificável on-chain pós-MVP"
+    "payoutDisclaimer": "pagamento semanal simulado · verificável on-chain pós-MVP",
+    "account": "Conta",
+    "recoverySignIn": "Entrar com código de recuperação",
+    "signOut": "Sair",
+    "signOutConfirmTitle": "Sair?",
+    "signOutConfirmBody": "Deseja sair?"
+  },
+  "profile": {
+    "title": "Conclua o seu perfil",
+    "subtitle": "Alguns dados para identificar a sua conta.",
+    "settingsSection": "Perfil",
+    "displayName": "Nome de exibição",
+    "displayNamePlaceholder": "O seu nome",
+    "phone": "Telefone",
+    "phonePlaceholder": "+351 900 000 000",
+    "phoneHint": "Opcional. Apenas para suporte da conta.",
+    "phoneEmpty": "Nenhum telefone registado",
+    "useTelegramPhone": "Usar número do Telegram",
+    "requestingPhone": "A pedir…",
+    "recoveryTitle": "Código de recuperação",
+    "recoveryWarn": "Guarde este código num local seguro. Precisará dele para entrar se o Telegram não estiver disponível. Não o podemos recuperar por si.",
+    "recoverySettingsHint": "Mantenha este código privado. Quem o tiver pode aceder à sua conta DigiHouse.",
+    "copyCode": "Copiar código de recuperação",
+    "showCode": "Mostrar código de recuperação",
+    "hideCode": "Ocultar código de recuperação",
+    "savedConfirm": "Guardei o meu código de recuperação num local seguro",
+    "saveContinue": "Guardar e continuar",
+    "saving": "A guardar…",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "errors": {
+      "name": "Introduza um nome (pelo menos 2 caracteres)",
+      "phone": "Introduza um telefone válido",
+      "saveCode": "Confirme que guardou o código de recuperação",
+      "save": "Não foi possível guardar o perfil"
+    }
+  },
+  "recovery": {
+    "title": "Entrar com código de recuperação",
+    "subtitle": "Use o código que guardou ao configurar o perfil.",
+    "codeLabel": "Código de recuperação",
+    "signIn": "Entrar",
+    "signingIn": "A entrar…",
+    "backHome": "Voltar ao início"
   }
 }

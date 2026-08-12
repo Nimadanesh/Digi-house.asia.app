@@ -56,8 +56,7 @@
     },
     "sell": {
       "headline": "जब चाहें बेचें",
-      "subtitle": "बाहर निकलने के लिए तैयार हों तो DigiHouse बाज़ार पर हिस्से सूचीबद्ध करें।",
-      "trustLine": "यह डेमो संस्करण है और लेन-देन सिमुलेटेड हैं"
+      "subtitle": "बाहर निकलने के लिए तैयार हों तो DigiHouse बाज़ार पर हिस्से सूचीबद्ध करें।"
     }
   },
   "home": {
@@ -146,18 +145,60 @@
     "languageHint": "ऐप भाषा",
     "languageAuto": "ऑटो (Telegram)",
     "chooseLanguage": "भाषा चुनें",
-    "useTelegramTheme": "Telegram थीम उपयोग करें",
+    "useTelegramTheme": "Dark / Light",
     "useTelegramThemeHint": "Telegram रंगों से मिलाएँ",
     "showDemoBadge": "डेमो बैज दिखाएँ",
     "showDemoBadgeHint": "ईमानदार MVP लेबल",
     "help": "मदद",
     "howItWorks": "DigiHouse कैसे काम करता है",
     "aboutLegal": "परिचय / कानूनी",
-    "demoFooter": "डेमो मोड · नमूना डेटा · लेन-देन सिमुलेटेड",
     "aboutBody": "DigiHouse TON पर आंशिक रियल-एस्टेट हिस्सों के लिए एक Telegram मिनी ऐप है। साप्ताहिक किराया प्रतिफल आपके स्वामित्व के अनुपात में दिखाया जाता है।",
     "aboutAdvice": "यहाँ कुछ भी वित्तीय सलाह नहीं है। संपत्ति दस्तावेज़ और टोकनाइज़ेशन प्रोडक्शन कॉन्ट्रैक्ट तक प्रदर्शन के लिए हैं।",
     "aboutCopyright": "© DigiHouse · MVP",
     "demoTxDisclaimer": "यह एक डेमो है – लेन-देन सिमुलेटेड हैं",
-    "payoutDisclaimer": "सिमुलेटेड साप्ताहिक भुगतान · MVP के बाद ऑन-चेन सत्यापन योग्य"
+    "payoutDisclaimer": "सिमुलेटेड साप्ताहिक भुगतान · MVP के बाद ऑन-चेन सत्यापन योग्य",
+    "account": "खाता",
+    "recoverySignIn": "रिकवरी कोड से साइन इन करें",
+    "signOut": "साइन आउट करें",
+    "signOutConfirmTitle": "क्या आप साइन आउट करेंगे?",
+    "signOutConfirmBody": "क्या आप साइन आउट करना चाहते हैं?"
+  },
+  "profile": {
+    "title": "अपनी प्रोफ़ाइल पूरी करें",
+    "subtitle": "आपके खाते की पहचान के लिए कुछ विवरण।",
+    "settingsSection": "प्रोफ़ाइल",
+    "displayName": "प्रदर्शित नाम",
+    "displayNamePlaceholder": "आपका नाम",
+    "phone": "फ़ोन",
+    "phonePlaceholder": "+91 98XXX XXXXX",
+    "phoneHint": "वैकल्पिक। केवल खाता सहायता के लिए।",
+    "phoneEmpty": "कोई फ़ोन दर्ज नहीं",
+    "useTelegramPhone": "Telegram नंबर उपयोग करें",
+    "requestingPhone": "अनुरोध हो रहा है…",
+    "recoveryTitle": "रिकवरी कोड",
+    "recoveryWarn": "इस कोड को सुरक्षित जगह सहेजें। Telegram उपलब्ध न हो तो साइन इन के लिए चाहिए। हम इसे आपके लिए पुनर्प्राप्त नहीं कर सकते।",
+    "recoverySettingsHint": "इस कोड को निजी रखें। जिसके पास यह हो वह आपके DigiHouse खाते तक पहुँच सकता है।",
+    "copyCode": "रिकवरी कोड कॉपी करें",
+    "showCode": "रिकवरी कोड दिखाएँ",
+    "hideCode": "रिकवरी कोड छिपाएँ",
+    "savedConfirm": "मैंने अपना रिकवरी कोड सुरक्षित जगह सहेजा है",
+    "saveContinue": "सहेजें और जारी रखें",
+    "saving": "सहेजा जा रहा है…",
+    "save": "सहेजें",
+    "cancel": "रद्द करें",
+    "errors": {
+      "name": "नाम दर्ज करें (कम से कम 2 अक्षर)",
+      "phone": "मान्य फ़ोन नंबर दर्ज करें",
+      "saveCode": "पुष्टि करें कि आपने रिकवरी कोड सहेजा है",
+      "save": "प्रोफ़ाइल सहेजी नहीं जा सकी"
+    }
+  },
+  "recovery": {
+    "title": "रिकवरी कोड से साइन इन",
+    "subtitle": "प्रोफ़ाइल सेटअप पर सहेजा गया कोड उपयोग करें।",
+    "codeLabel": "रिकवरी कोड",
+    "signIn": "साइन इन",
+    "signingIn": "साइन इन हो रहा है…",
+    "backHome": "होम पर वापस"
   }
 }

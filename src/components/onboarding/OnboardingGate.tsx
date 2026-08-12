@@ -29,6 +29,10 @@ export function OnboardingGate({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!hydrated) return;
     const onOnboarding = pathname === ROUTES.onboarding;
+    const onBypass =
+      pathname === ROUTES.recoveryLogin ||
+      (pathname === ROUTES.profileSetup && onboarded);
+    if (onBypass) return;
     if (!onboarded && !onOnboarding) {
       router.replace(ROUTES.onboarding);
       return;
@@ -49,8 +53,11 @@ export function OnboardingGate({ children }: { children: React.ReactNode }) {
   }
 
   const onOnboarding = pathname === ROUTES.onboarding;
+  const onBypass =
+    pathname === ROUTES.recoveryLogin ||
+    (pathname === ROUTES.profileSetup && onboarded);
   const blockedReplay = onboarded && onOnboarding && !onboardingReplay;
-  if ((!onboarded && !onOnboarding) || blockedReplay) {
+  if (!onBypass && ((!onboarded && !onOnboarding) || blockedReplay)) {
     return (
       <div className="flex flex-1 flex-col items-center justify-center gap-3 py-24" data-testid="onboarding-gate-redirect">
         <Skeleton className="h-4 w-32" />

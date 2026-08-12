@@ -17,8 +17,8 @@ describe("onboarding slides content", () => {
     expect(ONBOARDING_SLIDES[1]!.subtitle.toLowerCase()).not.toMatch(/landed in your wallet/);
   });
 
-  it("slide 3 sell + demo trust line", () => {
+  it("slide 3 sell", () => {
     expect(ONBOARDING_SLIDES[2]!.headline).toMatch(/Sell anytime/i);
-    expect(ONBOARDING_SLIDES[2]!.trustLine).toMatch(/demo version and transactions are simulated/i);
+    expect(ONBOARDING_SLIDES[2]!.subtitle).toMatch(/marketplace/i);
   });
 });

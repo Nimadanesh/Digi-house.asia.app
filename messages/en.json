@@ -56,8 +56,7 @@
     },
     "sell": {
       "headline": "Sell anytime you want",
-      "subtitle": "List shares on the DigiHouse marketplace when you’re ready to exit.",
-      "trustLine": "This is a demo version and transactions are simulated"
+      "subtitle": "List shares on the DigiHouse marketplace when you’re ready to exit."
     }
   },
   "home": {
@@ -135,6 +134,11 @@
   },
   "settings": {
     "title": "Settings",
+    "account": "Account",
+    "recoverySignIn": "Sign in with recovery code",
+    "signOut": "Sign out",
+    "signOutConfirmTitle": "Sign out?",
+    "signOutConfirmBody": "Do you want to sign out?",
     "wallet": "Wallet",
     "connectTitle": "Connect a TON wallet",
     "connectHint": "Required to buy shares and receive weekly yield.",
@@ -146,18 +150,55 @@
     "languageHint": "App language",
     "languageAuto": "Auto (Telegram)",
     "chooseLanguage": "Choose language",
-    "useTelegramTheme": "Use Telegram theme",
+    "useTelegramTheme": "Dark / Light",
     "useTelegramThemeHint": "Match Telegram colors",
     "showDemoBadge": "Show Demo badge",
     "showDemoBadgeHint": "Floating honest MVP label",
     "help": "Help",
     "howItWorks": "How DigiHouse Works",
     "aboutLegal": "About / Legal",
-    "demoFooter": "Demo mode · seed data · transactions simulated",
     "aboutBody": "DigiHouse is a Telegram Mini App for fractional real-estate shares on TON. Weekly rental yield is shown proportional to your ownership.",
     "aboutAdvice": "Nothing here is financial advice. Property documents and tokenization disclosures are for demonstration until production contracts ship.",
     "aboutCopyright": "© DigiHouse · MVP",
     "demoTxDisclaimer": "This is a demo – transactions are simulated",
     "payoutDisclaimer": "simulated weekly payout · on-chain verifiable post-MVP"
+  },
+  "profile": {
+    "title": "Complete your profile",
+    "subtitle": "A few details so we can identify your account.",
+    "settingsSection": "Profile",
+    "displayName": "Display name",
+    "displayNamePlaceholder": "Your name",
+    "phone": "Phone",
+    "phonePlaceholder": "+1 555 000 0000",
+    "phoneHint": "Optional. Used only for account support.",
+    "phoneEmpty": "No phone on file",
+    "useTelegramPhone": "Use Telegram number",
+    "requestingPhone": "Requesting…",
+    "recoveryTitle": "Recovery code",
+    "recoveryWarn": "Save this code somewhere safe. You need it to sign in if Telegram is unavailable. We cannot recover it for you.",
+    "recoverySettingsHint": "Keep this code private. Anyone with it can access your DigiHouse account.",
+    "copyCode": "Copy recovery code",
+    "showCode": "Show recovery code",
+    "hideCode": "Hide recovery code",
+    "savedConfirm": "I saved my recovery code in a safe place",
+    "saveContinue": "Save & continue",
+    "saving": "Saving…",
+    "save": "Save",
+    "cancel": "Cancel",
+    "errors": {
+      "name": "Enter a name (at least 2 characters)",
+      "phone": "Enter a valid phone number",
+      "saveCode": "Confirm you saved your recovery code",
+      "save": "Could not save profile"
+    }
+  },
+  "recovery": {
+    "title": "Sign in with recovery code",
+    "subtitle": "Use the code you saved when you set up your profile.",
+    "codeLabel": "Recovery code",
+    "signIn": "Sign in",
+    "signingIn": "Signing in…",
+    "backHome": "Back to home"
   }
 }
