@@ -271,7 +271,7 @@
    - On touch devices ((hover: none) and (pointer: coarse)) depth is dropped:
      no perspective / translateZ, no continuous idle sway, and flips run TWICE
      then settle blue (fw-flip-twice-settle + fill both) so animation work is
-     bounded (~4.6s incl. stagger) instead of infinite. .fw-cell KEEPS
+     bounded (~6.6s incl. stagger) instead of infinite. .fw-cell KEEPS
      transform-style: preserve-3d — without it, backface-visibility judges each
      face from its own transform and the blue back face is forever hidden
      (cells stay stuck on the dark front face).
@@ -373,49 +373,49 @@
          stagger delay, then holds the 100% keyframe (rotateX(180deg) = blue)
          once the two-cycle sequence completes. No infinite looping. */
     transform: rotateX(180deg);
-    animation: fw-flip-twice-settle 4000ms linear both;
+    animation: fw-flip-twice-settle 6000ms linear both;
   }
 }
-/* Mobile timeline, per cell, after its stagger delay (4000ms total):
-   0–10%   dark → blue   (cycle 1: appear)
-   10–20%  hold blue
-   20–30%  blue → dark   (cycle 1: disappear)
-   30–40%  hold dark
-   40–50%  dark → blue   (cycle 2: appear)
-   50–60%  hold blue
-   60–70%  blue → dark   (cycle 2: disappear)
-   70–80%  hold dark
-   80–90%  dark → blue   (final: appear)
-   90–100% hold blue — fill-mode both keeps it blue forever after completion. */
+/* Mobile timeline, per cell, after its stagger delay (6000ms total):
+   0–8.5%    dark → blue   (cycle 1: appear, ~510ms)
+   8.5–18.5% hold blue (~600ms)
+   18.5–26.5% blue → dark   (cycle 1: disappear, ~480ms)
+   26.5–32.5% hold dark (~360ms)
+   32.5–41%  dark → blue   (cycle 2: appear, ~510ms)
+   41–51%    hold blue (~600ms)
+   51–59%    blue → dark   (cycle 2: disappear, ~480ms)
+   59–65%    hold dark (~360ms)
+   65–73.5%  dark → blue   (final: appear, ~510ms)
+   73.5–100% hold blue — settled; fill-mode both keeps it blue forever after. */
 @keyframes fw-flip-twice-settle {
   0% {
     transform: rotateX(0deg);
   }
-  10% {
+  8.5% {
     transform: rotateX(180deg);
   }
-  20% {
+  18.5% {
     transform: rotateX(180deg);
   }
-  30% {
+  26.5% {
     transform: rotateX(0deg);
   }
-  40% {
+  32.5% {
     transform: rotateX(0deg);
   }
-  50% {
+  41% {
     transform: rotateX(180deg);
   }
-  60% {
+  51% {
     transform: rotateX(180deg);
   }
-  70% {
+  59% {
     transform: rotateX(0deg);
   }
-  80% {
+  65% {
     transform: rotateX(0deg);
   }
-  90% {
+  73.5% {
     transform: rotateX(180deg);
   }
   100% {

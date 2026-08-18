@@ -43,7 +43,7 @@ describe("flipwave mobile CSS contract (two-cycle settle-blue guarantee)", () =>
 
   it("uses the two-cycle animation with fill-mode both (no infinite loop on mobile)", () => {
     const block = touchBlock();
-    expect(block).toMatch(/fw-flip-twice-settle\s+4000ms\s+linear\s+both/);
+    expect(block).toMatch(/fw-flip-twice-settle\s+6000ms\s+linear\s+both/);
     // No infinite iterations inside the touch block.
     expect(block.match(/animation:[^;]*infinite/g) ?? []).toHaveLength(0);
     // The settled/fallback transform points at the visible back face.
