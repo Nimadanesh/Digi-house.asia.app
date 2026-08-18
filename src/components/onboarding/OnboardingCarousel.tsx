@@ -78,8 +78,14 @@ export function OnboardingCarousel({
           style={{ transform: trackTransform }}
           data-testid="onboarding-track"
         >
-          {ONBOARDING_SLIDES.map((slide) => (
-            <OnboardingSlide key={slide.id} slide={slide} />
+          {ONBOARDING_SLIDES.map((slide, i) => (
+            <OnboardingSlide
+              key={slide.id}
+              slide={slide}
+              // Only the visible slide animates; off-screen slides freeze their
+              // flip wave so mobile only ever composites one grid at a time.
+              active={i === index}
+            />
           ))}
         </div>
       </div>

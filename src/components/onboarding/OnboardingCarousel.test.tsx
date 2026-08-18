@@ -52,4 +52,15 @@ describe("OnboardingCarousel (RTL / Persian)", () => {
     expect(screen.getAllByText(headline!).length).toBeGreaterThan(0);
     expect(screen.getAllByText(subtitle!).length).toBeGreaterThan(0);
   });
+
+  it("only the active slide's flip wave is unpaused", () => {
+    renderRtl(1);
+    const gridOf = (slideId: string) =>
+      screen.getByTestId(`onboarding-slide-${slideId}`).querySelector(".fw-grid");
+    // Slide 2 (index 1) is visible → animating.
+    expect(gridOf("yield")).not.toHaveClass("fw-paused");
+    // Slides 1 and 3 are off-screen → frozen.
+    expect(gridOf("own")).toHaveClass("fw-paused");
+    expect(gridOf("sell")).toHaveClass("fw-paused");
+  });
 });

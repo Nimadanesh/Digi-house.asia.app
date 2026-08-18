@@ -8,6 +8,9 @@ import { cn } from "@/lib/utils";
 
 // 2× the original cycle — an extended brand splash (reduced-motion shows static, leaves sooner).
 const CYCLE_MS = 8800;
+// On touch devices the wave flips once and settles (~3s), so a shorter splash is enough —
+// it avoids ~4s of near-static full-screen animation on low-end phones/Telegram WebView.
+const MOBILE_DISMISS_MS = 4400;
 const EXIT_MS = 400;
 
 export function OnboardingLoader({
@@ -28,11 +31,14 @@ export function OnboardingLoader({
     const reduced =
       typeof window !== "undefined" &&
       window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    const coarse =
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(hover: none) and (pointer: coarse)").matches;
 
     const timers: number[] = [];
     let disposed = false;
 
-    const dismissAfter = reduced ? 900 : CYCLE_MS;
+    const dismissAfter = reduced ? 900 : coarse ? MOBILE_DISMISS_MS : CYCLE_MS;
     timers.push(
       window.setTimeout(() => {
         if (disposed) return;

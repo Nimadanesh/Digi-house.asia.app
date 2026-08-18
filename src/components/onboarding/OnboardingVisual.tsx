@@ -19,9 +19,12 @@ const CONFIG: Record<
 export function OnboardingVisual({
   slideId,
   className,
+  active = true,
 }: {
   slideId: OnboardingSlideDef["id"];
   className?: string;
+  /** False when this slide is off-screen — freezes the flip wave (perf). */
+  active?: boolean;
 }) {
   const conf = CONFIG[slideId];
   return (
@@ -33,7 +36,7 @@ export function OnboardingVisual({
       aria-hidden
       data-testid={`onboarding-visual-${slideId}`}
     >
-      <FlipwaveGrid {...conf} cellSize={9} gap={2} />
+      <FlipwaveGrid {...conf} cellSize={9} gap={2} active={active} />
     </div>
   );
 }

@@ -56,4 +56,21 @@ describe("FlipwaveGrid", () => {
     const { container } = render(<FlipwaveGrid mask={empty} variant="dollar" />);
     expect(container.querySelectorAll(".fw-cell.fw-animate").length).toBe(0);
   });
+
+  it("does not pause by default (active grid keeps animating)", () => {
+    const { container } = render(<FlipwaveGrid mask={HOUSE_MASK} variant="house" />);
+    expect(container.querySelector(".fw-grid")).not.toHaveClass("fw-paused");
+  });
+
+  it("adds fw-paused when active={false} so all flips freeze", () => {
+    const { container } = render(
+      <FlipwaveGrid mask={HOUSE_MASK} variant="house" active={false} />,
+    );
+    expect(container.querySelector(".fw-grid")).toHaveClass("fw-paused");
+    // Cells keep their .fw-animate class — freezing happens via CSS
+    // (animation-play-state: paused), so the settled state is preserved.
+    expect(container.querySelectorAll(".fw-cell.fw-animate").length).toBe(
+      countLit(HOUSE_MASK),
+    );
+  });
 });

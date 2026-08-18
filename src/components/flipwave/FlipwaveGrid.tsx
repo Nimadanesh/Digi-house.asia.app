@@ -22,6 +22,7 @@ export function FlipwaveGrid({
   gap = 3,
   cycleMs = 4400,
   flipUnlit = false,
+  active = true,
 }: {
   mask: readonly (readonly number[])[];
   variant: FlipwaveVariant;
@@ -31,6 +32,9 @@ export function FlipwaveGrid({
   cycleMs?: number;
   /** True when unlit cells also flip (to a dim tone) — the loader does this; slides don't. */
   flipUnlit?: boolean;
+  /** When false, the grid gets .fw-paused: all flip + idle animations freeze.
+   *  Used by the carousel so only the visible slide animates. */
+  active?: boolean;
 }) {
   const cells = useMemo(() => {
     const out: {
@@ -64,7 +68,7 @@ export function FlipwaveGrid({
   return (
     <div
       dir="ltr"
-      className={cn("fw-grid", className)}
+      className={cn("fw-grid", active === false && "fw-paused", className)}
       style={gridStyle}
     >
       {cells.map((cell) => (

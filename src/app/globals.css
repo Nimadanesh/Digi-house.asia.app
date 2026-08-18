@@ -263,7 +263,17 @@
 
 /* Braille Flipwave loader — CSS 3D dot-matrix flip wave (no WebGL).
    Only .fw-animate cells flip (rotateX 0→180 revealing the back face, hold, then back),
-   staggered by per-cell animation-delay and cycled by --fw-cycle (set on the grid). */
+   staggered by per-cell animation-delay and cycled by --fw-cycle (set on the grid).
+
+   Mobile perf strategy:
+   - Inactive grids (.fw-paused) freeze ALL their animations (flip + idle) via
+     animation-play-state: paused — the carousel only animates the visible slide.
+   - On touch devices ((hover: none) and (pointer: coarse)) true-3D is dropped:
+     no perspective / preserve-3d / translateZ, no continuous idle sway, and flips
+     run once then settle (fw-flip-once + forwards) so animation work is bounded
+     to ~3s instead of infinite.
+   - will-change is used on the grid container ONLY (one layer for the idle sway),
+     never on cells — hundreds of will-change'd cells would explode layer count. */
 .fw-grid {
   display: grid;
   gap: 3px;
@@ -272,6 +282,17 @@
   animation: fw-idle 9s ease-in-out infinite;
   /* Keep 3D flips from painting outside the parent frame */
   overflow: hidden;
+  /* Isolate the animated subtree: flips never invalidate layout/paint of ancestors */
+  contain: layout paint;
+  /* Promote only the container layer for the idle sway (cells keep their own flip layers) */
+  will-change: transform;
+}
+/* Off-screen grids: freeze the idle sway AND every cell flip (no per-frame work). */
+.fw-grid.fw-paused {
+  animation-play-state: paused;
+}
+.fw-grid.fw-paused .fw-cell.fw-animate {
+  animation-play-state: paused;
 }
 .fw-cell {
   position: relative;
@@ -322,6 +343,35 @@
   }
   50% {
     transform: rotateY(2.5deg);
+  }
+}
+
+/* Touch / mobile: orthographic once-and-settle flip wave (see header comment). */
+@media (hover: none) and (pointer: coarse) {
+  .fw-grid {
+    perspective: none;
+    transform-style: flat;
+    /* no continuous idle sway on mobile */
+    animation: none;
+    will-change: auto;
+  }
+  .fw-cell {
+    transform-style: flat;
+  }
+  .fw-cell.fw-animate {
+    /* flip in (0→180 over the first 13%), hold, then stop — bounded animation work */
+    animation: fw-flip-once 2400ms linear 1 forwards;
+  }
+}
+@keyframes fw-flip-once {
+  0% {
+    transform: rotateX(0deg);
+  }
+  13% {
+    transform: rotateX(180deg);
+  }
+  100% {
+    transform: rotateX(180deg);
   }
 }
 
