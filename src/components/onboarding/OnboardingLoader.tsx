@@ -8,9 +8,10 @@ import { cn } from "@/lib/utils";
 
 // 2× the original cycle — an extended brand splash (reduced-motion shows static, leaves sooner).
 const CYCLE_MS = 8800;
-// On touch devices the wave flips once and settles (~3s), so a shorter splash is enough —
-// it avoids ~4s of near-static full-screen animation on low-end phones/Telegram WebView.
-const MOBILE_DISMISS_MS = 4400;
+// On touch devices the wave plays two flip cycles and settles (~4.6s incl. the
+// corner-cell stagger), so a shorter splash than desktop is enough — it avoids
+// near-static full-screen animation on low-end phones/Telegram WebView.
+const MOBILE_DISMISS_MS = 5000;
 const EXIT_MS = 400;
 
 export function OnboardingLoader({
