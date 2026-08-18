@@ -1,0 +1,118 @@
+import { describe, expect, it } from "vitest";
+import { planFills, remaining, type EngineOrder } from "./match-engine.js";
+
+function order(over: Partial<EngineOrder> & Pick<EngineOrder, "id" | "userId" | "side" | "priceUsd" | "quantity">): EngineOrder {
+  return {
+    filledQuantity: 0,
+    isHouseAccount: false,
+    createdAt: new Date(Date.now() - Math.random() * 1000),
+    ...over,
+  };
+}
+
+describe("planFills — crossing rules", () => {
+  it("buy taker fills against cheaper/equal asks, at the ASK price", () => {
+    const taker = order({ id: "t", userId: "u1", side: "buy", priceUsd: 10_500, quantity: 10 });
+    const makers = [
+      order({ id: "a1", userId: "u2", side: "sell", priceUsd: 10_400, quantity: 4 }),
+      order({ id: "a2", userId: "u3", side: "sell", priceUsd: 10_600, quantity: 5 }), // above limit
+    ];
+    const { fills, takerRemaining } = planFills(taker, makers);
+    expect(fills).toEqual([
+      { makerOrderId: "a1", takerOrderId: "t", priceUsd: 10_400, quantity: 4 },
+    ]);
+    expect(takerRemaining).toBe(6);
+  });
+
+  it("sell taker fills against higher/equal bids, at the BID price", () => {
+    const taker = order({ id: "t", userId: "u1", side: "sell", priceUsd: 9_800, quantity: 5 });
+    const makers = [
+      order({ id: "b1", userId: "u2", side: "buy", priceUsd: 9_700, quantity: 3 }), // below limit
+      order({ id: "b2", userId: "u3", side: "buy", priceUsd: 9_900, quantity: 5 }),
+    ];
+    const { fills } = planFills(taker, makers);
+    expect(fills).toEqual([
+      { makerOrderId: "b2", takerOrderId: "t", priceUsd: 9_900, quantity: 5 },
+    ]);
+  });
+
+  it("same-side makers never match", () => {
+    const taker = order({ id: "t", userId: "u1", side: "buy", priceUsd: 10_000, quantity: 1 });
+    const makers = [order({ id: "b1", userId: "u2", side: "buy", priceUsd: 9_000, quantity: 1 })];
+    expect(planFills(taker, makers).fills).toEqual([]);
+  });
+});
+
+describe("planFills — priority", () => {
+  it("buy prefers the cheapest ask; ties break to the oldest order", () => {
+    const older = new Date("2026-01-01T00:00:00Z");
+    const newer = new Date("2026-01-02T00:00:00Z");
+    const taker = order({ id: "t", userId: "u1", side: "buy", priceUsd: 11_000, quantity: 10 });
+    const makers = [
+      order({ id: "expensive", userId: "u2", side: "sell", priceUsd: 10_800, quantity: 10, createdAt: older }),
+      order({ id: "cheap-new", userId: "u3", side: "sell", priceUsd: 10_500, quantity: 2, createdAt: newer }),
+      order({ id: "cheap-old", userId: "u4", side: "sell", priceUsd: 10_500, quantity: 3, createdAt: older }),
+    ];
+    const { fills } = planFills(taker, makers);
+    expect(fills.map((f) => f.makerOrderId)).toEqual(["cheap-old", "cheap-new", "expensive"]);
+  });
+
+  it("sell prefers the highest bid", () => {
+    const taker = order({ id: "t", userId: "u1", side: "sell", priceUsd: 1, quantity: 2 });
+    const makers = [
+      order({ id: "low", userId: "u2", side: "buy", priceUsd: 9_000, quantity: 1 }),
+      order({ id: "high", userId: "u3", side: "buy", priceUsd: 9_500, quantity: 1 }),
+    ];
+    const { fills } = planFills(taker, makers);
+    expect(fills.map((f) => [f.makerOrderId, f.priceUsd])).toEqual([
+      ["high", 9_500],
+      ["low", 9_000],
+    ]);
+  });
+});
+
+describe("planFills — partial fills & self-match", () => {
+  it("sweeps multiple makers until the taker is full", () => {
+    const taker = order({ id: "t", userId: "u1", side: "buy", priceUsd: 10_000, quantity: 10 });
+    const makers = [
+      order({ id: "a1", userId: "u2", side: "sell", priceUsd: 9_900, quantity: 4 }),
+      order({ id: "a2", userId: "u3", side: "sell", priceUsd: 9_950, quantity: 4 }),
+      order({ id: "a3", userId: "u4", side: "sell", priceUsd: 9_990, quantity: 4 }),
+    ];
+    const { fills, takerRemaining } = planFills(taker, makers);
+    expect(fills.map((f) => f.makerOrderId)).toEqual(["a1", "a2", "a3"]);
+    expect(fills[2]!.quantity).toBe(2); // only 2 of the last maker needed
+    expect(takerRemaining).toBe(0);
+  });
+
+  it("skips makers of the same user (self-trade prevention)", () => {
+    const taker = order({ id: "t", userId: "u1", side: "buy", priceUsd: 10_000, quantity: 5 });
+    const makers = [
+      order({ id: "mine", userId: "u1", side: "sell", priceUsd: 9_000, quantity: 5 }),
+      order({ id: "theirs", userId: "u2", side: "sell", priceUsd: 9_500, quantity: 5 }),
+    ];
+    const { fills } = planFills(taker, makers);
+    expect(fills.map((f) => f.makerOrderId)).toEqual(["theirs"]);
+  });
+
+  it("house account never matches against itself", () => {
+    const taker = order({ id: "t", userId: "house", side: "buy", priceUsd: 10_000, quantity: 5, isHouseAccount: true });
+    const makers = [
+      order({ id: "h2", userId: "house", side: "sell", priceUsd: 9_000, quantity: 5, isHouseAccount: true }),
+      order({ id: "u", userId: "user", side: "sell", priceUsd: 9_800, quantity: 5 }),
+    ];
+    const { fills } = planFills(taker, makers);
+    expect(fills.map((f) => f.makerOrderId)).toEqual(["u"]);
+  });
+
+  it("respects partially filled makers and empty books", () => {
+    const taker = order({ id: "t", userId: "u1", side: "buy", priceUsd: 10_000, quantity: 5 });
+    expect(planFills(taker, []).fills).toEqual([]);
+    const halfFilled = order({
+      id: "a1", userId: "u2", side: "sell", priceUsd: 9_000, quantity: 10, filledQuantity: 8,
+    });
+    const { fills } = planFills(taker, [halfFilled]);
+    expect(fills[0]!.quantity).toBe(2);
+    expect(remaining(halfFilled)).toBe(2);
+  });
+});

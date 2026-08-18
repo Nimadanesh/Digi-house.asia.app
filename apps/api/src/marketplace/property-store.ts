@@ -1,4 +1,4 @@
-import { and, desc, eq, ilike, or, sql, type SQL } from "drizzle-orm";
+import { and, desc, eq, ilike, inArray, or, sql, type SQL } from "drizzle-orm";
 import type { Db } from "../db/client.js";
 import { properties, type PropertyMetaJson, type PropertyRow } from "../db/schema/properties.js";
 import {
@@ -27,6 +27,10 @@ export type CreatePropertyInput = {
   meta: Record<string, unknown>;
   status?: "draft" | "funding" | "funded" | "resale";
   sharesSold?: number;
+  /** Monthly yield rate 4.50–7.50 as a string ("6.00"); defaults to 5.50. */
+  monthlyYieldRate?: string;
+  /** Whole-property value in cents; defaults to shares × price. */
+  totalValueUsd?: number;
 };
 
 export type PropertyStore = {
@@ -36,6 +40,16 @@ export type PropertyStore = {
   getByIds(ids: string[]): Promise<Map<string, ListingPublic>>;
   /** Race-safe: true if shares_sold incremented; false if would exceed total. */
   tryIncrementSharesSold(id: string, qty: number): Promise<boolean>;
+  /**
+   * Instant-sell return path (§0.3): race-safe decrement of shares_sold, only while
+   * the property is still in its primary offering (one-way funding → resale, PC-05).
+   */
+  tryDecrementSharesSold(id: string, qty: number): Promise<boolean>;
+  /**
+   * One-way sold-out transition (§0.1): funding/funded → resale once supply hits zero.
+   * Guarded update — a resale property can never return to primary.
+   */
+  markSoldOut(id: string): Promise<ListingPublic | null>;
   /**
    * Set pause flags for a property.
    * Returns the updated listing or null if property not found.
@@ -86,7 +100,9 @@ export function createDbPropertyStore(db: Db): PropertyStore {
               .where(and(...clauses))
               .orderBy(desc(properties.createdAt));
 
-      return rows.map(mapPropertyToListing);
+      // Explicit arrow — .map would pass the array index as mapPropertyToListing's
+      // second arg (lastTradeUsd) and corrupt every listing's last price (PD-07).
+      return rows.map((r) => mapPropertyToListing(r));
     },
 
     async getById(id) {
@@ -130,6 +146,41 @@ export function createDbPropertyStore(db: Db): PropertyStore {
       return rows.length > 0;
     },
 
+    async tryDecrementSharesSold(id, qty) {
+      if (qty <= 0) return false;
+      const rows = await db
+        .update(properties)
+        .set({
+          sharesSold: sql`${properties.sharesSold} - ${qty}`,
+          updatedAt: new Date(),
+        })
+        .where(
+          and(
+            eq(properties.id, id),
+            eq(properties.status, "funding"),
+            sql`${properties.sharesSold} - ${qty} >= 0`,
+          ),
+        )
+        .returning({ id: properties.id });
+      return rows.length > 0;
+    },
+
+    async markSoldOut(id) {
+      const rows = await db
+        .update(properties)
+        .set({ status: "resale", updatedAt: new Date() })
+        .where(
+          and(
+            eq(properties.id, id),
+            inArray(properties.status, ["funding", "funded"]),
+            sql`${properties.sharesSold} >= ${properties.totalShares}`,
+          ),
+        )
+        .returning();
+      const row = rows[0];
+      return row ? mapPropertyToListing(row) : null;
+    },
+
     async setPauseFlags(id, flags) {
       const updates: Record<string, unknown> = { updatedAt: new Date() };
       if (flags.salePaused !== undefined) updates.salePaused = flags.salePaused;
@@ -160,6 +211,8 @@ export function createDbPropertyStore(db: Db): PropertyStore {
         meta: input.meta as PropertyMetaJson,
         status: input.status ?? "draft",
         sharesSold: input.sharesSold ?? 0,
+        monthlyYieldRate: input.monthlyYieldRate ?? "5.50",
+        totalValueUsd: input.totalValueUsd ?? input.totalShares * input.sharePriceUsd,
         tokenizationStatus: "pending" as const,
         rentalHistory: [],
         jettonDecimals: 9,
@@ -188,6 +241,10 @@ export function createDbPropertyStore(db: Db): PropertyStore {
       if (patch.meta !== undefined) updates.meta = patch.meta;
       if (patch.status !== undefined) updates.status = patch.status;
       if (patch.sharesSold !== undefined) updates.sharesSold = patch.sharesSold;
+      if (patch.monthlyYieldRate !== undefined)
+        updates.monthlyYieldRate = patch.monthlyYieldRate;
+      if (patch.totalValueUsd !== undefined)
+        updates.totalValueUsd = patch.totalValueUsd;
 
       const rows = await db
         .update(properties)
@@ -228,7 +285,8 @@ export function createMemoryPropertyStore(
       list.sort(
         (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
       );
-      return list.map(mapPropertyToListing);
+      // Explicit arrow — see PD-07 note above (map would pass the index as lastTradeUsd).
+      return list.map((r) => mapPropertyToListing(r));
     },
 
     async getById(id) {
@@ -257,6 +315,30 @@ export function createMemoryPropertyStore(
       return true;
     },
 
+    async tryDecrementSharesSold(id, qty) {
+      if (qty <= 0) return false;
+      const row = rows.find((p) => p.id === id);
+      if (!row) return false;
+      if (row.status !== "funding") return false;
+      if (row.sharesSold - qty < 0) return false;
+      row.sharesSold -= qty;
+      row.updatedAt = new Date();
+      return true;
+    },
+
+    async markSoldOut(id) {
+      const row = rows.find((p) => p.id === id);
+      if (!row) return null;
+      if (
+        (row.status === "funding" || row.status === "funded") &&
+        row.sharesSold >= row.totalShares
+      ) {
+        row.status = "resale";
+        row.updatedAt = new Date();
+      }
+      return mapPropertyToListing(row);
+    },
+
     async setPauseFlags(id, flags) {
       const row = rows.find((p) => p.id === id);
       if (!row) return null;
@@ -282,6 +364,8 @@ export function createMemoryPropertyStore(
         meta: input.meta as PropertyMetaJson,
         status: input.status ?? "draft",
         sharesSold: input.sharesSold ?? 0,
+        monthlyYieldRate: input.monthlyYieldRate ?? "5.50",
+        totalValueUsd: input.totalValueUsd ?? input.totalShares * input.sharePriceUsd,
         tokenizationStatus: "pending",
         rentalHistory: [],
         jettonDecimals: 9,

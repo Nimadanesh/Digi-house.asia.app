@@ -1,204 +1,498 @@
 {
+
   "common": {
+
     "appName": "DigiHouse",
+
     "buyShare": "购买份额",
+
     "browseMarketplace": "浏览市场",
+
     "viewAll": "查看全部",
+
     "refresh": "刷新",
+
     "clearFilters": "清除筛选",
+
     "tryAgain": "重试",
+
     "retry": "再试一次",
+
     "skip": "跳过",
+
     "continue": "继续",
+
     "getStarted": "开始使用",
+
     "settings": "设置",
+
     "connectWallet": "连接钱包",
+
     "walletConnected": "钱包已连接",
+
     "disconnectWallet": "断开钱包",
+
     "share": "份额",
+
     "shares": "份额",
+
     "of": "/",
+
     "from": "起",
+
     "est": "约",
+
     "apy": "年化",
+
     "pending": "待发放",
+
     "paid": "已发放",
+
     "hot": "热门",
+
     "new": "新品",
+
     "soldPct": "已售 {pct}%",
+
     "week": "周",
+
     "weeks": "周",
+
     "demoMode": "演示模式 · 示例数据 · 交易为模拟",
+
     "somethingWentWrong": "出了点问题"
+
   },
+
   "tabs": {
+
     "home": "首页",
+
     "marketplace": "市场",
+
     "earnings": "收益",
+
     "portfolio": "持仓"
+
   },
+
   "header": {
+
     "greeting": "你好，{name}"
+
   },
+
   "onboarding": {
+
     "skip": "跳过",
+
     "continue": "继续",
+
     "getStarted": "开始使用",
+
     "slideProgress": "{current} / {total}",
+
     "slideAria": "第 {n} 页",
+
     "own": {
+
       "headline": "成为真实房产的共有人",
+
       "subtitle": "最低约 80 美元起投"
+
     },
+
     "yield": {
+
       "headline": "每周领取租金份额",
+
       "subtitle": "每周五在收益中查看你的份额"
+
     },
+
     "sell": {
+
       "headline": "随时可以卖出",
+
       "subtitle": "准备退出时，可在 DigiHouse 市场挂单出售份额。"
+
     }
+
   },
+
   "home": {
+
     "loadError": "无法加载首页。",
+
     "portfolioValue": "持仓价值",
+
     "totalInvested": "总投入",
+
     "totalEarningsReceived": "累计已收收益",
+
     "nextPayout": "下次发放",
+
     "myProperties": "我的房产",
+
     "myPropertiesCount": "我的房产（{count}）",
+
     "buyFirstShare": "购买你的第一份份额",
+
     "buyFirstShareHint": "拥有一小部分 — 每周五获得预计租金。",
+
     "todaysHighlight": "今日精选",
+
     "hotThisWeek": "本周热门",
+
     "weeklyPerShare": "每周 / 份",
+
     "pendingThisWeek": "本周待发 {amount}"
+
   },
+
   "marketplace": {
+
     "searchPlaceholder": "搜索房产",
+
     "searchAria": "搜索房产",
+
     "clearSearch": "清除搜索",
+
     "filtersAria": "市场筛选",
+
     "loadError": "无法加载房产。",
+
     "emptyTitle": "暂无房产",
+
     "emptyMessage": "每周都有新的份额上架 — 请稍后再来。",
+
     "noMatchesTitle": "无匹配结果",
+
     "noMatchesMessage": "试试其他搜索或筛选。",
+
     "chips": {
+
       "all": "全部",
+
+      "primary": "一级",
+
+      "secondary": "二级",
+
       "highest_yield": "最高收益",
+
       "new": "最新",
+
       "almost_sold": "即将售罄",
+
       "low_price": "低价"
+
     },
+
     "pricePerShare": "单价 / 份",
+
     "weeklyPerShare": "每周 / 份",
+
     "minPurchase": "最低购买",
-    "sharesSold": "已售 {sold} / {total} 份"
+
+    "sharesSold": "已售 {sold} / {total} 份",
+
+    "feesTitle": "佣金",
+
+    "feesPerTx": "费率等级按每笔交易金额确定——无买卖上限。",
+
+    "feesRange": "金额",
+
+    "feesBuyPrimary": "买入 · 一级",
+
+    "feesBuyMarket": "买入 · 市场",
+
+    "feesSellMarket": "卖出 · 市场",
+
+    "feesInstantSell": "即时卖出（一级）",
+
+    "feesInstantNote": "一级发行阶段为固定费率；二级交易按市场等级收费。",
+
+    "feesNoCap": "买卖金额无上限。",
+
+    "lastPrice": "最新价格"
+
   },
+
   "property": {
+
     "buyShare": "购买份额",
+
     "about": "简介",
+
     "metrics": "指标",
+
     "trust": "信任与透明",
+
     "rentalHistory": "租赁历史",
+
     "incomeCalculator": "收益计算器",
+
     "salesProgress": "销售进度",
+
     "gallery": "图库"
+
   },
+
   "earnings": {
+
     "loadError": "无法加载收益。",
+
     "emptyTitle": "尚未获得收益",
+
     "emptyMessage": "购买第一份份额，下周开始赚取收益。",
+
     "thisWeek": "本周收益",
+
     "nextPayoutIn": "距下次发放",
+
     "totalReceived": "累计已收收益",
+
     "consecutivePaid": "连续发放周数",
+
     "streak": "连续 {count} {unit} ✓",
+
     "noStreak": "暂无连续记录",
+
     "timeline": "历史",
-    "disclaimer": "模拟每周发放 · MVP 后可链上验证"
+
+    "disclaimer": "模拟每周发放 · MVP 后可链上验证",
+
+    "yieldTitle": "锁定股份收益",
+
+    "yieldAccrued": "未付应计",
+
+    "yieldMonthly": "每月",
+
+    "yieldWeekly": "每周",
+
+    "yieldNoLocks": "暂无锁定——在房产页面锁定股份即可开始赚取收益。",
+
+    "yieldPayments": "收益支付",
+
+    "yieldFinal": "最终派息"
+
   },
+
   "portfolio": {
+
     "loadError": "无法加载持仓。",
+
     "emptyTitle": "持仓为空",
+
     "emptyMessage": "约 80 美元起 — 在市场购买你的第一份份额。",
+
     "totalValue": "持仓总价值",
+
     "totalInvested": "总投入",
+
     "totalEarningsReceived": "累计已收收益",
+
     "unrealizedProfit": "未实现盈亏",
+
     "nextPayout": "下次发放",
+
     "myPropertiesCount": "我的房产（{count}）",
+
     "openOrders": "未完成订单",
-    "allocation": "配置"
+
+    "allocation": "配置",
+
+    "lockedShares": "锁定股份",
+
+    "freeShares": "可用股份",
+
+    "orderQueued": "排队中"
+
   },
+
   "settings": {
+
     "title": "设置",
+
     "wallet": "钱包",
+
     "connectTitle": "连接 TON 钱包",
+
     "connectHint": "购买份额并领取每周收益所需。",
+
     "disconnect": "断开钱包",
+
+    "withdrawals": "提现",
+
+    "withdrawalTitle": "USDT 提现地址",
+
+    "withdrawalHint": "您的可提现余额支付到此地址",
+
+    "withdrawalPlaceholder": "EQ… USDT-TON 地址",
+
+    "withdrawalEmpty": "未设置地址",
+
+    "withdrawalVerified": "已验证",
+
+    "withdrawalUnverified": "未验证",
+
+    "withdrawalInvalid": "请输入有效的 TON 地址",
+
+    "withdrawalSave": "保存",
+
+    "withdrawalCancel": "取消",
+
+    "withdrawalRequests": "提现申请",
+
+    "withdrawalRequestsEmpty": "暂无提现申请",
+
+    "withdrawalStatusPaid": "已支付",
+
+    "withdrawalStatusRequested": "已申请",
+
+    "withdrawalStatusApproved": "已批准",
+
+    "withdrawalStatusRejected": "已拒绝",
+
+    "withdrawalRequest": "申请提现",
+    "withdrawalsError": "无法加载提现请求",
+
+    "referrals": "推荐",
+
+    "inviteFriends": "邀请好友",
+
+    "copied": "已复制！",
+
+    "signInToInvite": "登录以邀请",
+
+
     "preferences": "偏好",
+
     "displayCurrency": "显示货币",
+
     "displayCurrencyHint": "金额以美元显示；购买时显示 TON 估算",
+
     "language": "语言",
+
     "languageHint": "应用语言",
+
     "languageAuto": "自动（Telegram）",
+
     "chooseLanguage": "选择语言",
+
     "useTelegramTheme": "Dark / Light",
+
     "useTelegramThemeHint": "匹配 Telegram 颜色",
+
     "showDemoBadge": "显示演示徽章",
+
     "showDemoBadgeHint": "浮动的诚实 MVP 标签",
+
     "help": "帮助",
+
     "howItWorks": "DigiHouse 如何运作",
+    "transactionHistory": "交易记录",
+
+
     "aboutLegal": "关于 / 法律",
+
     "aboutBody": "DigiHouse 是 Telegram 小程序，用于在 TON 上持有房产份额。每周租金收益按持有比例显示。",
+
     "aboutAdvice": "此处内容不构成财务建议。房产文件与代币化披露在正式合约上线前仅供演示。",
+
     "aboutCopyright": "© DigiHouse · MVP",
+
     "demoTxDisclaimer": "这是演示 – 交易均为模拟",
+
     "payoutDisclaimer": "模拟每周发放 · MVP 后可链上验证",
+
     "account": "账户",
+
     "recoverySignIn": "使用恢复码登录",
+
     "signOut": "退出登录",
+
     "signOutConfirmTitle": "是否退出登录？",
+
     "signOutConfirmBody": "您想退出登录吗？"
+
   },
+
   "profile": {
+
     "title": "完善个人资料",
+
     "subtitle": "填写少量信息以便识别您的账户。",
+
     "settingsSection": "个人资料",
+
     "displayName": "显示名称",
+
     "displayNamePlaceholder": "您的姓名",
+
     "phone": "电话",
+
     "phonePlaceholder": "+86 138 0000 0000",
+
     "phoneHint": "可选。仅用于账户支持。",
+
     "phoneEmpty": "未填写电话",
+
     "useTelegramPhone": "使用 Telegram 号码",
+
     "requestingPhone": "请求中…",
+
     "recoveryTitle": "恢复码",
+
     "recoveryWarn": "请将此代码妥善保存。若无法使用 Telegram，登录时需要它。我们无法替您找回。",
+
     "recoverySettingsHint": "请保密此代码。任何持有者都可访问您的 DigiHouse 账户。",
+
     "copyCode": "复制恢复码",
+
     "showCode": "显示恢复码",
+
     "hideCode": "隐藏恢复码",
+
     "savedConfirm": "我已将恢复码保存在安全的地方",
+
     "saveContinue": "保存并继续",
+
     "saving": "保存中…",
+
     "save": "保存",
+
     "cancel": "取消",
+
     "errors": {
+
       "name": "请输入姓名（至少 2 个字符）",
+
       "phone": "请输入有效电话号码",
+
       "saveCode": "请确认已保存恢复码",
+
       "save": "无法保存资料"
+
     }
+
   },
+
   "recovery": {
+
     "title": "使用恢复码登录",
+
     "subtitle": "使用设置个人资料时保存的代码。",
+
     "codeLabel": "恢复码",
+
     "signIn": "登录",
+
     "signingIn": "登录中…",
+
     "backHome": "返回首页"
+
   }
+
 }
+

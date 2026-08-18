@@ -59,13 +59,6 @@
       "breakpoints": true
     },
     {
-      "idx": 7,
-      "version": "7",
-      "when": 1720000007000,
-      "tag": "0008_audit_events",
-      "breakpoints": true
-    },
-    {
       "idx": 8,
       "version": "7",
       "when": 1785323500000,
@@ -127,7 +120,62 @@
       "when": 1789500000000,
       "tag": "0018_profile_recovery",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1790100000000,
+      "tag": "0019_product_foundation",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1790200000000,
+      "tag": "0020_share_locks_yield",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1790300000000,
+      "tag": "0021_property_total_value",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1790400000000,
+      "tag": "0022_phase_c_selling",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1790500000000,
+      "tag": "0023_phase_d_matching",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1790600000000,
+      "tag": "0024_phase_e_withdrawals",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1790700000000,
+      "tag": "0025_phase_e_withdrawals",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1790800000000,
+      "tag": "0026_pe09_tx_kinds",
+      "breakpoints": true
     }
   ]
-}
 }

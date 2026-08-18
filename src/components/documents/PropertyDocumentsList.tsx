@@ -33,7 +33,7 @@ export function PropertyDocumentsList({
 }: PropertyDocumentsListProps) {
   return (
     <section>
-      <h2 className="px-1 text-[0.8125rem] font-medium text-muted-foreground">
+      <h2 className="px-1 text-[0.9375rem] font-semibold text-foreground">
         Documents
       </h2>
       <Block>

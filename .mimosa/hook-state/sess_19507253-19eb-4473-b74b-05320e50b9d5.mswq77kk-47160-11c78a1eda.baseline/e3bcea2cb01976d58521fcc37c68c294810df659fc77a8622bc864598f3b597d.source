@@ -1,0 +1,23 @@
+export const AUDIT_ACTIONS = [
+  "buy.confirm",
+  "buy.verify",
+  "buy.settle",
+  "order.cancel",
+  "payout.tick",
+  "admin.pause",
+  "admin.unpause",
+  "admin.create",
+  "admin.update",
+  "lock.create",
+  "lock.unlock_request",
+  "order.create",
+  "order.trade",
+  "sell.instant",
+  "admin.house_order",
+] as const;
+
+export type AuditAction = (typeof AUDIT_ACTIONS)[number];
+
+export function isAuditAction(v: string): v is AuditAction {
+  return (AUDIT_ACTIONS as readonly string[]).includes(v);
+}

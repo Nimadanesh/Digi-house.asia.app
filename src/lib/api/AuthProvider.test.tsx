@@ -60,6 +60,8 @@ const VALID_USER = {
   displayName: "Test",
   role: "investor" as const,
   walletAddress: null,
+  withdrawalAddress: null,
+  withdrawalAddressVerified: false,
   onboarded: true,
   profileCompleted: true,
   useTelegramTheme: true,

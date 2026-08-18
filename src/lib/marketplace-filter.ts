@@ -2,11 +2,20 @@
 import type { Listing } from "@/types/property";
 import { annualYieldRatio } from "@/lib/format";
 
-export type MarketplaceChip = "all" | "highest_yield" | "new" | "almost_sold" | "low_price";
+export type MarketplaceChip =
+  | "all"
+  | "primary"
+  | "secondary"
+  | "highest_yield"
+  | "new"
+  | "almost_sold"
+  | "low_price";
 
 /** Chip ids only — labels live in messages via i18n (`marketplace.chips.*`). */
 export const MARKETPLACE_CHIP_IDS: readonly MarketplaceChip[] = [
   "all",
+  "primary",
+  "secondary",
   "highest_yield",
   "new",
   "almost_sold",
@@ -49,6 +58,12 @@ export function filterMarketplaceListings(
   }
 
   switch (chip) {
+    case "primary":
+      // Primary offering — fixed price, buy directly (PRODUCT-PLAN §0.1).
+      return next.filter((l) => l.status === "funding");
+    case "secondary":
+      // Secondary market — order-book trading (funded = legacy sold-out, book open).
+      return next.filter((l) => l.status === "resale" || l.status === "funded");
     case "highest_yield":
       return next.sort((a, b) => apyOf(b) - apyOf(a));
     case "new":

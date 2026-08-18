@@ -1,204 +1,498 @@
 {
+
   "common": {
+
     "appName": "DigiHouse",
+
     "buyShare": "Купить долю",
+
     "browseMarketplace": "Открыть маркетплейс",
+
     "viewAll": "Все",
+
     "refresh": "Обновить",
+
     "clearFilters": "Сбросить фильтры",
+
     "tryAgain": "Повторить",
+
     "retry": "Ещё раз",
+
     "skip": "Пропустить",
+
     "continue": "Далее",
+
     "getStarted": "Начать",
+
     "settings": "Настройки",
+
     "connectWallet": "Подключить кошелёк",
+
     "walletConnected": "Кошелёк подключён",
+
     "disconnectWallet": "Отключить кошелёк",
+
     "share": "доля",
+
     "shares": "доли",
+
     "of": "из",
+
     "from": "От",
+
     "est": "Оценка",
+
     "apy": "APY",
+
     "pending": "Ожидание",
+
     "paid": "Выплачено",
+
     "hot": "Хит",
+
     "new": "Новое",
+
     "soldPct": "{pct}% продано",
+
     "week": "неделя",
+
     "weeks": "недель",
+
     "demoMode": "Демо · тестовые данные · транзакции симулируются",
+
     "somethingWentWrong": "Что-то пошло не так"
+
   },
+
   "tabs": {
+
     "home": "Главная",
+
     "marketplace": "Маркет",
+
     "earnings": "Доход",
+
     "portfolio": "Портфель"
+
   },
+
   "header": {
+
     "greeting": "Привет, {name}"
+
   },
+
   "onboarding": {
+
     "skip": "Пропустить",
+
     "continue": "Далее",
+
     "getStarted": "Начать",
+
     "slideProgress": "{current} / {total}",
+
     "slideAria": "Слайд {n}",
+
     "own": {
+
       "headline": "Станьте владельцем доли недвижимости",
+
       "subtitle": "Начните примерно с $80"
+
     },
+
     "yield": {
+
       "headline": "Получайте долю аренды каждую неделю",
+
       "subtitle": "Смотрите долю каждую пятницу в Доходе"
+
     },
+
     "sell": {
+
       "headline": "Продавайте в любой момент",
+
       "subtitle": "Выставляйте доли на маркетплейсе DigiHouse, когда готовы выйти."
+
     }
+
   },
+
   "home": {
+
     "loadError": "Не удалось загрузить главную.",
+
     "portfolioValue": "Стоимость портфеля",
+
     "totalInvested": "Всего вложено",
+
     "totalEarningsReceived": "Всего получено",
+
     "nextPayout": "Следующая выплата",
+
     "myProperties": "Мои объекты",
+
     "myPropertiesCount": "Мои объекты ({count})",
+
     "buyFirstShare": "Купите первую долю",
+
     "buyFirstShareHint": "Владейте частью — получайте прогноз аренды каждую пятницу.",
+
     "todaysHighlight": "Сегодня в фокусе",
+
     "hotThisWeek": "Хит недели",
+
     "weeklyPerShare": "В неделю / доля",
+
     "pendingThisWeek": "{amount} ожидает на этой неделе"
+
   },
+
   "marketplace": {
+
     "searchPlaceholder": "Поиск объектов",
+
     "searchAria": "Поиск объектов",
+
     "clearSearch": "Очистить поиск",
+
     "filtersAria": "Фильтры маркетплейса",
+
     "loadError": "Не удалось загрузить объекты.",
+
     "emptyTitle": "Пока нет объектов",
+
     "emptyMessage": "Новые доли появляются каждую неделю — загляните позже.",
+
     "noMatchesTitle": "Ничего не найдено",
+
     "noMatchesMessage": "Попробуйте другой поиск или фильтр.",
+
     "chips": {
+
       "all": "Все",
+
+      "primary": "Первичный",
+
+      "secondary": "Вторичный",
+
       "highest_yield": "Высший доход",
+
       "new": "Новые",
+
       "almost_sold": "Почти продано",
+
       "low_price": "Низкая цена"
+
     },
+
     "pricePerShare": "Цена / доля",
+
     "weeklyPerShare": "В неделю / доля",
+
     "minPurchase": "Мин. покупка",
-    "sharesSold": "{sold} из {total} долей продано"
+
+    "sharesSold": "{sold} из {total} долей продано",
+
+    "feesTitle": "Комиссия",
+
+    "feesPerTx": "Уровень определяется суммой каждой сделки — без лимитов.",
+
+    "feesRange": "Сумма",
+
+    "feesBuyPrimary": "Покупка · праймери",
+
+    "feesBuyMarket": "Покупка · рынок",
+
+    "feesSellMarket": "Продажа · рынок",
+
+    "feesInstantSell": "Мгновенная продажа (праймери)",
+
+    "feesInstantNote": "Фиксированный сбор на этапе первичного размещения; вторичные сделки — по рыночной шкале.",
+
+    "feesNoCap": "Ограничений на суммы покупки/продажи нет.",
+
+    "lastPrice": "Последняя цена"
+
   },
+
   "property": {
+
     "buyShare": "Купить долю",
+
     "about": "О объекте",
+
     "metrics": "Показатели",
+
     "trust": "Доверие и прозрачность",
+
     "rentalHistory": "История аренды",
+
     "incomeCalculator": "Калькулятор дохода",
+
     "salesProgress": "Прогресс продаж",
+
     "gallery": "Галерея"
+
   },
+
   "earnings": {
+
     "loadError": "Не удалось загрузить доход.",
+
     "emptyTitle": "Пока нет дохода",
+
     "emptyMessage": "Купите первую долю и начните зарабатывать со следующей недели.",
+
     "thisWeek": "Доход за эту неделю",
+
     "nextPayoutIn": "До следующей выплаты",
+
     "totalReceived": "Всего получено",
+
     "consecutivePaid": "Подряд выплаченных недель",
+
     "streak": "{count} {unit} подряд ✓",
+
     "noStreak": "Пока без серии",
+
     "timeline": "История",
-    "disclaimer": "симулированная еженедельная выплата · on-chain после MVP"
+
+    "disclaimer": "симулированная еженедельная выплата · on-chain после MVP",
+
+    "yieldTitle": "Доход по заблокированным акциям",
+
+    "yieldAccrued": "Начислено, не выплачено",
+
+    "yieldMonthly": "Ежемесячно",
+
+    "yieldWeekly": "Еженедельно",
+
+    "yieldNoLocks": "Нет активных блокировок — заблокируйте акции на странице объекта, чтобы начать получать доход.",
+
+    "yieldPayments": "Выплаты дохода",
+
+    "yieldFinal": "Финальная выплата"
+
   },
+
   "portfolio": {
+
     "loadError": "Не удалось загрузить портфель.",
+
     "emptyTitle": "Портфель пуст",
+
     "emptyMessage": "Начните примерно с $80 — купите первую долю на маркетплейсе.",
+
     "totalValue": "Общая стоимость портфеля",
+
     "totalInvested": "Всего вложено",
+
     "totalEarningsReceived": "Всего получено",
+
     "unrealizedProfit": "Нереализованная прибыль",
+
     "nextPayout": "Следующая выплата",
+
     "myPropertiesCount": "Мои объекты ({count})",
+
     "openOrders": "Открытые ордера",
-    "allocation": "Распределение"
+
+    "allocation": "Распределение",
+
+    "lockedShares": "Заблокированные акции",
+
+    "freeShares": "Свободные акции",
+
+    "orderQueued": "В очереди"
+
   },
+
   "settings": {
+
     "title": "Настройки",
+
     "wallet": "Кошелёк",
+
     "connectTitle": "Подключите TON-кошелёк",
+
     "connectHint": "Нужен для покупки долей и еженедельного дохода.",
+
     "disconnect": "Отключить кошелёк",
+
+    "withdrawals": "Вывод средств",
+
+    "withdrawalTitle": "Адрес вывода USDT",
+
+    "withdrawalHint": "Куда выплачивается ваш доступный для вывода баланс",
+
+    "withdrawalPlaceholder": "EQ… адрес USDT-TON",
+
+    "withdrawalEmpty": "Адрес не указан",
+
+    "withdrawalVerified": "Подтверждён",
+
+    "withdrawalUnverified": "Не подтверждён",
+
+    "withdrawalInvalid": "Введите действительный адрес TON",
+
+    "withdrawalSave": "Сохранить",
+
+    "withdrawalCancel": "Отмена",
+
+    "withdrawalRequests": "Запросы на вывод",
+
+    "withdrawalRequestsEmpty": "Запросов на вывод пока нет",
+
+    "withdrawalStatusPaid": "Выплачено",
+
+    "withdrawalStatusRequested": "Запрошено",
+
+    "withdrawalStatusApproved": "Одобрено",
+
+    "withdrawalStatusRejected": "Отклонено",
+
+    "withdrawalRequest": "Запросить вывод",
+    "withdrawalsError": "Не удалось загрузить запросы на вывод",
+
+    "referrals": "Рефералы",
+
+    "inviteFriends": "Пригласить друзей",
+
+    "copied": "Скопировано!",
+
+    "signInToInvite": "Войдите, чтобы приглашать",
+
+
     "preferences": "Предпочтения",
+
     "displayCurrency": "Валюта отображения",
+
     "displayCurrencyHint": "Суммы в USD; оценка TON при покупке",
+
     "language": "Язык",
+
     "languageHint": "Язык приложения",
+
     "languageAuto": "Авто (Telegram)",
+
     "useTelegramTheme": "Dark / Light",
+
     "useTelegramThemeHint": "Цвета как в Telegram",
+
     "showDemoBadge": "Показать бейдж Demo",
+
     "showDemoBadgeHint": "Честная метка MVP",
+
     "help": "Помощь",
+
     "howItWorks": "Как работает DigiHouse",
+    "transactionHistory": "История операций",
+
+
     "aboutLegal": "О приложении / Правовая информация",
+
     "aboutBody": "DigiHouse — мини-приложение Telegram для долей недвижимости на TON. Еженедельный арендный доход показывается пропорционально вашей доле.",
+
     "aboutAdvice": "Это не финансовый совет. Документы и токенизация — демонстрация до продакшен-контрактов.",
+
     "aboutCopyright": "© DigiHouse · MVP",
+
     "demoTxDisclaimer": "Это демо — транзакции симулируются",
+
     "payoutDisclaimer": "симулированная еженедельная выплата · on-chain после MVP",
+
     "chooseLanguage": "Выберите язык",
+
     "account": "Аккаунт",
+
     "recoverySignIn": "Войти с кодом восстановления",
+
     "signOut": "Выйти",
+
     "signOutConfirmTitle": "Выйти?",
+
     "signOutConfirmBody": "Хотите выйти?"
+
   },
+
   "profile": {
+
     "title": "Заполните профиль",
+
     "subtitle": "Несколько данных, чтобы идентифицировать ваш аккаунт.",
+
     "settingsSection": "Профиль",
+
     "displayName": "Отображаемое имя",
+
     "displayNamePlaceholder": "Ваше имя",
+
     "phone": "Телефон",
+
     "phonePlaceholder": "+7 900 000 00 00",
+
     "phoneHint": "Необязательно. Только для поддержки аккаунта.",
+
     "phoneEmpty": "Телефон не указан",
+
     "useTelegramPhone": "Использовать номер Telegram",
+
     "requestingPhone": "Запрос…",
+
     "recoveryTitle": "Код восстановления",
+
     "recoveryWarn": "Сохраните этот код в надёжном месте. Он понадобится для входа, если Telegram недоступен. Мы не сможем восстановить его за вас.",
+
     "recoverySettingsHint": "Храните код в секрете. Любой, у кого он есть, может получить доступ к вашему аккаунту DigiHouse.",
+
     "copyCode": "Скопировать код восстановления",
+
     "showCode": "Показать код восстановления",
+
     "hideCode": "Скрыть код восстановления",
+
     "savedConfirm": "Я сохранил(а) код восстановления в надёжном месте",
+
     "saveContinue": "Сохранить и продолжить",
+
     "saving": "Сохранение…",
+
     "save": "Сохранить",
+
     "cancel": "Отмена",
+
     "errors": {
+
       "name": "Введите имя (минимум 2 символа)",
+
       "phone": "Введите корректный номер телефона",
+
       "saveCode": "Подтвердите, что сохранили код восстановления",
+
       "save": "Не удалось сохранить профиль"
+
     }
+
   },
+
   "recovery": {
+
     "title": "Вход с кодом восстановления",
+
     "subtitle": "Используйте код, сохранённый при настройке профиля.",
+
     "codeLabel": "Код восстановления",
+
     "signIn": "Войти",
+
     "signingIn": "Вход…",
+
     "backHome": "На главную"
+
   }
+
 }
+

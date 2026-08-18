@@ -41,7 +41,7 @@ export function TransactionList({
   if (isLoading && transactions.length === 0) {
     return (
       <section>
-        <h2 className="px-1 text-[0.8125rem] font-medium text-muted-foreground">
+        <h2 className="px-1 text-[0.9375rem] font-semibold text-foreground">
           Transaction history
         </h2>
         <Block>
@@ -65,7 +65,7 @@ export function TransactionList({
         <button
           type="button"
           onClick={onRetry}
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-primary"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-primary active:scale-[0.97] transition-transform duration-[120ms] ease-out"
         >
           <RefreshCw size={14} />
           Retry
@@ -84,7 +84,7 @@ export function TransactionList({
 
   return (
     <section>
-      <h2 className="px-1 text-[0.8125rem] font-medium text-muted-foreground">
+      <h2 className="px-1 text-[0.9375rem] font-semibold text-foreground">
         Transaction history
       </h2>
       <Block>
@@ -99,7 +99,7 @@ export function TransactionList({
             type="button"
             onClick={onLoadMore}
             disabled={isLoading}
-            className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-border bg-surface-2 py-3 text-sm font-medium text-foreground active:opacity-60 disabled:opacity-40"
+            className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-border bg-surface-2 py-3 text-sm font-medium text-foreground active:scale-[0.97] transition-transform duration-[120ms] ease-out disabled:opacity-40"
           >
             {isLoading ? (
               <Loader2 className="h-4 w-4 animate-spin" />

@@ -16,6 +16,10 @@ import { LanguageSelector } from "@/components/settings/LanguageSelector";
 import { SettingsLabelStack } from "@/components/settings/SettingsLabelStack";
 import { AboutLegalSheet } from "@/components/settings/AboutLegalSheet";
 import { SettingsProfileSection } from "@/components/settings/SettingsProfileSection";
+import { WithdrawalAddressSection } from "@/components/settings/WithdrawalAddressSection";
+import { WithdrawalRequestsSection } from "@/components/settings/WithdrawalRequestsSection";
+import { WithdrawalRequestSheet } from "@/components/settings/WithdrawalRequestSheet";
+import { useWithdrawals } from "@/hooks/useWithdrawals";
 import { useTonConnect } from "@/hooks/useTonConnect";
 import { useSettingsStore } from "@/stores/settings.store";
 import { useUiStore } from "@/stores/ui.store";
@@ -31,6 +35,8 @@ import { Copy, Check } from "lucide-react";
 
 /** Preference / wallet rows: taller touch target + vertical padding for title+hint stacks. */
 const SETTINGS_ROW = "!min-h-[64px] items-center py-3.5";
+/** Nav/action rows: press feedback = bg tint + scale (matches the Settings edit rows). */
+const NAV_ROW = "active:bg-surface-2/60 active:scale-[0.98] transition-transform duration-[120ms] ease-out";
 
 export function SettingsSheet() {
   const open = useUiStore((s) => s.settingsOpen);
@@ -61,8 +67,11 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
   const { reauthenticate } = useApiAuth();
   const [aboutOpen, setAboutOpen] = useState(false);
   const [signOutOpen, setSignOutOpen] = useState(false);
+  const [withdrawOpen, setWithdrawOpen] = useState(false);
 
   const user = useAuthStore((s) => s.user);
+  const { data: withdrawals, isLoading: withdrawalsLoading, error: withdrawalsError } =
+    useWithdrawals();
   const [copied, setCopied] = useState(false);
 
   const closeAll = useCallback(() => {
@@ -164,7 +173,7 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
                   onClose();
                   router.push(ROUTES.recoveryLogin);
                 }}
-                className="flex w-full min-h-[56px] items-center gap-2 px-4 py-3.5 text-start active:bg-surface-2/60"
+                className={`flex w-full min-h-[56px] items-center gap-2 px-4 py-3.5 text-start ${NAV_ROW}`}
                 data-testid="settings-recovery-login"
               >
                 <span className="flex-1 text-sm font-medium leading-snug text-foreground">
@@ -193,7 +202,7 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
                   <button
                     type="button"
                     onClick={() => void onDisconnect()}
-                    className="w-full py-1.5 text-start text-sm font-medium text-danger active:opacity-80"
+                    className="w-full py-1.5 text-start text-sm font-medium text-danger active:scale-[0.97] transition-transform duration-[120ms] ease-out"
                     data-testid="settings-disconnect"
                   >
                     {t("disconnect")}
@@ -208,6 +217,18 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
             )}
           </Block>
         </section>
+
+        <WithdrawalAddressSection />
+
+        <WithdrawalRequestsSection
+          withdrawals={withdrawals}
+          loading={withdrawalsLoading}
+          error={withdrawalsError ? t("withdrawalsError") : null}
+          onRequest={() => {
+            haptics.selection();
+            setWithdrawOpen(true);
+          }}
+        />
 
         <section className="space-y-2">
           <SectionLabel className="px-0.5">{t("preferences")}</SectionLabel>
@@ -238,18 +259,18 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
         </section>
 
         <section className="space-y-2">
-          <SectionLabel className="px-0.5">Referrals</SectionLabel>
+          <SectionLabel className="px-0.5">{t("referrals")}</SectionLabel>
           <Block>
             <button
               type="button"
               onClick={() => void onInviteFriends()}
-              className="flex w-full min-h-[56px] items-center gap-2 px-4 py-3.5 text-start active:bg-surface-2/60 disabled:opacity-50 disabled:pointer-events-none"
+              className={`flex w-full min-h-[56px] items-center gap-2 px-4 py-3.5 text-start ${NAV_ROW} disabled:opacity-50 disabled:pointer-events-none`}
               data-testid="settings-invite-friends"
               disabled={!canInvite}
               aria-disabled={!canInvite}
             >
               <span className="flex-1 text-sm font-medium leading-snug text-foreground">
-                {copied ? "Copied!" : !user?.id ? "Sign in to invite" : "Invite friends"}
+                {copied ? t("copied") : !user?.id ? t("signInToInvite") : t("inviteFriends")}
               </span>
               {copied ? (
                 <Check size={20} strokeWidth={1.75} className="shrink-0 text-success" aria-hidden />
@@ -266,7 +287,7 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
             <button
               type="button"
               onClick={openHowItWorks}
-              className="flex w-full min-h-[56px] items-center gap-2 px-4 py-3.5 text-start active:bg-surface-2/60"
+              className={`flex w-full min-h-[56px] items-center gap-2 px-4 py-3.5 text-start ${NAV_ROW}`}
               data-testid="settings-how-it-works"
             >
               <span className="flex-1 text-sm font-medium leading-snug text-foreground">
@@ -285,7 +306,7 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
                 haptics.selection();
                 setAboutOpen(true);
               }}
-              className="flex w-full min-h-[56px] items-center gap-2 border-t border-border px-4 py-3.5 text-start active:bg-surface-2/60"
+              className={`flex w-full min-h-[56px] items-center gap-2 border-t border-border px-4 py-3.5 text-start ${NAV_ROW}`}
               data-testid="settings-about-legal"
             >
               <span className="flex-1 text-sm font-medium leading-snug text-foreground">
@@ -305,11 +326,11 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
                 closeAll();
                 router.push(ROUTES.transactions);
               }}
-              className="flex w-full min-h-[56px] items-center gap-2 border-t border-border px-4 py-3.5 text-start active:bg-surface-2/60"
+              className={`flex w-full min-h-[56px] items-center gap-2 border-t border-border px-4 py-3.5 text-start ${NAV_ROW}`}
               data-testid="settings-transaction-history"
             >
               <span className="flex-1 text-sm font-medium leading-snug text-foreground">
-                Transaction history
+                {t("transactionHistory")}
               </span>
               <ChevronRight
                 size={20}
@@ -330,7 +351,7 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
                 haptics.selection();
                 setSignOutOpen(true);
               }}
-              className="flex w-full min-h-[56px] items-center gap-2 px-4 py-3.5 text-start active:bg-surface-2/60"
+              className={`flex w-full min-h-[56px] items-center gap-2 px-4 py-3.5 text-start ${NAV_ROW}`}
               data-testid="settings-sign-out"
             >
               <span className="flex-1 text-sm font-medium leading-snug text-danger">
@@ -353,6 +374,10 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
         open={signOutOpen}
         onConfirm={onSignOut}
         onCancel={onSignOutCancel}
+      />
+      <WithdrawalRequestSheet
+        open={withdrawOpen}
+        onClose={() => setWithdrawOpen(false)}
       />
     </>
   );
@@ -391,7 +416,7 @@ function SignOutConfirmSheet({
           <button
             type="button"
             onClick={onCancel}
-            className="h-11 flex-1 rounded-[12px] bg-surface-2 text-sm font-medium text-foreground"
+            className="h-11 flex-1 rounded-[12px] bg-surface-2 text-sm font-medium text-foreground active:scale-[0.98] transition-transform duration-[120ms] ease-out"
             data-testid="sign-out-confirm-cancel"
           >
             {tp("cancel")}
@@ -399,7 +424,7 @@ function SignOutConfirmSheet({
           <button
             type="button"
             onClick={onConfirm}
-            className="h-11 flex-1 rounded-[12px] bg-primary text-sm font-semibold text-primary-foreground"
+            className="h-11 flex-1 rounded-[12px] bg-primary text-sm font-semibold text-primary-foreground active:scale-[0.98] transition-transform duration-[120ms] ease-out"
             data-testid="sign-out-confirm-submit"
           >
             {t("signOut")}

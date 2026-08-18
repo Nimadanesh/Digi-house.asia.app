@@ -1,6 +1,8 @@
-// File responsibility: TON address canonicalization (raw `workchain:hex` form) for on-chain verification.
-// No @ton/core dependency in the API — decodes friendly base64url addresses (CRC-checked) and normalizes
-// raw addresses. Pure functions only.
+// File responsibility: TON address helpers.
+// canonicalTonAddress — dependency-free raw `workchain:hex` canonicalization (CRC-checked) for
+// on-chain verification. isValidTonAddress — format validation for user-supplied addresses
+// (PE-01) via @ton/core (already an API dependency, used in routes/buys.ts).
+import { Address } from "@ton/core";
 
 const RAW_RE = /^(-?\d+):([0-9a-fA-F]{64})$/;
 
@@ -54,4 +56,19 @@ export function canonicalTonAddress(input: string): string | null {
   if (wcByte === undefined) return null;
   const wc = wcByte & 0x80 ? wcByte - 0x100 : wcByte;
   return `${wc}:${buf.subarray(2, 34).toString("hex")}`;
+}
+
+/**
+ * True when the string parses as a TON address in any supported form
+ * (user-friendly EQ/UQ… or raw 0:hex). Used for the USDT withdrawal address
+ * (PE-01) — the saved value is what the user typed, only its format is checked.
+ */
+export function isValidTonAddress(input: string): boolean {
+  if (!input) return false;
+  try {
+    Address.parse(input.trim());
+    return true;
+  } catch {
+    return false;
+  }
 }

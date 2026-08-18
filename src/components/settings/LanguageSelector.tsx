@@ -40,7 +40,7 @@ export function LanguageSelector() {
           haptics.selection();
           setOpen(true);
         }}
-        className="flex w-full min-h-[64px] items-center gap-2 px-4 py-3.5 text-start active:bg-surface-2/60"
+        className="flex w-full min-h-[64px] items-center gap-2 px-4 py-3.5 text-start active:bg-surface-2/60 active:scale-[0.98] transition-transform duration-[120ms] ease-out"
         data-testid="language-selector"
         aria-haspopup="dialog"
         aria-expanded={open}
@@ -130,7 +130,7 @@ function LangRow({
       onClick={onClick}
       data-testid={testId}
       className={cn(
-        "flex w-full min-h-[52px] items-center gap-3 border-t border-border px-4 text-start first:border-t-0 active:bg-surface-2/60",
+        "flex w-full min-h-[52px] items-center gap-3 border-t border-border px-4 text-start first:border-t-0 active:bg-surface-2/60 active:scale-[0.98] transition-transform duration-[120ms] ease-out",
         selected && "bg-primary/8",
       )}
     >

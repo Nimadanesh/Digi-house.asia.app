@@ -47,6 +47,11 @@ vi.mock("@/hooks/useRecoveryCode", () => ({
   }),
 }));
 
+vi.mock("@/hooks/useWithdrawals", () => ({
+  useWithdrawals: () => ({ data: [], isLoading: false, error: null }),
+  useRequestWithdrawal: () => ({ mutate: vi.fn(), isPending: false }),
+}));
+
 vi.mock("@/lib/telegram/chrome", () => ({
   safeBackButton: {
     show: () => backShow(),
@@ -79,6 +84,8 @@ describe("SettingsSheet", () => {
         displayName: "Test User",
         role: "investor",
         walletAddress: null,
+        withdrawalAddress: null,
+        withdrawalAddressVerified: false,
         onboarded: true,
         profileCompleted: true,
         useTelegramTheme: false,

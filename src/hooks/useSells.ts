@@ -1,0 +1,67 @@
+"use client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { getRepo } from "@/lib/api/getRepo";
+import { haptics } from "@/lib/telegram/haptics";
+
+/** Sell paths touch nearly every screen — invalidate the whole money graph. */
+function useInvalidateAfterSell() {
+  const qc = useQueryClient();
+  return () => {
+    void qc.invalidateQueries({ queryKey: ["portfolio"] });
+    void qc.invalidateQueries({ queryKey: ["locks"] });
+    void qc.invalidateQueries({ queryKey: ["meSummary"] });
+    void qc.invalidateQueries({ queryKey: ["marketplace"] });
+    void qc.invalidateQueries({ queryKey: ["property"] });
+    void qc.invalidateQueries({ queryKey: ["orderBook"] });
+    void qc.invalidateQueries({ queryKey: ["transactions"] });
+  };
+}
+
+export function useInstantSell() {
+  const invalidate = useInvalidateAfterSell();
+  return useMutation({
+    mutationFn: (input: { propertyId: string; shares: number }) =>
+      getRepo().sells.instant(input),
+    onSuccess: () => {
+      void haptics.notification("success");
+      invalidate();
+    },
+    onError: () => {
+      void haptics.notification("error");
+    },
+  });
+}
+
+export function usePlaceOrder() {
+  const invalidate = useInvalidateAfterSell();
+  return useMutation({
+    mutationFn: (input: {
+      propertyId: string;
+      side: "buy" | "sell";
+      priceUsd: number;
+      quantity: number;
+    }) => getRepo().orderBook.placeOrder(input),
+    onSuccess: () => {
+      void haptics.notification("success");
+      invalidate();
+    },
+    onError: () => {
+      void haptics.notification("error");
+    },
+  });
+}
+
+/** Cancel an open/queued order — buy escrow is refunded atomically (PD-08). */
+export function useCancelOrder() {
+  const invalidate = useInvalidateAfterSell();
+  return useMutation({
+    mutationFn: (orderId: string) => getRepo().orderBook.cancelOrder(orderId),
+    onSuccess: () => {
+      void haptics.notification("success");
+      invalidate();
+    },
+    onError: () => {
+      void haptics.notification("error");
+    },
+  });
+}

@@ -43,20 +43,27 @@ function BottomTabBarInner() {
               prefetch
               onClick={() => haptics.selection()}
               className={cn(
-                "relative flex h-[50px] flex-col items-center justify-center gap-1 rounded-[22px] transition-colors duration-150 ease-out active:scale-[0.97]",
+                "relative flex h-[50px] items-center justify-center rounded-[22px] transition-colors duration-150 ease-out active:scale-[0.97]",
                 active ? "text-primary" : "text-muted-foreground",
               )}
               aria-current={active ? "page" : undefined}
             >
-              {active ? (
-                <span
-                  className="absolute inset-x-1.5 top-1 h-[46px] rounded-[20px] bg-primary/12"
-                  aria-hidden
-                />
-              ) : null}
-              <Icon size={22} strokeWidth={active ? 2.25 : 1.75} className="relative z-[1]" />
-              <span className="relative z-[1] text-[10px] font-medium leading-none tracking-wide">
-                {t(labelKey)}
+              {/* Content wrapper: centers icon + label and gives the active pill a
+                  consistent, tight padding — an even 2px vertical margin to the tab
+                  item (46px pill inside the 50px tab) and an equal text-to-pill gap
+                  on every tab (fixes the longer "Marketplace" label touching it). */}
+              <span className="relative flex flex-col items-center gap-1 px-2.5 py-[5px]">
+                {active ? (
+                  <span
+                    className="absolute inset-0 rounded-[16px] bg-primary/12"
+                    aria-hidden
+                    data-testid="tab-active-pill"
+                  />
+                ) : null}
+                <Icon size={22} strokeWidth={active ? 2.25 : 1.75} className="relative z-[1]" />
+                <span className="relative z-[1] text-[10px] font-medium leading-none tracking-wide">
+                  {t(labelKey)}
+                </span>
               </span>
             </Link>
           );

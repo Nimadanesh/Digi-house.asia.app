@@ -61,6 +61,32 @@ describe("OrderBook — DESIGN_SYSTEM §'Order book'", () => {
     expect(row?.className).toMatch(/bg-accent(?!\/)/);
   });
 
+  it("renders a 'Last' price header when a last trade exists (PD-06)", () => {
+    render(<OrderBook state={state} />);
+    const last = screen.getByTestId("book-last-price");
+    expect(last).toHaveTextContent("Last");
+    expect(last).toHaveTextContent("$251.00");
+  });
+
+  it("omits the 'Last' header when there is no last trade yet", () => {
+    render(
+      <OrderBook
+        state={{ propertyId: "p2", bids: state.bids, asks: state.asks, bestBidUsd: 24500, bestAskUsd: 25800 }}
+      />,
+    );
+    expect(screen.queryByTestId("book-last-price")).not.toBeInTheDocument();
+  });
+
+  it("draws a depth bar behind each level (PD-06)", () => {
+    render(<OrderBook state={state} />);
+    // 4 levels × 1 bar each = 4 depth bars
+    expect(screen.getAllByTestId("depth-bar")).toHaveLength(4);
+    // bids use the success tint; asks use the danger tint
+    const bars = screen.getAllByTestId("depth-bar");
+    expect(bars[0]!.className).toMatch(/bg-success\/10/);
+    expect(bars[2]!.className).toMatch(/bg-danger\/10/);
+  });
+
   it("an empty order book renders the em-dash placeholder for each side", () => {
     render(<OrderBook state={{ propertyId: "p2", bids: [], asks: [] }} />);
     expect(screen.getAllByText("—").length).toBe(2);

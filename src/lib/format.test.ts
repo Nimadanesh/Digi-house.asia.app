@@ -1,7 +1,8 @@
 import { describe, expect, it, vi, afterEach } from "vitest";
 import {
-  usd, ton, shortAddr, pct, weekLabel, weeklyRent, projectedYield,
+  usd, usdCompact, ton, shortAddr, pct, weekLabel, weeklyRent, projectedYield,
   annualYieldRatio, annualFromWeekly, payoutCountdown, payoutCountdownLong, payoutCountdownDhms,
+  timeAgo,
 } from "@/lib/format";
 
 describe("format", () => {
@@ -9,6 +10,16 @@ describe("format", () => {
     expect(usd(12500)).toBe("$125.00");
     expect(usd(0)).toBe("$0.00");
     expect(usd(5)).toBe("$0.05");
+  });
+
+  it("usdCompact uses K/M suffixes for large amounts", () => {
+    expect(usdCompact(8_000)).toBe("$80");
+    expect(usdCompact(50_000)).toBe("$500");
+    expect(usdCompact(2_000_000)).toBe("$20K");
+    expect(usdCompact(150_000)).toBe("$1.5K");
+    expect(usdCompact(1_500_000)).toBe("$15K");
+    expect(usdCompact(500_000_000)).toBe("$5M");
+    expect(usdCompact(1_000_000_000)).toBe("$10M");
   });
 
   it("ton formats nanoTON as decimal TON, 2–4 fractional digits", () => {
@@ -30,6 +41,14 @@ describe("format", () => {
 
   it("weekLabel renders 'Mon D' from an ISO Monday", () => {
     expect(weekLabel("2026-07-20")).toBe("Jul 20");
+  });
+
+  it("timeAgo renders short relative time", () => {
+    const now = Date.UTC(2026, 6, 26, 12, 0, 0);
+    expect(timeAgo(new Date(now - 30_000).toISOString(), now)).toBe("just now");
+    expect(timeAgo(new Date(now - 5 * 60_000).toISOString(), now)).toBe("5m ago");
+    expect(timeAgo(new Date(now - 2 * 3_600_000).toISOString(), now)).toBe("2h ago");
+    expect(timeAgo(new Date(now - 3 * 86_400_000).toISOString(), now)).toBe("3d ago");
   });
 
   it("weeklyRent floors annual rent / 52 to integer cents", () => {

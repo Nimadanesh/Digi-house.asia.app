@@ -1,204 +1,498 @@
 {
+
   "common": {
+
     "appName": "دیجی‌هاوس",
+
     "buyShare": "خرید سهم",
+
     "browseMarketplace": "مشاهده بازار",
+
     "viewAll": "مشاهده همه",
+
     "refresh": "بازنشانی",
+
     "clearFilters": "پاک کردن فیلترها",
+
     "tryAgain": "تلاش دوباره",
+
     "retry": "تلاش مجدد",
+
     "skip": "رد شدن",
+
     "continue": "ادامه",
+
     "getStarted": "شروع کنید",
+
     "settings": "تنظیمات",
+
     "connectWallet": "اتصال کیف پول",
+
     "walletConnected": "کیف پول متصل است",
+
     "disconnectWallet": "قطع اتصال کیف پول",
+
     "share": "سهم",
+
     "shares": "سهم",
+
     "of": "از",
+
     "from": "از",
+
     "est": "تقریبی",
+
     "apy": "بازده سالانه",
+
     "pending": "در انتظار",
+
     "paid": "پرداخت‌شده",
+
     "hot": "داغ",
+
     "new": "جدید",
+
     "soldPct": "{pct}٪ فروخته‌شده",
+
     "week": "هفته",
+
     "weeks": "هفته",
+
     "demoMode": "حالت دمو · داده آزمایشی · تراکنش‌ها شبیه‌سازی‌شده",
+
     "somethingWentWrong": "مشکلی پیش آمد"
+
   },
+
   "tabs": {
+
     "home": "خانه",
+
     "marketplace": "بازار",
+
     "earnings": "درآمد",
+
     "portfolio": "سبد"
+
   },
+
   "header": {
+
     "greeting": "سلام، {name}"
+
   },
+
   "onboarding": {
+
     "skip": "رد شدن",
+
     "continue": "ادامه",
+
     "getStarted": "شروع کنید",
+
     "slideProgress": "{current} / {total}",
+
     "slideAria": "اسلاید {n}",
+
     "own": {
+
       "headline": "مالک بخشی از یک ملک واقعی شوید",
+
       "subtitle": "از حدود ۸۰ دلار شروع کنید"
+
     },
+
     "yield": {
+
       "headline": "هر هفته سهم اجاره خود را دریافت کنید",
+
       "subtitle": "هر جمعه سهم خود را در بخش درآمد ببینید"
+
     },
+
     "sell": {
+
       "headline": "هر زمان خواستید بفروشید",
+
       "subtitle": "وقتی آماده خروج بودید، سهم‌ها را در بازار دیجی‌هاوس فهرست کنید."
+
     }
+
   },
+
   "home": {
+
     "loadError": "بارگذاری خانه ممکن نشد.",
+
     "portfolioValue": "ارزش سبد",
+
     "totalInvested": "کل سرمایه‌گذاری",
+
     "totalEarningsReceived": "کل درآمد دریافتی",
+
     "nextPayout": "پرداخت بعدی",
+
     "myProperties": "املاک من",
+
     "myPropertiesCount": "املاک من ({count})",
+
     "buyFirstShare": "اولین سهم خود را بخرید",
+
     "buyFirstShareHint": "بخشی را مالک شوید — هر جمعه اجاره پیش‌بینی‌شده دریافت کنید.",
+
     "todaysHighlight": "برجسته امروز",
+
     "hotThisWeek": "داغ این هفته",
+
     "weeklyPerShare": "هفتگی / سهم",
+
     "pendingThisWeek": "{amount} در انتظار این هفته"
+
   },
+
   "marketplace": {
+
     "searchPlaceholder": "جستجوی املاک",
+
     "searchAria": "جستجوی املاک",
+
     "clearSearch": "پاک کردن جستجو",
+
     "filtersAria": "فیلترهای بازار",
+
     "loadError": "بارگذاری املاک ممکن نشد.",
+
     "emptyTitle": "هنوز ملکی نیست",
+
     "emptyMessage": "فهرست‌های کسری جدید هر هفته اضافه می‌شوند — به‌زودی سر بزنید.",
+
     "noMatchesTitle": "موردی یافت نشد",
+
     "noMatchesMessage": "جستجو یا فیلتر دیگری را امتحان کنید.",
+
     "chips": {
+
       "all": "همه",
+
+      "primary": "اولیه",
+
+      "secondary": "ثانویه",
+
       "highest_yield": "بیشترین بازده",
+
       "new": "جدید",
+
       "almost_sold": "تقریباً فروخته",
+
       "low_price": "قیمت پایین"
+
     },
+
     "pricePerShare": "قیمت / سهم",
+
     "weeklyPerShare": "هفتگی / سهم",
+
     "minPurchase": "حداقل خرید",
-    "sharesSold": "{sold} از {total} سهم فروخته‌شده"
+
+    "sharesSold": "{sold} از {total} سهم فروخته‌شده",
+
+    "feesTitle": "کارمزد",
+
+    "feesPerTx": "سطح کارمزد بر اساس مبلغ هر تراکنش تعیین می‌شود — بدون سقف خرید یا فروش.",
+
+    "feesRange": "مبلغ",
+
+    "feesBuyPrimary": "خرید · عرضه",
+
+    "feesBuyMarket": "خرید · بازار",
+
+    "feesSellMarket": "فروش · بازار",
+
+    "feesInstantSell": "فروش آنی (عرضه اولیه)",
+
+    "feesInstantNote": "در مرحله عرضه اولیه ثابت است؛ معاملات ثانویه از سطح بازار استفاده می‌کنند.",
+
+    "feesNoCap": "هیچ سقفی برای مبلغ خرید یا فروش وجود ندارد.",
+
+    "lastPrice": "آخرین قیمت"
+
   },
+
   "property": {
+
     "buyShare": "خرید سهم",
+
     "about": "درباره",
+
     "metrics": "شاخص‌ها",
+
     "trust": "اعتماد و شفافیت",
+
     "rentalHistory": "سابقه اجاره",
+
     "incomeCalculator": "ماشین‌حساب درآمد",
+
     "salesProgress": "پیشرفت فروش",
+
     "gallery": "گالری"
+
   },
+
   "earnings": {
+
     "loadError": "بارگذاری درآمد ممکن نشد.",
+
     "emptyTitle": "هنوز درآمدی ندارید",
+
     "emptyMessage": "اولین سهم را بخرید و از هفته بعد درآمد کسب کنید.",
+
     "thisWeek": "درآمد این هفته",
+
     "nextPayoutIn": "پرداخت بعدی تا",
+
     "totalReceived": "کل درآمد دریافتی",
+
     "consecutivePaid": "هفته‌های پرداخت متوالی",
+
     "streak": "{count} {unit} پشت سر هم ✓",
+
     "noStreak": "هنوز رگباری نیست",
+
     "timeline": "تاریخچه",
-    "disclaimer": "پرداخت هفتگی شبیه‌سازی‌شده · قابل تأیید روی زنجیره پس از MVP"
+
+    "disclaimer": "پرداخت هفتگی شبیه‌سازی‌شده · قابل تأیید روی زنجیره پس از MVP",
+
+    "yieldTitle": "سود سهام قفل‌شده",
+
+    "yieldAccrued": "سود پرداخت‌نشده",
+
+    "yieldMonthly": "ماهانه",
+
+    "yieldWeekly": "هفتگی",
+
+    "yieldNoLocks": "قفل فعالی ندارید — برای شروع کسب سود، سهام را در صفحه ملک قفل کنید.",
+
+    "yieldPayments": "پرداخت‌های سود",
+
+    "yieldFinal": "پرداخت پایانی"
+
   },
+
   "portfolio": {
+
     "loadError": "بارگذاری سبد ممکن نشد.",
+
     "emptyTitle": "سبد شما خالی است",
+
     "emptyMessage": "از حدود ۸۰ دلار شروع کنید — اولین سهم را در بازار بخرید.",
+
     "totalValue": "کل ارزش سبد",
+
     "totalInvested": "کل سرمایه‌گذاری",
+
     "totalEarningsReceived": "کل درآمد دریافتی",
+
     "unrealizedProfit": "سود تحقق‌نیافته",
+
     "nextPayout": "پرداخت بعدی",
+
     "myPropertiesCount": "املاک من ({count})",
+
     "openOrders": "سفارش‌های باز",
-    "allocation": "تخصیص"
+
+    "allocation": "تخصیص",
+
+    "lockedShares": "سهام قفل‌شده",
+
+    "freeShares": "سهام آزاد",
+
+    "orderQueued": "در صف"
+
   },
+
   "settings": {
+
     "title": "تنظیمات",
+
     "wallet": "کیف پول",
+
     "connectTitle": "اتصال کیف پول TON",
+
     "connectHint": "برای خرید سهم و دریافت بازده هفتگی لازم است.",
+
     "disconnect": "قطع اتصال کیف پول",
+
+    "withdrawals": "برداشت‌ها",
+
+    "withdrawalTitle": "آدرس برداشت USDT",
+
+    "withdrawalHint": "جایی که موجودی قابل برداشت شما پرداخت می‌شود",
+
+    "withdrawalPlaceholder": "EQ… آدرس USDT-TON",
+
+    "withdrawalEmpty": "آدرسی تنظیم نشده",
+
+    "withdrawalVerified": "تأیید شده",
+
+    "withdrawalUnverified": "تأیید نشده",
+
+    "withdrawalInvalid": "یک آدرس TON معتبر وارد کنید",
+
+    "withdrawalSave": "ذخیره",
+
+    "withdrawalCancel": "انصراف",
+
+    "withdrawalRequests": "درخواست‌های برداشت",
+
+    "withdrawalRequestsEmpty": "هنوز درخواست برداشتی وجود ندارد",
+
+    "withdrawalStatusPaid": "پرداخت شده",
+
+    "withdrawalStatusRequested": "درخواست شده",
+
+    "withdrawalStatusApproved": "تأیید شده",
+
+    "withdrawalStatusRejected": "رد شده",
+
+    "withdrawalRequest": "درخواست برداشت",
+    "withdrawalsError": "بارگذاری درخواست‌های برداشت ممکن نشد",
+
+    "referrals": "معرفی",
+
+    "inviteFriends": "دعوت از دوستان",
+
+    "copied": "کپی شد!",
+
+    "signInToInvite": "برای دعوت وارد شوید",
+
+
     "preferences": "ترجیحات",
+
     "displayCurrency": "ارز نمایش",
+
     "displayCurrencyHint": "ارقام به دلار می‌مانند؛ تخمین TON هنگام خرید",
+
     "language": "زبان",
+
     "languageHint": "زبان برنامه",
+
     "languageAuto": "خودکار (تلگرام)",
+
     "useTelegramTheme": "Dark / Light",
+
     "useTelegramThemeHint": "هماهنگ با رنگ‌های تلگرام",
+
     "showDemoBadge": "نمایش نشان دمو",
+
     "showDemoBadgeHint": "برچسب صادقانه MVP",
+
     "help": "راهنما",
+
     "howItWorks": "دیجی‌هاوس چگونه کار می‌کند",
+    "transactionHistory": "تاریخچه تراکنش‌ها",
+
+
     "aboutLegal": "درباره / حقوقی",
+
     "aboutBody": "دیجی‌هاوس یک مینی‌اپ تلگرام برای سهام کسری املاک روی TON است. بازده اجاره هفتگی متناسب با مالکیت شما نمایش داده می‌شود.",
+
     "aboutAdvice": "هیچ‌چیز اینجا مشاوره مالی نیست. اسناد ملک و افشای توکن‌سازی تا زمان قراردادهای تولید، نمایشی هستند.",
+
     "aboutCopyright": "© دیجی‌هاوس · MVP",
+
     "demoTxDisclaimer": "این یک دمو است – تراکنش‌ها شبیه‌سازی می‌شوند",
+
     "payoutDisclaimer": "پرداخت هفتگی شبیه‌سازی‌شده · قابل تأیید روی زنجیره پس از MVP",
+
     "chooseLanguage": "انتخاب زبان",
+
     "account": "حساب",
+
     "recoverySignIn": "ورود با کد بازیابی",
+
     "signOut": "خروج از حساب",
+
     "signOutConfirmTitle": "خروج از حساب؟",
+
     "signOutConfirmBody": "آیا می‌خواهید از حساب خارج شوید؟"
+
   },
+
   "profile": {
+
     "title": "پروفایل خود را تکمیل کنید",
+
     "subtitle": "چند جزئیات برای شناسایی حساب شما.",
+
     "settingsSection": "پروفایل",
+
     "displayName": "نام نمایشی",
+
     "displayNamePlaceholder": "نام شما",
+
     "phone": "تلفن",
+
     "phonePlaceholder": "+98 9XX XXX XXXX",
+
     "phoneHint": "اختیاری. فقط برای پشتیبانی حساب.",
+
     "phoneEmpty": "شماره تلفنی ثبت نشده",
+
     "useTelegramPhone": "استفاده از شماره تلگرام",
+
     "requestingPhone": "در حال درخواست…",
+
     "recoveryTitle": "کد بازیابی",
+
     "recoveryWarn": "این کد را در جایی امن ذخیره کنید. اگر تلگرام در دسترس نباشد برای ورود به آن نیاز دارید. ما نمی‌توانیم آن را بازیابی کنیم.",
+
     "recoverySettingsHint": "این کد را محرمانه نگه دارید. هر کسی که آن را داشته باشد می‌تواند به حساب DigiHouse شما دسترسی پیدا کند.",
+
     "copyCode": "کپی کد بازیابی",
+
     "showCode": "نمایش کد بازیابی",
+
     "hideCode": "مخفی کردن کد بازیابی",
+
     "savedConfirm": "کد بازیابی را در جایی امن ذخیره کردم",
+
     "saveContinue": "ذخیره و ادامه",
+
     "saving": "در حال ذخیره…",
+
     "save": "ذخیره",
+
     "cancel": "لغو",
+
     "errors": {
+
       "name": "نامی وارد کنید (حداقل ۲ نویسه)",
+
       "phone": "شماره تلفن معتبر وارد کنید",
+
       "saveCode": "تأیید کنید که کد بازیابی را ذخیره کرده‌اید",
+
       "save": "ذخیره پروفایل ممکن نشد"
+
     }
+
   },
+
   "recovery": {
+
     "title": "ورود با کد بازیابی",
+
     "subtitle": "از کدی که هنگام ساخت پروفایل ذخیره کردید استفاده کنید.",
+
     "codeLabel": "کد بازیابی",
+
     "signIn": "ورود",
+
     "signingIn": "در حال ورود…",
+
     "backHome": "بازگشت به خانه"
+
   }
+
 }
+

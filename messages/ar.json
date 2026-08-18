@@ -1,204 +1,498 @@
 {
+
   "common": {
+
     "appName": "ديجي هاوس",
+
     "buyShare": "شراء حصة",
+
     "browseMarketplace": "تصفح السوق",
+
     "viewAll": "عرض الكل",
+
     "refresh": "تحديث",
+
     "clearFilters": "مسح الفلاتر",
+
     "tryAgain": "حاول مجددًا",
+
     "retry": "إعادة المحاولة",
+
     "skip": "تخطّي",
+
     "continue": "متابعة",
+
     "getStarted": "ابدأ",
+
     "settings": "الإعدادات",
+
     "connectWallet": "ربط المحفظة",
+
     "walletConnected": "المحفظة متصلة",
+
     "disconnectWallet": "فصل المحفظة",
+
     "share": "حصة",
+
     "shares": "حصص",
+
     "of": "من",
+
     "from": "من",
+
     "est": "تقديري",
+
     "apy": "عائد سنوي",
+
     "pending": "قيد الانتظار",
+
     "paid": "مدفوع",
+
     "hot": "رائج",
+
     "new": "جديد",
+
     "soldPct": "{pct}% مباع",
+
     "week": "أسبوع",
+
     "weeks": "أسابيع",
+
     "demoMode": "وضع تجريبي · بيانات وهمية · معاملات محاكاة",
+
     "somethingWentWrong": "حدث خطأ ما"
+
   },
+
   "tabs": {
+
     "home": "الرئيسية",
+
     "marketplace": "السوق",
+
     "earnings": "الأرباح",
+
     "portfolio": "المحفظة"
+
   },
+
   "header": {
+
     "greeting": "مرحبًا، {name}"
+
   },
+
   "onboarding": {
+
     "skip": "تخطّي",
+
     "continue": "متابعة",
+
     "getStarted": "ابدأ",
+
     "slideProgress": "{current} / {total}",
+
     "slideAria": "الشريحة {n}",
+
     "own": {
+
       "headline": "كن مالكًا لجزء من عقار حقيقي",
+
       "subtitle": "ابدأ من حوالي 80 دولارًا"
+
     },
+
     "yield": {
+
       "headline": "احصل على حصتك من الإيجار كل أسبوع",
+
       "subtitle": "شاهد حصتك كل جمعة في الأرباح"
+
     },
+
     "sell": {
+
       "headline": "بِع في أي وقت تشاء",
+
       "subtitle": "اعرض الحصص في سوق ديجي هاوس عندما تكون مستعدًا للخروج."
+
     }
+
   },
+
   "home": {
+
     "loadError": "تعذّر تحميل الصفحة الرئيسية.",
+
     "portfolioValue": "قيمة المحفظة",
+
     "totalInvested": "إجمالي الاستثمار",
+
     "totalEarningsReceived": "إجمالي الأرباح المستلمة",
+
     "nextPayout": "الدفعة التالية",
+
     "myProperties": "عقاراتي",
+
     "myPropertiesCount": "عقاراتي ({count})",
+
     "buyFirstShare": "اشترِ حصتك الأولى",
+
     "buyFirstShareHint": "امتلك جزءًا — اربح إيجارًا متوقعًا كل جمعة.",
+
     "todaysHighlight": "أبرز اليوم",
+
     "hotThisWeek": "رائج هذا الأسبوع",
+
     "weeklyPerShare": "أسبوعي / حصة",
+
     "pendingThisWeek": "{amount} قيد الانتظار هذا الأسبوع"
+
   },
+
   "marketplace": {
+
     "searchPlaceholder": "البحث عن عقارات",
+
     "searchAria": "البحث عن عقارات",
+
     "clearSearch": "مسح البحث",
+
     "filtersAria": "فلاتر السوق",
+
     "loadError": "تعذّر تحميل العقارات.",
+
     "emptyTitle": "لا عقارات بعد",
+
     "emptyMessage": "تُضاف قوائم جزئية جديدة كل أسبوع — عُد قريبًا.",
+
     "noMatchesTitle": "لا نتائج",
+
     "noMatchesMessage": "جرّب بحثًا أو فلترًا آخر.",
+
     "chips": {
+
       "all": "الكل",
+
+      "primary": "أساسي",
+
+      "secondary": "ثانوي",
+
       "highest_yield": "أعلى عائد",
+
       "new": "جديد",
+
       "almost_sold": "شبه مباع",
+
       "low_price": "سعر منخفض"
+
     },
+
     "pricePerShare": "السعر / حصة",
+
     "weeklyPerShare": "أسبوعي / حصة",
+
     "minPurchase": "الحد الأدنى",
-    "sharesSold": "{sold} من {total} حصة مباعة"
+
+    "sharesSold": "{sold} من {total} حصة مباعة",
+
+    "feesTitle": "العمولة",
+
+    "feesPerTx": "تُحدَّد الفئة حسب مبلغ كل معاملة — دون حد للشراء أو البيع.",
+
+    "feesRange": "المبلغ",
+
+    "feesBuyPrimary": "شراء · أولي",
+
+    "feesBuyMarket": "شراء · السوق",
+
+    "feesSellMarket": "بيع · السوق",
+
+    "feesInstantSell": "بيع فوري (الطرح)",
+
+    "feesInstantNote": "رسوم ثابتة أثناء الطرح الأولي؛ تداولات السوق الثانوية تستخدم فئة السوق.",
+
+    "feesNoCap": "لا حدود لمبالغ الشراء أو البيع.",
+
+    "lastPrice": "آخر سعر"
+
   },
+
   "property": {
+
     "buyShare": "شراء حصة",
+
     "about": "حول",
+
     "metrics": "المؤشرات",
+
     "trust": "الثقة والشفافية",
+
     "rentalHistory": "سجل الإيجار",
+
     "incomeCalculator": "حاسبة الدخل",
+
     "salesProgress": "تقدّم البيع",
+
     "gallery": "المعرض"
+
   },
+
   "earnings": {
+
     "loadError": "تعذّر تحميل الأرباح.",
+
     "emptyTitle": "لم تربح بعد",
+
     "emptyMessage": "اشترِ حصتك الأولى وابدأ الربح الأسبوع القادم.",
+
     "thisWeek": "أرباح هذا الأسبوع",
+
     "nextPayoutIn": "الدفعة التالية خلال",
+
     "totalReceived": "إجمالي الأرباح المستلمة",
+
     "consecutivePaid": "أسابيع مدفوعة متتالية",
+
     "streak": "{count} {unit} متتالية ✓",
+
     "noStreak": "لا سلسلة بعد",
+
     "timeline": "السجل",
-    "disclaimer": "دفعة أسبوعية محاكاة · قابلة للتحقق على السلسلة بعد MVP"
+
+    "disclaimer": "دفعة أسبوعية محاكاة · قابلة للتحقق على السلسلة بعد MVP",
+
+    "yieldTitle": "عائد الأسهم المقفلة",
+
+    "yieldAccrued": "مستحق غير مدفوع",
+
+    "yieldMonthly": "شهريًا",
+
+    "yieldWeekly": "أسبوعيًا",
+
+    "yieldNoLocks": "لا توجد أقفال نشطة — أقفل الأسهم في صفحة العقار لبدء الكسب.",
+
+    "yieldPayments": "مدفوعات العائد",
+
+    "yieldFinal": "دفعة نهائية"
+
   },
+
   "portfolio": {
+
     "loadError": "تعذّر تحميل محفظتك.",
+
     "emptyTitle": "محفظتك فارغة",
+
     "emptyMessage": "ابدأ من حوالي 80 دولارًا — اشترِ حصتك الأولى من السوق.",
+
     "totalValue": "إجمالي قيمة المحفظة",
+
     "totalInvested": "إجمالي الاستثمار",
+
     "totalEarningsReceived": "إجمالي الأرباح المستلمة",
+
     "unrealizedProfit": "ربح غير محقق",
+
     "nextPayout": "الدفعة التالية",
+
     "myPropertiesCount": "عقاراتي ({count})",
+
     "openOrders": "أوامر مفتوحة",
-    "allocation": "التوزيع"
+
+    "allocation": "التوزيع",
+
+    "lockedShares": "أسهم مقفلة",
+
+    "freeShares": "أسهم متاحة",
+
+    "orderQueued": "في الانتظار"
+
   },
+
   "settings": {
+
     "title": "الإعدادات",
+
     "wallet": "المحفظة",
+
     "connectTitle": "اربط محفظة TON",
+
     "connectHint": "مطلوب لشراء الحصص واستلام العائد الأسبوعي.",
+
     "disconnect": "فصل المحفظة",
+
+    "withdrawals": "السحوبات",
+
+    "withdrawalTitle": "عنوان سحب USDT",
+
+    "withdrawalHint": "حيث يتم دفع رصيدك القابل للسحب",
+
+    "withdrawalPlaceholder": "EQ… عنوان USDT-TON",
+
+    "withdrawalEmpty": "لم يتم تعيين عنوان",
+
+    "withdrawalVerified": "تم التحقق",
+
+    "withdrawalUnverified": "غير مُتحقق",
+
+    "withdrawalInvalid": "أدخل عنوان TON صالحًا",
+
+    "withdrawalSave": "حفظ",
+
+    "withdrawalCancel": "إلغاء",
+
+    "withdrawalRequests": "طلبات السحب",
+
+    "withdrawalRequestsEmpty": "لا توجد طلبات سحب بعد",
+
+    "withdrawalStatusPaid": "مدفوع",
+
+    "withdrawalStatusRequested": "قيد الطلب",
+
+    "withdrawalStatusApproved": "تمت الموافقة",
+
+    "withdrawalStatusRejected": "مرفوض",
+
+    "withdrawalRequest": "طلب سحب",
+    "withdrawalsError": "تعذر تحميل طلبات السحب",
+
+    "referrals": "الإحالات",
+
+    "inviteFriends": "دعوة الأصدقاء",
+
+    "copied": "تم النسخ!",
+
+    "signInToInvite": "سجّل الدخول للدعوة",
+
+
     "preferences": "التفضيلات",
+
     "displayCurrency": "عملة العرض",
+
     "displayCurrencyHint": "الأرقام بالدولار؛ تقديرات TON عند الشراء",
+
     "language": "اللغة",
+
     "languageHint": "لغة التطبيق",
+
     "languageAuto": "تلقائي (تيليجرام)",
+
     "useTelegramTheme": "Dark / Light",
+
     "useTelegramThemeHint": "مطابقة ألوان تيليجرام",
+
     "showDemoBadge": "إظهار شارة التجريبي",
+
     "showDemoBadgeHint": "تسمية MVP صادقة عائمة",
+
     "help": "مساعدة",
+
     "howItWorks": "كيف يعمل ديجي هاوس",
+    "transactionHistory": "سجل المعاملات",
+
+
     "aboutLegal": "حول / قانوني",
+
     "aboutBody": "ديجي هاوس تطبيق تيليجرام مصغّر لحصص عقارية جزئية على TON. يُعرض عائد الإيجار الأسبوعي بنسبة ملكيتك.",
+
     "aboutAdvice": "لا شيء هنا نصيحة مالية. مستندات العقار والإفصاحات للعرض حتى تُطلق عقود الإنتاج.",
+
     "aboutCopyright": "© ديجي هاوس · MVP",
+
     "demoTxDisclaimer": "هذا عرض تجريبي – المعاملات محاكاة",
+
     "payoutDisclaimer": "دفعة أسبوعية محاكاة · قابلة للتحقق على السلسلة بعد MVP",
+
     "chooseLanguage": "اختر اللغة",
+
     "account": "الحساب",
+
     "recoverySignIn": "تسجيل الدخول برمز الاسترداد",
+
     "signOut": "تسجيل الخروج",
+
     "signOutConfirmTitle": "تسجيل الخروج؟",
+
     "signOutConfirmBody": "هل تريد تسجيل الخروج؟"
+
   },
+
   "profile": {
+
     "title": "أكمل ملفك الشخصي",
+
     "subtitle": "بعض التفاصيل لتعريف حسابك.",
+
     "settingsSection": "الملف الشخصي",
+
     "displayName": "الاسم المعروض",
+
     "displayNamePlaceholder": "اسمك",
+
     "phone": "الهاتف",
+
     "phonePlaceholder": "+966 5X XXX XXXX",
+
     "phoneHint": "اختياري. يُستخدم فقط لدعم الحساب.",
+
     "phoneEmpty": "لا يوجد رقم هاتف",
+
     "useTelegramPhone": "استخدام رقم تيليجرام",
+
     "requestingPhone": "جارٍ الطلب…",
+
     "recoveryTitle": "رمز الاسترداد",
+
     "recoveryWarn": "احفظ هذا الرمز في مكان آمن. ستحتاجه لتسجيل الدخول إذا لم يتوفر تيليجرام. لا يمكننا استعادته لك.",
+
     "recoverySettingsHint": "أبقِ هذا الرمز خاصًا. أي شخص يملكه يمكنه الوصول إلى حسابك في DigiHouse.",
+
     "copyCode": "نسخ رمز الاسترداد",
+
     "showCode": "إظهار رمز الاسترداد",
+
     "hideCode": "إخفاء رمز الاسترداد",
+
     "savedConfirm": "لقد حفظت رمز الاسترداد في مكان آمن",
+
     "saveContinue": "حفظ ومتابعة",
+
     "saving": "جارٍ الحفظ…",
+
     "save": "حفظ",
+
     "cancel": "إلغاء",
+
     "errors": {
+
       "name": "أدخل اسمًا (حرفان على الأقل)",
+
       "phone": "أدخل رقم هاتف صالحًا",
+
       "saveCode": "أكد أنك حفظت رمز الاسترداد",
+
       "save": "تعذّر حفظ الملف الشخصي"
+
     }
+
   },
+
   "recovery": {
+
     "title": "تسجيل الدخول برمز الاسترداد",
+
     "subtitle": "استخدم الرمز الذي حفظته عند إعداد ملفك الشخصي.",
+
     "codeLabel": "رمز الاسترداد",
+
     "signIn": "تسجيل الدخول",
+
     "signingIn": "جارٍ تسجيل الدخول…",
+
     "backHome": "العودة للرئيسية"
+
   }
+
 }
+

@@ -140,7 +140,7 @@ export function ProfileSetupForm() {
               type="button"
               onClick={() => void onUseTelegramPhone()}
               disabled={requesting}
-              className="w-full py-2 text-sm font-medium text-primary active:opacity-80 disabled:opacity-50"
+              className="w-full py-2 text-sm font-medium text-primary active:scale-[0.97] transition-transform duration-[120ms] ease-out disabled:opacity-50"
               data-testid="profile-tg-phone"
             >
               {requesting ? t("requestingPhone") : t("useTelegramPhone")}

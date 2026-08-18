@@ -1,16 +1,20 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTransactions } from "@/hooks/useTransactions";
 import { useTelegram } from "@/hooks/useTelegram";
 import { TransactionList } from "@/components/transactions/TransactionList";
+import { TransactionFilterChips } from "@/components/transactions/TransactionFilterChips";
+import { filterTransactions, type TransactionChip } from "@/lib/transaction-filter";
 import { haptics } from "@/lib/telegram/haptics";
 
 export default function TransactionsPage() {
   const router = useRouter();
   const { transactions, isLoading, isError, error, hasMore, loadMore, refetch } = useTransactions();
   const { backButton } = useTelegram();
+  const [chip, setChip] = useState<TransactionChip>("all");
+  const filtered = filterTransactions(transactions, chip);
 
   useEffect(() => {
     try {
@@ -36,8 +40,13 @@ export default function TransactionsPage() {
 
   return (
     <div className="space-y-4 pb-6">
+      <TransactionFilterChips
+        value={chip}
+        onChange={setChip}
+        onSelectHaptic={() => haptics.selection()}
+      />
       <TransactionList
-        transactions={transactions}
+        transactions={filtered}
         isLoading={isLoading}
         isError={isError}
         error={error}

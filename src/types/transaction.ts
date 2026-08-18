@@ -1,4 +1,13 @@
-export type TxKind = "buy" | "sell" | "earnings" | "withdraw";
+export type TxKind =
+  | "buy"
+  | "sell"
+  | "earnings"
+  | "withdraw"
+  | "instant_sell"
+  | "trade_buy"
+  | "trade_sell"
+  | "yield_monthly"
+  | "yield_weekly";
 export type TxStatus = "pending" | "success" | "failed";
 
 export interface Transaction {
@@ -15,4 +24,6 @@ export interface Transaction {
   createdAt: string;
   propertyTitle?: string;
   propertyImage?: string;
+  /** Platform commission, integer cents (§0.5) — present on instant sells & secondary trades. */
+  feeUsd?: number;
 }

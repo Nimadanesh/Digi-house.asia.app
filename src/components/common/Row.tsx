@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 export function Row({ className, children, onClick }: { className?: string; children: React.ReactNode; onClick?: () => void }) {
   return (
     <div
-      className={cn("flex min-h-[48px] items-center gap-2 mx-4 border-t border-border first:border-t-0", onClick ? "cursor-pointer active:opacity-60" : "", className)}
+      className={cn("flex min-h-[48px] items-center gap-2 mx-4 border-t border-border first:border-t-0", onClick ? "cursor-pointer active:scale-[0.97] transition-transform duration-[120ms] ease-out" : "", className)}
       onClick={onClick}
       role={onClick ? "button" : undefined}
       tabIndex={onClick ? 0 : undefined}

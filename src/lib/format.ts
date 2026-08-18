@@ -8,6 +8,25 @@ export function usd(minor: number): string {
   })}`;
 }
 
+/**
+ * Compact money for tables/chips: $80, $500, $2K, $1.5K, $500K, $10M.
+ * Integer cents in; drops decimals, uses K/M suffixes above $1,000.
+ */
+export function usdCompact(minor: number): string {
+  const dollars = minor / 100;
+  if (dollars < 1_000) return `$${Math.round(dollars)}`;
+  if (dollars < 1_000_000) {
+    const k = dollars / 1_000;
+    return `$${trimZero(k.toFixed(k < 100 ? 1 : 0))}K`;
+  }
+  const m = dollars / 1_000_000;
+  return `$${trimZero(m.toFixed(m < 100 ? 1 : 0))}M`;
+}
+
+function trimZero(s: string): string {
+  return s.endsWith(".0") ? s.slice(0, -2) : s;
+}
+
 export function ton(nano: bigint): string {
   const n = Number(nano) / 1e9;
   const fixed = n.toLocaleString(undefined, {
@@ -31,6 +50,20 @@ export function pct(ratio: number): string {
 
 export function weekLabel(isoMonday: string): string {
   return new Date(isoMonday).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+}
+
+/**
+ * Short relative time for recent-trades rows: "just now" / "5m ago" / "2h ago" / "3d ago".
+ * `nowMs` injected for purity/tests.
+ */
+export function timeAgo(iso: string, nowMs: number = Date.now()): string {
+  const diffMs = Math.max(0, nowMs - new Date(iso).getTime());
+  const minutes = Math.floor(diffMs / 60_000);
+  if (minutes < 1) return "just now";
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  return `${Math.floor(hours / 24)}d ago`;
 }
 
 /** floor(annualRentUsdCents / 52) — integer minor units. */

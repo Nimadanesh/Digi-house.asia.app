@@ -60,4 +60,30 @@ export {
   type PropertyDocumentRow,
   type NewPropertyDocumentRow,
 } from "./property-documents.js";
+export { balances, type BalanceRow, type NewBalanceRow } from "./balances.js";
+export { feeTiers, type FeeTierRow, type NewFeeTierRow } from "./fee-tiers.js";
+export {
+  shareLocks,
+  yieldAccruals,
+  yieldPayments,
+  type ShareLockRow,
+  type NewShareLockRow,
+  type YieldAccrualRow,
+  type NewYieldAccrualRow,
+  type YieldPaymentRow,
+  type NewYieldPaymentRow,
+  type LockStatus,
+  type PayoutPeriod,
+} from "./share-locks.js";
+export {
+  instantSells,
+  type InstantSellRow,
+  type NewInstantSellRow,
+} from "./instant-sells.js";
+export { trades, type TradeRow, type NewTradeRow } from "./trades.js";
+export {
+  withdrawals,
+  type WithdrawalRow,
+  type NewWithdrawalRow,
+} from "./withdrawals.js";
 

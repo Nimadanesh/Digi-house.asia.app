@@ -7,7 +7,7 @@ export function AboutLegalSheet({ open, onClose }: { open: boolean; onClose: () 
   const t = useTranslations("settings");
 
   return (
-    <Sheet open={open} onClose={onClose} labelledBy="about-legal-title" className="max-h-[85svh] overflow-y-auto">
+    <Sheet open={open} onClose={onClose} labelledBy="about-legal-title" className="max-h-[85svh]">
       <div className="space-y-4 pb-4" data-testid="about-legal-sheet">
         <h2 id="about-legal-title" className="text-[1.0625rem] font-semibold leading-snug text-foreground">
           {t("aboutLegal")}

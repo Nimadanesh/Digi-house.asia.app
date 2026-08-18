@@ -8,10 +8,11 @@ import { PropertyHero } from "./PropertyHero";
 import { SalesProgress } from "./SalesProgress";
 import { PropertyMetricsGrid } from "./PropertyMetricsGrid";
 import { IncomeCalculator } from "./IncomeCalculator";
+import { YieldLockSection } from "./YieldLockSection";
 import { PropertyAbout } from "./PropertyAbout";
 import { PropertyTrust } from "./PropertyTrust";
 import { RentalHistory } from "./RentalHistory";
-import { OrderBook } from "./OrderBook";
+import { TradeSection } from "./TradeSection";
 import { PropertyDocumentsList } from "@/components/documents/PropertyDocumentsList";
 import type { DocumentMeta } from "@/types/property-document";
 
@@ -42,12 +43,18 @@ export function PropertyDetail({
       <SalesProgress listing={listing} />
       {/* Fable §Metrics */}
       <PropertyMetricsGrid listing={listing} />
+      {/* PRODUCT-PLAN §0.1/§0.3 — secondary market (resale/funded only) */}
+      {listing.status === "resale" || listing.status === "funded" ? (
+        <TradeSection listing={listing} orderBook={orderBook} />
+      ) : null}
       {/* Fable §Income calculator */}
       <IncomeCalculator
         listing={listing}
         shares={previewShares}
         onSharesChange={onPreviewSharesChange}
       />
+      {/* PRODUCT-PLAN §0.4 — yield + share locking */}
+      <YieldLockSection listing={listing} />
       {/* Fable §About */}
       <PropertyAbout listing={listing} />
       {/* Fable §Trust */}
@@ -62,7 +69,6 @@ export function PropertyDetail({
           downloadingId={downloadingDocId}
         />
       ) : null}
-      {orderBook ? <OrderBook state={orderBook} /> : null}
     </div>
   );
 }

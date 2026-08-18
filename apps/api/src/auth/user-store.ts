@@ -20,6 +20,11 @@ export type UserStore = {
   findById(id: string): Promise<UserPublic | null>;
   markOnboarded(id: string): Promise<UserPublic | null>;
   updateProfile(id: string, input: UpdateProfileInput): Promise<UserPublic | null>;
+  /**
+   * Save/change the USDT withdrawal address (PE-01). Any change invalidates a
+   * previous verification — the flag is reset to false atomically.
+   */
+  updateWithdrawalAddress(id: string, address: string): Promise<UserPublic | null>;
   /** Owner-only: plaintext recovery code, ensuring one exists. */
   getRecoveryCode(id: string): Promise<string | null>;
   /** Lookup by recovery code for recovery login. */
@@ -136,6 +141,21 @@ export function createDbUserStore(db: Db): UserStore {
       return row ? toUserPublic(row) : null;
     },
 
+    async updateWithdrawalAddress(id, address) {
+      const now = new Date();
+      const rows = await db
+        .update(users)
+        .set({
+          withdrawalAddress: address,
+          withdrawalAddressVerified: false,
+          updatedAt: now,
+        })
+        .where(eq(users.id, id))
+        .returning();
+      const row = rows[0];
+      return row ? toUserPublic(row) : null;
+    },
+
     async getRecoveryCode(id) {
       await this.ensureRecoveryCode(id);
       const rows = await db
@@ -197,6 +217,8 @@ function blankRow(partial: Partial<UserRow> & Pick<UserRow, "id" | "displayName"
     photoUrl: partial.photoUrl ?? null,
     role: partial.role ?? "investor",
     walletAddress: partial.walletAddress ?? null,
+    withdrawalAddress: partial.withdrawalAddress ?? null,
+    withdrawalAddressVerified: partial.withdrawalAddressVerified ?? false,
     phone: partial.phone ?? null,
     recoveryCode: partial.recoveryCode ?? null,
     recoveryCodeCreatedAt: partial.recoveryCodeCreatedAt ?? null,
@@ -294,6 +316,18 @@ export function createMemoryUserStore(
             ? now
             : existing.profileCompletedAt,
         updatedAt: now,
+      });
+      map.set(id, updated);
+      return toUserPublic(updated);
+    },
+    async updateWithdrawalAddress(id, address) {
+      const existing = map.get(id);
+      if (!existing) return null;
+      const updated = blankRow({
+        ...existing,
+        withdrawalAddress: address,
+        withdrawalAddressVerified: false,
+        updatedAt: new Date(),
       });
       map.set(id, updated);
       return toUserPublic(updated);

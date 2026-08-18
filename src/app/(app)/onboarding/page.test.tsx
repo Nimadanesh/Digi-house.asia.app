@@ -141,6 +141,8 @@ describe("Onboarding page", () => {
         username: "demoinvestor",
         role: "investor",
         walletAddress: null,
+        withdrawalAddress: null,
+        withdrawalAddressVerified: false,
         onboarded: false,
         profileCompleted: false,
         useTelegramTheme: false,

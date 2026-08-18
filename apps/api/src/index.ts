@@ -10,6 +10,13 @@ import { createDbIntentStore } from "./buys/intent-store.js";
 import { createDbTxStore } from "./buys/tx-store.js";
 import { createDbAuditStore } from "./audit/audit-store.js";
 import { createDbDocumentStore } from "./marketplace/document-store.js";
+import { createDbFeeTierStore } from "./fees/fee-tier-store.js";
+import { createDbShareLockStore } from "./yield/lock-store.js";
+import { createDbYieldStore } from "./yield/yield-store.js";
+import { createDbBalanceStore } from "./money/balance-store.js";
+import { createDbInstantSellStore } from "./sells/instant-sell-store.js";
+import { createDbTradeStore } from "./orders/trade-store.js";
+import { createDbWithdrawalStore } from "./withdrawals/withdrawal-store.js";
 import { propertyDocuments } from "./db/schema/property-documents.js";
 import { SEED_DOCUMENTS } from "./db/seed/documents-data.js";
 import { loadEnv } from "./env.js";
@@ -27,6 +34,13 @@ let intents = null as ReturnType<typeof createDbIntentStore> | null;
 let transactions = null as ReturnType<typeof createDbTxStore> | null;
 let audit = null as ReturnType<typeof createDbAuditStore> | null;
 let documents = null as ReturnType<typeof createDbDocumentStore> | null;
+let feeTiers = null as ReturnType<typeof createDbFeeTierStore> | null;
+let shareLockStore = null as ReturnType<typeof createDbShareLockStore> | null;
+let yieldStore = null as ReturnType<typeof createDbYieldStore> | null;
+let balanceStore = null as ReturnType<typeof createDbBalanceStore> | null;
+let instantSellStore = null as ReturnType<typeof createDbInstantSellStore> | null;
+let tradeStore = null as ReturnType<typeof createDbTradeStore> | null;
+let withdrawalStore = null as ReturnType<typeof createDbWithdrawalStore> | null;
 if (env.DATABASE_URL) {
   try {
     const db = createDb(requireDatabaseUrl({ DATABASE_URL: env.DATABASE_URL }));
@@ -39,6 +53,13 @@ if (env.DATABASE_URL) {
     transactions = createDbTxStore(db);
     audit = createDbAuditStore(db);
     documents = createDbDocumentStore(db);
+    feeTiers = createDbFeeTierStore(db);
+    shareLockStore = createDbShareLockStore(db);
+    yieldStore = createDbYieldStore(db);
+    balanceStore = createDbBalanceStore(db);
+    instantSellStore = createDbInstantSellStore(db);
+    tradeStore = createDbTradeStore(db);
+    withdrawalStore = createDbWithdrawalStore(db);
     // Seed demo documents if table is empty
     if (env.NODE_ENV !== "production") {
       (async () => {
@@ -77,6 +98,14 @@ const app = createApp({
   intents,
   transactions,
   audit,
+  feeTiers,
+  locks: shareLockStore,
+  yields: yieldStore,
+  balances: balanceStore,
+  instantSells: instantSellStore,
+  trades: tradeStore,
+  withdrawals: withdrawalStore,
+  unlockMaturationMs: env.UNLOCK_MATURATION_MS,
   orderRateLimitMax: env.ORDER_RATE_LIMIT_MAX,
   orderRateLimitWindowMs: env.ORDER_RATE_LIMIT_WINDOW_MS,
 });

@@ -1,23 +1,23 @@
 "use client";
 // File responsibility: Marketplace listing card — Fable vertical card (image badges, 3 metrics, scarcity bar).
 // Whole-card tap → Property detail. Press scale 0.98. Flat block (no drop shadow).
+// Yield figures are rate-based (§0.4) via lib/property-yield — consistent with detail + buy sheet.
 import { memo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { MapPin, Flame } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
+import { usd, pct } from "@/lib/format";
 import {
-  usd,
-  weeklyRent,
-  projectedYield,
-  annualYieldRatio,
-  pct,
-} from "@/lib/format";
+  annualReturnRatio,
+  shareWeeklyYieldUsd,
+} from "@/lib/property-yield";
 import { ROUTES } from "@/lib/constants";
 import { listingStatusBadge } from "@/lib/marketplace-filter";
 import type { Listing } from "@/types/property";
 import { FundingBar } from "./FundingBar";
+import { FeeInfoButton } from "@/components/common/FeeInfoButton";
 
 function PropertyCardInner({
   listing,
@@ -85,11 +85,16 @@ function PropertyCardInner({
   }
 
   const cover = listing.images[0] ?? "/images/properties/p1.png";
-  const totalValue = listing.sharePriceUsd * listing.totalShares;
-  const apy = annualYieldRatio(listing.annualRentUsd, totalValue);
-  const weeklyPerShare = projectedYield(weeklyRent(listing.annualRentUsd), 1, listing.totalShares);
-  const minPurchase = listing.sharePriceUsd; // 1 share
+  const apy = annualReturnRatio(listing);
+  const weeklyPerShare = shareWeeklyYieldUsd(listing);
   const funded = listing.fundingProgressRatio >= 1;
+  // PD-07: on the secondary market the price is the latest executed trade, not the
+  // historical offering price. Fall back to the offering price before the first fill.
+  const secondary =
+    listing.status === "resale" || listing.status === "funded";
+  const displayPrice = secondary
+    ? (listing.lastTradeUsd ?? listing.sharePriceUsd)
+    : listing.sharePriceUsd;
   const clock = nowMs > 0 ? nowMs : Date.UTC(2026, 6, 26);
   const badge = listingStatusBadge(listing, clock);
 
@@ -137,6 +142,9 @@ function PropertyCardInner({
         >
           {pct(apy)} {tCommon("apy")}
         </span>
+        <span className="absolute bottom-2.5 end-2.5">
+          <FeeInfoButton variant="icon" />
+        </span>
       </div>
 
       <div className="p-4 space-y-3">
@@ -149,9 +157,12 @@ function PropertyCardInner({
         </div>
 
         <div className="grid grid-cols-3 gap-2" data-testid="card-metrics">
-          <Metric label={t("pricePerShare")} value={usd(listing.sharePriceUsd)} />
+          <Metric
+            label={secondary ? t("lastPrice") : t("pricePerShare")}
+            value={usd(displayPrice)}
+          />
           <Metric label={t("weeklyPerShare")} value={usd(weeklyPerShare)} accent />
-          <Metric label={t("minPurchase")} value={usd(minPurchase)} />
+          <Metric label={t("minPurchase")} value={usd(displayPrice)} />
         </div>
 
         <div className="space-y-1.5">

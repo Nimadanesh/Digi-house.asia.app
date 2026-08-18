@@ -1,0 +1,178 @@
+import { describe, expect, it } from "vitest";
+import { createMemoryPropertyStore } from "../marketplace/property-store.js";
+import { toPropertyInsert } from "../db/seed/map-property.js";
+import { SEED_PROPERTIES } from "../db/seed/properties-data.js";
+import { createMemoryHoldingStore } from "../portfolio/holding-store.js";
+import { createMemoryShareLockStore } from "../yield/lock-store.js";
+import { createMemoryOrderStore } from "../orders/order-store.js";
+import { createMemoryBalanceStore } from "../money/balance-store.js";
+import { createMemoryTxStore } from "../buys/tx-store.js";
+import { createMemoryInstantSellStore } from "./instant-sell-store.js";
+import {
+  settleInstantSell,
+  INSTANT_SELL_FEE_BPS,
+  type SettleInstantSellDeps,
+} from "./settle-instant-sell.js";
+
+const FUNDING = "prop-marina-vista-4b"; // funding, 2500 total, 2300 sold → 200 remaining
+const RESALE = "prop-tbilisi-riverhouse-loft";
+const USER = "user-a";
+
+function makeDeps() {
+  const deps: SettleInstantSellDeps = {
+    properties: createMemoryPropertyStore(SEED_PROPERTIES.map(toPropertyInsert)),
+    holdings: createMemoryHoldingStore(),
+    locks: createMemoryShareLockStore(),
+    orders: createMemoryOrderStore(),
+    balances: createMemoryBalanceStore(),
+    transactions: createMemoryTxStore(),
+    instantSells: createMemoryInstantSellStore(),
+  };
+  return {
+    deps,
+    holdings: deps.holdings as ReturnType<typeof createMemoryHoldingStore>,
+    locks: deps.locks as ReturnType<typeof createMemoryShareLockStore>,
+    orders: deps.orders as ReturnType<typeof createMemoryOrderStore>,
+    balances: deps.balances as ReturnType<typeof createMemoryBalanceStore>,
+    transactions: deps.transactions as ReturnType<typeof createMemoryTxStore>,
+    instantSells: deps.instantSells as ReturnType<typeof createMemoryInstantSellStore>,
+    properties: deps.properties as ReturnType<typeof createMemoryPropertyStore>,
+  };
+}
+
+async function seedHolding(deps: SettleInstantSellDeps, shares = 10) {
+  await deps.holdings.upsert({
+    userId: USER,
+    propertyId: FUNDING,
+    sharesOwned: shares,
+    avgCostUsd: 8_000,
+  });
+}
+
+describe("settleInstantSell", () => {
+  it("settles at list price − 7%, returns shares to supply, credits investing", async () => {
+    const d = makeDeps();
+    await seedHolding(d.deps, 10);
+    const before = (await d.properties.getById(FUNDING))!;
+
+    const r = await settleInstantSell(d.deps, {
+      userId: USER,
+      propertyId: FUNDING,
+      shares: 4,
+    });
+    expect(r.ok).toBe(true);
+    if (!r.ok) return;
+
+    // 4 × $80 = $320 gross → fee 7% = $22.40 → net $297.60
+    expect(r.record.grossUsd).toBe(32_000);
+    expect(r.record.feeUsd).toBe(2_240);
+    expect(r.record.netUsd).toBe(29_760);
+
+    // supply returned: sharesSold 2300 → 2296, remaining 200 → 204
+    expect(r.sharesRemaining).toBe(before.sharesRemaining + 4);
+    const after = (await d.properties.getById(FUNDING))!;
+    expect(after.sharesSold).toBe(2_296);
+    expect(after.status).toBe("funding"); // still primary — no phase change
+
+    const holding = await d.holdings.get(USER, FUNDING);
+    expect(holding?.sharesOwned).toBe(6);
+
+    const balance = await d.balances.get(USER);
+    expect(balance?.investingUsd).toBe(29_760);
+    expect(balance?.withdrawableUsd).toBe(0);
+
+    expect(d.transactions._rows).toHaveLength(1);
+    expect(d.transactions._rows[0]).toMatchObject({
+      kind: "instant_sell",
+      amountUsd: 29_760,
+      feeUsd: 2_240,
+      shares: 4,
+      status: "success",
+    });
+    expect(d.instantSells._rows).toHaveLength(1);
+  });
+
+  it("rejects on a resale property (one-way invariant, PC-05)", async () => {
+    const d = makeDeps();
+    await d.holdings.upsert({
+      userId: USER,
+      propertyId: RESALE,
+      sharesOwned: 5,
+      avgCostUsd: 12_000,
+    });
+    const r = await settleInstantSell(d.deps, {
+      userId: USER,
+      propertyId: RESALE,
+      shares: 1,
+    });
+    expect(r).toEqual({ ok: false, code: "invalid_phase" });
+  });
+
+  it("rejects when free shares are insufficient (locked shares don't count)", async () => {
+    const d = makeDeps();
+    await seedHolding(d.deps, 10);
+    await d.locks.create({
+      id: "lock-1",
+      userId: USER,
+      propertyId: FUNDING,
+      shares: 8,
+      principalUsd: 64_000,
+      payoutPeriod: "monthly",
+      monthlyRate: 7.19,
+      nextPayoutAt: new Date(Date.now() + 30 * 86_400_000),
+    });
+    const r = await settleInstantSell(d.deps, {
+      userId: USER,
+      propertyId: FUNDING,
+      shares: 5, // only 2 free
+    });
+    expect(r).toEqual({ ok: false, code: "insufficient_free_shares" });
+  });
+
+  it("escrowed sell-order shares don't count as free", async () => {
+    const d = makeDeps();
+    await seedHolding(d.deps, 10);
+    await d.orders.insert({
+      id: "ord-1",
+      userId: USER,
+      propertyId: FUNDING,
+      makerAddress: "EQ",
+      side: "sell",
+      priceUsd: 9_000,
+      quantity: 6,
+      status: "queued",
+    });
+    const r = await settleInstantSell(d.deps, {
+      userId: USER,
+      propertyId: FUNDING,
+      shares: 5, // only 4 free
+    });
+    expect(r).toEqual({ ok: false, code: "insufficient_free_shares" });
+  });
+
+  it("selling the whole holding deletes the zero-share row", async () => {
+    const d = makeDeps();
+    await seedHolding(d.deps, 10);
+    const r = await settleInstantSell(d.deps, {
+      userId: USER,
+      propertyId: FUNDING,
+      shares: 10,
+    });
+    expect(r.ok).toBe(true);
+    expect(await d.holdings.get(USER, FUNDING)).toBeNull();
+  });
+
+  it("flat 7% fee regardless of amount", async () => {
+    expect(INSTANT_SELL_FEE_BPS).toBe(700);
+    const d = makeDeps();
+    await seedHolding(d.deps, 100);
+    const r = await settleInstantSell(d.deps, {
+      userId: USER,
+      propertyId: FUNDING,
+      shares: 100,
+    });
+    if (!r.ok) throw new Error("expected ok");
+    // $8,000 gross → $560 fee → same 7% ratio as the small case
+    expect(r.record.feeUsd / r.record.grossUsd).toBeCloseTo(0.07);
+  });
+});

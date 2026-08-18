@@ -27,7 +27,7 @@ export function RentalHistory({ listing }: { listing: Listing }) {
   }
   return (
     <div className="space-y-2" data-testid="rental-history">
-      <h2 className="px-1 text-[0.8125rem] font-medium text-muted-foreground">Rental payments</h2>
+      <h2 className="px-1 text-[0.9375rem] font-semibold text-foreground">Rental payments</h2>
       <Block>
         {rows.map((row) => (
           <Row key={row.id}>

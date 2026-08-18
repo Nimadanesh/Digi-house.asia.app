@@ -25,26 +25,23 @@ function ladder(
 }
 
 // Order book levels for the 2 funded + 2 resale properties (funding -> empty).
-const fundedBooks: Record<string, { bids: OrderBookLevel[]; asks: OrderBookLevel[]; lastTradeUsd: number }> = {
+// lastTradeUsd comes from the property's own field (single source of truth, PD-07).
+const fundedBooks: Record<string, { bids: OrderBookLevel[]; asks: OrderBookLevel[] }> = {
   "prop-bayside-marina-penthouse": {
     bids: ladder(25100, "bid"),
     asks: ladder(25100, "ask"),
-    lastTradeUsd: 25100,
   },
   "prop-alfama-terrace-flat": {
     bids: ladder(10000, "bid"),
     asks: ladder(10000, "ask"),
-    lastTradeUsd: 10000,
   },
   "prop-tbilisi-riverhouse-loft": {
     bids: ladder(8000, "bid"),
     asks: ladder(8000, "ask"),
-    lastTradeUsd: 8000,
   },
   "prop-canggu-surf-villa": {
     bids: ladder(20000, "bid"),
     asks: ladder(20000, "ask"),
-    lastTradeUsd: 20000,
   },
 };
 
@@ -63,7 +60,7 @@ export const ORDER_BOOKS: OrderBookState[] = PROPERTIES.map((p) => {
     asks: book.asks,
     bestBidUsd: book.bids[0]?.priceUsd,
     bestAskUsd: book.asks[0]?.priceUsd,
-    lastTradeUsd: book.lastTradeUsd,
+    ...(p.lastTradeUsd ? { lastTradeUsd: p.lastTradeUsd } : {}),
   };
 });
 

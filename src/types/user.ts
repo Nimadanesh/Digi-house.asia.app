@@ -7,6 +7,9 @@ export interface UserProfile {
   photoUrl?: string;
   role: UserRole;
   walletAddress: string | null;
+  /** USDT withdrawal destination (PE-01); verified only after admin check. */
+  withdrawalAddress: string | null;
+  withdrawalAddressVerified: boolean;
   phone?: string;
   onboarded: boolean;
   /** Light profile (name/phone + recovery ack) finished. */

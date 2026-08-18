@@ -1,204 +1,498 @@
 {
+
   "common": {
+
     "appName": "DigiHouse",
+
     "buyShare": "Beli saham",
+
     "browseMarketplace": "Jelajahi pasar",
+
     "viewAll": "Lihat semua",
+
     "refresh": "Muat ulang",
+
     "clearFilters": "Hapus filter",
+
     "tryAgain": "Coba lagi",
+
     "retry": "Ulangi",
+
     "skip": "Lewati",
+
     "continue": "Lanjut",
+
     "getStarted": "Mulai",
+
     "settings": "Pengaturan",
+
     "connectWallet": "Hubungkan dompet",
+
     "walletConnected": "Dompet terhubung",
+
     "disconnectWallet": "Putuskan dompet",
+
     "share": "saham",
+
     "shares": "saham",
+
     "of": "dari",
+
     "from": "Dari",
+
     "est": "Perkir.",
+
     "apy": "APY",
+
     "pending": "Menunggu",
+
     "paid": "Dibayar",
+
     "hot": "Populer",
+
     "new": "Baru",
+
     "soldPct": "{pct}% terjual",
+
     "week": "minggu",
+
     "weeks": "minggu",
+
     "demoMode": "Mode demo · data contoh · transaksi disimulasikan",
+
     "somethingWentWrong": "Terjadi kesalahan"
+
   },
+
   "tabs": {
+
     "home": "Beranda",
+
     "marketplace": "Pasar",
+
     "earnings": "Pendapatan",
+
     "portfolio": "Portofolio"
+
   },
+
   "header": {
+
     "greeting": "Hai, {name}"
+
   },
+
   "onboarding": {
+
     "skip": "Lewati",
+
     "continue": "Lanjut",
+
     "getStarted": "Mulai",
+
     "slideProgress": "{current} / {total}",
+
     "slideAria": "Slide {n}",
+
     "own": {
+
       "headline": "Jadi pemilik properti nyata",
+
       "subtitle": "Mulai dari sekitar $80"
+
     },
+
     "yield": {
+
       "headline": "Terima bagian sewa setiap minggu",
+
       "subtitle": "Lihat bagianmu setiap Jumat di Pendapatan"
+
     },
+
     "sell": {
+
       "headline": "Jual kapan saja",
+
       "subtitle": "Cantumkan saham di pasar DigiHouse saat siap keluar."
+
     }
+
   },
+
   "home": {
+
     "loadError": "Tidak dapat memuat beranda.",
+
     "portfolioValue": "Nilai portofolio",
+
     "totalInvested": "Total investasi",
+
     "totalEarningsReceived": "Total pendapatan diterima",
+
     "nextPayout": "Pembayaran berikutnya",
+
     "myProperties": "Properti saya",
+
     "myPropertiesCount": "Properti saya ({count})",
+
     "buyFirstShare": "Beli saham pertamamu",
+
     "buyFirstShareHint": "Miliki sepotong — dapatkan sewa proyeksi setiap Jumat.",
+
     "todaysHighlight": "Sorotan hari ini",
+
     "hotThisWeek": "Populer minggu ini",
+
     "weeklyPerShare": "Mingguan / saham",
+
     "pendingThisWeek": "{amount} menunggu minggu ini"
+
   },
+
   "marketplace": {
+
     "searchPlaceholder": "Cari properti",
+
     "searchAria": "Cari properti",
+
     "clearSearch": "Hapus pencarian",
+
     "filtersAria": "Filter pasar",
+
     "loadError": "Tidak dapat memuat properti.",
+
     "emptyTitle": "Belum ada properti",
+
     "emptyMessage": "Listing fraksional baru setiap minggu — cek lagi nanti.",
+
     "noMatchesTitle": "Tidak ada hasil",
+
     "noMatchesMessage": "Coba pencarian atau filter lain.",
+
     "chips": {
+
       "all": "Semua",
+
+      "primary": "Primer",
+
+      "secondary": "Sekunder",
+
       "highest_yield": "Imbal hasil tertinggi",
+
       "new": "Baru",
+
       "almost_sold": "Hampir habis",
+
       "low_price": "Harga rendah"
+
     },
+
     "pricePerShare": "Harga / saham",
+
     "weeklyPerShare": "Mingguan / saham",
+
     "minPurchase": "Min. beli",
-    "sharesSold": "{sold} dari {total} saham terjual"
+
+    "sharesSold": "{sold} dari {total} saham terjual",
+
+    "feesTitle": "Komisi",
+
+    "feesPerTx": "Tingkat ditentukan oleh nilai setiap transaksi — tanpa batas.",
+
+    "feesRange": "Nilai",
+
+    "feesBuyPrimary": "Beli · Primer",
+
+    "feesBuyMarket": "Beli · Pasar",
+
+    "feesSellMarket": "Jual · Pasar",
+
+    "feesInstantSell": "Jual instan (primer)",
+
+    "feesInstantNote": "Biaya tetap saat penawaran primer; sekunder memakai tingkat pasar.",
+
+    "feesNoCap": "Tanpa batas nilai beli atau jual.",
+
+    "lastPrice": "Harga terakhir"
+
   },
+
   "property": {
+
     "buyShare": "Beli saham",
+
     "about": "Tentang",
+
     "metrics": "Metrik",
+
     "trust": "Kepercayaan & transparansi",
+
     "rentalHistory": "Riwayat sewa",
+
     "incomeCalculator": "Kalkulator pendapatan",
+
     "salesProgress": "Progres penjualan",
+
     "gallery": "Galeri"
+
   },
+
   "earnings": {
+
     "loadError": "Tidak dapat memuat pendapatan.",
+
     "emptyTitle": "Belum ada pendapatan",
+
     "emptyMessage": "Beli saham pertama dan mulai hasilkan minggu depan.",
+
     "thisWeek": "Pendapatan minggu ini",
+
     "nextPayoutIn": "Pembayaran berikutnya dalam",
+
     "totalReceived": "Total pendapatan diterima",
+
     "consecutivePaid": "Minggu dibayar beruntun",
+
     "streak": "{count} {unit} beruntun ✓",
+
     "noStreak": "Belum ada streak",
+
     "timeline": "Riwayat",
-    "disclaimer": "pembayaran mingguan simulasi · dapat diverifikasi on-chain pasca-MVP"
+
+    "disclaimer": "pembayaran mingguan simulasi · dapat diverifikasi on-chain pasca-MVP",
+
+    "yieldTitle": "Imbal saham terkunci",
+
+    "yieldAccrued": "Akrual belum dibayar",
+
+    "yieldMonthly": "Bulanan",
+
+    "yieldWeekly": "Mingguan",
+
+    "yieldNoLocks": "Tidak ada kunci aktif — kunci saham di halaman properti untuk mulai mendapat imbal.",
+
+    "yieldPayments": "Pembayaran imbal",
+
+    "yieldFinal": "Pembayaran akhir"
+
   },
+
   "portfolio": {
+
     "loadError": "Tidak dapat memuat portofolio.",
+
     "emptyTitle": "Portofoliomu kosong",
+
     "emptyMessage": "Mulai dari sekitar $80 — beli saham pertama di pasar.",
+
     "totalValue": "Total nilai portofolio",
+
     "totalInvested": "Total investasi",
+
     "totalEarningsReceived": "Total pendapatan diterima",
+
     "unrealizedProfit": "Laba belum terealisasi",
+
     "nextPayout": "Pembayaran berikutnya",
+
     "myPropertiesCount": "Properti saya ({count})",
+
     "openOrders": "Order terbuka",
-    "allocation": "Alokasi"
+
+    "allocation": "Alokasi",
+
+    "lockedShares": "Saham terkunci",
+
+    "freeShares": "Saham bebas",
+
+    "orderQueued": "Antre"
+
   },
+
   "settings": {
+
     "title": "Pengaturan",
+
     "wallet": "Dompet",
+
     "connectTitle": "Hubungkan dompet TON",
+
     "connectHint": "Diperlukan untuk membeli saham dan menerima imbal hasil mingguan.",
+
     "disconnect": "Putuskan dompet",
+
+    "withdrawals": "Penarikan",
+
+    "withdrawalTitle": "Alamat penarikan USDT",
+
+    "withdrawalHint": "Tempat saldo yang dapat ditarik dibayarkan",
+
+    "withdrawalPlaceholder": "EQ… alamat USDT-TON",
+
+    "withdrawalEmpty": "Belum ada alamat",
+
+    "withdrawalVerified": "Terverifikasi",
+
+    "withdrawalUnverified": "Belum terverifikasi",
+
+    "withdrawalInvalid": "Masukkan alamat TON yang valid",
+
+    "withdrawalSave": "Simpan",
+
+    "withdrawalCancel": "Batal",
+
+    "withdrawalRequests": "Permintaan penarikan",
+
+    "withdrawalRequestsEmpty": "Belum ada permintaan penarikan",
+
+    "withdrawalStatusPaid": "Dibayar",
+
+    "withdrawalStatusRequested": "Diminta",
+
+    "withdrawalStatusApproved": "Disetujui",
+
+    "withdrawalStatusRejected": "Ditolak",
+
+    "withdrawalRequest": "Minta penarikan",
+    "withdrawalsError": "Tidak dapat memuat permintaan penarikan",
+
+    "referrals": "Referensi",
+
+    "inviteFriends": "Undang teman",
+
+    "copied": "Tersalin!",
+
+    "signInToInvite": "Masuk untuk mengundang",
+
+
     "preferences": "Preferensi",
+
     "displayCurrency": "Mata uang tampilan",
+
     "displayCurrencyHint": "Angka tetap USD; estimasi TON saat beli",
+
     "language": "Bahasa",
+
     "languageHint": "Bahasa aplikasi",
+
     "languageAuto": "Otomatis (Telegram)",
+
     "chooseLanguage": "Pilih bahasa",
+
     "useTelegramTheme": "Dark / Light",
+
     "useTelegramThemeHint": "Sesuaikan warna Telegram",
+
     "showDemoBadge": "Tampilkan lencana Demo",
+
     "showDemoBadgeHint": "Label MVP jujur mengambang",
+
     "help": "Bantuan",
+
     "howItWorks": "Cara kerja DigiHouse",
+    "transactionHistory": "Riwayat transaksi",
+
+
     "aboutLegal": "Tentang / Legal",
+
     "aboutBody": "DigiHouse adalah Mini App Telegram untuk saham real estat fraksional di TON. Imbal hasil sewa mingguan ditampilkan proporsional dengan kepemilikanmu.",
+
     "aboutAdvice": "Tidak ada di sini yang merupakan nasihat keuangan. Dokumen properti dan tokenisasi bersifat demonstrasi hingga kontrak produksi.",
+
     "aboutCopyright": "© DigiHouse · MVP",
+
     "demoTxDisclaimer": "Ini demo – transaksi disimulasikan",
+
     "payoutDisclaimer": "pembayaran mingguan simulasi · dapat diverifikasi on-chain pasca-MVP",
+
     "account": "Akun",
+
     "recoverySignIn": "Masuk dengan kode pemulihan",
+
     "signOut": "Keluar",
+
     "signOutConfirmTitle": "Keluar?",
+
     "signOutConfirmBody": "Apakah Anda ingin keluar?"
+
   },
+
   "profile": {
+
     "title": "Lengkapi profil Anda",
+
     "subtitle": "Beberapa detail agar kami dapat mengidentifikasi akun Anda.",
+
     "settingsSection": "Profil",
+
     "displayName": "Nama tampilan",
+
     "displayNamePlaceholder": "Nama Anda",
+
     "phone": "Telepon",
+
     "phonePlaceholder": "+62 8XX XXXX XXXX",
+
     "phoneHint": "Opsional. Hanya untuk dukungan akun.",
+
     "phoneEmpty": "Belum ada nomor telepon",
+
     "useTelegramPhone": "Gunakan nomor Telegram",
+
     "requestingPhone": "Meminta…",
+
     "recoveryTitle": "Kode pemulihan",
+
     "recoveryWarn": "Simpan kode ini di tempat aman. Anda membutuhkannya untuk masuk jika Telegram tidak tersedia. Kami tidak dapat memulihkannya untuk Anda.",
+
     "recoverySettingsHint": "Jaga kerahasiaan kode ini. Siapa pun yang memilikinya dapat mengakses akun DigiHouse Anda.",
+
     "copyCode": "Salin kode pemulihan",
+
     "showCode": "Tampilkan kode pemulihan",
+
     "hideCode": "Sembunyikan kode pemulihan",
+
     "savedConfirm": "Saya telah menyimpan kode pemulihan di tempat aman",
+
     "saveContinue": "Simpan & lanjutkan",
+
     "saving": "Menyimpan…",
+
     "save": "Simpan",
+
     "cancel": "Batal",
+
     "errors": {
+
       "name": "Masukkan nama (minimal 2 karakter)",
+
       "phone": "Masukkan nomor telepon yang valid",
+
       "saveCode": "Konfirmasi Anda telah menyimpan kode pemulihan",
+
       "save": "Tidak dapat menyimpan profil"
+
     }
+
   },
+
   "recovery": {
+
     "title": "Masuk dengan kode pemulihan",
+
     "subtitle": "Gunakan kode yang Anda simpan saat menyiapkan profil.",
+
     "codeLabel": "Kode pemulihan",
+
     "signIn": "Masuk",
+
     "signingIn": "Sedang masuk…",
+
     "backHome": "Kembali ke beranda"
+
   }
+
 }
+

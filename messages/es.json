@@ -1,204 +1,498 @@
 {
+
   "common": {
+
     "appName": "DigiHouse",
+
     "buyShare": "Comprar participación",
+
     "browseMarketplace": "Explorar mercado",
+
     "viewAll": "Ver todo",
+
     "refresh": "Actualizar",
+
     "clearFilters": "Borrar filtros",
+
     "tryAgain": "Intentar de nuevo",
+
     "retry": "Reintentar",
+
     "skip": "Omitir",
+
     "continue": "Continuar",
+
     "getStarted": "Empezar",
+
     "settings": "Ajustes",
+
     "connectWallet": "Conectar billetera",
+
     "walletConnected": "Billetera conectada",
+
     "disconnectWallet": "Desconectar billetera",
+
     "share": "participación",
+
     "shares": "participaciones",
+
     "of": "de",
+
     "from": "Desde",
+
     "est": "Est.",
+
     "apy": "APY",
+
     "pending": "Pendiente",
+
     "paid": "Pagado",
+
     "hot": "Popular",
+
     "new": "Nuevo",
+
     "soldPct": "{pct}% vendido",
+
     "week": "semana",
+
     "weeks": "semanas",
+
     "demoMode": "Modo demo · datos de prueba · transacciones simuladas",
+
     "somethingWentWrong": "Algo salió mal"
+
   },
+
   "tabs": {
+
     "home": "Inicio",
+
     "marketplace": "Mercado",
+
     "earnings": "Ingresos",
+
     "portfolio": "Cartera"
+
   },
+
   "header": {
+
     "greeting": "Hola, {name}"
+
   },
+
   "onboarding": {
+
     "skip": "Omitir",
+
     "continue": "Continuar",
+
     "getStarted": "Empezar",
+
     "slideProgress": "{current} / {total}",
+
     "slideAria": "Diapositiva {n}",
+
     "own": {
+
       "headline": "Conviértete en dueño de un inmueble real",
+
       "subtitle": "Empieza desde unos 80 $"
+
     },
+
     "yield": {
+
       "headline": "Recibe tu parte del alquiler cada semana",
+
       "subtitle": "Mira tu parte cada viernes en Ingresos"
+
     },
+
     "sell": {
+
       "headline": "Vende cuando quieras",
+
       "subtitle": "Lista participaciones en el mercado DigiHouse cuando quieras salir."
+
     }
+
   },
+
   "home": {
+
     "loadError": "No se pudo cargar el inicio.",
+
     "portfolioValue": "Valor de la cartera",
+
     "totalInvested": "Total invertido",
+
     "totalEarningsReceived": "Ingresos totales recibidos",
+
     "nextPayout": "Próximo pago",
+
     "myProperties": "Mis propiedades",
+
     "myPropertiesCount": "Mis propiedades ({count})",
+
     "buyFirstShare": "Compra tu primera participación",
+
     "buyFirstShareHint": "Sé dueño de una parte — gana alquiler proyectado cada viernes.",
+
     "todaysHighlight": "Destacado de hoy",
+
     "hotThisWeek": "Popular esta semana",
+
     "weeklyPerShare": "Semanal / part.",
+
     "pendingThisWeek": "{amount} pendiente esta semana"
+
   },
+
   "marketplace": {
+
     "searchPlaceholder": "Buscar propiedades",
+
     "searchAria": "Buscar propiedades",
+
     "clearSearch": "Borrar búsqueda",
+
     "filtersAria": "Filtros del mercado",
+
     "loadError": "No se pudieron cargar las propiedades.",
+
     "emptyTitle": "Aún no hay propiedades",
+
     "emptyMessage": "Nuevas listas fraccionadas cada semana — vuelve pronto.",
+
     "noMatchesTitle": "Sin resultados",
+
     "noMatchesMessage": "Prueba otra búsqueda o filtro.",
+
     "chips": {
+
       "all": "Todas",
+
+      "primary": "Principal",
+
+      "secondary": "Secundario",
+
       "highest_yield": "Mayor rendimiento",
+
       "new": "Nuevas",
+
       "almost_sold": "Casi vendido",
+
       "low_price": "Precio bajo"
+
     },
+
     "pricePerShare": "Precio / part.",
+
     "weeklyPerShare": "Semanal / part.",
+
     "minPurchase": "Compra mín.",
-    "sharesSold": "{sold} de {total} participaciones vendidas"
+
+    "sharesSold": "{sold} de {total} participaciones vendidas",
+
+    "feesTitle": "Comisión",
+
+    "feesPerTx": "El nivel se define por el monto de cada transacción, sin límites.",
+
+    "feesRange": "Monto",
+
+    "feesBuyPrimary": "Compra · Primaria",
+
+    "feesBuyMarket": "Compra · Mercado",
+
+    "feesSellMarket": "Venta · Mercado",
+
+    "feesInstantSell": "Venta instantánea (primaria)",
+
+    "feesInstantNote": "Tarifa fija durante la oferta primaria; el mercado secundario usa el nivel de mercado.",
+
+    "feesNoCap": "Sin límites en los montos de compra o venta.",
+
+    "lastPrice": "Último precio"
+
   },
+
   "property": {
+
     "buyShare": "Comprar participación",
+
     "about": "Acerca de",
+
     "metrics": "Métricas",
+
     "trust": "Confianza y transparencia",
+
     "rentalHistory": "Historial de alquiler",
+
     "incomeCalculator": "Calculadora de ingresos",
+
     "salesProgress": "Progreso de venta",
+
     "gallery": "Galería"
+
   },
+
   "earnings": {
+
     "loadError": "No se pudieron cargar los ingresos.",
+
     "emptyTitle": "Aún no has ganado",
+
     "emptyMessage": "Compra tu primera participación y empieza a ganar la próxima semana.",
+
     "thisWeek": "Ingresos de esta semana",
+
     "nextPayoutIn": "Próximo pago en",
+
     "totalReceived": "Ingresos totales recibidos",
+
     "consecutivePaid": "Semanas pagadas seguidas",
+
     "streak": "{count} {unit} seguidas ✓",
+
     "noStreak": "Aún sin racha",
+
     "timeline": "Historial",
-    "disclaimer": "pago semanal simulado · verificable on-chain tras MVP"
+
+    "disclaimer": "pago semanal simulado · verificable on-chain tras MVP",
+
+    "yieldTitle": "Rendimiento de acciones bloqueadas",
+
+    "yieldAccrued": "Devengado pendiente",
+
+    "yieldMonthly": "Mensual",
+
+    "yieldWeekly": "Semanal",
+
+    "yieldNoLocks": "Sin bloqueos activos: bloquea acciones en la página de una propiedad para empezar a ganar.",
+
+    "yieldPayments": "Pagos de rendimiento",
+
+    "yieldFinal": "Pago final"
+
   },
+
   "portfolio": {
+
     "loadError": "No se pudo cargar tu cartera.",
+
     "emptyTitle": "Tu cartera está vacía",
+
     "emptyMessage": "Empieza desde unos 80 $ — compra tu primera participación en el mercado.",
+
     "totalValue": "Valor total de la cartera",
+
     "totalInvested": "Total invertido",
+
     "totalEarningsReceived": "Ingresos totales recibidos",
+
     "unrealizedProfit": "Ganancia no realizada",
+
     "nextPayout": "Próximo pago",
+
     "myPropertiesCount": "Mis propiedades ({count})",
+
     "openOrders": "Órdenes abiertas",
-    "allocation": "Asignación"
+
+    "allocation": "Asignación",
+
+    "lockedShares": "Acciones bloqueadas",
+
+    "freeShares": "Acciones libres",
+
+    "orderQueued": "En cola"
+
   },
+
   "settings": {
+
     "title": "Ajustes",
+
     "wallet": "Billetera",
+
     "connectTitle": "Conecta una billetera TON",
+
     "connectHint": "Necesaria para comprar participaciones y recibir rendimiento semanal.",
+
     "disconnect": "Desconectar billetera",
+
+    "withdrawals": "Retiros",
+
+    "withdrawalTitle": "Dirección de retiro USDT",
+
+    "withdrawalHint": "Donde se paga tu saldo retirable",
+
+    "withdrawalPlaceholder": "EQ… dirección USDT-TON",
+
+    "withdrawalEmpty": "Sin dirección configurada",
+
+    "withdrawalVerified": "Verificado",
+
+    "withdrawalUnverified": "Sin verificar",
+
+    "withdrawalInvalid": "Ingresa una dirección TON válida",
+
+    "withdrawalSave": "Guardar",
+
+    "withdrawalCancel": "Cancelar",
+
+    "withdrawalRequests": "Solicitudes de retiro",
+
+    "withdrawalRequestsEmpty": "Aún no hay solicitudes de retiro",
+
+    "withdrawalStatusPaid": "Pagado",
+
+    "withdrawalStatusRequested": "Solicitado",
+
+    "withdrawalStatusApproved": "Aprobado",
+
+    "withdrawalStatusRejected": "Rechazado",
+
+    "withdrawalRequest": "Solicitar retiro",
+    "withdrawalsError": "No se pudieron cargar las solicitudes de retiro",
+
+    "referrals": "Referidos",
+
+    "inviteFriends": "Invitar amigos",
+
+    "copied": "¡Copiado!",
+
+    "signInToInvite": "Inicia sesión para invitar",
+
+
     "preferences": "Preferencias",
+
     "displayCurrency": "Moneda de visualización",
+
     "displayCurrencyHint": "Las cifras siguen en USD; estimación TON al comprar",
+
     "language": "Idioma",
+
     "languageHint": "Idioma de la app",
+
     "languageAuto": "Auto (Telegram)",
+
     "chooseLanguage": "Elegir idioma",
+
     "useTelegramTheme": "Dark / Light",
+
     "useTelegramThemeHint": "Colores de Telegram",
+
     "showDemoBadge": "Mostrar insignia Demo",
+
     "showDemoBadgeHint": "Etiqueta MVP honesta flotante",
+
     "help": "Ayuda",
+
     "howItWorks": "Cómo funciona DigiHouse",
+    "transactionHistory": "Historial de transacciones",
+
+
     "aboutLegal": "Acerca de / Legal",
+
     "aboutBody": "DigiHouse es una Mini App de Telegram para participaciones inmobiliarias fraccionadas en TON. El rendimiento de alquiler semanal se muestra proporcional a tu propiedad.",
+
     "aboutAdvice": "Nada de esto es asesoramiento financiero. Documentos y tokenización son demostrativos hasta contratos de producción.",
+
     "aboutCopyright": "© DigiHouse · MVP",
+
     "demoTxDisclaimer": "Esto es una demo: las transacciones se simulan",
+
     "payoutDisclaimer": "pago semanal simulado · verificable on-chain tras MVP",
+
     "account": "Cuenta",
+
     "recoverySignIn": "Iniciar sesión con código de recuperación",
+
     "signOut": "Cerrar sesión",
+
     "signOutConfirmTitle": "¿Cerrar sesión?",
+
     "signOutConfirmBody": "¿Quieres cerrar sesión?"
+
   },
+
   "profile": {
+
     "title": "Completa tu perfil",
+
     "subtitle": "Algunos datos para identificar tu cuenta.",
+
     "settingsSection": "Perfil",
+
     "displayName": "Nombre visible",
+
     "displayNamePlaceholder": "Tu nombre",
+
     "phone": "Teléfono",
+
     "phonePlaceholder": "+34 600 000 000",
+
     "phoneHint": "Opcional. Solo para soporte de la cuenta.",
+
     "phoneEmpty": "Sin teléfono registrado",
+
     "useTelegramPhone": "Usar número de Telegram",
+
     "requestingPhone": "Solicitando…",
+
     "recoveryTitle": "Código de recuperación",
+
     "recoveryWarn": "Guarda este código en un lugar seguro. Lo necesitarás para iniciar sesión si Telegram no está disponible. No podemos recuperarlo por ti.",
+
     "recoverySettingsHint": "Mantén este código en privado. Cualquiera con él puede acceder a tu cuenta de DigiHouse.",
+
     "copyCode": "Copiar código de recuperación",
+
     "showCode": "Mostrar código de recuperación",
+
     "hideCode": "Ocultar código de recuperación",
+
     "savedConfirm": "Guardé mi código de recuperación en un lugar seguro",
+
     "saveContinue": "Guardar y continuar",
+
     "saving": "Guardando…",
+
     "save": "Guardar",
+
     "cancel": "Cancelar",
+
     "errors": {
+
       "name": "Introduce un nombre (al menos 2 caracteres)",
+
       "phone": "Introduce un teléfono válido",
+
       "saveCode": "Confirma que guardaste el código de recuperación",
+
       "save": "No se pudo guardar el perfil"
+
     }
+
   },
+
   "recovery": {
+
     "title": "Iniciar sesión con código de recuperación",
+
     "subtitle": "Usa el código que guardaste al configurar tu perfil.",
+
     "codeLabel": "Código de recuperación",
+
     "signIn": "Iniciar sesión",
+
     "signingIn": "Iniciando sesión…",
+
     "backHome": "Volver al inicio"
+
   }
+
 }
+

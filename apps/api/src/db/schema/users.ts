@@ -23,6 +23,11 @@ export const users = pgTable(
     photoUrl: text("photo_url"),
     role: text("role").notNull().default("investor"),
     walletAddress: text("wallet_address"),
+    /** USDT-TON payout destination (PE-01); verified flag resets on every change. */
+    withdrawalAddress: text("withdrawal_address"),
+    withdrawalAddressVerified: boolean("withdrawal_address_verified")
+      .notNull()
+      .default(false),
     phone: text("phone"),
     recoveryCode: text("recovery_code"),
     recoveryCodeCreatedAt: timestamp("recovery_code_created_at", {

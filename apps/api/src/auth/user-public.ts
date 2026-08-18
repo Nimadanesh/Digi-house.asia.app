@@ -8,6 +8,9 @@ export type UserPublic = {
   photoUrl?: string;
   role: "investor" | "owner";
   walletAddress: string | null;
+  /** USDT withdrawal destination; verified only after admin check (PE-01). */
+  withdrawalAddress: string | null;
+  withdrawalAddressVerified: boolean;
   phone?: string;
   onboarded: boolean;
   profileCompleted: boolean;
@@ -25,6 +28,8 @@ export function toUserPublic(row: UserRow): UserPublic {
     ...(row.photoUrl ? { photoUrl: row.photoUrl } : {}),
     role,
     walletAddress: row.walletAddress ?? null,
+    withdrawalAddress: row.withdrawalAddress ?? null,
+    withdrawalAddressVerified: row.withdrawalAddressVerified,
     ...(row.phone ? { phone: row.phone } : {}),
     onboarded: row.onboarded,
     profileCompleted: row.profileCompletedAt != null,

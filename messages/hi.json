@@ -1,204 +1,498 @@
 {
+
   "common": {
+
     "appName": "DigiHouse",
+
     "buyShare": "हिस्सा खरीदें",
+
     "browseMarketplace": "बाज़ार देखें",
+
     "viewAll": "सभी देखें",
+
     "refresh": "रिफ़्रेश",
+
     "clearFilters": "फ़िल्टर साफ़ करें",
+
     "tryAgain": "फिर कोशिश करें",
+
     "retry": "पुनः प्रयास",
+
     "skip": "छोड़ें",
+
     "continue": "आगे",
+
     "getStarted": "शुरू करें",
+
     "settings": "सेटिंग्स",
+
     "connectWallet": "वॉलेट जोड़ें",
+
     "walletConnected": "वॉलेट जुड़ा है",
+
     "disconnectWallet": "वॉलेट डिस्कनेक्ट करें",
+
     "share": "हिस्सा",
+
     "shares": "हिस्से",
+
     "of": "में से",
+
     "from": "से",
+
     "est": "अनु.",
+
     "apy": "वार्षिक प्रतिफल",
+
     "pending": "लंबित",
+
     "paid": "भुगतान",
+
     "hot": "हॉट",
+
     "new": "नया",
+
     "soldPct": "{pct}% बिका",
+
     "week": "सप्ताह",
+
     "weeks": "सप्ताह",
+
     "demoMode": "डेमो मोड · नमूना डेटा · लेन-देन सिमुलेटेड",
+
     "somethingWentWrong": "कुछ गलत हो गया"
+
   },
+
   "tabs": {
+
     "home": "होम",
+
     "marketplace": "बाज़ार",
+
     "earnings": "कमाई",
+
     "portfolio": "पोर्टफ़ोलियो"
+
   },
+
   "header": {
+
     "greeting": "नमस्ते, {name}"
+
   },
+
   "onboarding": {
+
     "skip": "छोड़ें",
+
     "continue": "आगे",
+
     "getStarted": "शुरू करें",
+
     "slideProgress": "{current} / {total}",
+
     "slideAria": "स्लाइड {n}",
+
     "own": {
+
       "headline": "वास्तविक संपत्ति के मालिक बनें",
+
       "subtitle": "लगभग $80 से शुरू करें"
+
     },
+
     "yield": {
+
       "headline": "हर सप्ताह किराए का अपना हिस्सा पाएँ",
+
       "subtitle": "हर शुक्रवार कमाई में अपना हिस्सा देखें"
+
     },
+
     "sell": {
+
       "headline": "जब चाहें बेचें",
+
       "subtitle": "बाहर निकलने के लिए तैयार हों तो DigiHouse बाज़ार पर हिस्से सूचीबद्ध करें।"
+
     }
+
   },
+
   "home": {
+
     "loadError": "होम लोड नहीं हो सका।",
+
     "portfolioValue": "पोर्टफ़ोलियो मूल्य",
+
     "totalInvested": "कुल निवेश",
+
     "totalEarningsReceived": "कुल प्राप्त कमाई",
+
     "nextPayout": "अगला भुगतान",
+
     "myProperties": "मेरी संपत्तियाँ",
+
     "myPropertiesCount": "मेरी संपत्तियाँ ({count})",
+
     "buyFirstShare": "अपना पहला हिस्सा खरीदें",
+
     "buyFirstShareHint": "एक टुकड़ा रखें — हर शुक्रवार अनुमानित किराया कमाएँ।",
+
     "todaysHighlight": "आज की खास",
+
     "hotThisWeek": "इस सप्ताह हॉट",
+
     "weeklyPerShare": "साप्ताहिक / हिस्सा",
+
     "pendingThisWeek": "इस सप्ताह {amount} लंबित"
+
   },
+
   "marketplace": {
+
     "searchPlaceholder": "संपत्ति खोजें",
+
     "searchAria": "संपत्ति खोजें",
+
     "clearSearch": "खोज साफ़ करें",
+
     "filtersAria": "बाज़ार फ़िल्टर",
+
     "loadError": "संपत्तियाँ लोड नहीं हो सकीं।",
+
     "emptyTitle": "अभी कोई संपत्ति नहीं",
+
     "emptyMessage": "हर सप्ताह नई आंशिक लिस्टिंग — जल्द फिर देखें।",
+
     "noMatchesTitle": "कोई मेल नहीं",
+
     "noMatchesMessage": "दूसरी खोज या फ़िल्टर आज़माएँ।",
+
     "chips": {
+
       "all": "सभी",
+
+      "primary": "प्राथमिक",
+
+      "secondary": "द्वितीयक",
+
       "highest_yield": "उच्चतम प्रतिफल",
+
       "new": "नया",
+
       "almost_sold": "लगभग बिका",
+
       "low_price": "कम कीमत"
+
     },
+
     "pricePerShare": "कीमत / हिस्सा",
+
     "weeklyPerShare": "साप्ताहिक / हिस्सा",
+
     "minPurchase": "न्यूनतम खरीद",
-    "sharesSold": "{sold} में से {total} हिस्से बिके"
+
+    "sharesSold": "{sold} में से {total} हिस्से बिके",
+
+    "feesTitle": "कमीशन",
+
+    "feesPerTx": "स्तर प्रत्येक लेनदेन राशि से तय होता है — कोई सीमा नहीं।",
+
+    "feesRange": "राशि",
+
+    "feesBuyPrimary": "खरीद · प्राइमरी",
+
+    "feesBuyMarket": "खरीद · बाज़ार",
+
+    "feesSellMarket": "बिक्री · बाज़ार",
+
+    "feesInstantSell": "तुरंत बिक्री (प्राइमरी)",
+
+    "feesInstantNote": "प्राइमरी चरण में निश्चित शुल्क; सेकेंडरी में मार्केट स्तर लागू।",
+
+    "feesNoCap": "खरीद या बिक्री राशि पर कोई सीमा नहीं।",
+
+    "lastPrice": "अंतिम मूल्य"
+
   },
+
   "property": {
+
     "buyShare": "हिस्सा खरीदें",
+
     "about": "परिचय",
+
     "metrics": "मेट्रिक्स",
+
     "trust": "विश्वास और पारदर्शिता",
+
     "rentalHistory": "किराया इतिहास",
+
     "incomeCalculator": "आय कैलकुलेटर",
+
     "salesProgress": "बिक्री प्रगति",
+
     "gallery": "गैलरी"
+
   },
+
   "earnings": {
+
     "loadError": "कमाई लोड नहीं हो सकी।",
+
     "emptyTitle": "अभी कमाई नहीं",
+
     "emptyMessage": "पहला हिस्सा खरीदें और अगले सप्ताह कमाना शुरू करें।",
+
     "thisWeek": "इस सप्ताह की कमाई",
+
     "nextPayoutIn": "अगला भुगतान",
+
     "totalReceived": "कुल प्राप्त कमाई",
+
     "consecutivePaid": "लगातार भुगतान सप्ताह",
+
     "streak": "लगातार {count} {unit} ✓",
+
     "noStreak": "अभी कोई स्ट्रीक नहीं",
+
     "timeline": "इतिहास",
-    "disclaimer": "सिमुलेटेड साप्ताहिक भुगतान · MVP के बाद ऑन-चेन सत्यापन योग्य"
+
+    "disclaimer": "सिमुलेटेड साप्ताहिक भुगतान · MVP के बाद ऑन-चेन सत्यापन योग्य",
+
+    "yieldTitle": "लॉक्ड शेयर यील्ड",
+
+    "yieldAccrued": "अर्जित अवैतनिक",
+
+    "yieldMonthly": "मासिक",
+
+    "yieldWeekly": "साप्ताहिक",
+
+    "yieldNoLocks": "कोई सक्रिय लॉक नहीं — कमाई शुरू करने के लिए प्रॉपर्टी पेज पर शेयर लॉक करें।",
+
+    "yieldPayments": "यील्ड भुगतान",
+
+    "yieldFinal": "अंतिम भुगतान"
+
   },
+
   "portfolio": {
+
     "loadError": "पोर्टफ़ोलियो लोड नहीं हो सका।",
+
     "emptyTitle": "आपका पोर्टफ़ोलियो खाली है",
+
     "emptyMessage": "लगभग $80 से शुरू करें — बाज़ार पर पहला हिस्सा खरीदें।",
+
     "totalValue": "कुल पोर्टफ़ोलियो मूल्य",
+
     "totalInvested": "कुल निवेश",
+
     "totalEarningsReceived": "कुल प्राप्त कमाई",
+
     "unrealizedProfit": "अवास्तविक लाभ",
+
     "nextPayout": "अगला भुगतान",
+
     "myPropertiesCount": "मेरी संपत्तियाँ ({count})",
+
     "openOrders": "खुले ऑर्डर",
-    "allocation": "आवंटन"
+
+    "allocation": "आवंटन",
+
+    "lockedShares": "लॉक्ड शेयर",
+
+    "freeShares": "फ्री शेयर",
+
+    "orderQueued": "कतार में"
+
   },
+
   "settings": {
+
     "title": "सेटिंग्स",
+
     "wallet": "वॉलेट",
+
     "connectTitle": "TON वॉलेट जोड़ें",
+
     "connectHint": "हिस्से खरीदने और साप्ताहिक प्रतिफल पाने के लिए आवश्यक।",
+
     "disconnect": "वॉलेट डिस्कनेक्ट करें",
+
+    "withdrawals": "निकासी",
+
+    "withdrawalTitle": "USDT निकासी पता",
+
+    "withdrawalHint": "जहाँ आपकी निकासी योग्य शेष राशि का भुगतान किया जाता है",
+
+    "withdrawalPlaceholder": "EQ… USDT-TON पता",
+
+    "withdrawalEmpty": "कोई पता सेट नहीं",
+
+    "withdrawalVerified": "सत्यापित",
+
+    "withdrawalUnverified": "सत्यापित नहीं",
+
+    "withdrawalInvalid": "मान्य TON पता दर्ज करें",
+
+    "withdrawalSave": "सहेजें",
+
+    "withdrawalCancel": "रद्द करें",
+
+    "withdrawalRequests": "निकासी अनुरोध",
+
+    "withdrawalRequestsEmpty": "अभी तक कोई निकासी अनुरोध नहीं",
+
+    "withdrawalStatusPaid": "भुगतान किया गया",
+
+    "withdrawalStatusRequested": "अनुरोधित",
+
+    "withdrawalStatusApproved": "स्वीकृत",
+
+    "withdrawalStatusRejected": "अस्वीकृत",
+
+    "withdrawalRequest": "निकासी का अनुरोध करें",
+    "withdrawalsError": "निकासी अनुरोध लोड नहीं हो सके",
+
+    "referrals": "रेफ़रल",
+
+    "inviteFriends": "मित्रों को आमंत्रित करें",
+
+    "copied": "कॉपी हो गया!",
+
+    "signInToInvite": "आमंत्रित करने के लिए साइन इन करें",
+
+
     "preferences": "प्राथमिकताएँ",
+
     "displayCurrency": "प्रदर्शन मुद्रा",
+
     "displayCurrencyHint": "आंकड़े USD में रहते हैं; खरीद पर TON अनुमान",
+
     "language": "भाषा",
+
     "languageHint": "ऐप भाषा",
+
     "languageAuto": "ऑटो (Telegram)",
+
     "chooseLanguage": "भाषा चुनें",
+
     "useTelegramTheme": "Dark / Light",
+
     "useTelegramThemeHint": "Telegram रंगों से मिलाएँ",
+
     "showDemoBadge": "डेमो बैज दिखाएँ",
+
     "showDemoBadgeHint": "ईमानदार MVP लेबल",
+
     "help": "मदद",
+
     "howItWorks": "DigiHouse कैसे काम करता है",
+    "transactionHistory": "लेन-देन इतिहास",
+
+
     "aboutLegal": "परिचय / कानूनी",
+
     "aboutBody": "DigiHouse TON पर आंशिक रियल-एस्टेट हिस्सों के लिए एक Telegram मिनी ऐप है। साप्ताहिक किराया प्रतिफल आपके स्वामित्व के अनुपात में दिखाया जाता है।",
+
     "aboutAdvice": "यहाँ कुछ भी वित्तीय सलाह नहीं है। संपत्ति दस्तावेज़ और टोकनाइज़ेशन प्रोडक्शन कॉन्ट्रैक्ट तक प्रदर्शन के लिए हैं।",
+
     "aboutCopyright": "© DigiHouse · MVP",
+
     "demoTxDisclaimer": "यह एक डेमो है – लेन-देन सिमुलेटेड हैं",
+
     "payoutDisclaimer": "सिमुलेटेड साप्ताहिक भुगतान · MVP के बाद ऑन-चेन सत्यापन योग्य",
+
     "account": "खाता",
+
     "recoverySignIn": "रिकवरी कोड से साइन इन करें",
+
     "signOut": "साइन आउट करें",
+
     "signOutConfirmTitle": "क्या आप साइन आउट करेंगे?",
+
     "signOutConfirmBody": "क्या आप साइन आउट करना चाहते हैं?"
+
   },
+
   "profile": {
+
     "title": "अपनी प्रोफ़ाइल पूरी करें",
+
     "subtitle": "आपके खाते की पहचान के लिए कुछ विवरण।",
+
     "settingsSection": "प्रोफ़ाइल",
+
     "displayName": "प्रदर्शित नाम",
+
     "displayNamePlaceholder": "आपका नाम",
+
     "phone": "फ़ोन",
+
     "phonePlaceholder": "+91 98XXX XXXXX",
+
     "phoneHint": "वैकल्पिक। केवल खाता सहायता के लिए।",
+
     "phoneEmpty": "कोई फ़ोन दर्ज नहीं",
+
     "useTelegramPhone": "Telegram नंबर उपयोग करें",
+
     "requestingPhone": "अनुरोध हो रहा है…",
+
     "recoveryTitle": "रिकवरी कोड",
+
     "recoveryWarn": "इस कोड को सुरक्षित जगह सहेजें। Telegram उपलब्ध न हो तो साइन इन के लिए चाहिए। हम इसे आपके लिए पुनर्प्राप्त नहीं कर सकते।",
+
     "recoverySettingsHint": "इस कोड को निजी रखें। जिसके पास यह हो वह आपके DigiHouse खाते तक पहुँच सकता है।",
+
     "copyCode": "रिकवरी कोड कॉपी करें",
+
     "showCode": "रिकवरी कोड दिखाएँ",
+
     "hideCode": "रिकवरी कोड छिपाएँ",
+
     "savedConfirm": "मैंने अपना रिकवरी कोड सुरक्षित जगह सहेजा है",
+
     "saveContinue": "सहेजें और जारी रखें",
+
     "saving": "सहेजा जा रहा है…",
+
     "save": "सहेजें",
+
     "cancel": "रद्द करें",
+
     "errors": {
+
       "name": "नाम दर्ज करें (कम से कम 2 अक्षर)",
+
       "phone": "मान्य फ़ोन नंबर दर्ज करें",
+
       "saveCode": "पुष्टि करें कि आपने रिकवरी कोड सहेजा है",
+
       "save": "प्रोफ़ाइल सहेजी नहीं जा सकी"
+
     }
+
   },
+
   "recovery": {
+
     "title": "रिकवरी कोड से साइन इन",
+
     "subtitle": "प्रोफ़ाइल सेटअप पर सहेजा गया कोड उपयोग करें।",
+
     "codeLabel": "रिकवरी कोड",
+
     "signIn": "साइन इन",
+
     "signingIn": "साइन इन हो रहा है…",
+
     "backHome": "होम पर वापस"
+
   }
+
 }
+

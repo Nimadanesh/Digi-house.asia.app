@@ -15,6 +15,11 @@ import { createEarningsRoutes } from "./routes/earnings.js";
 import { createOrderRoutes } from "./routes/orders.js";
 import { createBuyRoutes } from "./routes/buys.js";
 import { createTransactionRoutes } from "./routes/transactions.js";
+import { createFeeRoutes } from "./routes/fees.js";
+import { createLockRoutes } from "./routes/locks.js";
+import { createMeRoutes } from "./routes/me.js";
+import { createSellRoutes } from "./routes/sells.js";
+import { createWithdrawalRoutes } from "./routes/withdrawals.js";
 import type { UserStore } from "./auth/user-store.js";
 import type { PropertyStore } from "./marketplace/property-store.js";
 import type { HoldingStore } from "./portfolio/holding-store.js";
@@ -22,6 +27,13 @@ import type { EarningsStore } from "./earnings/earnings-store.js";
 import type { OrderStore } from "./orders/order-store.js";
 import type { IntentStore } from "./buys/intent-store.js";
 import type { TxStore } from "./buys/tx-store.js";
+import type { FeeTierStore } from "./fees/fee-tier-store.js";
+import type { ShareLockStore } from "./yield/lock-store.js";
+import type { YieldStore } from "./yield/yield-store.js";
+import type { BalanceStore } from "./money/balance-store.js";
+import type { InstantSellStore } from "./sells/instant-sell-store.js";
+import type { TradeStore } from "./orders/trade-store.js";
+import type { WithdrawalStore } from "./withdrawals/withdrawal-store.js";
 import { createTonApiTxClient } from "./ton/tonapi-client.js";
 import type { TonTxClient } from "./ton/tx-client.js";
 import type { AuditStore } from "./audit/audit-store.js";
@@ -45,6 +57,15 @@ export type CreateAppOptions = {
   documents?: DocumentStore | null;
   intents?: IntentStore | null;
   transactions?: TxStore | null;
+  feeTiers?: FeeTierStore | null;
+  locks?: ShareLockStore | null;
+  yields?: YieldStore | null;
+  balances?: BalanceStore | null;
+  instantSells?: InstantSellStore | null;
+  trades?: TradeStore | null;
+  withdrawals?: WithdrawalStore | null;
+  /** Unlock maturation window ms (PRODUCT-PLAN §0.4: 2–3 days). */
+  unlockMaturationMs?: number;
   audit?: AuditStore | null;
   /** Injected for tests; defaults to a live TonAPI client from TON_API_URL/TON_API_KEY. */
   tonTxClient?: TonTxClient | null;
@@ -66,6 +87,14 @@ export function createApp(opts: CreateAppOptions) {
     documents = null,
     intents = null,
     transactions = null,
+    feeTiers = null,
+    locks = null,
+    yields = null,
+    balances = null,
+    instantSells = null,
+    trades = null,
+    withdrawals = null,
+    unlockMaturationMs = 3 * 24 * 3_600_000,
     audit = null,
     tonTxClient = null,
     prepareRateLimiter = null,
@@ -174,6 +203,21 @@ export function createApp(opts: CreateAppOptions) {
         properties,
         audit,
         s3Signer,
+        orders,
+        trades,
+        holdings,
+        balances,
+        feeTiers,
+        transactions,
+        withdrawals,
+        locks,
+        yields,
+        log,
+        unlockMaturationMs,
+        houseAccountUserId: env.HOUSE_ACCOUNT_USER_ID,
+        ...(env.TELEGRAM_BOT_TOKEN?.trim() && env.NOTIFY_YIELD
+          ? { notify: { botToken: env.TELEGRAM_BOT_TOKEN } }
+          : {}),
       }),
     );
   }
@@ -191,7 +235,11 @@ export function createApp(opts: CreateAppOptions) {
   }
 
   if (properties) {
-    app.route("/", createMarketplaceRoutes({ properties }));
+    app.route("/", createMarketplaceRoutes({ properties, trades }));
+  }
+
+  if (feeTiers) {
+    app.route("/", createFeeRoutes({ tiers: feeTiers }));
   }
 
   if (users && holdings && properties) {
@@ -214,7 +262,15 @@ export function createApp(opts: CreateAppOptions) {
         session,
         users,
         earnings,
+        ...(locks && yields ? { yieldDeps: { locks, yields } } : {}),
       }),
+    );
+  }
+
+  if (users && locks) {
+    app.route(
+      "/",
+      createMeRoutes({ session, users, balances, holdings, locks, yields }),
     );
   }
 
@@ -246,10 +302,69 @@ export function createApp(opts: CreateAppOptions) {
         properties,
         orders,
         holdings,
+        locks,
+        balances,
+        feeTiers,
+        trades,
+        transactions,
         audit,
         rateLimiter: orderRateLimiter,
         allowlist,
         launchMode,
+        ...(env.TELEGRAM_BOT_TOKEN?.trim() && env.NOTIFY_YIELD
+          ? { notify: { botToken: env.TELEGRAM_BOT_TOKEN } }
+          : {}),
+      }),
+    );
+  }
+
+  if (
+    users &&
+    properties &&
+    holdings &&
+    balances &&
+    transactions &&
+    instantSells
+  ) {
+    app.route(
+      "/",
+      createSellRoutes({
+        session,
+        users,
+        properties,
+        holdings,
+        locks,
+        orders,
+        balances,
+        transactions,
+        instantSells,
+        log,
+        audit,
+        ...(env.TELEGRAM_BOT_TOKEN?.trim() && env.NOTIFY_YIELD
+          ? { notify: { botToken: env.TELEGRAM_BOT_TOKEN } }
+          : {}),
+      }),
+    );
+  }
+
+  if (users && properties && holdings && locks && yields && balances && transactions) {
+    app.route(
+      "/",
+      createLockRoutes({
+        session,
+        users,
+        holdings,
+        properties,
+        locks,
+        yields,
+        balances,
+        transactions,
+        unlockMaturationMs,
+        log,
+        audit,
+        ...(env.TELEGRAM_BOT_TOKEN?.trim() && env.NOTIFY_YIELD
+          ? { notify: { botToken: env.TELEGRAM_BOT_TOKEN } }
+          : {}),
       }),
     );
   }
@@ -268,8 +383,12 @@ export function createApp(opts: CreateAppOptions) {
         users,
         properties,
         intents,
+        orders,
         holdings,
         transactions,
+        ...(env.TELEGRAM_BOT_TOKEN?.trim() && env.NOTIFY_YIELD
+          ? { notify: { botToken: env.TELEGRAM_BOT_TOKEN } }
+          : {}),
         tonTxClient: tonTxClientOrDefault,
         log,
         audit,
@@ -294,6 +413,24 @@ export function createApp(opts: CreateAppOptions) {
         session,
         users: users!,
         transactions,
+      }),
+    );
+  }
+
+  if (users && balances && transactions && withdrawals) {
+    app.route(
+      "/",
+      createWithdrawalRoutes({
+        session,
+        users,
+        balances,
+        transactions,
+        withdrawals,
+        log,
+        audit,
+        ...(env.TELEGRAM_BOT_TOKEN?.trim() && env.NOTIFY_YIELD
+          ? { notify: { botToken: env.TELEGRAM_BOT_TOKEN } }
+          : {}),
       }),
     );
   }

@@ -1,0 +1,202 @@
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { render, screen, fireEvent } from "@testing-library/react";
+
+vi.mock("next/image", () => ({
+  default: (props: { alt: string; src: string }) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img alt={props.alt} src={props.src} />
+  ),
+}));
+
+vi.mock("@/hooks/usePortfolio", () => ({ usePortfolio: vi.fn() }));
+vi.mock("@/hooks/useMarketplace", () => ({
+  useMarketplace: vi.fn(() => ({
+    data: [
+      {
+        id: "prop-bayside-marina-penthouse",
+        title: "Bayside Marina Penthouse",
+        location: "Sao Paulo",
+        images: ["/images/properties/p1.png"],
+      },
+    ],
+    isLoading: false,
+    isError: false,
+    refetch: vi.fn(),
+  })),
+}));
+
+vi.mock("@/hooks/useLocks", () => ({
+  useLocks: vi.fn(() => ({ data: { locks: [] }, isLoading: false })),
+  useMeSummary: vi.fn(() => ({ data: undefined, isLoading: false })),
+  useCreateLock: vi.fn(() => ({ mutate: vi.fn(), isPending: false, isError: false, error: null })),
+  useRequestUnlock: vi.fn(() => ({ mutate: vi.fn(), isPending: false, isError: false, error: null, variables: null })),
+  activeLocksForProperty: vi.fn(() => []),
+}));
+vi.mock("@/hooks/useTelegram", () => ({
+  useTelegram: () => ({
+    haptics: { selection: vi.fn(), impact: vi.fn(), notification: vi.fn() },
+    backButton: {
+      show: vi.fn(),
+      hide: vi.fn(),
+      onClick: vi.fn(() => vi.fn()),
+    },
+  }),
+}));
+vi.mock("@/hooks/usePayoutCountdownLong", () => ({
+  usePayoutCountdownLong: () => "2 days 14 hours",
+}));
+vi.mock("@/hooks/usePayoutCountdown", () => ({
+  usePayoutCountdown: () => "in 2d 14h",
+}));
+
+import { usePortfolio } from "@/hooks/usePortfolio";
+import PortfolioPage from "@/app/(app)/portfolio/page";
+import type { PortfolioSummary } from "@/types/position";
+
+const holding = {
+  propertyId: "prop-bayside-marina-penthouse",
+  sharesOwned: 60,
+  avgCostUsd: 25_000,
+  currentValueUsd: 1_560_000,
+  pendingWeekEarningsUsd: 3_375,
+  shareRatio: 0.075,
+};
+
+const loadedSummary: PortfolioSummary = {
+  totalValueUsd: 1_560_000,
+  totalInvestedUsd: 1_500_000,
+  totalEarningsUsd: 9_000,
+  weeklyProjectedUsd: 3_375,
+  dayChangeRatio: 0.02,
+  holdings: [holding],
+  openOrders: [],
+};
+
+describe("Portfolio page", () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it("loading shows portfolio-skeleton", () => {
+    vi.mocked(usePortfolio).mockReturnValue({
+      data: undefined,
+      isLoading: true,
+      isError: false,
+      refetch: vi.fn(),
+    } as never);
+    render(<PortfolioPage />);
+    expect(screen.getByTestId("portfolio-skeleton")).toBeInTheDocument();
+  });
+
+  it("error shows Retry", () => {
+    vi.mocked(usePortfolio).mockReturnValue({
+      data: undefined,
+      isLoading: false,
+      isError: true,
+      refetch: vi.fn(),
+    } as never);
+    render(<PortfolioPage />);
+    expect(screen.getByRole("button", { name: /try again/i })).toBeInTheDocument();
+  });
+
+  it("empty holdings shows empty copy and Browse Marketplace link", () => {
+    vi.mocked(usePortfolio).mockReturnValue({
+      data: { ...loadedSummary, holdings: [] },
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    } as never);
+    render(<PortfolioPage />);
+    expect(screen.getByText("Your portfolio is empty")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /browse marketplace/i })).toHaveAttribute(
+      "href",
+      "/marketplace",
+    );
+  });
+
+  it("loaded summary, allocation, holding card without Avg cost on list", () => {
+    vi.mocked(usePortfolio).mockReturnValue({
+      data: loadedSummary,
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    } as never);
+    render(<PortfolioPage />);
+
+    expect(screen.getByTestId("portfolio-summary")).toBeInTheDocument();
+    expect(screen.getByTestId("portfolio-total-value")).toHaveTextContent("$15,600.00");
+
+    const earnings = screen.getByTestId("portfolio-total-earnings");
+    expect(earnings).toHaveTextContent("$90.00");
+    expect(earnings).toHaveClass("text-success");
+
+    const nextPayout = screen.getByTestId("portfolio-next-payout");
+    expect(nextPayout).toHaveTextContent("$33.75");
+    expect(nextPayout).toHaveClass("text-foreground");
+    expect(nextPayout).not.toHaveClass("text-success");
+
+    expect(screen.getByTestId("portfolio-allocation")).toBeInTheDocument();
+    expect(
+      screen.getByTestId("holding-card-prop-bayside-marina-penthouse"),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/avg cost/i)).not.toBeInTheDocument();
+  });
+
+  it("click holding opens detail sheet with Avg cost, buy more, sell disabled", () => {
+    vi.mocked(usePortfolio).mockReturnValue({
+      data: loadedSummary,
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    } as never);
+    render(<PortfolioPage />);
+
+    fireEvent.click(screen.getByTestId("holding-card-prop-bayside-marina-penthouse"));
+
+    expect(screen.getByTestId("holding-detail-sheet")).toBeInTheDocument();
+    expect(screen.getByText(/avg cost/i)).toBeInTheDocument();
+    expect(screen.getByTestId("holding-buy-more")).toHaveAttribute(
+      "href",
+      "/property/prop-bayside-marina-penthouse",
+    );
+    expect(screen.getByTestId("holding-sell")).toBeDisabled();
+  });
+
+  it("does not show PAYOUT_DISCLAIMER on portfolio page", () => {
+    vi.mocked(usePortfolio).mockReturnValue({
+      data: loadedSummary,
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    } as never);
+    render(<PortfolioPage />);
+    expect(
+      screen.queryByText("simulated weekly payout · on-chain verifiable post-MVP"),
+    ).not.toBeInTheDocument();
+  });
+
+  it("loaded: shows open orders when present", () => {
+    vi.mocked(usePortfolio).mockReturnValue({
+      data: {
+        ...loadedSummary,
+        openOrders: [
+          {
+            id: "ord-1",
+            propertyId: "prop-bayside-marina-penthouse",
+            makerAddress: "EQ",
+            side: "sell",
+            priceUsd: 26000,
+            quantity: 5,
+            filledQuantity: 0,
+            status: "open",
+            createdAt: "2026-07-18T00:00:00Z",
+          },
+        ],
+      },
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    } as never);
+    render(<PortfolioPage />);
+    expect(screen.getByTestId("open-orders")).toBeInTheDocument();
+    expect(screen.getByText("Open Orders")).toBeInTheDocument();
+  });
+});

@@ -14,6 +14,11 @@ const KIND_ICON: Record<TxKind, typeof ArrowDownCircle> = {
   sell: ArrowUpCircle,
   earnings: DollarSign,
   withdraw: ArrowLeft,
+  instant_sell: ArrowUpCircle,
+  trade_buy: ArrowDownCircle,
+  trade_sell: ArrowUpCircle,
+  yield_monthly: DollarSign,
+  yield_weekly: DollarSign,
 };
 
 const KIND_COLOR: Record<TxKind, string> = {
@@ -21,6 +26,11 @@ const KIND_COLOR: Record<TxKind, string> = {
   sell: "text-destructive",
   earnings: "text-primary",
   withdraw: "text-muted-foreground",
+  instant_sell: "text-destructive",
+  trade_buy: "text-success",
+  trade_sell: "text-destructive",
+  yield_monthly: "text-primary",
+  yield_weekly: "text-primary",
 };
 
 const KIND_LABEL: Record<TxKind, string> = {
@@ -28,6 +38,11 @@ const KIND_LABEL: Record<TxKind, string> = {
   sell: "Sell",
   earnings: "Earnings",
   withdraw: "Withdraw",
+  instant_sell: "Instant sell",
+  trade_buy: "Trade buy",
+  trade_sell: "Trade sell",
+  yield_monthly: "Monthly yield",
+  yield_weekly: "Weekly yield",
 };
 
 function showSimulatedTxBadge(
@@ -118,6 +133,12 @@ export function TransactionRow({ transaction }: TransactionRowProps) {
               <div className="flex justify-between">
                 <span>TON amount</span>
                 <span className="tabular-nums text-foreground">{ton(BigInt(tx.tonAmount))}</span>
+              </div>
+            )}
+            {tx.feeUsd != null && (
+              <div className="flex justify-between">
+                <span>Fee</span>
+                <span className="tabular-nums text-foreground">{usd(tx.feeUsd)}</span>
               </div>
             )}
             <div className="flex justify-between">

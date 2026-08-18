@@ -3,7 +3,16 @@ import type { Db } from "../db/client.js";
 import { transactions } from "../db/schema/transactions.js";
 import { properties } from "../db/schema/properties.js";
 
-export type TxKind = "buy" | "sell" | "earnings" | "withdraw";
+export type TxKind =
+  | "buy"
+  | "sell"
+  | "earnings"
+  | "withdraw"
+  | "instant_sell"
+  | "trade_buy"
+  | "trade_sell"
+  | "yield_monthly"
+  | "yield_weekly";
 export type TxStatus = "pending" | "success" | "failed";
 export type TxCurrency = "TON" | "USDT";
 
@@ -21,6 +30,8 @@ export type TransactionRecord = {
   tokenAmount?: number | null;
   status: TxStatus;
   txHash: string | null;
+  /** Platform commission, integer cents (§0.5). */
+  feeUsd?: number | null;
   error: string | null;
   buyIntentId: string | null;
   createdAt: Date;
@@ -40,6 +51,7 @@ export type TransactionPublic = {
   tokenAmount?: number;
   status: TxStatus;
   txHash?: string;
+  feeUsd?: number;
   error?: string;
   createdAt: string;
   propertyTitle?: string;
@@ -59,10 +71,21 @@ export type TxStore = {
     tokenAmount?: number | null;
     status: TxStatus;
     txHash?: string | null;
+    feeUsd?: number | null;
     error?: string | null;
     buyIntentId?: string | null;
   }): Promise<TransactionRecord>;
   listByUserId(userId: string, opts?: { limit?: number; offset?: number }): Promise<TransactionRecord[]>;
+  /**
+   * Move a ledger row to a terminal state (e.g. withdrawal paid → success, or
+   * rejected → failed). Returns null when the id is unknown.
+   */
+  updateStatus(
+    id: string,
+    status: TxStatus,
+    error?: string | null,
+    txHash?: string | null,
+  ): Promise<TransactionRecord | null>;
 };
 
 export function mapTransactionPublic(r: TransactionRecord): TransactionPublic {
@@ -80,6 +103,7 @@ export function mapTransactionPublic(r: TransactionRecord): TransactionPublic {
   if (r.tonAmount != null) out.tonAmount = r.tonAmount;
   if (r.tokenAmount != null) out.tokenAmount = r.tokenAmount;
   if (r.txHash) out.txHash = r.txHash;
+  if (r.feeUsd != null) out.feeUsd = r.feeUsd;
   if (r.error) out.error = r.error;
   if (r.propertyTitle) out.propertyTitle = r.propertyTitle;
   if (r.propertyImage) out.propertyImage = r.propertyImage;
@@ -90,8 +114,19 @@ function mapCurrency(s: string | null): TxCurrency {
   return s === "USDT" ? "USDT" : "TON";
 }
 
-function mapKind(s: string): TxKind {
-  if (s === "buy" || s === "sell" || s === "earnings" || s === "withdraw") {
+/** Normalise a DB `kind` string to a typed `TxKind`; unknown values fall back to `"buy"`. */
+export function mapKind(s: string): TxKind {
+  if (
+    s === "buy" ||
+    s === "sell" ||
+    s === "earnings" ||
+    s === "withdraw" ||
+    s === "instant_sell" ||
+    s === "trade_buy" ||
+    s === "trade_sell" ||
+    s === "yield_monthly" ||
+    s === "yield_weekly"
+  ) {
     return s;
   }
   return "buy";
@@ -114,6 +149,7 @@ type TxQueryRow = {
   tokenAmount: number | null;
   status: string;
   txHash: string | null;
+  feeUsd: number | null;
   error: string | null;
   buyIntentId: string | null;
   createdAt: Date;
@@ -134,6 +170,7 @@ function mapRow(row: TxQueryRow): TransactionRecord {
     tokenAmount: row.tokenAmount != null ? Number(row.tokenAmount) : null,
     status: mapStatus(row.status),
     txHash: row.txHash,
+    feeUsd: row.feeUsd != null ? Number(row.feeUsd) : null,
     error: row.error,
     buyIntentId: row.buyIntentId,
     createdAt: row.createdAt,
@@ -160,6 +197,7 @@ export function createDbTxStore(db: Db): TxStore {
           tokenAmount: input.tokenAmount ?? null,
           status: input.status,
           txHash: input.txHash ?? null,
+          feeUsd: input.feeUsd ?? null,
           error: input.error ?? null,
           buyIntentId: input.buyIntentId ?? null,
           createdAt: now,
@@ -179,6 +217,7 @@ export function createDbTxStore(db: Db): TxStore {
         tokenAmount: row.tokenAmount != null ? Number(row.tokenAmount) : null,
         status: mapStatus(row.status),
         txHash: row.txHash,
+        feeUsd: row.feeUsd != null ? Number(row.feeUsd) : null,
         error: row.error,
         buyIntentId: row.buyIntentId,
         createdAt: row.createdAt,
@@ -200,6 +239,7 @@ export function createDbTxStore(db: Db): TxStore {
           tokenAmount: transactions.tokenAmount,
           status: transactions.status,
           txHash: transactions.txHash,
+          feeUsd: transactions.feeUsd,
           error: transactions.error,
           buyIntentId: transactions.buyIntentId,
           createdAt: transactions.createdAt,
@@ -213,6 +253,36 @@ export function createDbTxStore(db: Db): TxStore {
         .limit(limit)
         .offset(offset);
       return rows.map(mapRow);
+    },
+    async updateStatus(id, status, error = null, txHash = null) {
+      const rows = await db
+        .update(transactions)
+        .set({
+          status,
+          ...(error != null ? { error } : {}),
+          ...(txHash ? { txHash } : {}),
+        })
+        .where(eq(transactions.id, id))
+        .returning();
+      const row = rows[0];
+      if (!row) return null;
+      return {
+        id: row.id,
+        userId: row.userId,
+        kind: mapKind(row.kind),
+        propertyId: row.propertyId,
+        shares: row.shares,
+        amountUsd: Number(row.amountUsd),
+        currency: mapCurrency(row.currency),
+        tonAmount: row.tonAmount != null ? Number(row.tonAmount) : null,
+        tokenAmount: row.tokenAmount != null ? Number(row.tokenAmount) : null,
+        status: mapStatus(row.status),
+        txHash: row.txHash,
+        feeUsd: row.feeUsd != null ? Number(row.feeUsd) : null,
+        error: row.error,
+        buyIntentId: row.buyIntentId,
+        createdAt: row.createdAt,
+      };
     },
   };
 }
@@ -242,6 +312,7 @@ export function createMemoryTxStore(
         tokenAmount: input.tokenAmount ?? null,
         status: input.status,
         txHash: input.txHash ?? null,
+        feeUsd: input.feeUsd ?? null,
         error: input.error ?? null,
         buyIntentId: input.buyIntentId ?? null,
         createdAt: new Date(),
@@ -256,6 +327,14 @@ export function createMemoryTxStore(
         .filter((r) => r.userId === userId)
         .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
         .slice(offset, offset + limit);
+    },
+    async updateStatus(id, status, error = null, txHash = null) {
+      const r = rows.find((x) => x.id === id);
+      if (!r) return null;
+      r.status = status;
+      if (error != null) r.error = error;
+      if (txHash) r.txHash = txHash;
+      return { ...r };
     },
   };
 }

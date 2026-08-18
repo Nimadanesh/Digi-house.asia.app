@@ -1,204 +1,498 @@
 {
+
   "common": {
+
     "appName": "DigiHouse",
+
     "buyShare": "Acheter une part",
+
     "browseMarketplace": "Parcourir le marché",
+
     "viewAll": "Tout voir",
+
     "refresh": "Actualiser",
+
     "clearFilters": "Effacer les filtres",
+
     "tryAgain": "Réessayer",
+
     "retry": "Réessayer",
+
     "skip": "Passer",
+
     "continue": "Continuer",
+
     "getStarted": "Commencer",
+
     "settings": "Paramètres",
+
     "connectWallet": "Connecter le portefeuille",
+
     "walletConnected": "Portefeuille connecté",
+
     "disconnectWallet": "Déconnecter le portefeuille",
+
     "share": "part",
+
     "shares": "parts",
+
     "of": "sur",
+
     "from": "À partir de",
+
     "est": "Est.",
+
     "apy": "APY",
+
     "pending": "En attente",
+
     "paid": "Payé",
+
     "hot": "Populaire",
+
     "new": "Nouveau",
+
     "soldPct": "{pct} % vendu",
+
     "week": "semaine",
+
     "weeks": "semaines",
+
     "demoMode": "Mode démo · données de test · transactions simulées",
+
     "somethingWentWrong": "Une erreur s’est produite"
+
   },
+
   "tabs": {
+
     "home": "Accueil",
+
     "marketplace": "Marché",
+
     "earnings": "Revenus",
+
     "portfolio": "Portefeuille"
+
   },
+
   "header": {
+
     "greeting": "Bonjour, {name}"
+
   },
+
   "onboarding": {
+
     "skip": "Passer",
+
     "continue": "Continuer",
+
     "getStarted": "Commencer",
+
     "slideProgress": "{current} / {total}",
+
     "slideAria": "Diapositive {n}",
+
     "own": {
+
       "headline": "Devenez propriétaire d’un bien réel",
+
       "subtitle": "À partir d’environ 80 $"
+
     },
+
     "yield": {
+
       "headline": "Recevez votre part de loyer chaque semaine",
+
       "subtitle": "Consultez votre part chaque vendredi dans Revenus"
+
     },
+
     "sell": {
+
       "headline": "Vendez quand vous voulez",
+
       "subtitle": "Listez vos parts sur le marché DigiHouse quand vous êtes prêt à sortir."
+
     }
+
   },
+
   "home": {
+
     "loadError": "Impossible de charger l’accueil.",
+
     "portfolioValue": "Valeur du portefeuille",
+
     "totalInvested": "Total investi",
+
     "totalEarningsReceived": "Revenus totaux reçus",
+
     "nextPayout": "Prochain versement",
+
     "myProperties": "Mes biens",
+
     "myPropertiesCount": "Mes biens ({count})",
+
     "buyFirstShare": "Achetez votre première part",
+
     "buyFirstShareHint": "Possédez une part — gagnez un loyer projeté chaque vendredi.",
+
     "todaysHighlight": "Coup de cœur du jour",
+
     "hotThisWeek": "Populaire cette semaine",
+
     "weeklyPerShare": "Hebdo / part",
+
     "pendingThisWeek": "{amount} en attente cette semaine"
+
   },
+
   "marketplace": {
+
     "searchPlaceholder": "Rechercher des biens",
+
     "searchAria": "Rechercher des biens",
+
     "clearSearch": "Effacer la recherche",
+
     "filtersAria": "Filtres du marché",
+
     "loadError": "Impossible de charger les biens.",
+
     "emptyTitle": "Aucun bien pour l’instant",
+
     "emptyMessage": "De nouvelles offres fractionnées chaque semaine — revenez bientôt.",
+
     "noMatchesTitle": "Aucun résultat",
+
     "noMatchesMessage": "Essayez une autre recherche ou un autre filtre.",
+
     "chips": {
+
       "all": "Tous",
+
+      "primary": "Principal",
+
+      "secondary": "Secondaire",
+
       "highest_yield": "Meilleur rendement",
+
       "new": "Nouveau",
+
       "almost_sold": "Presque vendu",
+
       "low_price": "Prix bas"
+
     },
+
     "pricePerShare": "Prix / part",
+
     "weeklyPerShare": "Hebdo / part",
+
     "minPurchase": "Achat min.",
-    "sharesSold": "{sold} sur {total} parts vendues"
+
+    "sharesSold": "{sold} sur {total} parts vendues",
+
+    "feesTitle": "Commission",
+
+    "feesPerTx": "Le palier dépend du montant de chaque transaction — sans plafond.",
+
+    "feesRange": "Montant",
+
+    "feesBuyPrimary": "Achat · Primaire",
+
+    "feesBuyMarket": "Achat · Marché",
+
+    "feesSellMarket": "Vente · Marché",
+
+    "feesInstantSell": "Vente instantanée (primaire)",
+
+    "feesInstantNote": "Forfait pendant l'offre primaire ; le secondaire suit le palier marché.",
+
+    "feesNoCap": "Aucun plafond sur les montants d'achat ou de vente.",
+
+    "lastPrice": "Dernier prix"
+
   },
+
   "property": {
+
     "buyShare": "Acheter une part",
+
     "about": "À propos",
+
     "metrics": "Indicateurs",
+
     "trust": "Confiance et transparence",
+
     "rentalHistory": "Historique locatif",
+
     "incomeCalculator": "Calculateur de revenus",
+
     "salesProgress": "Progression des ventes",
+
     "gallery": "Galerie"
+
   },
+
   "earnings": {
+
     "loadError": "Impossible de charger les revenus.",
+
     "emptyTitle": "Pas encore de revenus",
+
     "emptyMessage": "Achetez votre première part et commencez à gagner la semaine prochaine.",
+
     "thisWeek": "Revenus de cette semaine",
+
     "nextPayoutIn": "Prochain versement dans",
+
     "totalReceived": "Revenus totaux reçus",
+
     "consecutivePaid": "Semaines payées consécutives",
+
     "streak": "{count} {unit} d’affilée ✓",
+
     "noStreak": "Pas encore de série",
+
     "timeline": "Historique",
-    "disclaimer": "versement hebdomadaire simulé · vérifiable on-chain après MVP"
+
+    "disclaimer": "versement hebdomadaire simulé · vérifiable on-chain après MVP",
+
+    "yieldTitle": "Rendement des parts verrouillées",
+
+    "yieldAccrued": "Acquis non payé",
+
+    "yieldMonthly": "Mensuel",
+
+    "yieldWeekly": "Hebdomadaire",
+
+    "yieldNoLocks": "Aucun verrou actif — verrouillez des parts sur une page de bien pour commencer à gagner.",
+
+    "yieldPayments": "Paiements de rendement",
+
+    "yieldFinal": "Paiement final"
+
   },
+
   "portfolio": {
+
     "loadError": "Impossible de charger votre portefeuille.",
+
     "emptyTitle": "Votre portefeuille est vide",
+
     "emptyMessage": "Commencez vers 80 $ — achetez votre première part sur le marché.",
+
     "totalValue": "Valeur totale du portefeuille",
+
     "totalInvested": "Total investi",
+
     "totalEarningsReceived": "Revenus totaux reçus",
+
     "unrealizedProfit": "Plus-value latente",
+
     "nextPayout": "Prochain versement",
+
     "myPropertiesCount": "Mes biens ({count})",
+
     "openOrders": "Ordres ouverts",
-    "allocation": "Répartition"
+
+    "allocation": "Répartition",
+
+    "lockedShares": "Parts verrouillées",
+
+    "freeShares": "Parts libres",
+
+    "orderQueued": "En attente"
+
   },
+
   "settings": {
+
     "title": "Paramètres",
+
     "wallet": "Portefeuille",
+
     "connectTitle": "Connecter un portefeuille TON",
+
     "connectHint": "Requis pour acheter des parts et recevoir le rendement hebdomadaire.",
+
     "disconnect": "Déconnecter le portefeuille",
+
+    "withdrawals": "Retraits",
+
+    "withdrawalTitle": "Adresse de retrait USDT",
+
+    "withdrawalHint": "Où votre solde retirable est versé",
+
+    "withdrawalPlaceholder": "EQ… adresse USDT-TON",
+
+    "withdrawalEmpty": "Aucune adresse définie",
+
+    "withdrawalVerified": "Vérifié",
+
+    "withdrawalUnverified": "Non vérifié",
+
+    "withdrawalInvalid": "Entrez une adresse TON valide",
+
+    "withdrawalSave": "Enregistrer",
+
+    "withdrawalCancel": "Annuler",
+
+    "withdrawalRequests": "Demandes de retrait",
+
+    "withdrawalRequestsEmpty": "Aucune demande de retrait pour l'instant",
+
+    "withdrawalStatusPaid": "Payé",
+
+    "withdrawalStatusRequested": "Demandé",
+
+    "withdrawalStatusApproved": "Approuvé",
+
+    "withdrawalStatusRejected": "Rejeté",
+
+    "withdrawalRequest": "Demander un retrait",
+    "withdrawalsError": "Impossible de charger les demandes de retrait",
+
+    "referrals": "Parrainage",
+
+    "inviteFriends": "Inviter des amis",
+
+    "copied": "Copié !",
+
+    "signInToInvite": "Connectez-vous pour inviter",
+
+
     "preferences": "Préférences",
+
     "displayCurrency": "Devise d’affichage",
+
     "displayCurrencyHint": "Les montants restent en USD ; estimation TON à l’achat",
+
     "language": "Langue",
+
     "languageHint": "Langue de l’application",
+
     "languageAuto": "Auto (Telegram)",
+
     "chooseLanguage": "Choisir la langue",
+
     "useTelegramTheme": "Dark / Light",
+
     "useTelegramThemeHint": "Couleurs Telegram",
+
     "showDemoBadge": "Afficher le badge Démo",
+
     "showDemoBadgeHint": "Libellé MVP honnête flottant",
+
     "help": "Aide",
+
     "howItWorks": "Comment fonctionne DigiHouse",
+    "transactionHistory": "Historique des transactions",
+
+
     "aboutLegal": "À propos / Mentions légales",
+
     "aboutBody": "DigiHouse est une Mini App Telegram pour des parts immobilières fractionnées sur TON. Le rendement locatif hebdomadaire est affiché au prorata de votre propriété.",
+
     "aboutAdvice": "Ceci n’est pas un conseil financier. Documents et tokenisation sont démonstratifs jusqu’aux contrats de production.",
+
     "aboutCopyright": "© DigiHouse · MVP",
+
     "demoTxDisclaimer": "Ceci est une démo – les transactions sont simulées",
+
     "payoutDisclaimer": "versement hebdomadaire simulé · vérifiable on-chain après MVP",
+
     "account": "Compte",
+
     "recoverySignIn": "Se connecter avec le code de récupération",
+
     "signOut": "Se déconnecter",
+
     "signOutConfirmTitle": "Se déconnecter ?",
+
     "signOutConfirmBody": "Voulez-vous vous déconnecter ?"
+
   },
+
   "profile": {
+
     "title": "Complétez votre profil",
+
     "subtitle": "Quelques informations pour identifier votre compte.",
+
     "settingsSection": "Profil",
+
     "displayName": "Nom affiché",
+
     "displayNamePlaceholder": "Votre nom",
+
     "phone": "Téléphone",
+
     "phonePlaceholder": "+33 6 00 00 00 00",
+
     "phoneHint": "Facultatif. Uniquement pour le support du compte.",
+
     "phoneEmpty": "Aucun téléphone enregistré",
+
     "useTelegramPhone": "Utiliser le numéro Telegram",
+
     "requestingPhone": "Demande…",
+
     "recoveryTitle": "Code de récupération",
+
     "recoveryWarn": "Conservez ce code en lieu sûr. Il est nécessaire pour vous connecter si Telegram est indisponible. Nous ne pourrons pas le récupérer pour vous.",
+
     "recoverySettingsHint": "Gardez ce code privé. Quiconque le possède peut accéder à votre compte DigiHouse.",
+
     "copyCode": "Copier le code de récupération",
+
     "showCode": "Afficher le code de récupération",
+
     "hideCode": "Masquer le code de récupération",
+
     "savedConfirm": "J’ai enregistré mon code de récupération en lieu sûr",
+
     "saveContinue": "Enregistrer et continuer",
+
     "saving": "Enregistrement…",
+
     "save": "Enregistrer",
+
     "cancel": "Annuler",
+
     "errors": {
+
       "name": "Saisissez un nom (au moins 2 caractères)",
+
       "phone": "Saisissez un numéro de téléphone valide",
+
       "saveCode": "Confirmez avoir enregistré votre code de récupération",
+
       "save": "Impossible d’enregistrer le profil"
+
     }
+
   },
+
   "recovery": {
+
     "title": "Connexion avec le code de récupération",
+
     "subtitle": "Utilisez le code enregistré lors de la configuration du profil.",
+
     "codeLabel": "Code de récupération",
+
     "signIn": "Se connecter",
+
     "signingIn": "Connexion…",
+
     "backHome": "Retour à l’accueil"
+
   }
+
 }
+

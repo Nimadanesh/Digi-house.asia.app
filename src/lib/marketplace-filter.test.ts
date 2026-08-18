@@ -20,6 +20,8 @@ function base(over: Partial<Listing> & Pick<Listing, "id" | "title">): Listing {
     sharesSold: 100,
     sharesRemaining: 900,
     fundingProgressRatio: 0.1,
+    monthlyYieldRate: 6.25,
+    totalValueUsd: 8_000_000,
     meta: {
       sizeSqm: 50,
       yearBuilt: 2020,
@@ -42,6 +44,8 @@ const list: Listing[] = [
     annualRentUsd: 1_000_000,
     createdAt: "2026-01-01T00:00:00Z",
     fundingProgressRatio: 0.9,
+    monthlyYieldRate: 6.25,
+    totalValueUsd: 8_000_000,
     sharesSold: 900,
     sharesRemaining: 100,
     status: "funding",
@@ -54,6 +58,8 @@ const list: Listing[] = [
     annualRentUsd: 100_000,
     createdAt: "2026-07-20T00:00:00Z",
     fundingProgressRatio: 0.3,
+    monthlyYieldRate: 6.25,
+    totalValueUsd: 8_000_000,
     sharesSold: 300,
     sharesRemaining: 700,
   }),
@@ -64,6 +70,8 @@ const list: Listing[] = [
     annualRentUsd: 400_000,
     createdAt: "2026-06-01T00:00:00Z",
     fundingProgressRatio: 0.6,
+    monthlyYieldRate: 6.25,
+    totalValueUsd: 8_000_000,
     sharesSold: 600,
     sharesRemaining: 400,
     status: "funding",
@@ -96,6 +104,21 @@ describe("filterMarketplaceListings", () => {
     const r = filterMarketplaceListings(list, { chip: "low_price" });
     expect(r.map((x) => x.id)).toEqual(["b", "c", "a"]);
   });
+
+  it("primary keeps only funding listings", () => {
+    const r = filterMarketplaceListings(list, { chip: "primary" });
+    expect(r.every((x) => x.status === "funding")).toBe(true);
+  });
+
+  it("secondary keeps only resale/funded listings", () => {
+    const secondaryList = [
+      base({ id: "s1", title: "S1", status: "resale" }),
+      base({ id: "s2", title: "S2", status: "funded" }),
+      base({ id: "s3", title: "S3", status: "funding" }),
+    ];
+    const r = filterMarketplaceListings(secondaryList, { chip: "secondary" });
+    expect(r.map((x) => x.id)).toEqual(["s1", "s2"]);
+  });
 });
 
 describe("listingStatusBadge", () => {
@@ -117,6 +140,8 @@ describe("listingStatusBadge", () => {
         title: "S",
         createdAt: "2025-01-01T00:00:00Z",
         fundingProgressRatio: 0.85,
+    monthlyYieldRate: 6.25,
+    totalValueUsd: 8_000_000,
         sharesRemaining: 150,
         status: "funding",
       }),
@@ -132,6 +157,8 @@ describe("listingStatusBadge", () => {
         title: "H",
         createdAt: "2025-01-01T00:00:00Z",
         fundingProgressRatio: 0.55,
+    monthlyYieldRate: 6.25,
+    totalValueUsd: 8_000_000,
         sharesRemaining: 400,
         status: "funding",
       }),

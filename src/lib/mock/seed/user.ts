@@ -7,6 +7,8 @@ export const USER: UserProfile = {
   username: "demoinvestor",
   role: "investor",
   walletAddress: "EQHq2VsN7yKwTp8rUy4mL0kHbZ6sAeF4oVgB8uTr9pXkMdH5",
+  withdrawalAddress: "EQHq2VsN7yKwTp8rUy4mL0kHbZ6sAeF4oVgB8uTr9pXkMdH5",
+  withdrawalAddressVerified: false,
   phone: undefined,
   onboarded: false,
   profileCompleted: false,

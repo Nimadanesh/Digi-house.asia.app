@@ -4,6 +4,7 @@ import { useMemo, useState, useCallback, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { useMarketplace } from "@/hooks/useMarketplace";
+import { useLocks } from "@/hooks/useLocks";
 import { useTelegram } from "@/hooks/useTelegram";
 import { haptics } from "@/lib/telegram/haptics";
 import { portfolioAllocation } from "@/lib/portfolio-math";
@@ -17,6 +18,7 @@ import { HoldingDetailSheet } from "@/components/portfolio/HoldingDetailSheet";
 import { OpenOrdersBlock } from "@/components/portfolio/OpenOrdersBlock";
 import { PortfolioSkeleton } from "@/components/portfolio/PortfolioSkeleton";
 import { useExportCsv } from "@/hooks/useExportCsv";
+import { useCancelOrder } from "@/hooks/useSells";
 import { Block } from "@/components/common/Block";
 import { Download } from "lucide-react";
 import type { Holding } from "@/types/position";
@@ -26,6 +28,17 @@ export default function PortfolioPage() {
   const t = useTranslations("portfolio");
   const portfolio = usePortfolio();
   const marketplace = useMarketplace();
+  const locksQuery = useLocks();
+
+  // Locked-share split (PRODUCT-PLAN §0.4): totals for the summary + per-holding pill.
+  const lockedByProperty = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const l of locksQuery.data?.locks ?? []) {
+      if (l.status === "matured") continue;
+      m.set(l.propertyId, (m.get(l.propertyId) ?? 0) + l.shares);
+    }
+    return m;
+  }, [locksQuery.data]);
   // Only need backButton chrome here — haptics imported directly to avoid theme/ready churn.
   const { backButton } = useTelegram();
   const [selected, setSelected] = useState<Holding | null>(null);
@@ -47,6 +60,7 @@ export default function PortfolioPage() {
   }, []);
 
   const { download: downloadCsv, downloading: csvDownloading } = useExportCsv();
+  const cancelOrder = useCancelOrder();
 
   useEffect(() => {
     if (!selected) {
@@ -100,10 +114,16 @@ export default function PortfolioPage() {
 
   const slices = portfolioAllocation(data.holdings, data.totalValueUsd);
   const selectedListing = selected ? listingById.get(selected.propertyId) : undefined;
+  const totalOwned = data.holdings.reduce((s, h) => s + h.sharesOwned, 0);
+  const totalLocked = [...lockedByProperty.values()].reduce((s, n) => s + n, 0);
 
   return (
     <div className="mt-3 space-y-4 pb-2" data-testid="portfolio-page">
-      <PortfolioSummaryCard summary={data} />
+      <PortfolioSummaryCard
+        summary={data}
+        lockedShares={totalLocked}
+        freeShares={Math.max(0, totalOwned - totalLocked)}
+      />
       <AllocationBar slices={slices} nameById={nameById} />
 
       <section className="space-y-2" data-testid="portfolio-holdings">
@@ -120,6 +140,7 @@ export default function PortfolioPage() {
                 title={listing?.title ?? h.propertyId}
                 location={listing?.location ?? ""}
                 image={listing?.images[0]}
+                lockedShares={lockedByProperty.get(h.propertyId) ?? 0}
                 onOpen={() => {
                   haptics.selection();
                   setSelected(h);
@@ -130,7 +151,12 @@ export default function PortfolioPage() {
         </div>
       </section>
 
-      <OpenOrdersBlock orders={data.openOrders} nameById={nameById} />
+      <OpenOrdersBlock
+        orders={data.openOrders}
+        nameById={nameById}
+        onCancel={(orderId) => cancelOrder.mutate(orderId)}
+        cancellingId={cancelOrder.isPending ? String(cancelOrder.variables) : null}
+      />
 
       <section className="space-y-2">
         <Block>

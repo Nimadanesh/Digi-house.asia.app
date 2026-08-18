@@ -1,9 +1,13 @@
 import { Hono } from "hono";
 import { isPropertyStatus } from "../marketplace/map-listing.js";
+import type { ListingPublic } from "../marketplace/map-listing.js";
 import type { PropertyStore } from "../marketplace/property-store.js";
+import type { TradeStore } from "../orders/trade-store.js";
 
 export type MarketplaceRouteDeps = {
   properties: PropertyStore;
+  /** Present → listings carry the latest secondary-market price (PD-04/PD-07). */
+  trades?: TradeStore | null;
 };
 
 export function createMarketplaceRoutes(deps: MarketplaceRouteDeps) {
@@ -31,7 +35,8 @@ export function createMarketplaceRoutes(deps: MarketplaceRouteDeps) {
         : {}),
       ...(queryRaw !== undefined ? { query: queryRaw } : {}),
     });
-    return c.json(listings);
+    const withLastPrice = await attachLastPrice(deps.trades, listings);
+    return c.json(withLastPrice);
   });
 
   app.get("/v1/properties/:id", async (c) => {
@@ -50,8 +55,22 @@ export function createMarketplaceRoutes(deps: MarketplaceRouteDeps) {
         404,
       );
     }
-    return c.json(listing);
+    const last = deps.trades ? await deps.trades.lastPriceUsd(id) : null;
+    return c.json({ ...listing, ...(last != null ? { lastTradeUsd: last } : {}) });
   });
 
   return app;
+}
+
+async function attachLastPrice(
+  trades: TradeStore | null | undefined,
+  listings: ListingPublic[],
+): Promise<ListingPublic[]> {
+  if (!trades) return listings;
+  return Promise.all(
+    listings.map(async (l) => {
+      const last = await trades.lastPriceUsd(l.id);
+      return last != null ? { ...l, lastTradeUsd: last } : l;
+    }),
+  );
 }

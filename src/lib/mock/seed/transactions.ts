@@ -49,22 +49,48 @@ export const TRANSACTIONS: Transaction[] = [
     error: "wallet rejected the buy transaction",
     createdAt: "2026-07-15T10:20:00Z",
   },
-  // --- Sell ---
+  // --- Instant sell (primary buy-back, −7% flat) ---
   {
-    id: "tx-alfama-sell-success",
-    kind: "sell",
+    id: "tx-alfama-instant-sell",
+    kind: "instant_sell",
     propertyId: "prop-alfama-terrace-flat",
     userId: USER.id,
-    shares: -25,
-    amountUsd: -25 * 10500,
+    shares: 25,
+    amountUsd: 279_000, // net = $3,000 gross − 7%
+    feeUsd: 21_000,
     status: "success",
     txHash: makeSyntheticTxHash(),
     createdAt: "2026-06-01T14:30:00Z",
   },
-  // --- Earnings ---
+  // --- Secondary trades ---
   {
-    id: "tx-weekly-earnings-jun28",
-    kind: "earnings",
+    id: "tx-alfama-trade-buy",
+    kind: "trade_buy",
+    propertyId: "prop-alfama-terrace-flat",
+    userId: USER.id,
+    shares: 30,
+    amountUsd: 360_000, // $3,600 notional
+    feeUsd: 2_520, // 0.7% buy-secondary
+    status: "success",
+    txHash: makeSyntheticTxHash(),
+    createdAt: "2026-06-15T11:00:00Z",
+  },
+  {
+    id: "tx-tbilisi-trade-sell",
+    kind: "trade_sell",
+    propertyId: "prop-tbilisi-riverhouse-loft",
+    userId: USER.id,
+    shares: 20,
+    amountUsd: 198_600, // net = $2,000 gross − 0.7%
+    feeUsd: 1_400,
+    status: "success",
+    txHash: makeSyntheticTxHash(),
+    createdAt: "2026-07-08T09:30:00Z",
+  },
+  // --- Yield (weekly + monthly) ---
+  {
+    id: "tx-yield-weekly-jun28",
+    kind: "yield_weekly",
     userId: USER.id,
     amountUsd: 4200,
     status: "success",
@@ -72,13 +98,13 @@ export const TRANSACTIONS: Transaction[] = [
     createdAt: "2026-06-28T00:00:00Z",
   },
   {
-    id: "tx-weekly-earnings-jul05",
-    kind: "earnings",
+    id: "tx-yield-monthly-jul01",
+    kind: "yield_monthly",
     userId: USER.id,
-    amountUsd: 4200,
+    amountUsd: 4800,
     status: "success",
-    txHash: "simulated:dist-jul05",
-    createdAt: "2026-07-05T00:00:00Z",
+    txHash: "simulated:dist-jul01",
+    createdAt: "2026-07-01T00:00:00Z",
   },
   // --- Withdraw ---
   {

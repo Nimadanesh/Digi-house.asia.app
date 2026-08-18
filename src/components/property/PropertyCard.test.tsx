@@ -25,6 +25,8 @@ const listing: Listing = {
   sharesSold: 920,
   sharesRemaining: 80,
   fundingProgressRatio: 0.92,
+    monthlyYieldRate: 6.25,
+    totalValueUsd: 8_000_000,
   meta: {
     sizeSqm: 72,
     yearBuilt: 2019,
@@ -63,5 +65,24 @@ describe("PropertyCard — Fable list layout", () => {
   it("does not show obsolete 'Total' property value row", () => {
     render(<PropertyCard listing={listing} nowMs={Date.UTC(2026, 6, 26)} />);
     expect(screen.queryByText("Total")).not.toBeInTheDocument();
+  });
+
+  it("resale card labels the price as 'Last price' and shows the market price (PD-07)", () => {
+    const resale: Listing = {
+      ...listing,
+      id: "prop-tbilisi-riverhouse-loft",
+      status: "resale",
+      sharePriceUsd: 12_000,
+      lastTradeUsd: 8_000,
+      sharesSold: 600,
+      sharesRemaining: 0,
+      fundingProgressRatio: 1,
+    };
+    render(<PropertyCard listing={resale} nowMs={Date.UTC(2026, 6, 26)} />);
+    expect(screen.getByText("Last price")).toBeInTheDocument();
+    // market price, not offering price ($120.00) — appears in Last price + Min. purchase
+    expect(screen.getAllByText("$80.00").length).toBeGreaterThanOrEqual(1);
+    expect(screen.queryByText("$120.00")).not.toBeInTheDocument();
+    expect(screen.queryByText("Price / share")).not.toBeInTheDocument();
   });
 });

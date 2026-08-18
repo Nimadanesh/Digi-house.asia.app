@@ -89,7 +89,7 @@ export default function OnboardingPage() {
             haptics.selection();
             complete();
           }}
-          className="min-h-[44px] px-2 text-sm font-medium text-primary active:opacity-80"
+          className="min-h-[44px] px-2 text-sm font-medium text-primary active:scale-[0.97] transition-transform duration-[120ms] ease-out"
           data-testid="onboarding-skip"
         >
           {t("skip")}

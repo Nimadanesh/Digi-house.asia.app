@@ -82,7 +82,7 @@ export function SettingsProfileSection() {
             <button
               type="button"
               onClick={openEdit}
-              className="flex w-full min-h-[56px] items-center gap-2 px-4 py-3.5 text-start active:bg-surface-2/60"
+              className="flex w-full min-h-[56px] items-center gap-2 px-4 py-3.5 text-start active:bg-surface-2/60 active:scale-[0.98] transition-transform duration-[120ms] ease-out"
               data-testid="settings-profile-edit"
             >
               <span className="flex flex-1 flex-col gap-0.5">
@@ -122,7 +122,7 @@ export function SettingsProfileSection() {
                 <button
                   type="button"
                   onClick={() => setEditing(false)}
-                  className="h-11 flex-1 rounded-[12px] bg-surface-2 text-sm font-medium text-foreground"
+                  className="h-11 flex-1 rounded-[12px] bg-surface-2 text-sm font-medium text-foreground active:scale-[0.98] transition-transform duration-[120ms] ease-out"
                 >
                   {t("cancel")}
                 </button>
@@ -130,7 +130,7 @@ export function SettingsProfileSection() {
                   type="button"
                   onClick={() => void onSave()}
                   disabled={pending}
-                  className="h-11 flex-1 rounded-[12px] bg-primary text-sm font-semibold text-primary-foreground disabled:opacity-50"
+                  className="h-11 flex-1 rounded-[12px] bg-primary text-sm font-semibold text-primary-foreground active:scale-[0.98] transition-transform duration-[120ms] ease-out disabled:opacity-50"
                   data-testid="settings-profile-save"
                 >
                   {t("save")}

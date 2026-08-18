@@ -24,6 +24,14 @@ vi.mock("@/hooks/useMarketplace", () => ({
     refetch: vi.fn(),
   })),
 }));
+
+vi.mock("@/hooks/useLocks", () => ({
+  useLocks: vi.fn(() => ({ data: { locks: [] }, isLoading: false })),
+  useMeSummary: vi.fn(() => ({ data: undefined, isLoading: false })),
+  useCreateLock: vi.fn(() => ({ mutate: vi.fn(), isPending: false, isError: false, error: null })),
+  useRequestUnlock: vi.fn(() => ({ mutate: vi.fn(), isPending: false, isError: false, error: null, variables: null })),
+  activeLocksForProperty: vi.fn(() => []),
+}));
 vi.mock("@/hooks/useTelegram", () => ({
   useTelegram: () => ({
     haptics: { selection: vi.fn(), impact: vi.fn(), notification: vi.fn() },
@@ -39,6 +47,11 @@ vi.mock("@/hooks/usePayoutCountdownLong", () => ({
 }));
 vi.mock("@/hooks/usePayoutCountdown", () => ({
   usePayoutCountdown: () => "in 2d 14h",
+}));
+vi.mock("@/hooks/useSells", () => ({
+  useInstantSell: vi.fn(() => ({ mutate: vi.fn(), isPending: false, isError: false, error: null })),
+  usePlaceOrder: vi.fn(() => ({ mutate: vi.fn(), isPending: false, isError: false, error: null })),
+  useCancelOrder: vi.fn(() => ({ mutate: vi.fn(), isPending: false, isError: false, error: null, variables: null })),
 }));
 
 import { usePortfolio } from "@/hooks/usePortfolio";

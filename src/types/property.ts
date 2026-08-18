@@ -34,10 +34,16 @@ export interface Property {
   createdAt: string;
   meta: PropertyMeta;
   rentalHistory: RentalPayment[];
+  /** Whole-property value, minor units (offered = totalShares × sharePriceUsd). */
+  totalValueUsd: number;
 }
 
 export interface Listing extends Property {
   sharesSold: number;
   sharesRemaining: number;
   fundingProgressRatio: number; // 0..1
+  /** Monthly yield rate (%) paid on locked shares — 4.50–7.50 (PRODUCT-PLAN §0.4). */
+  monthlyYieldRate: number;
+  /** Latest secondary-market executed price, minor units (PD-04/PD-07); absent before the first fill. */
+  lastTradeUsd?: number;
 }

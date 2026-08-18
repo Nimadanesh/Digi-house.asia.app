@@ -127,5 +127,62 @@ describe("transaction routes", () => {
       expect(body.transactions).toHaveLength(1);
       expect(body.hasMore).toBe(false);
     });
+
+    it("maps the new PE-09 kinds + feeUsd through mapTransactionPublic", async () => {
+      const store = createMemoryTxStore([
+        ...BASE_TXS,
+        {
+          id: "tx-isell", userId: "user-a", kind: "instant_sell", propertyId: "prop-1",
+          shares: 2, amountUsd: 14_880, tonAmount: null, status: "success",
+          txHash: "simulated:isell", error: null, buyIntentId: null, feeUsd: 1_120,
+          createdAt: new Date("2026-07-05"),
+        },
+        {
+          id: "tx-tbuy", userId: "user-a", kind: "trade_buy", propertyId: "prop-2",
+          shares: 3, amountUsd: 30_000, tonAmount: null, status: "success",
+          txHash: "simulated:tbuy", error: null, buyIntentId: null, feeUsd: 210,
+          createdAt: new Date("2026-07-06"),
+        },
+        {
+          id: "tx-tsell", userId: "user-a", kind: "trade_sell", propertyId: "prop-2",
+          shares: 3, amountUsd: 29_790, tonAmount: null, status: "success",
+          txHash: "simulated:tsell", error: null, buyIntentId: null, feeUsd: 210,
+          createdAt: new Date("2026-07-07"),
+        },
+        {
+          id: "tx-ym", userId: "user-a", kind: "yield_monthly", propertyId: null,
+          shares: null, amountUsd: 4_800, tonAmount: null, status: "success",
+          txHash: "simulated:ym", error: null, buyIntentId: null,
+          createdAt: new Date("2026-07-08"),
+        },
+        {
+          id: "tx-yw", userId: "user-a", kind: "yield_weekly", propertyId: null,
+          shares: null, amountUsd: 1_250, tonAmount: null, status: "success",
+          txHash: "simulated:yw", error: null, buyIntentId: null,
+          createdAt: new Date("2026-07-09"),
+        },
+      ]);
+      const app = new Hono().route(
+        "/",
+        createTransactionRoutes(makeDeps({ transactions: store })),
+      );
+      const { token } = await signSessionToken("user-a", SESSION);
+      const res = await app.request("/v1/transactions", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      expect(res.status).toBe(200);
+      const body = (await res.json()) as {
+        transactions: Array<{ id: string; kind: string; feeUsd?: number }>;
+      };
+      const byId = Object.fromEntries(body.transactions.map((t) => [t.id, t]));
+      expect(byId["tx-isell"]).toMatchObject({ kind: "instant_sell", feeUsd: 1_120 });
+      expect(byId["tx-tbuy"]).toMatchObject({ kind: "trade_buy", feeUsd: 210 });
+      expect(byId["tx-tsell"]).toMatchObject({ kind: "trade_sell", feeUsd: 210 });
+      expect(byId["tx-ym"]).toMatchObject({ kind: "yield_monthly" });
+      expect(byId["tx-yw"]).toMatchObject({ kind: "yield_weekly" });
+      // feeUsd is omitted (not serialised as 0) when absent — mapTransactionPublic guards it.
+      expect(byId["tx-ym"]!.feeUsd).toBeUndefined();
+      expect(byId["tx-yw"]!.feeUsd).toBeUndefined();
+    });
   });
 });

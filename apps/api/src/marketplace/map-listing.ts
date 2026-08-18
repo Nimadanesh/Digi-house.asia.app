@@ -26,9 +26,18 @@ export type ListingPublic = {
   fundingProgressRatio: number;
   salePaused: boolean;
   distributionPaused: boolean;
+  /** Monthly yield rate (%) paid on locked shares — 4.50–7.50 (PRODUCT-PLAN §0.4). */
+  monthlyYieldRate: number;
+  /** Whole-property value in cents; offered = totalShares × sharePriceUsd. */
+  totalValueUsd: number;
+  /** Latest secondary-market executed price (PD-04/PD-07); absent before the first fill. */
+  lastTradeUsd?: number;
 };
 
-export function mapPropertyToListing(row: PropertyRow): ListingPublic {
+export function mapPropertyToListing(
+  row: PropertyRow,
+  lastTradeUsd?: number | null,
+): ListingPublic {
   const totalShares = row.totalShares;
   const sharesSold = row.sharesSold;
   const sharesRemaining = totalShares - sharesSold;
@@ -55,6 +64,9 @@ export function mapPropertyToListing(row: PropertyRow): ListingPublic {
     fundingProgressRatio,
     salePaused: row.salePaused,
     distributionPaused: row.distributionPaused,
+    monthlyYieldRate: Number(row.monthlyYieldRate ?? "5.50"),
+    totalValueUsd: Number(row.totalValueUsd ?? 0),
+    ...(lastTradeUsd != null ? { lastTradeUsd } : {}),
   };
 }
 

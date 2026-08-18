@@ -1,0 +1,44 @@
+// File responsibility: yield integrity check — the numbers gate.
+// Asserts that the rate-based weekly yield shown on Property detail === the paid Earnings
+// entry for the same holding + week, and that the Home next-payout sum === the sum of
+// pending entries. Model (PRODUCT-PLAN §0.4): weekly = invested × (rate − 1%) / 4.
+import { describe, expect, it } from "vitest";
+import { PROPERTIES } from "@/lib/mock/seed/properties";
+import { HOLDINGS } from "@/lib/mock/seed/holdings";
+import { EARNINGS_ENTRIES } from "@/lib/mock/seed/earnings";
+import { positionYieldUsd } from "@/lib/property-yield";
+
+function weeklyForHolding(propertyId: string, sharesOwned: number): number {
+  const property = PROPERTIES.find((p) => p.id === propertyId);
+  if (!property) throw new Error(`integrity: property ${propertyId} not found in seed`);
+  return positionYieldUsd(property, sharesOwned).weeklyUsd;
+}
+
+describe("weekly-yield integrity check (R-6.6 judge gate)", () => {
+  it("Property detail projected yield === Earnings paid entry amount for the same holding + week", () => {
+    for (const holding of HOLDINGS) {
+      const propertyDetailProjected = weeklyForHolding(
+        holding.propertyId,
+        holding.sharesOwned,
+      );
+      const paidEntriesForHolding = EARNINGS_ENTRIES.filter(
+        (e) => e.propertyId === holding.propertyId && e.status === "paid",
+      );
+      if (paidEntriesForHolding.length === 0) continue;
+      for (const e of paidEntriesForHolding) {
+        expect(e.amountUsd).toBe(propertyDetailProjected);
+      }
+    }
+  });
+
+  it("Home next-payout contribution === Earnings pending entry amount for the same week", () => {
+    const pendingTotal = EARNINGS_ENTRIES
+      .filter((e) => e.status === "pending")
+      .reduce((s, e) => s + e.amountUsd, 0);
+    const sumByProjections = HOLDINGS.reduce(
+      (s, h) => s + weeklyForHolding(h.propertyId, h.sharesOwned),
+      0,
+    );
+    expect(pendingTotal).toBe(sumByProjections);
+  });
+});

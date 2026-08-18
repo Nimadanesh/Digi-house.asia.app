@@ -36,7 +36,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
   const tCommon = useTranslations("common");
   const tOnboarding = useTranslations("onboarding");
   const property = useProperty(id);
-  const orderBook = useOrderBook(id);
+  const orderBook = useOrderBook(id, { live: true });
   const { documents, download: docDownload } = usePropertyDocuments(id);
   const { backButton, mainButton } = useTelegram();
   const ton = useTonConnect();

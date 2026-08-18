@@ -5,6 +5,7 @@ import { SEED_PROPERTIES } from "../db/seed/properties-data.js";
 import type { ApiEnv } from "../env.js";
 import type { Logger } from "../logger.js";
 import { createMemoryPropertyStore } from "../marketplace/property-store.js";
+import { createMemoryTradeStore } from "../orders/trade-store.js";
 import type { ListingPublic } from "../marketplace/map-listing.js";
 
 const silentLog = {
@@ -56,23 +57,30 @@ function testEnv(): ApiEnv {
     R2_PUBLIC_BASE_URL: undefined,
     LAUNCH_MODE: "open",
     ALLOWLIST_WALLETS: undefined,
+    YIELD_WORKER_ENABLED: false,
+    YIELD_TICK_MS: 60_000,
+    UNLOCK_MATURATION_MS: 3 * 24 * 3_600_000,
+    NOTIFY_YIELD: false,
+    HOUSE_ACCOUNT_USER_ID: "house-account",
   };
 }
 
 function makeApp() {
   const seedRows = SEED_PROPERTIES.map(toPropertyInsert);
   const properties = createMemoryPropertyStore(seedRows);
+  const trades = createMemoryTradeStore();
   const app = createApp({
     env: testEnv(),
     log: silentLog,
     properties,
+    trades,
   });
-  return app;
+  return { app, trades };
 }
 
 describe("GET /v1/marketplace", () => {
   it("returns ≥6 listings with derived fields", async () => {
-    const app = makeApp();
+    const { app } = makeApp();
     const res = await app.request("/v1/marketplace");
     expect(res.status).toBe(200);
     const body = (await res.json()) as ListingPublic[];
@@ -93,7 +101,7 @@ describe("GET /v1/marketplace", () => {
   });
 
   it("filters ?status=funding", async () => {
-    const app = makeApp();
+    const { app } = makeApp();
     const res = await app.request("/v1/marketplace?status=funding");
     expect(res.status).toBe(200);
     const body = (await res.json()) as ListingPublic[];
@@ -102,7 +110,7 @@ describe("GET /v1/marketplace", () => {
   });
 
   it("filters ?status=funded", async () => {
-    const app = makeApp();
+    const { app } = makeApp();
     const res = await app.request("/v1/marketplace?status=funded");
     const body = (await res.json()) as ListingPublic[];
     expect(body.length).toBeGreaterThanOrEqual(1);
@@ -110,15 +118,44 @@ describe("GET /v1/marketplace", () => {
   });
 
   it("filters ?status=resale", async () => {
-    const app = makeApp();
+    const { app } = makeApp();
     const res = await app.request("/v1/marketplace?status=resale");
     const body = (await res.json()) as ListingPublic[];
     expect(body.length).toBeGreaterThanOrEqual(1);
     expect(body.every((p) => p.status === "resale")).toBe(true);
   });
 
+  it("attaches lastTradeUsd from the trades ledger (PD-07)", async () => {
+    const { app, trades } = makeApp();
+    const id = "prop-tbilisi-riverhouse-loft";
+    await trades.insert({
+      id: "trd-1",
+      propertyId: id,
+      priceUsd: 12_400,
+      quantity: 2,
+      buyerUserId: "b",
+      sellerUserId: "s",
+      buyFeeUsd: 100,
+      sellFeeUsd: 100,
+      makerOrderId: "m",
+      takerOrderId: "t",
+      fillSeq: 0,
+    });
+    const res = await app.request("/v1/marketplace");
+    const body = (await res.json()) as ListingPublic[];
+    const row = body.find((p) => p.id === id);
+    expect(row?.lastTradeUsd).toBe(12_400);
+  });
+
+  it("omits lastTradeUsd for properties with no fills", async () => {
+    const { app } = makeApp();
+    const res = await app.request("/v1/marketplace");
+    const body = (await res.json()) as ListingPublic[];
+    expect(body.every((p) => p.lastTradeUsd == null)).toBe(true);
+  });
+
   it("filters ?query=marina case-insensitively", async () => {
-    const app = makeApp();
+    const { app } = makeApp();
     const res = await app.request("/v1/marketplace?query=MARINA");
     expect(res.status).toBe(200);
     const body = (await res.json()) as ListingPublic[];
@@ -133,7 +170,7 @@ describe("GET /v1/marketplace", () => {
   });
 
   it("returns 400 for invalid status", async () => {
-    const app = makeApp();
+    const { app } = makeApp();
     const res = await app.request("/v1/marketplace?status=nope");
     expect(res.status).toBe(400);
     const body = (await res.json()) as { code: string };
@@ -143,7 +180,7 @@ describe("GET /v1/marketplace", () => {
 
 describe("GET /v1/properties/:id", () => {
   it("returns 200 + Listing for seeded id", async () => {
-    const app = makeApp();
+    const { app } = makeApp();
     const id = "prop-marina-vista-4b";
     const res = await app.request(`/v1/properties/${id}`);
     expect(res.status).toBe(200);
@@ -156,7 +193,7 @@ describe("GET /v1/properties/:id", () => {
   });
 
   it("matches list mapper for same id", async () => {
-    const app = makeApp();
+    const { app } = makeApp();
     const id = "prop-marina-vista-4b";
     const detail = (await (
       await app.request(`/v1/properties/${id}`)
@@ -172,7 +209,7 @@ describe("GET /v1/properties/:id", () => {
   });
 
   it("returns 404 for unknown id", async () => {
-    const app = makeApp();
+    const { app } = makeApp();
     const res = await app.request("/v1/properties/does-not-exist-zz");
     expect(res.status).toBe(404);
     const body = (await res.json()) as { code: string; message: string };
