@@ -268,10 +268,12 @@
    Mobile perf strategy:
    - Inactive grids (.fw-paused) freeze ALL their animations (flip + idle) via
      animation-play-state: paused — the carousel only animates the visible slide.
-   - On touch devices ((hover: none) and (pointer: coarse)) true-3D is dropped:
-     no perspective / preserve-3d / translateZ, no continuous idle sway, and flips
-     run once then settle (fw-flip-once + forwards) so animation work is bounded
-     to ~3s instead of infinite.
+   - On touch devices ((hover: none) and (pointer: coarse)) depth is dropped:
+     no perspective / translateZ, no continuous idle sway, and flips run once
+     then settle (fw-flip-once + fill both) so animation work is bounded to ~3s
+     instead of infinite. .fw-cell KEEPS transform-style: preserve-3d — without
+     it, backface-visibility judges each face from its own transform and the
+     blue back face is forever hidden (cells stay stuck on the dark front face).
    - will-change is used on the grid container ONLY (one layer for the idle sway),
      never on cells — hundreds of will-change'd cells would explode layer count. */
 .fw-grid {
@@ -346,7 +348,10 @@
   }
 }
 
-/* Touch / mobile: orthographic once-and-settle flip wave (see header comment). */
+/* Touch / mobile: orthographic once-and-settle flip wave (see header comment).
+   .fw-cell MUST keep transform-style: preserve-3d so the two faces flip correctly
+   (at rotateX(180deg) the front face is back-facing/hidden and the blue back face
+   is shown). Only perspective — the depth illusion — is dropped. */
 @media (hover: none) and (pointer: coarse) {
   .fw-grid {
     perspective: none;
@@ -356,11 +361,17 @@
     will-change: auto;
   }
   .fw-cell {
-    transform-style: flat;
+    transform-style: preserve-3d;
   }
   .fw-cell.fw-animate {
-    /* flip in (0→180 over the first 13%), hold, then stop — bounded animation work */
-    animation: fw-flip-once 2400ms linear 1 forwards;
+    /* Settled state = blue back face, guaranteed two ways:
+       - base transform: rotateX(180deg) shows the back face even if the
+         animation is interrupted or unsupported;
+       - fill-mode both: applies the 0% keyframe (dark) during each cell's
+         stagger delay, then holds the 100% keyframe (rotateX(180deg) = blue)
+         once the one-shot completes. No infinite looping. */
+    transform: rotateX(180deg);
+    animation: fw-flip-once 2400ms linear both;
   }
 }
 @keyframes fw-flip-once {
