@@ -2,6 +2,7 @@ import { Queue, Worker, type Job } from "bullmq";
 import type { Redis } from "ioredis";
 import IORedis from "ioredis";
 import type { Logger } from "../logger.js";
+import { sendOpsAlert, type OpsNotifyDeps } from "../notify/ops-alert.js";
 import { tickYieldEngine, type YieldEngineDeps } from "./tick-yield.js";
 
 export const YIELD_QUEUE_NAME = "digihouse-yield";
@@ -53,6 +54,8 @@ export function startYieldWorker(opts: {
   deps: YieldEngineDeps;
   unlockMaturationMs: number;
   log: Logger;
+  /** PF-05: optional ops Telegram alerting on failed ticks. */
+  notify?: OpsNotifyDeps | null;
 }): YieldWorkerHandle {
   const connection = createRedisConnection(opts.redisUrl);
 
@@ -80,6 +83,13 @@ export function startYieldWorker(opts: {
 
   worker.on("failed", (job, err) => {
     opts.log.error({ jobId: job?.id, err }, "yield job failed");
+    if (opts.notify) {
+      void sendOpsAlert(opts.notify, {
+        subject: `Yield job failed (${job?.id ?? "unknown"})`,
+        details: { queue: YIELD_QUEUE_NAME, name: job?.name },
+        err,
+      });
+    }
   });
 
   return {

@@ -203,6 +203,13 @@ Other `NEXT_PUBLIC_*` vars can stay at their `.env.local.example` defaults. Rede
 | `BUY_INTENT_TTL_SECONDS` | `900` | No | 15 min |
 | `PAYOUT_TICK_MS` | `60000` | No | Demo cadence |
 | `PAYOUT_WORKER_ENABLED` | `false` | No | Worker runs separately |
+| `YIELD_WORKER_ENABLED` | `false` | No | Yield worker (mature→accrue→pay); enable after monitoring baseline |
+| `YIELD_TICK_MS` | `60000` | No | Yield tick cadence (idempotent) |
+| `UNLOCK_MATURATION_MS` | `259200000` | No | 3 days; lock unlock maturation window |
+| `NOTIFY_YIELD` | `false` | No | `true` → Telegram notify on yield payouts + lock lifecycle |
+| `OPS_CHAT_ID` | ops channel id | No | PF-05 — failed yield/payout jobs + match guard trips alert; requires `TELEGRAM_BOT_TOKEN` |
+| `LAUNCH_MODE` | `allowlist` | No | P5-09 — allowlist gate; fail closed with empty `ALLOWLIST_WALLETS` |
+| `ALLOWLIST_WALLETS` | comma-separated test wallets | No | P5-09 — wallets allowed to buy/place orders |
 
 ### 7.2 Mini App env vars (staging)
 

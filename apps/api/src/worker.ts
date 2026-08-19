@@ -27,6 +27,7 @@ import {
 } from "./payouts/queue.js";
 import { startPayoutWorker } from "./payouts/worker.js";
 import { createDbTxStore } from "./buys/tx-store.js";
+import { sendOpsAlert, type OpsNotifyDeps } from "./notify/ops-alert.js";
 import { createDbShareLockStore } from "./yield/lock-store.js";
 import { createDbYieldStore } from "./yield/yield-store.js";
 import {
@@ -57,6 +58,18 @@ async function main() {
   }
 
   const db = createDb(requireDatabaseUrl({ DATABASE_URL: env.DATABASE_URL }));
+
+  // PF-05: ops alerting (failed yield/payout ticks + match guard trips).
+  const opsNotify: OpsNotifyDeps | null =
+    env.TELEGRAM_BOT_TOKEN?.trim() && env.OPS_CHAT_ID?.trim()
+      ? { botToken: env.TELEGRAM_BOT_TOKEN, chatId: env.OPS_CHAT_ID, log }
+      : null;
+  if (opsNotify) {
+    log.info(
+      { chatId: env.OPS_CHAT_ID },
+      "ops alerting enabled (failed jobs + match guard trips → Telegram)",
+    );
+  }
 
   const shutdownHandlers: Array<() => Promise<void>> = [];
 
@@ -106,6 +119,7 @@ async function main() {
       redisUrl: env.REDIS_URL!,
       deps,
       log,
+      notify: opsNotify,
     });
     log.info("payout worker listening");
 
@@ -123,6 +137,7 @@ async function main() {
       balances: createDbBalanceStore(db),
       transactions: createDbTxStore(db),
       log,
+      audit: createDbAuditStore(db),
       ...(env.NOTIFY_YIELD && env.TELEGRAM_BOT_TOKEN?.trim()
         ? {
             notify: {
@@ -139,6 +154,12 @@ async function main() {
     // Kick one immediate tick on boot so a cold worker settles overdue locks.
     void tickYieldEngine(yieldDeps, env.UNLOCK_MATURATION_MS).catch((err) => {
       log.warn({ err }, "yield boot tick failed");
+      if (opsNotify) {
+        void sendOpsAlert(opsNotify, {
+          subject: "Yield boot tick failed",
+          err,
+        });
+      }
     });
 
     const queue = createYieldQueue(env.REDIS_URL);
@@ -157,6 +178,7 @@ async function main() {
       deps: yieldDeps,
       unlockMaturationMs: env.UNLOCK_MATURATION_MS,
       log,
+      notify: opsNotify,
     });
     log.info("yield worker listening");
 

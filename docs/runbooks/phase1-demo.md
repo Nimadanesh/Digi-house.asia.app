@@ -36,6 +36,7 @@ Before starting, confirm each item:
 - [ ] `CORS_ORIGIN` set to the Mini App staging URL.
 - [ ] `DATABASE_URL` + `REDIS_URL` configured on staging.
 - [ ] Payout worker running: `PAYOUT_WORKER_ENABLED=true`, `PAYOUT_TICK_MS=60000` (see §4 step 10).
+- [ ] Yield worker running (for steps 14–16): `YIELD_WORKER_ENABLED=true`, `YIELD_TICK_MS=60000`, `UNLOCK_MATURATION_MS` set (default 3 days).
 
 ### Mini App
 
@@ -125,6 +126,17 @@ Execute each step and check the box. If a step fails, consult §5 (Troubleshooti
 | 11 | **Home post-payout** | Navigate to Home. Balance updated. Next payout countdown shows next Friday. Property card shows updated pending for next week. | R-3.1–3.3 |
 | 12 | **Rate limiting** | Send 11 rapid POSTs to `/v1/auth/telegram`. First 10 return 200/400 (valid auth). 11th returns `429` with `{"code":"rate_limit_exceeded","message":"Too many requests"}`. | H3, TM-08 |
 | 13 | **Portfolio empty state** | Create a new user (no holdings) via auth. Hit `GET /v1/portfolio`. Response is `200` with `{"holdings":[],...}` — not 500. | R-8.1 |
+| 14 | **Yield lock (Phase B)** | On a funded property, lock shares → lock appears (locked shares held). After `UNLOCK_MATURATION_MS`, the lock matures and unlocks (shares free again). Weekly yield accrual rows appear. | Phase B |
+| 15 | **Queued sell → sellout (Phase D)** | Place a **custom sell** on a **funding** property → order is `queued` (not matchable). Sell the last primary share (admin or another user) → property flips to `resale`, queued sells activate `open`, seller gets a Telegram notification. | Phase D, PF-02 |
+| 16 | **Secondary match (Phase D)** | On a resale property, a crossing buy executes against the resting ask (or vice versa). Verify: trade row, both ledger rows (`trade_buy` / `trade_sell`), seller credited notional − fee, buyer shares moved. | PD-01/02 |
+| 17 | **Withdrawal (Phase E)** | Request a withdrawal (withdrawable balance → `requested`). Admin approves → `approved` → mark paid → `paid` + success ledger row. Reject path refunds exactly once. | PE-03 |
+
+> **PF-01/PF-02 automated coverage:** the two money-path E2E specs
+> [`e2e/tests/money-path-1.spec.ts`](../../e2e/tests/money-path-1.spec.ts) (buy→lock→yield→unlock→mature→instant sell→shares back)
+> and [`e2e/tests/money-path-2.spec.ts`](../../e2e/tests/money-path-2.spec.ts) (buy→queued sell→sellout→match→withdrawal)
+> exercise steps 14–17 against staging. The same flows are covered in-process by
+> [`apps/api/src/e2e/money-path-1.test.ts`](../../apps/api/src/e2e/money-path-1.test.ts) and
+> [`apps/api/src/e2e/money-path-2.test.ts`](../../apps/api/src/e2e/money-path-2.test.ts).
 
 ### Detailed verification commands (for QA / headless)
 

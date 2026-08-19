@@ -739,6 +739,7 @@ export function createBuyRoutes(deps: BuyRouteDeps) {
             transactions: deps.transactions,
             orders: deps.orders,
             log: deps.log,
+            audit: deps.audit ?? null,
             notify: deps.notify ?? null,
           },
           {

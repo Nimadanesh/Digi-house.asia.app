@@ -71,6 +71,8 @@ const envSchema = z
       .default(3 * 24 * 3_600_000),
     /** Telegram notify on yield payouts + lock lifecycle (needs TELEGRAM_BOT_TOKEN). */
     NOTIFY_YIELD: boolish,
+    /** PF-05: Telegram chat id for ops alerts on failed jobs/matches (needs TELEGRAM_BOT_TOKEN). */
+    OPS_CHAT_ID: z.string().optional(),
     /** Platform house-account user id for liquidity orders (PD-03). */
     HOUSE_ACCOUNT_USER_ID: z.string().default("house-account"),
     /** P4-01: Telegram notify on earnings paid (default true in staging docs).
@@ -147,6 +149,7 @@ const envSchema = z
       YIELD_TICK_MS: val.YIELD_TICK_MS,
       UNLOCK_MATURATION_MS: val.UNLOCK_MATURATION_MS,
       NOTIFY_YIELD: val.NOTIFY_YIELD,
+      OPS_CHAT_ID: val.OPS_CHAT_ID,
       HOUSE_ACCOUNT_USER_ID: val.HOUSE_ACCOUNT_USER_ID,
       PAYOUT_TICK_SECRET: val.PAYOUT_TICK_SECRET,
       ADMIN_API_SECRET: val.ADMIN_API_SECRET,

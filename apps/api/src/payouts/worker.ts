@@ -1,5 +1,6 @@
 import { Worker, type Job } from "bullmq";
 import type { Logger } from "../logger.js";
+import { sendOpsAlert, type OpsNotifyDeps } from "../notify/ops-alert.js";
 import {
   PAYOUT_JOB_NAME,
   PAYOUT_QUEUE_NAME,
@@ -25,6 +26,8 @@ export function startPayoutWorker(opts: {
   redisUrl: string;
   deps: TickPayoutDeps;
   log: Logger;
+  /** PF-05: optional ops Telegram alerting on failed payout jobs. */
+  notify?: OpsNotifyDeps | null;
 }): PayoutWorkerHandle {
   const connection = createRedisConnection(opts.redisUrl);
 
@@ -61,6 +64,13 @@ export function startPayoutWorker(opts: {
 
   worker.on("failed", (job, err) => {
     opts.log.error({ jobId: job?.id, err }, "payout job failed");
+    if (opts.notify) {
+      void sendOpsAlert(opts.notify, {
+        subject: `Payout job failed (${job?.id ?? "unknown"})`,
+        details: { queue: PAYOUT_QUEUE_NAME, name: job?.name },
+        err,
+      });
+    }
   });
 
   return {

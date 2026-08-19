@@ -35,6 +35,35 @@ In a SEV1 incident, execute in order. Do not skip steps.
 
 **Do not unpause until checklist green** (see § Unpause checklist below).
 
+## Ops alerting (PF-05)
+
+Failed background work alerts the `#incidents` channel via Telegram before a user notices.
+
+**Configuration** (set in platform env, both required to enable):
+
+| Env | Purpose |
+|---|---|
+| `TELEGRAM_BOT_TOKEN` | Bot used for alerts (same prod bot as user notifications) |
+| `OPS_CHAT_ID` | Telegram chat id of the ops channel (user or group) |
+
+When `OPS_CHAT_ID` is unset, alerting is **disabled** and failures only log (`yield job failed` /
+`payout job failed` / `match.maker_guard_tripped`) — the API stays healthy either way (fail-open).
+
+**What triggers an alert** (all fail-open — alerting never breaks the failing path):
+
+| Trigger | Source | Subject prefix |
+|---|---|---|
+| BullMQ yield tick job failed | `yield/queue.ts` `worker.on("failed")` | `Yield job failed` |
+| BullMQ payout job failed | `payouts/worker.ts` `worker.on("failed")` | `Payout job failed` |
+| Yield boot tick failed (cold worker) | `worker.ts` boot tick | `Yield boot tick failed` |
+| Match guard tripped (concurrent change during fill) | `orders/settle-matches.ts` | `Match guard tripped on <property>` |
+
+**Triage**: each alert carries the job id / order ids and the error message. Match-guard alerts are
+usually transient (a concurrent cancel/fill); repeated alerts on the same property warrant a SEV2.
+
+**Verify after deploy**: set both env vars, then confirm the worker boot log line
+`ops alerting enabled (failed jobs + match guard trips → Telegram)`.
+
 ## Incident commander checklist
 
 - [ ] Assign commander (first responder or on-call)

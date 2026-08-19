@@ -232,3 +232,120 @@ describe("settleMatchesForTaker", () => {
     ).rejects.toThrow(/duplicate/);
   });
 });
+
+describe("concurrency — double-match (PF-04)", () => {
+  it("two concurrent takers can never double-fill a resting maker", async () => {
+    const d = makeDeps();
+    // Resting maker sell: 100 shares @ $100 (notional 1,000,000 → tier 4).
+    await seedSell(d.deps, 10_000, 100, SELLER, 100);
+    const escrow = buyEscrowUsd(DEFAULT_FEE_TIERS, 10_000, 100)!; // 1,000,000 + 6,000 fee
+
+    for (const [id, user] of [
+      ["taker-1", "user-buyer1"],
+      ["taker-2", "user-buyer2"],
+    ] as const) {
+      await d.balances.adjust(user, { investingDelta: escrow.total });
+      await d.orders.insert({
+        id, userId: user, propertyId: PROP, makerAddress: "EQ",
+        side: "buy", priceUsd: 10_000, quantity: 100, status: "open",
+        escrowedUsd: escrow.total,
+      });
+      await d.balances.adjust(user, { investingDelta: -escrow.total });
+    }
+
+    const t1 = (await d.orders.getById("taker-1"))!;
+    const t2 = (await d.orders.getById("taker-2"))!;
+    const [r1, r2] = await Promise.all([
+      settleMatchesForTaker(d.deps, t1),
+      settleMatchesForTaker(d.deps, t2),
+    ]);
+
+    // The per-property mutex + guarded applyFill cap total fills at the maker's 100.
+    const totalFilled =
+      r1.fills.reduce((s, f) => s + f.quantity, 0) +
+      r2.fills.reduce((s, f) => s + f.quantity, 0);
+    expect(totalFilled).toBe(100);
+
+    const maker = (await d.orders.getById(`sell-${10_000}-${100}`))!;
+    expect(maker.filledQuantity).toBe(100);
+    expect(maker.status).toBe("filled");
+
+    // Shares conserved: seller 0, buyers total 100, no negative holdings.
+    expect((await d.holdings.get(SELLER, PROP))?.sharesOwned ?? 0).toBe(0);
+    const b1 = (await d.holdings.get("user-buyer1", PROP))?.sharesOwned ?? 0;
+    const b2 = (await d.holdings.get("user-buyer2", PROP))?.sharesOwned ?? 0;
+    expect(b1 + b2).toBe(100);
+    expect(Math.max(b1, b2)).toBe(100); // the winning taker took all 100
+
+    // Seller paid for exactly 100 shares, once: 1,000,000 − sell fee.
+    // 1,000,000 sits in tier 3 (70bps) → fee 7,000 → net 993,000.
+    expect((await d.balances.get(SELLER))?.investingUsd).toBe(993_000);
+    // Exactly one trade row for the single fill.
+    expect(d.trades._rows).toHaveLength(1);
+  });
+});
+
+describe("concurrency — escrow refund vs cancel (PF-04)", () => {
+  async function placeEscrowedBuy(d: ReturnType<typeof makeDeps>, id: string, userId: string) {
+    const escrow = buyEscrowUsd(DEFAULT_FEE_TIERS, 10_000, 2)!; // 20,000 + 180 fee
+    await d.balances.adjust(userId, { investingDelta: escrow.total });
+    await d.orders.insert({
+      id, userId, propertyId: PROP, makerAddress: "EQ",
+      side: "buy", priceUsd: 10_000, quantity: 2, status: "open",
+      escrowedUsd: escrow.total,
+    });
+    await d.balances.adjust(userId, { investingDelta: -escrow.total });
+    return escrow.total;
+  }
+
+  it("two concurrent cancels refund the escrow exactly once", async () => {
+    const d = makeDeps();
+    const escrowTotal = await placeEscrowedBuy(d, "race-cancel", BUYER);
+
+    async function cancelAndRefund() {
+      const res = await d.orders.cancelIfOpen("race-cancel", BUYER);
+      if (!res.ok) return 0;
+      const released = await d.orders.releaseEscrow("race-cancel");
+      if (released > 0) {
+        await d.balances.adjust(BUYER, { investingDelta: released });
+      }
+      return released;
+    }
+
+    const [a, b] = await Promise.all([cancelAndRefund(), cancelAndRefund()]);
+
+    expect(a + b).toBe(escrowTotal); // refunded once, never twice
+    expect((await d.balances.get(BUYER))?.investingUsd).toBe(escrowTotal);
+    const order = (await d.orders.getById("race-cancel"))!;
+    expect(order.status).toBe("cancelled");
+    expect(order.escrowedUsd).toBe(0);
+  });
+
+  it("matcher releaseEscrow racing a cancel never double-credits", async () => {
+    const d = makeDeps();
+    const escrowTotal = await placeEscrowedBuy(d, "race-release", BUYER);
+
+    async function matcherRefund() {
+      const released = await d.orders.releaseEscrow("race-release");
+      if (released > 0) {
+        await d.balances.adjust(BUYER, { investingDelta: released });
+      }
+      return released;
+    }
+    async function cancelRefund() {
+      const res = await d.orders.cancelIfOpen("race-release", BUYER);
+      if (!res.ok) return 0;
+      const released = await d.orders.releaseEscrow("race-release");
+      if (released > 0) {
+        await d.balances.adjust(BUYER, { investingDelta: released });
+      }
+      return released;
+    }
+
+    const [m, c] = await Promise.all([matcherRefund(), cancelRefund()]);
+
+    expect(m + c).toBe(escrowTotal); // the guarded release released once
+    expect((await d.balances.get(BUYER))?.investingUsd).toBe(escrowTotal);
+    expect((await d.orders.getById("race-release"))?.escrowedUsd).toBe(0);
+  });
+});

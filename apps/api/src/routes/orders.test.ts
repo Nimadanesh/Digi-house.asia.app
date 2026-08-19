@@ -78,6 +78,7 @@ function testEnv(): ApiEnv {
     UNLOCK_MATURATION_MS: 3 * 24 * 3_600_000,
     NOTIFY_YIELD: false,
     HOUSE_ACCOUNT_USER_ID: "house-account",
+    OPS_CHAT_ID: undefined,
   };
 }
 

@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { createMemoryAuditStore } from "../audit/audit-store.js";
 import { createMemoryShareLockStore } from "./lock-store.js";
 import { createMemoryYieldStore } from "./yield-store.js";
 import { createMemoryBalanceStore } from "../money/balance-store.js";
@@ -21,8 +22,9 @@ function makeDeps() {
   const balances = createMemoryBalanceStore();
   const transactions: TxStore & { _rows: TransactionRecord[] } =
     createMemoryTxStore();
-  const deps: YieldEngineDeps = { locks, yields, balances, transactions };
-  return { deps, locks, yields, balances, transactions };
+  const audit = createMemoryAuditStore();
+  const deps: YieldEngineDeps = { locks, yields, balances, transactions, audit };
+  return { deps, locks, yields, balances, transactions, audit };
 }
 
 /** $1,000 @ 6% monthly — daily accrual $2.00, monthly installment $60. */
@@ -151,6 +153,33 @@ describe("matureDueLocks", () => {
     const row = await deps.locks.get("lock-1");
     expect(row?.status).toBe("matured");
     expect(await matureDueLocks(deps, MATURATION, due)).toEqual([]); // idempotent
+  });
+
+  it("emits lock.mature audit for every matured lock (PF-03)", async () => {
+    const { deps, audit } = makeDeps();
+    const lock = await seedLock(deps);
+    const requestedAt = new Date();
+    await deps.locks.markUnlockRequested(lock.id, requestedAt);
+
+    await matureDueLocks(
+      deps,
+      MATURATION,
+      new Date(requestedAt.getTime() + MATURATION),
+    );
+
+    const matureAudits = await audit.listByAction("lock.mature");
+    expect(matureAudits).toHaveLength(1);
+    expect(matureAudits[0]!.actorType).toBe("system");
+    expect(matureAudits[0]!.actorLabel).toBe("yieldEngine");
+    expect(matureAudits[0]!.resourceId).toBe("lock-1");
+    expect(matureAudits[0]!.payload?.shares).toBe(10);
+    // Idempotent — a second pass emits nothing.
+    await matureDueLocks(
+      deps,
+      MATURATION,
+      new Date(requestedAt.getTime() + MATURATION),
+    );
+    expect(await audit.listByAction("lock.mature")).toHaveLength(1);
   });
 });
 

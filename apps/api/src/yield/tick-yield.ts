@@ -7,6 +7,8 @@ import type { Logger } from "../logger.js";
 import type { BalanceStore } from "../money/balance-store.js";
 import type { TxStore } from "../buys/tx-store.js";
 import { sendTelegramMessage } from "../notify/telegram-notify.js";
+import type { AuditStore } from "../audit/audit-store.js";
+import { writeAuditEvent } from "../audit/write-audit.js";
 import {
   addDaysToDay,
   dailyAccrualAtDayIndex,
@@ -28,6 +30,8 @@ export type YieldEngineDeps = {
   balances: BalanceStore;
   transactions: TxStore;
   log?: Logger;
+  /** Optional audit trail for lock maturation (PF-03). */
+  audit?: AuditStore | null;
   /** Optional Telegram notify (fail-open). */
   notify?: YieldNotify | null;
 };
@@ -228,6 +232,23 @@ export async function matureDueLocks(
     if (row) {
       matured.push(lock.id);
       deps.log?.info({ lockId: lock.id }, "yield.lock.matured");
+      if (deps.audit) {
+        await writeAuditEvent(deps.audit, {
+          action: "lock.mature",
+          actorType: "system",
+          actorLabel: "yieldEngine",
+          resourceType: "share_lock",
+          resourceId: lock.id,
+          summary: `Lock matured — ${lock.shares} shares of ${lock.propertyId} are now sellable`,
+          payload: {
+            lockId: lock.id,
+            propertyId: lock.propertyId,
+            userId: lock.userId,
+            shares: lock.shares,
+          },
+          requestId: null,
+        });
+      }
       if (deps.notify) {
         try {
           const title = await deps.notify

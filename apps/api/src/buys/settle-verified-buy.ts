@@ -10,6 +10,8 @@ import type { HoldingStore } from "../portfolio/holding-store.js";
 import type { OrderStore } from "../orders/order-store.js";
 import type { Logger } from "../logger.js";
 import { sendTelegramMessage } from "../notify/telegram-notify.js";
+import type { AuditStore } from "../audit/audit-store.js";
+import { writeAuditEvent } from "../audit/write-audit.js";
 
 export type SettleVerifiedBuyDeps = {
   intents: IntentStore;
@@ -19,6 +21,8 @@ export type SettleVerifiedBuyDeps = {
   /** Present → sellout activates queued sell orders (Order Activation Trigger). */
   orders?: OrderStore | null;
   log?: Logger;
+  /** Optional audit trail for the sellout + order-activation state changes (PF-03). */
+  audit?: AuditStore | null;
   /** Optional Telegram notify when a user's queued order becomes tradable. */
   notify?: { botToken: string } | null;
 };
@@ -59,6 +63,21 @@ export async function settleVerifiedBuy(
     // Order Activation Trigger: one-way funding → resale, then queued sells go live.
     // Idempotent + race-safe (guarded UPDATE), so a double fire is harmless.
     await deps.properties.markSoldOut(input.intent.propertyId);
+    if (deps.audit) {
+      await writeAuditEvent(deps.audit, {
+        action: "property.sellout",
+        actorType: "system",
+        actorLabel: "settleVerifiedBuy",
+        resourceType: "property",
+        resourceId: input.intent.propertyId,
+        summary: `Primary offering sold out — ${input.intent.propertyId} moved to resale`,
+        payload: {
+          propertyId: input.intent.propertyId,
+          intentId: input.intent.id,
+        },
+        requestId: null,
+      });
+    }
     if (deps.orders) {
       const activated = await deps.orders.activateQueuedForProperty(
         input.intent.propertyId,
@@ -68,8 +87,26 @@ export async function settleVerifiedBuy(
           { propertyId: input.intent.propertyId, count: activated.length },
           "orders.activated_on_sellout",
         );
-        if (deps.notify) {
-          for (const order of activated) {
+        for (const order of activated) {
+          if (deps.audit) {
+            await writeAuditEvent(deps.audit, {
+              action: "order.activate",
+              actorType: "system",
+              actorLabel: "orderActivationTrigger",
+              resourceType: "order",
+              resourceId: order.id,
+              summary: `Queued sell order went live on sellout of ${input.intent.propertyId}`,
+              payload: {
+                orderId: order.id,
+                propertyId: input.intent.propertyId,
+                userId: order.userId,
+                priceUsd: order.priceUsd,
+                quantity: order.quantity,
+              },
+              requestId: null,
+            });
+          }
+          if (deps.notify) {
             try {
               await sendTelegramMessage({
                 botToken: deps.notify.botToken,

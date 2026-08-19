@@ -69,6 +69,7 @@ function testEnv(over: Partial<ApiEnv> = {}): ApiEnv {
     UNLOCK_MATURATION_MS: 3 * 24 * 3_600_000,
     NOTIFY_YIELD: false,
     HOUSE_ACCOUNT_USER_ID: "house-account",
+    OPS_CHAT_ID: undefined,
     ...over,
   };
 }
@@ -267,6 +268,7 @@ describe("Allowlist empty + allowlist mode (fail closed)", () => {
     UNLOCK_MATURATION_MS: 3 * 24 * 3_600_000,
     NOTIFY_YIELD: false,
     HOUSE_ACCOUNT_USER_ID: "house-account",
+    OPS_CHAT_ID: undefined,
       }),
       log: silentLog,
       users,
@@ -337,6 +339,7 @@ describe("Allowlist open mode (no restriction)", () => {
     UNLOCK_MATURATION_MS: 3 * 24 * 3_600_000,
     NOTIFY_YIELD: false,
     HOUSE_ACCOUNT_USER_ID: "house-account",
+    OPS_CHAT_ID: undefined,
       }),
       log: silentLog,
       users,

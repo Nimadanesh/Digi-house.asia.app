@@ -76,6 +76,7 @@ function engineDeps(deps: LockRouteDeps): YieldEngineDeps {
     balances: deps.balances,
     transactions: deps.transactions,
     log: deps.log,
+    audit: deps.audit ?? null,
   };
 }
 

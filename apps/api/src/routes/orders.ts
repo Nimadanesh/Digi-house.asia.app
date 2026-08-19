@@ -335,6 +335,7 @@ export function createOrderRoutes(deps: OrderRouteDeps) {
             balances: deps.balances,
             transactions: deps.transactions!,
             feeTiers: await deps.feeTiers.listAll(),
+            audit: deps.audit ?? null,
           },
           record,
         );

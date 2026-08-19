@@ -133,6 +133,7 @@ export async function placeHouseOrder(
       balances: deps.balances!,
       transactions: deps.transactions!,
       feeTiers: await deps.feeTiers!.listAll(),
+      audit: deps.audit ?? null,
     },
     order,
   );
@@ -552,6 +553,7 @@ export function createAdminRoutes(deps: AdminRouteDeps) {
       balances: deps.balances,
       transactions: deps.transactions,
       log: deps.log,
+      audit: deps.audit ?? null,
       notify: deps.notify
         ? {
             botToken: deps.notify.botToken,
@@ -611,6 +613,7 @@ export function createAdminRoutes(deps: AdminRouteDeps) {
       balances: deps.balances,
       transactions: deps.transactions,
       log: deps.log,
+      audit: deps.audit ?? null,
       notify: deps.notify
         ? {
             botToken: deps.notify.botToken,

@@ -162,19 +162,19 @@ Counsel checklist intentionally deferred (scale-stage item). All other product f
 **Phase E gate:** withdrawal round-trip and manual yield payout work end-to-end via admin API.
 
 ### Phase F — Hardening & launch
-- [ ] **PF-01** — E2E: buy primary → lock → weekly yield → unlock request → matured → instant sell → shares back to primary
-- [ ] **PF-02** — E2E: buy primary → custom sell (queued) → primary sells out → order active → user-to-user match → withdrawal
-- [ ] **PF-03** — Audit events for every state change (locks, unlocks, instant sells, order activation, matches, withdrawals)
-- [ ] **PF-04** — Concurrency/oversell tests (primary buy, matching engine, escrow refunds)
-- [ ] **PF-05** — Ops: monitoring/alerting on settlement & yield jobs; runbook updates
-- [ ] **PF-06** — Demo/staging runbook refresh; launch review (go/no-go); allowlist launch
+- [x] **PF-01** — E2E: buy primary → lock → weekly yield → unlock request → matured → instant sell → shares back to primary. *Playwright spec `e2e/tests/money-path-1.spec.ts` (staging harness, skip-guarded) + in-process integration test `apps/api/src/e2e/money-path-1.test.ts` that runs locally and verifies the full path (buy→lock→yield→unlock→mature→instant sell→shares back + audit).*
+- [x] **PF-02** — E2E: buy primary → custom sell (queued) → primary sells out → order active → user-to-user match → withdrawal. *Playwright spec `e2e/tests/money-path-2.spec.ts` + in-process integration test `apps/api/src/e2e/money-path-2.test.ts` (buy→queued sell→sellout→activation→match→withdrawal, admin-approved).*
+- [x] **PF-03** — Audit events for every state change (locks, unlocks, instant sells, order activation, matches, withdrawals). *Added `property.sellout`, `order.activate`, `lock.mature` (yield engine + admin); fixed the real gap — the orders/admin routes never passed `audit` to `settleMatchesForTaker`, so `order.trade` was not written for user-to-user matches. Unit + integration tests assert each event.*
+- [x] **PF-04** — Concurrency/oversell tests (primary buy, matching engine, escrow refunds). *+5 tests: oversell primary (within-supply both land; over-supply exactly one wins, never oversold), double-match (two concurrent takers can't double-fill a resting maker), escrow refund vs cancel (two cancels / matcher-release racing cancel refund exactly once).*
+- [x] **PF-05** — Ops: monitoring/alerting on settlement & yield jobs; runbook updates. *Fail-open Telegram ops alerts (`src/notify/ops-alert.ts`) on failed yield/payout BullMQ jobs, yield boot-tick failure, and match guard trips; `OPS_CHAT_ID` env; wired through worker.ts; runbooks updated (incident-response § Ops alerting, env-matrix, staging-deploy, mainnet-checklist 2.6a/4.5). 4 unit tests.*
+- [x] **PF-06** — Demo/staging runbook refresh; launch review (go/no-go); allowlist launch. *phase1-demo walkthrough extended with yield lock, queued sell→sellout, secondary match, withdrawal steps + references to the PF-01/02 specs; staging-deploy + env-matrix refreshed with Phase B/F vars; mainnet checklist walked (config items added); go/no-go pack remains a human meeting gate (`docs/ops/mainnet-go-no-go.md`).*
 
-**Phase F gate:** both E2E money paths green on staging; launch checklist signed off.
+**Phase F gate:** both E2E money paths green on staging; launch checklist signed off. *(In-process money-path tests green locally; Playwright specs run against staging per harness — see `e2e/README.md`.)*
 
 ---
 
 ## Status
 
-- **Current phase:** Phase F — Hardening & launch (Phase E complete)
-- **Last completed:** PE-09 (Transactions kinds + fee lines + filters) — 2026-08-17
-- **Next recommended:** PF-01
+- **Current phase:** Phase F — Hardening & launch (all tasks complete)
+- **Last completed:** PF-06 (Launch review — runbook refresh + checklist walk) — 2026-08-19
+- **Next recommended:** Staging E2E run of `money-path-1.spec.ts` + `money-path-2.spec.ts` against the live stack (needs Postgres/Redis/Docker, not available locally), then the human go/no-go meeting per `docs/ops/mainnet-go-no-go.md`

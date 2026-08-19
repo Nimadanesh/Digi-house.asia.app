@@ -79,6 +79,13 @@ Web must **never** set: `TELEGRAM_BOT_TOKEN`, `DATABASE_URL`, `SESSION_SECRET`, 
 | `PORT` | P | api | `8787` | platform | platform | OpenAPI local server |
 | `LOG_LEVEL` | P | api | `debug` | `info` | `info` | P1-01 logger |
 | `NOTIFY_EARNINGS_PAID` | P | api | unset (false) | `true` if TELEGRAM_BOT_TOKEN set | `true` | **P4-01** — Telegram notify on earnings paid; fail-open; default false |
+| `YIELD_WORKER_ENABLED` | P | api | `false` | `true` | `true` | **Phase B** — yield worker kill switch (mature→accrue→pay ticks) |
+| `YIELD_TICK_MS` | P | api | `60000` | `60000` | Friday cadence / worker schedule | **Phase B** — yield tick cadence; idempotent |
+| `UNLOCK_MATURATION_MS` | P | api | 3 days | 3 days | 3 days | **Phase B** — lock unlock maturation window (spec 2–3 days) |
+| `NOTIFY_YIELD` | P | api | unset (false) | `true` if TELEGRAM_BOT_TOKEN set | `true` | **Phase B** — Telegram notify on yield payouts + lock lifecycle |
+| `OPS_CHAT_ID` | P | api | unset (off) | ops channel id | ops channel id | **PF-05** — failed yield/payout jobs + match guard trips alert to Telegram; requires TELEGRAM_BOT_TOKEN |
+| `LAUNCH_MODE` | P* | api | `open` | `allowlist` | `allowlist` → `open` post-launch | **P5-09** — wallet allowlist gate; fail closed when allowlist empty |
+| `ALLOWLIST_WALLETS` | P | api | unset | test wallets | launch cohort | **P5-09** — comma-separated TON addresses; case-insensitive |
 | `NODE_ENV` | P | api | `development` | `production` | `production` | |
 | `SENTRY_DSN` | **S**† | api | optional | SM | SM | †DSN often treated as semi-public; still keep server-side |
 

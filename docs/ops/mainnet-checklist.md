@@ -39,6 +39,7 @@
 | 2.4 | **`CORS_ORIGIN`** — set to the exact prod Mini App origin, no trailing slash | / | staging-deploy.md |
 | 2.5 | **`ADMIN_API_SECRET`** — set in SM, ≥32 chars; admin routes mounted | / | admin-pause.md |
 | 2.6 | **`TELEGRAM_BOT_TOKEN`** — prod bot token from BotFather; not a test token | / | |
+| 2.6a | **`OPS_CHAT_ID`** — ops alert channel id set; failed yield/payout jobs + match guard trips alert (PF-05) | / | incident-response.md § Ops alerting |
 | 2.7 | **`SESSION_SECRET`** — ≥32 random chars, rotated at least once during drill | / | |
 | 2.8 | **Database credentials** — password rotated from defaults; not the dev-only `digihouse:digihouse` | / | |
 | 2.9 | **`PAYOUT_WORKER_ENABLED=false`** — initially disabled; enable after monitoring baseline | / | |
@@ -67,7 +68,7 @@
 | 4.2 | **Contract addresses frozen** — registry entries have `registry_frozen_at` set | / | mainnet-dry-run.md step 3 |
 | 4.3 | **API blue-green or rolling deploy** — documented procedure (platform-specific) | / | |
 | 4.4 | **Database migration applied** — latest migration on prod Postgres | / | |
-| 4.5 | **Monitoring & alerts** — healthz, error rate, payout tick, hot wallet balance, pause status | / | |
+| 4.5 | **Monitoring & alerts** — healthz, error rate, payout tick, hot wallet balance, pause status; failed-job + match-guard alerts verified on staging (PF-05) | / | incident-response.md § Ops alerting |
 | 4.6 | **CORS configured** — mainnet API allows mainnet Mini App origin | / | |
 
 ---

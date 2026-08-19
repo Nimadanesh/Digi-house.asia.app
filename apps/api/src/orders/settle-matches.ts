@@ -6,6 +6,7 @@
 // when the taker finishes. A per-property in-process mutex serializes matching.
 import type { AuditStore } from "../audit/audit-store.js";
 import { writeAuditEvent } from "../audit/write-audit.js";
+import { sendOpsAlert, type OpsNotifyDeps } from "../notify/ops-alert.js";
 import type { BalanceStore } from "../money/balance-store.js";
 import type { HoldingStore } from "../portfolio/holding-store.js";
 import type { Logger } from "../logger.js";
@@ -27,6 +28,8 @@ export type SettleMatchesDeps = {
   feeTiers: FeeTierRecord[];
   log?: Logger;
   audit?: AuditStore | null;
+  /** PF-05: optional ops Telegram alerting on match guard trips. */
+  notify?: OpsNotifyDeps | null;
 };
 
 export type SettledFill = {
@@ -179,6 +182,18 @@ async function settleOneFill(
       { takerId: taker.id, makerId, qty },
       "match.maker_guard_tripped",
     );
+    if (deps.notify) {
+      await sendOpsAlert(deps.notify, {
+        subject: `Match guard tripped on ${taker.propertyId}`,
+        details: {
+          takerId: taker.id,
+          makerId,
+          quantity: qty,
+          takerUserId: taker.userId,
+          propertyId: taker.propertyId,
+        },
+      });
+    }
     return null;
   }
 
