@@ -33,7 +33,7 @@ Optional deep: full threat-model register, OpenAPI schemas.
 | Threat model v0 | [docs/security/threat-model-v0.md](../security/threat-model-v0.md) | [x] |
 | Env matrix | [docs/ops/env-matrix.md](./env-matrix.md) | [x] |
 | Jetton deploy model | [docs/adr/ADR-002-jetton-factory.md](../adr/ADR-002-jetton-factory.md) | [x] |
-| Distribution model (claim/batch, dust, Friday) | [docs/adr/ADR-003-distribution-model.md](../adr/ADR-003-distribution-model.md) | [x] |
+| Distribution model (claim/batch, dust, Sunday) | [docs/adr/ADR-003-distribution-model.md](../adr/ADR-003-distribution-model.md) | [x] |
 | ADR index | [docs/adr/README.md](../adr/README.md) | [x] |
 | P0-01…P0-08 tracker deliverables complete | [EXECUTION-PLAN.md](../../EXECUTION-PLAN.md) Progress Tracker | [x] |
 | Human **Phase 0 accepted** | Chat / PR + §4 below | [x] |
@@ -104,7 +104,7 @@ Unresolved **blockers for Phase 1 start:** **none**. Ticketed items may proceed 
 | Settlement | `SETTLEMENT_MODE` ∈ mock \| hybrid \| onchain; ≠ `NEXT_PUBLIC_DATA_SOURCE` |
 | Honesty | Simulated badges until onchain + real non-`simulated:` txHash + explorer URL |
 | Jettons | One master per property; **manual/scripted deploy** Phase 2; factory later optional |
-| Distribution | **Claim-based** MVP; largest-holder dust; Friday UTC; no unbounded push |
+| Distribution | **Claim-based** MVP; largest-holder dust; Sunday UTC; no unbounded push |
 | Keys | Roles + caps; secrets never in repo/client; pause ownership defined |
 | API surface | OpenAPI 3.1 skeleton ↔ `repos.ts` |
 | Security | Threat model v0 ≥15 risks; STRIDE-lite |

@@ -23,7 +23,7 @@
 - **R-1.3 (Must)** Role is switchable from Settings; it changes which tabs/CTAs are prominent (Owner gets a "List a Property" entry).
 - **R-1.4 (Should)** Telegram user data (name, photo) is read via the SDK and pre-filled; not editable during onboarding.
 - **R-1.5 (Must)** Onboarding state persisted, so it never repeats after completion unless reset.
-- **R-1.6 (Must — pitch)** A single, plain-English explainer of how proportional weekly yield works is reachable from onboarding (e.g. "Own 1% → get 1% of the rent, every Friday"). The investor must understand the deal before seeing the Marketplace.
+- **R-1.6 (Must — pitch)** A single, plain-English explainer of how proportional weekly yield works is reachable from onboarding (e.g. "Own 1% → get 1% of the rent, every Sunday"). The investor must understand the deal before seeing the Marketplace.
 
 ## R-2 Wallet (TonConnect)
 - **R-2.1 (Must)** "Connect TON Wallet" CTA using `@tonconnect/ui-react` (TonConnect button), rendered as a Telegram-style full-width primary button.
@@ -54,7 +54,7 @@
 - **R-5.1 (Must)** Hero image, title, location, full description.
 - **R-5.2 (Must)** Financials as a Telegram block (rows): total price, shares offered/sold/remaining, share price.
 - **R-5.3 (Must)** Funding progress bar (% sold).
-- **R-5.4 (Must, HERO)** A **"Weekly Yield" block row** that shows: rent/month, your projected share if you buy N shares, payout day (e.g. "Every Friday"). The math must reflect the user's chosen buy quantity live.
+- **R-5.4 (Must, HERO)** A **"Weekly Yield" block row** that shows: rent/month, your projected share if you buy N shares, payout day (e.g. "Every Sunday"). The math must reflect the user's chosen buy quantity live.
 - **R-5.5 (Must)** Inline **Buy** control — quantity stepper + total cost (USD + TON estimate) + live projected weekly yield for that qty, confirm via TonConnect TX. Confirm uses the Telegram `MainButton` when available.
 - **R-5.6 (Must)** **Sell** control visible only if the user holds shares → opens a sell-order bottom sheet (qty, price/share).
 - **R-5.7 (Must)** **Order Book** — two stacked columns/lists of open buy (success-green) and sell (danger-red) orders: price, qty, cumulative; best bid/ask highlighted with the `accent` tint.

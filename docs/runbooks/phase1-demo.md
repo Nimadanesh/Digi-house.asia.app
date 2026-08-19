@@ -123,7 +123,7 @@ Execute each step and check the box. If a step fails, consult §5 (Troubleshooti
 | 8 | **Portfolio** | Navigate to Portfolio tab. Holding card visible: property name, shares owned (5), avg cost, current value. Open orders section (empty unless you placed one). | R-8.1–8.3 |
 | 9 | **Earnings — pending** | Navigate to Earnings tab. Summary header: "Pending: $X.XX". Per-week entries with **Pending** status. Each entry shows share % and projected amount. | R-6.1–6.4 |
 | 10 | **Payout tick** | Wait ≤60s for payout worker (or check logs). Verify via API: the payout tick fires, pending entries flip to **Paid**. `simulated:` txHash visible. Proportional math verified (see §6). | R-6.1, R-6.6 |
-| 11 | **Home post-payout** | Navigate to Home. Balance updated. Next payout countdown shows next Friday. Property card shows updated pending for next week. | R-3.1–3.3 |
+| 11 | **Home post-payout** | Navigate to Home. Balance updated. Next payout countdown shows next Sunday. Property card shows updated pending for next week. | R-3.1–3.3 |
 | 12 | **Rate limiting** | Send 11 rapid POSTs to `/v1/auth/telegram`. First 10 return 200/400 (valid auth). 11th returns `429` with `{"code":"rate_limit_exceeded","message":"Too many requests"}`. | H3, TM-08 |
 | 13 | **Portfolio empty state** | Create a new user (no holdings) via auth. Hit `GET /v1/portfolio`. Response is `200` with `{"holdings":[],...}` — not 500. | R-8.1 |
 | 14 | **Yield lock (Phase B)** | On a funded property, lock shares → lock appears (locked shares held). After `UNLOCK_MATURATION_MS`, the lock matures and unlocks (shares free again). Weekly yield accrual rows appear. | Phase B |

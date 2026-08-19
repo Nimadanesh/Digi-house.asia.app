@@ -190,7 +190,7 @@ If a hot wallet is configured for testnet:
 | Current balance | `ton <address> balance` or TonAPI |
 | Max cap | `HOT_WALLET_MAX_TON` env var or SM value |
 | Within cap? | Balance ≤ cap. Testnet interim cap: ≤50 TON (ADR-004 §3) |
-| Low-water alert configured? | Alert if balance < next Friday's rent pool need |
+| Low-water alert configured? | Alert if balance < next Sunday's rent pool need |
 
 No hot wallet on testnet → mark N/A.
 

@@ -11,7 +11,7 @@
 - **TON amounts:** integer **nanoTON** (`1 TON = 1e9 nanoTON`).
 - **Shares:** integer counts. 1 share = smallest ownable unit; `sharesRemaining = totalShares - sharesSold`.
 - **Ratios:** stored as a float `0..1` and named with a `…Ratio` suffix (e.g. `fundingProgressRatio`, `shareRatio`). Never percentages as numbers >1.
-- **Dates:** ISO-8601 strings (`createdAt`, `weekOf`). `weekOf` always = the Monday 00:00 UTC of that distribution week (Friday payout belongs to the week that started Monday).
+- **Dates:** ISO-8601 strings (`createdAt`, `weekOf`). `weekOf` always = the Monday 00:00 UTC of that distribution week (Sunday payout belongs to the week that started Monday).
 - **IDs:** stable string IDs. `UserProfile.id` = the Telegram user id (string) from launch params. Property/Order/Earnings IDs are stable opaque strings in MVP; on-chain swap uses the TON jetton/contract address as the canonical ID.
 
 ## Branded numeric helpers (recommended)
@@ -35,7 +35,7 @@ UserProfile ──< Holding >── Property (Listing)
 ```
 - A **User** owns **Holdings** (shares of a **Property**).
 - A **Property** has an **Order Book** of **Orders**; matched orders produce **Transactions** (Fills).
-- Each Friday, a **RentalDistribution** (per property) spawns **EarningsEntry** rows (per shareholder) and a payout **Transaction** to each wallet.
+- Each Sunday, a **RentalDistribution** (per property) spawns **EarningsEntry** rows (per shareholder) and a payout **Transaction** to each wallet.
 
 ---
 
@@ -271,7 +271,7 @@ export interface RentalDistribution {
   weekOf: string;               // ISO Monday
   rentPoolUsd: number;          // minor units collected this week (rent ÷ 52)
   rentPoolNanoTon: number;
-  payoutDay: string;            // ISO Friday for the week
+  payoutDay: string;            // ISO Sunday for the week
   status: "scheduled" | "distributing" | "completed";
   totalShares: number;         // snapshot of total shares at payout time
   createdAt: string;
@@ -297,7 +297,7 @@ Table `rental_distributions`
 | `week_of` | date | Monday |
 | `rent_pool_usd` | bigint | minor units |
 | `rent_pool_nano_ton` | bigint | |
-| `payout_day` | date | Friday that week |
+| `payout_day` | date | Sunday that week |
 | `status` | text CHECK | scheduled/distributing/completed |
 | `total_shares` | integer | snapshot |
 | `created_at` | timestamptz | |
@@ -309,7 +309,7 @@ Table `earnings_entries`
 
 ### On-chain shape (future TON contract — documented, not MVP)
 - A **Distribution Contract** per property holds the weekly rent in **nanoTON**.
-- Every Friday (cron or a TON kickoff message), the contract iterates jetton holders and sends each one `rentPoolNanoTon × (holder.balance / totalSupply)`. Alternatively, a claimable pattern where each shareholder pulls their payout — cheaper gas at scale.
+- Every Sunday (cron or a TON kickoff message), the contract iterates jetton holders and sends each one `rentPoolNanoTon × (holder.balance / totalSupply)`. Alternatively, a claimable pattern where each shareholder pulls their payout — cheaper gas at scale.
 - Each successful transfer emits a **body** with `propertyId`, `weekOf`, `shareRatio`, so `EarningsEntry.txHash` can be proven from the chain.
 - **MVP simulates this**: the mock `EarningsRepo` flips entries from `pending` → `paid` on the cadence and stamps a synthetic `txHash` placeholder.
 
@@ -453,6 +453,6 @@ export interface TxRepo {
 | Share ownership | `Holding` row off-chain | Jetton balance on each property master |
 | Buy TX | TonConnect connect + stub tx | Real jetton mint from master |
 | Order matching | Off-chain `placeOrder` (simulated fills) | On-chain order-book / Hydra matching |
-| **Weekly distribution** | `EarningsRepo.tickPayout()` flips pending→paid, stamps synthetic hash | Distribution contract pays nanoTON per share on Friday |
+| **Weekly distribution** | `EarningsRepo.tickPayout()` flips pending→paid, stamps synthetic hash | Distribution contract pays nanoTON per share on Sunday |
 | Proportional math | Computed in app from `shareRatio` | Enforced by contract `balance/totalSupply` |
 | Trust | Explainer line + live math | Verifiable TON BOC hash per `EarningsEntry.txHash` |

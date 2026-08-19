@@ -20,7 +20,7 @@ export const env = {
   manifestUrl: readString("TONCONNECT_MANIFEST_URL") || "/seo/tonconnect-manifest.json",
   /** Testnet relay/property-owner address for the 0.01 TON buy stub. Empty = fall back to per-property ownerWalletAddress. */
   relayAddress: readString("TON_RELAY_ADDRESS"),
-  /** Mock payout scheduler cadence (ms). Short so a judge sees a payout live; real Friday-UTC distribution is post-MVP. */
+  /** Mock payout scheduler cadence (ms). Short so a judge sees a payout live; real Sunday-UTC distribution is post-MVP. */
   payoutTickMs: Number(readString("PAYOUT_TICK_MS", "60000")) || 60000,
   /** Telegram bot username without @ — used for share deep links. */
   botUsername: readString("TG_BOT_USERNAME"),

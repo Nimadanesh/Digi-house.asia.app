@@ -47,7 +47,7 @@ Rules:
 |---|---|---|---|
 | **Buy settlement** | In-memory holding update after TonConnect **stub** TX (optional tiny testnet transfer as proof of intent). Shares **not** minted on-chain. | API `prepare` / `confirm` persists holding + app ledger in **Postgres**. TonConnect may still send a stub or payment intent; **no full jetton mint required**. | Prepare/confirm + indexer observe real jetton mint/transfer (or sale contract). Holdings credit only after confirmed chain event. |
 | **Holdings source of truth** | Mock `PortfolioRepo` / in-memory seed | **Postgres** holdings projection (API authoritative for UI) | **Jetton balances** via indexer projection; DB is cache; reconciliation job must match chain |
-| **Earnings payout mechanism** | Mock `EarningsRepo.tickPayout()` flips `pending` → `paid` on demo cadence (dev default ~60s; product cadence Friday UTC) | Off-chain worker (`tickPayout` / BullMQ): ledger `pending` → `paid`; audit row; **no** wallet transfer of rent | Distribution contract (push batch and/or claim per ADR-003); indexer writes paid rows from chain events |
+| **Earnings payout mechanism** | Mock `EarningsRepo.tickPayout()` flips `pending` → `paid` on demo cadence (dev default ~60s; product cadence Sunday UTC) | Off-chain worker (`tickPayout` / BullMQ): ledger `pending` → `paid`; audit row; **no** wallet transfer of rent | Distribution contract (push batch and/or claim per ADR-003); indexer writes paid rows from chain events |
 | **`EarningsEntry.txHash`** | Synthetic: `"simulated:" + id` | Synthetic `"simulated:…"` **unless** a real chain hash is later attached; hybrid default = synthetic | Real TON BOC / tx hash from distribution transfer or claim |
 | **Explorer link allowed?** | **No** (hash is not chain-resolvable) | **No**, unless row has non-`simulated:` hash (rare hybrid edge) | **Yes**, when hash is real and explorer URL can be built for configured network |
 | **Demo / Simulated UI badge rules** | Full honesty chrome (§3) | Full honesty chrome unless a **specific row** meets §4 on-chain gates (default: still simulated) | Hero copy may soften only after global gates; per-row simulated badge hides **only** per §4 |
@@ -117,7 +117,7 @@ Do not re-derive; implementations must match:
 | Projected holder yield | `projectedYield = floor(weeklyRentUsd × sharesOwned / totalShares)` |
 | Paid entry amount | `amountUsd == floor(rentPoolUsd × shareRatio)` with `shareRatio = sharesOwned / totalShares` |
 
-**Production invariant:** ROADMAP §3.6 (Friday UTC week; floor per holder; remainder policy documented).
+**Production invariant:** ROADMAP §3.6 (Sunday UTC week; floor per holder; remainder policy documented).
 
 **Dust policy:** DATA_MODELS — after summing all `floor(rentPoolUsd × shareRatio)`, remainder accrues to the **largest holder** (ties: insertion order) so `ΣamountUsd == rentPoolUsd` exactly. On-chain nanoTON dust policy is refined in ADR-003; must not contradict the cents invariant off-chain.
 

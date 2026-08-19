@@ -28,7 +28,7 @@ Show the Marketplace with 6+ properties. Scroll through quickly.
 
 ### 10–20s: The product — fractional property, real yield
 
-> "DigiHouse lets anyone buy a fraction of a rental property — starting at $5. Your share earns a proportional slice of the weekly rent. Every Friday, the payout lands in your wallet."
+> "DigiHouse lets anyone buy a fraction of a rental property — starting at $5. Your share earns a proportional slice of the weekly rent. Every Sunday, the payout lands in your wallet."
 
 Tap a funding property. Show: financial block, weekly yield per share, funding bar.
 
@@ -80,7 +80,7 @@ Tap the explorer link. Show the Tonviewer page with the transaction detail.
 |---|---|
 | The gap | "Real estate is the biggest asset class most people can't access." |
 | Fractional ownership | "Buy a slice for $5 — earn proportional rent." |
-| Weekly yield | "Rent is distributed every Friday. No quarterly waiting." |
+| Weekly yield | "Rent is distributed every Sunday. No quarterly waiting." |
 | TON settlement | "Testnet today, mainnet post-MVP — real L1 transactions." |
 | Honesty contract | "No simulated badges when the TX is real. Explorer-verifiable." |
 | Liquidity (future) | "Phase 4 adds a secondary market. Sell your shares anytime." |

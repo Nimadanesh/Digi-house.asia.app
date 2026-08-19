@@ -80,7 +80,7 @@ curl -sS https://digihouse-api-staging.fly.dev/healthz | jq .settlement_mode
 | 11 | **Earnings — wait for payout tick** | Navigate to Earnings. Wait ≤60s for payout worker. Pending entries become **Paid**. | R-6.1, R-6.6 |
 | 12 | **Earnings — no simulated badge** | Paid entry has a real txHash (not `simulated:` prefix). **No** "simulated" capsule on the row. | ADR-001 §4 |
 | 13 | **Earnings — explorer link** | Expand a paid entry. Tx hash row shows a clickable link to `testnet.tonviewer.com`. Link opens correct transaction. | ADR-001 §4 |
-| 14 | **Home post-payout** | Balance updated. Next payout countdown shows next Friday. | R-3.1 |
+| 14 | **Home post-payout** | Balance updated. Next payout countdown shows next Sunday. | R-3.1 |
 
 ### Headless verification (QA)
 

@@ -225,7 +225,7 @@ docs/ops/
 - [ ] Rejected alternative documented  
 
 #### P0-03 — ADR-003 Distribution model
-**Must decide:** push batch vs pull/claim; max holders/batch; dust → treasury or next week; Friday UTC alignment with DATA_MODELS.
+**Must decide:** push batch vs pull/claim; max holders/batch; dust → treasury or next week; Sunday UTC alignment with DATA_MODELS.
 
 **Acceptance:**
 - [ ] Formula matches ROADMAP §3.6 + `floor` rules  
@@ -336,7 +336,7 @@ docs/           # adr, openapi, runbooks (unchanged home)
 ### 4.3 Phase 1 exit criteria (must all pass)
 - [ ] Staging Mini App uses **API** for all reads (not mock)  
 - [ ] Buy hybrid/mock settlement but **holdings persist in Postgres**  
-- [ ] Earnings from DB; Friday/job flip pending→paid **off-chain** with audit row  
+- [ ] Earnings from DB; Sunday/job flip pending→paid **off-chain** with audit row  
 - [ ] Load smoke healthy  
 - [ ] No secrets in repo; web `npm run check` + API test suite green  
 - [ ] `SETTLEMENT_MODE` / honesty badges still accurate per ADR-001  

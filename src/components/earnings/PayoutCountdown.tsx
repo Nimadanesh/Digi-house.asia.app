@@ -1,5 +1,5 @@
 "use client";
-// File responsibility: render the next-Friday payout countdown readout (text only, reduced-motion safe).
+// File responsibility: render the next-Sunday payout countdown readout (text only, reduced-motion safe).
 // `variant="long"` matches Home Next Payout card; default keeps compact Earnings chrome.
 import { usePayoutCountdown } from "@/hooks/usePayoutCountdown";
 import { usePayoutCountdownLong } from "@/hooks/usePayoutCountdownLong";
@@ -22,5 +22,5 @@ function PayoutCountdownLong() {
 
 function PayoutCountdownCompact() {
   const short = usePayoutCountdown();
-  return <span className="text-xs text-muted-foreground tnum">Next payout Fri · {short}</span>;
+  return <span className="text-xs text-muted-foreground tnum">Next payout Sun · {short}</span>;
 }

@@ -60,12 +60,12 @@ All journeys happen **inside a Telegram Mini App**: launched from a Telegram cha
 | 2 | Tap **Explore Marketplace** → prompted to **Connect Wallet** → TonConnect sheet → pick Tonkeeper → connect | Marketplace / wallet | R-2.1–2.3 |
 | 3 | Address appears in header (`EQ…abcd`); Marketplace list loads (skeleton → cards). **Each card shows estimated weekly yield per share** ("≈ $X / week per share") | Marketplace | R-4.1–4.2, R-4.2a |
 | 4 | Tap a Listing card → Property detail; `BackButton` appears | Property detail | R-4.3, R-5.1 |
-| 5 | Read financials block + funding bar + **Weekly Yield block row** (rent/month → your projected share → payout day "Every Friday") | Property detail | R-5.2–5.4 |
+| 5 | Read financials block + funding bar + **Weekly Yield block row** (rent/month → your projected share → payout day "Every Sunday") | Property detail | R-5.2–5.4 |
 | 6 | Buy control: choose qty (e.g. 5) → **total cost** (USD + TON estimate) and **live projected weekly yield for that qty** update as she types → tap **Buy** (MainButton: "Buy 5 — $X") | Buy flow | R-5.5, R-7.1 |
 | 7 | TonConnect TX confirmation (deep-link to wallet) → approve | Wallet | R-7.1 |
 | 8 | Success toast (top, success-tint, haptic) → Home + Portfolio update: balance $X, property card appears showing 5 shares + **pending weekly earnings** | Home/Portfolio | R-3.2–3.3, R-7.1 |
 
-**The emotional beat:** step 6 is where Aria sees "you'll earn ≈ $Y every Friday" *before* she confirms. The price isn't a cost — it's a paycheck she's buying.
+**The emotional beat:** step 6 is where Aria sees "you'll earn ≈ $Y every Sunday" *before* she confirms. The price isn't a cost — it's a paycheck she's buying.
 
 **Alternate branches**
 - **R-2.4** Wallet not connected at step 6 → Buy disabled, "Connect Wallet" CTA replaces the button.
@@ -83,10 +83,10 @@ All journeys happen **inside a Telegram Mini App**: launched from a Telegram cha
 **Steps**
 | # | Action | Screen | Req |
 |---|---|---|---|
-| 1 | **Weekly cadence trigger** — every Friday 00:00 UTC (MVP: mock scheduler; future: on-chain job). For each property with rent that week, distribute rent × `shareRatio` to every shareholder. | — | R-6.1 |
+| 1 | **Weekly cadence trigger** — every Sunday 00:00 UTC (MVP: mock scheduler; future: on-chain job). For each property with rent that week, distribute rent × `shareRatio` to every shareholder. | — | R-6.1 |
 | 2 | Aria opens the app → a small unread dot appears on the **Earnings** tab; Home's **next payout** crossed to **just paid** | Home → Earnings | R-3.3b |
 | 3 | Tap **Earnings** → top entry "Week of Jul 25" appears, status **Paid**, amount (USD + TON, tabular), and her **share %** (e.g. 0.5%) | Earnings | R-6.1–6.2 |
-| 4 | Header summary updates: **"This week +$X.XX"** and **"All-time $Y"** with a payout countdown to next Friday | Earnings | R-6.3 |
+| 4 | Header summary updates: **"This week +$X.XX"** and **"All-time $Y"** with a payout countdown to next Sunday | Earnings | R-6.3 |
 | 5 | Entry expands (tap) to show: property thumb, week, share %, amount, and the **"Rent/month of this property"** so the math is provably proportional: `rent × share% = my payout` | Earnings | R-6.6 |
 | 6 | Portfolio "Total earnings" updates; Home "My Properties" cards show updated **pending (next week)** | Portfolio / Home | R-8.1, R-3.3a |
 
@@ -131,7 +131,7 @@ All journeys happen **inside a Telegram Mini App**: launched from a Telegram cha
 |---|---|---|---|
 | 1 | Open app → **Home** loads from portfolio repo (skeleton → filled) | Home | R-3.1–3.3 |
 | 2 | Header: name + avatar. Big balance: total value (USD) + TON estimate | Home | R-3.1–3.2 |
-| 3 | **Next payout block** prominently shown: "Next rent Friday — +$X.XX" with countdown | Home | R-3.3b |
+| 3 | **Next payout block** prominently shown: "Next rent Sunday — +$X.XX" with countdown | Home | R-3.3b |
 | 4 | "My Properties" cards: thumb, title, shares owned / total, value, pending weekly earnings | Home | R-3.3a |
 | 5 | Tap any card → Property detail; tap **Earnings** tab → Flow 2 timeline | Home | R-3.3 |
 

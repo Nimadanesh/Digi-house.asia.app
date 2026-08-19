@@ -76,40 +76,40 @@ describe("format", () => {
 describe("format.payoutCountdown", () => {
   afterEach(() => vi.useRealTimers());
 
-  it("returns days+hours when the next Friday is >=1 day away", () => {
-    // 2026-07-22 is a Wednesday; next Friday = 2026-07-24 00:00 UTC
-    const wed: number = Date.UTC(2026, 6, 22, 10, 0, 0);
-    expect(payoutCountdown(wed)).toBe("in 1d 14h");
+  it("returns days+hours when the next Sunday is >=1 day away", () => {
+    // 2026-07-24 10:00 UTC → next Sunday = 2026-07-26 00:00 UTC
+    const sampleNow: number = Date.UTC(2026, 6, 24, 10, 0, 0);
+    expect(payoutCountdown(sampleNow)).toBe("in 1d 14h");
   });
 
-  it("returns hours-only when under 24h to Friday", () => {
-    // 2026-07-23 22:00 UTC -> next Friday 2026-07-24 00:00 = 2h away
-    const near: number = Date.UTC(2026, 6, 23, 22, 0, 0);
+  it("returns hours-only when under 24h to Sunday", () => {
+    // 2026-07-25 22:00 UTC -> next Sunday 2026-07-26 00:00 = 2h away
+    const near: number = Date.UTC(2026, 6, 25, 22, 0, 0);
     expect(payoutCountdown(near)).toBe("in 2h");
   });
 
-  it("returns minutes-only when under 1h to Friday", () => {
-    const t: number = Date.UTC(2026, 6, 23, 23, 48, 0);
+  it("returns minutes-only when under 1h to Sunday", () => {
+    const t: number = Date.UTC(2026, 6, 25, 23, 48, 0);
     expect(payoutCountdown(t)).toBe("in 12m");
   });
 
-  it("rolls over to next week if now is Friday after midnight", () => {
-    // 2026-07-24 02:00 UTC (Friday, after payout). Next Friday = 2026-07-31 00:00.
-    const after: number = Date.UTC(2026, 6, 24, 2, 0, 0);
+  it("rolls over to next week if now is Sunday after midnight", () => {
+    // 2026-07-26 02:00 UTC (Sunday, after payout). Next Sunday = 2026-08-02 00:00.
+    const after: number = Date.UTC(2026, 6, 26, 2, 0, 0);
     expect(payoutCountdown(after)).toBe("in 6d 22h");
   });
 });
 
 describe("format.payoutCountdownLong", () => {
   it("returns long English units for Home card", () => {
-    const wed: number = Date.UTC(2026, 6, 22, 10, 0, 0);
-    expect(payoutCountdownLong(wed)).toBe("1 day 14 hours");
+    const sampleNow: number = Date.UTC(2026, 6, 24, 10, 0, 0);
+    expect(payoutCountdownLong(sampleNow)).toBe("1 day 14 hours");
   });
 });
 
 describe("format.payoutCountdownDhms", () => {
   it("returns d-h-m-s countdown", () => {
-    const wed: number = Date.UTC(2026, 6, 22, 10, 0, 0);
-    expect(payoutCountdownDhms(wed)).toBe("1d - 14h - 00m - 00s");
+    const sampleNow: number = Date.UTC(2026, 6, 24, 10, 0, 0);
+    expect(payoutCountdownDhms(sampleNow)).toBe("1d - 14h - 00m - 00s");
   });
 });

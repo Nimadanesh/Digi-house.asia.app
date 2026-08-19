@@ -42,7 +42,7 @@ This is the single non-negotiable invariant of the product. Every screen, data m
 
 **Why it's the differentiator:**
 - **Frequency wins attention.** Daily/weekly feedback beats "wait a year and see."
-- **Understandability wins trust.** "You own 1% → you get 1% of the rent, every Friday" is a sentence a 12-year-old gets.
+- **Understandability wins trust.** "You own 1% → you get 1% of the rent, every Sunday" is a sentence a 12-year-old gets.
 - **On-chain proof wins credibility.** Every payout is a TON transaction — verifiable, not a PDF.
 
 We don't just tokenize property. We make the **rent show up.**

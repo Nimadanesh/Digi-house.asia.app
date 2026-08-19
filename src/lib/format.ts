@@ -92,9 +92,9 @@ export function estimateNanoTon(usdCents: number, tonUsdPriceCents: number): big
   return BigInt(Math.floor((usdCents * 1_000_000_000) / tonUsdPriceCents));
 }
 
-/** Return "in Xd Yh" / "in Xh" / "in Xm" relative to the next Friday 00:00 UTC after now. */
+/** Return "in Xd Yh" / "in Xh" / "in Xm" relative to the next Sunday 00:00 UTC after now. */
 export function payoutCountdown(nowMs: number): string {
-  const { days, hours, minutes } = nextFridayParts(nowMs);
+  const { days, hours, minutes } = nextSundayParts(nowMs);
   if (days >= 1) return `in ${days}d ${hours}h`;
   if (hours >= 1) return `in ${hours}h`;
   return `in ${minutes}m`;
@@ -102,7 +102,7 @@ export function payoutCountdown(nowMs: number): string {
 
 /** Long form for Home Next Payout card — "2 days 14 hours" / "14 hours" / "12 minutes". */
 export function payoutCountdownLong(nowMs: number): string {
-  const { days, hours, minutes } = nextFridayParts(nowMs);
+  const { days, hours, minutes } = nextSundayParts(nowMs);
   if (days >= 1) {
     const d = `${days} ${days === 1 ? "day" : "days"}`;
     const h = `${hours} ${hours === 1 ? "hour" : "hours"}`;
@@ -112,7 +112,7 @@ export function payoutCountdownLong(nowMs: number): string {
   return `${minutes} ${minutes === 1 ? "minute" : "minutes"}`;
 }
 
-export function nextFridayParts(nowMs: number): {
+export function nextSundayParts(nowMs: number): {
   days: number;
   hours: number;
   minutes: number;
@@ -120,9 +120,9 @@ export function nextFridayParts(nowMs: number): {
 } {
   const now = new Date(nowMs);
   const day = now.getUTCDay();
-  const daysUntilFri = (5 - day + 7) % 7;
-  const nextFriMs = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + daysUntilFri, 0, 0, 0);
-  let diffMs = nextFriMs - nowMs;
+  const daysUntilSun = (0 - day + 7) % 7;
+  const nextSunMs = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + daysUntilSun, 0, 0, 0);
+  let diffMs = nextSunMs - nowMs;
   if (diffMs <= 0) diffMs += 7 * 24 * 60 * 60 * 1000;
   const totalSec = Math.floor(diffMs / 1000);
   const days = Math.floor(totalSec / 86_400);
@@ -134,7 +134,7 @@ export function nextFridayParts(nowMs: number): {
 
 /** Live home countdown — "2d - 14h - 30m - 05s". */
 export function payoutCountdownDhms(nowMs: number): string {
-  const { days, hours, minutes, seconds } = nextFridayParts(nowMs);
+  const { days, hours, minutes, seconds } = nextSundayParts(nowMs);
   const pad = (n: number) => String(n).padStart(2, "0");
   return `${days}d - ${hours}h - ${pad(minutes)}m - ${pad(seconds)}s`;
 }

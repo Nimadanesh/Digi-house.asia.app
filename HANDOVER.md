@@ -128,7 +128,7 @@ Do **not** market MVP yield as on-chain settled.
 5. **Buy transparency** (40s): fees $0, total math, confirming state, failure sticky error if shown.  
 6. **Earnings integrity** (30s): expand row — share × pool = payout.  
 7. **Settings** (15s): theme toggle, hide Demo badge, How DigiHouse Works replay.  
-8. **Roadmap ask** (20s): mock ledger → jettons + Friday distribution contracts.
+8. **Roadmap ask** (20s): mock ledger → jettons + Sunday distribution contracts.
 
 Full props list: `DEMO.md`. Deploy detail: `DEPLOY.md`.
 

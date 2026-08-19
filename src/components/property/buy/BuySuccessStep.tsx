@@ -21,7 +21,7 @@ export function BuySuccessStep({
 }: {
   propertyTitle: string;
   qty: number;
-  /** Optional epoch ms for countdown; omit → generic “Every Friday”. */
+  /** Optional epoch ms for countdown; omit → generic “Every Sunday”. */
   nowMs?: number;
   onClose: () => void;
 }) {
@@ -34,7 +34,7 @@ export function BuySuccessStep({
     return () => clearTimeout(t);
   }, [burst]);
 
-  const nextPay = nowMs != null ? payoutCountdown(nowMs) : "Every Friday";
+  const nextPay = nowMs != null ? payoutCountdown(nowMs) : "Every Sunday";
 
   async function share() {
     const text = `I just bought ${qty} shares of ${propertyTitle} on DigiHouse`;

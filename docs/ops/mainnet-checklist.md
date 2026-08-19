@@ -17,7 +17,7 @@
 
 | # | Item | Status | Notes |
 |---|---|---|---|
-| 1.1 | **Liquidity ops plan** — documented procedure for funding rent pools, managing hot wallet balance, and JIT top-up before payout Fridays | / | |
+| 1.1 | **Liquidity ops plan** — documented procedure for funding rent pools, managing hot wallet balance, and JIT top-up before payout Sundays | / | |
 | 1.2 | **Legal pointer** — external legal counsel or compliance contact identified (not a document; a named person or firm) | / | P5-07 |
 | 1.3 | **Support contact** — escalation path for users (Telegram group, email, or ticketing system) | / | |
 | 1.4 | **Pause key holders** — named roles (not private keys): at minimum a primary and a break-glass holder for Admin pause authority | / | ADR-004 §2, admin-pause.md |

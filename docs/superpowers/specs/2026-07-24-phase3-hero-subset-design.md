@@ -18,7 +18,7 @@
 ## 1. Goal
 
 Deliver USER_FLOW Flow 1 (Browse & Buy) + Flow 2 (Weekly Rental Income) so the product's
-heroic promise — *own a slice, see rent arrive every Friday* — is end-to-end demonstrable:
+heroic promise — *own a slice, see rent arrive every Sunday* — is end-to-end demonstrable:
 Aria connects a Tonkeeper testnet wallet, browses a property with visible per-share weekly
 yield, taps a card, sets a quantity, sees the live projected weekly yield for that qty,
 confirms via Telegram MainButton + Tonkeeper deep-link, gets a success toast (honestly
@@ -142,12 +142,12 @@ src/components/property/
   PropertyDetail.tsx         # composition: hero image + Block financials + WeeklyYieldCallout + FundingBar + OrderBook + BuyControl
   OrderBook.tsx              # read-only bids/asks lists in a Block; best row bg-accent; success/danger rows
   BuyControl.tsx             # qty stepper (44px +/- hit areas) + total (USD+TON) + live projected weekly yield
-  WeeklyYieldCallout.tsx     # recurring inline element: "≈ $X / week per share" | "Next payout: Fri, $X"
+  WeeklyYieldCallout.tsx     # recurring inline element: "≈ $X / week per share" | "Next payout: Sun, $X"
 src/components/earnings/
   EarningsTimeline.tsx       # Block of rows (thumb + property + week + amount + StatusPill); newest first
   EarningsSummaryBlock.tsx   # header summary: all-time USD + this-week-projected + payout countdown
   EarningsEntryRow.tsx       # one row + tap-expandable proportional-math line + simulated disclosure
-  PayoutCountdown.tsx        # the next-Friday countdown (subscribes to usePayoutCountdown ticker)
+  PayoutCountdown.tsx        # the next-Sunday countdown (subscribes to usePayoutCountdown ticker)
 src/components/common/
   Toast.tsx                  # NEW top-center toast (success/error variants); presentational; interruptible CSS transitions
 ```
@@ -157,7 +157,7 @@ src/components/common/
 src/hooks/
   useBuyShares.ts            # useMutation: send TX -> on ok call getRepo().tx.buy -> invalidate + toast/haptics via callbacks
   useProperty.ts             # useQuery(["property", id], () => getRepo().marketplace.get(id)) ; composes useOrderBook(id)
-  usePayoutCountdown.ts      # 1s ticker state returning ms-to-next-Friday-UTC; pure hook, no network
+  usePayoutCountdown.ts      # 1s ticker state returning ms-to-next-Sunday-UTC; pure hook, no network
   index.ts                    # barrel — add the 3 new hooks
 ```
 
@@ -190,7 +190,7 @@ gate: implementer subagent → task reviewer → fix-if-needed → re-review →
   - Push a new `Transaction{ ..., kind:"buy", status:"success", txHash: makeSyntheticTxHash() }` into `seed.transactions`.
   - Return the new `Transaction`.
   - Add unit test asserting the mutation took effect + `txHash` starts with `"simulated:"`.
-- Add `format.payoutCountdown(nowMs: number, opts?: { nowOnFriday?: string }) -> string` (TDD): for the weekly Friday-UTC payout, returns `"in 3d 4h"` (d≥1 → days+hours; <1 day → hours only; <1 hour → minutes). Pure; freeze `Date.now` in the test.
+- Add `format.payoutCountdown(nowMs: number, opts?: { nowOnSunday?: string }) -> string` (TDD): for the weekly Sunday-UTC payout, returns `"in 3d 4h"` (d≥1 → days+hours; <1 day → hours only; <1 hour → minutes). Pure; freeze `Date.now` in the test.
 - Add `usePayoutCountdown()` hook: `useState(nowMs)`, `useEffect` `setInterval` 1000ms; returns the countdown string via `format.payoutCountdown`. SSR-safe (no `window` access).
 - Add `useBuyShares()` mutation hook per §3 data flow above. The hook takes an `onSuccess`/`onError` callback (Toast + haptic wiring stays in the caller component so the hook stays pure about side-effects beyond the TX itself).
 - Add `useProperty(propertyId)` hook: `useQuery(["property", propertyId], () => getRepo().marketplace.get(propertyId), { enabled: Boolean(propertyId) })`. (Order book comes from the existing `useOrderBook`.)
@@ -218,7 +218,7 @@ gate: implementer subagent → task reviewer → fix-if-needed → re-review →
 **Files:** `src/components/property/{PropertyDetail,OrderBook,BuyControl}.tsx` (new), `src/app/(app)/property/[id]/page.tsx` (replace placeholder).
 - `OrderBook`: per DESIGN_SYSTEM "Order book" — two stacked lists in a Block. Bid rows tinted `text-success`, Ask rows `text-danger`; best row `bg-accent`. Columns Price / Qty / Cumulative, right-aligned, `font-mono text-xs tabular-nums`. Mono numbers; hairline rows. Rows are static — no entrance animation. Props: `{ state: OrderBookState }`. Read-only (no tap→fill buy in Phase 3 except via BuyControl's own stepper; tap-to-fill is Phase 4 polish).
 - `BuyControl`: per DESIGN_SYSTEM "Stepper (qty)" + the inline Buy form. Visible only if `status === "funding"` OR `status === "resale"` (RESALE of Primary shares — for Phase 3 resale orders come from the seeded buy side; user does NOT place resting sell orders yet — that's Phase 4). Local `useState` qty (1..remaining). Stepper: `bg-card rounded-[10px]` Block with `−`/`+` 44px hit areas; number tabular centered, animates on change (220ms — Phase 3 ships instant, Phase 5 animates). Below: total cost (USD via `format.usd(quantity * sharePriceUsd)` + TON estimate via `format.ton(usdToNanoEstimate(quantity * sharePriceUsd, tonPrice))` (need a TON price constant — read from env or default; document in code that this is a display estimate, not a real quote). Below: live **WeeklyYieldCallout** with `weeklyPerShare = projectedYield(weeklyRent(annualRentUsd), quantity, totalShares)` — the hero beat (R-5.5 + R-5.4 [HERO]). The confirm button is an in-page full-width Telegram primary per DESIGN_SYSTEM "Buttons"; in Phase 3 it's wired to the MainButton in Task 4, so Task 3 leaves it visible-but-disabled until wallet connected and MainButton wired. Validation R-7.4: inline `text-danger` text under the stepper if `qty < 1 || qty > remaining`; the in-page confirm button is `disabled` when invalid. Bottom of BuyControl: if wallet disconnected, render the `WalletConnectButton` (Phase 2 built) instead of the stepper: "Connect Wallet" CTA (R-2.4).
-- `PropertyDetail`: composition. Hero image (`aspect-[16/10] rounded-[12px]`), title H2, location meta; Block of `Row`s for financials (total price / shares offered + sold + remaining / share price) tabular; **the Weekly-Yield block row** with `rent/month → projected weekly yield for current buy qty → payout day "Every Friday"`; FundingBar; read-only OrderBook; BuyControl.
+- `PropertyDetail`: composition. Hero image (`aspect-[16/10] rounded-[12px]`), title H2, location meta; Block of `Row`s for financials (total price / shares offered + sold + remaining / share price) tabular; **the Weekly-Yield block row** with `rent/month → projected weekly yield for current buy qty → payout day "Every Sunday"`; FundingBar; read-only OrderBook; BuyControl.
 - Replace `property/[id]/page.tsx`: `useProperty(id)` → `{ data, isLoading, isError }`; render `PropertyDetail` with all states (loading = shaped Block skeletons in the same shapes as the final rows; error = Block with retry → `refetch`). Pass the `propertyId` for the order book `useOrderBook(propertyId)` so OrderBook is fresh.
 - `BackButton` shown (via `useTelegram().backButton.show()` on mount of this detail page; hide on unmount).
 - Commit message: `feat(phase3): Property detail - PropertyDetail + OrderBook + BuyControl shell (read-only)`.
@@ -235,11 +235,11 @@ gate: implementer subagent → task reviewer → fix-if-needed → re-review →
 
 ### Task 5 — Earnings hero page
 **Files:** `src/components/earnings/{EarningsSummaryBlock,EarningsTimeline,EarningsEntryRow,PayoutCountdown}.tsx` (new), `src/app/(app)/earnings/page.tsx` (replace placeholder).
-- `PayoutCountdown`: subscribes to `usePayoutCountdown()` and renders `"Next payout in Xd Yh"` or similar muted-tabular, per DESIGN_SYSTEM "Weekly-yield callout" / "the Home next payout countdown may tick each second but must use a CSS `transition` on the digit (not a jump), and must not spin or animate continuously — it's a calm countdown". Phase 3 ships a calming single-line readout: `Next payout Fri · in 3d 4h` (Friday-weekday + duration). No continuous animation; update each second but visually render a single line (digit changes can momentarily transition, Phase 5 polishes).
+- `PayoutCountdown`: subscribes to `usePayoutCountdown()` and renders `"Next payout in Xd Yh"` or similar muted-tabular, per DESIGN_SYSTEM "Weekly-yield callout" / "the Home next payout countdown may tick each second but must use a CSS `transition` on the digit (not a jump), and must not spin or animate continuously — it's a calm countdown". Phase 3 ships a calming single-line readout: `Next payout Sun · in 3d 4h` (Sunday-weekday + duration). No continuous animation; update each second but visually render a single line (digit changes can momentarily transition, Phase 5 polishes).
 - `EarningsSummaryBlock`: Block of rows. Top row: `All-time earned` `text-foreground` tabular + `--success` icon. Second row: `This week projected` muted-foreground + a `Warning`-tinted `StatusPill` `pending` per design-system and the seeded pending EarningsEntry. Third row: `PayoutCountdown`. The summary must surface the canonical `PAYOUT_DISCLAIMER` once immediately above it as a muted `<p className="px-1 text-xs text-muted-foreground">` (kept from Phase 2's placeholder; Task 5 preserves the placement).
 - `EarningsEntryRow`: per DESIGN_SYSTEM "Earnings timeline" — Block of rows (newest first, no left rail). Each row: thumb 36 + property name + week label (muted) + amount (tabular, H2-ish `0.9375rem/600`) + StatusPill. Paid pill rendered with `simulated` prop so the muted sibling capsule appears. Tap row → expandable detail: property thumb, week, share %, amount, and the proportional-math line `Rent this week $X × your 0.5% = $Y` (the judge-verifiable truth — R-6.6), plus a muted disclosure `"Simulated payout · tx hash is a placeholder"`. The expand uses a CSS height transition (interruptible). On first expand, fire `haptics.notificationOccurred('success')` (USER_FLOW §"R-7.6" — small celebration, never full-screen).
 - `EarningsTimeline`: composes `EarningsEntryRow`s in a single `Block`, newest first. Each row's separator is `border-t border-border mx-4 first:border-t-0 first:mx-0` (the standard Row hairline — `EarningsEntryRow` reuses the `Row` primitive internally).
-- Replace `earnings/page.tsx`: `useEarnings()` (interval ticks → on `paidEntries>0` invalidates → entries flip paid with synthetic txHash + simulated badge) → render `PAYOUT_DISCLAIMER` + `EarningsSummaryBlock` + `EarningsTimeline`. Loading → shaped Skeleton. `entries.length === 0` (no holdings) → `EmptyState` title "No earnings yet" + message "Own a slice — get rent every Friday" + action `<WalletConnectButton>` or a `Link href={ROUTES.marketplace}` "Explore Marketplace" primary button (the weekly-yield promise restated per R-6.4). The seed has a non-empty investor with earnings, so the timeline renders immediately in MVP; the empty branch still ships for code coverage.
+- Replace `earnings/page.tsx`: `useEarnings()` (interval ticks → on `paidEntries>0` invalidates → entries flip paid with synthetic txHash + simulated badge) → render `PAYOUT_DISCLAIMER` + `EarningsSummaryBlock` + `EarningsTimeline`. Loading → shaped Skeleton. `entries.length === 0` (no holdings) → `EmptyState` title "No earnings yet" + message "Own a slice — get rent every Sunday" + action `<WalletConnectButton>` or a `Link href={ROUTES.marketplace}` "Explore Marketplace" primary button (the weekly-yield promise restated per R-6.4). The seed has a non-empty investor with earnings, so the timeline renders immediately in MVP; the empty branch still ships for code coverage.
 - `BackButton` NOT shown (root tab).
 - Commit message: `feat(phase3): Earnings hero - timeline + Paid pill simulated badge + summary + payout countdown`.
 
@@ -248,10 +248,10 @@ gate: implementer subagent → task reviewer → fix-if-needed → re-review →
 - Home page per R-3 and USER_FLOW Flow 4: `usePortfolio()` → `{ data, isLoading, isError }`.
   - `isLoading` → shaped Skeleton blocks (balance block + next-payout block + 2 my-property cards).
   - `isError` → retry Block.
-  - `data` empty (zero holdings) → `EmptyState` title "Welcome to DigiHouse" + message "Buy a slice of a property — earn rent every Friday." + primary `Link` to Marketplace "Explore Marketplace" (R-3.4).
+  - `data` empty (zero holdings) → `EmptyState` title "Welcome to DigiHouse" + message "Buy a slice of a property — earn rent every Sunday." + primary `Link` to Marketplace "Explore Marketplace" (R-3.4).
   - `data` with holdings:
     - Big balance block (DESIGN_SYSTEM §"Balance card (Home hero)"): `bg-card rounded-[12px] p-4`; label "Portfolio value" uppercase muted; value `1.625rem/700` tabular via `format.usd(totalValueUsd)`; TON estimate below, muted, tabular via `format.ton(usdToNanoEstimate(totalValueUsd, tonPrice))`.
-    - **Next-payout block** (R-3.3b [HERO]): a Block with `PayoutCountdown` + the sum of pending week earnings from the existing `useEarnings()`. Read pending entries from `summary.entries.filter(e => e.status === "pending")`, sum their amounts, surface as `"Next rent Friday · +$X.XX"`.
+    - **Next-payout block** (R-3.3b [HERO]): a Block with `PayoutCountdown` + the sum of pending week earnings from the existing `useEarnings()`. Read pending entries from `summary.entries.filter(e => e.status === "pending")`, sum their amounts, surface as `"Next rent Sunday · +$X.XX"`.
     - **My Properties** mini-cards: subsbet of `PropertyCard` (or a dedicated `MyPropertyCardRow` if `PropertyCard` grows too big — YAGNI says reuse and pass a `variant: "list"|"mini"` prop; decide in the plan based on line count). Each mini-card: thumb 36 + title + "shares owned / total" + value + **pending weekly earnings** (the seeded pending amounts). Tap → Property detail.
 - Weekly-yield integrity test (the judge gate):
   - New `src/lib/__tests__/integrity.test.ts` — a vitest that:

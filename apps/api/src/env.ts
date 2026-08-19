@@ -50,7 +50,7 @@ const envSchema = z
     ORDER_RATE_LIMIT_WINDOW_MS: z.coerce.number().int().positive().default(60_000),
     /**
      * Demo payout cadence in ms (default 60s).
-     * NOT production Friday calendar — ADR-003.
+     * NOT production Sunday calendar — ADR-003.
      */
     PAYOUT_TICK_MS: z.coerce.number().int().positive().default(60_000),
     /** Kill switch — worker process no-ops when false (default). */

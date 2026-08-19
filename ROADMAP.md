@@ -54,7 +54,7 @@ A production DigiHouse that an investor can trust and a VC can diligence:
 2. **Property listings** — curated / compliance-approved assets with legal docs, photos, APY, funding state.
 3. **Primary sale** — buy shares with TON (or stable jetton); mint/transfer property jettons on-chain.
 4. **Portfolio** — live holdings from chain + indexed DB; PnL, open orders.
-5. **Weekly rental yield (hero)** — every Friday UTC, rent pool distributed **proportional to share**, as real TON (or jetton) transfers with **verifiable tx hashes**.
+5. **Weekly rental yield (hero)** — every Sunday UTC, rent pool distributed **proportional to share**, as real TON (or jetton) transfers with **verifiable tx hashes**.
 6. **Secondary market** — limit/market orders (off-chain matching first; optional on-chain book later).
 7. **Owner portal** — list % of property, fund rent pool, see raise progress (phase 4+).
 8. **Ops & compliance** — admin console, audit logs, KYC gates where required, incident runbooks.
@@ -101,7 +101,7 @@ A production DigiHouse that an investor can trust and a VC can diligence:
         ▼                   ▼                     ▼
 ┌───────────────┐  ┌─────────────────┐  ┌────────────────────┐
 │ PostgreSQL    │  │ Redis           │  │ Worker / Cron      │
-│ (source of    │  │ sessions,       │  │ Friday payout kick │
+│ (source of    │  │ sessions,       │  │ Sunday payout kick │
 │  truth off-   │  │ rate limits,    │  │ order matcher      │
 │  chain)       │  │ job queues      │  │ indexer consumer   │
 └───────┬───────┘  └─────────────────┘  └─────────┬──────────┘
@@ -127,7 +127,7 @@ A production DigiHouse that an investor can trust and a VC can diligence:
 | **API** | **TypeScript + Hono** (or Fastify) monorepo package | Same language as Mini App; tiny cold start; Zod-first |
 | **Monorepo** | **pnpm workspaces** or Turborepo: `apps/web`, `apps/api`, `packages/shared`, `contracts/` | Shared types from DATA_MODELS |
 | **DB** | **PostgreSQL 16** + **Drizzle ORM** (or Prisma) | Relational fit for holdings/orders/distributions; strong migrations |
-| **Cache / queue** | **Redis** + **BullMQ** | Friday jobs, indexer backlog, rate limits |
+| **Cache / queue** | **Redis** + **BullMQ** | Sunday jobs, indexer backlog, rate limits |
 | **Auth** | Validate Telegram `initData` HMAC; session JWT (httpOnly cookie or Authorization) bound to `telegramUserId` + optional wallet | Standard TMA pattern |
 | **Object storage** | S3-compatible (R2 / S3) for property docs & images | CDN-friendly |
 | **TON contracts** | **Tact** or **FunC** + Blueprint; `@ton/core` / `@ton/ton` off-chain | Ecosystem standard; Blueprint testnet deploy |
@@ -172,7 +172,7 @@ A production DigiHouse that an investor can trust and a VC can diligence:
 
 ### 3.6 Weekly yield — production invariant
 ```
-For each property P, week W (Monday 00:00 UTC → Friday payout):
+For each property P, week W (Monday 00:00 UTC → Sunday payout):
   rentPoolNano = funded amount for W
   for each holder h with balance b:
     amount_h = floor(rentPoolNano * b / totalSupply)
@@ -258,7 +258,7 @@ Tables (align with DATA_MODELS):
 **Exit criteria**
 - [ ] Mini App on staging uses API (not mock) for all reads  
 - [ ] Buy still hybrid/mock settlement but **persists holdings in Postgres**  
-- [ ] Earnings list from DB; Friday job can flip pending→paid **off-chain** with audit row  
+- [ ] Earnings list from DB; Sunday job can flip pending→paid **off-chain** with audit row  
 - [ ] Load smoke: 100 concurrent GETs healthy  
 - [ ] No secrets in repo; `npm run check` + API test suite green  
 
@@ -407,7 +407,7 @@ Tables (align with DATA_MODELS):
 
 **Exit criteria (mainnet go/no-go)**
 - [ ] Audit findings resolved or accepted with risk register  
-- [ ] Staging ran ≥2 consecutive real Friday distributions without incident  
+- [ ] Staging ran ≥2 consecutive real Sunday distributions without incident  
 - [ ] On-call rotation + runbooks  
 - [ ] Legal counsel sign-off for target geos  
 - [ ] Feature flag plan for gradual rollout (wallet allowlist → open)  

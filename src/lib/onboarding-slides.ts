@@ -17,7 +17,7 @@ export const ONBOARDING_SLIDES: readonly OnboardingSlideDef[] = [
     id: "yield",
     headline: "Receive your rental share every week",
     // MVP honesty: projected weekly yield in Earnings — real wallet deposition is post-MVP.
-    subtitle: "See your share every Friday in Earnings",
+    subtitle: "See your share every Sunday in Earnings",
   },
   {
     id: "sell",

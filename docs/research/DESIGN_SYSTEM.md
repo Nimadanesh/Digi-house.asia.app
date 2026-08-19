@@ -217,7 +217,7 @@ Two stacked lists in a block. Bid rows tinted `text-success`, Ask rows `text-dan
 ### Weekly-yield callout (recurring pattern)
 A small inline element that appears on Cards, Property detail, and Portfolio:
 - **Look:** one line, `--success` text, tabular-nums, a `CalendarClock` 16px icon left.
-- **Copy:** "≈ $X.XX / week per share" or "Next payout: Fri, $X.XX".
+- **Copy:** "≈ $X.XX / week per share" or "Next payout: Sun, $X.XX".
 - **Motion:** only when the projected amount changes (buy qty change), animate 220ms `--ease-out` on `transform`. Idle state is static.
 
 ### My-position block
@@ -246,7 +246,7 @@ Top-center, `mt-[max(env(safe-area-inset-top),8px)]`, `bg-card border border-bor
 `bg-surface-2 rounded-[6px]`, animate `pulse` (tw-animate-css), matching the final element's size/shape exactly (card, row, bar). Critically: **never a spinner replacing a list.**
 
 ### Empty state
-Centered: ~120px monochrome line-illustration in `--muted-foreground`, headline H2, one muted sentence, one **Primary** button (or "Explore Marketplace" → Marketplace tab). The Earnings empty state must **restate the weekly-yield promise** ("Own a slice — get rent every Friday").
+Centered: ~120px monochrome line-illustration in `--muted-foreground`, headline H2, one muted sentence, one **Primary** button (or "Explore Marketplace" → Marketplace tab). The Earnings empty state must **restate the weekly-yield promise** ("Own a slice — get rent every Sunday").
 
 ---
 

@@ -60,7 +60,7 @@
 - Implement a **mock** backend in `src/lib/mock/*.ts` returning typed data with realistic delays (`await sleep(n)` — 250–700ms to mimic mobile latency).
 - Single `getRepo()` injection point → real TON/backend swap-in is a one-folder change.
 - Mock seed must cover every UI state (see [DATA_MODELS](./DATA_MODELS.md) "Mock seed invariants").
-- **Weekly-yield simulation:** the mock `EarningsRepo.tickPayout()` flips `pending` → `paid` entries on a configurable cadence (default every 60s in dev so the demo shows the payoff live; real cadence is Friday UTC). It stamps a synthetic `txHash` placeholder.
+- **Weekly-yield simulation:** the mock `EarningsRepo.tickPayout()` flips `pending` → `paid` entries on a configurable cadence (default every 60s in dev so the demo shows the payoff live; real cadence is Sunday UTC). It stamps a synthetic `txHash` placeholder.
 
 ## Performance budget (R-9.13 enforcement)
 - **First meaningful paint** on a cached Telegram cold start: **≤ 1.5s** on a mid-range phone (Pixel 5a / iPhone 11 class). Lighthouse Mobile target.
@@ -131,7 +131,7 @@ docs/research/                           # spec docs (source of truth)
 - **TanStack Query + Zustand (no Redux)** — clear boundary between server cache and local UI; lower boilerplate; better fits the mock-repo hook architecture.
 - **Tailwind v4 over v3** — oklch and `@theme` first-class; smaller build; aligns with DESIGN_SYSTEM token system.
 - **WAAPI + CSS transitions reserved for hot paths** — toasts/orders/list items animate via transitions so they stay smooth when the main thread is busy loading new screens (emil-design-eng principle: CSS animations beat JS under load).
-- **`NEXT_PUBLIC_PAYOUT_TICK_MS` mock cadence** — short so the demo visibly "pays out" while a judge watches; real Friday-UTC distribution is a future on-chain job.
+- **`NEXT_PUBLIC_PAYOUT_TICK_MS` mock cadence** — short so the demo visibly "pays out" while a judge watches; real Sunday-UTC distribution is a future on-chain job.
 - **Added `@ton/core@^0.63` (Phase 2 TON foundation)** — Address parse/validate/format + Cell/message builders. Small; required now for address utilities and the SC skeleton.
 - **`@ton/crypto@^3.3` and `@ton/ton@^16.3` installed but deferred** — present on disk for future use; Phase 2 TON foundation does NOT call them (no client-side signing, no ADNL client — `@ton/ton`'s `TonClient` doesn't run cleanly inside the Telegram WebView). Kept for Phase 6+ real-contract work.
 - **TonAPI HTTP over `@ton/ton` ADNL client** — ADNL doesn't run cleanly inside the Telegram WebView; a fetch-based HTTP client (TonAPI.io, testnet at `https://testnet.tonapi.io`) is lighter and WebView-safe. The `TonApiClient` interface is the swap-in point for the real backend.

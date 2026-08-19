@@ -129,7 +129,7 @@ Full list of variables consumed by `loadEnv()` in `src/env.ts`. Required vars ar
 | Variable | Default | Required | Notes |
 |---|---|---|---|
 | **`PAYOUT_WORKER_ENABLED`** | `false` | No | Kill switch — worker exits 0 when `false` |
-| **`PAYOUT_TICK_MS`** | `60000` | No | Demo cadence per ADR-003; **not** production Friday schedule |
+| **`PAYOUT_TICK_MS`** | `60000` | No | Demo cadence per ADR-003; **not** production Sunday schedule |
 | **`ALLOW_MANUAL_PAYOUT_TICK`** | `false` | No | Mount manual tick route (off by default) |
 | **`PAYOUT_TICK_SECRET`** | — | No | Secret for manual tick route |
 

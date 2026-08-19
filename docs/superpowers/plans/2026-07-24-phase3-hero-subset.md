@@ -49,7 +49,7 @@
 | `src/app/(app)/property/[id]/page.tsx` (modify) | Real Property detail (read-only); BackButton shown | 3 |
 | `src/components/property/BuyControl.tsx` (modify) | Wire confirm via `onConfirm` prop | 4 |
 | `src/app/(app)/property/[id]/page.tsx` (modify) | MainButton lifecycle + `useBuyShares` + Toast + haptics | 4 |
-| `src/components/earnings/PayoutCountdown.tsx` | Renders the Fri + duration readout using `usePayoutCountdown()` | 5 |
+| `src/components/earnings/PayoutCountdown.tsx` | Renders the Sun + duration readout using `usePayoutCountdown()` | 5 |
 | `src/components/earnings/EarningsSummaryBlock.tsx` | All-time + this-week-projected + PayoutCountdown rows in a Block | 5 |
 | `src/components/earnings/EarningsEntryRow.tsx` | One row; tap-expandable proportional-math line + simulated disclosure | 5 |
 | `src/components/earnings/EarningsTimeline.tsx` | Block of `EarningsEntryRow`s, newest first | 5 |
@@ -75,7 +75,7 @@ No new files in `lib/ton/**`, `lib/telegram/**`, `lib/api/**`, `lib/query/**`, `
 **Interfaces:**
 - Consumes (from Phase 2): `seed` from `@/lib/mock/seed`; `seed.holdings` (array of `Holding`), `seed.transactions` ([...]), `seed.properties` (find by id); `makeSyntheticTxHash()` from `@/lib/ton/sendTx`; `format.weeklyRent`/`projectedYield`; `TonConnectState.send` via `useTonConnect`; `getRepo()`; env (`env.relayAddress`); `useQuery`/`useMutation`/`useQueryClient` from `@tanstack/react-query`.
 - Produces:
-  - `format.payoutCountdown(nowMs: number, opts?: { payoutDay?: "Friday" | "Monday" }): string` — returns `"in 3d 4h"` when d≥1 else `"in 4h"` when h≥1 else `"in 12m"`. Always relative to next Friday-00:00-UTC after `nowMs`.
+  - `format.payoutCountdown(nowMs: number, opts?: { payoutDay?: "Sunday" | "Monday" }): string` — returns `"in 3d 4h"` when d≥1 else `"in 4h"` when h≥1 else `"in 12m"`. Always relative to next Sunday-00:00-UTC after `nowMs`.
   - `usePayoutCountdown(): string` — 1s ticker wrapper around `format.payoutCountdown(Date.now())`.
   - `useBuyShares(): UseMutationResult<SendTxResult, Error, BuyInput, unknown>` where `BuyInput = { propertyId: string; quantity: number; priceUsdPerShare: number; toFriendlyAddress: string; propertyName: string }`.
     - On success (`SendTxResult.ok === true`): calls `getRepo().tx.buy(...)` → invalidates `["portfolio"]`, `["earnings"]`, `["marketplace"]`, `["property", propertyId]`, `["orderBook", propertyId]`. Returns the `SendTxResult` unchanged.
@@ -92,25 +92,25 @@ import { payoutCountdown } from "@/lib/format";
 describe("format.payoutCountdown", () => {
   afterEach(() => vi.useRealTimers());
 
-  it("returns days+hours when the next Friday is >=1 day away", () => {
-    // 2026-07-22 is a Wednesday; next Friday = 2026-07-24 00:00 UTC
+  it("returns days+hours when the next Sunday is >=1 day away", () => {
+    // 2026-07-22 is a Wednesday; next Sunday = 2026-07-24 00:00 UTC
     const wed: number = Date.UTC(2026, 6, 22, 10, 0, 0);
     expect(payoutCountdown(wed)).toBe("in 1d 14h");
   });
 
-  it("returns hours-only when under 24h to Friday", () => {
-    // 2026-07-23 22:00 UTC -> next Friday 2026-07-24 00:00 = 2h away
+  it("returns hours-only when under 24h to Sunday", () => {
+    // 2026-07-23 22:00 UTC -> next Sunday 2026-07-24 00:00 = 2h away
     const near: number = Date.UTC(2026, 6, 23, 22, 0, 0);
     expect(payoutCountdown(near)).toBe("in 2h");
   });
 
-  it("returns minutes-only when under 1h to Friday", () => {
+  it("returns minutes-only when under 1h to Sunday", () => {
     const t: number = Date.UTC(2026, 6, 23, 23, 48, 0);
     expect(payoutCountdown(t)).toBe("in 12m");
   });
 
-  it("rolls over to next week if now is Friday after midnight", () => {
-    // 2026-07-24 02:00 UTC (Friday, after payout). Next Friday = 2026-07-31 00:00.
+  it("rolls over to next week if now is Sunday after midnight", () => {
+    // 2026-07-24 02:00 UTC (Sunday, after payout). Next Sunday = 2026-07-31 00:00.
     const after: number = Date.UTC(2026, 6, 24, 2, 0, 0);
     expect(payoutCountdown(after)).toBe("in 6d 22h");
   });
@@ -127,15 +127,15 @@ Expected: FAIL — `payoutCountdown` not exported from `@/lib/format`.
 - [ ] **Step 3: Implement `payoutCountdown`** — append to `src/lib/format.ts`:
 
 ```ts
-/** Return "in Xd Yh" / "in Xh" / "in Xm" relative to the next Friday 00:00 UTC after now. */
-export function payoutCountdown(nowMs: number, _opts?: { payoutDay?: "Friday" }): string {
+/** Return "in Xd Yh" / "in Xh" / "in Xm" relative to the next Sunday 00:00 UTC after now. */
+export function payoutCountdown(nowMs: number, _opts?: { payoutDay?: "Sunday" }): string {
   const now = new Date(nowMs);
-  // ISO day: 4 = Friday. Find the next Friday 00:00 UTC strictly after now (rollover if already past).
+  // ISO day: 0 = Sunday. Find the next Sunday 00:00 UTC strictly after now (rollover if already past).
   const day = now.getUTCDay(); // 0 Sun..6 Sat
-  const daysUntilFri = (4 - day + 7) % 7;
-  const nextFriMs = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + daysUntilFri, 0, 0, 0);
-  let diffMs = nextFriMs - nowMs;
-  if (diffMs <= 0) diffMs += 7 * 24 * 60 * 60 * 1000; // already Friday past midnight → next week
+  const daysUntilSun = (0 - day + 7) % 7;
+  const nextSunMs = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + daysUntilSun, 0, 0, 0);
+  let diffMs = nextSunMs - nowMs;
+  if (diffMs <= 0) diffMs += 7 * 24 * 60 * 60 * 1000; // already Sunday past midnight → next week
   const totalMin = Math.floor(diffMs / 60_000);
   const days = Math.floor(totalMin / (60 * 24));
   const hours = Math.floor((totalMin % (60 * 24)) / 60);
@@ -283,7 +283,7 @@ Expected: 2 passed.
 
 ```ts
 "use client";
-// File responsibility: 1s ticker hook returning a textual payout countdown to next Friday 00:00 UTC.
+// File responsibility: 1s ticker hook returning a textual payout countdown to next Sunday 00:00 UTC.
 // Pure UI time-keeper — no network, no wallet. Honors reduced-motion implicitly (it's text, no animation).
 import { useEffect, useState } from "react";
 import { payoutCountdown } from "@/lib/format";
@@ -899,7 +899,7 @@ export function PropertyDetail({
       {/* Weekly-Yield block row [HERO R-5.4] */}
       <Block>
         <Row><span className="text-sm text-muted-foreground">Weekly rent pool</span><span className="ml-auto text-sm tnum text-success font-medium">{usd(weeklyPool)}</span></Row>
-        <Row><span className="text-sm text-muted-foreground">Payout day</span><span className="ml-auto text-sm text-foreground">Every Friday</span></Row>
+        <Row><span className="text-sm text-muted-foreground">Payout day</span><span className="ml-auto text-sm text-foreground">Every Sunday</span></Row>
       </Block>
 
       <div>
@@ -1147,7 +1147,7 @@ git commit -m "feat(phase3): Buy flow - MainButton confirm + useBuyShares + toas
 **Interfaces:**
 - Consumes: `useEarnings` (already wired, runs tickPayout interval); `usePayoutCountdown` (Task 1); `PAYOUT_DISCLAIMER` from `@/lib/constants`; `format.usd/ton/weekLabel/pct`; `Block`/`Row`/`Skeleton`/`EmptyState`/`StatusPill`; lucide icons (`ChevronDown`, `ChevronUp` or `ChevronRight` per DESIGN_SYSTEM).
 - Produces:
-  - `<PayoutCountdown />` — uses `usePayoutCountdown()` + renders the next-Fri + duration.
+  - `<PayoutCountdown />` — uses `usePayoutCountdown()` + renders the next-Sun + duration.
   - `<EarningsSummaryBlock summary={EarningsSummary} />` — readout block.
   - `<EarningsEntryRow entry={EarningsEntry} />` — with tap-expandable proportional-math line.
   - `<EarningsTimeline entries={EarningsEntry[]} />` — Block of rows newest-first.
@@ -1161,7 +1161,7 @@ import { usePayoutCountdown } from "@/hooks/usePayoutCountdown";
 
 export function PayoutCountdown() {
   const text = usePayoutCountdown();
-  return <span className="text-xs text-muted-foreground tnum">Next payout Fri · {text}</span>;
+  return <span className="text-xs text-muted-foreground tnum">Next payout Sun · {text}</span>;
 }
 ```
 
@@ -1348,7 +1348,7 @@ export default function EarningsPage() {
       ) : !earnings.data || earnings.data.entries.length === 0 ? (
         <EmptyState
           title="No earnings yet"
-          message="Own a slice of a property — get rent every Friday."
+          message="Own a slice of a property — get rent every Sunday."
           action={<Link href={ROUTES.marketplace} className="inline-flex items-center justify-center h-[44px] rounded-[10px] bg-primary text-primary-foreground px-4 text-sm font-semibold">Explore Marketplace</Link>}
           className="mt-12"
         />
@@ -1467,7 +1467,7 @@ export default function HomePage() {
     return (
       <EmptyState
         title="Welcome to DigiHouse"
-        message="Buy a slice of a property — earn rent every Friday."
+        message="Buy a slice of a property — earn rent every Sunday."
         action={<Link href={ROUTES.marketplace} className="inline-flex items-center justify-center h-[44px] rounded-[10px] bg-primary text-primary-foreground px-4 text-sm font-semibold">Explore Marketplace</Link>}
         className="mt-12"
       />

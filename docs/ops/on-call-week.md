@@ -97,9 +97,9 @@ Thresholds (proposal):
 
 If payout worker is not running → check `PAYOUT_WORKER_ENABLED` env var.
 
-### 7. Payout job last success (Friday focus)
+### 7. Payout job last success (Sunday focus)
 
-Every Friday (payout day):
+Every Sunday (payout day):
 - Check `POST /v1/admin/worker/status` (if implemented) or logs for `payout.tick` completion
 - Verify last payout batch has `status = 'paid'`
 - Check earnings entries for the current week are visible to users

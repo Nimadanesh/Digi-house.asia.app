@@ -14,7 +14,7 @@
 |---|---|---|---|---|---|
 | **ADR-001** | Settlement modes + UI badge rules | Accepted | `SETTLEMENT_MODE` ladder; badges until real explorer hash; ≠ `DATA_SOURCE` | [ADR-001-settlement-modes.md](./ADR-001-settlement-modes.md) |
 | **ADR-002** | Jetton deployment | Accepted | One master/property; **manual deploy** P2; factory optional later | [ADR-002-jetton-factory.md](./ADR-002-jetton-factory.md) |
-| **ADR-003** | Weekly distribution | Accepted | **Claim** MVP; largest-holder dust; Friday UTC; no unbounded push | [ADR-003-distribution-model.md](./ADR-003-distribution-model.md) |
+| **ADR-003** | Weekly distribution | Accepted | **Claim** MVP; largest-holder dust; Sunday UTC; no unbounded push | [ADR-003-distribution-model.md](./ADR-003-distribution-model.md) |
 | **ADR-004** | Key hierarchy & custody | Accepted | Role table; hot-wallet caps; secrets never in repo/client | [ADR-004-key-hierarchy.md](./ADR-004-key-hierarchy.md) |
 | **ADR-005** | USDT stable pay path | Proposed | Defer to Phase 5; dual-jetton escrow preferred if accepted; no USDT in MVP buy flow | [ADR-005-usdt-pay-path.md](./ADR-005-usdt-pay-path.md) |
 

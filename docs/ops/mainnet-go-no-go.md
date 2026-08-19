@@ -32,7 +32,7 @@
 
 | # | Item | Evidence | Status |
 |---|---|---|---|
-| B.1 | **Staging ≥2 consecutive real Friday (or documented synthetic Friday) distributions** without incident | [phase1-demo.md](../runbooks/phase1-demo.md) (QA checklist §B) + deployment log (external) | / |
+| B.1 | **Staging ≥2 consecutive real Sunday (or documented synthetic Sunday) distributions** without incident | [phase1-demo.md](../runbooks/phase1-demo.md) (QA checklist §B) + deployment log (external) | / |
 | B.2 | **Backup restore drill signed** | [backup-drill-log.md](./backup-drill-log.md) (latest entry) | / |
 | B.3 | **Status page + incident runbook exist** | [status-page.md](./status-page.md), [incident-response.md](../runbooks/incident-response.md), [public/status/index.html](../../public/status/index.html) | / |
 | B.4 | **On-call rotation named** | Table below | / |

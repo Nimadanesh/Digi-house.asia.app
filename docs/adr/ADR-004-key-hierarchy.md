@@ -66,14 +66,14 @@ Claim-based MVP (ADR-003) means the hot wallet **primarily funds the rent pool**
 |---|---|---|
 | **local/dev** | Dust / **unused** if claim-only and no live fund script | Prefer empty; no standing float |
 | **testnet** | **≤ 50 TON** interim | Enough for demo weeks; label **interim** — revisit after first multi-property testnet |
-| **prod** | **≤ max( estimated 1 week rent float for live properties, fixed nanoTON cap in SM config )** | Prefer the **lower** of policy cap vs computed need; top up just-in-time before Friday |
+| **prod** | **≤ max( estimated 1 week rent float for live properties, fixed nanoTON cap in SM config )** | Prefer the **lower** of policy cap vs computed need; top up just-in-time before Sunday |
 
 **Also required:**
 
 | Control | Expectation |
 |---|---|
 | **High-water alert** | Balance **>** configured cap → page/ops alert |
-| **Low-water alert** | Balance **<** minimum for next Friday’s funded pools → alert before payoutDay |
+| **Low-water alert** | Balance **<** minimum for next Sunday’s funded pools → alert before payoutDay |
 | **Failed fund txs** | Monitor and alert (tooling Phase 5 / ops observability) |
 | **Minimal balance** | Do not park treasury-scale funds in hot wallet; cold/multisig holds surplus |
 | **Future batch relayer** | Separate key; **stricter** cap (e.g. ≤ one batch gas + one holder payout buffer); rate limit; off by default |

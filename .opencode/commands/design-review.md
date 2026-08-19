@@ -60,7 +60,7 @@
 #### States
 - [ ] Every screen ships: **loaded | loading skeleton | empty | error**.
 - [ ] Skeletons match the final shape exactly (no spinner replacing a list).
-- [ ] Empty state restates the weekly-yield promise where relevant (Earnings empty: "Own a slice — get rent every Friday").
+- [ ] Empty state restates the weekly-yield promise where relevant (Earnings empty: "Own a slice — get rent every Sunday").
 
 #### Honesty (MVP payout claims)
 - [ ] No screen claims live on-chain weekly payouts for the MVP. Any "Paid" moment on the hero Earnings screen is visibly marked **simulated** (badge/hint), and the canonical copy reads: **"simulated weekly payout · on-chain verifiable post-MVP"**.

@@ -89,10 +89,10 @@ No cent is lost.
 | Phase | Cadence | Mechanism |
 |---|---|---|
 | MVP (mock) | Every `PAYOUT_TICK_MS` ms (default 60s in dev) | `EarningsRepo.tickPayout()` flips pending → paid; synthetic txHash |
-| Hybrid (staging) | Friday UTC (weekly) | Off-chain worker processes pending distributions |
-| On-chain (future) | Friday UTC | Distribution contract pushes or allows claim per holder |
+| Hybrid (staging) | Sunday UTC (weekly) | Off-chain worker processes pending distributions |
+| On-chain (future) | Sunday UTC | Distribution contract pushes or allows claim per holder |
 
-The payout day is **Friday UTC** for the distribution week that started the prior Monday (`weekOf`).
+The payout day is **Sunday UTC** for the distribution week that started the prior Monday (`weekOf`).
 
 ---
 

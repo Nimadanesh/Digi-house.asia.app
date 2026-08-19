@@ -31,7 +31,7 @@ export function createRedisConnection(
 
 /**
  * Register repeatable due-tick job. jobId stable for BullMQ dedupe.
- * Cadence = PAYOUT_TICK_MS (demo clock ≠ production Friday — ADR-003).
+ * Cadence = PAYOUT_TICK_MS (demo clock ≠ production Sunday — ADR-003).
  */
 export async function schedulePayoutDueJobs(
   queue: Queue<PayoutJobData>,

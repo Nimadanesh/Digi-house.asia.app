@@ -47,7 +47,7 @@ From [ADR-001](../adr/ADR-001-settlement-modes.md) §5 — do not invent opposit
 | `NEXT_PUBLIC_TON_NETWORK` | P | web | `testnet` | `testnet` | `testnet` → `mainnet` only post go/no-go | Exists (`.env.local.example`) |
 | `NEXT_PUBLIC_TONCONNECT_MANIFEST_URL` | P | web | unset → `${origin}/seo/tonconnect-manifest.json` | absolute HTTPS staging | absolute HTTPS prod | Exists |
 | `NEXT_PUBLIC_TON_RELAY_ADDRESS` | P | web | testnet relay or empty (seed owner) | testnet relay | mainnet relay only if buy stub still used | Exists; not a secret key |
-| `NEXT_PUBLIC_PAYOUT_TICK_MS` | P | web | `60000` | `60000` or longer | unused if no mock tick | Mock cadence only; ≠ Friday calendar (ADR-003) |
+| `NEXT_PUBLIC_PAYOUT_TICK_MS` | P | web | `60000` | `60000` or longer | unused if no mock tick | Mock cadence only; ≠ Sunday calendar (ADR-003) |
 | `NEXT_PUBLIC_TG_BOT_USERNAME` | P | web | optional | staging bot username | prod bot username | No `@`; share links; not the bot **token** |
 | `NODE_ENV` | P | web | `development` | `production` | `production` | Host-set |
 
@@ -70,9 +70,9 @@ Web must **never** set: `TELEGRAM_BOT_TOKEN`, `DATABASE_URL`, `SESSION_SECRET`, 
 | `USDT_JETTON_MASTER_ADDRESS` | P | api | testnet master `kQDw5tNMBGsM0ZlLGhA9TSV9iX1nMLrfPZ7HnrQMBxgrAhWe` | testnet master | **mainnet** master `EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs` | Must match `TON_API_URL` network; mismatch rejects every settle (`jetton_mismatch`) |
 | `TON_USD_PRICE_CENTS` | P* | api | `200` | current rate | current rate | USD→TON for /v1/buys/prepare payable amount |
 | `BUY_STUB_NANOTON` | P* | api | `10000000` | unset (rate used) | unset (rate used) | Stub only when rate unset |
-| `PAYOUT_TICK_MS` | P* | api | `60000` demo | staging cadence or cron | Friday cron / worker schedule | Hybrid `tickPayout` **P1-13**; not public web |
+| `PAYOUT_TICK_MS` | P* | api | `60000` demo | staging cadence or cron | Sunday cron / worker schedule | Hybrid `tickPayout` **P1-13**; not public web |
 | `HOT_WALLET_MAX_TON` | P* | api | `0` or unset | `50` interim | policy cap (§6) | Monitor/enforce; ADR-004 |
-| `HOT_WALLET_MIN_TON` | P* | api | unset | low-water for alerts | next-Friday need | Optional low-water (ADR-004) |
+| `HOT_WALLET_MIN_TON` | P* | api | unset | low-water for alerts | next-Sunday need | Optional low-water (ADR-004) |
 | `HOT_WALLET_ADDRESS` | P | api | unset | testnet fund address | prod fund address | Public address OK; **key** is separate S |
 | `HOT_WALLET_KEY_REF` | **S** | api | unused claim-only | `sm://…` | `sm://…` | Ref only — never raw key in env files committed |
 | `CORS_ORIGIN` | P | api | `http://localhost:3000` | staging Mini App origin(s) | prod Mini App origin(s) | Allowlist |
@@ -80,7 +80,7 @@ Web must **never** set: `TELEGRAM_BOT_TOKEN`, `DATABASE_URL`, `SESSION_SECRET`, 
 | `LOG_LEVEL` | P | api | `debug` | `info` | `info` | P1-01 logger |
 | `NOTIFY_EARNINGS_PAID` | P | api | unset (false) | `true` if TELEGRAM_BOT_TOKEN set | `true` | **P4-01** — Telegram notify on earnings paid; fail-open; default false |
 | `YIELD_WORKER_ENABLED` | P | api | `false` | `true` | `true` | **Phase B** — yield worker kill switch (mature→accrue→pay ticks) |
-| `YIELD_TICK_MS` | P | api | `60000` | `60000` | Friday cadence / worker schedule | **Phase B** — yield tick cadence; idempotent |
+| `YIELD_TICK_MS` | P | api | `60000` | `60000` | Sunday cadence / worker schedule | **Phase B** — yield tick cadence; idempotent |
 | `UNLOCK_MATURATION_MS` | P | api | 3 days | 3 days | 3 days | **Phase B** — lock unlock maturation window (spec 2–3 days) |
 | `NOTIFY_YIELD` | P | api | unset (false) | `true` if TELEGRAM_BOT_TOKEN set | `true` | **Phase B** — Telegram notify on yield payouts + lock lifecycle |
 | `OPS_CHAT_ID` | P | api | unset (off) | ops channel id | ops channel id | **PF-05** — failed yield/payout jobs + match guard trips alert to Telegram; requires TELEGRAM_BOT_TOKEN |
@@ -113,7 +113,7 @@ Admin pause keys: see ADR-004 roles — stored in SM, not listed as Mini App env
 
 Optional nano form for scripts: `HOT_WALLET_MAX_NANO` (= TON × 1e9) — pick one unit in P1 impl and document here.
 
-Monitoring (ADR-004): alert if balance **>** max or **<** min next-Friday need. Claim-based distribution (ADR-003) keeps hot wallet as **fund pool**, not per-holder pusher.
+Monitoring (ADR-004): alert if balance **>** max or **<** min next-Sunday need. Claim-based distribution (ADR-003) keeps hot wallet as **fund pool**, not per-holder pusher.
 
 ## 7. Where values live
 
@@ -153,7 +153,7 @@ Monitoring (ADR-004): alert if balance **>** max or **<** min next-Friday need. 
 ## 10. References
 
 - [ADR-001 — Settlement modes](../adr/ADR-001-settlement-modes.md) — mode defaults §5
-- [ADR-003 — Distribution](../adr/ADR-003-distribution-model.md) — tick vs Friday
+- [ADR-003 — Distribution](../adr/ADR-003-distribution-model.md) — tick vs Sunday
 - [ADR-004 — Key hierarchy](../adr/ADR-004-key-hierarchy.md) — secrets, caps
 - [threat-model-v0.md](../security/threat-model-v0.md) — TM-01, TM-05, TM-16
 - [TECH_STACK.md](../research/TECH_STACK.md) — Mini App env names

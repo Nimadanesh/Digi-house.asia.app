@@ -6,7 +6,7 @@
 
 ## Context
 
-Weekly rental yield is DigiHouse’s hero invariant: holders receive rent **proportional to share**, on a **Friday UTC** cadence, with judge-verifiable math (R-6.6). ROADMAP §3.6 and DATA_MODELS define floor division and dust; ROADMAP §3.5 forbids **unbounded** single-TX holder loops (“Unbounded distribution gas” risk).
+Weekly rental yield is DigiHouse’s hero invariant: holders receive rent **proportional to share**, on a **Sunday UTC** cadence, with judge-verifiable math (R-6.6). ROADMAP §3.6 and DATA_MODELS define floor division and dust; ROADMAP §3.5 forbids **unbounded** single-TX holder loops (“Unbounded distribution gas” risk).
 
 Without a frozen model, Phase 1’s off-chain `tickPayout`, Phase 2’s Distribution contract, and Phase 3’s indexer will disagree on:
 
@@ -25,19 +25,19 @@ ADR-001 covers honesty badges and mode ladder; ADR-002 registers `distribution_a
 |---|---|
 | Distribution week | Monday 00:00 UTC → Sunday 23:59:59 UTC |
 | `RentalDistribution.weekOf` | ISO **Monday** date string (`YYYY-MM-DD`) |
-| `payoutDay` | That week’s **Friday** (ISO date) |
-| Production kick | Friday UTC — cron/ops funds pool and opens claim window (or starts batch helper if enabled later) |
+| `payoutDay` | That week’s **Sunday** (ISO date) |
+| Production kick | Sunday UTC — cron/ops funds pool and opens claim window (or starts batch helper if enabled later) |
 | Snapshot | `totalShares` / jetton `totalSupply` and each holder’s eligible balance frozen at **distribution create** (when row leaves draft → `scheduled`) — see §7 mid-week transfers |
 
 **Demo vs production clock:**
 
 | Mode | Clock | Domain model |
 |---|---|---|
-| `mock` | `NEXT_PUBLIC_PAYOUT_TICK_MS` / in-process tick (default ~60s) | Still emits `weekOf` / `payoutDay` as Monday/Friday labels on seed rows |
-| `hybrid` | BullMQ `tickPayout` (`P1-13`); configurable cadence for staging demos | Same Monday/Friday fields; **demo tick ≠ production calendar** — runbooks must say so |
-| `onchain` | Real Friday UTC ops/cron | Calendar is authoritative |
+| `mock` | `NEXT_PUBLIC_PAYOUT_TICK_MS` / in-process tick (default ~60s) | Still emits `weekOf` / `payoutDay` as Monday/Sunday labels on seed rows |
+| `hybrid` | BullMQ `tickPayout` (`P1-13`); configurable cadence for staging demos | Same Monday/Sunday fields; **demo tick ≠ production calendar** — runbooks must say so |
+| `onchain` | Real Sunday UTC ops/cron | Calendar is authoritative |
 
-UI copy may say “Every Friday”; never treat a 60s demo tick as a real week in investor materials without labeling demo.
+UI copy may say “Every Sunday”; never treat a 60s demo tick as a real week in investor materials without labeling demo.
 
 ### 2. Math invariant (ROADMAP §3.6 + DATA_MODELS)
 
@@ -94,7 +94,7 @@ ROADMAP §3.6 allows “treasury or next week” but requires matching DATA_MODE
 
 | Topic | Rule |
 |---|---|
-| Open | After pool funded ≥ sum of floor amounts (+ dust assignable); status → `distributing`; claim window opens at/after `payoutDay` 00:00 UTC (ops may open same Friday) |
+| Open | After pool funded ≥ sum of floor amounts (+ dust assignable); status → `distributing`; claim window opens at/after `payoutDay` 00:00 UTC (ops may open same Sunday) |
 | Close | Default window: **7 days** after open (through next Thursday 23:59 UTC), configurable by admin later |
 | Unclaimed after window | **Roll into next week’s rent pool** for that property (increase next `rentPoolNano`); mark entry `pending`→ special status or keep pending with UI “rolled — claim closed”; do **not** fake `paid`. Audit row required |
 | Who pays gas | **Holder** on claim TX |
@@ -134,7 +134,7 @@ completed     → all snapshot holders paid/claimed OR window closed and unclaim
 |---|---|---|
 | 1. Create distribution | Admin/cron | `rental_distributions` `scheduled`; precompute pending `earnings_entries` with floor amounts + dust assignment |
 | 2. Fund pool | Owner/ops | Ton to `distribution_address`; record `rentPoolNanoTon` |
-| 3. Open claims | Ops/cron Friday | Status `distributing`; emit/open claim |
+| 3. Open claims | Ops/cron Sunday | Status `distributing`; emit/open claim |
 | 4. Holder claims | User wallet | On-chain transfer out; event with property/week/amount |
 | 5. Index | Indexer `P3-03` | Set `earnings_entries.tx_hash`, status `paid` |
 | 6. Close | Cron after window | Unclaimed → next pool; status `completed` when settled |
@@ -170,7 +170,7 @@ Map: `rental_distributions.status` ∈ `scheduled` | `distributing` | `completed
 | Task | Impact |
 |---|---|
 | **P1-10** | Earnings API returns pending/paid; floor math in tests |
-| **P1-13** | Idempotent off-chain `tickPayout`; dust → largest holder; synthetic hash; Friday-week fields even if demo cadence |
+| **P1-13** | Idempotent off-chain `tickPayout`; dust → largest holder; synthetic hash; Sunday-week fields even if demo cadence |
 | **P2-04** | Distribution contract: deposit rent, **claim** API, pause, snapshot week id |
 | **P2-05** | Conservation: `sum(payouts) + dust == rentPool` (USD fixture + nanoTON) |
 | **P2-07** | Gas benchmarks; finalize batch size only if B pursued |
@@ -216,7 +216,7 @@ Map: `rental_distributions.status` ∈ `scheduled` | `distributing` | `completed
 - [ADR-001 — Settlement modes](./ADR-001-settlement-modes.md) — mode matrix, badges, synthetic vs real `txHash`
 - [ADR-002 — Jetton deployment](./ADR-002-jetton-factory.md) — `distribution_address` registry; one master per property
 - [ROADMAP.md](../../ROADMAP.md) — §3.5 Distribution; §3.6 invariant; Phase 3 §3.3 path; unbounded gas risk; P1-13, P2-04/05/07, P3-03/08
-- [docs/research/DATA_MODELS.md](../research/DATA_MODELS.md) — `RentalDistribution`, floor invariant, largest-holder dust, Monday/Friday fields
+- [docs/research/DATA_MODELS.md](../research/DATA_MODELS.md) — `RentalDistribution`, floor invariant, largest-holder dust, Monday/Sunday fields
 - [docs/research/USER_FLOW.md](../research/USER_FLOW.md) — Flow 2 weekly cadence + honest simulated labeling
 - [EXECUTION-PLAN.md](../../EXECUTION-PLAN.md) — P0-03 acceptance
 - Mock: `EarningsRepo.tickPayout` — in-memory pending→paid + `simulated:` hash (hybrid analogue offline)
