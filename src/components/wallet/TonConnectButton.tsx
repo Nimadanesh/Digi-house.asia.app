@@ -1,6 +1,6 @@
 "use client";
 
-// File responsibility: the DigiHouse-native TON connect button. Presentational — all TON surface
+// File responsibility: the FractionalLuxe-native TON connect button. Presentational — all TON surface
 // (openModal dispatch) comes through the sanctioned useTonConnect hook; this component NEVER imports
 // @tonconnect/* directly (telegram-ton-ownership hard rule). DESIGN_SYSTEM §"Buttons (in-page)" Primary.
 import { useTonConnect } from "@/hooks/useTonConnect";

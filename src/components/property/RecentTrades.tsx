@@ -8,30 +8,33 @@ import { Block } from "@/components/common/Block";
 import { SectionLabel } from "@/components/common/SectionLabel";
 import { Skeleton } from "@/components/common/Skeleton";
 
-export function RecentTrades({ propertyId }: { propertyId: string }) {
+export function RecentTrades({ propertyId, max }: { propertyId: string; /** Compact cap (Phase 4 market card); undefined = all. */ max?: number }) {
   const { data, isLoading, isError } = useTrades(propertyId, { live: true });
+  const trades = data && max ? data.slice(0, max) : data;
+  const loadingState = isLoading && !data;
+  const emptyState = !trades || trades.length === 0;
 
   return (
     <Block className="overflow-hidden" data-testid="recent-trades">
       <div className="px-4 py-2">
         <SectionLabel>Recent trades</SectionLabel>
       </div>
-      {isLoading && !data ? (
+      {loadingState ? (
         <div className="space-y-2 px-4 pb-4">
           <Skeleton className="h-4 w-full" />
           <Skeleton className="h-4 w-4/5" />
           <Skeleton className="h-4 w-3/5" />
         </div>
-      ) : isError && !data ? (
+      ) : isError && !trades ? (
         <p className="px-4 pb-4 text-xs text-muted-foreground">Couldn&apos;t load recent trades.</p>
-      ) : !data || data.length === 0 ? (
+      ) : emptyState ? (
         <p className="px-4 pb-4 text-xs text-muted-foreground" data-testid="trades-empty">
           No trades yet — the market opens when the primary offering sells out.
         </p>
       ) : (
         <div className="px-4 pb-3 text-xs font-mono" data-testid="trades-list">
-          {data.map((t, i) => {
-            const prev = data[i + 1];
+          {trades!.map((t, i) => {
+            const prev = trades![i + 1];
             const dir = prev ? Math.sign(t.priceUsd - prev.priceUsd) : 0;
             return (
               <div

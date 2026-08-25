@@ -77,7 +77,7 @@ export function OnboardingLoader({
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 70% 55% at 50% 42%, rgba(51,144,236,0.08) 0%, rgba(11,18,32,0) 65%)",
+            "radial-gradient(ellipse 70% 55% at 50% 42%, rgba(34,158,217,0.08) 0%, rgba(11,18,32,0) 65%)",
         }}
       />
 
@@ -111,7 +111,7 @@ export function OnboardingLoader({
             data-testid="onboarding-loader-progress"
           >
             <div
-              className="h-full rounded-full bg-[#3390EC] transition-[width] duration-300 ease-out"
+              className="h-full rounded-full bg-[#229ED9] transition-[width] duration-300 ease-out"
               style={{ width: `${clampedProgress}%` }}
             />
           </div>

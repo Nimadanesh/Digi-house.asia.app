@@ -2,7 +2,7 @@
 
   "common": {
 
-    "appName": "DigiHouse",
+    "appName": "FractionalLuxe",
 
     "buyShare": "Pay satın al",
 
@@ -104,9 +104,9 @@
 
     "yield": {
 
-      "headline": "Her hafta kira payını al",
+      "headline": "Her ay kira payını al",
 
-      "subtitle": "Her Pazar payını Kazanç’ta gör"
+      "subtitle": "Aylık payını Kazanç’ta gör"
 
     },
 
@@ -114,7 +114,7 @@
 
       "headline": "İstediğin zaman sat",
 
-      "subtitle": "Çıkmaya hazır olduğunda payları DigiHouse pazarında listele."
+      "subtitle": "Çıkmaya hazır olduğunda payları FractionalLuxe pazarında listele."
 
     }
 
@@ -138,13 +138,13 @@
 
     "buyFirstShare": "İlk payını satın al",
 
-    "buyFirstShareHint": "Bir dilim sahiplen — her Pazar tahmini kira kazan.",
+    "buyFirstShareHint": "Bir dilim sahiplen — her ay tahmini kira kazan.",
 
     "todaysHighlight": "Günün öne çıkanı",
 
     "hotThisWeek": "Bu hafta popüler",
 
-    "weeklyPerShare": "Haftalık / pay",
+    "monthlyPerShare": "Aylık / pay",
 
     "pendingThisWeek": "Bu hafta {amount} beklemede"
 
@@ -190,7 +190,7 @@
 
     "pricePerShare": "Fiyat / pay",
 
-    "weeklyPerShare": "Haftalık / pay",
+    "monthlyPerShare": "Aylık / pay",
 
     "minPurchase": "Min. alım",
 
@@ -244,7 +244,7 @@
 
     "emptyTitle": "Henüz kazancın yok",
 
-    "emptyMessage": "İlk payını al ve gelecek hafta kazanmaya başla.",
+    "emptyMessage": "İlk payını al ve gelecek ay kazanmaya başla.",
 
     "thisWeek": "Bu haftanın kazancı",
 
@@ -260,15 +260,15 @@
 
     "timeline": "Geçmiş",
 
-    "disclaimer": "simüle haftalık ödeme · MVP sonrası zincir üzerinde doğrulanabilir",
+    "disclaimer": "simüle aylık ödeme · MVP sonrası zincir üzerinde doğrulanabilir",
+
+    "withdrawalTerms": "Dilediğin zaman çek — %1 ücret, 4 haftalık taksitte ödenir",
 
     "yieldTitle": "Kilitli pay getirisi",
 
     "yieldAccrued": "Birikmiş ödenmemiş",
 
     "yieldMonthly": "Aylık",
-
-    "yieldWeekly": "Haftalık",
 
     "yieldNoLocks": "Aktif kilit yok — kazanmaya başlamak için bir mülk sayfasında pay kilitleyin.",
 
@@ -318,7 +318,7 @@
 
     "connectTitle": "TON cüzdan bağla",
 
-    "connectHint": "Pay almak ve haftalık getiri için gerekli.",
+    "connectHint": "Pay almak ve aylık kira geliri için gerekli.",
 
     "disconnect": "Cüzdanı ayır",
 
@@ -388,21 +388,21 @@
 
     "help": "Yardım",
 
-    "howItWorks": "DigiHouse nasıl çalışır",
+    "howItWorks": "FractionalLuxe nasıl çalışır",
     "transactionHistory": "İşlem geçmişi",
 
 
     "aboutLegal": "Hakkında / Yasal",
 
-    "aboutBody": "DigiHouse, TON üzerinde fraksiyonel gayrimenkul payları için bir Telegram Mini App’tir. Haftalık kira getirisi sahipliğine orantılı gösterilir.",
+    "aboutBody": "FractionalLuxe, TON üzerinde fraksiyonel gayrimenkul payları için bir Telegram Mini App’tir. Aylık kira geliri sahipliğine orantılı olarak birikir.",
 
     "aboutAdvice": "Buradaki hiçbir şey finansal tavsiye değildir. Mülk belgeleri ve tokenizasyon, üretim sözleşmelerine kadar gösterim amaçlıdır.",
 
-    "aboutCopyright": "© DigiHouse · MVP",
+    "aboutCopyright": "© FractionalLuxe · MVP",
 
     "demoTxDisclaimer": "Bu bir demodur – işlemler simüle edilir",
 
-    "payoutDisclaimer": "simüle haftalık ödeme · MVP sonrası zincir üzerinde doğrulanabilir",
+    "payoutDisclaimer": "simüle aylık ödeme · MVP sonrası zincir üzerinde doğrulanabilir",
 
     "chooseLanguage": "Dil seç",
 
@@ -446,7 +446,7 @@
 
     "recoveryWarn": "Bu kodu güvenli bir yerde sakla. Telegram yoksa giriş için gerekir. Senin için kurtaramayız.",
 
-    "recoverySettingsHint": "Bu kodu gizli tut. Elinde olan herkes DigiHouse hesabına erişebilir.",
+    "recoverySettingsHint": "Bu kodu gizli tut. Elinde olan herkes FractionalLuxe hesabına erişebilir.",
 
     "copyCode": "Kurtarma kodunu kopyala",
 

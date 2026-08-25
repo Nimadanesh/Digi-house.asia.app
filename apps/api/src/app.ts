@@ -34,10 +34,13 @@ import type { BalanceStore } from "./money/balance-store.js";
 import type { InstantSellStore } from "./sells/instant-sell-store.js";
 import type { TradeStore } from "./orders/trade-store.js";
 import type { WithdrawalStore } from "./withdrawals/withdrawal-store.js";
+import type { WaitlistStore } from "./waitlist/waitlist-store.js";
 import { createTonApiTxClient } from "./ton/tonapi-client.js";
 import type { TonTxClient } from "./ton/tx-client.js";
 import type { AuditStore } from "./audit/audit-store.js";
 import { createRedisTokenBucket } from "./lib/rate-limit-redis.js";
+import { createMemoryTokenBucket } from "./lib/rate-limit-memory.js";
+import { createPublicRoutes } from "./routes/public.js";
 import { S3Signer } from "./lib/s3-sign.js";
 import type { DocumentStore } from "./marketplace/document-store.js";
 import { parseAllowlist } from "./launch/allowlist.js";
@@ -64,6 +67,7 @@ export type CreateAppOptions = {
   instantSells?: InstantSellStore | null;
   trades?: TradeStore | null;
   withdrawals?: WithdrawalStore | null;
+  waitlist?: WaitlistStore | null;
   /** Unlock maturation window ms (PRODUCT-PLAN §0.4: 2–3 days). */
   unlockMaturationMs?: number;
   audit?: AuditStore | null;
@@ -94,6 +98,7 @@ export function createApp(opts: CreateAppOptions) {
     instantSells = null,
     trades = null,
     withdrawals = null,
+    waitlist = null,
     unlockMaturationMs = 3 * 24 * 3_600_000,
     audit = null,
     tonTxClient = null,
@@ -234,8 +239,27 @@ export function createApp(opts: CreateAppOptions) {
     );
   }
 
+  // A5: in-memory token bucket for unauthenticated /public reads.
+  const publicRateLimiter = properties
+    ? createMemoryTokenBucket({ max: 120, windowMs: 60_000 })
+    : null;
+
   if (properties) {
     app.route("/", createMarketplaceRoutes({ properties, trades }));
+  }
+
+  // A5: unauthenticated public read API for the marketing site (rate-limited).
+  if (properties) {
+    app.route(
+      "/",
+      createPublicRoutes({
+        properties,
+        trades,
+        waitlist,
+        corsOrigins: env.PUBLIC_CORS_ORIGINS,
+        rateLimiter: publicRateLimiter ?? undefined,
+      }),
+    );
   }
 
   if (feeTiers) {

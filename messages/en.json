@@ -2,7 +2,7 @@
 
   "common": {
 
-    "appName": "DigiHouse",
+    "appName": "FractionalLuxe",
 
     "buyShare": "Buy Share",
 
@@ -104,9 +104,9 @@
 
     "yield": {
 
-      "headline": "Receive your rental share every week",
+      "headline": "Receive your rental share every month",
 
-      "subtitle": "See your share every Sunday in Earnings"
+      "subtitle": "See your monthly share in Earnings"
 
     },
 
@@ -114,7 +114,7 @@
 
       "headline": "Sell anytime you want",
 
-      "subtitle": "List shares on the DigiHouse marketplace when you’re ready to exit."
+      "subtitle": "List shares on the FractionalLuxe marketplace when you’re ready to exit."
 
     }
 
@@ -138,13 +138,13 @@
 
     "buyFirstShare": "Buy your first share",
 
-    "buyFirstShareHint": "Own a slice — earn projected rent every Sunday.",
+    "buyFirstShareHint": "Own a slice — earn projected rent every month.",
 
     "todaysHighlight": "Today's Highlight",
 
     "hotThisWeek": "Hot this week",
 
-    "weeklyPerShare": "Weekly / share",
+    "monthlyPerShare": "Monthly / share",
 
     "pendingThisWeek": "{amount} pending this week"
 
@@ -190,7 +190,7 @@
 
     "pricePerShare": "Price / share",
 
-    "weeklyPerShare": "Weekly / share",
+    "monthlyPerShare": "Monthly / share",
 
     "minPurchase": "Min. purchase",
 
@@ -244,7 +244,7 @@
 
     "emptyTitle": "You haven't earned yet",
 
-    "emptyMessage": "Buy your first share and start earning next week.",
+    "emptyMessage": "Buy your first share and start earning next month.",
 
     "thisWeek": "This Week's Earnings",
 
@@ -260,15 +260,15 @@
 
     "timeline": "History",
 
-    "disclaimer": "simulated weekly payout · on-chain verifiable post-MVP",
+    "disclaimer": "simulated monthly payout · on-chain verifiable post-MVP",
+
+    "withdrawalTerms": "Withdraw anytime — 1% fee, paid in 4 weekly installments",
 
     "yieldTitle": "Locked-share yield",
 
     "yieldAccrued": "Accrued unpaid",
 
     "yieldMonthly": "Monthly",
-
-    "yieldWeekly": "Weekly",
 
     "yieldNoLocks": "No active locks — lock shares on a property page to start earning.",
 
@@ -328,7 +328,7 @@
 
     "connectTitle": "Connect a TON wallet",
 
-    "connectHint": "Required to buy shares and receive weekly yield.",
+    "connectHint": "Required to buy shares and receive monthly rental income.",
 
     "disconnect": "Disconnect Wallet",
 
@@ -400,21 +400,21 @@
 
     "help": "Help",
 
-    "howItWorks": "How DigiHouse Works",
+    "howItWorks": "How FractionalLuxe Works",
     "transactionHistory": "Transaction history",
 
 
     "aboutLegal": "About / Legal",
 
-    "aboutBody": "DigiHouse is a Telegram Mini App for fractional real-estate shares on TON. Weekly rental yield is shown proportional to your ownership.",
+    "aboutBody": "FractionalLuxe is a Telegram Mini App for fractional real-estate shares on TON. Monthly rental income accrues proportional to your ownership.",
 
     "aboutAdvice": "Nothing here is financial advice. Property documents and tokenization disclosures are for demonstration until production contracts ship.",
 
-    "aboutCopyright": "© DigiHouse · MVP",
+    "aboutCopyright": "© FractionalLuxe · MVP",
 
     "demoTxDisclaimer": "This is a demo – transactions are simulated",
 
-    "payoutDisclaimer": "simulated weekly payout · on-chain verifiable post-MVP"
+    "payoutDisclaimer": "simulated monthly payout · on-chain verifiable post-MVP"
 
   },
 
@@ -446,7 +446,7 @@
 
     "recoveryWarn": "Save this code somewhere safe. You need it to sign in if Telegram is unavailable. We cannot recover it for you.",
 
-    "recoverySettingsHint": "Keep this code private. Anyone with it can access your DigiHouse account.",
+    "recoverySettingsHint": "Keep this code private. Anyone with it can access your FractionalLuxe account.",
 
     "copyCode": "Copy recovery code",
 

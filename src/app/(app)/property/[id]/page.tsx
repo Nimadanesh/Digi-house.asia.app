@@ -10,10 +10,14 @@ import { useOrderBook } from "@/hooks/useOrderBook";
 import { useTelegram } from "@/hooks/useTelegram";
 import { useTonConnect } from "@/hooks/useTonConnect";
 import { useBuyShares, type BuyInput, UsdtUnavailableError } from "@/hooks/useBuyShares";
+import { usePortfolio } from "@/hooks/usePortfolio";
 import { usePropertyDocuments } from "@/hooks/usePropertyDocuments";
+import { useLocks, activeLocksForProperty } from "@/hooks/useLocks";
+import { useScrolledPast } from "@/hooks/useScrolledPast";
 import { useUiStore } from "@/stores/ui.store";
 import { haptics } from "@/lib/telegram/haptics";
 import { usd } from "@/lib/format";
+import { getCurrentSharePrice } from "@/lib/property-price";
 import type { BuyCurrency } from "@/types/buy";
 import { PropertyDetail } from "@/components/property/PropertyDetail";
 import { PropertyDetailSkeleton } from "@/components/property/PropertyDetailSkeleton";
@@ -22,7 +26,9 @@ import { Toast } from "@/components/common/Toast";
 import { EmptyState } from "@/components/common/EmptyState";
 import { ErrorState } from "@/components/common/ErrorState";
 import { BrowseMarketplaceCta } from "@/components/common/BrowseMarketplaceCta";
-import { StickyBuyBar } from "@/components/property/StickyBuyBar";
+import { PropertyStickyCta } from "@/components/property/PropertyStickyCta";
+import { LimitBuySheet } from "@/components/property/LimitBuySheet";
+import { SellSheet } from "@/components/property/SellSheet";
 
 interface ToastState {
   tone: "success" | "error";
@@ -37,7 +43,9 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
   const tOnboarding = useTranslations("onboarding");
   const property = useProperty(id);
   const orderBook = useOrderBook(id, { live: true });
+  const portfolio = usePortfolio();
   const { documents, download: docDownload } = usePropertyDocuments(id);
+  const locksQuery = useLocks();
   const { backButton, mainButton } = useTelegram();
   const ton = useTonConnect();
   const buy = useBuyShares();
@@ -45,11 +53,15 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
   const setMainButtonActive = useUiStore((s) => s.setMainButtonActive);
   const settingsOpen = useUiStore((s) => s.settingsOpen);
 
-  const [previewShares, setPreviewShares] = useState(10);
+  /** null = untouched — derives from owned shares once the portfolio loads (Phase 2 prefill). */
+  const [previewShares, setPreviewShares] = useState<number | null>(null);
   const [qty, setQty] = useState(10);
   const [currency, setCurrency] = useState<BuyCurrency>("TON");
   const [sheetOpen, setSheetOpen] = useState(false);
   const [step, setStep] = useState<BuySheetStep>("qty");
+  /** Secondary-market sheets (Phase 7) — LimitBuy for Buy, SellSheet for Sell. */
+  const [limitBuyOpen, setLimitBuyOpen] = useState(false);
+  const [sellOpen, setSellOpen] = useState(false);
   const [toast, setToast] = useState<ToastState | null>(null);
   const [buyError, setBuyError] = useState<string | null>(null);
   /** False once the server reports USDT as not configured (409 payment_method_unavailable). */
@@ -64,6 +76,52 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
     setStep("qty");
     setBuyError(null);
   }, []);
+
+  // Ownership prefill — REDESIGN-SPEC Phase 2: slider starts at owned shares (min 1).
+  // Derived (not an effect): untouched state follows ownership until the user edits it.
+  const ownedShares = portfolio.data?.holdings.find((h) => h.propertyId === id)?.sharesOwned ?? 0;
+  // Phase 6 — locked subset for this property (active locks only).
+  const lockedShares = activeLocksForProperty(locksQuery.data?.locks, id).reduce(
+    (sum, lock) => sum + lock.shares,
+    0,
+  );
+  const avgCostUsd = portfolio.data?.holdings.find((h) => h.propertyId === id)?.avgCostUsd;
+  const effectivePreviewShares = previewShares ?? Math.max(1, ownedShares);
+  const freeShares = Math.max(0, ownedShares - lockedShares);
+  const mainButtonActive = useUiStore((s) => s.mainButtonActive);
+  const setStickyCtaVisible = useUiStore((s) => s.setStickyCtaVisible);
+  // Sticky bar appears only after the hero (with its own CTA) scrolls away — CTA fixes #2.
+  const heroPassed = useScrolledPast("property-hero", !sheetOpen);
+  const stickyVisible = !sheetOpen && !limitBuyOpen && !sellOpen && heroPassed;
+
+  // Floating chrome (demo badge) must yield while the sticky CTA occupies the zone.
+  useEffect(() => {
+    setStickyCtaVisible(stickyVisible && Boolean(listing));
+    return () => setStickyCtaVisible(false);
+  }, [stickyVisible, listing, setStickyCtaVisible]);
+
+  // Single source of truth for "current share price" (lib/property-price).
+  const currentPriceUsd = listing
+    ? getCurrentSharePrice(listing, { bestAskUsd: orderBook.data?.bestAskUsd })
+    : 0;
+
+  // Single buy entry — hero CTA, sticky CTA, calculator and MainButton all route here.
+  // Primary offering opens the TON/USDT BuySheet; a secondary listing opens the
+  // market (limit) buy sheet anchored to the best ask (Phase 7).
+  const openBuyForContext = useCallback((n?: number) => {
+    if (!listing) return;
+    if (listing.status === "funding") {
+      if (remaining <= 0) return;
+      haptics.impact("light");
+      setQty(Math.min(remaining, Math.max(1, n ?? effectivePreviewShares)));
+      setCurrency("TON");
+      setStep("qty");
+      setSheetOpen(true);
+      return;
+    }
+    haptics.impact("light");
+    setLimitBuyOpen(true);
+  }, [listing, remaining, effectivePreviewShares]);
 
   // Toast lifecycle — DESIGN_SYSTEM §Toast.
   useEffect(() => {
@@ -188,17 +246,13 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
       mainButton.setParams({
         text: tCommon("buyShare"),
         isEnabled: true,
-        color: "#3390ec",
+        color: "#229ED9",
         textColor: "#ffffff",
       });
       const off = mainButton.onClick(() => {
         haptics.impact("light");
-        setQty(Math.min(remaining, Math.max(1, previewShares)));
-        setCurrency("TON");
-        setStep("qty");
-        setSheetOpen(true);
-      });
-      return () => {
+        openBuyForContext();
+      });return () => {
         off();
       };
     }
@@ -210,7 +264,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
       mainButton.setParams({
         text: tCommon("connectWallet"),
         isEnabled: true,
-        color: "#3390ec",
+        color: "#229ED9",
         textColor: "#ffffff",
       });
       const off = mainButton.onClick(() => {
@@ -227,7 +281,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
       mainButton.setParams({
         text: tOnboarding("continue"),
         isEnabled: valid && remaining > 0,
-        color: "#3390ec",
+        color: "#229ED9",
         textColor: "#ffffff",
       });
       const off = mainButton.onClick(() => {
@@ -247,7 +301,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
       mainButton.setParams({
         text: pending ? "Confirming…" : `Confirm & Pay — ${usd(totalUsd)}`,
         isEnabled: valid && !pending,
-        color: "#3390ec",
+        color: "#229ED9",
         textColor: "#ffffff",
         isLoaderVisible: pending,
       });
@@ -268,7 +322,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
     qty,
     remaining,
     ton.connected,
-    previewShares,
+    effectivePreviewShares,
     buy.isPending,
     confirmBuy,
     tCommon,
@@ -314,30 +368,43 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
   return (
     <>
       {toast ? <Toast tone={toast.tone} title={toast.title} sub={toast.sub} leaving={toast.leaving} /> : null}
-      <div className={canBuy && !sheetOpen ? "pb-20" : undefined}>
+      <div className={!sheetOpen ? "pb-24" : undefined}>
         <PropertyDetail
           listing={listing}
           orderBook={orderBook.data}
-          previewShares={previewShares}
-          onPreviewSharesChange={setPreviewShares}
+          onBuy={() => openBuyForContext()}
+          previewShares={effectivePreviewShares}
+          onSharesChange={setPreviewShares}
+          ownedShares={ownedShares}
+          lockedShares={lockedShares}
+          avgCostUsd={avgCostUsd}
+          onBuyShares={(n) => openBuyForContext(n)}
           documents={documents}
           onDownloadDoc={(docId) => docDownload.mutate(docId)}
           downloadingDocId={docDownload.isPending ? String(docDownload.variables) : null}
         />
       </div>
-      {canBuy && !sheetOpen ? (
-        <StickyBuyBar
-          onClick={() => {
-            haptics.impact("light");
-            setQty(Math.min(remaining, Math.max(10, previewShares)));
-            setCurrency("TON");
-            setStep("qty");
-            setSheetOpen(true);
-          }}
+      {/* Sticky CTA reveals only once the hero CTA has scrolled out of view.
+          Tab bar is hidden while the Telegram MainButton is active (ui.store) —
+          when it is visible we lift the bar above it. */}
+      {!stickyVisible ? null : (
+        <PropertyStickyCta
+          variant={listing.status === "funding" ? "primary" : "secondary"}
+          priceUsd={currentPriceUsd}
+          onBuy={() => openBuyForContext()}
+          buyDisabled={listing.status === "funding" && remaining <= 0}
+          onSell={
+            listing.status !== "funding" && freeShares > 0
+              ? () => {
+                  haptics.impact("light");
+                  setSellOpen(true);
+                }
+              : undefined
+          }
+          navOffset={!mainButtonActive}
         />
-      ) : null}
-      <BuySheet
-        open={sheetOpen}
+      )}
+      <BuySheet        open={sheetOpen}
         onClose={closeSheet}
         listing={listing}
         step={step}
@@ -356,7 +423,26 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
         buyError={buyError}
         buyPending={buy.isPending}
         buyVerifying={buy.phase === "verifying"}
+        unitPriceUsd={currentPriceUsd}
       />
+      {/* Phase 7 — secondary market sheets (conditionally mounted: their hooks only run when open) */}
+      {limitBuyOpen ? (
+        <LimitBuySheet
+          open
+          onClose={() => setLimitBuyOpen(false)}
+          listing={listing}
+          orderBook={orderBook.data}
+        />
+      ) : null}
+      {sellOpen ? (
+        <SellSheet
+          open
+          onClose={() => setSellOpen(false)}
+          listing={listing}
+          freeShares={freeShares}
+          avgCostUsd={avgCostUsd ?? listing.sharePriceUsd}
+        />
+      ) : null}
     </>
   );
 }

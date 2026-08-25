@@ -8,7 +8,7 @@ import { haptics } from "@/lib/telegram/haptics";
 import { cn } from "@/lib/utils";
 
 const TITLES: Record<string, string> = {
-  "/home": "DigiHouse",
+  "/home": "FractionalLuxe",
   "/marketplace": "Marketplace",
   "/earnings": "Earnings",
   "/portfolio": "Portfolio",
@@ -32,7 +32,7 @@ const ROOT_PATHS = new Set([
 export function Header() {
   const pathname = usePathname();
   const router = useRouter();
-  const title = TITLES[pathname] ?? (pathname.startsWith("/property/") ? "Property" : "DigiHouse");
+  const title = TITLES[pathname] ?? (pathname.startsWith("/property/") ? "Property" : "FractionalLuxe");
   const isRoot = ROOT_PATHS.has(pathname);
   // Nested routes always get an in-app back control (native Telegram BackButton is additive).
   const showBack = !isRoot;

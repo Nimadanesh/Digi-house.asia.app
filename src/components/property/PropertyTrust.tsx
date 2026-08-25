@@ -1,4 +1,5 @@
-// File responsibility: trust checks + tokenization doc demo link (Fable §Trust).
+// File responsibility: trust signal strip — tenant/lease/payment-history/share-demand
+// checks derived from existing listing data (REDESIGN-SPEC Phase 5).
 import { Check } from "lucide-react";
 import type { Listing } from "@/types/property";
 import { Block } from "@/components/common/Block";
@@ -6,37 +7,45 @@ import { Block } from "@/components/common/Block";
 export function PropertyTrust({ listing }: { listing: Listing }) {
   const { meta } = listing;
   const leaseYear = meta.leaseUntil ? new Date(meta.leaseUntil).getUTCFullYear() : null;
+  const paymentsOnTime = listing.rentalHistory.length;
+
   const items: { ok: boolean; label: string }[] = [
-    { ok: meta.activeTenant, label: meta.activeTenant ? "Active tenant ✓" : "No active tenant" },
+    {
+      ok: meta.activeTenant,
+      label: meta.activeTenant ? "Active tenant" : "No active tenant",
+    },
     {
       ok: Boolean(leaseYear),
-      label: leaseYear ? `Lease until ${leaseYear} ✓` : "Lease not set",
+      label: leaseYear ? `Lease until ${leaseYear}` : "Lease not set",
     },
+    ...(paymentsOnTime > 0
+      ? [{ ok: true, label: `${paymentsOnTime} on-time ${paymentsOnTime === 1 ? "payment" : "payments"}` }]
+      : []),
+    { ok: true, label: `${listing.sharesSold.toLocaleString()} shares sold` },
+    { ok: true, label: "Tokenization docs available" },
   ];
 
   return (
-    <Block className="p-4 space-y-3" data-testid="property-trust">
-      <h2 className="text-[0.9375rem] font-semibold text-foreground">Trust</h2>
+    <Block className="space-y-3 p-4" data-testid="property-trust">
+      <h2 className="text-[0.9375rem] font-semibold text-foreground">Why invest with confidence</h2>
       <div className="flex flex-wrap gap-2">
         {items.map((item) => (
           <span
             key={item.label}
             className="inline-flex items-center gap-1.5 rounded-full bg-surface-2 px-2.5 py-1 text-xs text-foreground"
           >
-            {item.ok ? <Check size={14} strokeWidth={2} className="text-success" aria-hidden /> : null}
+            {item.ok ? (
+              <Check size={14} strokeWidth={2} className="shrink-0 text-success" aria-hidden />
+            ) : null}
             {item.label}
           </span>
         ))}
       </div>
-      <a
-        href={meta.tokenizationDocUrl}
-        className="inline-flex min-h-[44px] items-center text-sm font-medium text-primary"
-        onClick={(e) => {
-          if (meta.tokenizationDocUrl.startsWith("#")) e.preventDefault();
-        }}
-      >
-        Tokenization Document
-      </a>
+      {paymentsOnTime > 0 ? (
+        <p className="text-xs leading-relaxed text-muted-foreground">
+          Payment history reflects simulated demo records.
+        </p>
+      ) : null}
     </Block>
   );
 }

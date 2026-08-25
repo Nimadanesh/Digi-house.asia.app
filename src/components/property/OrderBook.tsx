@@ -7,7 +7,9 @@ import { SectionLabel } from "@/components/common/SectionLabel";
 import { usd } from "@/lib/format";
 import type { OrderBookState, OrderBookLevel } from "@/types/order";
 
-export function OrderBook({ state }: { state: OrderBookState }) {
+export function OrderBook({ state, maxLevels }: { state: OrderBookState; /** Compact view cap (Phase 4 market card); undefined = full depth. */ maxLevels?: number }) {
+  const bids = maxLevels ? state.bids.slice(0, maxLevels) : state.bids;
+  const asks = maxLevels ? state.asks.slice(0, maxLevels) : state.asks;
   return (
     <Block className="overflow-hidden">
       <div className="px-4 py-2">
@@ -27,8 +29,8 @@ export function OrderBook({ state }: { state: OrderBookState }) {
         </div>
       ) : null}
       <div className="grid grid-cols-2 px-4 pb-4 text-xs font-mono">
-        <OrderColumn levels={state.bids} tint="text-success" />
-        <OrderColumn levels={state.asks} tint="text-danger" rightAlign />
+        <OrderColumn levels={bids} tint="text-success" />
+        <OrderColumn levels={asks} tint="text-danger" rightAlign />
       </div>
     </Block>
   );

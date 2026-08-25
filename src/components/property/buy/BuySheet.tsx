@@ -24,6 +24,7 @@ export function BuySheet({
   buyError,
   buyPending,
   buyVerifying,
+  unitPriceUsd,
 }: {
   open: boolean;
   onClose: () => void;
@@ -39,6 +40,8 @@ export function BuySheet({
   buyError?: string | null;
   buyPending?: boolean;
   buyVerifying?: boolean;
+  /** Single source of truth (lib/property-price); defaults to list price. */
+  unitPriceUsd?: number;
 }) {
   return (
     <Sheet open={open} onClose={onClose} labelledBy="buy-sheet-title">
@@ -51,6 +54,7 @@ export function BuySheet({
           currency={currency}
           onCurrencyChange={onCurrencyChange}
           usdtAvailable={usdtAvailable}
+          unitPriceUsd={unitPriceUsd}
         />
       ) : null}
       {step === "summary" ? (
@@ -61,6 +65,7 @@ export function BuySheet({
           error={buyError}
           pending={buyPending}
           verifying={buyVerifying}
+          unitPriceUsd={unitPriceUsd}
         />
       ) : null}
       {step === "success" ? (

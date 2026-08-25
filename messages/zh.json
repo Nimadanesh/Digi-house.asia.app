@@ -2,7 +2,7 @@
 
   "common": {
 
-    "appName": "DigiHouse",
+    "appName": "FractionalLuxe",
 
     "buyShare": "购买份额",
 
@@ -104,9 +104,9 @@
 
     "yield": {
 
-      "headline": "每周领取租金份额",
+      "headline": "每月领取租金份额",
 
-      "subtitle": "每周日在收益中查看你的份额"
+      "subtitle": "在收益中查看你的月度份额"
 
     },
 
@@ -114,7 +114,7 @@
 
       "headline": "随时可以卖出",
 
-      "subtitle": "准备退出时，可在 DigiHouse 市场挂单出售份额。"
+      "subtitle": "准备退出时，可在 FractionalLuxe 市场挂单出售份额。"
 
     }
 
@@ -138,13 +138,13 @@
 
     "buyFirstShare": "购买你的第一份份额",
 
-    "buyFirstShareHint": "拥有一小部分 — 每周日获得预计租金。",
+    "buyFirstShareHint": "拥有一小部分 — 每月获得预计租金。",
 
     "todaysHighlight": "今日精选",
 
     "hotThisWeek": "本周热门",
 
-    "weeklyPerShare": "每周 / 份",
+    "monthlyPerShare": "每月 / 份",
 
     "pendingThisWeek": "本周待发 {amount}"
 
@@ -190,7 +190,7 @@
 
     "pricePerShare": "单价 / 份",
 
-    "weeklyPerShare": "每周 / 份",
+    "monthlyPerShare": "每月 / 份",
 
     "minPurchase": "最低购买",
 
@@ -244,7 +244,7 @@
 
     "emptyTitle": "尚未获得收益",
 
-    "emptyMessage": "购买第一份份额，下周开始赚取收益。",
+    "emptyMessage": "购买第一份份额，下个月开始赚取收益。",
 
     "thisWeek": "本周收益",
 
@@ -260,15 +260,15 @@
 
     "timeline": "历史",
 
-    "disclaimer": "模拟每周发放 · MVP 后可链上验证",
+    "disclaimer": "模拟每月发放 · MVP 后可链上验证",
+
+    "withdrawalTerms": "随时提现 — 1% 手续费，分 4 周每周一笔发放",
 
     "yieldTitle": "锁定股份收益",
 
     "yieldAccrued": "未付应计",
 
     "yieldMonthly": "每月",
-
-    "yieldWeekly": "每周",
 
     "yieldNoLocks": "暂无锁定——在房产页面锁定股份即可开始赚取收益。",
 
@@ -318,7 +318,7 @@
 
     "connectTitle": "连接 TON 钱包",
 
-    "connectHint": "购买份额并领取每周收益所需。",
+    "connectHint": "购买份额并领取每月租金收益所需。",
 
     "disconnect": "断开钱包",
 
@@ -390,21 +390,21 @@
 
     "help": "帮助",
 
-    "howItWorks": "DigiHouse 如何运作",
+    "howItWorks": "FractionalLuxe 如何运作",
     "transactionHistory": "交易记录",
 
 
     "aboutLegal": "关于 / 法律",
 
-    "aboutBody": "DigiHouse 是 Telegram 小程序，用于在 TON 上持有房产份额。每周租金收益按持有比例显示。",
+    "aboutBody": "FractionalLuxe 是 Telegram 小程序，用于在 TON 上持有房产份额。每月租金收益按持有比例累积。",
 
     "aboutAdvice": "此处内容不构成财务建议。房产文件与代币化披露在正式合约上线前仅供演示。",
 
-    "aboutCopyright": "© DigiHouse · MVP",
+    "aboutCopyright": "© FractionalLuxe · MVP",
 
     "demoTxDisclaimer": "这是演示 – 交易均为模拟",
 
-    "payoutDisclaimer": "模拟每周发放 · MVP 后可链上验证",
+    "payoutDisclaimer": "模拟每月发放 · MVP 后可链上验证",
 
     "account": "账户",
 
@@ -446,7 +446,7 @@
 
     "recoveryWarn": "请将此代码妥善保存。若无法使用 Telegram，登录时需要它。我们无法替您找回。",
 
-    "recoverySettingsHint": "请保密此代码。任何持有者都可访问您的 DigiHouse 账户。",
+    "recoverySettingsHint": "请保密此代码。任何持有者都可访问您的 FractionalLuxe 账户。",
 
     "copyCode": "复制恢复码",
 

@@ -27,6 +27,7 @@ export function BuyQtyStep({
   currency,
   onCurrencyChange,
   usdtAvailable = true,
+  unitPriceUsd,
 }: {
   listing: Listing;
   qty: number;
@@ -36,11 +37,14 @@ export function BuyQtyStep({
   onCurrencyChange: (c: BuyCurrency) => void;
   /** False when the server reports USDT as not configured — the USDT option is disabled. */
   usdtAvailable?: boolean;
+  /** Single source of truth (lib/property-price); defaults to list price. */
+  unitPriceUsd?: number;
 }) {
   const tonc = useTonConnect();
   const remaining = listing.sharesRemaining;
   const max = remaining;
-  const totalUsd = qty * listing.sharePriceUsd;
+  const unitPrice = unitPriceUsd ?? listing.sharePriceUsd;
+  const totalUsd = qty * unitPrice;
   const weekly = positionYieldUsd(listing, qty).weeklyUsd;
   const invalid = qty < 1 || qty > remaining;
 

@@ -3,9 +3,9 @@ import "./globals.css";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
-  title: "DigiHouse — Fractional Property on TON",
+  title: "FractionalLuxe — Fractional Property on TON",
   description: "Buy, sell, and earn weekly rental yield from fractionalized real estate on the TON blockchain.",
-  applicationName: "DigiHouse",
+  applicationName: "FractionalLuxe",
 };
 
 export const viewport: Viewport = {

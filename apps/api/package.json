@@ -16,6 +16,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx src/db/migrate.ts",
     "db:seed": "tsx src/db/seed/seed-properties.ts",
+    "db:seed:dryrun": "tsx src/db/seed/dry-run.ts",
     "db:seed-house-books": "tsx src/db/seed/seed-house-books.ts",
     "db:studio": "drizzle-kit studio",
     "worker": "tsx src/worker.ts"

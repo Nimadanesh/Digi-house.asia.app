@@ -61,6 +61,10 @@ function WithdrawalRequestContent({ onClose }: { onClose: () => void }) {
           Request withdrawal
         </h2>
 
+        <p className="text-xs leading-relaxed text-muted-foreground">
+          Withdraw anytime — 1% fee, paid in 4 weekly installments.
+        </p>
+
         <Block>
           <Row className="!min-h-[48px]">
             <span className="text-sm text-muted-foreground">Withdrawable</span>

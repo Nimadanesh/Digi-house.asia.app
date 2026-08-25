@@ -2,7 +2,7 @@
 
   "common": {
 
-    "appName": "DigiHouse",
+    "appName": "FractionalLuxe",
 
     "buyShare": "Comprar cota",
 
@@ -104,9 +104,9 @@
 
     "yield": {
 
-      "headline": "Receba sua parte do aluguel toda semana",
+      "headline": "Receba sua parte do aluguel todo mês",
 
-      "subtitle": "Veja sua parte todo domingo em Rendimentos"
+      "subtitle": "Veja sua parte mensal em Rendimentos"
 
     },
 
@@ -114,7 +114,7 @@
 
       "headline": "Venda quando quiser",
 
-      "subtitle": "Liste cotas no mercado DigiHouse quando estiver pronto para sair."
+      "subtitle": "Liste cotas no mercado FractionalLuxe quando estiver pronto para sair."
 
     }
 
@@ -138,13 +138,13 @@
 
     "buyFirstShare": "Compre sua primeira cota",
 
-    "buyFirstShareHint": "Seja dono de uma fatia — ganhe aluguel projetado todo domingo.",
+    "buyFirstShareHint": "Seja dono de uma fatia — ganhe aluguel projetado todo mês.",
 
     "todaysHighlight": "Destaque de hoje",
 
     "hotThisWeek": "Em alta esta semana",
 
-    "weeklyPerShare": "Semanal / cota",
+    "monthlyPerShare": "Mensal / cota",
 
     "pendingThisWeek": "{amount} pendente esta semana"
 
@@ -190,7 +190,7 @@
 
     "pricePerShare": "Preço / cota",
 
-    "weeklyPerShare": "Semanal / cota",
+    "monthlyPerShare": "Mensal / cota",
 
     "minPurchase": "Compra mín.",
 
@@ -244,7 +244,7 @@
 
     "emptyTitle": "Você ainda não ganhou",
 
-    "emptyMessage": "Compre sua primeira cota e comece a ganhar na próxima semana.",
+    "emptyMessage": "Compre sua primeira cota e comece a ganhar no próximo mês.",
 
     "thisWeek": "Rendimentos desta semana",
 
@@ -260,15 +260,15 @@
 
     "timeline": "Histórico",
 
-    "disclaimer": "pagamento semanal simulado · verificável on-chain pós-MVP",
+    "disclaimer": "pagamento mensal simulado · verificável on-chain pós-MVP",
+
+    "withdrawalTerms": "Saque quando quiser — taxa de 1%, pago em 4 parcelas semanais",
 
     "yieldTitle": "Rendimento de ações bloqueadas",
 
     "yieldAccrued": "Acumulado pendente",
 
     "yieldMonthly": "Mensal",
-
-    "yieldWeekly": "Semanal",
 
     "yieldNoLocks": "Sem bloqueios ativos — bloqueie ações na página de um imóvel para começar a ganhar.",
 
@@ -318,7 +318,7 @@
 
     "connectTitle": "Conecte uma carteira TON",
 
-    "connectHint": "Necessária para comprar cotas e receber rendimento semanal.",
+    "connectHint": "Necessária para comprar cotas e receber renda mensal de aluguel.",
 
     "disconnect": "Desconectar carteira",
 
@@ -390,21 +390,21 @@
 
     "help": "Ajuda",
 
-    "howItWorks": "Como o DigiHouse funciona",
+    "howItWorks": "Como o FractionalLuxe funciona",
     "transactionHistory": "Histórico de transações",
 
 
     "aboutLegal": "Sobre / Legal",
 
-    "aboutBody": "DigiHouse é um Mini App do Telegram para cotas imobiliárias fracionadas na TON. O rendimento de aluguel semanal é mostrado proporcional à sua participação.",
+    "aboutBody": "FractionalLuxe é um Mini App do Telegram para cotas imobiliárias fracionadas na TON. A renda mensal de aluguel acumula-se proporcional à sua participação.",
 
     "aboutAdvice": "Nada aqui é aconselhamento financeiro. Documentos e tokenização são demonstrativos até os contratos de produção.",
 
-    "aboutCopyright": "© DigiHouse · MVP",
+    "aboutCopyright": "© FractionalLuxe · MVP",
 
     "demoTxDisclaimer": "Isto é uma demo – as transações são simuladas",
 
-    "payoutDisclaimer": "pagamento semanal simulado · verificável on-chain pós-MVP",
+    "payoutDisclaimer": "pagamento mensal simulado · verificável on-chain pós-MVP",
 
     "account": "Conta",
 
@@ -446,7 +446,7 @@
 
     "recoveryWarn": "Guarde este código num local seguro. Precisará dele para entrar se o Telegram não estiver disponível. Não o podemos recuperar por si.",
 
-    "recoverySettingsHint": "Mantenha este código privado. Quem o tiver pode aceder à sua conta DigiHouse.",
+    "recoverySettingsHint": "Mantenha este código privado. Quem o tiver pode aceder à sua conta FractionalLuxe.",
 
     "copyCode": "Copiar código de recuperação",
 

@@ -11,7 +11,7 @@ import {
 import { cn } from "@/lib/utils";
 
 export const FLIP_FRONT_COLOR = "#1E293B";
-export const FLIP_BLUE_COLOR = "#3390EC";
+export const FLIP_BLUE_COLOR = "#229ED9";
 export const FLIP_DIM_COLOR = "#334155";
 
 export function FlipwaveGrid({

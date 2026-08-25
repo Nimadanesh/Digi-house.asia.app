@@ -48,7 +48,7 @@ export default function OnboardingPage() {
     mainButton.setParams({
       text: isLast ? t("getStarted") : t("continue"),
       isEnabled: true,
-      color: "#3390ec",
+      color: "#229ED9",
       textColor: "#ffffff",
     });
     const off = mainButton.onClick(() => {

@@ -1,3 +1,7 @@
+# ACTIVE WORK: FractionalLuxe program — read FRACTIONALLUXE-PROGRAM.md before any task.
+Work its checkboxes in order; tick as you verify; update its Resume Here + Progress Log.
+Never modify payment/settlement logic beyond steps it explicitly names.
+
 <!-- BEGIN:nextjs-agent-rules -->
 # This is NOT the Next.js you know
 

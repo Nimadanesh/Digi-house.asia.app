@@ -2,7 +2,7 @@
 
   "common": {
 
-    "appName": "DigiHouse",
+    "appName": "FractionalLuxe",
 
     "buyShare": "Anteil kaufen",
 
@@ -104,9 +104,9 @@
 
     "yield": {
 
-      "headline": "Erhalte deinen Mietanteil jede Woche",
+      "headline": "Erhalte deinen Mietanteil jeden Monat",
 
-      "subtitle": "Sieh deinen Anteil jeden Sonntag unter Erträge"
+      "subtitle": "Sieh deinen monatlichen Anteil unter Erträge"
 
     },
 
@@ -114,7 +114,7 @@
 
       "headline": "Jederzeit verkaufen",
 
-      "subtitle": "Stelle Anteile auf dem DigiHouse-Marktplatz ein, wenn du aussteigen willst."
+      "subtitle": "Stelle Anteile auf dem FractionalLuxe-Marktplatz ein, wenn du aussteigen willst."
 
     }
 
@@ -138,13 +138,13 @@
 
     "buyFirstShare": "Kaufe deinen ersten Anteil",
 
-    "buyFirstShareHint": "Besitze einen Anteil — erhalte projizierte Miete jeden Sonntag.",
+    "buyFirstShareHint": "Besitze einen Anteil — erhalte projizierte Miete jeden Monat.",
 
     "todaysHighlight": "Highlight des Tages",
 
     "hotThisWeek": "Beliebt diese Woche",
 
-    "weeklyPerShare": "Wöchentlich / Anteil",
+    "monthlyPerShare": "Monatlich / Anteil",
 
     "pendingThisWeek": "{amount} ausstehend diese Woche"
 
@@ -190,7 +190,7 @@
 
     "pricePerShare": "Preis / Anteil",
 
-    "weeklyPerShare": "Wöchentlich / Anteil",
+    "monthlyPerShare": "Monatlich / Anteil",
 
     "minPurchase": "Mindestkauf",
 
@@ -244,7 +244,7 @@
 
     "emptyTitle": "Noch keine Erträge",
 
-    "emptyMessage": "Kaufe deinen ersten Anteil und verdiene ab nächster Woche.",
+    "emptyMessage": "Kaufe deinen ersten Anteil und verdiene ab nächstem Monat.",
 
     "thisWeek": "Erträge dieser Woche",
 
@@ -260,15 +260,15 @@
 
     "timeline": "Verlauf",
 
-    "disclaimer": "simulierte wöchentliche Auszahlung · on-chain nach MVP",
+    "disclaimer": "simulierte monatliche Auszahlung · on-chain nach MVP",
+
+    "withdrawalTerms": "Jederzeit abheben — 1 % Gebühr, ausgezahlt in 4 wöchentlichen Raten",
 
     "yieldTitle": "Ertrag gesperrter Anteile",
 
     "yieldAccrued": "Angespart, unverzahlt",
 
     "yieldMonthly": "Monatlich",
-
-    "yieldWeekly": "Wöchentlich",
 
     "yieldNoLocks": "Keine aktiven Sperren — sperre Anteile auf einer Objektseite, um Erträge zu erhalten.",
 
@@ -318,7 +318,7 @@
 
     "connectTitle": "TON-Wallet verbinden",
 
-    "connectHint": "Erforderlich zum Kauf von Anteilen und wöchentlicher Rendite.",
+    "connectHint": "Erforderlich zum Kauf von Anteilen und monatlichem Mieteinkommen.",
 
     "disconnect": "Wallet trennen",
 
@@ -388,21 +388,21 @@
 
     "help": "Hilfe",
 
-    "howItWorks": "So funktioniert DigiHouse",
+    "howItWorks": "So funktioniert FractionalLuxe",
     "transactionHistory": "Transaktionsverlauf",
 
 
     "aboutLegal": "Über / Rechtliches",
 
-    "aboutBody": "DigiHouse ist eine Telegram Mini App für fraktionierte Immobilienanteile auf TON. Wöchentliche Mietrendite wird anteilig angezeigt.",
+    "aboutBody": "FractionalLuxe ist eine Telegram Mini App für fraktionierte Immobilienanteile auf TON. Monatliche Mieteinnahmen entstehen anteilig zu deinem Eigentum.",
 
     "aboutAdvice": "Keine Finanzberatung. Immobiliendokumente und Tokenisierung sind Demonstration bis Produktionsverträge.",
 
-    "aboutCopyright": "© DigiHouse · MVP",
+    "aboutCopyright": "© FractionalLuxe · MVP",
 
     "demoTxDisclaimer": "Dies ist eine Demo – Transaktionen werden simuliert",
 
-    "payoutDisclaimer": "simulierte wöchentliche Auszahlung · on-chain nach MVP",
+    "payoutDisclaimer": "simulierte monatliche Auszahlung · on-chain nach MVP",
 
     "chooseLanguage": "Sprache wählen",
 
@@ -446,7 +446,7 @@
 
     "recoveryWarn": "Bewahre diesen Code sicher auf. Du brauchst ihn zur Anmeldung, wenn Telegram nicht verfügbar ist. Wir können ihn nicht für dich wiederherstellen.",
 
-    "recoverySettingsHint": "Halte diesen Code geheim. Jeder damit kann auf dein DigiHouse-Konto zugreifen.",
+    "recoverySettingsHint": "Halte diesen Code geheim. Jeder damit kann auf dein FractionalLuxe-Konto zugreifen.",
 
     "copyCode": "Wiederherstellungscode kopieren",
 

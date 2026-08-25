@@ -86,7 +86,7 @@ function PropertyCardInner({
 
   const cover = listing.images[0] ?? "/images/properties/p1.png";
   const apy = annualReturnRatio(listing);
-  const weeklyPerShare = shareWeeklyYieldUsd(listing);
+  const monthlyPerShare = (shareWeeklyYieldUsd(listing) * 52) / 12;
   const funded = listing.fundingProgressRatio >= 1;
   // PD-07: on the secondary market the price is the latest executed trade, not the
   // historical offering price. Fall back to the offering price before the first fill.
@@ -161,7 +161,7 @@ function PropertyCardInner({
             label={secondary ? t("lastPrice") : t("pricePerShare")}
             value={usd(displayPrice)}
           />
-          <Metric label={t("weeklyPerShare")} value={usd(weeklyPerShare)} accent />
+          <Metric label={t("monthlyPerShare")} value={usd(monthlyPerShare)} accent />
           <Metric label={t("minPurchase")} value={usd(displayPrice)} />
         </div>
 

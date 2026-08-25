@@ -150,9 +150,9 @@ describe("SettingsSheet", () => {
     expect(useSettingsStore.getState().locale).toBe("fa");
   });
 
-  it("How DigiHouse Works sets onboarding replay and navigates", () => {
+  it("How FractionalLuxe Works sets onboarding replay and navigates", () => {
     render(<SettingsSheet />);
-    fireEvent.click(screen.getByRole("button", { name: /how digihouse works/i }));
+    fireEvent.click(screen.getByRole("button", { name: /how fractionalluxe works/i }));
     expect(useUiStore.getState().onboardingReplay).toBe(true);
     expect(useUiStore.getState().settingsOpen).toBe(false);
     expect(push).toHaveBeenCalledWith("/onboarding");

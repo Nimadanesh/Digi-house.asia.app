@@ -22,7 +22,7 @@ export const ONBOARDING_SLIDES: readonly OnboardingSlideDef[] = [
   {
     id: "sell",
     headline: "Sell anytime you want",
-    subtitle: "List shares on the DigiHouse marketplace when you’re ready to exit.",
+    subtitle: "List shares on the FractionalLuxe marketplace when you’re ready to exit.",
   },
 ] as const;
 

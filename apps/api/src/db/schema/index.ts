@@ -86,4 +86,5 @@ export {
   type WithdrawalRow,
   type NewWithdrawalRow,
 } from "./withdrawals.js";
+export { waitlist, type WaitlistRow, type NewWaitlistRow } from "./waitlist.js";
 

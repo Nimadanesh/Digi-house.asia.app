@@ -1,4 +1,4 @@
-# DigiHouse
+# FractionalLuxe
 
 Fractional real estate on **TON** as a **Telegram Mini App** — buy property shares, track a portfolio, and see **simulated** weekly rental yield.
 
@@ -44,8 +44,13 @@ Env examples: [`.env.example`](./.env.example), [`apps/api/.env.example`](./apps
 
 ```bash
 npm run db:migrate       # after infra:up + apps/api/.env (users + wallets + properties)
-npm run db:seed          # ≥6 mock-equivalent listings (idempotent)
+npm run db:seed          # 24 FractionalLuxe manifest listings (idempotent)
 ```
+
+## Open items
+
+- KYC pending decision (U4) — no identity verification exists today; auth is Telegram initData only.
+- Production bot username (deep links), launch mode, and waitlist notifications are pending user inputs.
 
 ## Docs
 

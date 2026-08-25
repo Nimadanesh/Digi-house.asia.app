@@ -1,5 +1,5 @@
 "use client";
-// File responsibility: apply DigiHouse static (default) or live Telegram theme based on settings store.
+// File responsibility: apply FractionalLuxe static (default) or live Telegram theme based on settings store.
 import { useEffect } from "react";
 import { useSettingsStore } from "@/stores/settings.store";
 import { bindLiveThemeVars } from "@/lib/telegram";

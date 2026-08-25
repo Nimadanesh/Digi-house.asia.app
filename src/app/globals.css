@@ -95,7 +95,7 @@
   --surface-2: oklch(0.31 0.027 256);            /* #2b3744 inset / nested row   */
   --popover: oklch(0.267 0.027 256);             /* #232e3c modal / menu bg     */
   --popover-foreground: oklch(1 0 0);
-  --primary: oklch(0.625 0.177 250);             /* #3390ec Telegram blue accent*/
+  --primary: oklch(0.662 0.133 236);             /*  #229ED9 FractionalLuxe azure*/
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.31 0.027 256);            /* #2b3744 subtle button bg    */
   --secondary-foreground: oklch(1 0 0);
@@ -106,14 +106,14 @@
   --destructive: oklch(0.62 0.22 25);            /* #e53935 Telegram destructive */
   --border: oklch(1 0 0 / 0.08);                 /* #fff 8% hairline separator  */
   --input: oklch(1 0 0 / 0.1);                    /* field fill                  */
-  --ring: oklch(0.625 0.177 250);                /* focus ring = Telegram blue  */
+  --ring: oklch(0.662 0.133 236);                /* focus ring = FractionalLuxe azure  */
   --success: oklch(0.72 0.17 145);               /* up / ask / paid (finance)   */
   --success-foreground: oklch(0.12 0.02 145);
   --danger: oklch(0.62 0.22 25);                 /* down / bid / error          */
   --danger-foreground: oklch(1 0 0);
   --warning: oklch(0.79 0.16 70);                /* pending earnings            */
   --warning-foreground: oklch(0.2 0.02 70);
-  --chart-1: oklch(0.625 0.177 250);             /* Telegram blue              */
+  --chart-1: oklch(0.662 0.133 236);             /* #229ED9 FractionalLuxe     */
   --chart-2: oklch(0.72 0.17 145);               /* up green                   */
   --chart-3: oklch(0.79 0.16 70);                /* amber                      */
   --chart-4: oklch(0.62 0.22 25);                /* down red                   */
@@ -121,12 +121,12 @@
   --radius: 0.75rem;                             /* 12px — Telegram block radius */
   --sidebar: oklch(0.267 0.027 256);
   --sidebar-foreground: oklch(1 0 0);
-  --sidebar-primary: oklch(0.625 0.177 250);
+  --sidebar-primary: oklch(0.662 0.133 236);
   --sidebar-primary-foreground: oklch(1 0 0);
   --sidebar-accent: oklch(0.625 0.177 250 / 0.14);
   --sidebar-accent-foreground: oklch(1 0 0);
   --sidebar-border: oklch(1 0 0 / 0.08);
-  --sidebar-ring: oklch(0.625 0.177 250);
+  --sidebar-ring: oklch(0.662 0.133 236);
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -143,7 +143,7 @@
   --surface-2: oklch(0.96 0 0);                   /* #f4f4f5 inset / nested row     */
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.18 0.004 256);
-  --primary: oklch(0.58 0.19 250);                /* Telegram blue on light         */
+  --primary: oklch(0.662 0.133 236);                /* Telegram blue on light         */
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.96 0 0);
   --secondary-foreground: oklch(0.18 0.004 256);
@@ -154,26 +154,26 @@
   --destructive: oklch(0.58 0.22 25);
   --border: oklch(0 0 0 / 0.08);                  /* #000 8% hairline               */
   --input: oklch(0 0 0 / 0.06);
-  --ring: oklch(0.58 0.19 250);
+  --ring: oklch(0.662 0.133 236);
   --success: oklch(0.6 0.17 145);
   --success-foreground: oklch(1 0 0);
   --danger: oklch(0.58 0.22 25);
   --danger-foreground: oklch(1 0 0);
   --warning: oklch(0.75 0.16 70);
   --warning-foreground: oklch(0.2 0.02 70);
-  --chart-1: oklch(0.58 0.19 250);
+  --chart-1: oklch(0.662 0.133 236);
   --chart-2: oklch(0.6 0.17 145);
   --chart-3: oklch(0.75 0.16 70);
   --chart-4: oklch(0.58 0.22 25);
   --chart-5: oklch(0.58 0.006 250);
   --sidebar: oklch(1 0 0);
   --sidebar-foreground: oklch(0.18 0.004 256);
-  --sidebar-primary: oklch(0.58 0.19 250);
+  --sidebar-primary: oklch(0.662 0.133 236);
   --sidebar-primary-foreground: oklch(1 0 0);
   --sidebar-accent: oklch(0.58 0.19 250 / 0.12);
   --sidebar-accent-foreground: oklch(0.18 0.004 256);
   --sidebar-border: oklch(0 0 0 / 0.08);
-  --sidebar-ring: oklch(0.58 0.19 250);
+  --sidebar-ring: oklch(0.662 0.133 236);
 }
 
 @layer base {

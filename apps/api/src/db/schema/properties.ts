@@ -21,6 +21,11 @@ export type PropertyMetaJson = {
   leaseUntil: string | null;
   activeTenant: boolean;
   tokenizationDocUrl: string;
+  /** Optional manifest projections (A3) — verbatim from portfolio-manifest.json. */
+  projectedNetYieldPct?: number;
+  avgNightlyRateUsd?: number;
+  occupancyRatePct?: number;
+  ownershipStructure?: string;
 };
 
 export type RentalPaymentJson = {

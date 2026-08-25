@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, act, waitFor } from "@testing-library/react";
+import { render, screen, act, waitFor, fireEvent, within } from "@testing-library/react";
 import type { Listing } from "@/types/property";
+import type { OrderBookState } from "@/types/order";
+import type { PortfolioSummary } from "@/types/position";
 
 vi.mock("next/image", () => ({
   default: (props: { alt: string; src: string }) => (
@@ -48,7 +50,7 @@ const useProperty = vi.fn(() => ({
   isError: false,
   refetch: vi.fn(),
 }));
-const useOrderBook = vi.fn(() => ({ data: undefined }));
+const useOrderBook = vi.fn((): { data?: OrderBookState } => ({ data: undefined }));
 
 const haptics = { impact: vi.fn(), notification: vi.fn(), selection: vi.fn() };
 let mainHandler: (() => void | Promise<void>) | null = null;
@@ -73,6 +75,9 @@ vi.mock("@/hooks/useProperty", () => ({
 }));
 vi.mock("@/hooks/useOrderBook", () => ({
   useOrderBook: () => useOrderBook(),
+}));
+vi.mock("@/hooks/useMarketplace", () => ({
+  useMarketplace: () => ({ data: [], isLoading: false, isError: false }),
 }));
 vi.mock("@/hooks/usePropertyDocuments", () => ({
   usePropertyDocuments: () => ({
@@ -112,12 +117,25 @@ vi.mock("@/hooks/useBuyShares", () => ({
   useBuyShares: () => ({ mutateAsync, isPending: false, phase: "idle" }),
 }));
 vi.mock("@/stores/ui.store", () => ({
-  useUiStore: (sel: (s: { setMainButtonActive: (v: boolean) => void }) => unknown) =>
-    sel({ setMainButtonActive: vi.fn() }),
+  useUiStore: (sel: (s: Record<string, unknown>) => unknown) =>
+    sel({
+      setMainButtonActive: vi.fn(),
+      mainButtonActive: false,
+      stickyCtaVisible: false,
+      setStickyCtaVisible: vi.fn(),
+    }),
 }));
 
+const usePortfolio = vi.fn((): { data?: PortfolioSummary; isLoading: boolean } => ({
+  data: undefined,
+  isLoading: false,
+}));
 vi.mock("@/hooks/usePortfolio", () => ({
-  usePortfolio: vi.fn(() => ({ data: undefined, isLoading: false })),
+  usePortfolio: () => usePortfolio(),
+}));
+const useTrades = vi.fn(() => ({ data: [], isLoading: false, isError: false }));
+vi.mock("@/hooks/useTrades", () => ({
+  useTrades: () => useTrades(),
 }));
 vi.mock("@/hooks/useLocks", () => ({
   useLocks: vi.fn(() => ({ data: { locks: [] }, isLoading: false })),
@@ -127,9 +145,19 @@ vi.mock("@/hooks/useLocks", () => ({
   activeLocksForProperty: vi.fn(() => []),
 }));
 
+const placeOrderMutate = vi.fn();
 vi.mock("@/hooks/useSells", () => ({
   useInstantSell: vi.fn(() => ({ mutate: vi.fn(), isPending: false, isError: false, error: null })),
-  usePlaceOrder: vi.fn(() => ({ mutate: vi.fn(), isPending: false, isError: false, error: null })),
+  usePlaceOrder: () => ({
+    mutate: placeOrderMutate,
+    isPending: false,
+    isError: false,
+    error: null,
+  }),
+}));
+
+vi.mock("@/hooks/useFees", () => ({
+  useFees: vi.fn(() => ({ data: [], isLoading: false, isError: false })),
 }));
 
 
@@ -209,5 +237,177 @@ describe("Property detail page — states + buy happy path", () => {
     });
     expect(await screen.findByTestId("buy-success-step")).toBeInTheDocument();
     expect(screen.getByText(/Congratulations/i)).toBeInTheDocument();
+  });
+
+  it("Phase 7 secondary: hero Buy-at CTA opens the market (limit) buy sheet", async () => {
+    const resale = { ...listing, status: "resale" as const, sharesRemaining: 0, lastTradeUsd: 13_100 };
+    useProperty.mockReturnValue({ data: resale, isLoading: false, isError: false, refetch: vi.fn() });
+    useOrderBook.mockReturnValue({
+      data: {
+        propertyId: resale.id,
+        bids: [{ priceUsd: 12_900, quantity: 5, cumulative: 5 }],
+        asks: [{ priceUsd: 13_200, quantity: 4, cumulative: 4 }],
+        bestBidUsd: 12_900,
+        bestAskUsd: 13_200,
+        lastTradeUsd: 13_100,
+      },
+    });
+    await renderPage(resale.id);
+
+    fireEvent.click(await screen.findByTestId("hero-cta"));
+    expect(await screen.findByTestId("limit-buy-sheet")).toBeInTheDocument();
+    // Price input defaults to the best ask — the page's source of truth
+    expect(screen.getByTestId("limit-buy-price-input")).toHaveValue(132);
+  });
+
+  it("Phase 7 sell: owner sees the Sell sheet with free-share context via Yield section", async () => {
+    useProperty.mockReturnValue({ data: listing, isLoading: false, isError: false, refetch: vi.fn() });
+    const holding = {
+      propertyId: listing.id,
+      sharesOwned: 160,
+      avgCostUsd: 12_000,
+      currentValueUsd: 1_920_000,
+      pendingWeekEarningsUsd: 0,
+      shareRatio: 0.16,
+    };
+    usePortfolio.mockReturnValue({
+      data: {
+        holdings: [holding],
+        totalValueUsd: 0,
+        totalInvestedUsd: 0,
+        totalEarningsUsd: 0,
+        weeklyProjectedUsd: 0,
+        dayChangeRatio: 0,
+        openOrders: [],
+      },
+      isLoading: false,
+    });
+    await renderPage(listing.id);
+
+    fireEvent.click(await screen.findByTestId("open-sell-sheet"));
+    const sheet = await screen.findByTestId("sell-sheet");
+    expect(within(sheet).getByText("Free shares")).toBeInTheDocument();
+    expect(within(sheet).getByText("160")).toBeInTheDocument();
+  });
+
+  it("Phase 7 regression: a custom limit sell never changes the displayed current price", async () => {    // Secondary property with a live book; page price source of truth = bestAsk $132.00.
+    const resale = { ...listing, status: "resale" as const, sharesRemaining: 0, lastTradeUsd: 13_100 };
+    useProperty.mockReturnValue({ data: resale, isLoading: false, isError: false, refetch: vi.fn() });
+    useOrderBook.mockReturnValue({
+      data: {
+        propertyId: resale.id,
+        bids: [{ priceUsd: 12_900, quantity: 5, cumulative: 5 }],
+        asks: [{ priceUsd: 13_200, quantity: 4, cumulative: 4 }],
+        bestBidUsd: 12_900,
+        bestAskUsd: 13_200,
+        lastTradeUsd: 13_100,
+      },
+    });
+    const holding = {
+      propertyId: resale.id,
+      sharesOwned: 50,
+      avgCostUsd: 12_500,
+      currentValueUsd: 625_000,
+      pendingWeekEarningsUsd: 0,
+      shareRatio: 0.05,
+    };
+    usePortfolio.mockReturnValue({
+      data: {
+        holdings: [holding],
+        totalValueUsd: 0,
+        totalInvestedUsd: 0,
+        totalEarningsUsd: 0,
+        weeklyProjectedUsd: 0,
+        dayChangeRatio: 0,
+        openOrders: [],
+      },
+      isLoading: false,
+    });
+    await renderPage(resale.id);
+
+    // Price before
+    expect(metricPrice("Price per share")).toBe("$132.00");
+
+    // Owner places an absurd custom sell at $999/share
+    fireEvent.click(await screen.findByTestId("open-sell-sheet"));
+    fireEvent.click(await screen.findByLabelText("Sell Custom price"));
+    const priceInput = await screen.findByTestId("sell-price-input");
+    await act(async () => {
+      fireEvent.change(priceInput, { target: { value: "999" } });
+    });
+    fireEvent.click(screen.getByTestId("custom-sell-confirm"));
+
+    await waitFor(() => {
+      expect(placeOrderMutate).toHaveBeenCalledWith(
+        expect.objectContaining({ side: "sell", priceUsd: 99_900, quantity: 1 }),
+        expect.objectContaining({ onSuccess: expect.any(Function) }),
+      );
+    });
+
+    // The order was placed — but the page-wide price is UNCHANGED.
+    expect(metricPrice("Price per share")).toBe("$132.00");
+    expect(screen.getByTestId("hero-cta")).toHaveTextContent(/Buy at \$132\.00/);
+
+    function metricPrice(label: string): string {
+      const grid = screen.getByTestId("metrics-grid");
+      return (within(grid).getByText(label).nextElementSibling?.textContent) ?? "";
+    }
+  });
+
+  it("Phase 7 sticky: Sell opens the SellSheet when the user has free shares", async () => {
+    // Stub IntersectionObserver so the scroll-revealed sticky bar appears in jsdom.
+    const instances: Array<{ callback: (entries: { isIntersecting: boolean }[]) => void }> = [];
+    class FakeIO {
+      observe = vi.fn();
+      unobserve = vi.fn();
+      disconnect = vi.fn();
+      callback: (entries: { isIntersecting: boolean }[]) => void;
+      constructor(cb: (entries: { isIntersecting: boolean }[]) => void) {
+        this.callback = cb;
+        instances.push(this);
+      }
+    }
+    vi.stubGlobal("IntersectionObserver", FakeIO);
+    try {
+      const resale = { ...listing, status: "resale" as const, sharesRemaining: 0, lastTradeUsd: 13_100 };
+      useProperty.mockReturnValue({ data: resale, isLoading: false, isError: false, refetch: vi.fn() });
+      useOrderBook.mockReturnValue({
+        data: {
+          propertyId: resale.id,
+          bids: [],
+          asks: [],
+          bestBidUsd: 12_900,
+          bestAskUsd: 13_200,
+        },
+      });
+      usePortfolio.mockReturnValue({
+        data: {
+          holdings: [
+            { propertyId: resale.id, sharesOwned: 50, avgCostUsd: 12_500, currentValueUsd: 0, pendingWeekEarningsUsd: 0, shareRatio: 0.05 },
+          ],
+          totalValueUsd: 0,
+          totalInvestedUsd: 0,
+          totalEarningsUsd: 0,
+          weeklyProjectedUsd: 0,
+          dayChangeRatio: 0,
+          openOrders: [],
+        },
+        isLoading: false,
+      });
+      await renderPage(resale.id);
+
+      // Simulate the user scrolling the hero out of view (IO initial + scroll events).
+      await act(async () => {
+        instances.forEach((io) => io.callback([{ isIntersecting: true }]));
+        instances.forEach((io) => io.callback([{ isIntersecting: false }]));
+      });
+
+      const sell = screen.getByTestId("sticky-sell");
+      expect(sell).toBeEnabled();
+      fireEvent.click(sell);
+      expect(await screen.findByTestId("sell-sheet")).toBeInTheDocument();
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 });

@@ -17,6 +17,7 @@ import { createDbBalanceStore } from "./money/balance-store.js";
 import { createDbInstantSellStore } from "./sells/instant-sell-store.js";
 import { createDbTradeStore } from "./orders/trade-store.js";
 import { createDbWithdrawalStore } from "./withdrawals/withdrawal-store.js";
+import { createDbWaitlistStore } from "./waitlist/waitlist-store.js";
 import { propertyDocuments } from "./db/schema/property-documents.js";
 import { SEED_DOCUMENTS } from "./db/seed/documents-data.js";
 import { loadEnv } from "./env.js";
@@ -41,6 +42,7 @@ let balanceStore = null as ReturnType<typeof createDbBalanceStore> | null;
 let instantSellStore = null as ReturnType<typeof createDbInstantSellStore> | null;
 let tradeStore = null as ReturnType<typeof createDbTradeStore> | null;
 let withdrawalStore = null as ReturnType<typeof createDbWithdrawalStore> | null;
+let waitlistStore = null as ReturnType<typeof createDbWaitlistStore> | null;
 if (env.DATABASE_URL) {
   try {
     const db = createDb(requireDatabaseUrl({ DATABASE_URL: env.DATABASE_URL }));
@@ -60,6 +62,7 @@ if (env.DATABASE_URL) {
     instantSellStore = createDbInstantSellStore(db);
     tradeStore = createDbTradeStore(db);
     withdrawalStore = createDbWithdrawalStore(db);
+    waitlistStore = createDbWaitlistStore(db);
     // Seed demo documents if table is empty
     if (env.NODE_ENV !== "production") {
       (async () => {
@@ -105,6 +108,7 @@ const app = createApp({
   instantSells: instantSellStore,
   trades: tradeStore,
   withdrawals: withdrawalStore,
+  waitlist: waitlistStore,
   unlockMaturationMs: env.UNLOCK_MATURATION_MS,
   orderRateLimitMax: env.ORDER_RATE_LIMIT_MAX,
   orderRateLimitWindowMs: env.ORDER_RATE_LIMIT_WINDOW_MS,

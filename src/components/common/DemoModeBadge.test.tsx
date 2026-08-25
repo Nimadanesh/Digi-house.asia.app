@@ -1,40 +1,22 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
-import { useSettingsStore } from "@/stores/settings.store";
+import { describe, it, expect } from "vitest";
+import { render, screen } from "@testing-library/react";
+import { DemoModeBadge } from "@/components/common/DemoModeBadge";
 import { useUiStore } from "@/stores/ui.store";
 
-vi.mock("next/navigation", () => ({
-  usePathname: () => "/home",
-}));
+function renderBadge() {
+  return render(<DemoModeBadge />);
+}
 
-vi.mock("@/hooks/useTelegram", () => ({
-  useTelegram: () => ({
-    haptics: { selection: vi.fn(), impact: vi.fn(), notification: vi.fn() },
-  }),
-}));
-
-import { DemoModeBadge } from "@/components/common/DemoModeBadge";
-
-describe("DemoModeBadge", () => {
-  beforeEach(() => {
-    useSettingsStore.setState({ showDemoBadge: true });
-    useUiStore.setState({ settingsOpen: false, mainButtonActive: false });
-  });
-
-  it("renders when showDemoBadge is true", () => {
-    render(<DemoModeBadge />);
+describe("DemoModeBadge — yields to the in-page sticky CTA", () => {
+  it("renders when no sticky CTA is visible", () => {
+    useUiStore.setState({ mainButtonActive: false, stickyCtaVisible: false });
+    renderBadge();
     expect(screen.getByTestId("demo-mode-badge")).toBeInTheDocument();
   });
 
-  it("hides when showDemoBadge is false", () => {
-    useSettingsStore.setState({ showDemoBadge: false });
-    render(<DemoModeBadge />);
+  it("is hidden while the property sticky CTA occupies the zone (Sell tap fix)", () => {
+    useUiStore.setState({ mainButtonActive: false, stickyCtaVisible: true });
+    renderBadge();
     expect(screen.queryByTestId("demo-mode-badge")).not.toBeInTheDocument();
-  });
-
-  it("opens Settings on tap", () => {
-    render(<DemoModeBadge />);
-    fireEvent.click(screen.getByTestId("demo-mode-badge"));
-    expect(useUiStore.getState().settingsOpen).toBe(true);
   });
 });

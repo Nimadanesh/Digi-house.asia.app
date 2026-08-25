@@ -5,7 +5,7 @@ import { sql } from "drizzle-orm";
 import { createDb, requireDatabaseUrl } from "../client.js";
 import { properties } from "../schema/properties.js";
 import { toPropertyInsert } from "./map-property.js";
-import { SEED_PROPERTIES } from "./properties-data.js";
+import { loadManifestSeedProperties } from "./manifest-data.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const apiRoot = join(__dirname, "../../..");
@@ -35,15 +35,34 @@ async function main() {
   const url = requireDatabaseUrl();
   const db = createDb(url);
 
-  const rows = SEED_PROPERTIES.map(toPropertyInsert);
+  const rows = loadManifestSeedProperties().map(toPropertyInsert);
   const statuses = new Set(rows.map((r) => r.status));
-  if (rows.length < 6) {
-    throw new Error(`Seed must have ≥6 properties, got ${rows.length}`);
+  if (rows.length !== 24) {
+    throw new Error(`Seed must have exactly 24 manifest properties, got ${rows.length}`);
   }
   for (const need of ["funding", "funded", "resale"] as const) {
     if (!statuses.has(need)) {
       throw new Error(`Seed missing status: ${need}`);
     }
+  }
+
+  // A3: remove legacy seed listings not in the manifest so exactly the 24
+  // contract properties exist. If dev rows (holdings/orders) still reference
+  // them, keep seeding and warn instead of failing.
+  const manifestIds = new Set(rows.map((r) => r.id));
+  try {
+    await db.execute(
+      sql`DELETE FROM ${properties} WHERE ${properties.id} NOT IN (${sql.join(
+        [...manifestIds].map((id) => sql`${id}`),
+        sql`, `,
+      )})`,
+    );
+  } catch (err) {
+    console.warn(
+      `Could not prune legacy properties (dependent rows exist?): ${
+        err instanceof Error ? err.message : err
+      }`,
+    );
   }
 
   for (const row of rows) {

@@ -1,0 +1,468 @@
+[
+  {
+    "id": "bali-estate-ubud-004",
+    "title": "Ubud Jungle Estate",
+    "destination": "Bali",
+    "area": "Ubud",
+    "pricePerShare": 280,
+    "totalShares": 5000,
+    "valuationUsd": 1400000,
+    "projectedNetYield": 8.6,
+    "avgNightlyRate": 1630,
+    "occupancyRate": 80,
+    "propertyType": "Estate",
+    "gallery": [
+      "/images/properties/bali-estate-ubud-004/01.webp"
+    ],
+    "legal": {
+      "ownershipStructure": "Single-property SPV (Freehold)"
+    }
+  },
+  {
+    "id": "bali-villa-canggu-001",
+    "title": "Villa Canggu",
+    "destination": "Bali",
+    "area": "Canggu",
+    "pricePerShare": 130,
+    "totalShares": 5000,
+    "valuationUsd": 650000,
+    "projectedNetYield": 9.5,
+    "avgNightlyRate": 1330,
+    "occupancyRate": 79,
+    "propertyType": "Villa",
+    "gallery": [
+      "/images/properties/bali-villa-canggu-001/01.webp"
+    ],
+    "legal": {
+      "ownershipStructure": "Single-property SPV (Leasehold)",
+      "leaseholdYears": 25
+    }
+  },
+  {
+    "id": "bali-villa-seminyak-002",
+    "title": "Villa Seminyak",
+    "destination": "Bali",
+    "area": "Seminyak",
+    "pricePerShare": 82,
+    "totalShares": 10000,
+    "valuationUsd": 820000,
+    "projectedNetYield": 9.2,
+    "avgNightlyRate": 1400,
+    "occupancyRate": 80,
+    "propertyType": "Villa",
+    "gallery": [
+      "/images/properties/bali-villa-seminyak-002/01.webp"
+    ],
+    "legal": {
+      "ownershipStructure": "Single-property SPV (Leasehold)",
+      "leaseholdYears": 25
+    }
+  },
+  {
+    "id": "bali-villa-uluwatu-003",
+    "title": "Uluwatu Cliff Villa",
+    "destination": "Bali",
+    "area": "Uluwatu",
+    "pricePerShare": 460,
+    "totalShares": 5000,
+    "valuationUsd": 2300000,
+    "projectedNetYield": 8.1,
+    "avgNightlyRate": 1950,
+    "occupancyRate": 82,
+    "propertyType": "Villa",
+    "gallery": [
+      "/images/properties/bali-villa-uluwatu-003/01.webp"
+    ],
+    "legal": {
+      "ownershipStructure": "Single-property SPV (Leasehold)",
+      "leaseholdYears": 25
+    }
+  },
+  {
+    "id": "dubai-penthouse-bluewaters-004",
+    "title": "Bluewaters Penthouse",
+    "destination": "Dubai",
+    "area": "Bluewaters Island",
+    "pricePerShare": 155,
+    "totalShares": 20000,
+    "valuationUsd": 3100000,
+    "projectedNetYield": 6.3,
+    "avgNightlyRate": 2100,
+    "occupancyRate": 75,
+    "propertyType": "Penthouse",
+    "gallery": [
+      "/images/properties/dubai-penthouse-bluewaters-004/01.webp"
+    ],
+    "legal": {
+      "ownershipStructure": "Single-property SPV (Freehold), Dubai Land Department registered"
+    }
+  },
+  {
+    "id": "dubai-villa-aurora-001",
+    "title": "Villa Aurora",
+    "destination": "Dubai",
+    "area": "Palm Jumeirah",
+    "pricePerShare": 420,
+    "totalShares": 10000,
+    "valuationUsd": 4200000,
+    "projectedNetYield": 6.3,
+    "avgNightlyRate": 2400,
+    "occupancyRate": 80,
+    "propertyType": "Beachfront Villa",
+    "gallery": [
+      "/images/properties/dubai-villa-aurora-001/01.webp"
+    ],
+    "legal": {
+      "ownershipStructure": "Single-property SPV (Freehold), Dubai Land Department registered"
+    }
+  },
+  {
+    "id": "dubai-villa-marina-002",
+    "title": "Villa Marina",
+    "destination": "Dubai",
+    "area": "Dubai Hills Estate",
+    "pricePerShare": 320,
+    "totalShares": 5000,
+    "valuationUsd": 1600000,
+    "projectedNetYield": 7.5,
+    "avgNightlyRate": 1650,
+    "occupancyRate": 78,
+    "propertyType": "Villa",
+    "gallery": [
+      "/images/properties/dubai-villa-marina-002/01.webp"
+    ],
+    "legal": {
+      "ownershipStructure": "Single-property SPV (Freehold), Dubai Land Department registered"
+    }
+  },
+  {
+    "id": "dubai-villa-oasis-003",
+    "title": "Villa Oasis",
+    "destination": "Dubai",
+    "area": "Palm Jumeirah",
+    "pricePerShare": 120,
+    "totalShares": 20000,
+    "valuationUsd": 2400000,
+    "projectedNetYield": 6.9,
+    "avgNightlyRate": 1900,
+    "occupancyRate": 78,
+    "propertyType": "Villa",
+    "gallery": [
+      "/images/properties/dubai-villa-oasis-003/01.webp"
+    ],
+    "legal": {
+      "ownershipStructure": "Single-property SPV (Freehold), Dubai Land Department registered"
+    }
+  },
+  {
+    "id": "maldives-villa-atoll-001",
+    "title": "Atoll Reserve",
+    "destination": "Maldives",
+    "area": "Baa Atoll",
+    "pricePerShare": 520,
+    "totalShares": 10000,
+    "valuationUsd": 5200000,
+    "projectedNetYield": 6,
+    "avgNightlyRate": 3200,
+    "occupancyRate": 60,
+    "propertyType": "Overwater Villa",
+    "gallery": [
+      "/images/properties/maldives-villa-atoll-001/01.webp"
+    ],
+    "legal": {
+      "ownershipStructure": "Single-property SPV (25-year leasehold, resort residence scheme)",
+      "leaseholdYears": 25
+    }
+  },
+  {
+    "id": "maldives-villa-lagoon-002",
+    "title": "Lagoon Retreat",
+    "destination": "Maldives",
+    "area": "South Ari Atoll",
+    "pricePerShare": 325,
+    "totalShares": 8000,
+    "valuationUsd": 2600000,
+    "projectedNetYield": 6.4,
+    "avgNightlyRate": 2300,
+    "occupancyRate": 54,
+    "propertyType": "Overwater Villa",
+    "gallery": [
+      "/images/properties/maldives-villa-lagoon-002/01.webp"
+    ],
+    "legal": {
+      "ownershipStructure": "Single-property SPV (25-year leasehold, resort residence scheme)",
+      "leaseholdYears": 25
+    }
+  },
+  {
+    "id": "maldives-villa-reef-003",
+    "title": "Reef House Villa",
+    "destination": "Maldives",
+    "area": "Baa Atoll",
+    "pricePerShare": 160,
+    "totalShares": 10000,
+    "valuationUsd": 1600000,
+    "projectedNetYield": 6.9,
+    "avgNightlyRate": 1950,
+    "occupancyRate": 49,
+    "propertyType": "Beachfront Villa",
+    "gallery": [
+      "/images/properties/maldives-villa-reef-003/01.webp"
+    ],
+    "legal": {
+      "ownershipStructure": "Single-property SPV (25-year leasehold, resort residence scheme)",
+      "leaseholdYears": 25
+    }
+  },
+  {
+    "id": "maldives-villa-sunset-004",
+    "title": "Sunset Lagoon Villa",
+    "destination": "Maldives",
+    "area": "North Malé Atoll",
+    "pricePerShare": 130,
+    "totalShares": 10000,
+    "valuationUsd": 1300000,
+    "projectedNetYield": 7.1,
+    "avgNightlyRate": 1850,
+    "occupancyRate": 46,
+    "propertyType": "Overwater Villa",
+    "gallery": [
+      "/images/properties/maldives-villa-sunset-004/01.webp"
+    ],
+    "legal": {
+      "ownershipStructure": "Single-property SPV (25-year leasehold, resort residence scheme)",
+      "leaseholdYears": 25
+    }
+  },
+  {
+    "id": "marbella-villa-goldenmile-001",
+    "title": "Golden Mile Villa",
+    "destination": "Marbella",
+    "area": "Golden Mile",
+    "pricePerShare": 360,
+    "totalShares": 10000,
+    "valuationUsd": 3600000,
+    "projectedNetYield": 5.2,
+    "avgNightlyRate": 2500,
+    "occupancyRate": 53,
+    "propertyType": "Villa",
+    "gallery": [
+      "/images/properties/marbella-villa-goldenmile-001/01.webp"
+    ],
+    "legal": {
+      "ownershipStructure": "Single-property SPV (Freehold), Spanish Land Registry"
+    }
+  },
+  {
+    "id": "marbella-villa-guadalmina-004",
+    "title": "Villa Guadalmina",
+    "destination": "Marbella",
+    "area": "Guadalmina",
+    "pricePerShare": 94,
+    "totalShares": 10000,
+    "valuationUsd": 940000,
+    "projectedNetYield": 6.6,
+    "avgNightlyRate": 1650,
+    "occupancyRate": 40,
+    "propertyType": "Villa",
+    "gallery": [
+      "/images/properties/marbella-villa-guadalmina-004/01.webp"
+    ],
+    "legal": {
+      "ownershipStructure": "Single-property SPV (Freehold), Spanish Land Registry"
+    }
+  },
+  {
+    "id": "marbella-villa-losmonteros-003",
+    "title": "Villa Los Monteros",
+    "destination": "Marbella",
+    "area": "Los Monteros",
+    "pricePerShare": 110,
+    "totalShares": 10000,
+    "valuationUsd": 1100000,
+    "projectedNetYield": 6.3,
+    "avgNightlyRate": 1700,
+    "occupancyRate": 42,
+    "propertyType": "Villa",
+    "gallery": [
+      "/images/properties/marbella-villa-losmonteros-003/01.webp"
+    ],
+    "legal": {
+      "ownershipStructure": "Single-property SPV (Freehold), Spanish Land Registry"
+    }
+  },
+  {
+    "id": "marbella-villa-sierrablanca-002",
+    "title": "Villa Sierra Blanca",
+    "destination": "Marbella",
+    "area": "Sierra Blanca",
+    "pricePerShare": 300,
+    "totalShares": 6000,
+    "valuationUsd": 1800000,
+    "projectedNetYield": 5.9,
+    "avgNightlyRate": 2000,
+    "occupancyRate": 45,
+    "propertyType": "Villa",
+    "gallery": [
+      "/images/properties/marbella-villa-sierrablanca-002/01.webp"
+    ],
+    "legal": {
+      "ownershipStructure": "Single-property SPV (Freehold), Spanish Land Registry"
+    }
+  },
+  {
+    "id": "mykonos-villa-aleomandra-002",
+    "title": "Villa Aleomandra",
+    "destination": "Mykonos",
+    "area": "Aleomandra",
+    "pricePerShare": 380,
+    "totalShares": 5000,
+    "valuationUsd": 1900000,
+    "projectedNetYield": 5.4,
+    "avgNightlyRate": 2250,
+    "occupancyRate": 35,
+    "propertyType": "Villa",
+    "gallery": [
+      "/images/properties/mykonos-villa-aleomandra-002/01.webp"
+    ],
+    "legal": {
+      "ownershipStructure": "Single-property SPV (Freehold), Hellenic Land Registry"
+    }
+  },
+  {
+    "id": "mykonos-villa-lazaros-003",
+    "title": "Villa Lazaros",
+    "destination": "Mykonos",
+    "area": "Agios Lazaros",
+    "pricePerShare": 120,
+    "totalShares": 10000,
+    "valuationUsd": 1200000,
+    "projectedNetYield": 5.8,
+    "avgNightlyRate": 1800,
+    "occupancyRate": 37,
+    "propertyType": "Villa",
+    "gallery": [
+      "/images/properties/mykonos-villa-lazaros-003/01.webp"
+    ],
+    "legal": {
+      "ownershipStructure": "Single-property SPV (Freehold), Hellenic Land Registry"
+    }
+  },
+  {
+    "id": "mykonos-villa-ornos-004",
+    "title": "Villa Ornos",
+    "destination": "Mykonos",
+    "area": "Ornos",
+    "pricePerShare": 150,
+    "totalShares": 10000,
+    "valuationUsd": 1500000,
+    "projectedNetYield": 5.6,
+    "avgNightlyRate": 2900,
+    "occupancyRate": 39,
+    "propertyType": "Villa",
+    "gallery": [
+      "/images/properties/mykonos-villa-ornos-004/01.webp"
+    ],
+    "legal": {
+      "ownershipStructure": "Single-property SPV (Freehold), Hellenic Land Registry"
+    }
+  },
+  {
+    "id": "mykonos-villa-psarou-001",
+    "title": "Villa Psarou",
+    "destination": "Mykonos",
+    "area": "Psarou",
+    "pricePerShare": 380,
+    "totalShares": 10000,
+    "valuationUsd": 3800000,
+    "projectedNetYield": 4.9,
+    "avgNightlyRate": 3900,
+    "occupancyRate": 41,
+    "propertyType": "Villa",
+    "gallery": [
+      "/images/properties/mykonos-villa-psarou-001/01.webp"
+    ],
+    "legal": {
+      "ownershipStructure": "Single-property SPV (Freehold), Hellenic Land Registry"
+    }
+  },
+  {
+    "id": "phuket-villa-bangtao-001",
+    "title": "Villa Bang Tao",
+    "destination": "Phuket",
+    "area": "Bang Tao",
+    "pricePerShare": 130,
+    "totalShares": 6000,
+    "valuationUsd": 780000,
+    "projectedNetYield": 7.9,
+    "avgNightlyRate": 2360,
+    "occupancyRate": 72,
+    "propertyType": "Villa",
+    "gallery": [
+      "/images/properties/phuket-villa-bangtao-001/01.webp"
+    ],
+    "legal": {
+      "ownershipStructure": "Single-property SPV (Leasehold)",
+      "leaseholdYears": 30
+    }
+  },
+  {
+    "id": "phuket-villa-capesunset-004",
+    "title": "Cape Sunset Villa",
+    "destination": "Phuket",
+    "area": "Cape Yamu",
+    "pricePerShare": 425,
+    "totalShares": 8000,
+    "valuationUsd": 3400000,
+    "projectedNetYield": 6.8,
+    "avgNightlyRate": 2500,
+    "occupancyRate": 65,
+    "propertyType": "Beachfront Villa",
+    "gallery": [
+      "/images/properties/phuket-villa-capesunset-004/01.webp"
+    ],
+    "legal": {
+      "ownershipStructure": "Single-property SPV (Freehold), Chanote title"
+    }
+  },
+  {
+    "id": "phuket-villa-kamala-003",
+    "title": "Villa Kamala",
+    "destination": "Phuket",
+    "area": "Kamala",
+    "pricePerShare": 340,
+    "totalShares": 5000,
+    "valuationUsd": 1700000,
+    "projectedNetYield": 7.2,
+    "avgNightlyRate": 1780,
+    "occupancyRate": 66,
+    "propertyType": "Villa",
+    "gallery": [
+      "/images/properties/phuket-villa-kamala-003/01.webp"
+    ],
+    "legal": {
+      "ownershipStructure": "Single-property SPV (Leasehold)",
+      "leaseholdYears": 30
+    }
+  },
+  {
+    "id": "phuket-villa-surin-002",
+    "title": "Villa Surin",
+    "destination": "Phuket",
+    "area": "Surin",
+    "pricePerShare": 96,
+    "totalShares": 10000,
+    "valuationUsd": 960000,
+    "projectedNetYield": 7.6,
+    "avgNightlyRate": 2440,
+    "occupancyRate": 70,
+    "propertyType": "Villa",
+    "gallery": [
+      "/images/properties/phuket-villa-surin-002/01.webp"
+    ],
+    "legal": {
+      "ownershipStructure": "Single-property SPV (Leasehold)",
+      "leaseholdYears": 30
+    }
+  }
+]

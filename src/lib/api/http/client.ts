@@ -1,4 +1,4 @@
-// File responsibility: lightweight HTTP client for the DigiHouse API.
+// File responsibility: lightweight HTTP client for the FractionalLuxe API.
 // Handles JSON serialization, Bearer auth, error mapping, query building, and 401 signal.
 import { triggerAuthInvalidated } from "@/lib/api/auth-events";
 import { setApiAccessToken } from "@/lib/api/session-token";

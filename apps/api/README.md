@@ -25,7 +25,7 @@ cp apps/api/.env.example apps/api/.env
 # 5) Apply database migrations
 npm run db:migrate
 
-# 6) Seed properties (≥6 listings: funding, funded, resale)
+# 6) Seed properties (24 FractionalLuxe manifest listings)
 npm run db:seed
 
 # 7) Start API dev server
@@ -373,6 +373,26 @@ curl -sS http://localhost:8787/healthz
 ```
 
 Response includes `settlementMode` when `SETTLEMENT_MODE` is set.
+
+### Public (unauthenticated, for fractionalluxe.com)
+
+Rate-limited (in-memory token bucket). CORS origins via `PUBLIC_CORS_ORIGINS`
+(comma-separated; default `https://fractionalluxe.com,http://localhost:3000`).
+**Money fields are whole US dollars**, not cents like the internal `/v1` routes.
+
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| `GET` | `/public/properties` | Public | All listings: `[{ propertyId, title, destination, area, pricePerShare, sharesSold, totalShares, projectedNetYield }]` |
+| `GET` | `/public/properties/:id` | Public | Same + `{ fundedPct, recentTrades: [last 5 { price, qty, at }] }` |
+| `POST` | `/public/waitlist` | Public | Waitlist signup `{ email, telegram?, propertyId?, utm? }` → `{ ok: true }`; idempotent on email |
+
+```bash
+curl -sS http://localhost:8787/public/properties | jq .
+curl -sS http://localhost:8787/public/properties/bali-villa-canggu-001 | jq .
+curl -sS -X POST http://localhost:8787/public/waitlist \
+  -H "content-type: application/json" \
+  -d '{"email":"user@example.com"}'
+```
 
 ---
 

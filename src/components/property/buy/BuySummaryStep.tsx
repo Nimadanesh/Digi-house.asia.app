@@ -14,6 +14,7 @@ export function BuySummaryStep({
   error,
   pending,
   verifying,
+  unitPriceUsd,
 }: {
   listing: Listing;
   qty: number;
@@ -23,8 +24,11 @@ export function BuySummaryStep({
   pending?: boolean;
   /** Payment sent — waiting for on-chain verification + settlement. */
   verifying?: boolean;
+  /** Single source of truth (lib/property-price); defaults to list price. */
+  unitPriceUsd?: number;
 }) {
-  const totalUsd = qty * listing.sharePriceUsd;
+  const unitPrice = unitPriceUsd ?? listing.sharePriceUsd;
+  const totalUsd = qty * unitPrice;
   const weekly = positionYieldUsd(listing, qty).weeklyUsd;
   const feesUsd = 0;
 
@@ -44,7 +48,7 @@ export function BuySummaryStep({
         </Row>
         <Row>
           <span className="text-sm text-muted-foreground">Price / share</span>
-          <span className="ml-auto text-sm tnum text-foreground">{usd(listing.sharePriceUsd)}</span>
+          <span className="ml-auto text-sm tnum text-foreground">{usd(unitPrice)}</span>
         </Row>
         <Row>
           <span className="text-sm text-muted-foreground">Pay with</span>

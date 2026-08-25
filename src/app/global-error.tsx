@@ -23,7 +23,7 @@ export default function GlobalError({
             gap: 12,
           }}
         >
-          <h1 style={{ fontSize: 17, fontWeight: 600, margin: 0 }}>DigiHouse hit a snag</h1>
+          <h1 style={{ fontSize: 17, fontWeight: 600, margin: 0 }}>FractionalLuxe hit a snag</h1>
           <p style={{ fontSize: 14, opacity: 0.7, margin: 0, maxWidth: 280 }}>
             Please try again. If it keeps happening, reopen the Mini App from Telegram.
           </p>
@@ -36,7 +36,7 @@ export default function GlobalError({
               padding: "0 20px",
               borderRadius: 10,
               border: "none",
-              background: "#3390ec",
+              background: "#229ED9",
               color: "#fff",
               fontWeight: 600,
               fontSize: 14,

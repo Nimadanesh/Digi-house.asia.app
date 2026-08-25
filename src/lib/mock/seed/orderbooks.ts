@@ -24,29 +24,19 @@ function ladder(
   });
 }
 
-// Order book levels for the 2 funded + 2 resale properties (funding -> empty).
-// lastTradeUsd comes from the property's own field (single source of truth, PD-07).
-const fundedBooks: Record<string, { bids: OrderBookLevel[]; asks: OrderBookLevel[] }> = {
-  "prop-bayside-marina-penthouse": {
-    bids: ladder(25100, "bid"),
-    asks: ladder(25100, "ask"),
-  },
-  "prop-alfama-terrace-flat": {
-    bids: ladder(10000, "bid"),
-    asks: ladder(10000, "ask"),
-  },
-  "prop-tbilisi-riverhouse-loft": {
-    bids: ladder(8000, "bid"),
-    asks: ladder(8000, "ask"),
-  },
-  "prop-canggu-surf-villa": {
-    bids: ladder(20000, "bid"),
-    asks: ladder(20000, "ask"),
-  },
-};
+// Order book levels for funded/resale properties (funding -> empty).
+// The ladder mid derives from the property's OWN current price — last trade for
+// secondary listings, else list price (lib/property-price hierarchy) — so the book
+// can never drift away from the price shown in Hero/Metrics/Calculator.
+const fundedBooks = new Map(
+  PROPERTIES.filter((p) => p.status !== "funding").map((p) => [
+    p.id,
+    { mid: p.lastTradeUsd ?? p.sharePriceUsd },
+  ]),
+);
 
 export const ORDER_BOOKS: OrderBookState[] = PROPERTIES.map((p) => {
-  const book = fundedBooks[p.id];
+  const book = fundedBooks.get(p.id);
   if (!book) {
     return {
       propertyId: p.id,
@@ -54,12 +44,14 @@ export const ORDER_BOOKS: OrderBookState[] = PROPERTIES.map((p) => {
       asks: [],
     };
   }
+  const bids = ladder(book.mid, "bid");
+  const asks = ladder(book.mid, "ask");
   return {
     propertyId: p.id,
-    bids: book.bids,
-    asks: book.asks,
-    bestBidUsd: book.bids[0]?.priceUsd,
-    bestAskUsd: book.asks[0]?.priceUsd,
+    bids,
+    asks,
+    bestBidUsd: bids[0]?.priceUsd,
+    bestAskUsd: asks[0]?.priceUsd,
     ...(p.lastTradeUsd ? { lastTradeUsd: p.lastTradeUsd } : {}),
   };
 });

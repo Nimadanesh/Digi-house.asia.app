@@ -1,6 +1,6 @@
 "use client";
 // File responsibility: Locked-share yield card on Earnings (PRODUCT-PLAN §0.4 / PB-10) —
-// monthly ↔ weekly comparison, accrued-unpaid figure, and the yield payment list.
+// monthly projection, accrued-unpaid figure, withdrawal terms, and the yield payment list.
 import { useTranslations } from "next-intl";
 import { Lock } from "lucide-react";
 import type { YieldSummary } from "@/types/lock";
@@ -35,7 +35,7 @@ export function YieldSummaryCard({ summary }: { summary: YieldSummary }) {
                 {usd(summary.accruedUnpaidUsd)}
               </span>
             </div>
-            <div className="grid grid-cols-2 gap-3 border-t border-border pt-3">
+            <div className="space-y-3 border-t border-border pt-3">
               <div>
                 <p className="mb-1 text-[0.6875rem] leading-snug text-muted-foreground">
                   {t("yieldMonthly")}
@@ -44,14 +44,9 @@ export function YieldSummaryCard({ summary }: { summary: YieldSummary }) {
                   {usd(summary.projectedMonthlyUsd)}
                 </p>
               </div>
-              <div>
-                <p className="mb-1 text-[0.6875rem] leading-snug text-muted-foreground">
-                  {t("yieldWeekly")}
-                </p>
-                <p className="text-sm font-semibold tnum text-foreground" data-testid="yield-weekly">
-                  {usd(summary.projectedWeeklyUsd)} × 4
-                </p>
-              </div>
+              <p className="text-[0.6875rem] leading-snug text-muted-foreground">
+                {t("withdrawalTerms")}
+              </p>
             </div>
           </>
         )}

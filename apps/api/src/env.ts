@@ -26,6 +26,8 @@ const envSchema = z
     JWT_SECRET: z.string().optional(),
     SESSION_TTL_SECONDS: z.coerce.number().int().positive().default(604_800), // 7d
     CORS_ORIGIN: z.string().default("http://localhost:3000"),
+    /** A5/A6: comma-separated origins allowed on unauthenticated /public routes. */
+    PUBLIC_CORS_ORIGINS: z.string().optional(),
     /** Optional TON address for hybrid buy TonConnect stub messages. */
     TON_RELAY_ADDRESS: z.string().optional(),
     /** NanoTON amount string in prepare tonConnectMessages (default 0.01 TON). */
@@ -131,6 +133,9 @@ const envSchema = z
       SESSION_SECRET: sessionSecret,
       SESSION_TTL_SECONDS: val.SESSION_TTL_SECONDS,
       CORS_ORIGIN: val.CORS_ORIGIN,
+      ...(val.PUBLIC_CORS_ORIGINS !== undefined
+        ? { PUBLIC_CORS_ORIGINS: val.PUBLIC_CORS_ORIGINS }
+        : {}),
       TON_RELAY_ADDRESS: val.TON_RELAY_ADDRESS,
       BUY_STUB_NANOTON: val.BUY_STUB_NANOTON,
       ADMIN_TON_WALLET_ADDRESS: val.ADMIN_TON_WALLET_ADDRESS,

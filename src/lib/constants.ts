@@ -23,7 +23,7 @@ export const TABS: readonly TabDef[] = [
   { href: ROUTES.portfolio,  label: "Portfolio",   icon: PieChart },
 ] as const;
 
-export const PAYOUT_DISCLAIMER = "simulated weekly payout · on-chain verifiable post-MVP";
+export const PAYOUT_DISCLAIMER = "simulated monthly payout · on-chain verifiable post-MVP";
 
 /** Shown once on Property detail About and Buy success (MVP honesty). */
 export const DEMO_TX_DISCLAIMER = "This is a demo – transactions are simulated";

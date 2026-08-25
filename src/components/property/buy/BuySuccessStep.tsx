@@ -37,7 +37,7 @@ export function BuySuccessStep({
   const nextPay = nowMs != null ? payoutCountdown(nowMs) : "Every Sunday";
 
   async function share() {
-    const text = `I just bought ${qty} shares of ${propertyTitle} on DigiHouse`;
+    const text = `I just bought ${qty} shares of ${propertyTitle} on FractionalLuxe`;
     const url = env.botUsername
       ? `https://t.me/${env.botUsername}`
       : typeof window !== "undefined"
@@ -45,7 +45,7 @@ export function BuySuccessStep({
         : undefined;
     try {
       if (typeof navigator !== "undefined" && navigator.share) {
-        await navigator.share({ title: "DigiHouse", text, url });
+        await navigator.share({ title: "FractionalLuxe", text, url });
         return;
       }
     } catch {
@@ -84,6 +84,9 @@ export function BuySuccessStep({
         </p>
         <p className="text-sm leading-relaxed text-muted-foreground">
           Next payout <span className="tnum">{nextPay}</span>
+        </p>
+        <p className="text-sm leading-relaxed text-warning">
+          Lock your new shares in the Yield section to start earning.
         </p>
         <p className="pt-1 text-[0.6875rem] leading-relaxed text-muted-foreground pb-0.5">
           {DEMO_TX_DISCLAIMER}

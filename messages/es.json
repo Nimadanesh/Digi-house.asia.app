@@ -2,7 +2,7 @@
 
   "common": {
 
-    "appName": "DigiHouse",
+    "appName": "FractionalLuxe",
 
     "buyShare": "Comprar participación",
 
@@ -104,9 +104,9 @@
 
     "yield": {
 
-      "headline": "Recibe tu parte del alquiler cada semana",
+      "headline": "Recibe tu parte del alquiler cada mes",
 
-      "subtitle": "Mira tu parte cada domingo en Ingresos"
+      "subtitle": "Mira tu parte mensual en Ingresos"
 
     },
 
@@ -114,7 +114,7 @@
 
       "headline": "Vende cuando quieras",
 
-      "subtitle": "Lista participaciones en el mercado DigiHouse cuando quieras salir."
+      "subtitle": "Lista participaciones en el mercado FractionalLuxe cuando quieras salir."
 
     }
 
@@ -138,13 +138,13 @@
 
     "buyFirstShare": "Compra tu primera participación",
 
-    "buyFirstShareHint": "Sé dueño de una parte — gana alquiler proyectado cada domingo.",
+    "buyFirstShareHint": "Sé dueño de una parte — gana alquiler proyectado cada mes.",
 
     "todaysHighlight": "Destacado de hoy",
 
     "hotThisWeek": "Popular esta semana",
 
-    "weeklyPerShare": "Semanal / part.",
+    "monthlyPerShare": "Mensual / part.",
 
     "pendingThisWeek": "{amount} pendiente esta semana"
 
@@ -190,7 +190,7 @@
 
     "pricePerShare": "Precio / part.",
 
-    "weeklyPerShare": "Semanal / part.",
+    "monthlyPerShare": "Mensual / part.",
 
     "minPurchase": "Compra mín.",
 
@@ -244,7 +244,7 @@
 
     "emptyTitle": "Aún no has ganado",
 
-    "emptyMessage": "Compra tu primera participación y empieza a ganar la próxima semana.",
+    "emptyMessage": "Compra tu primera participación y empieza a ganar el próximo mes.",
 
     "thisWeek": "Ingresos de esta semana",
 
@@ -260,15 +260,15 @@
 
     "timeline": "Historial",
 
-    "disclaimer": "pago semanal simulado · verificable on-chain tras MVP",
+    "disclaimer": "pago mensual simulado · verificable on-chain tras MVP",
+
+    "withdrawalTerms": "Retira en cualquier momento — 1% de comisión, pagado en 4 cuotas semanales",
 
     "yieldTitle": "Rendimiento de acciones bloqueadas",
 
     "yieldAccrued": "Devengado pendiente",
 
     "yieldMonthly": "Mensual",
-
-    "yieldWeekly": "Semanal",
 
     "yieldNoLocks": "Sin bloqueos activos: bloquea acciones en la página de una propiedad para empezar a ganar.",
 
@@ -318,7 +318,7 @@
 
     "connectTitle": "Conecta una billetera TON",
 
-    "connectHint": "Necesaria para comprar participaciones y recibir rendimiento semanal.",
+    "connectHint": "Necesaria para comprar participaciones y recibir ingresos mensuales de alquiler.",
 
     "disconnect": "Desconectar billetera",
 
@@ -390,21 +390,21 @@
 
     "help": "Ayuda",
 
-    "howItWorks": "Cómo funciona DigiHouse",
+    "howItWorks": "Cómo funciona FractionalLuxe",
     "transactionHistory": "Historial de transacciones",
 
 
     "aboutLegal": "Acerca de / Legal",
 
-    "aboutBody": "DigiHouse es una Mini App de Telegram para participaciones inmobiliarias fraccionadas en TON. El rendimiento de alquiler semanal se muestra proporcional a tu propiedad.",
+    "aboutBody": "FractionalLuxe es una Mini App de Telegram para participaciones inmobiliarias fraccionadas en TON. El ingreso de alquiler mensual se acumula proporcional a tu propiedad.",
 
     "aboutAdvice": "Nada de esto es asesoramiento financiero. Documentos y tokenización son demostrativos hasta contratos de producción.",
 
-    "aboutCopyright": "© DigiHouse · MVP",
+    "aboutCopyright": "© FractionalLuxe · MVP",
 
     "demoTxDisclaimer": "Esto es una demo: las transacciones se simulan",
 
-    "payoutDisclaimer": "pago semanal simulado · verificable on-chain tras MVP",
+    "payoutDisclaimer": "pago mensual simulado · verificable on-chain tras MVP",
 
     "account": "Cuenta",
 
@@ -446,7 +446,7 @@
 
     "recoveryWarn": "Guarda este código en un lugar seguro. Lo necesitarás para iniciar sesión si Telegram no está disponible. No podemos recuperarlo por ti.",
 
-    "recoverySettingsHint": "Mantén este código en privado. Cualquiera con él puede acceder a tu cuenta de DigiHouse.",
+    "recoverySettingsHint": "Mantén este código en privado. Cualquiera con él puede acceder a tu cuenta de FractionalLuxe.",
 
     "copyCode": "Copiar código de recuperación",
 

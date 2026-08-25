@@ -10,7 +10,7 @@ export type DisplayCurrency = "usd" | "ton";
 interface SettingsState {
   role: UserRole | null;
   onboarded: boolean;
-  useTelegramTheme: boolean; // default false -> DigiHouse static palette
+  useTelegramTheme: boolean; // default false -> FractionalLuxe static palette
   displayCurrency: DisplayCurrency;
   /** null = auto-detect from Telegram language_code / browser. */
   locale: AppLocale | null;

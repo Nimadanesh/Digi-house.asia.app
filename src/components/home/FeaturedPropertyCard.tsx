@@ -21,7 +21,7 @@ export function FeaturedPropertyCard({
   const t = useTranslations("home");
   const tCommon = useTranslations("common");
   const apy = annualReturnRatio(listing);
-  const weekly = shareWeeklyYieldUsd(listing);
+  const monthly = (shareWeeklyYieldUsd(listing) * 52) / 12;
   const cover = listing.images[0] ?? "/images/properties/p1.png";
 
   return (
@@ -63,8 +63,8 @@ export function FeaturedPropertyCard({
               </span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">{t("weeklyPerShare")}</span>
-              <span className="font-medium tnum text-success">{usd(weekly)}</span>
+              <span className="text-muted-foreground">{t("monthlyPerShare")}</span>
+              <span className="font-medium tnum text-success">{usd(monthly)}</span>
             </div>
             <FundingBar progress={listing.fundingProgressRatio} funded={listing.fundingProgressRatio >= 1} />
           </div>

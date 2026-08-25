@@ -12,13 +12,16 @@ export function DemoModeBadge() {
   const show = useSettingsStore((s) => s.showDemoBadge);
   const openSettings = useUiStore((s) => s.openSettings);
   const mainButtonActive = useUiStore((s) => s.mainButtonActive);
+  const stickyCtaVisible = useUiStore((s) => s.stickyCtaVisible);
 
   if (
     !show ||
     pathname === ROUTES.onboarding ||
     pathname === ROUTES.profileSetup ||
     pathname === ROUTES.recoveryLogin ||
-    mainButtonActive
+    mainButtonActive ||
+    // The in-page sticky CTA occupies this zone — never intercept its taps.
+    stickyCtaVisible
   )
     return null;
 

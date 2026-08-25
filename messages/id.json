@@ -2,7 +2,7 @@
 
   "common": {
 
-    "appName": "DigiHouse",
+    "appName": "FractionalLuxe",
 
     "buyShare": "Beli saham",
 
@@ -104,9 +104,9 @@
 
     "yield": {
 
-      "headline": "Terima bagian sewa setiap minggu",
+      "headline": "Terima bagian sewa setiap bulan",
 
-      "subtitle": "Lihat bagianmu setiap Minggu di Pendapatan"
+      "subtitle": "Lihat bagian bulananmu di Pendapatan"
 
     },
 
@@ -114,7 +114,7 @@
 
       "headline": "Jual kapan saja",
 
-      "subtitle": "Cantumkan saham di pasar DigiHouse saat siap keluar."
+      "subtitle": "Cantumkan saham di pasar FractionalLuxe saat siap keluar."
 
     }
 
@@ -138,13 +138,13 @@
 
     "buyFirstShare": "Beli saham pertamamu",
 
-    "buyFirstShareHint": "Miliki sepotong — dapatkan sewa proyeksi setiap Minggu.",
+    "buyFirstShareHint": "Miliki sepotong — dapatkan sewa proyeksi setiap bulan.",
 
     "todaysHighlight": "Sorotan hari ini",
 
     "hotThisWeek": "Populer minggu ini",
 
-    "weeklyPerShare": "Mingguan / saham",
+    "monthlyPerShare": "Bulanan / saham",
 
     "pendingThisWeek": "{amount} menunggu minggu ini"
 
@@ -190,7 +190,7 @@
 
     "pricePerShare": "Harga / saham",
 
-    "weeklyPerShare": "Mingguan / saham",
+    "monthlyPerShare": "Bulanan / saham",
 
     "minPurchase": "Min. beli",
 
@@ -244,7 +244,7 @@
 
     "emptyTitle": "Belum ada pendapatan",
 
-    "emptyMessage": "Beli saham pertama dan mulai hasilkan minggu depan.",
+    "emptyMessage": "Beli saham pertama dan mulai hasilkan bulan depan.",
 
     "thisWeek": "Pendapatan minggu ini",
 
@@ -260,15 +260,15 @@
 
     "timeline": "Riwayat",
 
-    "disclaimer": "pembayaran mingguan simulasi · dapat diverifikasi on-chain pasca-MVP",
+    "disclaimer": "pembayaran bulanan simulasi · dapat diverifikasi on-chain pasca-MVP",
+
+    "withdrawalTerms": "Tarik kapan saja — biaya 1%, dibayar dalam 4 angsuran mingguan",
 
     "yieldTitle": "Imbal saham terkunci",
 
     "yieldAccrued": "Akrual belum dibayar",
 
     "yieldMonthly": "Bulanan",
-
-    "yieldWeekly": "Mingguan",
 
     "yieldNoLocks": "Tidak ada kunci aktif — kunci saham di halaman properti untuk mulai mendapat imbal.",
 
@@ -318,7 +318,7 @@
 
     "connectTitle": "Hubungkan dompet TON",
 
-    "connectHint": "Diperlukan untuk membeli saham dan menerima imbal hasil mingguan.",
+    "connectHint": "Diperlukan untuk membeli saham dan menerima pendapatan sewa bulanan.",
 
     "disconnect": "Putuskan dompet",
 
@@ -390,21 +390,21 @@
 
     "help": "Bantuan",
 
-    "howItWorks": "Cara kerja DigiHouse",
+    "howItWorks": "Cara kerja FractionalLuxe",
     "transactionHistory": "Riwayat transaksi",
 
 
     "aboutLegal": "Tentang / Legal",
 
-    "aboutBody": "DigiHouse adalah Mini App Telegram untuk saham real estat fraksional di TON. Imbal hasil sewa mingguan ditampilkan proporsional dengan kepemilikanmu.",
+    "aboutBody": "FractionalLuxe adalah Mini App Telegram untuk saham real estat fraksional di TON. Pendapatan sewa bulanan terakumulasi proporsional dengan kepemilikanmu.",
 
     "aboutAdvice": "Tidak ada di sini yang merupakan nasihat keuangan. Dokumen properti dan tokenisasi bersifat demonstrasi hingga kontrak produksi.",
 
-    "aboutCopyright": "© DigiHouse · MVP",
+    "aboutCopyright": "© FractionalLuxe · MVP",
 
     "demoTxDisclaimer": "Ini demo – transaksi disimulasikan",
 
-    "payoutDisclaimer": "pembayaran mingguan simulasi · dapat diverifikasi on-chain pasca-MVP",
+    "payoutDisclaimer": "pembayaran bulanan simulasi · dapat diverifikasi on-chain pasca-MVP",
 
     "account": "Akun",
 
@@ -446,7 +446,7 @@
 
     "recoveryWarn": "Simpan kode ini di tempat aman. Anda membutuhkannya untuk masuk jika Telegram tidak tersedia. Kami tidak dapat memulihkannya untuk Anda.",
 
-    "recoverySettingsHint": "Jaga kerahasiaan kode ini. Siapa pun yang memilikinya dapat mengakses akun DigiHouse Anda.",
+    "recoverySettingsHint": "Jaga kerahasiaan kode ini. Siapa pun yang memilikinya dapat mengakses akun FractionalLuxe Anda.",
 
     "copyCode": "Salin kode pemulihan",
 

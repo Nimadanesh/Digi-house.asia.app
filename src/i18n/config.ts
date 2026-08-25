@@ -1,4 +1,4 @@
-// File responsibility: supported locales, RTL set, and display metadata for DigiHouse i18n.
+// File responsibility: supported locales, RTL set, and display metadata for FractionalLuxe i18n.
 // LOCALES order = Settings language picker order (do not sort alphabetically).
 export const LOCALES = [
   "en", // 1. English

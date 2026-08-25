@@ -40,9 +40,9 @@ describe("FlipwaveGrid", () => {
     const litCount = countLit(HOUSE_MASK);
     const backs = container.querySelectorAll(".fw-cell.fw-animate .fw-back");
     const styles = Array.from(backs).map((b) => b.getAttribute("style") ?? "");
-    // jsdom normalises the inline hex to rgb(): #3390EC → rgb(51, 144, 236),
+    // jsdom normalises the inline hex to rgb(): #229ED9 → rgb(34, 158, 217),
     // #334155 → rgb(51, 65, 85).
-    const blues = styles.filter((s) => s.includes("51, 144, 236")).length;
+    const blues = styles.filter((s) => s.includes("34, 158, 217")).length;
     const dims = styles.filter((s) => s.includes("51, 65, 85")).length;
     expect(styles).toHaveLength(GRID_COLS * GRID_ROWS);
     expect(blues).toBe(litCount);

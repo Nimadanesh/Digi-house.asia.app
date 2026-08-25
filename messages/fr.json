@@ -2,7 +2,7 @@
 
   "common": {
 
-    "appName": "DigiHouse",
+    "appName": "FractionalLuxe",
 
     "buyShare": "Acheter une part",
 
@@ -104,9 +104,9 @@
 
     "yield": {
 
-      "headline": "Recevez votre part de loyer chaque semaine",
+      "headline": "Recevez votre part de loyer chaque mois",
 
-      "subtitle": "Consultez votre part chaque dimanche dans Revenus"
+      "subtitle": "Consultez votre part mensuelle dans Revenus"
 
     },
 
@@ -114,7 +114,7 @@
 
       "headline": "Vendez quand vous voulez",
 
-      "subtitle": "Listez vos parts sur le marché DigiHouse quand vous êtes prêt à sortir."
+      "subtitle": "Listez vos parts sur le marché FractionalLuxe quand vous êtes prêt à sortir."
 
     }
 
@@ -138,13 +138,13 @@
 
     "buyFirstShare": "Achetez votre première part",
 
-    "buyFirstShareHint": "Possédez une part — gagnez un loyer projeté chaque dimanche.",
+    "buyFirstShareHint": "Possédez une part — gagnez un loyer projeté chaque mois.",
 
     "todaysHighlight": "Coup de cœur du jour",
 
     "hotThisWeek": "Populaire cette semaine",
 
-    "weeklyPerShare": "Hebdo / part",
+    "monthlyPerShare": "Mensuel / part",
 
     "pendingThisWeek": "{amount} en attente cette semaine"
 
@@ -190,7 +190,7 @@
 
     "pricePerShare": "Prix / part",
 
-    "weeklyPerShare": "Hebdo / part",
+    "monthlyPerShare": "Mensuel / part",
 
     "minPurchase": "Achat min.",
 
@@ -244,7 +244,7 @@
 
     "emptyTitle": "Pas encore de revenus",
 
-    "emptyMessage": "Achetez votre première part et commencez à gagner la semaine prochaine.",
+    "emptyMessage": "Achetez votre première part et commencez à gagner le mois prochain.",
 
     "thisWeek": "Revenus de cette semaine",
 
@@ -260,15 +260,15 @@
 
     "timeline": "Historique",
 
-    "disclaimer": "versement hebdomadaire simulé · vérifiable on-chain après MVP",
+    "disclaimer": "versement mensuel simulé · vérifiable on-chain après MVP",
+
+    "withdrawalTerms": "Retirez à tout moment — frais de 1 %, versés en 4 tranches hebdomadaires",
 
     "yieldTitle": "Rendement des parts verrouillées",
 
     "yieldAccrued": "Acquis non payé",
 
     "yieldMonthly": "Mensuel",
-
-    "yieldWeekly": "Hebdomadaire",
 
     "yieldNoLocks": "Aucun verrou actif — verrouillez des parts sur une page de bien pour commencer à gagner.",
 
@@ -318,7 +318,7 @@
 
     "connectTitle": "Connecter un portefeuille TON",
 
-    "connectHint": "Requis pour acheter des parts et recevoir le rendement hebdomadaire.",
+    "connectHint": "Requis pour acheter des parts et recevoir le revenus locatifs mensuels.",
 
     "disconnect": "Déconnecter le portefeuille",
 
@@ -390,21 +390,21 @@
 
     "help": "Aide",
 
-    "howItWorks": "Comment fonctionne DigiHouse",
+    "howItWorks": "Comment fonctionne FractionalLuxe",
     "transactionHistory": "Historique des transactions",
 
 
     "aboutLegal": "À propos / Mentions légales",
 
-    "aboutBody": "DigiHouse est une Mini App Telegram pour des parts immobilières fractionnées sur TON. Le rendement locatif hebdomadaire est affiché au prorata de votre propriété.",
+    "aboutBody": "FractionalLuxe est une Mini App Telegram pour des parts immobilières fractionnées sur TON. Le revenu locatif mensuel s’accumule au prorata de votre propriété.",
 
     "aboutAdvice": "Ceci n’est pas un conseil financier. Documents et tokenisation sont démonstratifs jusqu’aux contrats de production.",
 
-    "aboutCopyright": "© DigiHouse · MVP",
+    "aboutCopyright": "© FractionalLuxe · MVP",
 
     "demoTxDisclaimer": "Ceci est une démo – les transactions sont simulées",
 
-    "payoutDisclaimer": "versement hebdomadaire simulé · vérifiable on-chain après MVP",
+    "payoutDisclaimer": "versement mensuel simulé · vérifiable on-chain après MVP",
 
     "account": "Compte",
 
@@ -446,7 +446,7 @@
 
     "recoveryWarn": "Conservez ce code en lieu sûr. Il est nécessaire pour vous connecter si Telegram est indisponible. Nous ne pourrons pas le récupérer pour vous.",
 
-    "recoverySettingsHint": "Gardez ce code privé. Quiconque le possède peut accéder à votre compte DigiHouse.",
+    "recoverySettingsHint": "Gardez ce code privé. Quiconque le possède peut accéder à votre compte FractionalLuxe.",
 
     "copyCode": "Copier le code de récupération",
 
