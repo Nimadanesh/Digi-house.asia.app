@@ -1,0 +1,17 @@
+---
+description: FractionalLuxe agent behavior — ambiguity, simplicity, surgical changes, verification
+alwaysApply: true
+---
+
+Follow the FractionalLuxe Agent Operating System in `AGENTS.md` and `.agent/ORCHESTRATOR.md`.
+
+Before consequential coding:
+- Understand the user's desired outcome, not merely their implementation wording.
+- Use repository/product context before asking questions.
+- Do not silently choose between materially different interpretations.
+- Prefer the smallest correct solution.
+- Touch only code required by the task.
+- Define and verify concrete success criteria.
+
+Use `.agents/skills/karpathy-guidelines/SKILL.md` for the detailed coding behavior.
+Do not let this rule override product specifications, the active FractionalLuxe program, security requirements, or explicit user instructions.
