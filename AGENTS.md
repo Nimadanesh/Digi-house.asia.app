@@ -2,6 +2,52 @@
 Work its checkboxes in order; tick as you verify; update its Resume Here + Progress Log.
 Never modify payment/settlement logic beyond steps it explicitly names.
 
+# FractionalLuxe Agent Operating System
+
+This repository is operated as a product team, not as a code-generation queue.
+
+## Before every task
+1. Read `FRACTIONALLUXE-PROGRAM.md` for active phase, locked decisions, blockers, and execution order.
+2. Read the relevant product/spec documents before making product or UX decisions.
+3. Read `.agent/TEAM.md` and `.agent/ORCHESTRATOR.md` when the task is non-trivial or ambiguous.
+4. Identify the desired outcome, scope, constraints, acceptance criteria, and risk before coding.
+
+## Ambiguity rule
+Do not silently guess when multiple plausible interpretations would materially change behavior, scope, data, architecture, or risk.
+- If repository context strongly supports one low-risk interpretation, state it briefly and proceed.
+- If the ambiguity is material, ask one focused question before changing code.
+- Never ask the user to restate information that is already documented in the repository.
+
+## Engineering behavior
+- Think before coding.
+- Simplicity first.
+- Make surgical changes.
+- Do not invent product requirements.
+- Do not add dependencies without explicit approval.
+- Do not perform unrelated refactors or formatting churn.
+- Verify the intended behavior, not merely compilation.
+
+## Team responsibilities
+- Product intent/scope → `.agent/roles/product-lead.md`
+- UX/design → `.agent/roles/product-designer.md`
+- Architecture → `.agent/roles/tech-lead.md`
+- Implementation → `.agent/roles/senior-engineer.md`
+- Verification → `.agent/roles/qa-engineer.md`
+- Security/financial logic → `.agent/roles/security-finance.md`
+- Production/release → `.agent/roles/release-engineer.md`
+
+The same coding agent may perform multiple roles for small tasks, but it must preserve these responsibility boundaries.
+
+## Product identity
+The user-facing product is **FractionalLuxe** and the app domain is **`app.fractionalluxe.com`**. `DigiHouse` may remain in technical identifiers where changing it would create unnecessary risk or break an existing contract. Do not mass-rename technical identifiers merely for branding.
+
+## Product context and invariants
+- `.agent/context/PRODUCT.md` — product identity, model, principles, scope.
+- `.agent/context/BUSINESS-RULES.md` — locked business and financial rules.
+- `FRACTIONALLUXE-PROGRAM.md` — active execution plan and locked program decisions.
+
+If these conflict with a source-of-truth spec, stop and surface the conflict; do not silently choose.
+
 <!-- BEGIN:nextjs-agent-rules -->
 # This is NOT the Next.js you know
 
@@ -98,3 +144,11 @@ docs/research/  # spec docs (source of truth)
 - The mock layer must cover every UI state: ≥6 properties (funding/funded/resale), holdings, ≥4 weekly earnings, ≥1 open order, a failed/pending tx example.
 - Append new tech decisions to the **Decisions log** in TECH_STACK.md (don't silently switch libs).
 - Do NOT commit secrets. Use `.env.local` for any BotFather/TonConnect endpoints.
+
+## Agent OS references
+- Team charter: `.agent/TEAM.md`
+- Orchestrator: `.agent/ORCHESTRATOR.md`
+- Product context: `.agent/context/PRODUCT.md`
+- Business rules: `.agent/context/BUSINESS-RULES.md`
+- Role definitions: `.agent/roles/`
+- Protocols: `.agent/protocols/`
