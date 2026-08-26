@@ -1,3 +1,11 @@
+---
+name: release-readiness
+description: Verify user-visible behavior, responsive states, accessibility basics, truthful financial claims, validation results, and final-diff quality before declaring a task done.
+compatibility: opencode
+metadata:
+  opencode/autoinvoke: "true"
+---
+
 # Release Readiness Skill
 
 Use before calling a product task complete or preparing a release.
