@@ -32,6 +32,9 @@ vi.mock("@/hooks/useLocks", () => ({
   useRequestUnlock: vi.fn(() => ({ mutate: vi.fn(), isPending: false, isError: false, error: null, variables: null })),
   activeLocksForProperty: vi.fn(() => []),
 }));
+vi.mock("@/hooks/useNfts", () => ({
+  useNfts: vi.fn(() => ({ data: [], isLoading: false, isError: false })),
+}));
 vi.mock("@/hooks/useTelegram", () => ({
   useTelegram: () => ({
     haptics: { selection: vi.fn(), impact: vi.fn(), notification: vi.fn() },
@@ -55,6 +58,7 @@ vi.mock("@/hooks/useSells", () => ({
 }));
 
 import { usePortfolio } from "@/hooks/usePortfolio";
+import { useLocks } from "@/hooks/useLocks";
 import PortfolioPage from "@/app/(app)/portfolio/page";
 import type { PortfolioSummary } from "@/types/position";
 
@@ -129,16 +133,26 @@ describe("Portfolio page", () => {
     expect(screen.getByTestId("portfolio-summary")).toBeInTheDocument();
     expect(screen.getByTestId("portfolio-total-value")).toHaveTextContent("$15,600.00");
 
-    const earnings = screen.getByTestId("portfolio-total-earnings");
-    expect(earnings).toHaveTextContent("$90.00");
-    expect(earnings).toHaveClass("text-success");
+    // Editorial hero secondary line replaces the equal-weight stat grid.
+    const secondary = screen.getByTestId("portfolio-hero-secondary");
+    expect(secondary).toHaveTextContent("$15,000.00 invested");
+    expect(secondary).toHaveTextContent("+$90.00 earned");
+    expect(secondary).toHaveTextContent("+$600.00 unrealized");
 
-    const nextPayout = screen.getByTestId("portfolio-next-payout");
-    expect(nextPayout).toHaveTextContent("$33.75");
-    expect(nextPayout).toHaveClass("text-foreground");
-    expect(nextPayout).not.toHaveClass("text-success");
+    // Locked vs Free prominent component (locks empty → all 60 shares idle + quiet nudge).
+    expect(screen.getByTestId("locked-free-card")).toBeInTheDocument();
+    expect(screen.getByTestId("locked-shares-value")).toHaveTextContent("0");
+    expect(screen.getByTestId("free-shares-value")).toHaveTextContent("60");
+    const nudge = screen.getByTestId("idle-nudge");
+    expect(nudge).toHaveAttribute("href", "/property/prop-bayside-marina-penthouse");
+    expect(nudge).toHaveTextContent("60 shares not earning");
 
+    // Allocation is compact by default; legend hidden until expanded.
     expect(screen.getByTestId("portfolio-allocation")).toBeInTheDocument();
+    expect(screen.queryByTestId("allocation-legend")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByTestId("allocation-toggle"));
+    expect(screen.getByTestId("allocation-legend")).toBeInTheDocument();
+
     expect(
       screen.getByTestId("holding-card-prop-bayside-marina-penthouse"),
     ).toBeInTheDocument();
@@ -158,6 +172,8 @@ describe("Portfolio page", () => {
 
     expect(screen.getByTestId("holding-detail-sheet")).toBeInTheDocument();
     expect(screen.getByText(/avg cost/i)).toBeInTheDocument();
+    // Monthly estimate uses the A4 presentation conversion: 3,375¢ weekly ×52 ÷12 = $146.25.
+    expect(screen.getByTestId("holding-monthly-yield")).toHaveTextContent("$146.25");
     expect(screen.getByTestId("holding-buy-more")).toHaveAttribute(
       "href",
       "/property/prop-bayside-marina-penthouse",
@@ -203,5 +219,27 @@ describe("Portfolio page", () => {
     render(<PortfolioPage />);
     expect(screen.getByTestId("open-orders")).toBeInTheDocument();
     expect(screen.getByText("Open Orders")).toBeInTheDocument();
+  });
+
+  it("hides the idle-share nudge when every owned share is earning", () => {
+    vi.mocked(useLocks).mockReturnValue({
+      data: {
+        locks: [
+          { id: "l1", propertyId: "prop-bayside-marina-penthouse", shares: 60, status: "locked" },
+        ],
+      },
+      isLoading: false,
+    } as never);
+    vi.mocked(usePortfolio).mockReturnValue({
+      data: loadedSummary,
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    } as never);
+    render(<PortfolioPage />);
+
+    expect(screen.getByTestId("locked-shares-value")).toHaveTextContent("60");
+    expect(screen.getByTestId("free-shares-value")).toHaveTextContent("0");
+    expect(screen.queryByTestId("idle-nudge")).not.toBeInTheDocument();
   });
 });

@@ -6,9 +6,17 @@ import type { Withdrawal } from "@/types/withdrawal";
 const base: Withdrawal = {
   id: "wd-1",
   amountUsd: 12_500,
+  feeUsd: 125,
+  netUsd: 12_375,
   address: "EQ",
   status: "requested",
   txHash: null,
+  installments: [
+    { seq: 1, amountUsd: 3_094, status: "pending", dueAt: "2026-08-22T00:00:00.000Z", paidAt: null, txHash: null },
+    { seq: 2, amountUsd: 3_094, status: "pending", dueAt: "2026-08-29T00:00:00.000Z", paidAt: null, txHash: null },
+    { seq: 3, amountUsd: 3_094, status: "pending", dueAt: "2026-09-05T00:00:00.000Z", paidAt: null, txHash: null },
+    { seq: 4, amountUsd: 3_093, status: "pending", dueAt: "2026-09-12T00:00:00.000Z", paidAt: null, txHash: null },
+  ],
   createdAt: "2026-08-15T00:00:00.000Z",
   updatedAt: "2026-08-15T00:00:00.000Z",
 };
@@ -32,6 +40,39 @@ describe("WithdrawalRequestsSection — PE-08", () => {
     expect(screen.getByText("Requested")).toBeInTheDocument();
     expect(screen.getByText("Approved")).toBeInTheDocument();
     expect(screen.getByText("Rejected")).toBeInTheDocument();
+  });
+
+  it("shows installment progress (paid of total) for each request", () => {
+    render(
+      <WithdrawalRequestsSection
+        withdrawals={[
+          {
+            ...base,
+            id: "a",
+            status: "paid",
+            txHash: "h".repeat(64),
+            installments: base.installments.map((i) => ({
+              ...i,
+              status: "paid" as const,
+              paidAt: "2026-08-20T00:00:00.000Z",
+              txHash: "h".repeat(64),
+            })),
+          },
+          {
+            ...base,
+            id: "b",
+            amountUsd: 4_800,
+            feeUsd: 48,
+            netUsd: 4_752,
+            installments: base.installments.map((i, idx) =>
+              idx === 0 ? { ...i, status: "paid" as const, paidAt: "2026-08-20T00:00:00.000Z", txHash: "h".repeat(64) } : i,
+            ),
+          },
+        ]}
+      />,
+    );
+    expect(screen.getByText(/4 of 4 installments paid/)).toBeInTheDocument();
+    expect(screen.getByText(/1 of 4 installments paid/)).toBeInTheDocument();
   });
 
   it("shows the empty state when there are no requests", () => {

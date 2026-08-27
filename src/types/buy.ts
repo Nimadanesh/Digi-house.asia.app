@@ -19,7 +19,12 @@ export interface BuyPrepareResult {
   propertyId: string;
   quantity: number;
   priceUsdPerShare: number;
+  /** Principal (quantity × share price), integer cents. */
   totalUsd: number;
+  /** Primary-market commission (FractionalLuxe revenue), integer cents; set by the API/mock. */
+  feeUsd?: number;
+  /** Principal + commission — what the buyer actually pays. */
+  totalPayableUsd?: number;
   /** Payment rail chosen at prepare — drives display + verification expectations. */
   currency: BuyCurrency;
   /** The exact TonConnect message to send (backend tonConnectMessages[0]). */

@@ -75,6 +75,7 @@
 
 > One dated entry per session. Never delete entries.
 
+- **2026-08-26** — **Collectible Position NFT system (user-directed, outside the A/I checklists).** DB `holding_nfts` (migration 0029, 1 holding → 1 NFT unique constraints), settlement hook in `settleVerifiedBuy` (best-effort, never blocks the buy), BullMQ worker with guarded lifecycle (pending → minting → minted → transferring → delivered, +failed retryable) and a recovery sweep (stale pending re-enqueue, stuck-active timeout), deterministic PII-free metadata + public endpoint, user + admin API (owner-scoped reads, admin retry/sweep), simulated minter (default) + TON testnet minter (standard deploy_item/transfer opcodes via the repo's `ton` fork; REQUIRES USER CONFIGURATION — minter wallet mnemonic + testnet collection), portfolio web UI (card badge + detail block + collectible disclaimer). 48 new API tests + 4 web tests; API 567/567, web 410/410. Docs: `docs/research/NFT.md`. Nothing committed.
 - **2026-08-23** — Program file created (mirrored from the site-repo master plan; income model corrected to monthly accrual + 1%-fee/4-weekly-installment withdrawals). No code changes yet.
 - **2026-08-24** — **Phase A complete (A0–A8).**
   - A0: baseline `npm run check` green; Docker unavailable → DB runtime checks skipped/flagged.

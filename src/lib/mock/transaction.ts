@@ -6,8 +6,10 @@ import type { TxRepo } from "@/lib/api/repos";
 import type { Transaction } from "@/types/transaction";
 import type { Listing } from "@/types/property";
 import type { BuyPrepareResult, BuyVerifyResult } from "@/types/buy";
+import { previewFeeUsd } from "@/types/fees";
 import { seed } from "./seed";
 import { PROPERTIES } from "./seed/properties";
+import { DEFAULT_FEE_TIERS } from "./fees";
 import { sleep, jitter } from "./sleep";
 import { makeSyntheticTxHash } from "@/lib/ton/synthetic-tx";
 import { estimateNanoTon, weeklyRent, projectedYield } from "@/lib/format";
@@ -36,13 +38,18 @@ export function MockTxRepo(): TxRepo {
 
       const totalUsd = input.quantity * input.priceUsdPerShare;
       const currency = input.currency === "USDT" ? "USDT" : "TON";
+      // Primary-market commission (approved model): the property Commission Card wins when
+      // present; the mock has no cards, so the amount-based tier table is the fallback —
+      // mirroring the API. The buyer pays principal + commission.
+      const feeUsd = previewFeeUsd(DEFAULT_FEE_TIERS, totalUsd, "buy_primary") ?? 0;
+      const totalPayableUsd = totalUsd + feeUsd;
       // The mock settles optimistically (no on-chain verification), so the USDT message is a
       // placeholder: gas-sized amount, no real jetton body. Mirrors the HTTP response shape.
       const message = currency === "USDT"
         ? { address: property.ownerWalletAddress, amount: "100000000", payload: null }
         : {
             address: property.ownerWalletAddress,
-            amount: estimateNanoTon(totalUsd, TON_PRICE_USD_CENTS).toString(),
+            amount: estimateNanoTon(totalPayableUsd, TON_PRICE_USD_CENTS).toString(),
             payload: null,
           };
       const intent: BuyPrepareResult = {
@@ -51,6 +58,8 @@ export function MockTxRepo(): TxRepo {
         quantity: input.quantity,
         priceUsdPerShare: input.priceUsdPerShare,
         totalUsd,
+        feeUsd,
+        totalPayableUsd,
         currency,
         message,
         expiresAt: new Date(Date.now() + INTENT_TTL_MS).toISOString(),
@@ -100,6 +109,8 @@ export function MockTxRepo(): TxRepo {
         userId: seed.user.id,
         shares: intent.quantity,
         amountUsd: intent.totalUsd,
+        // Primary-market commission — FractionalLuxe revenue, separate from principal.
+        ...(intent.feeUsd ? { feeUsd: intent.feeUsd } : {}),
         status: "success",
         txHash: makeSyntheticTxHash(),
         createdAt: new Date().toISOString(),

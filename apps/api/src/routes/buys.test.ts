@@ -5,6 +5,7 @@ import { signSessionToken } from "../auth/session.js";
 import { createMemoryUserStore } from "../auth/user-store.js";
 import { createMemoryIntentStore } from "../buys/intent-store.js";
 import { createMemoryTxStore } from "../buys/tx-store.js";
+import { createMemoryFeeTierStore } from "../fees/fee-tier-store.js";
 import { toPropertyInsert } from "../db/seed/map-property.js";
 import { SEED_PROPERTIES } from "../db/seed/properties-data.js";
 import type { ApiEnv } from "../env.js";
@@ -84,6 +85,20 @@ function testEnv(over: Partial<ApiEnv> = {}): ApiEnv {
     NOTIFY_YIELD: false,
     HOUSE_ACCOUNT_USER_ID: "house-account",
     OPS_CHAT_ID: undefined,
+    WITHDRAWAL_WORKER_ENABLED: false,
+    WITHDRAWAL_TICK_MS: 60_000,
+    NFT_WORKER_ENABLED: false,
+    NFT_TICK_MS: 60_000,
+    NFT_MINTER_MODE: "simulated" as const,
+    NFT_NETWORK: "testnet" as const,
+    NFT_MINTER_MNEMONIC: undefined,
+    NFT_COLLECTION_ADDRESS: undefined,
+    TONCENTER_API_URL: "https://testnet.toncenter.com/api/v2/jsonRPC",
+    TONCENTER_API_KEY: undefined,
+    NFT_METADATA_BASE_URL: "http://localhost:8787",
+    NFT_JOB_ATTEMPTS: 3,
+    NFT_STALE_PENDING_MS: 300_000,
+    NFT_STALE_ACTIVE_MS: 1_800_000,
     ...over,
   };
 }
@@ -148,6 +163,7 @@ function makeApp(opts: {
     intents,
     transactions,
     audit,
+    feeTiers: createMemoryFeeTierStore(),
     tonTxClient: opts.tonClient
       ? { ...fakeTonClient(), ...opts.tonClient }
       : fakeTonClient(),
@@ -216,8 +232,11 @@ async function verifyAndSettle(
 /** Raw admin receive wallet (TonAPI returns raw addresses; canonicalization compares strictly). */
 const ADMIN_RAW = "0:1111111111111111111111111111111111111111111111111111111111111111";
 const TX_HASH = "a".repeat(64);
-/** 5 shares × 8_000¢ = 40_000¢ = 40000 TON/200 = 312.5 TON at 200¢/TON */
-const AMOUNT_NANO = "200000000000";
+/** 5 shares × 8_000¢ = 40_000¢ principal + 1_200¢ tier-1 commission (3%) = 41_200¢ payable → 206 TON at 200¢/TON */
+const AMOUNT_NANO = "206000000000";
+/** Tier-1 (3%) commission on 5 × 8_000¢ = 1_200¢; payable = 41_200¢. */
+const BUY_FEE_USD = 1_200;
+const PAYABLE_USD = 41_200;
 
 // --- USDT (Jetton) fixtures -------------------------------------------------
 const USDT_MASTER_RAW = "0:2222222222222222222222222222222222222222222222222222222222222222";
@@ -225,8 +244,8 @@ const ADMIN_USDT_RAW = "0:333333333333333333333333333333333333333333333333333333
 const USER_JETTON_WALLET_RAW = "0:4444444444444444444444444444444444444444444444444444444444444444";
 /** Connected buyer wallet (owner of the USDT jetton wallet). */
 const USER_WALLET_RAW = "0:5555555555555555555555555555555555555555555555555555555555555555";
-/** 5 shares × 8_000¢ = 40_000¢ × 10^4 = 400,000,000 base units (USDT has 6 decimals). */
-const USDT_AMOUNT = "400000000";
+/** 5 shares → 41_200¢ payable (principal + 3% commission) × 10^4 = 412,000,000 base units (USDT has 6 decimals). */
+const USDT_AMOUNT = "412000000";
 
 function jettonTransfer(over: Partial<OnChainJettonTransfer> = {}): OnChainJettonTransfer {
   return {
@@ -295,6 +314,8 @@ describe("POST /v1/buys/prepare", () => {
     const body = (await res.json()) as {
       intentId: string;
       totalUsd: number;
+      feeUsd?: number;
+      totalPayableUsd?: number;
       expiresAt: string;
       quantity: number;
       priceUsdPerShare: number;
@@ -306,9 +327,12 @@ describe("POST /v1/buys/prepare", () => {
     expect(body.priceUsdPerShare).toBe(PRICE);
     expect(new Date(body.expiresAt).getTime()).toBeGreaterThan(Date.now());
     expect(body.tonConnectMessages).toHaveLength(1);
-    // destination is the admin receive wallet, amount = total × price at 200¢/TON
+    // principal is separate from the commission; the buyer pays principal + commission
+    expect(body.feeUsd).toBe(BUY_FEE_USD);
+    expect(body.totalPayableUsd).toBe(PAYABLE_USD);
+    // destination is the admin receive wallet, amount = payable (principal + fee) at 200¢/TON
     expect(body.tonConnectMessages[0]!.address).toBe(ADMIN_WALLET);
-    expect(body.tonConnectMessages[0]!.amount).toBe("200000000000");
+    expect(body.tonConnectMessages[0]!.amount).toBe(AMOUNT_NANO);
   });
 
   it("quantity > remaining → 400", async () => {
@@ -516,13 +540,15 @@ describe("POST /v1/buys/confirm", () => {
     });
     const { intentId } = (await prep.json()) as { intentId: string };
     const before = await intents.getById(intentId);
-    expect(before?.expectedNanoTon).toBe("80000000000");
+    // 2 × 8_000¢ = 16_000¢ principal + 480¢ commission → 16_480¢ payable → 82_400_000_000 nanoTON
+    expect(before?.expectedNanoTon).toBe("82400000000");
     expect(before?.destinationAddress).toBe(ADMIN_RAW);
+    expect(before?.feeUsd).toBe(480);
 
     await confirm(app, "user-a", intentId, { txHash: TX_HASH });
 
     const after = await intents.getById(intentId);
-    expect(after?.expectedNanoTon).toBe("80000000000");
+    expect(after?.expectedNanoTon).toBe("82400000000");
     expect(after?.destinationAddress).toBe(ADMIN_RAW);
     expect(after?.expectedJettonAmount).toBeNull();
   });
@@ -587,6 +613,8 @@ describe("POST /v1/buys/verify-and-settle", () => {
     expect(tx.txHash).toBe(TX_HASH);
     expect(tx.buyIntentId).toBe(intentId);
     expect(tx.tonAmount).toBe(Number(AMOUNT_NANO));
+    // primary-market commission is recorded separately on the ledger (FractionalLuxe revenue)
+    expect(tx.feeUsd).toBe(BUY_FEE_USD);
     // intent now settled with the real txHash
     const intent = await intents.getById(intentId);
     expect(intent?.status).toBe("settled");
@@ -950,6 +978,7 @@ describe("POST /v1/buys/verify-and-settle — USDT (Jetton) rail", () => {
     expect(txs[0]!.tokenAmount).toBe(Number(USDT_AMOUNT));
     expect(txs[0]!.tonAmount).toBeNull();
     expect(txs[0]!.buyIntentId).toBe(intentId);
+    expect(txs[0]!.feeUsd).toBe(BUY_FEE_USD);
 
     const intent = await intents.getById(intentId);
     expect(intent?.status).toBe("settled");

@@ -11,6 +11,7 @@ import type { MeSummary, PayoutPeriod, ShareLock, UnlockRequestResult } from "@/
 import type { FeeTier } from "@/types/fees";
 import type { InstantSellResult } from "@/types/sell";
 import type { Withdrawal } from "@/types/withdrawal";
+import type { HoldingNft } from "@/types/nft";
 
 export interface MarketplaceRepo {
   list(filter?: { status?: PropertyStatus; query?: string }): Promise<Listing[]>;
@@ -93,6 +94,14 @@ export interface WithdrawalsRepo {
   request(input: { amountUsd: number }): Promise<Withdrawal>;
 }
 
+/**
+ * Collectible Position NFTs — display-only receipts of holdings (Phase 8/9).
+ * Never the ownership source; read-only from the app.
+ */
+export interface NftsRepo {
+  list(): Promise<HoldingNft[]>;
+}
+
 export interface Repos {
   marketplace: MarketplaceRepo;
   orderBook: OrderBookRepo;
@@ -105,4 +114,5 @@ export interface Repos {
   fees: FeesRepo;
   sells: SellsRepo;
   withdrawals: WithdrawalsRepo;
+  nfts: NftsRepo;
 }

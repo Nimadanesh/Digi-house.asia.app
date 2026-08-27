@@ -136,17 +136,33 @@
 
     "myPropertiesCount": "Properti saya ({count})",
 
-    "buyFirstShare": "Beli saham pertamamu",
-
-    "buyFirstShareHint": "Miliki sepotong — dapatkan sewa proyeksi setiap bulan.",
-
-    "todaysHighlight": "Sorotan hari ini",
-
-    "hotThisWeek": "Populer minggu ini",
-
     "monthlyPerShare": "Bulanan / saham",
 
-    "pendingThisWeek": "{amount} menunggu minggu ini"
+    "pendingThisWeek": "{amount} menunggu minggu ini",
+
+    "earnedWord": "diperoleh",
+
+    "viewAllCount": "+{count} lainnya di Portfolio",
+
+    "featuredOpportunity": "Peluang pilihan",
+
+    "featuredTag": "Pilihan",
+
+    "moreOpportunities": "Lebih banyak peluang",
+
+    "emptyTitle": "Perjalanan properti Anda dimulai di sini",
+
+    "emptyHint": "Jalan tenang menuju pendapatan sewa bulanan.",
+
+    "emptyStepBuy": "Beli saham",
+
+    "emptyStepLock": "Kunci untuk imbal hasil",
+
+    "emptyStepEarn": "Hasilkan setiap bulan",
+
+    "emptyCta": "Jelajahi peluang",
+
+    "trustFooter": "Pendapatan sewa bertambah bulanan. Tarik kapan saja (biaya 1%, 4 cicilan mingguan). Disimulasikan sampai on-chain."
 
   },
 
@@ -248,7 +264,7 @@
 
     "thisWeek": "Pendapatan minggu ini",
 
-    "nextPayoutIn": "Pembayaran berikutnya dalam",
+    "nextPayoutIn": "Pembayaran berikutnya",
 
     "totalReceived": "Total pendapatan diterima",
 
@@ -264,7 +280,29 @@
 
     "withdrawalTerms": "Tarik kapan saja — biaya 1%, dibayar dalam 4 angsuran mingguan",
 
-    "yieldTitle": "Imbal saham terkunci",
+    "yieldTitle": "Daya pendapatan",
+
+    "totalEarned": "Total diperoleh",
+
+    "chartTitle": "12 minggu terakhir",
+
+    "chartCaption": "Pembayaran sewa mingguan · disimulasikan sampai on-chain.",
+
+    "timelineTitle": "Arus pendapatan Anda",
+
+    "timelinePaid": "Dibayar",
+
+    "timelineAccruing": "Menumpuk",
+
+    "timelineAccruingSub": "bulan berjalan",
+
+    "timelineNext": "Perkiraan berikutnya",
+
+    "timelineCaption": "Akrual bulanan; pembayaran diselesaikan setiap Minggu.",
+
+    "withdraw": "Tarik ke dompet Anda",
+
+    "withdrawSubtitle": "Biaya 1% · 4 cicilan mingguan",
 
     "yieldAccrued": "Akrual belum dibayar",
 
@@ -305,6 +343,76 @@
     "lockedShares": "Saham terkunci",
 
     "freeShares": "Saham bebas",
+
+    "investedWord": "diinvestasikan",
+
+    "earnedWord": "diperoleh",
+
+    "unrealizedWord": "belum terwujud",
+
+    "orderOpen": "Terbuka",
+
+    "allocationProperties": "{count} properti",
+
+    "showDetails": "Lihat detail",
+
+    "hideDetails": "Sembunyikan detail",
+
+    "lockedCaption": "Menghasilkan imbal hasil bulanan",
+
+    "freeCaption": "Belum menghasilkan",
+
+    "idleShares": "{count} saham tidak menghasilkan",
+
+    "lockThem": "Kunci",
+
+    "earningPill": "{count} menghasilkan",
+
+    "idlePill": "{count} idle",
+
+    "estMonthly": "≈ {amount} / bln",
+
+    "projectedMonthlyShort": "Estimasi sewa bulanan",
+
+    "exportCsv": "Ekspor CSV",
+
+    "exporting": "Mengekspor…",
+
+    "sharesOwned": "Saham dimiliki",
+
+    "avgCostPerShare": "Rata-rata biaya / saham",
+
+    "currentValueRow": "Nilai saat ini",
+
+    "unrealizedPnl": "L/R belum terwujud",
+
+    "projectedMonthlyYield": "Imbal hasil bulanan diproyeksikan",
+
+    "buyMore": "Beli lagi",
+
+    "sellComingSoon": "Jual segera hadir",
+
+    "nftCollectible": "NFT koleksi",
+
+    "nftItem": "Item NFT",
+
+    "collection": "Koleksi",
+
+    "viewOnExplorer": "Lihat di explorer",
+
+    "nftDisclaimer": "NFT ini adalah tanda terima koleksi — database tetap menjadi catatan kepemilikan.",
+
+    "nftStatusPending": "Menunggu",
+
+    "nftStatusMinting": "Mencetak",
+
+    "nftStatusMinted": "Tercetak",
+
+    "nftStatusTransferring": "Mentransfer",
+
+    "nftStatusDelivered": "Terkirim",
+
+    "nftStatusFailed": "Gagal",
 
     "orderQueued": "Antre"
 
@@ -353,6 +461,8 @@
     "withdrawalStatusApproved": "Disetujui",
 
     "withdrawalStatusRejected": "Ditolak",
+
+    "withdrawalInstallmentProgress": "{paid} dari {total} cicilan dibayar",
 
     "withdrawalRequest": "Minta penarikan",
     "withdrawalsError": "Tidak dapat memuat permintaan penarikan",

@@ -27,6 +27,8 @@ export const buyIntents = pgTable(
     quantity: integer("quantity").notNull(),
     priceUsdPerShare: bigint("price_usd_per_share", { mode: "number" }).notNull(),
     totalUsd: bigint("total_usd", { mode: "number" }).notNull(),
+    /** Primary-market commission (FractionalLuxe revenue), integer cents; null for pre-0028 rows. */
+    feeUsd: bigint("fee_usd", { mode: "number" }),
     status: text("status").notNull(),
     boc: text("boc"),
     /** Receive address returned by prepare — the only destination we will settle against. */

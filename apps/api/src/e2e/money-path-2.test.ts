@@ -148,20 +148,26 @@ describe("PF-02 money path — buy → queued sell → sellout → activation �
       { method: "POST", headers: adminHeaders },
     );
     expect(approve.status).toBe(200);
-    const paid = await h.app.request(
-      `/v1/admin/withdrawals/${wd.withdrawal.id}/mark-paid`,
-      {
-        method: "POST",
-        headers: adminHeaders,
-        body: JSON.stringify({ txHash: "f".repeat(64) }),
-      },
-    );
-    expect(paid.status).toBe(200);
-    const paidBody = (await paid.json()) as {
-      withdrawal: { status: string; txHash: string | null };
-    };
-    expect(paidBody.withdrawal.status).toBe("paid");
-    expect(paidBody.withdrawal.txHash).toBe("f".repeat(64));
+    // Locked model: the net is paid in exactly 4 weekly installments — one
+    // mark-paid per installment; the 4th flips the withdrawal to paid.
+    let paidBody: { withdrawal: { status: string; txHash: string | null } } | null =
+      null;
+    for (let seq = 1; seq <= 4; seq++) {
+      const paid = await h.app.request(
+        `/v1/admin/withdrawals/${wd.withdrawal.id}/mark-paid`,
+        {
+          method: "POST",
+          headers: adminHeaders,
+          body: JSON.stringify({ txHash: `wd-tx-${seq}` + "a".repeat(58) }),
+        },
+      );
+      expect(paid.status).toBe(200);
+      paidBody = (await paid.json()) as {
+        withdrawal: { status: string; txHash: string | null };
+      };
+    }
+    expect(paidBody?.withdrawal.status).toBe("paid");
+    expect(paidBody?.withdrawal.txHash).toContain("wd-tx-4");
 
     // Audit for the withdrawal lifecycle.
     const actions = h.audit._rows.map((a) => a.action);

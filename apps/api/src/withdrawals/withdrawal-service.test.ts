@@ -2,13 +2,16 @@ import { describe, expect, it } from "vitest";
 import { createMemoryUserStore } from "../auth/user-store.js";
 import { createMemoryTxStore } from "../buys/tx-store.js";
 import { createMemoryBalanceStore } from "../money/balance-store.js";
+import { createMemoryInstallmentStore } from "./installment-store.js";
 import { createMemoryWithdrawalStore } from "./withdrawal-store.js";
 import {
   approveWithdrawal,
-  payWithdrawal,
+  payInstallment,
+  payNextInstallment,
   rejectWithdrawal,
   requestWithdrawal,
 } from "./withdrawal-service.js";
+import { WITHDRAWAL_INSTALLMENT_COUNT } from "./withdrawal-constants.js";
 
 const ADDRESS = "EQHq2VsN7yKwTp8rUy4mL0kHbZ6sAeF4oVgB8uTr9pXkMdH5";
 const USER = "user-a";
@@ -25,15 +28,16 @@ function makeDeps(over: { address?: string | null } = {}) {
   const balances = createMemoryBalanceStore();
   const transactions = createMemoryTxStore();
   const withdrawals = createMemoryWithdrawalStore();
-  return { users, balances, transactions, withdrawals };
+  const installments = createMemoryInstallmentStore();
+  return { users, balances, transactions, withdrawals, installments };
 }
 
 async function fund(deps: ReturnType<typeof makeDeps>, amountUsd: number) {
   await deps.balances.adjust(USER, { withdrawableDelta: amountUsd });
 }
 
-describe("requestWithdrawal (PE-02)", () => {
-  it("debits withdrawable atomically and records a requested withdrawal + pending ledger row", async () => {
+describe("requestWithdrawal (PE-02, locked model)", () => {
+  it("debits withdrawable atomically, charges the 1% fee, records 4 installments summing to net", async () => {
     const deps = makeDeps();
     await fund(deps, 50_000);
 
@@ -41,13 +45,25 @@ describe("requestWithdrawal (PE-02)", () => {
     expect(r.ok).toBe(true);
     if (!r.ok) return;
 
+    // 1% of 12_500 = 125; net = 12_375; 4 installments: 3094+3094+3094+3093 = 12_375
+    expect(r.feeUsd).toBe(125);
+    expect(r.netUsd).toBe(12_375);
+    expect(r.installments).toHaveLength(WITHDRAWAL_INSTALLMENT_COUNT);
+    const sum = r.installments.reduce((acc, i) => acc + i.amountUsd, 0);
+    expect(sum).toBe(r.netUsd);
+    expect(
+      r.installments.map((i) => i.amountUsd).sort((a, b) => b - a)[0]! -
+        r.installments.map((i) => i.amountUsd).sort((a, b) => b - a)[3]!,
+    ).toBeLessThanOrEqual(1);
+
     expect(r.withdrawal.userId).toBe(USER);
     expect(r.withdrawal.amountUsd).toBe(12_500);
+    expect(r.withdrawal.feeUsd).toBe(125);
     expect(r.withdrawal.address).toBe(ADDRESS);
     expect(r.withdrawal.status).toBe("requested");
     expect(r.withdrawal.transactionId).toBe(r.txId);
 
-    // Atomic debit happened.
+    // Atomic debit happened (gross).
     expect((await deps.balances.get(USER))?.withdrawableUsd).toBe(37_500);
 
     const txs = await deps.transactions.listByUserId(USER);
@@ -55,9 +71,19 @@ describe("requestWithdrawal (PE-02)", () => {
     expect(txs[0]).toMatchObject({
       kind: "withdraw",
       amountUsd: 12_500,
+      feeUsd: 125,
       currency: "USDT",
       status: "pending",
     });
+
+    // Installments persisted with weekly due dates.
+    const stored = await deps.installments.listByWithdrawal(r.withdrawal.id);
+    expect(stored).toHaveLength(4);
+    for (let i = 1; i < stored.length; i++) {
+      const diffMs =
+        stored[i]!.dueAt.getTime() - stored[i - 1]!.dueAt.getTime();
+      expect(diffMs).toBe(7 * 86_400_000);
+    }
   });
 
   it("rejects with no_withdrawal_address when the user has not set one", async () => {
@@ -122,22 +148,37 @@ describe("rejectWithdrawal (refund on reject)", () => {
       await rejectWithdrawal(deps, { withdrawalId: "wd_missing" }),
     ).toBeNull();
   });
+
+  it("rejected withdrawals can never be paid (installments locked)", async () => {
+    const deps = makeDeps();
+    await fund(deps, 50_000);
+    const req = await requestWithdrawal(deps, { userId: USER, amountUsd: 12_500 });
+    if (!req.ok) throw new Error("expected success");
+    await rejectWithdrawal(deps, { withdrawalId: req.withdrawal.id });
+
+    const paid = await payNextInstallment(deps, {
+      withdrawalId: req.withdrawal.id,
+      txHash: "h".repeat(64),
+    });
+    expect(paid.ok).toBe(false);
+    if (!paid.ok) expect(paid.code).toBe("terminal");
+  });
 });
 
-describe("approveWithdrawal / payWithdrawal (PE-03)", () => {
+describe("approveWithdrawal / installment payments (PE-03)", () => {
   async function requested(deps: ReturnType<typeof makeDeps>) {
     const r = await requestWithdrawal(deps, { userId: USER, amountUsd: 12_500 });
     if (!r.ok) throw new Error("expected success");
-    return r.withdrawal;
+    return r;
   }
 
   it("approve moves requested → approved (ledger stays pending)", async () => {
     const deps = makeDeps();
     await fund(deps, 50_000);
-    const w = await requested(deps);
+    const { withdrawal } = await requested(deps);
 
     const approved = await approveWithdrawal(deps, {
-      withdrawalId: w.id,
+      withdrawalId: withdrawal.id,
     });
     expect(approved?.status).toBe("approved");
     expect((await deps.transactions.listByUserId(USER))[0]?.status).toBe(
@@ -145,32 +186,85 @@ describe("approveWithdrawal / payWithdrawal (PE-03)", () => {
     );
   });
 
-  it("pay moves approved → paid and flips the ledger row to success with the tx hash", async () => {
+  it("paying all 4 installments flips the withdrawal to paid and the ledger to success", async () => {
     const deps = makeDeps();
     await fund(deps, 50_000);
-    const w = await requested(deps);
-    await approveWithdrawal(deps, { withdrawalId: w.id });
+    const { withdrawal } = await requested(deps);
+    await approveWithdrawal(deps, { withdrawalId: withdrawal.id });
 
-    const txHash = "h".repeat(64);
-    const paid = await payWithdrawal(deps, { withdrawalId: w.id, txHash });
-    expect(paid?.status).toBe("paid");
-    expect(paid?.txHash).toBe(txHash);
+    // After 3 of 4, still approved (not terminal).
+    for (let seq = 1; seq <= 3; seq++) {
+      const paid = await payInstallment(deps, {
+        withdrawalId: withdrawal.id,
+        seq,
+        txHash: `tx-${seq}-` + "a".repeat(60),
+      });
+      expect(paid.ok).toBe(true);
+      const current = await deps.withdrawals.get(withdrawal.id);
+      expect(current?.status).toBe("approved");
+    }
+
+    // 4th payment completes the withdrawal.
+    const last = await payInstallment(deps, {
+      withdrawalId: withdrawal.id,
+      seq: 4,
+      txHash: "b".repeat(64),
+    });
+    expect(last.ok).toBe(true);
+    if (!last.ok) return;
+    expect(last.withdrawal.status).toBe("paid");
+    expect(last.withdrawal.txHash).toBe("b".repeat(64));
 
     const tx = (await deps.transactions.listByUserId(USER))[0]!;
     expect(tx.status).toBe("success");
-    expect(tx.txHash).toBe(txHash);
+    expect(tx.txHash).toBe("b".repeat(64));
+
+    // All installments paid.
+    const stored = await deps.installments.listByWithdrawal(withdrawal.id);
+    expect(stored.every((i) => i.status === "paid")).toBe(true);
   });
 
-  it("pay from requested directly also works (admin may skip approve)", async () => {
+  it("a second payment of the same installment is rejected (no double-pay)", async () => {
     const deps = makeDeps();
     await fund(deps, 50_000);
-    const w = await requested(deps);
+    const { withdrawal } = await requested(deps);
 
-    const paid = await payWithdrawal(deps, {
-      withdrawalId: w.id,
-      txHash: "g".repeat(64),
+    const first = await payInstallment(deps, {
+      withdrawalId: withdrawal.id,
+      seq: 1,
+      txHash: "x".repeat(64),
     });
-    expect(paid?.status).toBe("paid");
+    expect(first.ok).toBe(true);
+
+    const again = await payInstallment(deps, {
+      withdrawalId: withdrawal.id,
+      seq: 1,
+      txHash: "y".repeat(64),
+    });
+    expect(again.ok).toBe(false);
+    if (!again.ok) expect(again.code).toBe("already_paid");
+  });
+
+  it("payNextInstallment pays installments in seq order and never pays a paid one", async () => {
+    const deps = makeDeps();
+    await fund(deps, 50_000);
+    const { withdrawal } = await requested(deps);
+
+    const p1 = await payNextInstallment(deps, {
+      withdrawalId: withdrawal.id,
+      txHash: "p1-" + "c".repeat(61),
+    });
+    expect(p1.ok).toBe(true);
+    if (!p1.ok) return;
+    expect(p1.installment.seq).toBe(1);
+
+    const p2 = await payNextInstallment(deps, {
+      withdrawalId: withdrawal.id,
+      txHash: "p2-" + "c".repeat(61),
+    });
+    expect(p2.ok).toBe(true);
+    if (!p2.ok) return;
+    expect(p2.installment.seq).toBe(2);
   });
 
   it("approve/pay return null for unknown withdrawals", async () => {
@@ -178,12 +272,12 @@ describe("approveWithdrawal / payWithdrawal (PE-03)", () => {
     expect(
       await approveWithdrawal(deps, { withdrawalId: "wd_missing" }),
     ).toBeNull();
-    expect(
-      await payWithdrawal(deps, {
-        withdrawalId: "wd_missing",
-        txHash: "h".repeat(64),
-      }),
-    ).toBeNull();
+    const paid = await payNextInstallment(deps, {
+      withdrawalId: "wd_missing",
+      txHash: "h".repeat(64),
+    });
+    expect(paid.ok).toBe(false);
+    if (!paid.ok) expect(paid.code).toBe("withdrawal_not_found");
   });
 });
 

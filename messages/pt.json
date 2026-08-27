@@ -136,17 +136,33 @@
 
     "myPropertiesCount": "Meus imóveis ({count})",
 
-    "buyFirstShare": "Compre sua primeira cota",
-
-    "buyFirstShareHint": "Seja dono de uma fatia — ganhe aluguel projetado todo mês.",
-
-    "todaysHighlight": "Destaque de hoje",
-
-    "hotThisWeek": "Em alta esta semana",
-
     "monthlyPerShare": "Mensal / cota",
 
-    "pendingThisWeek": "{amount} pendente esta semana"
+    "pendingThisWeek": "{amount} pendente esta semana",
+
+    "earnedWord": "recebido",
+
+    "viewAllCount": "+{count} mais no Portfólio",
+
+    "featuredOpportunity": "Oportunidade em destaque",
+
+    "featuredTag": "Destaque",
+
+    "moreOpportunities": "Mais oportunidades",
+
+    "emptyTitle": "Sua jornada imobiliária começa aqui",
+
+    "emptyHint": "Um caminho tranquilo para renda mensal de aluguel.",
+
+    "emptyStepBuy": "Compre ações",
+
+    "emptyStepLock": "Trave para render",
+
+    "emptyStepEarn": "Ganhe todo mês",
+
+    "emptyCta": "Explore oportunidades",
+
+    "trustFooter": "O aluguel rende mensalmente. Retire quando quiser (1% de taxa, 4 parcelas semanais). Simulado até on-chain."
 
   },
 
@@ -248,7 +264,7 @@
 
     "thisWeek": "Rendimentos desta semana",
 
-    "nextPayoutIn": "Próximo pagamento em",
+    "nextPayoutIn": "Próximo pagamento",
 
     "totalReceived": "Rendimentos totais recebidos",
 
@@ -264,7 +280,29 @@
 
     "withdrawalTerms": "Saque quando quiser — taxa de 1%, pago em 4 parcelas semanais",
 
-    "yieldTitle": "Rendimento de ações bloqueadas",
+    "yieldTitle": "Poder de ganho",
+
+    "totalEarned": "Total recebido",
+
+    "chartTitle": "Últimas 12 semanas",
+
+    "chartCaption": "Pagamentos semanais de aluguel · simulados até on-chain.",
+
+    "timelineTitle": "Seu fluxo de renda",
+
+    "timelinePaid": "Pago",
+
+    "timelineAccruing": "Acumulando",
+
+    "timelineAccruingSub": "mês atual",
+
+    "timelineNext": "Próxima estimativa",
+
+    "timelineCaption": "Acréscimo mensal; os pagamentos são conciliados todo domingo.",
+
+    "withdraw": "Retire para sua carteira",
+
+    "withdrawSubtitle": "Taxa de 1% · 4 parcelas semanais",
 
     "yieldAccrued": "Acumulado pendente",
 
@@ -305,6 +343,76 @@
     "lockedShares": "Ações bloqueadas",
 
     "freeShares": "Ações livres",
+
+    "investedWord": "investido",
+
+    "earnedWord": "recebido",
+
+    "unrealizedWord": "não realizado",
+
+    "orderOpen": "Aberta",
+
+    "allocationProperties": "{count} propriedades",
+
+    "showDetails": "Mostrar detalhes",
+
+    "hideDetails": "Ocultar detalhes",
+
+    "lockedCaption": "Gerando rendimento mensal",
+
+    "freeCaption": "Ainda não rende",
+
+    "idleShares": "{count} ações sem rendimento",
+
+    "lockThem": "Trave-as",
+
+    "earningPill": "{count} rendendo",
+
+    "idlePill": "{count} ociosas",
+
+    "estMonthly": "≈ {amount} / mês",
+
+    "projectedMonthlyShort": "Aluguel mensal estimado",
+
+    "exportCsv": "Exportar CSV",
+
+    "exporting": "Exportando…",
+
+    "sharesOwned": "Ações possuídas",
+
+    "avgCostPerShare": "Custo médio / ação",
+
+    "currentValueRow": "Valor atual",
+
+    "unrealizedPnl": "P/L não realizado",
+
+    "projectedMonthlyYield": "Rendimento mensal projetado",
+
+    "buyMore": "Comprar mais",
+
+    "sellComingSoon": "Venda em breve",
+
+    "nftCollectible": "NFT colecionável",
+
+    "nftItem": "Item NFT",
+
+    "collection": "Coleção",
+
+    "viewOnExplorer": "Ver no explorador",
+
+    "nftDisclaimer": "Este NFT é um recibo colecionável — o banco de dados permanece o registro de propriedade.",
+
+    "nftStatusPending": "Pendente",
+
+    "nftStatusMinting": "Cunhando",
+
+    "nftStatusMinted": "Cunhado",
+
+    "nftStatusTransferring": "Transferindo",
+
+    "nftStatusDelivered": "Entregue",
+
+    "nftStatusFailed": "Falhou",
 
     "orderQueued": "Na fila"
 
@@ -353,6 +461,8 @@
     "withdrawalStatusApproved": "Aprovado",
 
     "withdrawalStatusRejected": "Rejeitado",
+
+    "withdrawalInstallmentProgress": "{paid} de {total} parcelas pagas",
 
     "withdrawalRequest": "Solicitar saque",
     "withdrawalsError": "Não foi possível carregar os pedidos de saque",

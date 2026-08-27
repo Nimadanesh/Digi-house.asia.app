@@ -136,17 +136,33 @@
 
     "myPropertiesCount": "Мои объекты ({count})",
 
-    "buyFirstShare": "Купите первую долю",
-
-    "buyFirstShareHint": "Владейте частью — получайте прогнозируемую аренду каждый месяц.",
-
-    "todaysHighlight": "Сегодня в фокусе",
-
-    "hotThisWeek": "Хит недели",
-
     "monthlyPerShare": "В месяц / доля",
 
-    "pendingThisWeek": "{amount} ожидает на этой неделе"
+    "pendingThisWeek": "{amount} ожидает на этой неделе",
+
+    "earnedWord": "заработано",
+
+    "viewAllCount": "ещё +{count} в портфеле",
+
+    "featuredOpportunity": "Избранная возможность",
+
+    "featuredTag": "Избранное",
+
+    "moreOpportunities": "Больше возможностей",
+
+    "emptyTitle": "Ваш путь к недвижимости начинается здесь",
+
+    "emptyHint": "Спокойный путь к ежемесячному арендному доходу.",
+
+    "emptyStepBuy": "Купите доли",
+
+    "emptyStepLock": "Заблокируйте для дохода",
+
+    "emptyStepEarn": "Зарабатывайте каждый месяц",
+
+    "emptyCta": "Изучить возможности",
+
+    "trustFooter": "Арендный доход накапливается ежемесячно. Выводите в любое время (комиссия 1 %, 4 еженедельных платежа). Симуляция до on-chain."
 
   },
 
@@ -248,7 +264,7 @@
 
     "thisWeek": "Доход за эту неделю",
 
-    "nextPayoutIn": "До следующей выплаты",
+    "nextPayoutIn": "Следующая выплата",
 
     "totalReceived": "Всего получено",
 
@@ -264,7 +280,29 @@
 
     "withdrawalTerms": "Выводите в любой момент — комиссия 1%, выплата 4 еженедельными частями",
 
-    "yieldTitle": "Доход по заблокированным акциям",
+    "yieldTitle": "Заработок",
+
+    "totalEarned": "Всего заработано",
+
+    "chartTitle": "Последние 12 недель",
+
+    "chartCaption": "Еженедельные арендные выплаты · симуляция до on-chain.",
+
+    "timelineTitle": "Ваш денежный поток",
+
+    "timelinePaid": "Выплачено",
+
+    "timelineAccruing": "Накапливается",
+
+    "timelineAccruingSub": "текущий месяц",
+
+    "timelineNext": "Следующая оценка",
+
+    "timelineCaption": "Ежемесячное начисление; выплаты сверяются каждое воскресенье.",
+
+    "withdraw": "Вывести в свой кошелёк",
+
+    "withdrawSubtitle": "Комиссия 1 % · 4 еженедельных платежа",
 
     "yieldAccrued": "Начислено, не выплачено",
 
@@ -305,6 +343,76 @@
     "lockedShares": "Заблокированные акции",
 
     "freeShares": "Свободные акции",
+
+    "investedWord": "инвестировано",
+
+    "earnedWord": "заработано",
+
+    "unrealizedWord": "нереализовано",
+
+    "orderOpen": "Открыта",
+
+    "allocationProperties": "{count} объектов",
+
+    "showDetails": "Показать детали",
+
+    "hideDetails": "Скрыть детали",
+
+    "lockedCaption": "Приносит ежемесячный доход",
+
+    "freeCaption": "Пока не приносит",
+
+    "idleShares": "{count} долей без дохода",
+
+    "lockThem": "Заблокировать",
+
+    "earningPill": "{count} приносят доход",
+
+    "idlePill": "{count} без дохода",
+
+    "estMonthly": "≈ {amount} / месяц",
+
+    "projectedMonthlyShort": "Оценка месячной аренды",
+
+    "exportCsv": "Экспорт CSV",
+
+    "exporting": "Экспорт…",
+
+    "sharesOwned": "Долей в собственности",
+
+    "avgCostPerShare": "Средняя цена / доля",
+
+    "currentValueRow": "Текущая стоимость",
+
+    "unrealizedPnl": "Нереализованный П/У",
+
+    "projectedMonthlyYield": "Прогнозируемый месячный доход",
+
+    "buyMore": "Купить ещё",
+
+    "sellComingSoon": "Продажа скоро",
+
+    "nftCollectible": "Коллекционный NFT",
+
+    "nftItem": "Объект NFT",
+
+    "collection": "Коллекция",
+
+    "viewOnExplorer": "Открыть в обозревателе",
+
+    "nftDisclaimer": "Этот NFT — коллекционный чек; база данных остаётся записью о праве собственности.",
+
+    "nftStatusPending": "Ожидает",
+
+    "nftStatusMinting": "Создание",
+
+    "nftStatusMinted": "Создан",
+
+    "nftStatusTransferring": "Передача",
+
+    "nftStatusDelivered": "Доставлен",
+
+    "nftStatusFailed": "Сбой",
 
     "orderQueued": "В очереди"
 
@@ -353,6 +461,8 @@
     "withdrawalStatusApproved": "Одобрено",
 
     "withdrawalStatusRejected": "Отклонено",
+
+    "withdrawalInstallmentProgress": "Оплачено {paid} из {total} платежей",
 
     "withdrawalRequest": "Запросить вывод",
     "withdrawalsError": "Не удалось загрузить запросы на вывод",

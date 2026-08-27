@@ -10,4 +10,5 @@ export { MockMeRepo } from "./me";
 export { MockFeesRepo } from "./fees";
 export { MockSellsRepo } from "./sells";
 export { MockWithdrawalsRepo } from "./withdrawals";
+export { MockNftsRepo } from "./nfts";
 export { seed } from "./seed";

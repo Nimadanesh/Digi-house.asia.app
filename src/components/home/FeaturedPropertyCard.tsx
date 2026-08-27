@@ -1,8 +1,7 @@
 "use client";
-// File responsibility: Home featured / Hot this week marketplace highlight (Fable Home §Featured).
+// File responsibility: one editorial Featured Opportunity on Home (redesign). No flame/hot badge.
 import Link from "next/link";
 import Image from "next/image";
-import { Flame } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { usd, pct } from "@/lib/format";
 import { annualReturnRatio, shareWeeklyYieldUsd } from "@/lib/property-yield";
@@ -26,7 +25,7 @@ export function FeaturedPropertyCard({
 
   return (
     <section className="space-y-2" data-testid="featured-section">
-      <h2 className="px-0.5 text-[0.9375rem] font-semibold text-foreground">{t("todaysHighlight")}</h2>
+      <h2 className="px-0.5 text-[0.9375rem] font-semibold text-foreground">{t("featuredOpportunity")}</h2>
       <Link
         href={ROUTES.property(listing.id)}
         onClick={() => onNavigateHaptic?.()}
@@ -43,9 +42,8 @@ export function FeaturedPropertyCard({
               className="object-cover"
               sizes="(max-width:480px) 100vw, 480px"
             />
-            <span className="absolute top-2.5 start-2.5 inline-flex items-center gap-1 rounded-full bg-danger/90 px-2 py-0.5 text-[0.6875rem] font-semibold text-white">
-              <Flame size={12} strokeWidth={2.25} aria-hidden />
-              {t("hotThisWeek")}
+            <span className="absolute top-2.5 start-2.5 rounded-full bg-primary/90 px-2.5 py-1 text-[0.6875rem] font-semibold text-white">
+              {t("featuredTag")}
             </span>
             <span className="absolute top-2.5 end-2.5 rounded-full bg-success px-2.5 py-1 text-xs font-semibold text-white tnum">
               {pct(apy)} {tCommon("apy")}

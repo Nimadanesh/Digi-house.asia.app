@@ -12,6 +12,9 @@ import type { Logger } from "../logger.js";
 import { sendTelegramMessage } from "../notify/telegram-notify.js";
 import type { AuditStore } from "../audit/audit-store.js";
 import { writeAuditEvent } from "../audit/write-audit.js";
+import type { UserStore } from "../auth/user-store.js";
+import type { NftStore } from "../nft/nft-store.js";
+import { requestNftForHolding } from "../nft/request.js";
 
 export type SettleVerifiedBuyDeps = {
   intents: IntentStore;
@@ -25,6 +28,15 @@ export type SettleVerifiedBuyDeps = {
   audit?: AuditStore | null;
   /** Optional Telegram notify when a user's queued order becomes tradable. */
   notify?: { botToken: string } | null;
+  /** Optional collectible-NFT stores — the NFT is a display-only receipt, never the ownership source. */
+  nfts?: NftStore | null;
+  nftQueue?: {
+    add(job: { name: string; data: { holdingNftId: string } }): Promise<unknown>;
+  } | null;
+  nftMetadataBaseUrl?: string;
+  nftCollectionAddress?: string | null;
+  /** Resolves the fallback delivery wallet when the intent has no payer wallet. */
+  users?: UserStore | null;
 };
 
 export type SettleVerifiedBuyResult =
@@ -136,6 +148,35 @@ export async function settleVerifiedBuy(
     avgCostUsd: nextAvgCostUsd(oldShares, oldAvg, input.intent.quantity, input.intent.priceUsdPerShare),
   });
 
+  // Collectible NFT request — best-effort, fire-and-forget. It can NEVER throw into the
+  // buy path or roll back the settlement; on failure the NFT goes pending/failed (retryable)
+  // and the DB holding remains the authoritative ownership record.
+  if (deps.nfts && deps.nftQueue) {
+    try {
+      await requestNftForHolding(
+        {
+          nfts: deps.nfts,
+          queue: deps.nftQueue,
+          users: deps.users ?? null,
+          metadataBaseUrl: deps.nftMetadataBaseUrl,
+          collectionAddress: deps.nftCollectionAddress ?? null,
+          audit: deps.audit ?? null,
+          log: deps.log,
+        },
+        {
+          userId: input.intent.userId,
+          propertyId: input.intent.propertyId,
+          paidByWallet: input.intent.paidByWallet,
+        },
+      );
+    } catch (err) {
+      deps.log?.warn(
+        { intentId: input.intent.id, err },
+        "nft.request.failed_buy_unaffected",
+      );
+    }
+  }
+
   const isUsdt = input.intent.currency === "USDT";
   const tonAmount = isUsdt
     ? null
@@ -149,6 +190,7 @@ export async function settleVerifiedBuy(
     kind: "buy",
     propertyId: input.intent.propertyId,
     shares: input.intent.quantity,
+    // Principal only — the commission is FractionalLuxe revenue, recorded separately.
     amountUsd: input.intent.totalUsd,
     currency: isUsdt ? "USDT" : "TON",
     tonAmount,
@@ -156,6 +198,8 @@ export async function settleVerifiedBuy(
     status: "success",
     txHash: input.intent.txHash,
     buyIntentId: input.intent.id,
+    // Primary-market commission (FractionalLuxe revenue) — the buyer paid principal + fee.
+    feeUsd: input.intent.feeUsd ?? 0,
   });
 
   return { ok: true, ...(soldOut ? { soldOut: true } : {}) };

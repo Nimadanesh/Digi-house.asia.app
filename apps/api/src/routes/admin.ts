@@ -23,11 +23,28 @@ import type {
 } from "../withdrawals/withdrawal-store.js";
 import {
   approveWithdrawal,
-  payWithdrawal,
+  payInstallment,
+  payNextInstallment,
   rejectWithdrawal,
 } from "../withdrawals/withdrawal-service.js";
+import type {
+  WithdrawalInstallmentRecord,
+  WithdrawalInstallmentStore,
+} from "../withdrawals/installment-store.js";
 import { withdrawalToPublic } from "./withdrawals.js";
+import type { NftQueueLike, NftStore, NftStatus } from "../nft/nft-store.js";
+import { runNftSweep } from "../nft/worker.js";
 import type { Logger } from "../logger.js";
+
+const silentLogger = {
+  info: () => {},
+  warn: () => {},
+  error: () => {},
+  debug: () => {},
+  fatal: () => {},
+  trace: () => {},
+  child: () => silentLogger,
+} as unknown as Logger;
 import type { ShareLockStore } from "../yield/lock-store.js";
 import type { YieldStore } from "../yield/yield-store.js";
 import {
@@ -68,6 +85,8 @@ export type AdminRouteDeps = {
   houseAccountUserId?: string;
   /** Present → admin withdrawal queue (PE-03). */
   withdrawals?: WithdrawalStore | null;
+  /** Present → installment-aware withdrawal queue (locked model: 4 weekly installments). */
+  installments?: WithdrawalInstallmentStore | null;
   /** Present → manual yield payout (PE-04) + unlock maturation controls (PE-07). */
   locks?: ShareLockStore | null;
   yields?: YieldStore | null;
@@ -75,13 +94,32 @@ export type AdminRouteDeps = {
   unlockMaturationMs?: number;
   /** Optional Telegram notify on each withdrawal transition (fail-open). */
   notify?: { botToken: string } | null;
+  /** Present → collectible-NFT admin queue + retry/sweep controls. */
+  nfts?: NftStore | null;
+  nftQueue?: NftQueueLike | null;
+  nftSweep?: {
+    stalePendingMs: number;
+    staleActiveMs: number;
+  } | null;
   log?: Logger;
 };
+
+function isNftStatus(v: string | undefined): v is NftStatus {
+  return (
+    v === "pending" ||
+    v === "minting" ||
+    v === "minted" ||
+    v === "transferring" ||
+    v === "delivered" ||
+    v === "failed"
+  );
+}
 
 type CoreWithdrawalDeps = {
   balances: BalanceStore;
   transactions: TxStore;
   withdrawals: WithdrawalStore;
+  installments: WithdrawalInstallmentStore;
 };
 
 function isWithdrawalStatus(v: string | undefined): v is WithdrawalStatus {
@@ -747,15 +785,33 @@ export function createAdminRoutes(deps: AdminRouteDeps) {
     const rows = await deps.withdrawals.listAll(
       status ? { status } : undefined,
     );
-    return c.json({ withdrawals: rows.map(withdrawalToPublic) });
+    const allInstallments = deps.installments
+      ? await deps.installments.listByWithdrawals(rows.map((r) => r.id))
+      : [];
+    return c.json({
+      withdrawals: rows.map((w) =>
+        withdrawalToPublic(
+          w,
+          allInstallments.filter((i) => i.withdrawalId === w.id),
+        ),
+      ),
+    });
   });
 
   async function coreWithdrawalDeps(): Promise<CoreWithdrawalDeps | null> {
-    if (!deps.balances || !deps.transactions || !deps.withdrawals) return null;
+    if (
+      !deps.balances ||
+      !deps.transactions ||
+      !deps.withdrawals ||
+      !deps.installments
+    ) {
+      return null;
+    }
     return {
       balances: deps.balances,
       transactions: deps.transactions,
       withdrawals: deps.withdrawals,
+      installments: deps.installments,
     };
   }
 
@@ -764,6 +820,7 @@ export function createAdminRoutes(deps: AdminRouteDeps) {
     action: "admin.withdraw.approve" | "admin.withdraw.reject" | "admin.withdraw.paid",
     updated: WithdrawalRecord | null,
     notifyText: string,
+    installments: WithdrawalInstallmentRecord[] = [],
   ) {
     if (!updated) {
       return c.json(
@@ -797,7 +854,7 @@ export function createAdminRoutes(deps: AdminRouteDeps) {
         // fail-open: notification must never block the admin transition
       }
     }
-    return c.json({ withdrawal: withdrawalToPublic(updated) });
+    return c.json({ withdrawal: withdrawalToPublic(updated, installments) });
   }
 
   app.post("/v1/admin/withdrawals/:id/approve", async (c) => {
@@ -850,6 +907,11 @@ export function createAdminRoutes(deps: AdminRouteDeps) {
     );
   });
 
+  /**
+   * POST /v1/admin/withdrawals/:id/mark-paid — mark the NEXT unpaid installment paid
+   * (locked model: 4 weekly installments; call once per installment). The withdrawal
+   * flips to `paid` and the ledger row succeeds only when all 4 installments are paid.
+   */
   app.post("/v1/admin/withdrawals/:id/mark-paid", async (c) => {
     const core = await coreWithdrawalDeps();
     if (!core) {
@@ -879,12 +941,109 @@ export function createAdminRoutes(deps: AdminRouteDeps) {
     if (!existing) {
       return c.json({ code: "not_found", message: "Withdrawal not found" }, 404);
     }
-    const updated = await payWithdrawal(core, { withdrawalId: id, txHash });
+    if (existing.status === "rejected" || existing.status === "paid") {
+      return c.json(
+        { code: "conflict", message: "Withdrawal is already terminal" },
+        409,
+      );
+    }
+    const result = await payNextInstallment(core, { withdrawalId: id, txHash });
+    if (!result.ok) {
+      if (result.code === "withdrawal_not_found") {
+        return c.json({ code: "not_found", message: "Withdrawal not found" }, 404);
+      }
+      return c.json(
+        {
+          code: "conflict",
+          message: "All installments are already paid",
+        },
+        409,
+      );
+    }
+    const all = await core.installments.listByWithdrawal(id);
+    const paidCount = all.filter((i) => i.status === "paid").length;
+    const installments = await core.installments.listByWithdrawal(id);
     return respondTransition(
       c,
       "admin.withdraw.paid",
-      updated,
-      `💸 Withdrawal paid\n$${(existing.amountUsd / 100).toFixed(2)} USDT sent to your address.`,
+      result.withdrawal,
+      `💸 Withdrawal installment ${result.installment.seq}/4 paid\n` +
+        `$${(result.installment.amountUsd / 100).toFixed(2)} USDT sent to your address (${paidCount}/4 paid).`,
+      installments,
+    );
+  });
+
+  /**
+   * POST /v1/admin/withdrawals/:id/installments/:seq/mark-paid — mark ONE specific
+   * installment paid with the fulfillment tx hash (guarded; idempotent on already-paid).
+   */
+  app.post("/v1/admin/withdrawals/:id/installments/:seq/mark-paid", async (c) => {
+    const core = await coreWithdrawalDeps();
+    if (!core) {
+      return c.json(
+        { code: "not_configured", message: "Withdrawal stores not configured" },
+        501,
+      );
+    }
+    let body: { txHash?: unknown };
+    try {
+      body = await c.req.json();
+    } catch {
+      return c.json(
+        { code: "validation_error", message: "Invalid JSON body" },
+        400,
+      );
+    }
+    const txHash = typeof body.txHash === "string" ? body.txHash.trim() : "";
+    if (!txHash) {
+      return c.json(
+        { code: "validation_error", message: "txHash is required" },
+        400,
+      );
+    }
+    const id = c.req.param("id");
+    const seqRaw = Number(c.req.param("seq"));
+    if (!Number.isInteger(seqRaw) || seqRaw < 1 || seqRaw > 4) {
+      return c.json(
+        { code: "validation_error", message: "seq must be 1..4" },
+        400,
+      );
+    }
+    const existing = await core.withdrawals.get(id);
+    if (!existing) {
+      return c.json({ code: "not_found", message: "Withdrawal not found" }, 404);
+    }
+    if (existing.status === "rejected" || existing.status === "paid") {
+      return c.json(
+        { code: "conflict", message: "Withdrawal is already terminal" },
+        409,
+      );
+    }
+    const result = await payInstallment(core, {
+      withdrawalId: id,
+      seq: seqRaw,
+      txHash,
+    });
+    if (!result.ok) {
+      if (result.code === "withdrawal_not_found") {
+        return c.json({ code: "not_found", message: "Withdrawal not found" }, 404);
+      }
+      return c.json(
+        {
+          code: "conflict",
+          message: `Installment ${seqRaw} is already paid`,
+        },
+        409,
+      );
+    }
+    const installments = await core.installments.listByWithdrawal(id);
+    return respondTransition(
+      c,
+      "admin.withdraw.paid",
+      result.withdrawal,
+      `💸 Withdrawal installment ${result.installment.seq}/4 paid\n` +
+        `$${(result.installment.amountUsd / 100).toFixed(2)} USDT sent to your address.`,
+      installments,
     );
   });
 
@@ -1096,6 +1255,109 @@ export function createAdminRoutes(deps: AdminRouteDeps) {
       },
       201,
     );
+  });
+
+  /**
+   * GET /v1/admin/nfts — collectible-NFT queue, newest first, optional ?status= filter.
+   * The NFT is a display-only receipt; the DB holding stays the ownership source.
+   */
+  app.get("/v1/admin/nfts", async (c) => {
+    if (!deps.nfts) {
+      return c.json({ code: "not_configured", message: "NFT store not configured" }, 501);
+    }
+    const statusRaw = c.req.query("status");
+    const status = statusRaw !== undefined && isNftStatus(statusRaw) ? statusRaw : undefined;
+    if (statusRaw && !status) {
+      return c.json(
+        {
+          code: "validation_error",
+          message: "status must be pending, minting, minted, transferring, delivered or failed",
+        },
+        400,
+      );
+    }
+    const rows = await deps.nfts.listAll(status ? { status } : undefined);
+    return c.json({
+      nfts: rows.map((r) => ({
+        id: r.id,
+        userId: r.userId,
+        propertyId: r.propertyId,
+        holdingKey: r.holdingKey,
+        walletAddress: r.walletAddress,
+        status: r.status,
+        nftItemId: r.nftItemId,
+        nftAddress: r.nftAddress,
+        collectionAddress: r.collectionAddress,
+        metadataUrl: r.metadataUrl,
+        mintTxHash: r.mintTxHash,
+        transferTxHash: r.transferTxHash,
+        attempts: r.attempts,
+        errorCode: r.errorCode,
+        errorMessage: r.errorMessage,
+        createdAt: r.createdAt.toISOString(),
+        updatedAt: r.updatedAt.toISOString(),
+      })),
+    });
+  });
+
+  /**
+   * POST /v1/admin/nfts/:id/retry — re-queue a FAILED collectible-NFT delivery (failed →
+   * pending + enqueue). Only explicit, admin-authorized retries — no arbitrary minting.
+   */
+  app.post("/v1/admin/nfts/:id/retry", async (c) => {
+    if (!deps.nfts || !deps.nftQueue) {
+      return c.json({ code: "not_configured", message: "NFT stores not configured" }, 501);
+    }
+    const id = c.req.param("id");
+    const existing = await deps.nfts.get(id);
+    if (!existing) {
+      return c.json({ code: "not_found", message: "NFT not found" }, 404);
+    }
+    if (existing.status !== "failed") {
+      return c.json(
+        { code: "conflict", message: "Only failed NFTs can be retried" },
+        409,
+      );
+    }
+    const retried = await deps.nfts.retry(id);
+    if (!retried) {
+      return c.json({ code: "conflict", message: "NFT state changed — retry again" }, 409);
+    }
+    try {
+      await deps.nftQueue.add({ name: "mintNft", data: { holdingNftId: id } });
+    } catch (err) {
+      deps.log?.warn({ nftId: id, err }, "admin.nft.retry_enqueue_failed");
+    }
+    if (deps.audit) {
+      await writeAuditEvent(deps.audit, {
+        action: "nft.retry",
+        actorType: "admin",
+        actorUserId: null,
+        actorLabel: "admin",
+        resourceType: "holding_nft",
+        resourceId: id,
+        summary: `NFT delivery retried for ${existing.propertyId}`,
+        payload: { nftId: id, propertyId: existing.propertyId, errorCode: existing.errorCode },
+        requestId: (c.var as { requestId?: string }).requestId ?? null,
+      });
+    }
+    return c.json({ nft: { id: retried.id, status: retried.status } });
+  });
+
+  /** POST /v1/admin/nfts/sweep — run the recovery sweep now (stale pending re-enqueue + timeouts). */
+  app.post("/v1/admin/nfts/sweep", async (c) => {
+    if (!deps.nfts || !deps.nftQueue) {
+      return c.json({ code: "not_configured", message: "NFT stores not configured" }, 501);
+    }
+    const result = await runNftSweep(
+      { nfts: deps.nfts, audit: deps.audit ?? null, log: deps.log ?? silentLogger },
+      deps.nftQueue,
+      {
+        stalePendingMs: deps.nftSweep?.stalePendingMs ?? 5 * 60_000,
+        staleActiveMs: deps.nftSweep?.staleActiveMs ?? 30 * 60_000,
+      },
+    );
+    return c.json({ ok: true, ...result });
   });
 
   return app;

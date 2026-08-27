@@ -136,17 +136,33 @@
 
     "myPropertiesCount": "عقاراتي ({count})",
 
-    "buyFirstShare": "اشترِ حصتك الأولى",
-
-    "buyFirstShareHint": "امتلك جزءًا — اربح إيجارًا متوقعًا كل شهر.",
-
-    "todaysHighlight": "أبرز اليوم",
-
-    "hotThisWeek": "رائج هذا الأسبوع",
-
     "monthlyPerShare": "شهري / حصة",
 
-    "pendingThisWeek": "{amount} قيد الانتظار هذا الأسبوع"
+    "pendingThisWeek": "{amount} قيد الانتظار هذا الأسبوع",
+
+    "earnedWord": "مكتسب",
+
+    "viewAllCount": "+{count} في المحفظة",
+
+    "featuredOpportunity": "فرصة مميزة",
+
+    "featuredTag": "مميز",
+
+    "moreOpportunities": "المزيد من الفرص",
+
+    "emptyTitle": "رحلتك العقارية تبدأ هنا",
+
+    "emptyHint": "مسار هادئ نحو دخل إيجار شهري.",
+
+    "emptyStepBuy": "اشترِ أسهماً",
+
+    "emptyStepLock": "أقفلها لتحقيق العائد",
+
+    "emptyStepEarn": "اربح كل شهر",
+
+    "emptyCta": "استكشف الفرص",
+
+    "trustFooter": "يتراكم دخل الإيجار شهرياً. اسحب في أي وقت (رسوم 1٪، 4 دفعات أسبوعية). محاكاة حتى يتم on-chain."
 
   },
 
@@ -248,7 +264,7 @@
 
     "thisWeek": "أرباح هذا الأسبوع",
 
-    "nextPayoutIn": "الدفعة التالية خلال",
+    "nextPayoutIn": "الدفعة التالية",
 
     "totalReceived": "إجمالي الأرباح المستلمة",
 
@@ -264,7 +280,29 @@
 
     "withdrawalTerms": "اسحب في أي وقت — رسوم 1٪، تُدفع على 4 أقساط أسبوعية",
 
-    "yieldTitle": "عائد الأسهم المقفلة",
+    "yieldTitle": "قوة الكسب",
+
+    "totalEarned": "إجمالي المكتسب",
+
+    "chartTitle": "آخر 12 أسبوعاً",
+
+    "chartCaption": "مدفوعات الإيجار الأسبوعية · محاكاة حتى on-chain.",
+
+    "timelineTitle": "تدفق دخلك",
+
+    "timelinePaid": "مدفوع",
+
+    "timelineAccruing": "متراكم",
+
+    "timelineAccruingSub": "الشهر الحالي",
+
+    "timelineNext": "التقدير التالي",
+
+    "timelineCaption": "استحقاق شهري؛ تتم تسوية المدفوعات كل يوم أحد.",
+
+    "withdraw": "اسحب إلى محفظتك",
+
+    "withdrawSubtitle": "رسوم 1٪ · 4 دفعات أسبوعية",
 
     "yieldAccrued": "مستحق غير مدفوع",
 
@@ -305,6 +343,76 @@
     "lockedShares": "أسهم مقفلة",
 
     "freeShares": "أسهم متاحة",
+
+    "investedWord": "مستثمر",
+
+    "earnedWord": "مكتسب",
+
+    "unrealizedWord": "غير محقق",
+
+    "orderOpen": "مفتوح",
+
+    "allocationProperties": "{count} عقارات",
+
+    "showDetails": "إظهار التفاصيل",
+
+    "hideDetails": "إخفاء التفاصيل",
+
+    "lockedCaption": "يحقق عائداً شهرياً",
+
+    "freeCaption": "لا يحقق بعد",
+
+    "idleShares": "{count} أسهماً لا تحقق",
+
+    "lockThem": "أقفلها",
+
+    "earningPill": "{count} تحقق",
+
+    "idlePill": "{count} خاملة",
+
+    "estMonthly": "≈ {amount} / شهر",
+
+    "projectedMonthlyShort": "إيجار شهري تقديري",
+
+    "exportCsv": "تصدير CSV",
+
+    "exporting": "جارٍ التصدير…",
+
+    "sharesOwned": "الأسهم المملوكة",
+
+    "avgCostPerShare": "متوسط التكلفة / السهم",
+
+    "currentValueRow": "القيمة الحالية",
+
+    "unrealizedPnl": "ربح/خسارة غير محقق",
+
+    "projectedMonthlyYield": "عائد شهري متوقع",
+
+    "buyMore": "شراء المزيد",
+
+    "sellComingSoon": "البيع قريباً",
+
+    "nftCollectible": "NFT قابل للتحصيل",
+
+    "nftItem": "عنصر NFT",
+
+    "collection": "مجموعة",
+
+    "viewOnExplorer": "عرض في المستكشف",
+
+    "nftDisclaimer": "هذا NFT إيصال قابل للتحصيل — تبقى قاعدة البيانات سجل الملكية.",
+
+    "nftStatusPending": "قيد الانتظار",
+
+    "nftStatusMinting": "جارٍ السك",
+
+    "nftStatusMinted": "تم السك",
+
+    "nftStatusTransferring": "جارٍ التحويل",
+
+    "nftStatusDelivered": "تم التسليم",
+
+    "nftStatusFailed": "فشل",
 
     "orderQueued": "في الانتظار"
 
@@ -353,6 +461,8 @@
     "withdrawalStatusApproved": "تمت الموافقة",
 
     "withdrawalStatusRejected": "مرفوض",
+
+    "withdrawalInstallmentProgress": "تم دفع {paid} من {total} دفعات",
 
     "withdrawalRequest": "طلب سحب",
     "withdrawalsError": "تعذر تحميل طلبات السحب",

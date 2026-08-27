@@ -136,17 +136,33 @@
 
     "myPropertiesCount": "Meine Immobilien ({count})",
 
-    "buyFirstShare": "Kaufe deinen ersten Anteil",
-
-    "buyFirstShareHint": "Besitze einen Anteil — erhalte projizierte Miete jeden Monat.",
-
-    "todaysHighlight": "Highlight des Tages",
-
-    "hotThisWeek": "Beliebt diese Woche",
-
     "monthlyPerShare": "Monatlich / Anteil",
 
-    "pendingThisWeek": "{amount} ausstehend diese Woche"
+    "pendingThisWeek": "{amount} ausstehend diese Woche",
+
+    "earnedWord": "verdient",
+
+    "viewAllCount": "+{count} weitere im Portfolio",
+
+    "featuredOpportunity": "Ausgewählte Gelegenheit",
+
+    "featuredTag": "Empfohlen",
+
+    "moreOpportunities": "Weitere Gelegenheiten",
+
+    "emptyTitle": "Deine Immobilien-Reise beginnt hier",
+
+    "emptyHint": "Ein ruhiger Weg zu monatlichem Mieteinkommen.",
+
+    "emptyStepBuy": "Anteile kaufen",
+
+    "emptyStepLock": "Für Rendite sperren",
+
+    "emptyStepEarn": "Monatlich verdienen",
+
+    "emptyCta": "Gelegenheiten entdecken",
+
+    "trustFooter": "Mieteinkommen fällt monatlich an. Beliebig abheben (1 % Gebühr, 4 wöchentliche Raten). Simuliert bis on-chain."
 
   },
 
@@ -248,7 +264,7 @@
 
     "thisWeek": "Erträge dieser Woche",
 
-    "nextPayoutIn": "Nächste Auszahlung in",
+    "nextPayoutIn": "Nächste Auszahlung",
 
     "totalReceived": "Erhaltene Erträge gesamt",
 
@@ -264,7 +280,29 @@
 
     "withdrawalTerms": "Jederzeit abheben — 1 % Gebühr, ausgezahlt in 4 wöchentlichen Raten",
 
-    "yieldTitle": "Ertrag gesperrter Anteile",
+    "yieldTitle": "Ertragskraft",
+
+    "totalEarned": "Insgesamt verdient",
+
+    "chartTitle": "Letzte 12 Wochen",
+
+    "chartCaption": "Wöchentliche Mietpayouts · simuliert bis on-chain.",
+
+    "timelineTitle": "Dein Einkommensfluss",
+
+    "timelinePaid": "Bezahlt",
+
+    "timelineAccruing": "Ansparend",
+
+    "timelineAccruingSub": "aktueller Monat",
+
+    "timelineNext": "Nächste Schätzung",
+
+    "timelineCaption": "Monatliche Abgrenzung; Auszahlungen werden jeden Sonntag abgeglichen.",
+
+    "withdraw": "An deine Wallet abheben",
+
+    "withdrawSubtitle": "1 % Gebühr · 4 wöchentliche Raten",
 
     "yieldAccrued": "Angespart, unverzahlt",
 
@@ -305,6 +343,76 @@
     "lockedShares": "Gesperrte Anteile",
 
     "freeShares": "Freie Anteile",
+
+    "investedWord": "investiert",
+
+    "earnedWord": "verdient",
+
+    "unrealizedWord": "unrealisiert",
+
+    "orderOpen": "Offen",
+
+    "allocationProperties": "{count} Immobilien",
+
+    "showDetails": "Details anzeigen",
+
+    "hideDetails": "Details ausblenden",
+
+    "lockedCaption": "Erzeugt monatliche Rendite",
+
+    "freeCaption": "Noch ohne Rendite",
+
+    "idleShares": "{count} Anteile ohne Rendite",
+
+    "lockThem": "Sperren",
+
+    "earningPill": "{count} verzinst",
+
+    "idlePill": "{count} frei",
+
+    "estMonthly": "≈ {amount} / Monat",
+
+    "projectedMonthlyShort": "Geschätzte Monatsmiete",
+
+    "exportCsv": "CSV exportieren",
+
+    "exporting": "Wird exportiert…",
+
+    "sharesOwned": "Anteile gehalten",
+
+    "avgCostPerShare": "Ø Einstieg / Anteil",
+
+    "currentValueRow": "Aktueller Wert",
+
+    "unrealizedPnl": "Unrealisierter G/V",
+
+    "projectedMonthlyYield": "Projizierte Monatsrendite",
+
+    "buyMore": "Mehr kaufen",
+
+    "sellComingSoon": "Verkauf folgt bald",
+
+    "nftCollectible": "Sammel-NFT",
+
+    "nftItem": "NFT-Objekt",
+
+    "collection": "Sammlung",
+
+    "viewOnExplorer": "Im Explorer ansehen",
+
+    "nftDisclaimer": "Dieses NFT ist eine Sammelbestätigung — die Datenbank bleibt der Eigentumsnachweis.",
+
+    "nftStatusPending": "Ausstehend",
+
+    "nftStatusMinting": "Wird erstellt",
+
+    "nftStatusMinted": "Erstellt",
+
+    "nftStatusTransferring": "Wird übertragen",
+
+    "nftStatusDelivered": "Zugestellt",
+
+    "nftStatusFailed": "Fehlgeschlagen",
 
     "orderQueued": "Warteschlange"
 
@@ -353,6 +461,8 @@
     "withdrawalStatusApproved": "Genehmigt",
 
     "withdrawalStatusRejected": "Abgelehnt",
+
+    "withdrawalInstallmentProgress": "{paid} von {total} Raten bezahlt",
 
     "withdrawalRequest": "Auszahlung anfordern",
     "withdrawalsError": "Auszahlungsanfragen konnten nicht geladen werden",

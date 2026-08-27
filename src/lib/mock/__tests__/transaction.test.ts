@@ -30,6 +30,40 @@ describe("MockTxRepo prepareBuy + confirmBuy (mock keeps optimistic settlement)"
     expect(prep.message.payload).toBeNull();
   });
 
+  it("prepareBuy charges the primary-market commission (tier fallback) — buyer pays principal + fee", async () => {
+    const repo = MockTxRepo();
+    // $750 principal → $500–$2,000 tier (2.5%) → $18.75 commission → $768.75 payable.
+    const prep = await repo.prepareBuy({
+      propertyId: "prop-soho-loft-studio",
+      quantity: 5,
+      priceUsdPerShare: 15000,
+    });
+    expect(prep.feeUsd).toBe(1_875);
+    expect(prep.totalPayableUsd).toBe(76_875);
+    expect(prep.totalPayableUsd).toBe(prep.totalUsd + (prep.feeUsd ?? 0));
+
+    // The TON message amount is derived from the PAYABLE (principal + fee), not the principal.
+    const { estimateNanoTon } = await import("@/lib/format");
+    const { TON_PRICE_USD_CENTS } = await import("@/lib/constants");
+    expect(prep.message.amount).toBe(
+      estimateNanoTon(prep.totalPayableUsd!, TON_PRICE_USD_CENTS).toString(),
+    );
+  });
+
+  it("confirmBuy records the commission separately as feeUsd on the ledger row", async () => {
+    const repo = MockTxRepo();
+    const prep = await repo.prepareBuy({
+      propertyId: "prop-soho-loft-studio",
+      quantity: 5,
+      priceUsdPerShare: 15000,
+    });
+    await repo.confirmBuy({ intentId: prep.intentId });
+    const created = seed.transactions[seed.transactions.length - 1]!;
+    expect(created.kind).toBe("buy");
+    expect(created.amountUsd).toBe(75_000);
+    expect(created.feeUsd).toBe(1_875);
+  });
+
   it("prepareBuy supports the USDT rail with a gas-sized message", async () => {
     const repo = MockTxRepo();
     const prep = await repo.prepareBuy({

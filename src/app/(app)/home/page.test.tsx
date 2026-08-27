@@ -29,9 +29,7 @@ vi.mock("@/hooks/useTonConnect", () => ({
 vi.mock("@/hooks/useTelegram", () => ({
   useTelegram: () => ({ haptics: { selection: vi.fn(), impact: vi.fn(), notification: vi.fn() } }),
 }));
-vi.mock("@/hooks/usePayoutCountdownDhms", () => ({
-  usePayoutCountdownDhms: () => "2d - 14h - 00m - 00s",
-}));
+vi.mock("@/hooks/useSharedNowMs", () => ({ useSharedNowMs: () => 1_700_000_000_000 }));
 
 const usePortfolio = vi.fn();
 const useEarnings = vi.fn();
@@ -57,8 +55,8 @@ const listing: Listing = {
   sharesSold: 920,
   sharesRemaining: 80,
   fundingProgressRatio: 0.92,
-    monthlyYieldRate: 6.25,
-    totalValueUsd: 8_000_000,
+  monthlyYieldRate: 6.25,
+  totalValueUsd: 8_000_000,
   meta: {
     sizeSqm: 72,
     yearBuilt: 2019,
@@ -69,6 +67,28 @@ const listing: Listing = {
     tokenizationDocUrl: "#",
   },
   rentalHistory: [],
+};
+
+const fundingTwo: Listing = {
+  ...listing,
+  id: "prop-second-primary",
+  title: "Second Primary",
+  location: "Bali",
+  description: "Oceanfront",
+  images: ["/images/properties/p1.png"],
+  status: "funding",
+  totalValueUsd: 5_000_000,
+};
+
+const fundedResale: Listing = {
+  ...listing,
+  id: "prop-resale",
+  title: "Resale Villa",
+  location: "Mykonos",
+  description: "Villa",
+  images: ["/images/properties/p1.png"],
+  status: "funded",
+  totalValueUsd: 6_000_000,
 };
 
 const summary: PortfolioSummary = {
@@ -97,10 +117,14 @@ const earnings: EarningsSummary = {
   entries: [],
 };
 
-describe("Home page — Fable redesign", () => {
+describe("Home page — calm-money redesign", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    useMarketplace.mockReturnValue({ data: [listing], isLoading: false, isError: false });
+    useMarketplace.mockReturnValue({
+      data: [listing, fundingTwo, fundedResale],
+      isLoading: false,
+      isError: false,
+    });
     useEarnings.mockReturnValue({ data: earnings, isLoading: false, isError: false });
   });
 
@@ -116,26 +140,70 @@ describe("Home page — Fable redesign", () => {
     expect(screen.getByRole("button", { name: /try again/i })).toBeInTheDocument();
   });
 
-  it("loaded: portfolio card, next payout, my properties, featured", () => {
+  it("loaded: calm hero, static next payout, my properties, featured, more opportunities, trust footer", () => {
     usePortfolio.mockReturnValue({ data: summary, isLoading: false, isError: false, refetch: vi.fn() });
     render(<HomePage />);
+
+    // Calm portfolio hero: value + muted break line, no day-change badge.
     expect(screen.getByTestId("portfolio-value-card")).toHaveAttribute("href", "/portfolio");
-    expect(screen.getByTestId("day-change-badge")).toHaveTextContent("+2.3%");
-    expect(screen.getByText("Total Invested")).toBeInTheDocument();
-    expect(screen.getByText("Total Earnings Received")).toBeInTheDocument();
-    expect(screen.getByTestId("next-payout-card")).toHaveAttribute("href", "/earnings");
-    expect(screen.getByTestId("next-payout-timer")).toHaveTextContent("2d - 14h - 00m - 00s");
+    expect(screen.getByTestId("portfolio-value-amount")).toHaveTextContent("$2,500.00");
+    const heroSecondary = screen.getByTestId("portfolio-hero-secondary");
+    expect(heroSecondary).toHaveTextContent("$2,400.00 Total Invested");
+    expect(heroSecondary).toHaveTextContent("+$120.00 earned");
+    expect(screen.queryByTestId("day-change-badge")).not.toBeInTheDocument();
+
+    // Static next-payout summary (no ticking countdown).
+    expect(screen.getByTestId("next-payout-summary")).toHaveAttribute("href", "/earnings");
+    expect(screen.getByTestId("next-payout-date")).toHaveTextContent(/Sun/);
     expect(screen.getByTestId("next-payout-amount")).toHaveTextContent("$33.75");
-    expect(screen.getByTestId("my-properties-scroll")).toBeInTheDocument();
-    expect(screen.getByTestId("home-property-chip")).toHaveAttribute(
-      "href",
-      `/property/${listing.id}`,
-    );
+    expect(screen.queryByTestId("next-payout-timer")).not.toBeInTheDocument();
+
+    expect(screen.getByTestId("my-properties-list")).toBeInTheDocument();
+    // Title appears in both the My-Properties chip and the Featured card.
+    expect(screen.getAllByText("Marina Vista Apt 4B").length).toBeGreaterThan(0);
+
+    // Editorial Featured — no flame/hot cue.
     expect(screen.getByTestId("featured-card")).toBeInTheDocument();
+    expect(screen.getByText("Featured Opportunity")).toBeInTheDocument();
+    expect(screen.queryByText("Hot this week")).not.toBeInTheDocument();
+
+    // 1–2 primary listings in More opportunities (excludes featured + non-primary).
+    const moreCards = screen.getAllByTestId("more-opportunity-card");
+    expect(moreCards.length).toBeGreaterThan(0);
+    expect(moreCards.length).toBeLessThanOrEqual(2);
+
+    expect(screen.getByTestId("home-trust-footer")).toBeInTheDocument();
   });
 
+  it("cops My Properties to a short calm set (max 3 + View all)", () => {
+    const fiveProperties = [
+      ...Array.from({ length: 5 }).map((_, i) => ({
+        ...listing,
+        id: `prop-clone-${i}`,
+        title: `Clone Villa ${i}`,
+      })),
+    ];
+    const manyHoldings = fiveProperties.map((p) => ({
+      propertyId: p.id,
+      sharesOwned: 10,
+      avgCostUsd: 12500,
+      currentValueUsd: 50_000,
+      pendingWeekEarningsUsd: 200,
+      shareRatio: 0.001,
+    }));
+    useMarketplace.mockReturnValue({ data: fiveProperties, isLoading: false, isError: false });
+    usePortfolio.mockReturnValue({
+      data: { ...summary, holdings: manyHoldings },
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    });
+    render(<HomePage />);
+    expect(screen.getAllByTestId("home-property-chip").length).toBe(3);
+    expect(screen.getByText("+2 more in Portfolio")).toBeInTheDocument();
+  });
 
-  it("empty holdings: Buy your first share + Browse Marketplace", () => {
+  it("empty holdings: premium Buy shares → Lock → Earn state + Featured still visible", () => {
     usePortfolio.mockReturnValue({
       data: { ...summary, holdings: [] },
       isLoading: false,
@@ -143,10 +211,11 @@ describe("Home page — Fable redesign", () => {
       refetch: vi.fn(),
     });
     render(<HomePage />);
-    expect(screen.getByTestId("first-share-empty")).toBeInTheDocument();
-    expect(screen.getByText("Buy your first share")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /browse marketplace/i })).toHaveAttribute("href", "/marketplace");
-    // Featured still available
+    expect(screen.getByTestId("home-empty-state")).toBeInTheDocument();
+    expect(screen.getByTestId("empty-step-buy")).toHaveTextContent("Buy shares");
+    expect(screen.getByTestId("empty-step-lock")).toHaveTextContent("Lock them to earn yield");
+    expect(screen.getByTestId("empty-step-earn")).toHaveTextContent("Earn every month");
+    expect(screen.getByTestId("empty-browse-marketplace")).toHaveAttribute("href", "/marketplace");
     expect(screen.getByTestId("featured-card")).toBeInTheDocument();
   });
 

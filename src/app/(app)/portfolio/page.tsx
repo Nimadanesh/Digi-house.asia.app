@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { useMarketplace } from "@/hooks/useMarketplace";
 import { useLocks } from "@/hooks/useLocks";
+import { useNfts } from "@/hooks/useNfts";
 import { useTelegram } from "@/hooks/useTelegram";
 import { haptics } from "@/lib/telegram/haptics";
 import { portfolioAllocation } from "@/lib/portfolio-math";
@@ -12,6 +13,7 @@ import { EmptyState } from "@/components/common/EmptyState";
 import { ErrorState } from "@/components/common/ErrorState";
 import { BrowseMarketplaceCta } from "@/components/common/BrowseMarketplaceCta";
 import { PortfolioSummaryCard } from "@/components/portfolio/PortfolioSummaryCard";
+import { LockedFreeCard } from "@/components/portfolio/LockedFreeCard";
 import { AllocationBar } from "@/components/portfolio/AllocationBar";
 import { HoldingCard } from "@/components/portfolio/HoldingCard";
 import { HoldingDetailSheet } from "@/components/portfolio/HoldingDetailSheet";
@@ -23,12 +25,14 @@ import { Block } from "@/components/common/Block";
 import { Download } from "lucide-react";
 import type { Holding } from "@/types/position";
 import type { Listing } from "@/types/property";
+import type { HoldingNft } from "@/types/nft";
 
 export default function PortfolioPage() {
   const t = useTranslations("portfolio");
   const portfolio = usePortfolio();
   const marketplace = useMarketplace();
   const locksQuery = useLocks();
+  const nftsQuery = useNfts();
 
   // Locked-share split (PRODUCT-PLAN §0.4): totals for the summary + per-holding pill.
   const lockedByProperty = useMemo(() => {
@@ -53,6 +57,13 @@ export default function PortfolioPage() {
     () => Object.fromEntries((marketplace.data ?? []).map((p) => [p.id, p.title])),
     [marketplace.data],
   );
+
+  // Collectible-NFT receipt per property (display-only — the DB is the ownership record).
+  const nftByProperty = useMemo(() => {
+    const m = new Map<string, HoldingNft>();
+    for (const n of nftsQuery.data ?? []) m.set(n.propertyId, n);
+    return m;
+  }, [nftsQuery.data]);
 
   const closeSheet = useCallback(() => {
     haptics.selection();
@@ -116,13 +127,20 @@ export default function PortfolioPage() {
   const selectedListing = selected ? listingById.get(selected.propertyId) : undefined;
   const totalOwned = data.holdings.reduce((s, h) => s + h.sharesOwned, 0);
   const totalLocked = [...lockedByProperty.values()].reduce((s, n) => s + n, 0);
+  const totalFree = Math.max(0, totalOwned - totalLocked);
+  // Quiet idle-share action targets the property holding the most free (idle) shares.
+  const nudgePropertyId = data.holdings
+    .map((h) => ({ id: h.propertyId, free: h.sharesOwned - (lockedByProperty.get(h.propertyId) ?? 0) }))
+    .filter((h) => h.free > 0)
+    .sort((a, b) => b.free - a.free)[0]?.id;
 
   return (
     <div className="mt-3 space-y-4 pb-2" data-testid="portfolio-page">
-      <PortfolioSummaryCard
-        summary={data}
+      <PortfolioSummaryCard summary={data} />
+      <LockedFreeCard
         lockedShares={totalLocked}
-        freeShares={Math.max(0, totalOwned - totalLocked)}
+        freeShares={totalFree}
+        nudgePropertyId={nudgePropertyId}
       />
       <AllocationBar slices={slices} nameById={nameById} />
 
@@ -141,6 +159,7 @@ export default function PortfolioPage() {
                 location={listing?.location ?? ""}
                 image={listing?.images[0]}
                 lockedShares={lockedByProperty.get(h.propertyId) ?? 0}
+                nftStatus={nftByProperty.get(h.propertyId)?.status ?? null}
                 onOpen={() => {
                   haptics.selection();
                   setSelected(h);
@@ -169,7 +188,7 @@ export default function PortfolioPage() {
           >
             <Download size={20} strokeWidth={1.75} className="shrink-0 text-muted-foreground" aria-hidden />
             <span className="flex-1 text-sm font-medium leading-snug text-foreground">
-              {csvDownloading ? "Exporting…" : "Export CSV"}
+              {csvDownloading ? t("exporting") : t("exportCsv")}
             </span>
           </button>
         </Block>
@@ -182,6 +201,7 @@ export default function PortfolioPage() {
         title={selectedListing?.title ?? selected?.propertyId ?? ""}
         location={selectedListing?.location ?? ""}
         image={selectedListing?.images[0]}
+        nft={selected ? nftByProperty.get(selected.propertyId) ?? null : null}
       />
     </div>
   );

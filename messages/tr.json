@@ -136,17 +136,33 @@
 
     "myPropertiesCount": "Mülklerim ({count})",
 
-    "buyFirstShare": "İlk payını satın al",
-
-    "buyFirstShareHint": "Bir dilim sahiplen — her ay tahmini kira kazan.",
-
-    "todaysHighlight": "Günün öne çıkanı",
-
-    "hotThisWeek": "Bu hafta popüler",
-
     "monthlyPerShare": "Aylık / pay",
 
-    "pendingThisWeek": "Bu hafta {amount} beklemede"
+    "pendingThisWeek": "Bu hafta {amount} beklemede",
+
+    "earnedWord": "kazanıldı",
+
+    "viewAllCount": "Portföyde +{count} daha",
+
+    "featuredOpportunity": "Öne çıkan fırsat",
+
+    "featuredTag": "Öne çıkan",
+
+    "moreOpportunities": "Daha fazla fırsat",
+
+    "emptyTitle": "Gayrimenkul yolculuğunuz burada başlıyor",
+
+    "emptyHint": "Aylık kira gelirine sakin bir yol.",
+
+    "emptyStepBuy": "Hisse satın al",
+
+    "emptyStepLock": "Getiri için kilitle",
+
+    "emptyStepEarn": "Her ay kazan",
+
+    "emptyCta": "Fırsatları keşfet",
+
+    "trustFooter": "Kira geliri aylık birikir. İstediğiniz zaman çekin (%1 ücret, 4 haftalık taksit). On-chain olana kadar simüle."
 
   },
 
@@ -248,7 +264,7 @@
 
     "thisWeek": "Bu haftanın kazancı",
 
-    "nextPayoutIn": "Sonraki ödemeye",
+    "nextPayoutIn": "Sonraki ödeme",
 
     "totalReceived": "Alınan toplam kazanç",
 
@@ -264,7 +280,29 @@
 
     "withdrawalTerms": "Dilediğin zaman çek — %1 ücret, 4 haftalık taksitte ödenir",
 
-    "yieldTitle": "Kilitli pay getirisi",
+    "yieldTitle": "Kazanç gücü",
+
+    "totalEarned": "Toplam kazanılan",
+
+    "chartTitle": "Son 12 hafta",
+
+    "chartCaption": "Haftalık kira ödemeleri · on-chain olana kadar simüle.",
+
+    "timelineTitle": "Gelir akışınız",
+
+    "timelinePaid": "Ödendi",
+
+    "timelineAccruing": "Birikiyor",
+
+    "timelineAccruingSub": "içinde bulunulan ay",
+
+    "timelineNext": "Sonraki tahmin",
+
+    "timelineCaption": "Aylık birikim; ödemeler her Pazar mutabakat edilir.",
+
+    "withdraw": "Cüzdanına çek",
+
+    "withdrawSubtitle": "%1 ücret · 4 haftalık taksit",
 
     "yieldAccrued": "Birikmiş ödenmemiş",
 
@@ -305,6 +343,76 @@
     "lockedShares": "Kilitli paylar",
 
     "freeShares": "Serbest paylar",
+
+    "investedWord": "yatırılan",
+
+    "earnedWord": "kazanılan",
+
+    "unrealizedWord": "gerçekleşmemiş",
+
+    "orderOpen": "Açık",
+
+    "allocationProperties": "{count} emlak",
+
+    "showDetails": "Detayları göster",
+
+    "hideDetails": "Detayları gizle",
+
+    "lockedCaption": "Aylık getiri sağlıyor",
+
+    "freeCaption": "Henüz getiri yok",
+
+    "idleShares": "{count} hisse getiride değil",
+
+    "lockThem": "Kilitler",
+
+    "earningPill": "{count} getiride",
+
+    "idlePill": "{count} boşta",
+
+    "estMonthly": "≈ {amount} / ay",
+
+    "projectedMonthlyShort": "Tahmini aylık kira",
+
+    "exportCsv": "CSV dışa aktar",
+
+    "exporting": "Dışa aktarılıyor…",
+
+    "sharesOwned": "Sahip olunan hisse",
+
+    "avgCostPerShare": "Ort. maliyet / hisse",
+
+    "currentValueRow": "Güncel değer",
+
+    "unrealizedPnl": "Gerçekleşmemiş K/Z",
+
+    "projectedMonthlyYield": "Öngörülen aylık getiri",
+
+    "buyMore": "Daha fazla al",
+
+    "sellComingSoon": "Satış yakında",
+
+    "nftCollectible": "Koleksiyon NFT",
+
+    "nftItem": "NFT öğesi",
+
+    "collection": "Koleksiyon",
+
+    "viewOnExplorer": "Kâşifte görüntüle",
+
+    "nftDisclaimer": "Bu NFT koleksiyonluk bir makbuzdur — veritabanı sahiplik kaydı olmaya devam eder.",
+
+    "nftStatusPending": "Beklemede",
+
+    "nftStatusMinting": "Basılıyor",
+
+    "nftStatusMinted": "Basıldı",
+
+    "nftStatusTransferring": "Aktarılıyor",
+
+    "nftStatusDelivered": "Teslim edildi",
+
+    "nftStatusFailed": "Başarısız",
 
     "orderQueued": "Sırada"
 
@@ -353,6 +461,8 @@
     "withdrawalStatusApproved": "Onaylandı",
 
     "withdrawalStatusRejected": "Reddedildi",
+
+    "withdrawalInstallmentProgress": "{paid} / {total} taksit ödendi",
 
     "withdrawalRequest": "Para çekme talebi",
     "withdrawalsError": "Para çekme talepleri yüklenemedi",

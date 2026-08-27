@@ -17,6 +17,9 @@ import { createDbBalanceStore } from "./money/balance-store.js";
 import { createDbInstantSellStore } from "./sells/instant-sell-store.js";
 import { createDbTradeStore } from "./orders/trade-store.js";
 import { createDbWithdrawalStore } from "./withdrawals/withdrawal-store.js";
+import { createDbInstallmentStore } from "./withdrawals/installment-store.js";
+import { createDbNftStore } from "./nft/nft-store.js";
+import { createNftQueue } from "./nft/worker.js";
 import { createDbWaitlistStore } from "./waitlist/waitlist-store.js";
 import { propertyDocuments } from "./db/schema/property-documents.js";
 import { SEED_DOCUMENTS } from "./db/seed/documents-data.js";
@@ -42,6 +45,9 @@ let balanceStore = null as ReturnType<typeof createDbBalanceStore> | null;
 let instantSellStore = null as ReturnType<typeof createDbInstantSellStore> | null;
 let tradeStore = null as ReturnType<typeof createDbTradeStore> | null;
 let withdrawalStore = null as ReturnType<typeof createDbWithdrawalStore> | null;
+let installmentStore = null as ReturnType<typeof createDbInstallmentStore> | null;
+let nftStore = null as ReturnType<typeof createDbNftStore> | null;
+let nftQueue = null as ReturnType<typeof createNftQueue> | null;
 let waitlistStore = null as ReturnType<typeof createDbWaitlistStore> | null;
 if (env.DATABASE_URL) {
   try {
@@ -62,6 +68,8 @@ if (env.DATABASE_URL) {
     instantSellStore = createDbInstantSellStore(db);
     tradeStore = createDbTradeStore(db);
     withdrawalStore = createDbWithdrawalStore(db);
+    installmentStore = createDbInstallmentStore(db);
+    nftStore = createDbNftStore(db);
     waitlistStore = createDbWaitlistStore(db);
     // Seed demo documents if table is empty
     if (env.NODE_ENV !== "production") {
@@ -77,7 +85,7 @@ if (env.DATABASE_URL) {
       });
     }
     log.info(
-      "database stores enabled (users + properties + holdings + earnings + orders + buys + audit + documents)",
+      "database stores enabled (users + properties + holdings + earnings + orders + buys + audit + documents + nfts)",
     );
   } catch (err) {
     log.fatal({ err }, "failed to init database");
@@ -87,6 +95,10 @@ if (env.DATABASE_URL) {
   log.warn(
     "DATABASE_URL unset — authenticated API routes not mounted (healthz only)",
   );
+}
+
+if (env.REDIS_URL?.trim()) {
+  nftQueue = createNftQueue(env.REDIS_URL);
 }
 
 const app = createApp({
@@ -108,7 +120,16 @@ const app = createApp({
   instantSells: instantSellStore,
   trades: tradeStore,
   withdrawals: withdrawalStore,
+  installments: installmentStore,
   waitlist: waitlistStore,
+  nfts: nftStore,
+  nftQueue: nftQueue ? { add: (job) => nftQueue.add(job.name, job.data) } : null,
+  nftMetadataBaseUrl: env.NFT_METADATA_BASE_URL,
+  nftCollectionAddress: env.NFT_COLLECTION_ADDRESS ?? null,
+  nftSweep: {
+    stalePendingMs: env.NFT_STALE_PENDING_MS,
+    staleActiveMs: env.NFT_STALE_ACTIVE_MS,
+  },
   unlockMaturationMs: env.UNLOCK_MATURATION_MS,
   orderRateLimitMax: env.ORDER_RATE_LIMIT_MAX,
   orderRateLimitWindowMs: env.ORDER_RATE_LIMIT_WINDOW_MS,
@@ -141,7 +162,16 @@ server.on("error", (err: NodeJS.ErrnoException) => {
 
 function shutdown(signal: string) {
   log.info({ signal }, "shutting down");
-  server.close(() => process.exit(0));
+  server.close(async () => {
+    if (nftQueue) {
+      try {
+        await nftQueue.close();
+      } catch {
+        // best-effort queue close on shutdown
+      }
+    }
+    process.exit(0);
+  });
 }
 
 process.on("SIGINT", () => shutdown("SIGINT"));

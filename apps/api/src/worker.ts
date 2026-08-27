@@ -17,6 +17,7 @@ import { startIndexer } from "./indexer/indexer-worker.js";
 import { createTonClient } from "./indexer/ton-client.js";
 import { createLogger } from "./logger.js";
 import { createDbPropertyStore } from "./marketplace/property-store.js";
+import { createDbHoldingStore } from "./portfolio/holding-store.js";
 import { createDbBalanceStore } from "./money/balance-store.js";
 import type { NotifyDeps } from "./notify/notify-utils.js";
 import { createDbDistributionStore } from "./payouts/distribution-store.js";
@@ -36,6 +37,23 @@ import {
   startYieldWorker,
 } from "./yield/queue.js";
 import { tickYieldEngine } from "./yield/tick-yield.js";
+import { createDbInstallmentStore } from "./withdrawals/installment-store.js";
+import {
+  createWithdrawalQueue,
+  scheduleWithdrawalTickJobs,
+  startWithdrawalWorker,
+} from "./withdrawals/worker.js";
+import { createDbNftStore } from "./nft/nft-store.js";
+import {
+  createSimulatedNftMinter,
+  createTonNftMinter,
+} from "./nft/minter.js";
+import {
+  createNftQueue,
+  runNftSweep,
+  scheduleNftSweep,
+  startNftWorker,
+} from "./nft/worker.js";
 
 const env = loadEnv();
 const log = createLogger(env);
@@ -43,11 +61,13 @@ const log = createLogger(env);
 async function main() {
   const hasPayoutWorker = env.PAYOUT_WORKER_ENABLED && env.REDIS_URL?.trim();
   const hasYieldWorker = env.YIELD_WORKER_ENABLED && env.REDIS_URL?.trim();
+  const hasWithdrawalWorker = env.WITHDRAWAL_WORKER_ENABLED && env.REDIS_URL?.trim();
+  const hasNftWorker = env.NFT_WORKER_ENABLED && env.REDIS_URL?.trim();
   const hasIndexer = env.INDEXER_ENABLED && env.DATABASE_URL?.trim();
 
-  if (!hasPayoutWorker && !hasYieldWorker && !hasIndexer) {
+  if (!hasPayoutWorker && !hasYieldWorker && !hasWithdrawalWorker && !hasNftWorker && !hasIndexer) {
     log.info(
-      "PAYOUT_WORKER_ENABLED=false, YIELD_WORKER_ENABLED=false and INDEXER_ENABLED=false — no workers started",
+      "PAYOUT_WORKER_ENABLED=false, YIELD_WORKER_ENABLED=false, WITHDRAWAL_WORKER_ENABLED=false, NFT_WORKER_ENABLED=false and INDEXER_ENABLED=false — no workers started",
     );
     process.exit(0);
   }
@@ -185,6 +205,100 @@ async function main() {
     shutdownHandlers.push(async () => {
       await yieldHandle.close();
       await queue.close();
+    });
+  }
+
+  if (hasNftWorker) {
+    // The minter is the ONE place that touches the blockchain. Private keys never leave
+    // env; missing TON config → null → records fail cleanly (minter_not_configured).
+    const minter =
+      env.NFT_MINTER_MODE === "ton"
+        ? createTonNftMinter({
+            mnemonic: env.NFT_MINTER_MNEMONIC ?? "",
+            collectionAddress: env.NFT_COLLECTION_ADDRESS ?? "",
+            toncenterUrl: env.TONCENTER_API_URL,
+            toncenterApiKey: env.TONCENTER_API_KEY,
+            network: env.NFT_NETWORK,
+          })
+        : createSimulatedNftMinter();
+
+    const nftDeps = {
+      nfts: createDbNftStore(db),
+      minter,
+      properties: createDbPropertyStore(db),
+      holdings: createDbHoldingStore(db),
+      audit: createDbAuditStore(db),
+      log,
+      maxAttempts: env.NFT_JOB_ATTEMPTS,
+    };
+
+    const nftQueue = createNftQueue(env.REDIS_URL);
+    if (!nftQueue) {
+      log.fatal("failed to create nft queue");
+      process.exit(1);
+    }
+
+    await scheduleNftSweep(nftQueue, env.NFT_TICK_MS);
+    log.info(
+      { everyMs: env.NFT_TICK_MS, queue: "digihouse-nfts" },
+      "scheduled repeatable sweepNfts",
+    );
+
+    // Boot sweep: recover stale pending records left by an API restart.
+    void runNftSweep(
+      nftDeps,
+      { add: (job) => nftQueue.add(job.name, job.data) },
+      {
+        stalePendingMs: env.NFT_STALE_PENDING_MS,
+        staleActiveMs: env.NFT_STALE_ACTIVE_MS,
+      },
+    ).catch((err) => {
+      log.warn({ err }, "nft boot sweep failed");
+    });
+
+    const nftHandle = startNftWorker({
+      redisUrl: env.REDIS_URL!,
+      deps: nftDeps,
+      log,
+      stalePendingMs: env.NFT_STALE_PENDING_MS,
+      staleActiveMs: env.NFT_STALE_ACTIVE_MS,
+      queue: nftQueue,
+      notify: opsNotify,
+    });
+    log.info(
+      { mode: env.NFT_MINTER_MODE, minterReady: minter !== null },
+      "nft worker listening",
+    );
+
+    shutdownHandlers.push(async () => {
+      await nftHandle.close();
+      await nftQueue.close();
+    });
+  }
+
+  if (hasWithdrawalWorker) {
+    const withdrawalHandle = startWithdrawalWorker({
+      redisUrl: env.REDIS_URL!,
+      installments: createDbInstallmentStore(db),
+      log,
+      notify: opsNotify,
+    });
+    log.info("withdrawal worker listening");
+
+    const withdrawalQueue = createWithdrawalQueue(env.REDIS_URL);
+    if (!withdrawalQueue) {
+      log.fatal("failed to create withdrawal queue");
+      process.exit(1);
+    }
+    await scheduleWithdrawalTickJobs(withdrawalQueue, env.WITHDRAWAL_TICK_MS);
+    log.info(
+      { everyMs: env.WITHDRAWAL_TICK_MS, queue: "digihouse-withdrawals" },
+      "scheduled repeatable tickWithdrawals",
+    );
+
+    shutdownHandlers.push(async () => {
+      await withdrawalHandle.close();
+      await withdrawalQueue.close();
     });
   }
 

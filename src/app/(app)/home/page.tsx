@@ -1,5 +1,7 @@
 "use client";
-// File responsibility: Home screen composition (Fable Home). GlobalHeader is provided by AppShell.
+// File responsibility: Home screen composition (redesign — "calm money, clear next step").
+// Calm portfolio hero → static next-payout summary → My Properties (max 3) → one editorial
+// Featured Opportunity → a short More-opportunities rail of Primary listings → quiet trust footer.
 import { useCallback, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { usePortfolio } from "@/hooks/usePortfolio";
@@ -8,9 +10,11 @@ import { useMarketplace } from "@/hooks/useMarketplace";
 import { haptics } from "@/lib/telegram/haptics";
 import { pickFeaturedListing } from "@/lib/home-featured";
 import { PortfolioValueCard } from "@/components/home/PortfolioValueCard";
-import { NextPayoutCard } from "@/components/home/NextPayoutCard";
+import { NextPayoutSummary } from "@/components/money/NextPayoutSummary";
 import { MyPropertiesSection } from "@/components/home/MyPropertiesSection";
 import { FeaturedPropertyCard } from "@/components/home/FeaturedPropertyCard";
+import { MoreOpportunitiesSection, pickMoreOpportunities } from "@/components/home/MoreOpportunitiesSection";
+import { HomeTrustFooter } from "@/components/home/HomeTrustFooter";
 import { HomeSkeleton } from "@/components/home/HomeSkeleton";
 import { ErrorState } from "@/components/common/ErrorState";
 import type { PortfolioSummary } from "@/types/position";
@@ -41,6 +45,14 @@ export default function HomePage() {
     [marketplace.data],
   );
 
+  // A short calm rail of additional Primary (funding) listings, not the Featured one.
+  const moreOpportunities = useMemo(
+    () => pickMoreOpportunities(marketplace.data ?? [], featured?.id),
+    [marketplace.data, featured?.id],
+  );
+
+  const holdings = portfolio.data?.holdings ?? EMPTY_SUMMARY.holdings;
+
   const tap = useCallback(() => haptics.selection(), []);
 
   if (portfolio.isLoading && !portfolio.data) {
@@ -68,15 +80,22 @@ export default function HomePage() {
   return (
     <div className="mt-1 space-y-3 pb-2" data-testid="home-page">
       <PortfolioValueCard summary={summary} onNavigateHaptic={tap} />
-      <NextPayoutCard projectedUsd={projectedNext} onNavigateHaptic={tap} />
+      <NextPayoutSummary projectedUsd={projectedNext} onNavigateHaptic={tap} />
       <MyPropertiesSection
-        holdings={summary.holdings}
+        holdings={holdings}
         listingById={listingById}
         onNavigateHaptic={tap}
       />
       {featured ? (
         <FeaturedPropertyCard listing={featured} onNavigateHaptic={tap} />
       ) : null}
+      {moreOpportunities.length > 0 ? (
+        <MoreOpportunitiesSection
+          listings={moreOpportunities}
+          onNavigateHaptic={tap}
+        />
+      ) : null}
+      <HomeTrustFooter />
     </div>
   );
 }

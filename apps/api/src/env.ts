@@ -102,6 +102,41 @@ const envSchema = z
     ALLOWLIST_WALLETS: z.string().optional(),
     /** Kill switch — indexer process no-ops when false (default). */
     INDEXER_ENABLED: boolish,
+
+    /** FractionalLuxe withdrawal installments (locked model). */
+    /** Kill switch for the withdrawal due-marking worker (pending → due weekly ticks). */
+    WITHDRAWAL_WORKER_ENABLED: boolish,
+    /** Withdrawal worker tick cadence in ms (default 60s; idempotent). */
+    WITHDRAWAL_TICK_MS: z.coerce.number().int().positive().default(60_000),
+
+    /** Collectible Position NFT (Phase 1–13). */
+    /** Kill switch for the NFT worker (mint → transfer → deliver + recovery sweep). */
+    NFT_WORKER_ENABLED: boolish,
+    /** NFT recovery sweep cadence in ms (default 60s). */
+    NFT_TICK_MS: z.coerce.number().int().positive().default(60_000),
+    /**
+     * Minter mode: "simulated" (default, no blockchain) or "ton" (testnet, requires
+     * NFT_MINTER_MNEMONIC + NFT_COLLECTION_ADDRESS). Never guess credentials.
+     */
+    NFT_MINTER_MODE: z.enum(["simulated", "ton"]).default("simulated"),
+    /** Network the minter operates on — source of truth for testOnly NFT address serialization. */
+    NFT_NETWORK: z.enum(["testnet", "mainnet"]).default("testnet"),
+    /** 24-word minter wallet mnemonic (SECRET — env only, never committed/logged). */
+    NFT_MINTER_MNEMONIC: z.string().optional(),
+    /** Deployed TON NFT collection address (user-friendly; testnet first). */
+    NFT_COLLECTION_ADDRESS: z.string().optional(),
+    /** Toncenter HTTP API v2 endpoint for sending minter transactions. */
+    TONCENTER_API_URL: z.string().default("https://testnet.toncenter.com/api/v2/jsonRPC"),
+    /** Optional Toncenter API key. */
+    TONCENTER_API_KEY: z.string().optional(),
+    /** Base URL for stable NFT metadata URLs served by this API. */
+    NFT_METADATA_BASE_URL: z.string().default("http://localhost:8787"),
+    /** BullMQ mint job attempts (transient failures retry with backoff). */
+    NFT_JOB_ATTEMPTS: z.coerce.number().int().positive().default(3),
+    /** Stale `pending` records older than this are re-enqueued by the sweep (ms). */
+    NFT_STALE_PENDING_MS: z.coerce.number().int().positive().default(5 * 60_000),
+    /** Records stuck in minting/transferring past this are failed (timeout) by the sweep (ms). */
+    NFT_STALE_ACTIVE_MS: z.coerce.number().int().positive().default(30 * 60_000),
   })
   .superRefine((val, ctx) => {
     const secret = val.SESSION_SECRET ?? val.JWT_SECRET;
@@ -170,6 +205,20 @@ const envSchema = z
       INDEXER_ENABLED: val.INDEXER_ENABLED,
       LAUNCH_MODE: val.LAUNCH_MODE,
       ALLOWLIST_WALLETS: val.ALLOWLIST_WALLETS,
+      WITHDRAWAL_WORKER_ENABLED: val.WITHDRAWAL_WORKER_ENABLED,
+      WITHDRAWAL_TICK_MS: val.WITHDRAWAL_TICK_MS,
+      NFT_WORKER_ENABLED: val.NFT_WORKER_ENABLED,
+      NFT_TICK_MS: val.NFT_TICK_MS,
+      NFT_MINTER_MODE: val.NFT_MINTER_MODE,
+      NFT_NETWORK: val.NFT_NETWORK,
+      NFT_MINTER_MNEMONIC: val.NFT_MINTER_MNEMONIC,
+      NFT_COLLECTION_ADDRESS: val.NFT_COLLECTION_ADDRESS,
+      TONCENTER_API_URL: val.TONCENTER_API_URL,
+      TONCENTER_API_KEY: val.TONCENTER_API_KEY,
+      NFT_METADATA_BASE_URL: val.NFT_METADATA_BASE_URL,
+      NFT_JOB_ATTEMPTS: val.NFT_JOB_ATTEMPTS,
+      NFT_STALE_PENDING_MS: val.NFT_STALE_PENDING_MS,
+      NFT_STALE_ACTIVE_MS: val.NFT_STALE_ACTIVE_MS,
     };
   });
 

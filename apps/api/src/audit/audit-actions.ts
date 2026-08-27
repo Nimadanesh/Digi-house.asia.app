@@ -25,6 +25,14 @@ export const AUDIT_ACTIONS = [
   "admin.house_order_seed",
   "admin.lock_mature",
   "admin.lock_mature_manual",
+  "nft.requested",
+  "nft.mint_started",
+  "nft.minted",
+  "nft.mint_recovered",
+  "nft.transfer_started",
+  "nft.delivered",
+  "nft.failed",
+  "nft.retry",
 ] as const;
 
 export type AuditAction = (typeof AUDIT_ACTIONS)[number];

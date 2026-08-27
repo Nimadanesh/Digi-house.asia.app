@@ -51,6 +51,20 @@ function testEnv(): ApiEnv {
     NOTIFY_YIELD: false,
     HOUSE_ACCOUNT_USER_ID: "house-account",
     OPS_CHAT_ID: undefined,
+    WITHDRAWAL_WORKER_ENABLED: false,
+    WITHDRAWAL_TICK_MS: 60_000,
+    NFT_WORKER_ENABLED: false,
+    NFT_TICK_MS: 60_000,
+    NFT_MINTER_MODE: "simulated" as const,
+    NFT_NETWORK: "testnet" as const,
+    NFT_MINTER_MNEMONIC: undefined,
+    NFT_COLLECTION_ADDRESS: undefined,
+    TONCENTER_API_URL: "https://testnet.toncenter.com/api/v2/jsonRPC",
+    TONCENTER_API_KEY: undefined,
+    NFT_METADATA_BASE_URL: "http://localhost:8787",
+    NFT_JOB_ATTEMPTS: 3,
+    NFT_STALE_PENDING_MS: 300_000,
+    NFT_STALE_ACTIVE_MS: 1_800_000,
   };
 }
 

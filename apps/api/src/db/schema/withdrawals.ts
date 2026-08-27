@@ -23,6 +23,8 @@ export const withdrawals = pgTable(
     amountUsd: bigint("amount_usd", { mode: "number" }).notNull(),
     /** Address snapshot at request time (the user's withdrawal address). */
     address: text("address").notNull(),
+    /** 1% withdrawal fee charged at request time (FractionalLuxe revenue), integer cents. */
+    feeUsd: bigint("fee_usd", { mode: "number" }).notNull().default(0),
     status: text("status").notNull(),
     txHash: text("tx_hash"),
     /** Ledger `transactions` row id (kind 'withdraw'), for the PE-09 history view. */
@@ -41,6 +43,10 @@ export const withdrawals = pgTable(
       name: "withdrawals_user_id_fk",
     }).onDelete("cascade"),
     check("withdrawals_amount_pos_check", sql`${t.amountUsd} > 0`),
+    check(
+      "withdrawals_fee_usd_nonneg_check",
+      sql`${t.feeUsd} >= 0`,
+    ),
     check(
       "withdrawals_status_check",
       sql`${t.status} IN ('requested', 'approved', 'rejected', 'paid')`,

@@ -136,17 +136,33 @@
 
     "myPropertiesCount": "Mis propiedades ({count})",
 
-    "buyFirstShare": "Compra tu primera participación",
-
-    "buyFirstShareHint": "Sé dueño de una parte — gana alquiler proyectado cada mes.",
-
-    "todaysHighlight": "Destacado de hoy",
-
-    "hotThisWeek": "Popular esta semana",
-
     "monthlyPerShare": "Mensual / part.",
 
-    "pendingThisWeek": "{amount} pendiente esta semana"
+    "pendingThisWeek": "{amount} pendiente esta semana",
+
+    "earnedWord": "ganado",
+
+    "viewAllCount": "+{count} más en Cartera",
+
+    "featuredOpportunity": "Oportunidad destacada",
+
+    "featuredTag": "Destacado",
+
+    "moreOpportunities": "Más oportunidades",
+
+    "emptyTitle": "Tu viaje inmobiliario comienza aquí",
+
+    "emptyHint": "Un camino tranquilo hacia ingresos de alquiler mensuales.",
+
+    "emptyStepBuy": "Compra acciones",
+
+    "emptyStepLock": "Bloquéalas para obtener rendimiento",
+
+    "emptyStepEarn": "Gana cada mes",
+
+    "emptyCta": "Explora oportunidades",
+
+    "trustFooter": "La renta se acumula mensualmente. Retira cuando quieras (1 % de comisión, 4 cuotas semanales). Simulado hasta que sea on-chain."
 
   },
 
@@ -248,7 +264,7 @@
 
     "thisWeek": "Ingresos de esta semana",
 
-    "nextPayoutIn": "Próximo pago en",
+    "nextPayoutIn": "Próximo pago",
 
     "totalReceived": "Ingresos totales recibidos",
 
@@ -264,7 +280,29 @@
 
     "withdrawalTerms": "Retira en cualquier momento — 1% de comisión, pagado en 4 cuotas semanales",
 
-    "yieldTitle": "Rendimiento de acciones bloqueadas",
+    "yieldTitle": "Poder de ganancia",
+
+    "totalEarned": "Total ganado",
+
+    "chartTitle": "Últimas 12 semanas",
+
+    "chartCaption": "Pagos semanales de renta · simulados hasta que sea on-chain.",
+
+    "timelineTitle": "Tu flujo de ingresos",
+
+    "timelinePaid": "Pagado",
+
+    "timelineAccruing": "Acumulando",
+
+    "timelineAccruingSub": "mes actual",
+
+    "timelineNext": "Próxima estimación",
+
+    "timelineCaption": "Acumulación mensual; los pagos se liquidan cada domingo.",
+
+    "withdraw": "Retira a tu cartera",
+
+    "withdrawSubtitle": "Comisión del 1 % · 4 cuotas semanales",
 
     "yieldAccrued": "Devengado pendiente",
 
@@ -305,6 +343,76 @@
     "lockedShares": "Acciones bloqueadas",
 
     "freeShares": "Acciones libres",
+
+    "investedWord": "invertido",
+
+    "earnedWord": "ganado",
+
+    "unrealizedWord": "no realizado",
+
+    "orderOpen": "Abierto",
+
+    "allocationProperties": "{count} propiedades",
+
+    "showDetails": "Mostrar detalles",
+
+    "hideDetails": "Ocultar detalles",
+
+    "lockedCaption": "Generando renta mensual",
+
+    "freeCaption": "Aún no genera",
+
+    "idleShares": "{count} acciones sin generar",
+
+    "lockThem": "Bloquéalas",
+
+    "earningPill": "{count} generando",
+
+    "idlePill": "{count} inactivas",
+
+    "estMonthly": "≈ {amount} / mes",
+
+    "projectedMonthlyShort": "Renta mensual est.",
+
+    "exportCsv": "Exportar CSV",
+
+    "exporting": "Exportando…",
+
+    "sharesOwned": "Acciones en propiedad",
+
+    "avgCostPerShare": "Coste medio / acción",
+
+    "currentValueRow": "Valor actual",
+
+    "unrealizedPnl": "P/G no realizado",
+
+    "projectedMonthlyYield": "Rendimiento mensual proyectado",
+
+    "buyMore": "Comprar más",
+
+    "sellComingSoon": "Venta próximamente",
+
+    "nftCollectible": "NFT coleccionable",
+
+    "nftItem": "Elemento NFT",
+
+    "collection": "Colección",
+
+    "viewOnExplorer": "Ver en el explorador",
+
+    "nftDisclaimer": "Este NFT es un recibo coleccionable: la base de datos sigue siendo el registro de propiedad.",
+
+    "nftStatusPending": "Pendiente",
+
+    "nftStatusMinting": "Acuñando",
+
+    "nftStatusMinted": "Acuñado",
+
+    "nftStatusTransferring": "Transfiriendo",
+
+    "nftStatusDelivered": "Entregado",
+
+    "nftStatusFailed": "Fallido",
 
     "orderQueued": "En cola"
 
@@ -353,6 +461,8 @@
     "withdrawalStatusApproved": "Aprobado",
 
     "withdrawalStatusRejected": "Rechazado",
+
+    "withdrawalInstallmentProgress": "{paid} de {total} plazos pagados",
 
     "withdrawalRequest": "Solicitar retiro",
     "withdrawalsError": "No se pudieron cargar las solicitudes de retiro",

@@ -1,46 +1,23 @@
 "use client";
-// File responsibility: Earnings hero page (Fable Earnings polish).
-// UI via hooks only. Row expand holds the single discrete demo disclaimer (not on collapsed rows).
-import { useMemo } from "react";
+// File responsibility: Earnings page (redesign — "calm money, clear next step").
+// Total-earned hero → static 12-week chart → Paid/Accruing/Next timeline → Earning power →
+// secondary Withdraw entry. UI via hooks only.
 import { useTranslations } from "next-intl";
 import { useEarnings } from "@/hooks/useEarnings";
-import { useMarketplace } from "@/hooks/useMarketplace";
-import { usePortfolio } from "@/hooks/usePortfolio";
 import { haptics } from "@/lib/telegram/haptics";
-import { weeklyRent } from "@/lib/format";
 import { EmptyState } from "@/components/common/EmptyState";
 import { ErrorState } from "@/components/common/ErrorState";
 import { BrowseMarketplaceCta } from "@/components/common/BrowseMarketplaceCta";
 import { EarningsHeroCard } from "@/components/earnings/EarningsHeroCard";
 import { YieldSummaryCard } from "@/components/earnings/YieldSummaryCard";
 import { WeeklyEarningsChart } from "@/components/earnings/WeeklyEarningsChart";
-import { EarningsTimeline } from "@/components/earnings/EarningsTimeline";
+import { IncomeTimeline } from "@/components/earnings/IncomeTimeline";
+import { EarningsWithdrawEntry } from "@/components/earnings/EarningsWithdrawEntry";
 import { EarningsSkeleton } from "@/components/earnings/EarningsSkeleton";
 
 export default function EarningsPage() {
   const t = useTranslations("earnings");
   const earnings = useEarnings();
-  const marketplace = useMarketplace();
-  const portfolio = usePortfolio();
-
-  const properties = marketplace.data;
-  const propertyNameById = useMemo(
-    () => Object.fromEntries((properties ?? []).map((p) => [p.id, p.title])),
-    [properties],
-  );
-  const propertyImageById = useMemo(
-    () => Object.fromEntries((properties ?? []).map((p) => [p.id, p.images[0] ?? ""])),
-    [properties],
-  );
-  const weeklyRentPoolUsdById = useMemo(
-    () => Object.fromEntries((properties ?? []).map((p) => [p.id, weeklyRent(p.annualRentUsd)])),
-    [properties],
-  );
-  const holdings = portfolio.data?.holdings;
-  const sharesOwnedById = useMemo(
-    () => Object.fromEntries((holdings ?? []).map((h) => [h.propertyId, h.sharesOwned])),
-    [holdings],
-  );
 
   if (earnings.isLoading && !earnings.data) {
     return (
@@ -79,15 +56,13 @@ export default function EarningsPage() {
   return (
     <div className="mt-3 space-y-4 pb-2" data-testid="earnings-page">
       <EarningsHeroCard summary={earnings.data} />
-      {earnings.data.yield ? <YieldSummaryCard summary={earnings.data.yield} /> : null}
       <WeeklyEarningsChart entries={earnings.data.entries} />
-      <EarningsTimeline
+      <IncomeTimeline
         entries={earnings.data.entries}
-        propertyNameById={propertyNameById}
-        propertyImageById={propertyImageById}
-        weeklyRentPoolUsdById={weeklyRentPoolUsdById}
-        sharesOwnedById={sharesOwnedById}
+        projectedNextUsd={earnings.data.projectedNextWeekUsd}
       />
+      {earnings.data.yield ? <YieldSummaryCard summary={earnings.data.yield} /> : null}
+      <EarningsWithdrawEntry />
     </div>
   );
 }

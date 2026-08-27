@@ -136,17 +136,33 @@
 
     "myPropertiesCount": "Mes biens ({count})",
 
-    "buyFirstShare": "Achetez votre première part",
-
-    "buyFirstShareHint": "Possédez une part — gagnez un loyer projeté chaque mois.",
-
-    "todaysHighlight": "Coup de cœur du jour",
-
-    "hotThisWeek": "Populaire cette semaine",
-
     "monthlyPerShare": "Mensuel / part",
 
-    "pendingThisWeek": "{amount} en attente cette semaine"
+    "pendingThisWeek": "{amount} en attente cette semaine",
+
+    "earnedWord": "gagné",
+
+    "viewAllCount": "+{count} de plus dans le portefeuille",
+
+    "featuredOpportunity": "Opportunité à la une",
+
+    "featuredTag": "À la une",
+
+    "moreOpportunities": "Plus d’opportunités",
+
+    "emptyTitle": "Votre parcours immobilier commence ici",
+
+    "emptyHint": "Un chemin serein vers des revenus locatifs mensuels.",
+
+    "emptyStepBuy": "Achetez des actions",
+
+    "emptyStepLock": "Verrouillez pour toucher un rendement",
+
+    "emptyStepEarn": "Gagnez chaque mois",
+
+    "emptyCta": "Découvrir les opportunités",
+
+    "trustFooter": "Les revenus locatifs s’accumulent mensuellement. Retirez à tout moment (1 % de frais, 4 versements hebdomadaires). Simulé jusqu’à l’on-chain."
 
   },
 
@@ -248,7 +264,7 @@
 
     "thisWeek": "Revenus de cette semaine",
 
-    "nextPayoutIn": "Prochain versement dans",
+    "nextPayoutIn": "Prochain paiement",
 
     "totalReceived": "Revenus totaux reçus",
 
@@ -264,7 +280,29 @@
 
     "withdrawalTerms": "Retirez à tout moment — frais de 1 %, versés en 4 tranches hebdomadaires",
 
-    "yieldTitle": "Rendement des parts verrouillées",
+    "yieldTitle": "Puissance de gain",
+
+    "totalEarned": "Total gagné",
+
+    "chartTitle": "12 dernières semaines",
+
+    "chartCaption": "Paiements hebdomadaires des loyers · simulés jusqu’à l’on-chain.",
+
+    "timelineTitle": "Votre flux de revenus",
+
+    "timelinePaid": "Payé",
+
+    "timelineAccruing": "En cours d’acquisition",
+
+    "timelineAccruingSub": "mois en cours",
+
+    "timelineNext": "Prochaine estimation",
+
+    "timelineCaption": "Accumulation mensuelle; les paiements se règlent chaque dimanche.",
+
+    "withdraw": "Retirer vers votre portefeuille",
+
+    "withdrawSubtitle": "1 % de frais · 4 versements hebdomadaires",
 
     "yieldAccrued": "Acquis non payé",
 
@@ -305,6 +343,76 @@
     "lockedShares": "Parts verrouillées",
 
     "freeShares": "Parts libres",
+
+    "investedWord": "investi",
+
+    "earnedWord": "gagné",
+
+    "unrealizedWord": "non réalisé",
+
+    "orderOpen": "Ouverte",
+
+    "allocationProperties": "{count} biens",
+
+    "showDetails": "Afficher les détails",
+
+    "hideDetails": "Masquer les détails",
+
+    "lockedCaption": "Génère un rendement mensuel",
+
+    "freeCaption": "Ne génère pas encore",
+
+    "idleShares": "{count} actions non rémunérées",
+
+    "lockThem": "Verrouillez-les",
+
+    "earningPill": "{count} rémunérées",
+
+    "idlePill": "{count} inactives",
+
+    "estMonthly": "≈ {amount} / mois",
+
+    "projectedMonthlyShort": "Loyer mensuel estimé",
+
+    "exportCsv": "Exporter en CSV",
+
+    "exporting": "Exportation…",
+
+    "sharesOwned": "Actions détenues",
+
+    "avgCostPerShare": "Coût moyen / action",
+
+    "currentValueRow": "Valeur actuelle",
+
+    "unrealizedPnl": "P/L non réalisé",
+
+    "projectedMonthlyYield": "Rendement mensuel projeté",
+
+    "buyMore": "Acheter plus",
+
+    "sellComingSoon": "Vente à venir",
+
+    "nftCollectible": "NFT collectionnable",
+
+    "nftItem": "Objet NFT",
+
+    "collection": "Collection",
+
+    "viewOnExplorer": "Voir dans l’explorateur",
+
+    "nftDisclaimer": "Ce NFT est un reçu collectionnable — la base de données reste preuve de propriété.",
+
+    "nftStatusPending": "En attente",
+
+    "nftStatusMinting": "Frappe en cours",
+
+    "nftStatusMinted": "Frappé",
+
+    "nftStatusTransferring": "Transfert en cours",
+
+    "nftStatusDelivered": "Livré",
+
+    "nftStatusFailed": "Échec",
 
     "orderQueued": "En attente"
 
@@ -353,6 +461,8 @@
     "withdrawalStatusApproved": "Approuvé",
 
     "withdrawalStatusRejected": "Rejeté",
+
+    "withdrawalInstallmentProgress": "{paid} sur {total} versements payés",
 
     "withdrawalRequest": "Demander un retrait",
     "withdrawalsError": "Impossible de charger les demandes de retrait",

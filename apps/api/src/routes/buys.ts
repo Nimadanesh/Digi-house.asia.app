@@ -7,7 +7,13 @@ import type { SessionConfig } from "../auth/session.js";
 import type { UserStore } from "../auth/user-store.js";
 import type { BuyCurrency, IntentStore } from "../buys/intent-store.js";
 import { settleVerifiedBuy } from "../buys/settle-verified-buy.js";
+import type { NftQueueLike, NftStore } from "../nft/nft-store.js";
 import { usdCentsToNanoTon } from "../buys/settle-buy.js";
+import {
+  DEFAULT_FEE_TIERS,
+  type FeeTierStore,
+} from "../fees/fee-tier-store.js";
+import { resolvePrimaryCommission } from "../fees/resolve-primary.js";
 import type { TxStore } from "../buys/tx-store.js";
 import type { Logger } from "../logger.js";
 import type { PropertyStore } from "../marketplace/property-store.js";
@@ -55,6 +61,8 @@ export type BuyRouteDeps = {
   buyStubNanoTon?: string;
   /** USD-per-TON conversion (cents per TON) for computing prepare amounts. */
   tonUsdPriceCents?: number;
+  /** Primary-market commission source — tier store when present, else DEFAULT_FEE_TIERS. */
+  feeTiers?: FeeTierStore | null;
   /** Max age of a payment transaction we will settle (default 30 min). */
   verifyMaxAgeMs?: number;
   buyIntentTtlSeconds?: number;
@@ -62,6 +70,11 @@ export type BuyRouteDeps = {
   prepareRateLimiter?: MiddlewareHandler;
   allowlist: Set<string>;
   launchMode: LaunchMode;
+  /** Optional collectible-NFT stores (display-only receipt; never blocks settlement). */
+  nfts?: NftStore | null;
+  nftQueue?: NftQueueLike | null;
+  nftMetadataBaseUrl?: string;
+  nftCollectionAddress?: string | null;
 };
 
 function isPositiveInt(n: unknown): n is number {
@@ -230,6 +243,30 @@ export function createBuyRoutes(deps: BuyRouteDeps) {
       const intentId = `intent_${crypto.randomUUID()}`;
       const currency = parseCurrency(b.currency);
 
+      // Primary-market commission (FractionalLuxe revenue): the property Commission Card
+      // rate when available, else the amount-based tier table (buy_primary). The buyer
+      // pays principal + commission; the commission is recorded separately on the ledger.
+      const commissionTiers = deps.feeTiers
+        ? await deps.feeTiers.listAll()
+        : DEFAULT_FEE_TIERS;
+      const commission = resolvePrimaryCommission({
+        // No Commission Card data exists yet — the tier table is the fallback (approved model).
+        propertyCardBps: null,
+        tiers: commissionTiers,
+        principalUsd: totalUsd,
+      });
+      if (!commission) {
+        return c.json(
+          {
+            code: "no_fee_tier",
+            message: "No commission tier covers this amount",
+          },
+          409,
+        );
+      }
+      const feeUsd = commission.feeUsd;
+      const totalPayableUsd = commission.totalPayableUsd;
+
       // Step 4: USDT (Jetton) payment rail. The Jetton transfer must originate from the BUYER's
       // USDT jetton wallet (derived from master + owner) and credit the admin USDT wallet.
       if (currency === "USDT") {
@@ -255,8 +292,8 @@ export function createBuyRoutes(deps: BuyRouteDeps) {
           );
         }
 
-        // totalUsd is integer cents → USDT base units (6 decimals) = cents × 10^4.
-        const jettonAmount = BigInt(totalUsd) * USDT_BASE_UNITS_PER_CENT;
+        // The buyer pays principal + commission; cents → USDT base units (6 decimals) = × 10^4.
+        const jettonAmount = BigInt(totalPayableUsd) * USDT_BASE_UNITS_PER_CENT;
 
         const jettonWallet = await deps.tonTxClient.getJettonWalletAddress(master, userWallet);
         if (jettonWallet.kind !== "found") {
@@ -284,6 +321,7 @@ export function createBuyRoutes(deps: BuyRouteDeps) {
           quantity,
           priceUsdPerShare,
           totalUsd,
+          feeUsd,
           destinationAddress: adminUsdt,
           paidByWallet: userWallet,
           currency,
@@ -298,6 +336,8 @@ export function createBuyRoutes(deps: BuyRouteDeps) {
           quantity,
           priceUsdPerShare,
           totalUsd,
+          feeUsd,
+          totalPayableUsd,
           currency,
           tonConnectMessages: [message],
           expiresAt: expiresAt.toISOString(),
@@ -311,11 +351,11 @@ export function createBuyRoutes(deps: BuyRouteDeps) {
         deps.tonRelayAddress?.trim() ||
         listing.ownerWalletAddress ||
         "";
-      // Real payable amount: total USD converted to nanoTON at the configured rate.
+      // Real payable amount: principal + commission converted to nanoTON at the configured rate.
       // (BUY_STUB_NANOTON remains a fallback only when no rate is configured.)
       const nanoTon =
         deps.tonUsdPriceCents && deps.tonUsdPriceCents > 0
-          ? usdCentsToNanoTon(totalUsd, deps.tonUsdPriceCents).toString()
+          ? usdCentsToNanoTon(totalPayableUsd, deps.tonUsdPriceCents).toString()
           : stubNano;
       // Payer recorded at prepare — verify later that the tx originates from THIS wallet.
       const payerWallet = c.get("user")?.walletAddress ?? null;
@@ -328,6 +368,7 @@ export function createBuyRoutes(deps: BuyRouteDeps) {
         quantity,
         priceUsdPerShare,
         totalUsd,
+        feeUsd,
         destinationAddress: address,
         paidByWallet: payerWallet,
         currency,
@@ -346,6 +387,8 @@ export function createBuyRoutes(deps: BuyRouteDeps) {
         quantity,
         priceUsdPerShare,
         totalUsd,
+        feeUsd,
+        totalPayableUsd,
         currency,
         tonConnectMessages,
         expiresAt: expiresAt.toISOString(),
@@ -741,6 +784,11 @@ export function createBuyRoutes(deps: BuyRouteDeps) {
             log: deps.log,
             audit: deps.audit ?? null,
             notify: deps.notify ?? null,
+            nfts: deps.nfts ?? null,
+            nftQueue: deps.nftQueue ?? null,
+            nftMetadataBaseUrl: deps.nftMetadataBaseUrl,
+            nftCollectionAddress: deps.nftCollectionAddress ?? null,
+            users: deps.users,
           },
           {
             intent,

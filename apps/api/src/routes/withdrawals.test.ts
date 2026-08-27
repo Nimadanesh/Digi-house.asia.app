@@ -3,6 +3,7 @@ import { signSessionToken } from "../auth/session.js";
 import { createMemoryUserStore } from "../auth/user-store.js";
 import { createMemoryTxStore } from "../buys/tx-store.js";
 import { createMemoryBalanceStore } from "../money/balance-store.js";
+import { createMemoryInstallmentStore } from "../withdrawals/installment-store.js";
 import { createMemoryWithdrawalStore } from "../withdrawals/withdrawal-store.js";
 import { createWithdrawalRoutes } from "./withdrawals.js";
 
@@ -24,14 +25,16 @@ function makeApp() {
   const balances = createMemoryBalanceStore();
   const transactions = createMemoryTxStore();
   const withdrawals = createMemoryWithdrawalStore();
+  const installments = createMemoryInstallmentStore();
   const app = createWithdrawalRoutes({
     session: SESSION,
     users,
     balances,
     transactions,
     withdrawals,
+    installments,
   });
-  return { app, users, balances, transactions, withdrawals };
+  return { app, users, balances, transactions, withdrawals, installments };
 }
 
 function post(
@@ -47,7 +50,7 @@ function post(
 }
 
 describe("POST /v1/withdrawals (PE-02)", () => {
-  it("201 — debits withdrawable and returns the requested withdrawal", async () => {
+  it("201 — debits withdrawable, returns gross + 1% fee + 4 installments summing to net", async () => {
     const { app, balances } = makeApp();
     await balances.adjust(USER, { withdrawableDelta: 50_000 });
     const token = await bearerFor(USER);
@@ -57,15 +60,29 @@ describe("POST /v1/withdrawals (PE-02)", () => {
     const body = (await res.json()) as {
       withdrawal: {
         amountUsd: number;
+        feeUsd: number;
+        netUsd: number;
         address: string;
         status: string;
         txHash: string | null;
+        installments: Array<{ seq: number; amountUsd: number; status: string }>;
       };
     };
     expect(body.withdrawal.amountUsd).toBe(12_500);
+    expect(body.withdrawal.feeUsd).toBe(125);
+    expect(body.withdrawal.netUsd).toBe(12_375);
     expect(body.withdrawal.address).toBe(ADDRESS);
     expect(body.withdrawal.status).toBe("requested");
     expect(body.withdrawal.txHash).toBeNull();
+    expect(body.withdrawal.installments).toHaveLength(4);
+    const sum = body.withdrawal.installments.reduce(
+      (acc, i) => acc + i.amountUsd,
+      0,
+    );
+    expect(sum).toBe(body.withdrawal.netUsd);
+    expect(
+      body.withdrawal.installments.every((i) => i.status === "pending"),
+    ).toBe(true);
     expect((await balances.get(USER))?.withdrawableUsd).toBe(37_500);
   });
 
@@ -112,7 +129,7 @@ describe("POST /v1/withdrawals (PE-02)", () => {
 });
 
 describe("GET /v1/withdrawals (PE-02)", () => {
-  it("returns only the caller's withdrawals, newest first", async () => {
+  it("returns only the caller's withdrawals, newest first, with installment progress", async () => {
     const { app, balances } = makeApp();
     await balances.adjust(USER, { withdrawableDelta: 100_000 });
     const token = await bearerFor(USER);
@@ -125,10 +142,17 @@ describe("GET /v1/withdrawals (PE-02)", () => {
       headers: { Authorization: token },
     });
     expect(res.status).toBe(200);
-    const body = (await res.json()) as { withdrawals: Array<{ amountUsd: number }> };
+    const body = (await res.json()) as {
+      withdrawals: Array<{
+        amountUsd: number;
+        installments: unknown[];
+      }>;
+    };
     expect(body.withdrawals).toHaveLength(2);
     expect(body.withdrawals[0]?.amountUsd).toBe(20_000);
     expect(body.withdrawals[1]?.amountUsd).toBe(10_000);
+    expect(body.withdrawals[0]?.installments).toHaveLength(4);
+    expect(body.withdrawals[1]?.installments).toHaveLength(4);
   });
 
   it("is scoped per user (no IDOR)", async () => {

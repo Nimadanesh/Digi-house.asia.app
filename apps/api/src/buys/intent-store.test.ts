@@ -9,6 +9,7 @@ function seedIntent(over: Partial<BuyIntentRecord> = {}): BuyIntentRecord {
     quantity: 5,
     priceUsdPerShare: 12_500,
     totalUsd: 62_500,
+    feeUsd: null,
     status: "pending",
     boc: null,
     destinationAddress: "EQD-admin",

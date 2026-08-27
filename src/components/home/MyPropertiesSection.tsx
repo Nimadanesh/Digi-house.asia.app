@@ -1,13 +1,16 @@
 "use client";
-// File responsibility: My Properties row — title + View All + horizontal chips or empty CTA (Fable).
+// File responsibility: My Properties section (redesign) — max 3 chips + View All, or the premium
+// empty state (Buy shares → Lock → Earn). No horizontal-scroll FOMO; calm and capped.
 import Link from "next/link";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import type { Listing } from "@/types/property";
 import type { Holding } from "@/types/position";
 import { ROUTES } from "@/lib/constants";
 import { HomePropertyChip } from "./HomePropertyChip";
-import { Block } from "@/components/common/Block";
+import { HomeEmptyState } from "./HomeEmptyState";
+
+/** The brief caps My Properties on Home at 3 + View All. */
+export const MY_PROPERTIES_HOME_LIMIT = 3;
 
 export function MyPropertiesSection({
   holdings,
@@ -20,6 +23,14 @@ export function MyPropertiesSection({
 }) {
   const t = useTranslations("home");
   const tCommon = useTranslations("common");
+
+  if (holdings.length === 0) {
+    return <HomeEmptyState onNavigateHaptic={onNavigateHaptic} />;
+  }
+
+  // Show the most recently held first; cap to the short calm set.
+  const visible = holdings.slice(0, MY_PROPERTIES_HOME_LIMIT);
+  const hasMore = holdings.length > visible.length;
 
   return (
     <section className="space-y-2" data-testid="my-properties-section">
@@ -38,56 +49,26 @@ export function MyPropertiesSection({
         </Link>
       </div>
 
-      {holdings.length === 0 ? (
-        <Block className="overflow-hidden" data-testid="first-share-empty">
-          <div className="relative h-28 bg-surface-2">
-            <Image
-              src="/images/properties/p1.png"
-              alt=""
-              fill
-              className="object-cover opacity-80"
-              sizes="(max-width: 480px) 100vw, 480px"
+      <div className="space-y-2" data-testid="my-properties-list">
+        {visible.map((h) => {
+          const listing = listingById.get(h.propertyId);
+          if (!listing) return null;
+          return (
+            <HomePropertyChip
+              key={h.propertyId}
+              listing={listing}
+              holding={h}
+              onNavigateHaptic={onNavigateHaptic}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent" />
-          </div>
-          <div className="relative -mt-6 space-y-3.5 p-4">
-            <div className="space-y-1.5">
-              <p className="text-[0.9375rem] font-semibold leading-snug text-foreground">
-                {t("buyFirstShare")}
-              </p>
-              <p className="text-sm leading-relaxed text-muted-foreground pb-0.5">
-                {t("buyFirstShareHint")}
-              </p>
-            </div>
-            <Link
-              href={ROUTES.marketplace}
-              onClick={() => onNavigateHaptic?.()}
-              className="inline-flex h-[44px] w-full items-center justify-center rounded-[10px] bg-primary text-sm font-semibold text-primary-foreground active:scale-[0.97] transition-transform duration-[120ms] ease-out"
-            >
-              {tCommon("browseMarketplace")}
-            </Link>
-          </div>
-        </Block>
-      ) : (
-        <div
-          className="flex gap-2.5 overflow-x-auto pb-1 -mx-4 px-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-          style={{ WebkitOverflowScrolling: "touch" }}
-          data-testid="my-properties-scroll"
-        >
-          {holdings.map((h) => {
-            const listing = listingById.get(h.propertyId);
-            if (!listing) return null;
-            return (
-              <HomePropertyChip
-                key={h.propertyId}
-                listing={listing}
-                holding={h}
-                onNavigateHaptic={onNavigateHaptic}
-              />
-            );
-          })}
-        </div>
-      )}
+          );
+        })}
+      </div>
+
+      {hasMore ? (
+        <p className="px-0.5 text-xs leading-relaxed text-muted-foreground tnum">
+          {t("viewAllCount", { count: holdings.length - visible.length })}
+        </p>
+      ) : null}
     </section>
   );
 }

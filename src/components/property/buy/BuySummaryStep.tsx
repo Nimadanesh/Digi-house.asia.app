@@ -1,9 +1,14 @@
 // File responsibility: order summary step (Fable Buy Flow §Step 2) — totals per payment rail.
+// Primary-market commission (approved model): the property Commission Card is authoritative
+// when available; until cards are provided the amount-based tier table is the fallback — the
+// preview mirrors the server math, the server always computes the actual charge.
 import { usd, ton, estimateNanoTon } from "@/lib/format";
 import { positionYieldUsd } from "@/lib/property-yield";
 import { TON_PRICE_USD_CENTS } from "@/lib/constants";
 import type { Listing } from "@/types/property";
 import type { BuyCurrency } from "@/types/buy";
+import { previewFeeUsd } from "@/types/fees";
+import { useFees } from "@/hooks/useFees";
 import { Block } from "@/components/common/Block";
 import { Row } from "@/components/common/Row";
 
@@ -27,10 +32,13 @@ export function BuySummaryStep({
   /** Single source of truth (lib/property-price); defaults to list price. */
   unitPriceUsd?: number;
 }) {
+  const fees = useFees();
   const unitPrice = unitPriceUsd ?? listing.sharePriceUsd;
   const totalUsd = qty * unitPrice;
   const weekly = positionYieldUsd(listing, qty).weeklyUsd;
-  const feesUsd = 0;
+  // Primary-market commission preview (tier fallback — the Commission Card seam stays null).
+  const feesUsd = previewFeeUsd(fees.data ?? [], totalUsd, "buy_primary") ?? 0;
+  const totalPayableUsd = totalUsd + feesUsd;
 
   return (
     <div className="space-y-3 pb-2" data-testid="buy-summary-step">
@@ -58,12 +66,12 @@ export function BuySummaryStep({
         </Row>
         <Row>
           <span className="text-sm text-muted-foreground">Fees</span>
-          <span className="ml-auto text-sm tnum text-foreground">{usd(feesUsd)}</span>
+          <span className="ml-auto text-sm tnum text-foreground" data-testid="buy-fees">{usd(feesUsd)}</span>
         </Row>
         <Row>
           <span className="text-sm font-medium text-foreground">Total</span>
           <span className="ml-auto text-sm tnum font-semibold text-foreground" data-testid="buy-total">
-            {currency === "USDT" ? `${usd(totalUsd)} USDT` : `${usd(totalUsd)} · ${ton(estimateNanoTon(totalUsd, TON_PRICE_USD_CENTS))}`}
+            {currency === "USDT" ? `${usd(totalPayableUsd)} USDT` : `${usd(totalPayableUsd)} · ${ton(estimateNanoTon(totalPayableUsd, TON_PRICE_USD_CENTS))}`}
           </span>
         </Row>
         <Row>
@@ -72,7 +80,7 @@ export function BuySummaryStep({
         </Row>
       </Block>
       <p className="mt-0.5 px-0.5 pb-0.5 text-[0.6875rem] leading-relaxed text-muted-foreground">
-        No hidden fees. Total equals quantity × price per share.
+        Total includes the primary-market commission. No other fees.
       </p>
       {pending ? (
         <p

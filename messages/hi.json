@@ -136,17 +136,33 @@
 
     "myPropertiesCount": "मेरी संपत्तियाँ ({count})",
 
-    "buyFirstShare": "अपना पहला हिस्सा खरीदें",
-
-    "buyFirstShareHint": "एक टुकड़ा रखें — हर महीने अनुमानित किराया कमाएँ।",
-
-    "todaysHighlight": "आज की खास",
-
-    "hotThisWeek": "इस सप्ताह हॉट",
-
     "monthlyPerShare": "मासिक / हिस्सा",
 
-    "pendingThisWeek": "इस सप्ताह {amount} लंबित"
+    "pendingThisWeek": "इस सप्ताह {amount} लंबित",
+
+    "earnedWord": "अर्जित",
+
+    "viewAllCount": "पोर्टफोलियो में +{count} और",
+
+    "featuredOpportunity": "विशेष अवसर",
+
+    "featuredTag": "चयनित",
+
+    "moreOpportunities": "अधिक अवसर",
+
+    "emptyTitle": "आपकी संपत्ति यात्रा यहाँ से शुरू होती है",
+
+    "emptyHint": "मासिक किराया आय का एक शांत मार्ग।",
+
+    "emptyStepBuy": "शेयर खरीदें",
+
+    "emptyStepLock": "रिटर्न के लिए लॉक करें",
+
+    "emptyStepEarn": "हर महीने कमाएँ",
+
+    "emptyCta": "अवसर देखें",
+
+    "trustFooter": "किराया आय मासिक रूप से संचित होती है। कभी भी निकालें (1% शुल्क, 4 साप्ताहिक किश्तें)। ऑन-चेन होने तक सिम्युलेटेड।"
 
   },
 
@@ -264,7 +280,29 @@
 
     "withdrawalTerms": "कभी भी निकालें — 1% शुल्क, 4 साप्ताहिक किश्तों में भुगतान",
 
-    "yieldTitle": "लॉक्ड शेयर यील्ड",
+    "yieldTitle": "कमाई की शक्ति",
+
+    "totalEarned": "कुल अर्जित",
+
+    "chartTitle": "पिछले 12 सप्ताह",
+
+    "chartCaption": "साप्ताहिक किराया भुगतान · ऑन-चेन होने तक सिम्युलेटेड।",
+
+    "timelineTitle": "आपकी आय प्रवाह",
+
+    "timelinePaid": "भुगतान किया",
+
+    "timelineAccruing": "अर्जित हो रहा",
+
+    "timelineAccruingSub": "वर्तमान माह",
+
+    "timelineNext": "अगला अनुमान",
+
+    "timelineCaption": "मासिक संचय; भुगतान हर रविवार मिलान होते हैं।",
+
+    "withdraw": "अपने वॉलेट में निकालें",
+
+    "withdrawSubtitle": "1% शुल्क · 4 साप्ताहिक किश्तें",
 
     "yieldAccrued": "अर्जित अवैतनिक",
 
@@ -305,6 +343,76 @@
     "lockedShares": "लॉक्ड शेयर",
 
     "freeShares": "फ्री शेयर",
+
+    "investedWord": "निवेशित",
+
+    "earnedWord": "अर्जित",
+
+    "unrealizedWord": "अप्राप्त",
+
+    "orderOpen": "खुला",
+
+    "allocationProperties": "{count} संपत्तियाँ",
+
+    "showDetails": "विवरण दिखाएँ",
+
+    "hideDetails": "विवरण छिपाएँ",
+
+    "lockedCaption": "मासिक उपज कमा रहा",
+
+    "freeCaption": "अभी नहीं कमा रहा",
+
+    "idleShares": "{count} शेयर कमा नहीं रहे",
+
+    "lockThem": "उन्हें लॉक करें",
+
+    "earningPill": "{count} कमा रहे",
+
+    "idlePill": "{count} निष्क्रिय",
+
+    "estMonthly": "≈ {amount} / माह",
+
+    "projectedMonthlyShort": "अनुमानित मासिक किराया",
+
+    "exportCsv": "CSV निर्यात करें",
+
+    "exporting": "निर्यात हो रहा…",
+
+    "sharesOwned": "स्वामित्व वाले शेयर",
+
+    "avgCostPerShare": "औसत लागत / शेयर",
+
+    "currentValueRow": "वर्तमान मूल्य",
+
+    "unrealizedPnl": "अप्राप्त लाभ/हानि",
+
+    "projectedMonthlyYield": "अनुमानित मासिक उपज",
+
+    "buyMore": "और खरीदें",
+
+    "sellComingSoon": "बिक्री जल्द",
+
+    "nftCollectible": "संग्रहणीय NFT",
+
+    "nftItem": "NFT आइटम",
+
+    "collection": "संग्रह",
+
+    "viewOnExplorer": "एक्सप्लोरर में देखें",
+
+    "nftDisclaimer": "यह NFT संग्रहणीय रसीद है — डेटाबेस ही स्वामित्व का रिकॉर्ड बना रहता है।",
+
+    "nftStatusPending": "लंबित",
+
+    "nftStatusMinting": "मिंट हो रहा",
+
+    "nftStatusMinted": "मिंट हो गया",
+
+    "nftStatusTransferring": "स्थानांतरित हो रहा",
+
+    "nftStatusDelivered": "वितरित",
+
+    "nftStatusFailed": "विफल",
 
     "orderQueued": "कतार में"
 
@@ -353,6 +461,8 @@
     "withdrawalStatusApproved": "स्वीकृत",
 
     "withdrawalStatusRejected": "अस्वीकृत",
+
+    "withdrawalInstallmentProgress": "{paid} में से {total} किस्तें भुगतान हुईं",
 
     "withdrawalRequest": "निकासी का अनुरोध करें",
     "withdrawalsError": "निकासी अनुरोध लोड नहीं हो सके",

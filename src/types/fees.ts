@@ -19,11 +19,16 @@ export function bpsToPct(bps: number): string {
   return `${Number.isInteger(pct) ? pct : pct.toFixed(2)}%`;
 }
 
-/** Mirror of the API fee resolver for UI previews. Returns fee cents or null (no tier). */
+/**
+ * Mirror of the API fee resolver for UI previews. Returns fee cents or null (no tier).
+ * The property Commission Card is authoritative when it exists; until cards are provided
+ * the amount-based tier table is the fallback (mirrored here for display parity — the
+ * server always computes the actual charge).
+ */
 export function previewFeeUsd(
   tiers: FeeTier[],
   amountUsd: number,
-  op: "buy_secondary" | "sell_secondary",
+  op: "buy_primary" | "buy_secondary" | "sell_secondary",
 ): number | null {
   const tier = tiers.find(
     (t) =>
@@ -31,6 +36,11 @@ export function previewFeeUsd(
       (t.maxAmountUsd == null || amountUsd <= t.maxAmountUsd),
   );
   if (!tier) return null;
-  const bps = op === "buy_secondary" ? tier.buySecondaryBps : tier.sellSecondaryBps;
+  const bps =
+    op === "buy_primary"
+      ? tier.buyPrimaryBps
+      : op === "buy_secondary"
+        ? tier.buySecondaryBps
+        : tier.sellSecondaryBps;
   return Math.floor((amountUsd * bps) / 10_000);
 }

@@ -20,6 +20,7 @@ import { createLockRoutes } from "./routes/locks.js";
 import { createMeRoutes } from "./routes/me.js";
 import { createSellRoutes } from "./routes/sells.js";
 import { createWithdrawalRoutes } from "./routes/withdrawals.js";
+import { createNftRoutes, createNftMetadataRoute } from "./routes/nfts.js";
 import type { UserStore } from "./auth/user-store.js";
 import type { PropertyStore } from "./marketplace/property-store.js";
 import type { HoldingStore } from "./portfolio/holding-store.js";
@@ -34,6 +35,8 @@ import type { BalanceStore } from "./money/balance-store.js";
 import type { InstantSellStore } from "./sells/instant-sell-store.js";
 import type { TradeStore } from "./orders/trade-store.js";
 import type { WithdrawalStore } from "./withdrawals/withdrawal-store.js";
+import type { WithdrawalInstallmentStore } from "./withdrawals/installment-store.js";
+import type { NftQueueLike, NftStore } from "./nft/nft-store.js";
 import type { WaitlistStore } from "./waitlist/waitlist-store.js";
 import { createTonApiTxClient } from "./ton/tonapi-client.js";
 import type { TonTxClient } from "./ton/tx-client.js";
@@ -67,7 +70,17 @@ export type CreateAppOptions = {
   instantSells?: InstantSellStore | null;
   trades?: TradeStore | null;
   withdrawals?: WithdrawalStore | null;
+  installments?: WithdrawalInstallmentStore | null;
   waitlist?: WaitlistStore | null;
+  /** Collectible-NFT stores — display-only receipts; never the ownership source. */
+  nfts?: NftStore | null;
+  nftQueue?: NftQueueLike | null;
+  nftMetadataBaseUrl?: string;
+  nftCollectionAddress?: string | null;
+  nftSweep?: {
+    stalePendingMs: number;
+    staleActiveMs: number;
+  } | null;
   /** Unlock maturation window ms (PRODUCT-PLAN §0.4: 2–3 days). */
   unlockMaturationMs?: number;
   audit?: AuditStore | null;
@@ -98,7 +111,13 @@ export function createApp(opts: CreateAppOptions) {
     instantSells = null,
     trades = null,
     withdrawals = null,
+    installments = null,
     waitlist = null,
+    nfts = null,
+    nftQueue = null,
+    nftMetadataBaseUrl = "",
+    nftCollectionAddress = null,
+    nftSweep = null,
     unlockMaturationMs = 3 * 24 * 3_600_000,
     audit = null,
     tonTxClient = null,
@@ -215,6 +234,10 @@ export function createApp(opts: CreateAppOptions) {
         feeTiers,
         transactions,
         withdrawals,
+        installments,
+        nfts,
+        nftQueue,
+        nftSweep,
         locks,
         yields,
         log,
@@ -410,6 +433,7 @@ export function createApp(opts: CreateAppOptions) {
         orders,
         holdings,
         transactions,
+        feeTiers,
         ...(env.TELEGRAM_BOT_TOKEN?.trim() && env.NOTIFY_YIELD
           ? { notify: { botToken: env.TELEGRAM_BOT_TOKEN } }
           : {}),
@@ -425,9 +449,26 @@ export function createApp(opts: CreateAppOptions) {
         buyIntentTtlSeconds: env.BUY_INTENT_TTL_SECONDS,
         allowlist,
         launchMode,
+        nfts,
+        nftQueue,
+        nftMetadataBaseUrl,
+        nftCollectionAddress,
         prepareRateLimiter: prepareRateLimiter ?? undefined,
       }),
     );
+  }
+
+  if (users && properties && holdings && nfts) {
+    const nftRouteDeps = {
+      session,
+      users: users!,
+      nfts,
+      properties: properties!,
+      holdings: holdings!,
+      rateLimiter: publicRateLimiter ?? undefined,
+    };
+    app.route("/", createNftRoutes(nftRouteDeps));
+    app.route("/", createNftMetadataRoute(nftRouteDeps));
   }
 
   if (transactions && users) {
@@ -441,7 +482,7 @@ export function createApp(opts: CreateAppOptions) {
     );
   }
 
-  if (users && balances && transactions && withdrawals) {
+  if (users && balances && transactions && withdrawals && installments) {
     app.route(
       "/",
       createWithdrawalRoutes({
@@ -450,6 +491,7 @@ export function createApp(opts: CreateAppOptions) {
         balances,
         transactions,
         withdrawals,
+        installments,
         log,
         audit,
         ...(env.TELEGRAM_BOT_TOKEN?.trim() && env.NOTIFY_YIELD

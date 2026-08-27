@@ -24,6 +24,7 @@ import { createMemoryHoldingStore } from "../portfolio/holding-store.js";
 import { createMemoryInstantSellStore } from "../sells/instant-sell-store.js";
 import type { OnChainTx, TonTxClient } from "../ton/tx-client.js";
 import { createMemoryWithdrawalStore } from "../withdrawals/withdrawal-store.js";
+import { createMemoryInstallmentStore } from "../withdrawals/installment-store.js";
 import { createMemoryShareLockStore } from "../yield/lock-store.js";
 import { createMemoryYieldStore } from "../yield/yield-store.js";
 
@@ -93,6 +94,20 @@ export function testEnv(over: Partial<ApiEnv> = {}): ApiEnv {
     NOTIFY_YIELD: false,
     HOUSE_ACCOUNT_USER_ID: "house-account",
     OPS_CHAT_ID: undefined,
+    WITHDRAWAL_WORKER_ENABLED: false,
+    WITHDRAWAL_TICK_MS: 60_000,
+    NFT_WORKER_ENABLED: false,
+    NFT_TICK_MS: 60_000,
+    NFT_MINTER_MODE: "simulated" as const,
+    NFT_NETWORK: "testnet" as const,
+    NFT_MINTER_MNEMONIC: undefined,
+    NFT_COLLECTION_ADDRESS: undefined,
+    TONCENTER_API_URL: "https://testnet.toncenter.com/api/v2/jsonRPC",
+    TONCENTER_API_KEY: undefined,
+    NFT_METADATA_BASE_URL: "http://localhost:8787",
+    NFT_JOB_ATTEMPTS: 3,
+    NFT_STALE_PENDING_MS: 300_000,
+    NFT_STALE_ACTIVE_MS: 1_800_000,
     ...over,
   };
 }
@@ -165,6 +180,7 @@ export type MoneyPathHarness = {
   instantSells: ReturnType<typeof createMemoryInstantSellStore>;
   trades: ReturnType<typeof createMemoryTradeStore>;
   withdrawals: ReturnType<typeof createMemoryWithdrawalStore>;
+  installments: ReturnType<typeof createMemoryInstallmentStore>;
   audit: ReturnType<typeof createMemoryAuditStore>;
 };
 
@@ -233,6 +249,7 @@ export function makeHarness(opts: {
   const instantSells = createMemoryInstantSellStore();
   const trades = createMemoryTradeStore();
   const withdrawals = createMemoryWithdrawalStore();
+  const installments = createMemoryInstallmentStore();
   const audit = createMemoryAuditStore();
 
   const app = createApp({
@@ -253,6 +270,7 @@ export function makeHarness(opts: {
     instantSells,
     trades,
     withdrawals,
+    installments,
     audit,
     tonTxClient: fakeTonClient(),
     prepareRateLimiter: async (_c, next) => {
@@ -276,6 +294,7 @@ export function makeHarness(opts: {
     instantSells,
     trades,
     withdrawals,
+    installments,
     audit,
   };
 }

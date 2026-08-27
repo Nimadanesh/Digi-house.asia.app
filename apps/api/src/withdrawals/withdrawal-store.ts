@@ -12,6 +12,8 @@ export type WithdrawalRecord = {
   userId: string;
   /** Integer cents, debited from withdrawable at request time. */
   amountUsd: number;
+  /** 1% withdrawal fee (FractionalLuxe revenue), integer cents. */
+  feeUsd: number;
   /** Address snapshot at request time. */
   address: string;
   status: WithdrawalStatus;
@@ -27,6 +29,7 @@ export type WithdrawalStore = {
     id: string;
     userId: string;
     amountUsd: number;
+    feeUsd?: number;
     address: string;
     status: WithdrawalStatus;
     transactionId?: string | null;
@@ -47,6 +50,7 @@ function mapRow(row: {
   id: string;
   userId: string;
   amountUsd: number | string;
+  feeUsd: number | string;
   address: string;
   status: string;
   txHash: string | null;
@@ -58,6 +62,7 @@ function mapRow(row: {
     id: row.id,
     userId: row.userId,
     amountUsd: Number(row.amountUsd),
+    feeUsd: Number(row.feeUsd),
     address: row.address,
     status: row.status as WithdrawalStatus,
     txHash: row.txHash,
@@ -77,6 +82,7 @@ export function createDbWithdrawalStore(db: Db): WithdrawalStore {
           id: input.id,
           userId: input.userId,
           amountUsd: input.amountUsd,
+          feeUsd: input.feeUsd ?? 0,
           address: input.address,
           status: input.status,
           txHash: null,
@@ -173,6 +179,7 @@ export function createMemoryWithdrawalStore(
         id: input.id,
         userId: input.userId,
         amountUsd: input.amountUsd,
+        feeUsd: input.feeUsd ?? 0,
         address: input.address,
         status: input.status,
         txHash: null,

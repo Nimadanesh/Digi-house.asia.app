@@ -100,19 +100,30 @@ export function WithdrawalRequestsSection({
             </span>
           </Row>
         ) : (
-          rows.map((w) => (
-            <Row key={w.id} className="!min-h-[56px]">
-              <div className="min-w-0 flex-1">
-                <div className="text-sm font-semibold tnum text-foreground">
-                  {usd(w.amountUsd)}
+          rows.map((w) => {
+            const paidCount = w.installments.filter(
+              (i) => i.status === "paid",
+            ).length;
+            return (
+              <Row key={w.id} className="!min-h-[56px]">
+                <div className="min-w-0 flex-1">
+                  <div className="text-sm font-semibold tnum text-foreground">
+                    {usd(w.amountUsd)}
+                  </div>
+                  <div className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                    {timeAgo(w.createdAt)}
+                    {w.installments.length > 0
+                      ? ` · ${t("withdrawalInstallmentProgress", {
+                          paid: paidCount,
+                          total: w.installments.length,
+                        })}`
+                      : null}
+                  </div>
                 </div>
-                <div className="mt-1 text-xs leading-relaxed text-muted-foreground">
-                  {timeAgo(w.createdAt)}
-                </div>
-              </div>
-              <StatusPill label={statusLabel(t, w.status)} variant={STATUS_VARIANT[w.status]} />
-            </Row>
-          ))
+                <StatusPill label={statusLabel(t, w.status)} variant={STATUS_VARIANT[w.status]} />
+              </Row>
+            );
+          })
         )}
       </Block>
     </section>

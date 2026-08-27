@@ -86,5 +86,15 @@ export {
   type WithdrawalRow,
   type NewWithdrawalRow,
 } from "./withdrawals.js";
+export {
+  withdrawalInstallments,
+  type WithdrawalInstallmentRow,
+  type NewWithdrawalInstallmentRow,
+} from "./withdrawal-installments.js";
 export { waitlist, type WaitlistRow, type NewWaitlistRow } from "./waitlist.js";
+export {
+  holdingNfts,
+  type HoldingNftRow,
+  type NewHoldingNftRow,
+} from "./holding-nfts.js";
 

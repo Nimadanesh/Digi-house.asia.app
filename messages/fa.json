@@ -136,17 +136,33 @@
 
     "myPropertiesCount": "املاک من ({count})",
 
-    "buyFirstShare": "اولین سهم خود را بخرید",
-
-    "buyFirstShareHint": "بخشی را مالک شوید — هر ماه اجاره پیش‌بینی‌شده دریافت کنید.",
-
-    "todaysHighlight": "برجسته امروز",
-
-    "hotThisWeek": "داغ این هفته",
-
     "monthlyPerShare": "ماهانه / سهم",
 
-    "pendingThisWeek": "{amount} در انتظار این هفته"
+    "pendingThisWeek": "{amount} در انتظار این هفته",
+
+    "earnedWord": "درآمد",
+
+    "viewAllCount": "+{count} دیگر در سبد",
+
+    "featuredOpportunity": "فرصت ویژه",
+
+    "featuredTag": "ویژه",
+
+    "moreOpportunities": "فرصتهای بیشتر",
+
+    "emptyTitle": "سفر ملکی شما از اینجا شروع میشود",
+
+    "emptyHint": "مسیری آرام به سوی درآمد اجاره ماهانه.",
+
+    "emptyStepBuy": "سهام بخرید",
+
+    "emptyStepLock": "برای بازده قفل کنید",
+
+    "emptyStepEarn": "هر ماه درآمد داشته باشید",
+
+    "emptyCta": "فرصتها را کشف کنید",
+
+    "trustFooter": "درآمد اجاره ماهانه انباشته میشود. هر زمان برداشت کنید (کارمزد ۱٪، ۴ قسط هفتگی). تا زمان on-chain شبیهسازی شده."
 
   },
 
@@ -248,7 +264,7 @@
 
     "thisWeek": "درآمد این هفته",
 
-    "nextPayoutIn": "پرداخت بعدی تا",
+    "nextPayoutIn": "پرداخت بعدی",
 
     "totalReceived": "کل درآمد دریافتی",
 
@@ -264,7 +280,29 @@
 
     "withdrawalTerms": "هر زمان بخواهید برداشت کنید — کارمزد ۱٪، پرداخت‌شده در 4 قسط هفتگی",
 
-    "yieldTitle": "سود سهام قفل‌شده",
+    "yieldTitle": "قدرت درآمد",
+
+    "totalEarned": "درآمد کل",
+
+    "chartTitle": "۱۲ هفتهٔ گذشته",
+
+    "chartCaption": "پرداختهای هفتگی اجاره · شبیهسازی تا on-chain.",
+
+    "timelineTitle": "جریان درآمد شما",
+
+    "timelinePaid": "پرداختشده",
+
+    "timelineAccruing": "در حال انباشت",
+
+    "timelineAccruingSub": "ماه جاری",
+
+    "timelineNext": "تخمین بعدی",
+
+    "timelineCaption": "انباشت ماهانه؛ پرداختها هر یکشنبه تسویه میشوند.",
+
+    "withdraw": "به کیف پول خود برداشت کنید",
+
+    "withdrawSubtitle": "کارمزد ۱٪ · ۴ قسط هفتگی",
 
     "yieldAccrued": "سود پرداخت‌نشده",
 
@@ -305,6 +343,76 @@
     "lockedShares": "سهام قفل‌شده",
 
     "freeShares": "سهام آزاد",
+
+    "investedWord": "سرمایه‌گذاری‌شده",
+
+    "earnedWord": "درآمد",
+
+    "unrealizedWord": "تحقق‌نیافته",
+
+    "orderOpen": "باز",
+
+    "allocationProperties": "{count} ملک",
+
+    "showDetails": "نمایش جزئیات",
+
+    "hideDetails": "پنهان کردن جزئیات",
+
+    "lockedCaption": "سود ماهانه می‌دهد",
+
+    "freeCaption": "هنوز سود نمی‌دهد",
+
+    "idleShares": "{count} سهم بدون سود",
+
+    "lockThem": "قفلشان کنید",
+
+    "earningPill": "{count} سودده",
+
+    "idlePill": "{count} بیکار",
+
+    "estMonthly": "≈ {amount} / ماه",
+
+    "projectedMonthlyShort": "اجاره ماهانه تخمینی",
+
+    "exportCsv": "خروجی CSV",
+
+    "exporting": "در حال خروجی…",
+
+    "sharesOwned": "سهام در مالکیت",
+
+    "avgCostPerShare": "میانگین هزینه / سهم",
+
+    "currentValueRow": "ارزش فعلی",
+
+    "unrealizedPnl": "سود/زیان تحقق‌نیافته",
+
+    "projectedMonthlyYield": "بازده ماهانه پیش‌بینی‌شده",
+
+    "buyMore": "بیشتر بخرید",
+
+    "sellComingSoon": "فروش به‌زودی",
+
+    "nftCollectible": "NFT کلکسیونی",
+
+    "nftItem": "اقلام NFT",
+
+    "collection": "مجموعه",
+
+    "viewOnExplorer": "مشاهده در مرورگر",
+
+    "nftDisclaimer": "این NFT رسید کلکسیونی است — پایگاه داده همچنان سند مالکیت است.",
+
+    "nftStatusPending": "در انتظار",
+
+    "nftStatusMinting": "در حال ضرب",
+
+    "nftStatusMinted": "ضرب‌شده",
+
+    "nftStatusTransferring": "در حال انتقال",
+
+    "nftStatusDelivered": "تحویل‌شده",
+
+    "nftStatusFailed": "ناموفق",
 
     "orderQueued": "در صف"
 
@@ -353,6 +461,8 @@
     "withdrawalStatusApproved": "تأیید شده",
 
     "withdrawalStatusRejected": "رد شده",
+
+    "withdrawalInstallmentProgress": "{paid} از {total} قسط پرداخت شده",
 
     "withdrawalRequest": "درخواست برداشت",
     "withdrawalsError": "بارگذاری درخواست‌های برداشت ممکن نشد",

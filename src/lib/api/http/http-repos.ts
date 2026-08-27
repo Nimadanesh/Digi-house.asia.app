@@ -12,6 +12,7 @@ import type {
   FeesRepo,
   SellsRepo,
   WithdrawalsRepo,
+  NftsRepo,
 } from "@/lib/api/repos";
 import type { HttpClient } from "@/lib/api/http/client";
 import type { DocumentMeta, DocumentDownloadUrl } from "@/types/property-document";
@@ -22,6 +23,7 @@ import type { MeSummary, ShareLock, UnlockRequestResult } from "@/types/lock";
 import type { FeeTier } from "@/types/fees";
 import type { InstantSellResult } from "@/types/sell";
 import type { Withdrawal } from "@/types/withdrawal";
+import type { HoldingNft } from "@/types/nft";
 
 interface BuyPrepareResponse {
   intentId: string;
@@ -174,7 +176,18 @@ export function createHttpRepos(client: HttpClient): Repos {
       return body.withdrawals;
     },
     async request(input) {
-      return client.post<Withdrawal>("/v1/withdrawals", input);
+      const body = await client.post<{ withdrawal: Withdrawal }>(
+        "/v1/withdrawals",
+        input,
+      );
+      return body.withdrawal;
+    },
+  };
+
+  const nfts: NftsRepo = {
+    async list() {
+      const body = await client.get<{ nfts: HoldingNft[] }>("/v1/nfts");
+      return body.nfts;
     },
   };
 
@@ -185,5 +198,5 @@ export function createHttpRepos(client: HttpClient): Repos {
     },
   };
 
-  return { marketplace, orderBook, portfolio, earnings, tx, documents, locks, me, fees, sells, withdrawals };
+  return { marketplace, orderBook, portfolio, earnings, tx, documents, locks, me, fees, sells, withdrawals, nfts };
 }

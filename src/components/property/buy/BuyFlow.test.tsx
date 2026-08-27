@@ -6,8 +6,14 @@ import { BuyQtyStep } from "@/components/property/buy/BuyQtyStep";
 import { BuySummaryStep } from "@/components/property/buy/BuySummaryStep";
 import { BuySuccessStep } from "@/components/property/buy/BuySuccessStep";
 import { DEMO_TX_DISCLAIMER } from "@/lib/constants";
+import { DEFAULT_FEE_TIERS } from "@/lib/mock/fees";
 
 const push = vi.fn();
+
+const useFees = vi.fn();
+vi.mock("@/hooks/useFees", () => ({
+  useFees: () => useFees(),
+}));
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ push, back: vi.fn() }),
 }));
@@ -147,18 +153,29 @@ describe("Buy flow steps", () => {
   });
 
   it("summary step: property, qty, total, fees", () => {
+    useFees.mockReturnValue({ data: DEFAULT_FEE_TIERS, isLoading: false, isError: false });
     render(<BuySummaryStep listing={listing} qty={10} currency="TON" />);
     expect(screen.getByText("Order summary")).toBeInTheDocument();
     expect(screen.getByText("Marina Vista Apt 4B")).toBeInTheDocument();
     expect(screen.getByText("10")).toBeInTheDocument();
     expect(screen.getByText("Fees")).toBeInTheDocument();
     expect(screen.getByTestId("buy-total")).toBeInTheDocument();
-    expect(screen.getByText(/No hidden fees/i)).toBeInTheDocument();
+    expect(screen.getByText(/Total includes the primary-market commission/i)).toBeInTheDocument();
   });
 
-  it("summary step: shows the USDT total when paying with USDT", () => {
+  it("summary step: shows the USDT total including the primary commission when paying with USDT", () => {
+    useFees.mockReturnValue({ data: DEFAULT_FEE_TIERS, isLoading: false, isError: false });
     render(<BuySummaryStep listing={listing} qty={10} currency="USDT" />);
     expect(screen.getByTestId("buy-pay-with")).toHaveTextContent("USDT");
+    // $1,250.00 principal at the $500–$2,000 tier (2.5%) → $31.25 commission → $1,281.25 payable.
+    expect(screen.getByTestId("buy-fees")).toHaveTextContent("$31.25");
+    expect(screen.getByTestId("buy-total")).toHaveTextContent("$1,281.25 USDT");
+  });
+
+  it("summary step: fees fall back to $0 when the tier list is unavailable", () => {
+    useFees.mockReturnValue({ data: undefined, isLoading: true, isError: false });
+    render(<BuySummaryStep listing={listing} qty={10} currency="USDT" />);
+    expect(screen.getByTestId("buy-fees")).toHaveTextContent("$0.00");
     expect(screen.getByTestId("buy-total")).toHaveTextContent("$1,250.00 USDT");
   });
 

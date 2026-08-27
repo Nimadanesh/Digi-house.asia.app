@@ -14,6 +14,7 @@ import {
   MockFeesRepo,
   MockSellsRepo,
   MockWithdrawalsRepo,
+  MockNftsRepo,
 } from "@/lib/mock";
 import { createHttpClient } from "@/lib/api/http/client";
 import { createHttpRepos } from "@/lib/api/http/http-repos";
@@ -47,6 +48,7 @@ export function getRepo(): Repos {
       fees: MockFeesRepo(),
       sells: MockSellsRepo(),
       withdrawals: MockWithdrawalsRepo(),
+      nfts: MockNftsRepo(),
     };
   }
   return cached;

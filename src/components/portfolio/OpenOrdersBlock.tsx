@@ -50,7 +50,7 @@ export function OpenOrdersBlock({
                     <StatusPill label={t("orderQueued")} variant="warning" />
                   </div>
                 ) : (
-                  <div className="text-[0.6875rem] uppercase tracking-wide text-warning">Open</div>
+                  <div className="text-[0.6875rem] uppercase tracking-wide text-warning">{t("orderOpen")}</div>
                 )}
               </div>
               {cancellable ? (

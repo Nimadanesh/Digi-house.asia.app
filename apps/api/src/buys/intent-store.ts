@@ -18,6 +18,8 @@ export type BuyIntentRecord = {
   quantity: number;
   priceUsdPerShare: number;
   totalUsd: number;
+  /** Primary-market commission (FractionalLuxe revenue), integer cents; null pre-0028. */
+  feeUsd: number | null;
   status: BuyIntentStatus;
   boc: string | null;
   /** Receive address returned by prepare (admin TON wallet / admin USDT wallet). */
@@ -53,6 +55,7 @@ export type IntentStore = {
     quantity: number;
     priceUsdPerShare: number;
     totalUsd: number;
+    feeUsd?: number | null;
     destinationAddress: string;
     paidByWallet?: string | null;
     currency?: BuyCurrency;
@@ -110,6 +113,7 @@ function mapRow(r: {
   quantity: number;
   priceUsdPerShare: number;
   totalUsd: number;
+  feeUsd: number | null;
   status: string;
   boc: string | null;
   destinationAddress: string | null;
@@ -130,6 +134,7 @@ function mapRow(r: {
     quantity: Number(r.quantity),
     priceUsdPerShare: Number(r.priceUsdPerShare),
     totalUsd: Number(r.totalUsd),
+    feeUsd: r.feeUsd != null ? Number(r.feeUsd) : null,
     status: mapStatus(r.status),
     boc: r.boc,
     destinationAddress: r.destinationAddress,
@@ -158,6 +163,7 @@ export function createDbIntentStore(db: Db): IntentStore {
           quantity: input.quantity,
           priceUsdPerShare: input.priceUsdPerShare,
           totalUsd: input.totalUsd,
+          feeUsd: input.feeUsd ?? null,
           status: "pending",
           boc: null,
           destinationAddress: input.destinationAddress,
@@ -296,6 +302,7 @@ export function createMemoryIntentStore(
         quantity: input.quantity,
         priceUsdPerShare: input.priceUsdPerShare,
         totalUsd: input.totalUsd,
+        feeUsd: input.feeUsd ?? null,
         status: "pending",
         boc: null,
         destinationAddress: input.destinationAddress,

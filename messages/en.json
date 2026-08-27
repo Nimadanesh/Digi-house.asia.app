@@ -130,19 +130,35 @@
 
     "totalEarningsReceived": "Total Earnings Received",
 
+    "earnedWord": "earned",
+
     "nextPayout": "Next Payout",
 
     "myProperties": "My Properties",
 
     "myPropertiesCount": "My Properties ({count})",
 
-    "buyFirstShare": "Buy your first share",
+    "viewAllCount": "+{count} more in Portfolio",
 
-    "buyFirstShareHint": "Own a slice — earn projected rent every month.",
+    "featuredOpportunity": "Featured Opportunity",
 
-    "todaysHighlight": "Today's Highlight",
+    "featuredTag": "Featured",
 
-    "hotThisWeek": "Hot this week",
+    "moreOpportunities": "More opportunities",
+
+    "emptyTitle": "Your property journey starts here",
+
+    "emptyHint": "A calm path to monthly rental income.",
+
+    "emptyStepBuy": "Buy shares",
+
+    "emptyStepLock": "Lock them to earn yield",
+
+    "emptyStepEarn": "Earn every month",
+
+    "emptyCta": "Explore opportunities",
+
+    "trustFooter": "Rental income accrues monthly. Withdraw anytime (1% fee, 4 weekly installments). Simulated until on-chain.",
 
     "monthlyPerShare": "Monthly / share",
 
@@ -248,7 +264,9 @@
 
     "thisWeek": "This Week's Earnings",
 
-    "nextPayoutIn": "Next payout in",
+    "totalEarned": "Total Earned",
+
+    "nextPayoutIn": "Next payout",
 
     "totalReceived": "Total Earnings Received",
 
@@ -258,13 +276,33 @@
 
     "noStreak": "No streak yet",
 
+    "chartTitle": "Last 12 weeks",
+
+    "chartCaption": "Weekly rental-share payouts · simulated until on-chain.",
+
+    "timelineTitle": "Your income flow",
+
+    "timelinePaid": "Paid",
+
+    "timelineAccruing": "Accruing",
+
+    "timelineAccruingSub": "current month",
+
+    "timelineNext": "Next estimated",
+
+    "timelineCaption": "Monthly accrual; payouts reconcile every Sunday.",
+
+    "withdraw": "Withdraw to your wallet",
+
+    "withdrawSubtitle": "1% fee · 4 weekly installments",
+
     "timeline": "History",
 
     "disclaimer": "simulated monthly payout · on-chain verifiable post-MVP",
 
     "withdrawalTerms": "Withdraw anytime — 1% fee, paid in 4 weekly installments",
 
-    "yieldTitle": "Locked-share yield",
+    "yieldTitle": "Earning power",
 
     "yieldAccrued": "Accrued unpaid",
 
@@ -276,38 +314,56 @@
 
     "yieldFinal": "Final payout"
 
-  },
-
-  "portfolio": {
-
+  },  "portfolio": {
     "loadError": "Couldn't load your portfolio.",
-
     "emptyTitle": "Your portfolio is empty",
-
     "emptyMessage": "Start from about $80 — buy your first share on the marketplace.",
-
-    "totalValue": "Total Portfolio Value",
-
+    "totalValue": "Portfolio Value",
     "totalInvested": "Total Invested",
-
     "totalEarningsReceived": "Total Earnings Received",
-
     "unrealizedProfit": "Unrealized Profit",
-
+    "investedWord": "invested",
+    "earnedWord": "earned",
+    "unrealizedWord": "unrealized",
     "nextPayout": "Next Payout",
-
     "myPropertiesCount": "My Properties ({count})",
-
     "openOrders": "Open Orders",
-
+    "orderOpen": "Open",
     "allocation": "Allocation",
-
+    "allocationProperties": "{count} properties",
+    "showDetails": "Show details",
+    "hideDetails": "Hide details",
     "lockedShares": "Locked shares",
-
     "freeShares": "Free shares",
-
+    "lockedCaption": "Earning monthly yield",
+    "freeCaption": "Not earning yet",
+    "idleShares": "{count} shares not earning",
+    "lockThem": "Lock them",
+    "earningPill": "{count} earning",
+    "idlePill": "{count} idle",
+    "estMonthly": "≈ {amount} / month",
+    "projectedMonthlyShort": "Est. monthly rent",
+    "exportCsv": "Export CSV",
+    "exporting": "Exporting…",
+    "sharesOwned": "Shares owned",
+    "avgCostPerShare": "Avg cost / share",
+    "currentValueRow": "Current value",
+    "unrealizedPnl": "Unrealized PnL",
+    "projectedMonthlyYield": "Projected monthly yield",
+    "buyMore": "Buy More",
+    "sellComingSoon": "Sell Coming Soon",
+    "nftCollectible": "Collectible NFT",
+    "nftItem": "NFT item",
+    "collection": "Collection",
+    "viewOnExplorer": "View on explorer",
+    "nftDisclaimer": "This NFT is a collectible receipt — the database remains the record of ownership.",
+    "nftStatusPending": "Pending",
+    "nftStatusMinting": "Minting",
+    "nftStatusMinted": "Minted",
+    "nftStatusTransferring": "Transferring",
+    "nftStatusDelivered": "Delivered",
+    "nftStatusFailed": "Failed",
     "orderQueued": "Queued"
-
   },
 
   "settings": {
@@ -364,6 +420,8 @@
 
     "withdrawalStatusRejected": "Rejected",
 
+
+    "withdrawalInstallmentProgress": "{paid} of {total} installments paid",
     "withdrawalRequest": "Request withdrawal",
     "withdrawalsError": "Couldn't load withdrawal requests",
 
