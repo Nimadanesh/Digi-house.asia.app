@@ -22,20 +22,15 @@ import type { BuyCurrency } from "@/types/buy";
 import { PropertyDetail } from "@/components/property/PropertyDetail";
 import { PropertyDetailSkeleton } from "@/components/property/PropertyDetailSkeleton";
 import { BuySheet, type BuySheetStep } from "@/components/property/buy/BuySheet";
-import { Toast } from "@/components/common/Toast";
+import { closeTopSheet } from "@/components/common/Sheet";
 import { EmptyState } from "@/components/common/EmptyState";
 import { ErrorState } from "@/components/common/ErrorState";
 import { BrowseMarketplaceCta } from "@/components/common/BrowseMarketplaceCta";
 import { PropertyStickyCta } from "@/components/property/PropertyStickyCta";
 import { LimitBuySheet } from "@/components/property/LimitBuySheet";
 import { SellSheet } from "@/components/property/SellSheet";
-
-interface ToastState {
-  tone: "success" | "error";
-  title: string;
-  sub?: string;
-  leaving: boolean;
-}
+import { PropertyCompactTopBar } from "@/components/property/PropertyCompactTopBar";
+import { useScrollDirection } from "@/hooks/useScrollDirection";
 
 export default function PropertyDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -52,6 +47,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
   const router = useRouter();
   const setMainButtonActive = useUiStore((s) => s.setMainButtonActive);
   const settingsOpen = useUiStore((s) => s.settingsOpen);
+  const pushToast = useUiStore((s) => s.pushToast);
 
   /** null = untouched — derives from owned shares once the portfolio loads (Phase 2 prefill). */
   const [previewShares, setPreviewShares] = useState<number | null>(null);
@@ -62,7 +58,6 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
   /** Secondary-market sheets (Phase 7) — LimitBuy for Buy, SellSheet for Sell. */
   const [limitBuyOpen, setLimitBuyOpen] = useState(false);
   const [sellOpen, setSellOpen] = useState(false);
-  const [toast, setToast] = useState<ToastState | null>(null);
   const [buyError, setBuyError] = useState<string | null>(null);
   /** False once the server reports USDT as not configured (409 payment_method_unavailable). */
   const [usdtAvailable, setUsdtAvailable] = useState(true);
@@ -81,10 +76,10 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
   // Derived (not an effect): untouched state follows ownership until the user edits it.
   const ownedShares = portfolio.data?.holdings.find((h) => h.propertyId === id)?.sharesOwned ?? 0;
   // Phase 6 — locked subset for this property (active locks only).
-  const lockedShares = activeLocksForProperty(locksQuery.data?.locks, id).reduce(
-    (sum, lock) => sum + lock.shares,
-    0,
-  );
+  const activeLocks = activeLocksForProperty(locksQuery.data?.locks, id);
+  const lockedShares = activeLocks.reduce((sum, lock) => sum + lock.shares, 0);
+  // Phase 3 — display-only accrued unpaid yield across this property's active locks.
+  const accruedUnpaidUsd = activeLocks.reduce((sum, lock) => sum + lock.accruedUnpaidUsd, 0);
   const avgCostUsd = portfolio.data?.holdings.find((h) => h.propertyId === id)?.avgCostUsd;
   const effectivePreviewShares = previewShares ?? Math.max(1, ownedShares);
   const freeShares = Math.max(0, ownedShares - lockedShares);
@@ -93,6 +88,13 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
   // Sticky bar appears only after the hero (with its own CTA) scrolls away — CTA fixes #2.
   const heroPassed = useScrolledPast("property-hero", !sheetOpen);
   const stickyVisible = !sheetOpen && !limitBuyOpen && !sellOpen && heroPassed;
+
+  // Compact top bar (#07b) — direction-aware: appears on scroll-up once the user
+  // is past the hero area (threshold ≈ hero height), hides on scroll-down or while
+  // any sheet owns the screen (no conflict with Telegram MainButton chrome).
+  const scrolledUp = useScrollDirection(320);
+  const compactBarVisible =
+    Boolean(listing) && !sheetOpen && !limitBuyOpen && !sellOpen && !settingsOpen && heroPassed && scrolledUp;
 
   // Floating chrome (demo badge) must yield while the sticky CTA occupies the zone.
   useEffect(() => {
@@ -123,18 +125,6 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
     setLimitBuyOpen(true);
   }, [listing, remaining, effectivePreviewShares]);
 
-  // Toast lifecycle — DESIGN_SYSTEM §Toast.
-  useEffect(() => {
-    if (!toast) return;
-    const leaveTimer = setTimeout(() => setToast((t) => (t ? { ...t, leaving: true } : null)), 3000);
-    const unmountTimer = setTimeout(() => setToast(null), 3160);
-    return () => {
-      clearTimeout(leaveTimer);
-      clearTimeout(unmountTimer);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [toast?.tone, toast?.title, toast?.sub]);
-
   // BackButton — safe chrome never throws (even if TG unavailable).
   useEffect(() => {
     if (settingsOpen) return;
@@ -155,6 +145,14 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
           closeSheet();
           return;
         }
+        // Secondary sheets (limit buy / sell / lock / confirmations) — close the
+        // topmost sheet instead of abandoning the page with a half-finished form.
+        if (limitBuyOpen || sellOpen) {
+          setLimitBuyOpen(false);
+          setSellOpen(false);
+          return;
+        }
+        if (closeTopSheet()) return;
         router.back();
       });
     } catch {
@@ -167,7 +165,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
         /* ignore */
       }
     };
-  }, [sheetOpen, step, closeSheet, router, backButton, settingsOpen]);
+  }, [sheetOpen, step, closeSheet, router, backButton, settingsOpen, limitBuyOpen, sellOpen]);
 
   useEffect(() => {
     return () => {
@@ -196,7 +194,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
         haptics.notification("success");
       } else {
         setBuyError(res.error || "Buy failed");
-        setToast({ tone: "error", title: "Buy failed", sub: res.error, leaving: false });
+        pushToast("error", "Buy failed", res.error);
         haptics.notification("error");
       }
     } catch (e) {
@@ -205,21 +203,16 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
         setCurrency("TON");
         setUsdtAvailable(false);
         setBuyError(e.message);
-        setToast({
-          tone: "error",
-          title: "USDT unavailable",
-          sub: "Switching you to TON for this purchase.",
-          leaving: false,
-        });
+        pushToast("error", "USDT unavailable", "Switching you to TON for this purchase.");
         haptics.notification("error");
         return;
       }
       const message = e instanceof Error ? e.message : "transaction rejected";
       setBuyError(message);
-      setToast({ tone: "error", title: "Buy failed", sub: message, leaving: false });
+      pushToast("error", "Buy failed", message);
       haptics.notification("error");
     }
-  }, [listing, qty, currency, buy]);
+  }, [listing, qty, currency, buy, pushToast]);
 
   // MainButton — Fable: closed → "Buy Share"; sheet qty → Continue; summary → Confirm & Pay; success → hidden.
   useEffect(() => {
@@ -367,7 +360,11 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
 
   return (
     <>
-      {toast ? <Toast tone={toast.tone} title={toast.title} sub={toast.sub} leaving={toast.leaving} /> : null}
+      {/* Compact top bar (#07b) — back + property name on scroll-up past the hero. */}
+      <PropertyCompactTopBar title={listing.title} visible={compactBarVisible} />
+      {/* Tight CTA clearance (#08): 96px = 52px sticky bar + scrim + breathing room.
+          The AppShell's own bottom inset (88px + safe area) remains as the
+          Telegram-chrome clearance — no excess blank block. */}
       <div className={!sheetOpen ? "pb-24" : undefined}>
         <PropertyDetail
           listing={listing}
@@ -378,10 +375,12 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
           ownedShares={ownedShares}
           lockedShares={lockedShares}
           avgCostUsd={avgCostUsd}
+          accruedUnpaidUsd={accruedUnpaidUsd}
           onBuyShares={(n) => openBuyForContext(n)}
           documents={documents}
           onDownloadDoc={(docId) => docDownload.mutate(docId)}
           downloadingDocId={docDownload.isPending ? String(docDownload.variables) : null}
+          documentsError={docDownload.error instanceof Error ? docDownload.error.message : null}
         />
       </div>
       {/* Sticky CTA reveals only once the hero CTA has scrolled out of view.

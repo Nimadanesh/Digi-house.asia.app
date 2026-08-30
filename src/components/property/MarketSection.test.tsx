@@ -64,8 +64,8 @@ describe("MarketSection — redesign Phase 4", () => {
     useTrades.mockReturnValue({ data: [], isLoading: false, isError: false });
     render(<MarketSection listing={listing} orderBook={book} />);
     const prices = screen.getAllByText(/^\$\d+\.\d{2}$/);
-    // 4 bids + 4 asks + best bid/ask (2) + last price (1) = 11 price strings max
-    expect(prices.length).toBeLessThanOrEqual(11);
+    // 4 bids + 4 asks + best bid/ask (2) + last price (1) + summary current price + spread (2) = 13 max
+    expect(prices.length).toBeLessThanOrEqual(13);
     expect(screen.queryByText("$119.00")).not.toBeInTheDocument();
     expect(screen.queryByText("$131.00")).not.toBeInTheDocument();
   });

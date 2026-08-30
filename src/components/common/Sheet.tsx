@@ -1,8 +1,21 @@
 "use client";
 // File responsibility: Telegram-style bottom sheet — portals to body; CSS transition (no framer on hot path).
+// Also owns the sheet close-registry: pages consult closeTopSheet() so the Telegram
+// BackButton closes the topmost open sheet instead of navigating away mid-flow.
 import { useEffect, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { cn } from "@/lib/utils";
+
+/** Stack of open sheets' close callbacks (topmost = last). */
+const sheetStack: Array<() => void> = [];
+
+/** Close the topmost open sheet; true when one was closed. */
+export function closeTopSheet(): boolean {
+  const top = sheetStack[sheetStack.length - 1];
+  if (!top) return false;
+  top();
+  return true;
+}
 
 function subscribe() {
   return () => {};
@@ -21,6 +34,7 @@ export function Sheet({
   className,
   bodyClassName,
   labelledBy,
+  dismissible = true,
 }: {
   open: boolean;
   onClose: () => void;
@@ -29,22 +43,28 @@ export function Sheet({
   /** Override the default scroll body (e.g. language picker owns its own single scroller). */
   bodyClassName?: string;
   labelledBy?: string;
+  /** False while a decision is in flight (pending/success) — backdrop + Esc won't close. */
+  dismissible?: boolean;
 }) {
   const mounted = useSyncExternalStore(subscribe, clientOk, serverNo);
 
   useEffect(() => {
     if (!open) return;
+    const closer = () => onClose();
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape" && dismissible) onClose();
     };
     window.addEventListener("keydown", onKey);
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    if (dismissible) sheetStack.push(closer);
     return () => {
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = prev;
+      const i = sheetStack.lastIndexOf(closer);
+      if (i >= 0) sheetStack.splice(i, 1);
     };
-  }, [open, onClose]);
+  }, [open, dismissible, onClose]);
 
   if (!mounted || typeof document === "undefined" || !open) return null;
 
@@ -59,7 +79,7 @@ export function Sheet({
         aria-label="Close sheet"
         className="absolute inset-0 bg-black/45 animate-in fade-in duration-200"
         style={{ animation: "dh-fade-in 160ms ease-out" }}
-        onClick={onClose}
+        onClick={dismissible ? onClose : undefined}
       />
       <div
         role="dialog"

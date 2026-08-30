@@ -1,5 +1,6 @@
-﻿"use client";
+"use client";
 // File responsibility: Portfolio screen (Fable redesign). Summary, allocation, holdings + detail sheet.
+// Cancel-order goes through a confirmation sheet (escrow refund is consequential) — no direct mutation.
 import { useMemo, useState, useCallback, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { usePortfolio } from "@/hooks/usePortfolio";
@@ -9,9 +10,12 @@ import { useNfts } from "@/hooks/useNfts";
 import { useTelegram } from "@/hooks/useTelegram";
 import { haptics } from "@/lib/telegram/haptics";
 import { portfolioAllocation } from "@/lib/portfolio-math";
+import { usd } from "@/lib/format";
+import { closeTopSheet } from "@/components/common/Sheet";
 import { EmptyState } from "@/components/common/EmptyState";
 import { ErrorState } from "@/components/common/ErrorState";
 import { BrowseMarketplaceCta } from "@/components/common/BrowseMarketplaceCta";
+import { ConfirmActionSheet } from "@/components/common/ConfirmActionSheet";
 import { PortfolioSummaryCard } from "@/components/portfolio/PortfolioSummaryCard";
 import { LockedFreeCard } from "@/components/portfolio/LockedFreeCard";
 import { AllocationBar } from "@/components/portfolio/AllocationBar";
@@ -26,6 +30,7 @@ import { Download } from "lucide-react";
 import type { Holding } from "@/types/position";
 import type { Listing } from "@/types/property";
 import type { HoldingNft } from "@/types/nft";
+import type { Order } from "@/types/order";
 
 export default function PortfolioPage() {
   const t = useTranslations("portfolio");
@@ -33,6 +38,11 @@ export default function PortfolioPage() {
   const marketplace = useMarketplace();
   const locksQuery = useLocks();
   const nftsQuery = useNfts();
+  const { backButton } = useTelegram();
+  const [selected, setSelected] = useState<Holding | null>(null);
+  /** Order awaiting cancel confirmation — null = sheet closed. */
+  const [cancelTarget, setCancelTarget] = useState<Order | null>(null);
+  const [cancelDone, setCancelDone] = useState(false);
 
   // Locked-share split (PRODUCT-PLAN §0.4): totals for the summary + per-holding pill.
   const lockedByProperty = useMemo(() => {
@@ -43,9 +53,6 @@ export default function PortfolioPage() {
     }
     return m;
   }, [locksQuery.data]);
-  // Only need backButton chrome here — haptics imported directly to avoid theme/ready churn.
-  const { backButton } = useTelegram();
-  const [selected, setSelected] = useState<Holding | null>(null);
 
   const listingById = useMemo(() => {
     const m = new Map<string, Listing>();
@@ -70,23 +77,30 @@ export default function PortfolioPage() {
     setSelected(null);
   }, []);
 
+  const closeCancelSheet = useCallback(() => {
+    setCancelTarget(null);
+    setCancelDone(false);
+  }, []);
+
   const { download: downloadCsv, downloading: csvDownloading } = useExportCsv();
   const cancelOrder = useCancelOrder();
 
   useEffect(() => {
-    if (!selected) {
+    if (!selected && !cancelTarget) {
       backButton.hide();
       return;
     }
     backButton.show();
     const off = backButton.onClick(() => {
+      // Close the topmost sheet (cancel confirm, holding detail) before leaving.
+      if (closeTopSheet()) return;
       closeSheet();
     });
     return () => {
       off();
       backButton.hide();
     };
-  }, [selected, backButton, closeSheet]);
+  }, [selected, cancelTarget, backButton, closeSheet]);
 
   if (portfolio.isLoading && !portfolio.data) {
     return (
@@ -173,7 +187,13 @@ export default function PortfolioPage() {
       <OpenOrdersBlock
         orders={data.openOrders}
         nameById={nameById}
-        onCancel={(orderId) => cancelOrder.mutate(orderId)}
+        onCancel={(orderId) => {
+          const order = data.openOrders.find((o) => o.id === orderId);
+          if (!order) return;
+          haptics.impact("light");
+          setCancelDone(false);
+          setCancelTarget(order);
+        }}
         cancellingId={cancelOrder.isPending ? String(cancelOrder.variables) : null}
       />
 
@@ -202,6 +222,52 @@ export default function PortfolioPage() {
         location={selectedListing?.location ?? ""}
         image={selectedListing?.images[0]}
         nft={selected ? nftByProperty.get(selected.propertyId) ?? null : null}
+      />
+
+      {/* Cancelling removes the order and refunds the escrow — confirm before mutating. */}
+      <ConfirmActionSheet
+        open={cancelTarget != null}
+        onClose={closeCancelSheet}
+        title="Cancel order"
+        description="The funds held in escrow for this order return to your investing balance."
+        details={[
+          {
+            label: "Property",
+            value: cancelTarget ? nameById[cancelTarget.propertyId] ?? cancelTarget.propertyId : "",
+          },
+          {
+            label: "Order",
+            value: cancelTarget
+              ? `${cancelTarget.side === "buy" ? "Buy" : "Sell"} · ${cancelTarget.quantity} shares`
+              : "",
+          },
+          {
+            label: "Price per share",
+            value: cancelTarget ? usd(cancelTarget.priceUsd) : "",
+          },
+          {
+            label: "Order value",
+            value: cancelTarget ? usd(cancelTarget.priceUsd * cancelTarget.quantity) : "",
+          },
+        ]}
+        confirmLabel="Cancel order"
+        cancelLabel="Keep order"
+        pendingLabel="Cancelling…"
+        pending={cancelOrder.isPending}
+        error={cancelOrder.isError && cancelOrder.error ? (cancelOrder.error as Error).message : null}
+        success={
+          cancelDone
+            ? {
+                title: "Order cancelled",
+                message: "The escrowed funds are back in your investing balance.",
+              }
+            : null
+        }
+        onConfirm={() => {
+          if (!cancelTarget || cancelOrder.isPending) return;
+          cancelOrder.mutate(cancelTarget.id, { onSuccess: () => setCancelDone(true) });
+        }}
+        testId="cancel-order-confirm"
       />
     </div>
   );

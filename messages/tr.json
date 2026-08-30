@@ -1,608 +1,567 @@
 {
-
   "common": {
-
     "appName": "FractionalLuxe",
-
     "buyShare": "Pay satın al",
-
     "browseMarketplace": "Pazaryerine git",
-
     "viewAll": "Tümünü gör",
-
     "refresh": "Yenile",
-
     "clearFilters": "Filtreleri temizle",
-
     "tryAgain": "Tekrar dene",
-
     "retry": "Yeniden dene",
-
     "skip": "Atla",
-
     "continue": "Devam",
-
     "getStarted": "Başla",
-
     "settings": "Ayarlar",
-
     "connectWallet": "Cüzdan bağla",
-
     "walletConnected": "Cüzdan bağlı",
-
     "disconnectWallet": "Cüzdanı ayır",
-
     "share": "pay",
-
     "shares": "pay",
-
     "of": "/",
-
     "from": "Başlangıç",
-
     "est": "Tah.",
-
     "apy": "Yıllık getiri",
-
     "pending": "Beklemede",
-
     "paid": "Ödendi",
-
     "hot": "Popüler",
-
     "new": "Yeni",
-
     "soldPct": "%{pct} satıldı",
-
     "week": "hafta",
-
     "weeks": "hafta",
-
     "demoMode": "Demo · örnek veri · işlemler simüle",
-
     "somethingWentWrong": "Bir şeyler ters gitti"
-
   },
-
   "tabs": {
-
     "home": "Ana sayfa",
-
     "marketplace": "Pazar",
-
     "earnings": "Kazanç",
-
     "portfolio": "Portföy"
-
   },
-
   "header": {
-
     "greeting": "Merhaba, {name}"
-
   },
-
   "onboarding": {
-
     "skip": "Atla",
-
     "continue": "Devam",
-
     "getStarted": "Başla",
-
     "slideProgress": "{current} / {total}",
-
     "slideAria": "Slayt {n}",
-
     "own": {
-
       "headline": "Gerçek bir mülkün ortağı ol",
-
       "subtitle": "Yaklaşık 80 $’dan başla"
-
     },
-
     "yield": {
-
       "headline": "Her ay kira payını al",
-
       "subtitle": "Aylık payını Kazanç’ta gör"
-
     },
-
     "sell": {
-
       "headline": "İstediğin zaman sat",
-
       "subtitle": "Çıkmaya hazır olduğunda payları FractionalLuxe pazarında listele."
-
     }
-
   },
-
   "home": {
-
     "loadError": "Ana sayfa yüklenemedi.",
-
     "portfolioValue": "Portföy değeri",
-
     "totalInvested": "Toplam yatırım",
-
     "totalEarningsReceived": "Alınan toplam kazanç",
-
     "nextPayout": "Sonraki ödeme",
-
     "myProperties": "Mülklerim",
-
     "myPropertiesCount": "Mülklerim ({count})",
-
     "monthlyPerShare": "Aylık / pay",
-
     "pendingThisWeek": "Bu hafta {amount} beklemede",
-
     "earnedWord": "kazanıldı",
-
     "viewAllCount": "Portföyde +{count} daha",
-
     "featuredOpportunity": "Öne çıkan fırsat",
-
     "featuredTag": "Öne çıkan",
-
     "moreOpportunities": "Daha fazla fırsat",
-
     "emptyTitle": "Gayrimenkul yolculuğunuz burada başlıyor",
-
     "emptyHint": "Aylık kira gelirine sakin bir yol.",
-
     "emptyStepBuy": "Hisse satın al",
-
     "emptyStepLock": "Getiri için kilitle",
-
     "emptyStepEarn": "Her ay kazan",
-
     "emptyCta": "Fırsatları keşfet",
-
     "trustFooter": "Kira geliri aylık birikir. İstediğiniz zaman çekin (%1 ücret, 4 haftalık taksit). On-chain olana kadar simüle."
-
   },
-
   "marketplace": {
-
     "searchPlaceholder": "Mülk ara",
-
     "searchAria": "Mülk ara",
-
     "clearSearch": "Aramayı temizle",
-
     "filtersAria": "Pazar filtreleri",
-
     "loadError": "Mülkler yüklenemedi.",
-
     "emptyTitle": "Henüz mülk yok",
-
     "emptyMessage": "Yeni fraksiyonel listeler her hafta gelir — yakında tekrar bak.",
-
     "noMatchesTitle": "Eşleşme yok",
-
     "noMatchesMessage": "Başka arama veya filtre dene.",
-
     "chips": {
-
       "all": "Tümü",
-
       "primary": "Birincil",
-
       "secondary": "İkincil",
-
       "highest_yield": "En yüksek getiri",
-
       "new": "Yeni",
-
       "almost_sold": "Neredeyse tükendi",
-
       "low_price": "Düşük fiyat"
-
     },
-
     "pricePerShare": "Fiyat / pay",
-
     "monthlyPerShare": "Aylık / pay",
-
-    "minPurchase": "Min. alım",
-
+    "nightFrom": "Gece / itibaren",
     "sharesSold": "{sold} / {total} pay satıldı",
-
     "feesTitle": "Komisyon",
-
     "feesPerTx": "Kadem, her işlem tutarına göre belirlenir — alım/satım sınırı yoktur.",
-
     "feesRange": "Tutar",
-
     "feesBuyPrimary": "Alış · Birincil",
-
     "feesBuyMarket": "Alış · Piyasa",
-
     "feesSellMarket": "Satış · Piyasa",
-
     "feesInstantSell": "Anında satış (birincil)",
-
     "feesInstantNote": "Birincil aşamada sabit ücret; ikincil işlemler piyasa kademesini kullanır.",
-
     "feesNoCap": "Alım/satım tutarlarında sınır yoktur.",
-
     "lastPrice": "Son fiyat"
-
   },
-
   "property": {
-
     "buyShare": "Pay satın al",
-
     "about": "Hakkında",
-
     "metrics": "Metrikler",
-
     "trust": "Güven ve şeffaflık",
-
     "rentalHistory": "Kira geçmişi",
-
     "incomeCalculator": "Gelir hesaplayıcı",
-
     "salesProgress": "Satış ilerlemesi",
-
-    "gallery": "Galeri"
-
+    "gallery": "Galeri",
+    "tabOverview": "Genel bakış",
+    "tabPerformance": "Performans",
+    "tabHolders": "Hamiler",
+    "tabIncome": "Gelir",
+    "tabDetails": "Detaylar",
+    "marketBadge": "İkincil piyasa",
+    "offerPrice": "Teklif fiyatı",
+    "sharesSoldOf": "Satılan / toplam",
+    "holdersComingSoon": "Hami analizleri bir sonraki güncellemede gelecek.",
+    "incomeComingSoon": "Gelir analizleri bir sonraki güncellemede gelecek.",
+    "fundedCaption": "%{pct} tamamlandı · {remaining} pay kaldı",
+    "sharesRemaining": "Kalan pay",
+    "totalTarget": "Toplam hedef",
+    "primaryFixedPrice": "{title} bir birincil arz — hisse başına {price} sabit fiyat. Henüz piyasa fiyat geçmişi yok.",
+    "primaryFundingNote": "Finansman analizleri bir sonraki güncellemede gelecek.",
+    "fundamentals": "Mülk verileri",
+    "propertyValue": "Mülk değeri",
+    "annualRent": "Yıllık kira",
+    "grossYield": "Brüt getiri",
+    "tabsLabel": "Varlık bölümleri",
+    "marketSummary": "Piyasa özeti",
+    "currentPrice": "Güncel fiyat",
+    "bestBid": "En iyi alış",
+    "bestAsk": "En iyi satış",
+    "spread": "Fark",
+    "vsOffer": "arza göre",
+    "positionTitle": "Pozisyonunuz",
+    "positionTotal": "Toplam pay",
+    "positionLocked": "Kilitli",
+    "positionFree": "Serbest",
+    "positionAccrued": "Tahakkuk eden",
+    "positionValue": "Tahmini değer",
+    "positionLock": "Kilitle",
+    "positionSell": "Sat",
+    "fundingProgressTitle": "Zaman içindeki fonlama ilerlemesi",
+    "cumulativeSharesTitle": "Kümülatif satılan hisse",
+    "yieldProjectionTitle": "Getiri projeksiyonu",
+    "yieldProjectionNote": "Mevcut kira ve getiriye dayalı projeksiyon — gelecek getirilerin garantisi değildir.",
+    "pricePerformance": "Fiyat performansı",
+    "yieldPerformance": "Getiri performansı",
+    "simulatedHistoryNote": "Gösterim amaçlı simüle edilmiş geçmiş — gelecek getirilerin garantisi değildir.",
+    "holderDonutTitle": "Hisse sahibi dağılımı",
+    "totalHolders": "Toplam hisse sahibi",
+    "holder.others": "Diğerleri",
+    "holderPrivacyNote": "Hissedarlar anonim kategoriler olarak — kişisel veri yok.",
+    "holderStatsTitle": "Hisse sahibi istatistikleri",
+    "statTotalHolders": "Toplam hisse sahibi",
+    "statAvgHolding": "Ortalama elde tutma",
+    "statMedianHolding": "Medyan elde tutma",
+    "statTop5Ownership": "İlk 5 hisse",
+    "statNewHolders30d": "Yeni 30G",
+    "statLargestHolder": "En büyük hisse sahibi",
+    "sharesWord": "hisse",
+    "shareWord": "hisse",
+    "donutTapHint": "Ayrıntılar için bir dilime dokunun",
+    "topHoldersTitle": "En büyük hisse sahipleri",
+    "treemapTitle": "Sahiplik ağacı",
+    "treemapTapHint": "Ayrıntılar için bir bloğa dokunun",
+    "distributionOverTimeTitle": "Zaman içinde hisse dağılımı",
+    "distributionTapHint": "O tarihin ayrıntıları için grafiğe dokunun",
+    "bubbleChartTitle": "Kabarcık grafiği",
+    "bubbleTapHint": "Ayrıntılar için bir kabarcığa dokunun",
+    "holder.A": "Hissedar A",
+    "holder.B": "Hissedar B",
+    "holder.C": "Hissedar C",
+    "holder.D": "Hissedar D",
+    "holder.E": "Hissedar E",
+    "holder.F": "Hissedar F",
+    "fundedCaptionShort": "%{pct} fonlandı",
+    "incomeHistoryTitle": "Gelir geçmişi",
+    "cumulativeYieldPerShare": "Hisse başına kümülatif getiri",
+    "incomeMonthsWord": "ay geçmiş",
+    "perShareWord": "hisse başına",
+    "poolWord": "havuz",
+    "incomeTapHint": "O ayın ödemesini görmek için bir sütuna dokunun.",
+    "payoutHistoryTitle": "Ödeme geçmişi",
+    "payoutHistoryNote": "Simüle gelir geçmişi · MVP sonrası zincirde doğrulanabilir.",
+    "incomeRatiosTitle": "Gayrimenkul metrikleri",
+    "annualYieldRate": "Yıllık getiri oranı",
+    "incomeRatiosNote": "Gayrimenkulün kirasından ve değerinden türetilmiştir. Net getiri, cap rate, NOI ve gider oranı gösterilmez — veri setinde bu alanlar yok.",
+    "incomeProjectionsTitle": "Öngörülen kazanç",
+    "incomeProjectionsNote": "Genel bakış sekmesindeki gelir hesaplayıcıyı kullanın — seçtiğiniz hisse sayısına göre kazancınızı öngörür; bunlar vaat değil, öngörülerdir.",
+    "marketTitle": "Pazar",
+    "orderBook": "Emir defteri",
+    "bids": "Alışlar",
+    "asks": "Satışlar",
+    "best": "en iyi",
+    "lastTrade": "Son",
+    "recentTrades": "Son işlemler",
+    "tradesLoadError": "Son işlemler yüklenemedi.",
+    "tradesEmpty": "Henüz işlem yok — birincil arz tükenince pazar açılır.",
+    "galleryPages": "Galeri sayfaları",
+    "showImage": "{n}. görseli göster",
+    "expectedAnnualYield": "Beklenen yıllık getiri",
+    "basedOnLease": "Mevcut kiraya dayanır · {count} {unit} zamanında ödeme",
+    "monthWord": "ay",
+    "monthsWord": "ay",
+    "buySharesAt": "Hisse al · {price}",
+    "buyAt": "{price} fiyatına al",
+    "offeringSoldOut": "Birincil arz tükendi",
+    "stickyBuyShares": "Hisse al · {price}",
+    "stickyBuy": "Al · {price}",
+    "sell": "Sat",
+    "pricePerShareMetric": "Hisse başına fiyat",
+    "monthlyYieldPerShare": "Aylık getiri / hisse",
+    "totalPropertyValue": "Toplam mülk değeri",
+    "moreDetails": "Daha fazla detay",
+    "sizeLabel": "Alan",
+    "yearBuilt": "İnşaat yılı",
+    "typeLabel": "Tür",
+    "rentalStatusLabel": "Kira durumu",
+    "leaseUntil": "Kira bitişi",
+    "trustTitle": "Neden güvenle yatırım yapmalısınız",
+    "trustSimulatedNote": "Ödeme geçmişi simüle edilmiş demo kayıtları yansıtır.",
+    "similarProperties": "Benzer mülkler",
+    "documents": "Belgeler",
+    "documentsEmpty": "Henüz belge yok",
+    "downloadDoc": "{title} indir",
+    "docKindOffering": "Arz",
+    "docKindFinancial": "Finansal",
+    "docKindLegal": "Hukuki",
+    "docKindOther": "Diğer",
+    "documentsError": "Belgeler yüklenemedi.",
+    "simulatedPriceNote": "Görsel amaçlı simüle fiyat geçmişi — gelecek getirilerin garantisi değildir.",
+    "bannerLockCta": "Kazanmaya başlamak için hisseleri kilitleyin",
+    "youOwn": "{count} {unit} sahibisiniz · {locked} kilitli",
+    "earningNow": "Kazanıyor",
+    "notEarningYet": "Henüz kazanmıyor",
+    "bannerLockNote": "Hisseler yalnızca kilitliyken getiri sağlar. Kilitlemek ücretsizdir — fikrinizi değiştirirseniz açmak 2–3 gün sürer.",
+    "yieldSection": "Getiri",
+    "monthlyYield": "Aylık getiri",
+    "onLockedSharesNote": "Kilitli hisselerde · haftalık seçenek oran − %1 öder",
+    "yourShares": "Hisseleriniz",
+    "freeToLock": "Kilitlenebilir",
+    "buyFirstNote": "Önce hisse satın alın, sonra birinci günden kazanmak için kilitleyin.",
+    "allLocked": "Tümü kilitli",
+    "lockCta": "Kilitle",
+    "requestUnlock": "Kilit açma isteği",
+    "requesting": "İstek gönderiliyor…",
+    "unlockPendingNote": "Kilit açma isteğinizle getiri durdu. Hisseler 2–3 gün içinde satılabilir olur.",
+    "nShares": "{count} hisse",
+    "accruingWeekly": "Birikiyor · haftalık",
+    "accruingMonthly": "Birikiyor · aylık",
+    "unlocksOn": "{date} tarihinde açılır",
+    "unlockingInDays": "2–3 gün",
+    "perWeek": "Haftada",
+    "perMonth": "Ayda",
+    "unlockConfirmTitle": "Hisselerin kilidini aç",
+    "unlockConfirmBody": "Kilidi açmak bu hisselerin getirisini şimdi durdurur. 2–3 gün içinde satılabilir hale gelirler.",
+    "unlockConfirmCta": "Kilit açmayı onayla",
+    "unlockPendingLabel": "Kilit açılıyor…",
+    "unlockSuccessTitle": "Kilit açma istendi",
+    "unlockSuccessBody": "Getiri durdu. Hisseler 2–3 gün içinde satılabilir olacak.",
+    "propertyLabel": "Mülk",
+    "sharesLabel": "Hisseler",
+    "payoutPeriodLabel": "Ödeme dönemi",
+    "weeklyLabel": "Haftalık",
+    "monthlyLabel": "Aylık",
+    "accruedUnpaidLabel": "Biriken ödenmemiş",
+    "lockSheetTitle": "Hisseleri kilitle",
+    "lockSheetIntro": "Kilitli hisseler 1. günden itibaren getiri sağlar. Ödeme sıklığını seçin.",
+    "payoutPeriodMonthly": "Aylık",
+    "payoutPeriodWeekly": "Haftalık",
+    "payoutPeriodMonthlyHint": "tam oran, ayda 1 ödeme",
+    "payoutPeriodWeeklyHint": "oran − %1, ayda 4 ödeme",
+    "payoutPeriodAria": "{period} ödeme",
+    "monthlyRate": "Aylık oran",
+    "maxCta": "Maks.",
+    "quantityInvalid": "Miktar 1 ile {max} arasında olmalıdır.",
+    "lockedPrincipal": "Kilitli anapara",
+    "monthlyPayout": "Aylık ödeme",
+    "weeklyPayout": "Haftalık ödeme",
+    "perMonthWord": "/ ay",
+    "perWeekWord": "/ hafta",
+    "timesFourMonth": "× 4 / ay",
+    "lockConfirmCta": "{count} {unit} kilitle ve kazan",
+    "lockingPending": "Kilitleniyor…",
+    "lockWarningNote": "Kilitli hisseler satılamaz. Kilit açma 2–3 gün sürer ve getiriyi durdurur.",
+    "lockedSuccessTitle": "Hisseler kilitlendi",
+    "earningFromDay1": "{count} {unit} 1. günden kazanıyor",
+    "sellSheetTitle": "Hisse sat",
+    "confirmInstantSale": "Anında satışı onayla",
+    "sellModeAria": "Satış modu",
+    "sellModeAriaOf": "{mode} sat",
+    "instantMode": "Anında",
+    "customPriceMode": "Özel fiyat",
+    "instantSellReview": "Satışı gözden geçir · {amount}",
+    "instantSellReviewBody": "Platform bu hisseleri liste fiyatı − %7'den geri alır. Bu işlem geri alınamaz.",
+    "feeLabel": "Ücret (%7)",
+    "youReceive": "Alacağınız",
+    "confirmSell": "Satışı onayla",
+    "sellingPending": "Satılıyor…",
+    "placingPending": "Veriliyor…",
+    "lockedInOrders": "Kilitli / emirde",
+    "notSellable": "satılamaz",
+    "onTrade": "işlem başına",
+    "instantSellEnded": "Anında satış sona erdi — birincil arz tükendi. Özel bir fiyat kullanın.",
+    "queueSellOrder": "Satış emrini kuyruğa al",
+    "placeSellOrder": "Satış emri ver",
+    "queuedUntilSellout": "Birincil arz tükenene kadar kuyrukta — sonra emriniz otomatik olarak piyasada işlem görür.",
+    "platformBuybackNote": "Platform liste fiyatı − %7'den geri alır. Yatırım bakiyenize yatırılır.",
+    "sellSuccessTitle": "Hisseler satıldı",
+    "creditedNote": "Yatırım bakiyenize yatırılır.",
+    "backCta": "Geri",
+    "sellOrderPlacedToast": "Satış emri verildi",
+    "sellOrderPlacedBody": "Portföy → Açık emirler'den takip edin",
+    "buyOnMarket": "Piyasadan al",
+    "lastPrice": "Son fiyat",
+    "marketFeeLabel": "Piyasa ücreti",
+    "heldInEscrow": "Escrow'da tutuluyor",
+    "escrowNote": "Bakiyenizden tutar, emir gerçekleşene kadar — ya da iptal edene kadar — bloke edilir.",
+    "buyOrderPlacedToast": "Alış emri verildi",
+    "buyOrderPlacedBody": "Emir gerçekleşene kadar fonlar escrow'da",
+    "placeBuyOrder": "Alış emri ver",
+    "freeSharesLabel": "Serbest hisseler",
+    "orderValue": "Emir değeri",
+    "valueRow": "Değer",
+    "doneCta": "Tamam",
+    "decreaseQty": "Miktarı azalt",
+    "increaseQty": "Miktarı artır",
+    "pricePerShareLabel": "Hisse başı fiyat",
+    "reviewSaleCta": "Satışı gözden geçir · {amount}",
+    "calcTitle": "Ne kadar kazanabilirim?",
+    "calcYouOwn": "{count} adetiniz var",
+    "calcLockedSuffix": " · {count} kilitli",
+    "calcSharesLabel": "Hisseler",
+    "calcDecreaseShares": "Hisseleri azalt",
+    "calcIncreaseShares": "Hisseleri artır",
+    "calcSharesInput": "Hisse sayısı",
+    "calcSharesSlider": "Hisse kaydırıcısı",
+    "calcProjected": "Öngörülen kazanç",
+    "perYearWord": "/ yıl",
+    "calcFeesNote": "Platform ücretleri sonrası · Kilitli hisseler 1. günden kazanır",
+    "calcBuyCta": "{count} {unit} satın al – {cost}",
+    "scenarioConservative": "Muhafazakâr",
+    "scenarioBase": "Temel",
+    "scenarioOptimistic": "İyimser",
+    "walletLabel": "Cüzdan",
+    "availableShares": "Mevcut hisseler",
+    "totalLabel": "Toplam",
+    "estWeeklyYield": "Tahmini haftalık getiri",
+    "paymentCurrency": "Ödeme para birimi",
+    "performanceTitle": "Performans",
+    "connectWalletTitle": "Cüzdanı bağla",
+    "connectWalletBody": "Hisse satın almak ve kira getirisi kazanmak için bir TON cüzdanı bağlayın.",
+    "fullyFundedTitle": "Tamamen finanse edildi",
+    "fullyFundedBody": "Birincil hisselerin tamamı satıldı. İkinci piyasası sıradaki.",
+    "buySheetTitle": "Hisse satın al",
+    "payWithAria": "{currency} ile öde",
+    "usdtUnavailableNote": "USDT şu anda kullanılamıyor — TON ile ödeyeceksiniz.",
+    "paidInNote": "Bağlı cüzdanınızdan {currency} ile ödeme.",
+    "freeShares": "Serbest hisseler",
+    "valueLabel": "Değer",
+    "bannerFunding": "Finansmana açık · {progress} · {count} {unit} kaldı",
+    "bannerLiveTrading": "{status} · Canlı işlem",
+    "resaleWord": "İkinci el satış",
+    "fullyFundedWord": "Tamamen finanse edildi",
+    "chartTrendSummary": "Eğilim: {start} → {end} {direction}.",
+    "trendUp": "yükseliş",
+    "trendDown": "düşüş",
+    "performanceSectionTitle": "Performans",
+    "priceMode": "Fiyat",
+    "yieldMode": "Getiri"
   },
-
   "earnings": {
-
     "loadError": "Kazançlar yüklenemedi.",
-
     "emptyTitle": "Henüz kazancın yok",
-
     "emptyMessage": "İlk payını al ve gelecek ay kazanmaya başla.",
-
     "thisWeek": "Bu haftanın kazancı",
-
     "nextPayoutIn": "Sonraki ödeme",
-
     "totalReceived": "Alınan toplam kazanç",
-
     "consecutivePaid": "Ardışık ödenen haftalar",
-
     "streak": "Üst üste {count} {unit} ✓",
-
     "noStreak": "Henüz seri yok",
-
     "timeline": "Geçmiş",
-
     "disclaimer": "simüle aylık ödeme · MVP sonrası zincir üzerinde doğrulanabilir",
-
     "withdrawalTerms": "Dilediğin zaman çek — %1 ücret, 4 haftalık taksitte ödenir",
-
     "yieldTitle": "Kazanç gücü",
-
     "totalEarned": "Toplam kazanılan",
-
     "chartTitle": "Son 12 hafta",
-
     "chartCaption": "Haftalık kira ödemeleri · on-chain olana kadar simüle.",
-
     "timelineTitle": "Gelir akışınız",
-
     "timelinePaid": "Ödendi",
-
     "timelineAccruing": "Birikiyor",
-
     "timelineAccruingSub": "içinde bulunulan ay",
-
     "timelineNext": "Sonraki tahmin",
-
     "timelineCaption": "Aylık birikim; ödemeler her Pazar mutabakat edilir.",
-
     "withdraw": "Cüzdanına çek",
-
     "withdrawSubtitle": "%1 ücret · 4 haftalık taksit",
-
     "yieldAccrued": "Birikmiş ödenmemiş",
-
     "yieldMonthly": "Aylık",
-
     "yieldNoLocks": "Aktif kilit yok — kazanmaya başlamak için bir mülk sayfasında pay kilitleyin.",
-
     "yieldPayments": "Getiri ödemeleri",
-
     "yieldFinal": "Son ödeme"
-
   },
-
   "portfolio": {
-
     "loadError": "Portföyün yüklenemedi.",
-
     "emptyTitle": "Portföyün boş",
-
     "emptyMessage": "Yaklaşık 80 $’dan başla — ilk payını pazardan al.",
-
     "totalValue": "Toplam portföy değeri",
-
     "totalInvested": "Toplam yatırım",
-
     "totalEarningsReceived": "Alınan toplam kazanç",
-
     "unrealizedProfit": "Gerçekleşmemiş kâr",
-
     "nextPayout": "Sonraki ödeme",
-
     "myPropertiesCount": "Mülklerim ({count})",
-
     "openOrders": "Açık emirler",
-
     "allocation": "Dağılım",
-
     "lockedShares": "Kilitli paylar",
-
     "freeShares": "Serbest paylar",
-
     "investedWord": "yatırılan",
-
     "earnedWord": "kazanılan",
-
     "unrealizedWord": "gerçekleşmemiş",
-
     "orderOpen": "Açık",
-
     "allocationProperties": "{count} emlak",
-
     "showDetails": "Detayları göster",
-
     "hideDetails": "Detayları gizle",
-
     "lockedCaption": "Aylık getiri sağlıyor",
-
     "freeCaption": "Henüz getiri yok",
-
     "idleShares": "{count} hisse getiride değil",
-
     "lockThem": "Kilitler",
-
     "earningPill": "{count} getiride",
-
     "idlePill": "{count} boşta",
-
     "estMonthly": "≈ {amount} / ay",
-
     "projectedMonthlyShort": "Tahmini aylık kira",
-
     "exportCsv": "CSV dışa aktar",
-
     "exporting": "Dışa aktarılıyor…",
-
     "sharesOwned": "Sahip olunan hisse",
-
     "avgCostPerShare": "Ort. maliyet / hisse",
-
     "currentValueRow": "Güncel değer",
-
     "unrealizedPnl": "Gerçekleşmemiş K/Z",
-
     "projectedMonthlyYield": "Öngörülen aylık getiri",
-
     "buyMore": "Daha fazla al",
-
     "sellComingSoon": "Satış yakında",
-
     "nftCollectible": "Koleksiyon NFT",
-
     "nftItem": "NFT öğesi",
-
     "collection": "Koleksiyon",
-
     "viewOnExplorer": "Kâşifte görüntüle",
-
     "nftDisclaimer": "Bu NFT koleksiyonluk bir makbuzdur — veritabanı sahiplik kaydı olmaya devam eder.",
-
     "nftStatusPending": "Beklemede",
-
     "nftStatusMinting": "Basılıyor",
-
     "nftStatusMinted": "Basıldı",
-
     "nftStatusTransferring": "Aktarılıyor",
-
     "nftStatusDelivered": "Teslim edildi",
-
     "nftStatusFailed": "Başarısız",
-
     "orderQueued": "Sırada"
-
   },
-
   "settings": {
-
     "title": "Ayarlar",
-
     "wallet": "Cüzdan",
-
     "connectTitle": "TON cüzdan bağla",
-
     "connectHint": "Pay almak ve aylık kira geliri için gerekli.",
-
     "disconnect": "Cüzdanı ayır",
-
     "withdrawals": "Para çekme",
-
     "withdrawalTitle": "USDT çekim adresi",
-
     "withdrawalHint": "Çekilebilir bakiyenizin ödendiği yer",
-
     "withdrawalPlaceholder": "EQ… USDT-TON adresi",
-
     "withdrawalEmpty": "Adres ayarlanmadı",
-
     "withdrawalVerified": "Doğrulandı",
-
     "withdrawalUnverified": "Doğrulanmadı",
-
     "withdrawalInvalid": "Geçerli bir TON adresi girin",
-
     "withdrawalSave": "Kaydet",
-
     "withdrawalCancel": "İptal",
-
     "withdrawalRequests": "Para çekme talepleri",
-
     "withdrawalRequestsEmpty": "Henüz para çekme talebi yok",
-
     "withdrawalStatusPaid": "Ödendi",
-
     "withdrawalStatusRequested": "Talep edildi",
-
     "withdrawalStatusApproved": "Onaylandı",
-
     "withdrawalStatusRejected": "Reddedildi",
-
     "withdrawalInstallmentProgress": "{paid} / {total} taksit ödendi",
-
     "withdrawalRequest": "Para çekme talebi",
     "withdrawalsError": "Para çekme talepleri yüklenemedi",
-
     "referrals": "Referanslar",
-
     "inviteFriends": "Arkadaşlarını davet et",
-
     "copied": "Kopyalandı!",
-
     "signInToInvite": "Davet etmek için giriş yap",
-
-
     "preferences": "Tercihler",
-
     "displayCurrency": "Görüntüleme para birimi",
-
     "displayCurrencyHint": "Rakamlar USD kalır; TON tahmini alışta",
-
     "language": "Dil",
-
     "languageHint": "Uygulama dili",
-
     "languageAuto": "Otomatik (Telegram)",
-
     "useTelegramTheme": "Dark / Light",
-
     "useTelegramThemeHint": "Telegram renklerine uy",
-
     "showDemoBadge": "Demo rozetini göster",
-
     "showDemoBadgeHint": "Dürüst yüzen MVP etiketi",
-
     "help": "Yardım",
-
     "howItWorks": "FractionalLuxe nasıl çalışır",
     "transactionHistory": "İşlem geçmişi",
-
-
     "aboutLegal": "Hakkında / Yasal",
-
     "aboutBody": "FractionalLuxe, TON üzerinde fraksiyonel gayrimenkul payları için bir Telegram Mini App’tir. Aylık kira geliri sahipliğine orantılı olarak birikir.",
-
     "aboutAdvice": "Buradaki hiçbir şey finansal tavsiye değildir. Mülk belgeleri ve tokenizasyon, üretim sözleşmelerine kadar gösterim amaçlıdır.",
-
     "aboutCopyright": "© FractionalLuxe · MVP",
-
     "demoTxDisclaimer": "Bu bir demodur – işlemler simüle edilir",
-
     "payoutDisclaimer": "simüle aylık ödeme · MVP sonrası zincir üzerinde doğrulanabilir",
-
     "chooseLanguage": "Dil seç",
-
     "account": "Hesap",
-
     "recoverySignIn": "Kurtarma koduyla giriş yap",
-
     "signOut": "Çıkış yap",
-
     "signOutConfirmTitle": "Çıkış yapmak istiyor musunuz?",
-
     "signOutConfirmBody": "Çıkış yapmak istediğinizden emin misiniz?"
-
   },
-
   "profile": {
-
     "title": "Profilini tamamla",
-
     "subtitle": "Hesabını tanımlamak için birkaç bilgi.",
-
     "settingsSection": "Profil",
-
     "displayName": "Görünen ad",
-
     "displayNamePlaceholder": "Adın",
-
     "phone": "Telefon",
-
     "phonePlaceholder": "+90 5XX XXX XX XX",
-
     "phoneHint": "İsteğe bağlı. Yalnızca hesap desteği için.",
-
     "phoneEmpty": "Kayıtlı telefon yok",
-
     "useTelegramPhone": "Telegram numarasını kullan",
-
     "requestingPhone": "İsteniyor…",
-
     "recoveryTitle": "Kurtarma kodu",
-
     "recoveryWarn": "Bu kodu güvenli bir yerde sakla. Telegram yoksa giriş için gerekir. Senin için kurtaramayız.",
-
     "recoverySettingsHint": "Bu kodu gizli tut. Elinde olan herkes FractionalLuxe hesabına erişebilir.",
-
     "copyCode": "Kurtarma kodunu kopyala",
-
     "showCode": "Kurtarma kodunu göster",
-
     "hideCode": "Kurtarma kodunu gizle",
-
     "savedConfirm": "Kurtarma kodumu güvenli bir yere kaydettim",
-
     "saveContinue": "Kaydet ve devam et",
-
     "saving": "Kaydediliyor…",
-
     "save": "Kaydet",
-
     "cancel": "İptal",
-
     "errors": {
-
       "name": "Bir ad gir (en az 2 karakter)",
-
       "phone": "Geçerli bir telefon numarası gir",
-
       "saveCode": "Kurtarma kodunu kaydettiğini onayla",
-
       "save": "Profil kaydedilemedi"
-
     }
-
   },
-
   "recovery": {
-
     "title": "Kurtarma koduyla giriş",
-
     "subtitle": "Profil kurulumunda kaydettiğin kodu kullan.",
-
     "codeLabel": "Kurtarma kodu",
-
     "signIn": "Giriş yap",
-
     "signingIn": "Giriş yapılıyor…",
-
     "backHome": "Ana sayfaya dön"
-
   }
-
 }
-

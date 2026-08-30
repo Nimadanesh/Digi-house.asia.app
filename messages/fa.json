@@ -1,608 +1,567 @@
 {
-
   "common": {
-
     "appName": "دیجی‌هاوس",
-
     "buyShare": "خرید سهم",
-
     "browseMarketplace": "مشاهده بازار",
-
     "viewAll": "مشاهده همه",
-
     "refresh": "بازنشانی",
-
     "clearFilters": "پاک کردن فیلترها",
-
     "tryAgain": "تلاش دوباره",
-
     "retry": "تلاش مجدد",
-
     "skip": "رد شدن",
-
     "continue": "ادامه",
-
     "getStarted": "شروع کنید",
-
     "settings": "تنظیمات",
-
     "connectWallet": "اتصال کیف پول",
-
     "walletConnected": "کیف پول متصل است",
-
     "disconnectWallet": "قطع اتصال کیف پول",
-
     "share": "سهم",
-
     "shares": "سهم",
-
     "of": "از",
-
     "from": "از",
-
     "est": "تقریبی",
-
     "apy": "بازده سالانه",
-
     "pending": "در انتظار",
-
     "paid": "پرداخت‌شده",
-
     "hot": "داغ",
-
     "new": "جدید",
-
     "soldPct": "{pct}٪ فروخته‌شده",
-
     "week": "هفته",
-
     "weeks": "هفته",
-
     "demoMode": "حالت دمو · داده آزمایشی · تراکنش‌ها شبیه‌سازی‌شده",
-
     "somethingWentWrong": "مشکلی پیش آمد"
-
   },
-
   "tabs": {
-
     "home": "خانه",
-
     "marketplace": "بازار",
-
     "earnings": "درآمد",
-
     "portfolio": "سبد"
-
   },
-
   "header": {
-
     "greeting": "سلام، {name}"
-
   },
-
   "onboarding": {
-
     "skip": "رد شدن",
-
     "continue": "ادامه",
-
     "getStarted": "شروع کنید",
-
     "slideProgress": "{current} / {total}",
-
     "slideAria": "اسلاید {n}",
-
     "own": {
-
       "headline": "مالک بخشی از یک ملک واقعی شوید",
-
       "subtitle": "از حدود ۸۰ دلار شروع کنید"
-
     },
-
     "yield": {
-
       "headline": "هر ماه سهم اجاره خود را دریافت کنید",
-
       "subtitle": "سهم ماهانه خود را در بخش درآمد ببینید"
-
     },
-
     "sell": {
-
       "headline": "هر زمان خواستید بفروشید",
-
       "subtitle": "وقتی آماده خروج بودید، سهم‌ها را در بازار دیجی‌هاوس فهرست کنید."
-
     }
-
   },
-
   "home": {
-
     "loadError": "بارگذاری خانه ممکن نشد.",
-
     "portfolioValue": "ارزش سبد",
-
     "totalInvested": "کل سرمایه‌گذاری",
-
     "totalEarningsReceived": "کل درآمد دریافتی",
-
     "nextPayout": "پرداخت بعدی",
-
     "myProperties": "املاک من",
-
     "myPropertiesCount": "املاک من ({count})",
-
     "monthlyPerShare": "ماهانه / سهم",
-
     "pendingThisWeek": "{amount} در انتظار این هفته",
-
     "earnedWord": "درآمد",
-
     "viewAllCount": "+{count} دیگر در سبد",
-
     "featuredOpportunity": "فرصت ویژه",
-
     "featuredTag": "ویژه",
-
     "moreOpportunities": "فرصتهای بیشتر",
-
     "emptyTitle": "سفر ملکی شما از اینجا شروع میشود",
-
     "emptyHint": "مسیری آرام به سوی درآمد اجاره ماهانه.",
-
     "emptyStepBuy": "سهام بخرید",
-
     "emptyStepLock": "برای بازده قفل کنید",
-
     "emptyStepEarn": "هر ماه درآمد داشته باشید",
-
     "emptyCta": "فرصتها را کشف کنید",
-
     "trustFooter": "درآمد اجاره ماهانه انباشته میشود. هر زمان برداشت کنید (کارمزد ۱٪، ۴ قسط هفتگی). تا زمان on-chain شبیهسازی شده."
-
   },
-
   "marketplace": {
-
     "searchPlaceholder": "جستجوی املاک",
-
     "searchAria": "جستجوی املاک",
-
     "clearSearch": "پاک کردن جستجو",
-
     "filtersAria": "فیلترهای بازار",
-
     "loadError": "بارگذاری املاک ممکن نشد.",
-
     "emptyTitle": "هنوز ملکی نیست",
-
     "emptyMessage": "فهرست‌های کسری جدید هر هفته اضافه می‌شوند — به‌زودی سر بزنید.",
-
     "noMatchesTitle": "موردی یافت نشد",
-
     "noMatchesMessage": "جستجو یا فیلتر دیگری را امتحان کنید.",
-
     "chips": {
-
       "all": "همه",
-
       "primary": "اولیه",
-
       "secondary": "ثانویه",
-
       "highest_yield": "بیشترین بازده",
-
       "new": "جدید",
-
       "almost_sold": "تقریباً فروخته",
-
       "low_price": "قیمت پایین"
-
     },
-
     "pricePerShare": "قیمت / سهم",
-
     "monthlyPerShare": "ماهانه / سهم",
-
-    "minPurchase": "حداقل خرید",
-
+    "nightFrom": "شب / از",
     "sharesSold": "{sold} از {total} سهم فروخته‌شده",
-
     "feesTitle": "کارمزد",
-
     "feesPerTx": "سطح کارمزد بر اساس مبلغ هر تراکنش تعیین می‌شود — بدون سقف خرید یا فروش.",
-
     "feesRange": "مبلغ",
-
     "feesBuyPrimary": "خرید · عرضه",
-
     "feesBuyMarket": "خرید · بازار",
-
     "feesSellMarket": "فروش · بازار",
-
     "feesInstantSell": "فروش آنی (عرضه اولیه)",
-
     "feesInstantNote": "در مرحله عرضه اولیه ثابت است؛ معاملات ثانویه از سطح بازار استفاده می‌کنند.",
-
     "feesNoCap": "هیچ سقفی برای مبلغ خرید یا فروش وجود ندارد.",
-
     "lastPrice": "آخرین قیمت"
-
   },
-
   "property": {
-
     "buyShare": "خرید سهم",
-
     "about": "درباره",
-
     "metrics": "شاخص‌ها",
-
     "trust": "اعتماد و شفافیت",
-
     "rentalHistory": "سابقه اجاره",
-
     "incomeCalculator": "ماشین‌حساب درآمد",
-
     "salesProgress": "پیشرفت فروش",
-
-    "gallery": "گالری"
-
-  },
-
-  "earnings": {
-
-    "loadError": "بارگذاری درآمد ممکن نشد.",
-
-    "emptyTitle": "هنوز درآمدی ندارید",
-
-    "emptyMessage": "اولین سهم را بخرید و از ماه بعد درآمد کسب کنید.",
-
-    "thisWeek": "درآمد این هفته",
-
-    "nextPayoutIn": "پرداخت بعدی",
-
-    "totalReceived": "کل درآمد دریافتی",
-
-    "consecutivePaid": "هفته‌های پرداخت متوالی",
-
-    "streak": "{count} {unit} پشت سر هم ✓",
-
-    "noStreak": "هنوز رگباری نیست",
-
-    "timeline": "تاریخچه",
-
-    "disclaimer": "پرداخت ماهانه شبیه‌سازی‌شده · قابل تأیید روی زنجیره پس از MVP",
-
-    "withdrawalTerms": "هر زمان بخواهید برداشت کنید — کارمزد ۱٪، پرداخت‌شده در 4 قسط هفتگی",
-
-    "yieldTitle": "قدرت درآمد",
-
-    "totalEarned": "درآمد کل",
-
-    "chartTitle": "۱۲ هفتهٔ گذشته",
-
-    "chartCaption": "پرداختهای هفتگی اجاره · شبیهسازی تا on-chain.",
-
-    "timelineTitle": "جریان درآمد شما",
-
-    "timelinePaid": "پرداختشده",
-
-    "timelineAccruing": "در حال انباشت",
-
-    "timelineAccruingSub": "ماه جاری",
-
-    "timelineNext": "تخمین بعدی",
-
-    "timelineCaption": "انباشت ماهانه؛ پرداختها هر یکشنبه تسویه میشوند.",
-
-    "withdraw": "به کیف پول خود برداشت کنید",
-
-    "withdrawSubtitle": "کارمزد ۱٪ · ۴ قسط هفتگی",
-
-    "yieldAccrued": "سود پرداخت‌نشده",
-
-    "yieldMonthly": "ماهانه",
-
-    "yieldNoLocks": "قفل فعالی ندارید — برای شروع کسب سود، سهام را در صفحه ملک قفل کنید.",
-
-    "yieldPayments": "پرداخت‌های سود",
-
-    "yieldFinal": "پرداخت پایانی"
-
-  },
-
-  "portfolio": {
-
-    "loadError": "بارگذاری سبد ممکن نشد.",
-
-    "emptyTitle": "سبد شما خالی است",
-
-    "emptyMessage": "از حدود ۸۰ دلار شروع کنید — اولین سهم را در بازار بخرید.",
-
-    "totalValue": "کل ارزش سبد",
-
-    "totalInvested": "کل سرمایه‌گذاری",
-
-    "totalEarningsReceived": "کل درآمد دریافتی",
-
-    "unrealizedProfit": "سود تحقق‌نیافته",
-
-    "nextPayout": "پرداخت بعدی",
-
-    "myPropertiesCount": "املاک من ({count})",
-
-    "openOrders": "سفارش‌های باز",
-
-    "allocation": "تخصیص",
-
-    "lockedShares": "سهام قفل‌شده",
-
+    "gallery": "گالری",
+    "tabOverview": "نمای کلی",
+    "tabPerformance": "عملکرد",
+    "tabHolders": "دارندگان",
+    "tabIncome": "درآمد",
+    "tabDetails": "جزئیات",
+    "marketBadge": "بازار ثانویه",
+    "offerPrice": "قیمت عرضه",
+    "sharesSoldOf": "فروش‌رفته / کل",
+    "holdersComingSoon": "تحلیل دارندگان در به‌روزرسانی بعدی ارائه می‌شود.",
+    "incomeComingSoon": "تحلیل درآمد در به‌روزرسانی بعدی ارائه می‌شود.",
+    "fundedCaption": "{pct}% تأمین شد · {remaining} سهم باقی‌مانده",
+    "sharesRemaining": "سهام باقی‌مانده",
+    "totalTarget": "هدف کل",
+    "primaryFixedPrice": "{title} یک عرضه اولیه است — قیمت ثابت {price} به ازای هر سهم. هنوز سابقه قیمت بازار وجود ندارد.",
+    "primaryFundingNote": "تحلیل پیشرفت تأمین مالی در به‌روزرسانی بعدی ارائه می‌شود.",
+    "fundamentals": "مبانی ملک",
+    "propertyValue": "ارزش ملک",
+    "annualRent": "اجاره سالانه",
+    "grossYield": "بازده ناخالص",
+    "tabsLabel": "بخش‌های دارایی",
+    "marketSummary": "خلاصه بازار",
+    "currentPrice": "قیمت فعلی",
+    "bestBid": "بهترین خرید",
+    "bestAsk": "بهترین فروش",
+    "spread": "اختلاف",
+    "vsOffer": "نسبت به عرضه",
+    "positionTitle": "موقعیت شما",
+    "positionTotal": "کل سهام",
+    "positionLocked": "قفل‌شده",
+    "positionFree": "آزاد",
+    "positionAccrued": "تعلق‌گرفته پرداخت‌نشده",
+    "positionValue": "ارزش تخمینی",
+    "positionLock": "قفل",
+    "positionSell": "فروش",
+    "fundingProgressTitle": "پیشرفت تأمین مالی در طول زمان",
+    "cumulativeSharesTitle": "مجموع سهام فروخته‌شده",
+    "yieldProjectionTitle": "پیش‌بینی بازدهی",
+    "yieldProjectionNote": "پیش‌بینی بر اساس اجاره و بازدهی فعلی — وعده‌ای برای بازدهی آینده نیست.",
+    "pricePerformance": "عملکرد قیمت",
+    "yieldPerformance": "عملکرد بازدهی",
+    "simulatedHistoryNote": "تاریخچه شبیه‌سازی‌شده برای نمایش — وعده‌ای برای بازدهی آینده نیست.",
+    "holderDonutTitle": "توزیع دارندگان سهام",
+    "totalHolders": "کل دارندگان",
+    "holder.others": "سایران",
+    "holderPrivacyNote": "دارندگان به‌صورت دسته‌های ناشناس — بدون داده شخصی.",
+    "holderStatsTitle": "آمار دارندگان",
+    "statTotalHolders": "کل دارندگان",
+    "statAvgHolding": "میانگین دارایی",
+    "statMedianHolding": "میانه دارایی",
+    "statTop5Ownership": "۵ دارنده برتر",
+    "statNewHolders30d": "دارندگان جدید ۳۰ روز",
+    "statLargestHolder": "بزرگ‌ترین دارنده",
+    "sharesWord": "سهام",
+    "shareWord": "سهم",
+    "donutTapHint": "برای جزئیات روی یک بخش بزنید",
+    "topHoldersTitle": "بزرگ‌ترین دارندگان سهام",
+    "treemapTitle": "نقشه مالکیت",
+    "treemapTapHint": "برای جزئیات روی یک مربع بزنید",
+    "distributionOverTimeTitle": "توزیع سهام در طول زمان",
+    "distributionTapHint": "برای جزئیات آن تاریخ روی نمودار بزنید",
+    "bubbleChartTitle": "نمودار حبابی دارندگان",
+    "bubbleTapHint": "برای جزئیات روی یک حباب بزنید",
+    "holder.A": "دارنده الف",
+    "holder.B": "دارنده ب",
+    "holder.C": "دارنده ج",
+    "holder.D": "دارنده د",
+    "holder.E": "دارنده ه",
+    "holder.F": "دارنده و",
+    "fundedCaptionShort": "{pct}% تأمین‌شده",
+    "incomeHistoryTitle": "تاریخچه درآمد",
+    "cumulativeYieldPerShare": "بازده تجمعی به ازای هر سهم",
+    "incomeMonthsWord": "ماه سابقه",
+    "perShareWord": "به ازای هر سهم",
+    "poolWord": "کل",
+    "incomeTapHint": "برای دیدن جزئیات پرداخت آن ماه، روی یک ستون بزنید.",
+    "payoutHistoryTitle": "تاریخچه پرداخت‌ها",
+    "payoutHistoryNote": "تاریخچه درآمد شبیه‌سازی‌شده · پس از MVP قابل تأیید روی زنجیره.",
+    "incomeRatiosTitle": "شاخص‌های املاک",
+    "annualYieldRate": "نرخ بازده سالانه",
+    "incomeRatiosNote": "از اجاره و ارزش ملک محاسبه شده است. بازده خالص، نرخ سرمایه‌گذاری، NOI و نسبت هزینه نمایش داده نمی‌شوند — مجموعه داده آن فیلدها را ندارد.",
+    "incomeProjectionsTitle": "درآمد پیش‌بینی‌شده",
+    "incomeProjectionsNote": "از ماشین‌حساب درآمد در تب نمای کلی استفاده کنید — درآمد شما را بر اساس تعداد سهم انتخابی محاسبه می‌کند؛ این‌ها پیش‌بینی هستند نه وعده.",
+    "marketTitle": "بازار",
+    "orderBook": "دفتر سفارش‌ها",
+    "bids": "خریدها",
+    "asks": "فروش‌ها",
+    "best": "بهترین",
+    "lastTrade": "آخرین",
+    "recentTrades": "معاملات اخیر",
+    "tradesLoadError": "بارگذاری معاملات اخیر ممکن نشد.",
+    "tradesEmpty": "هنوز معامله‌ای نیست — بازار وقتی عرضه اولیه به پایان برسد باز می‌شود.",
+    "galleryPages": "صفحات گالری",
+    "showImage": "نمایش تصویر {n}",
+    "expectedAnnualYield": "بازده سالانه مورد انتظار",
+    "basedOnLease": "بر اساس اجاره‌نامه فعلی · {count} {unit} پرداخت به‌موقع",
+    "monthWord": "ماه",
+    "monthsWord": "ماه",
+    "buySharesAt": "خرید سهام · {price}",
+    "buyAt": "خرید با قیمت {price}",
+    "offeringSoldOut": "عرضه اولیه به پایان رسید",
+    "stickyBuyShares": "خرید سهام · {price}",
+    "stickyBuy": "خرید · {price}",
+    "sell": "فروش",
+    "pricePerShareMetric": "قیمت هر سهم",
+    "monthlyYieldPerShare": "بازده ماهانه / سهم",
+    "totalPropertyValue": "ارزش کل ملک",
+    "moreDetails": "جزئیات بیشتر",
+    "sizeLabel": "اندازه",
+    "yearBuilt": "سال ساخت",
+    "typeLabel": "نوع",
+    "rentalStatusLabel": "وضعیت اجاره",
+    "leaseUntil": "اجاره تا",
+    "trustTitle": "چرا با اطمینان سرمایه‌گذاری کنید",
+    "trustSimulatedNote": "سابقه پرداخت‌ها بازتاب داده‌های نمایشی شبیه‌سازی‌شده است.",
+    "similarProperties": "املاک مشابه",
+    "documents": "اسناد",
+    "documentsEmpty": "هنوز سندی نیست",
+    "downloadDoc": "دانلود {title}",
+    "docKindOffering": "عرضه",
+    "docKindFinancial": "مالی",
+    "docKindLegal": "حقوقی",
+    "docKindOther": "سایر",
+    "documentsError": "بارگذاری اسناد ممکن نشد.",
+    "simulatedPriceNote": "سابقه قیمت شبیه‌سازی‌شده برای توضیح — وعده بازده آینده نیست.",
+    "bannerLockCta": "برای شروع کسب درآمد، سهام را قفل کنید",
+    "youOwn": "شما {count} {unit} دارید · {locked} قفل‌شده",
+    "earningNow": "در حال کسب درآمد",
+    "notEarningYet": "هنوز درآمد ندارد",
+    "bannerLockNote": "سهام فقط وقتی قفل هستند بازده می‌دهند. قفل کردن رایگان است — اگر نظرتان عوض شود، باز کردن ۲ تا ۳ روز طول می‌کشد.",
+    "yieldSection": "بازده",
+    "monthlyYield": "بازده ماهانه",
+    "onLockedSharesNote": "روی سهام قفل‌شده · گزینه هفتگی نرخ منهای ۱٪ می‌پردازد",
+    "yourShares": "سهام شما",
+    "freeToLock": "آزاد برای قفل",
+    "buyFirstNote": "اول سهام بخرید، سپس آن‌ها را قفل کنید تا از روز اول درآمد داشته باشید.",
+    "allLocked": "همه قفل شده",
+    "lockCta": "قفل",
+    "requestUnlock": "درخواست باز کردن قفل",
+    "requesting": "در حال درخواست…",
+    "unlockPendingNote": "بازده با درخواست باز کردن قفل متوقف شد. سهام طی ۲ تا ۳ روز قابل فروش می‌شوند.",
+    "nShares": "{count} سهم",
+    "accruingWeekly": "در حال تجمع · هفتگی",
+    "accruingMonthly": "در حال تجمع · ماهانه",
+    "unlocksOn": "در {date} باز می‌شود",
+    "unlockingInDays": "۲ تا ۳ روز",
+    "perWeek": "هر هفته",
+    "perMonth": "هر ماه",
+    "unlockConfirmTitle": "باز کردن قفل سهام",
+    "unlockConfirmBody": "باز کردن قفل، بازده این سهام را همین حالا متوقف می‌کند. طی ۲ تا ۳ روز قابل فروش می‌شوند.",
+    "unlockConfirmCta": "تأیید باز کردن قفل",
+    "unlockPendingLabel": "در حال باز کردن قفل…",
+    "unlockSuccessTitle": "درخواست باز کردن قفل ثبت شد",
+    "unlockSuccessBody": "بازده متوقف شد. سهام طی ۲ تا ۳ روز قابل فروش می‌شوند.",
+    "propertyLabel": "ملک",
+    "sharesLabel": "سهام",
+    "payoutPeriodLabel": "دوره پرداخت",
+    "weeklyLabel": "هفتگی",
+    "monthlyLabel": "ماهانه",
+    "accruedUnpaidLabel": "سرمایه‌نشده پرداخت‌نشده",
+    "lockSheetTitle": "قفل سهام",
+    "lockSheetIntro": "سهام قفل‌شده از روز اول بازده می‌گیرند. انتخاب کنید چند وقت یک‌بار پرداخت می‌شوید.",
+    "payoutPeriodMonthly": "ماهانه",
+    "payoutPeriodWeekly": "هفتگی",
+    "payoutPeriodMonthlyHint": "نرخ کامل، ۱ پرداخت در ماه",
+    "payoutPeriodWeeklyHint": "نرخ منهای ۱٪، ۴ پرداخت در ماه",
+    "payoutPeriodAria": "دوره {period}",
+    "monthlyRate": "نرخ ماهانه",
+    "maxCta": "حداکثر",
+    "quantityInvalid": "تعداد باید بین ۱ و {max} باشد.",
+    "lockedPrincipal": "اصل مبلغ قفل‌شده",
+    "monthlyPayout": "پرداخت ماهانه",
+    "weeklyPayout": "پرداخت هفتگی",
+    "perMonthWord": "/ ماه",
+    "perWeekWord": "/ هفته",
+    "timesFourMonth": "× ۴ / ماه",
+    "lockConfirmCta": "{count} {unit} را قفل کن و درآمد بگیر",
+    "lockingPending": "در حال قفل کردن…",
+    "lockWarningNote": "سهام قفل‌شده قابل فروش نیستند. باز کردن قفل ۲ تا ۳ روز طول می‌کشد و بازده را متوقف می‌کند.",
+    "lockedSuccessTitle": "سهام قفل شد",
+    "earningFromDay1": "{count} {unit} از روز اول درآمد دارد",
+    "sellSheetTitle": "فروش سهام",
+    "confirmInstantSale": "تأیید فروش فوری",
+    "sellModeAria": "حالت فروش",
+    "sellModeAriaOf": "فروش {mode}",
+    "instantMode": "فوری",
+    "customPriceMode": "قیمت دلخواه",
+    "instantSellReview": "بازبینی فروش · {amount}",
+    "instantSellReviewBody": "پلتفرم این سهام را با قیمت لیست منهای ۷٪ بازمی‌خرد. این عمل قابل بازگشت نیست.",
+    "feeLabel": "کارمزد (۷٪)",
+    "youReceive": "شما دریافت می‌کنید",
+    "confirmSell": "تأیید فروش",
+    "sellingPending": "در حال فروش…",
+    "placingPending": "در حال ثبت…",
+    "lockedInOrders": "قفل‌شده / در سفارش‌ها",
+    "notSellable": "قابل فروش نیست",
+    "onTrade": "روی معامله",
+    "instantSellEnded": "فروش فوری پایان یافت — عرضه اولیه به پایان رسیده است. از قیمت دلخواه استفاده کنید.",
+    "queueSellOrder": "قرار دادن سفارش فروش در صف",
+    "placeSellOrder": "ثبت سفارش فروش",
+    "queuedUntilSellout": "در صف می‌ماند تا عرضه اولیه به پایان برسد — سپس سفارش شما به‌طور خودکار در بازار فعال می‌شود.",
+    "platformBuybackNote": "پلتفرم با قیمت لیست منهای ۷٪ بازمی‌خرد. به موجودی سرمایه‌گذاری شما واریز می‌شود.",
+    "sellSuccessTitle": "سهام فروخته شد",
+    "creditedNote": "به موجودی سرمایه‌گذاری شما واریز می‌شود.",
+    "backCta": "بازگشت",
+    "sellOrderPlacedToast": "سفارش فروش ثبت شد",
+    "sellOrderPlacedBody": "در پرتفوی → سفارش‌های باز دنبال کنید",
+    "buyOnMarket": "خرید از بازار",
+    "lastPrice": "آخرین قیمت",
+    "marketFeeLabel": "کارمزد بازار",
+    "heldInEscrow": "در سپرده امانی",
+    "escrowNote": "مبلغ از موجودی سرمایه‌گذاری شما نگه داشته می‌شود تا سفارش پر شود — یا آن را لغو کنید.",
+    "buyOrderPlacedToast": "سفارش خرید ثبت شد",
+    "buyOrderPlacedBody": "مبلغ تا زمان اجرای سفارش در سپرده امانی می‌ماند",
+    "placeBuyOrder": "ثبت سفارش خرید",
+    "freeSharesLabel": "سهام آزاد",
+    "orderValue": "ارزش سفارش",
+    "valueRow": "ارزش",
+    "doneCta": "انجام شد",
+    "decreaseQty": "کاهش تعداد",
+    "increaseQty": "افزایش تعداد",
+    "pricePerShareLabel": "قیمت هر سهم",
+    "reviewSaleCta": "بازبینی فروش · {amount}",
+    "calcTitle": "چقدر می‌توانم درآمد داشته باشم؟",
+    "calcYouOwn": "شما {count} دارید",
+    "calcLockedSuffix": " · {count} قفل‌شده",
+    "calcSharesLabel": "سهام",
+    "calcDecreaseShares": "کاهش سهام",
+    "calcIncreaseShares": "افزایش سهام",
+    "calcSharesInput": "تعداد سهام",
+    "calcSharesSlider": "اسلایدر سهام",
+    "calcProjected": "درآمد پیش‌بینی‌شده",
+    "perYearWord": "/ سال",
+    "calcFeesNote": "پس از کارمزد پلتفرم · سهام قفل‌شده از روز اول درآمد دارد",
+    "calcBuyCta": "خرید {count} {unit} – {cost}",
+    "scenarioConservative": "محافظه‌کارانه",
+    "scenarioBase": "پایه",
+    "scenarioOptimistic": "خوش‌بینانه",
+    "walletLabel": "کیف پول",
+    "availableShares": "سهام موجود",
+    "totalLabel": "مجموع",
+    "estWeeklyYield": "بازده هفتگی تخمینی",
+    "paymentCurrency": "ارز پرداخت",
+    "performanceTitle": "عملکرد",
+    "connectWalletTitle": "اتصال کیف پول",
+    "connectWalletBody": "برای خرید سهام و کسب بازده اجاره، یک کیف پول TON متصل کنید.",
+    "fullyFundedTitle": "کاملاً تأمین شده",
+    "fullyFundedBody": "همه سهام اولیه فروخته شدند. فروش دوباره بعد از آن.",
+    "buySheetTitle": "خرید سهام",
+    "payWithAria": "پرداخت با {currency}",
+    "usdtUnavailableNote": "USDT در حال حاضر در دسترس نیست — با TON پرداخت می‌کنید.",
+    "paidInNote": "پرداخت با {currency} از کیف پول متصل شما.",
     "freeShares": "سهام آزاد",
-
-    "investedWord": "سرمایه‌گذاری‌شده",
-
-    "earnedWord": "درآمد",
-
-    "unrealizedWord": "تحقق‌نیافته",
-
-    "orderOpen": "باز",
-
-    "allocationProperties": "{count} ملک",
-
-    "showDetails": "نمایش جزئیات",
-
-    "hideDetails": "پنهان کردن جزئیات",
-
-    "lockedCaption": "سود ماهانه می‌دهد",
-
-    "freeCaption": "هنوز سود نمی‌دهد",
-
-    "idleShares": "{count} سهم بدون سود",
-
-    "lockThem": "قفلشان کنید",
-
-    "earningPill": "{count} سودده",
-
-    "idlePill": "{count} بیکار",
-
-    "estMonthly": "≈ {amount} / ماه",
-
-    "projectedMonthlyShort": "اجاره ماهانه تخمینی",
-
-    "exportCsv": "خروجی CSV",
-
-    "exporting": "در حال خروجی…",
-
-    "sharesOwned": "سهام در مالکیت",
-
-    "avgCostPerShare": "میانگین هزینه / سهم",
-
-    "currentValueRow": "ارزش فعلی",
-
-    "unrealizedPnl": "سود/زیان تحقق‌نیافته",
-
-    "projectedMonthlyYield": "بازده ماهانه پیش‌بینی‌شده",
-
-    "buyMore": "بیشتر بخرید",
-
-    "sellComingSoon": "فروش به‌زودی",
-
-    "nftCollectible": "NFT کلکسیونی",
-
-    "nftItem": "اقلام NFT",
-
-    "collection": "مجموعه",
-
-    "viewOnExplorer": "مشاهده در مرورگر",
-
-    "nftDisclaimer": "این NFT رسید کلکسیونی است — پایگاه داده همچنان سند مالکیت است.",
-
-    "nftStatusPending": "در انتظار",
-
-    "nftStatusMinting": "در حال ضرب",
-
-    "nftStatusMinted": "ضرب‌شده",
-
-    "nftStatusTransferring": "در حال انتقال",
-
-    "nftStatusDelivered": "تحویل‌شده",
-
-    "nftStatusFailed": "ناموفق",
-
-    "orderQueued": "در صف"
-
+    "valueLabel": "ارزش",
+    "bannerFunding": "باز برای تأمین مالی · {progress} · {count} {unit} باقی مانده",
+    "bannerLiveTrading": "{status} · معامله زنده",
+    "resaleWord": "فروش دوباره",
+    "fullyFundedWord": "کاملاً تأمین‌شده",
+    "chartTrendSummary": "روند: {direction} از {start} تا {end}.",
+    "trendUp": "صعودی",
+    "trendDown": "نزولی",
+    "performanceSectionTitle": "عملکرد",
+    "priceMode": "قیمت",
+    "yieldMode": "بازده"
   },
-
+  "earnings": {
+    "loadError": "بارگذاری درآمد ممکن نشد.",
+    "emptyTitle": "هنوز درآمدی ندارید",
+    "emptyMessage": "اولین سهم را بخرید و از ماه بعد درآمد کسب کنید.",
+    "thisWeek": "درآمد این هفته",
+    "nextPayoutIn": "پرداخت بعدی",
+    "totalReceived": "کل درآمد دریافتی",
+    "consecutivePaid": "هفته‌های پرداخت متوالی",
+    "streak": "{count} {unit} پشت سر هم ✓",
+    "noStreak": "هنوز رگباری نیست",
+    "timeline": "تاریخچه",
+    "disclaimer": "پرداخت ماهانه شبیه‌سازی‌شده · قابل تأیید روی زنجیره پس از MVP",
+    "withdrawalTerms": "هر زمان بخواهید برداشت کنید — کارمزد ۱٪، پرداخت‌شده در 4 قسط هفتگی",
+    "yieldTitle": "قدرت درآمد",
+    "totalEarned": "درآمد کل",
+    "chartTitle": "۱۲ هفتهٔ گذشته",
+    "chartCaption": "پرداختهای هفتگی اجاره · شبیهسازی تا on-chain.",
+    "timelineTitle": "جریان درآمد شما",
+    "timelinePaid": "پرداختشده",
+    "timelineAccruing": "در حال انباشت",
+    "timelineAccruingSub": "ماه جاری",
+    "timelineNext": "تخمین بعدی",
+    "timelineCaption": "انباشت ماهانه؛ پرداختها هر یکشنبه تسویه میشوند.",
+    "withdraw": "به کیف پول خود برداشت کنید",
+    "withdrawSubtitle": "کارمزد ۱٪ · ۴ قسط هفتگی",
+    "yieldAccrued": "سود پرداخت‌نشده",
+    "yieldMonthly": "ماهانه",
+    "yieldNoLocks": "قفل فعالی ندارید — برای شروع کسب سود، سهام را در صفحه ملک قفل کنید.",
+    "yieldPayments": "پرداخت‌های سود",
+    "yieldFinal": "پرداخت پایانی"
+  },
+  "portfolio": {
+    "loadError": "بارگذاری سبد ممکن نشد.",
+    "emptyTitle": "سبد شما خالی است",
+    "emptyMessage": "از حدود ۸۰ دلار شروع کنید — اولین سهم را در بازار بخرید.",
+    "totalValue": "کل ارزش سبد",
+    "totalInvested": "کل سرمایه‌گذاری",
+    "totalEarningsReceived": "کل درآمد دریافتی",
+    "unrealizedProfit": "سود تحقق‌نیافته",
+    "nextPayout": "پرداخت بعدی",
+    "myPropertiesCount": "املاک من ({count})",
+    "openOrders": "سفارش‌های باز",
+    "allocation": "تخصیص",
+    "lockedShares": "سهام قفل‌شده",
+    "freeShares": "سهام آزاد",
+    "investedWord": "سرمایه‌گذاری‌شده",
+    "earnedWord": "درآمد",
+    "unrealizedWord": "تحقق‌نیافته",
+    "orderOpen": "باز",
+    "allocationProperties": "{count} ملک",
+    "showDetails": "نمایش جزئیات",
+    "hideDetails": "پنهان کردن جزئیات",
+    "lockedCaption": "سود ماهانه می‌دهد",
+    "freeCaption": "هنوز سود نمی‌دهد",
+    "idleShares": "{count} سهم بدون سود",
+    "lockThem": "قفلشان کنید",
+    "earningPill": "{count} سودده",
+    "idlePill": "{count} بیکار",
+    "estMonthly": "≈ {amount} / ماه",
+    "projectedMonthlyShort": "اجاره ماهانه تخمینی",
+    "exportCsv": "خروجی CSV",
+    "exporting": "در حال خروجی…",
+    "sharesOwned": "سهام در مالکیت",
+    "avgCostPerShare": "میانگین هزینه / سهم",
+    "currentValueRow": "ارزش فعلی",
+    "unrealizedPnl": "سود/زیان تحقق‌نیافته",
+    "projectedMonthlyYield": "بازده ماهانه پیش‌بینی‌شده",
+    "buyMore": "بیشتر بخرید",
+    "sellComingSoon": "فروش به‌زودی",
+    "nftCollectible": "NFT کلکسیونی",
+    "nftItem": "اقلام NFT",
+    "collection": "مجموعه",
+    "viewOnExplorer": "مشاهده در مرورگر",
+    "nftDisclaimer": "این NFT رسید کلکسیونی است — پایگاه داده همچنان سند مالکیت است.",
+    "nftStatusPending": "در انتظار",
+    "nftStatusMinting": "در حال ضرب",
+    "nftStatusMinted": "ضرب‌شده",
+    "nftStatusTransferring": "در حال انتقال",
+    "nftStatusDelivered": "تحویل‌شده",
+    "nftStatusFailed": "ناموفق",
+    "orderQueued": "در صف"
+  },
   "settings": {
-
     "title": "تنظیمات",
-
     "wallet": "کیف پول",
-
     "connectTitle": "اتصال کیف پول TON",
-
     "connectHint": "برای خرید سهم و دریافت درآمد اجاره ماهانه لازم است.",
-
     "disconnect": "قطع اتصال کیف پول",
-
     "withdrawals": "برداشت‌ها",
-
     "withdrawalTitle": "آدرس برداشت USDT",
-
     "withdrawalHint": "جایی که موجودی قابل برداشت شما پرداخت می‌شود",
-
     "withdrawalPlaceholder": "EQ… آدرس USDT-TON",
-
     "withdrawalEmpty": "آدرسی تنظیم نشده",
-
     "withdrawalVerified": "تأیید شده",
-
     "withdrawalUnverified": "تأیید نشده",
-
     "withdrawalInvalid": "یک آدرس TON معتبر وارد کنید",
-
     "withdrawalSave": "ذخیره",
-
     "withdrawalCancel": "انصراف",
-
     "withdrawalRequests": "درخواست‌های برداشت",
-
     "withdrawalRequestsEmpty": "هنوز درخواست برداشتی وجود ندارد",
-
     "withdrawalStatusPaid": "پرداخت شده",
-
     "withdrawalStatusRequested": "درخواست شده",
-
     "withdrawalStatusApproved": "تأیید شده",
-
     "withdrawalStatusRejected": "رد شده",
-
     "withdrawalInstallmentProgress": "{paid} از {total} قسط پرداخت شده",
-
     "withdrawalRequest": "درخواست برداشت",
     "withdrawalsError": "بارگذاری درخواست‌های برداشت ممکن نشد",
-
     "referrals": "معرفی",
-
     "inviteFriends": "دعوت از دوستان",
-
     "copied": "کپی شد!",
-
     "signInToInvite": "برای دعوت وارد شوید",
-
-
     "preferences": "ترجیحات",
-
     "displayCurrency": "ارز نمایش",
-
     "displayCurrencyHint": "ارقام به دلار می‌مانند؛ تخمین TON هنگام خرید",
-
     "language": "زبان",
-
     "languageHint": "زبان برنامه",
-
     "languageAuto": "خودکار (تلگرام)",
-
     "useTelegramTheme": "Dark / Light",
-
     "useTelegramThemeHint": "هماهنگ با رنگ‌های تلگرام",
-
     "showDemoBadge": "نمایش نشان دمو",
-
     "showDemoBadgeHint": "برچسب صادقانه MVP",
-
     "help": "راهنما",
-
     "howItWorks": "دیجی‌هاوس چگونه کار می‌کند",
     "transactionHistory": "تاریخچه تراکنش‌ها",
-
-
     "aboutLegal": "درباره / حقوقی",
-
     "aboutBody": "دیجی‌هاوس یک مینی‌اپ تلگرام برای سهام کسری املاک روی TON است. درآمد اجاره ماهانه متناسب با مالکیت شما انباشته می‌شود.",
-
     "aboutAdvice": "هیچ‌چیز اینجا مشاوره مالی نیست. اسناد ملک و افشای توکن‌سازی تا زمان قراردادهای تولید، نمایشی هستند.",
-
     "aboutCopyright": "© دیجی‌هاوس · MVP",
-
     "demoTxDisclaimer": "این یک دمو است – تراکنش‌ها شبیه‌سازی می‌شوند",
-
     "payoutDisclaimer": "پرداخت ماهانه شبیه‌سازی‌شده · قابل تأیید روی زنجیره پس از MVP",
-
     "chooseLanguage": "انتخاب زبان",
-
     "account": "حساب",
-
     "recoverySignIn": "ورود با کد بازیابی",
-
     "signOut": "خروج از حساب",
-
     "signOutConfirmTitle": "خروج از حساب؟",
-
     "signOutConfirmBody": "آیا می‌خواهید از حساب خارج شوید؟"
-
   },
-
   "profile": {
-
     "title": "پروفایل خود را تکمیل کنید",
-
     "subtitle": "چند جزئیات برای شناسایی حساب شما.",
-
     "settingsSection": "پروفایل",
-
     "displayName": "نام نمایشی",
-
     "displayNamePlaceholder": "نام شما",
-
     "phone": "تلفن",
-
     "phonePlaceholder": "+98 9XX XXX XXXX",
-
     "phoneHint": "اختیاری. فقط برای پشتیبانی حساب.",
-
     "phoneEmpty": "شماره تلفنی ثبت نشده",
-
     "useTelegramPhone": "استفاده از شماره تلگرام",
-
     "requestingPhone": "در حال درخواست…",
-
     "recoveryTitle": "کد بازیابی",
-
     "recoveryWarn": "این کد را در جایی امن ذخیره کنید. اگر تلگرام در دسترس نباشد برای ورود به آن نیاز دارید. ما نمی‌توانیم آن را بازیابی کنیم.",
-
     "recoverySettingsHint": "این کد را محرمانه نگه دارید. هر کسی که آن را داشته باشد می‌تواند به حساب FractionalLuxe شما دسترسی پیدا کند.",
-
     "copyCode": "کپی کد بازیابی",
-
     "showCode": "نمایش کد بازیابی",
-
     "hideCode": "مخفی کردن کد بازیابی",
-
     "savedConfirm": "کد بازیابی را در جایی امن ذخیره کردم",
-
     "saveContinue": "ذخیره و ادامه",
-
     "saving": "در حال ذخیره…",
-
     "save": "ذخیره",
-
     "cancel": "لغو",
-
     "errors": {
-
       "name": "نامی وارد کنید (حداقل ۲ نویسه)",
-
       "phone": "شماره تلفن معتبر وارد کنید",
-
       "saveCode": "تأیید کنید که کد بازیابی را ذخیره کرده‌اید",
-
       "save": "ذخیره پروفایل ممکن نشد"
-
     }
-
   },
-
   "recovery": {
-
     "title": "ورود با کد بازیابی",
-
     "subtitle": "از کدی که هنگام ساخت پروفایل ذخیره کردید استفاده کنید.",
-
     "codeLabel": "کد بازیابی",
-
     "signIn": "ورود",
-
     "signingIn": "در حال ورود…",
-
     "backHome": "بازگشت به خانه"
-
   }
-
 }
-

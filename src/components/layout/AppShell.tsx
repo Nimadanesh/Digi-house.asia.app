@@ -8,6 +8,7 @@ import { OnboardingGate } from "@/components/onboarding/OnboardingGate";
 import { ProfileGate } from "@/components/profile/ProfileGate";
 import { SettingsSheet } from "@/components/settings/SettingsSheet";
 import { DemoModeBadge } from "@/components/common/DemoModeBadge";
+import { ToastHost } from "@/components/common/ToastHost";
 import { useTheme } from "@/hooks/useTheme";
 import { useUiStore } from "@/stores/ui.store";
 import { ROUTES, TABS } from "@/lib/constants";
@@ -32,11 +33,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       {chromeless ? null : isTab ? <GlobalHeader /> : <Header />}
       <main className="flex-1 px-4 pb-[calc(88px+env(safe-area-inset-bottom))]">
         <OnboardingGate>
-          <ProfileGate>{children}</ProfileGate>
+          <ProfileGate>
+            {/* Keyed by pathname: one shared, restrained page-enter transition on every
+                route change (§page-enter in globals.css) — continuity, not showmanship. */}
+            <div key={pathname} className="page-enter" data-testid="page-enter">
+              {children}
+            </div>
+          </ProfileGate>
         </OnboardingGate>
       </main>
       {mainButtonActive || chromeless ? null : <BottomTabBar />}
       <DemoModeBadge />
+      <ToastHost />
       <SettingsSheet />
     </div>
   );

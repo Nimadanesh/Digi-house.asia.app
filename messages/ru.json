@@ -1,608 +1,567 @@
 {
-
   "common": {
-
     "appName": "FractionalLuxe",
-
     "buyShare": "Купить долю",
-
     "browseMarketplace": "Открыть маркетплейс",
-
     "viewAll": "Все",
-
     "refresh": "Обновить",
-
     "clearFilters": "Сбросить фильтры",
-
     "tryAgain": "Повторить",
-
     "retry": "Ещё раз",
-
     "skip": "Пропустить",
-
     "continue": "Далее",
-
     "getStarted": "Начать",
-
     "settings": "Настройки",
-
     "connectWallet": "Подключить кошелёк",
-
     "walletConnected": "Кошелёк подключён",
-
     "disconnectWallet": "Отключить кошелёк",
-
     "share": "доля",
-
     "shares": "доли",
-
     "of": "из",
-
     "from": "От",
-
     "est": "Оценка",
-
     "apy": "APY",
-
     "pending": "Ожидание",
-
     "paid": "Выплачено",
-
     "hot": "Хит",
-
     "new": "Новое",
-
     "soldPct": "{pct}% продано",
-
     "week": "неделя",
-
     "weeks": "недель",
-
     "demoMode": "Демо · тестовые данные · транзакции симулируются",
-
     "somethingWentWrong": "Что-то пошло не так"
-
   },
-
   "tabs": {
-
     "home": "Главная",
-
     "marketplace": "Маркет",
-
     "earnings": "Доход",
-
     "portfolio": "Портфель"
-
   },
-
   "header": {
-
     "greeting": "Привет, {name}"
-
   },
-
   "onboarding": {
-
     "skip": "Пропустить",
-
     "continue": "Далее",
-
     "getStarted": "Начать",
-
     "slideProgress": "{current} / {total}",
-
     "slideAria": "Слайд {n}",
-
     "own": {
-
       "headline": "Станьте владельцем доли недвижимости",
-
       "subtitle": "Начните примерно с $80"
-
     },
-
     "yield": {
-
       "headline": "Получайте долю аренды каждый месяц",
-
       "subtitle": "Смотрите ежемесячную долю в Доходе"
-
     },
-
     "sell": {
-
       "headline": "Продавайте в любой момент",
-
       "subtitle": "Выставляйте доли на маркетплейсе FractionalLuxe, когда готовы выйти."
-
     }
-
   },
-
   "home": {
-
     "loadError": "Не удалось загрузить главную.",
-
     "portfolioValue": "Стоимость портфеля",
-
     "totalInvested": "Всего вложено",
-
     "totalEarningsReceived": "Всего получено",
-
     "nextPayout": "Следующая выплата",
-
     "myProperties": "Мои объекты",
-
     "myPropertiesCount": "Мои объекты ({count})",
-
     "monthlyPerShare": "В месяц / доля",
-
     "pendingThisWeek": "{amount} ожидает на этой неделе",
-
     "earnedWord": "заработано",
-
     "viewAllCount": "ещё +{count} в портфеле",
-
     "featuredOpportunity": "Избранная возможность",
-
     "featuredTag": "Избранное",
-
     "moreOpportunities": "Больше возможностей",
-
     "emptyTitle": "Ваш путь к недвижимости начинается здесь",
-
     "emptyHint": "Спокойный путь к ежемесячному арендному доходу.",
-
     "emptyStepBuy": "Купите доли",
-
     "emptyStepLock": "Заблокируйте для дохода",
-
     "emptyStepEarn": "Зарабатывайте каждый месяц",
-
     "emptyCta": "Изучить возможности",
-
     "trustFooter": "Арендный доход накапливается ежемесячно. Выводите в любое время (комиссия 1 %, 4 еженедельных платежа). Симуляция до on-chain."
-
   },
-
   "marketplace": {
-
     "searchPlaceholder": "Поиск объектов",
-
     "searchAria": "Поиск объектов",
-
     "clearSearch": "Очистить поиск",
-
     "filtersAria": "Фильтры маркетплейса",
-
     "loadError": "Не удалось загрузить объекты.",
-
     "emptyTitle": "Пока нет объектов",
-
     "emptyMessage": "Новые доли появляются каждую неделю — загляните позже.",
-
     "noMatchesTitle": "Ничего не найдено",
-
     "noMatchesMessage": "Попробуйте другой поиск или фильтр.",
-
     "chips": {
-
       "all": "Все",
-
       "primary": "Первичный",
-
       "secondary": "Вторичный",
-
       "highest_yield": "Высший доход",
-
       "new": "Новые",
-
       "almost_sold": "Почти продано",
-
       "low_price": "Низкая цена"
-
     },
-
     "pricePerShare": "Цена / доля",
-
     "monthlyPerShare": "В месяц / доля",
-
-    "minPurchase": "Мин. покупка",
-
+    "nightFrom": "Ночь / от",
     "sharesSold": "{sold} из {total} долей продано",
-
     "feesTitle": "Комиссия",
-
     "feesPerTx": "Уровень определяется суммой каждой сделки — без лимитов.",
-
     "feesRange": "Сумма",
-
     "feesBuyPrimary": "Покупка · праймери",
-
     "feesBuyMarket": "Покупка · рынок",
-
     "feesSellMarket": "Продажа · рынок",
-
     "feesInstantSell": "Мгновенная продажа (праймери)",
-
     "feesInstantNote": "Фиксированный сбор на этапе первичного размещения; вторичные сделки — по рыночной шкале.",
-
     "feesNoCap": "Ограничений на суммы покупки/продажи нет.",
-
     "lastPrice": "Последняя цена"
-
   },
-
   "property": {
-
     "buyShare": "Купить долю",
-
     "about": "О объекте",
-
     "metrics": "Показатели",
-
     "trust": "Доверие и прозрачность",
-
     "rentalHistory": "История аренды",
-
     "incomeCalculator": "Калькулятор дохода",
-
     "salesProgress": "Прогресс продаж",
-
-    "gallery": "Галерея"
-
-  },
-
-  "earnings": {
-
-    "loadError": "Не удалось загрузить доход.",
-
-    "emptyTitle": "Пока нет дохода",
-
-    "emptyMessage": "Купите первую долю и начните зарабатывать со следующего месяца.",
-
-    "thisWeek": "Доход за эту неделю",
-
-    "nextPayoutIn": "Следующая выплата",
-
-    "totalReceived": "Всего получено",
-
-    "consecutivePaid": "Подряд выплаченных недель",
-
-    "streak": "{count} {unit} подряд ✓",
-
-    "noStreak": "Пока без серии",
-
-    "timeline": "История",
-
-    "disclaimer": "симулированная ежемесячная выплата · on-chain после MVP",
-
-    "withdrawalTerms": "Выводите в любой момент — комиссия 1%, выплата 4 еженедельными частями",
-
-    "yieldTitle": "Заработок",
-
-    "totalEarned": "Всего заработано",
-
-    "chartTitle": "Последние 12 недель",
-
-    "chartCaption": "Еженедельные арендные выплаты · симуляция до on-chain.",
-
-    "timelineTitle": "Ваш денежный поток",
-
-    "timelinePaid": "Выплачено",
-
-    "timelineAccruing": "Накапливается",
-
-    "timelineAccruingSub": "текущий месяц",
-
-    "timelineNext": "Следующая оценка",
-
-    "timelineCaption": "Ежемесячное начисление; выплаты сверяются каждое воскресенье.",
-
-    "withdraw": "Вывести в свой кошелёк",
-
-    "withdrawSubtitle": "Комиссия 1 % · 4 еженедельных платежа",
-
-    "yieldAccrued": "Начислено, не выплачено",
-
-    "yieldMonthly": "Ежемесячно",
-
-    "yieldNoLocks": "Нет активных блокировок — заблокируйте акции на странице объекта, чтобы начать получать доход.",
-
-    "yieldPayments": "Выплаты дохода",
-
-    "yieldFinal": "Финальная выплата"
-
-  },
-
-  "portfolio": {
-
-    "loadError": "Не удалось загрузить портфель.",
-
-    "emptyTitle": "Портфель пуст",
-
-    "emptyMessage": "Начните примерно с $80 — купите первую долю на маркетплейсе.",
-
-    "totalValue": "Общая стоимость портфеля",
-
-    "totalInvested": "Всего вложено",
-
-    "totalEarningsReceived": "Всего получено",
-
-    "unrealizedProfit": "Нереализованная прибыль",
-
-    "nextPayout": "Следующая выплата",
-
-    "myPropertiesCount": "Мои объекты ({count})",
-
-    "openOrders": "Открытые ордера",
-
-    "allocation": "Распределение",
-
-    "lockedShares": "Заблокированные акции",
-
+    "gallery": "Галерея",
+    "tabOverview": "Обзор",
+    "tabPerformance": "Динамика",
+    "tabHolders": "Держатели",
+    "tabIncome": "Доход",
+    "tabDetails": "Детали",
+    "marketBadge": "Вторичный рынок",
+    "offerPrice": "Цена предложения",
+    "sharesSoldOf": "Продано / всего",
+    "holdersComingSoon": "Аналитика по держателям появится в следующем обновлении.",
+    "incomeComingSoon": "Аналитика доходов появится в следующем обновлении.",
+    "fundedCaption": "{pct}% собрано · {remaining} долей осталось",
+    "sharesRemaining": "Осталось долей",
+    "totalTarget": "Общая цель",
+    "primaryFixedPrice": "{title} — первичное размещение по фиксированной цене {price} за долю. Истории рыночной цены пока нет.",
+    "primaryFundingNote": "Аналитика сбора средств появится в следующем обновлении.",
+    "fundamentals": "Показатели объекта",
+    "propertyValue": "Стоимость объекта",
+    "annualRent": "Годовая аренда",
+    "grossYield": "Валовая доходность",
+    "tabsLabel": "Разделы актива",
+    "marketSummary": "Сводка рынка",
+    "currentPrice": "Текущая цена",
+    "bestBid": "Лучшая ставка",
+    "bestAsk": "Лучший запрос",
+    "spread": "Спред",
+    "vsOffer": "к размещению",
+    "positionTitle": "Ваша позиция",
+    "positionTotal": "Всего долей",
+    "positionLocked": "Заблокировано",
+    "positionFree": "Свободно",
+    "positionAccrued": "Начислено не выплачено",
+    "positionValue": "Оценочная стоимость",
+    "positionLock": "Заблокировать",
+    "positionSell": "Продать",
+    "fundingProgressTitle": "Прогресс финансирования по времени",
+    "cumulativeSharesTitle": "Кумулятивно проданные доли",
+    "yieldProjectionTitle": "Прогноз доходности",
+    "yieldProjectionNote": "Прогноз на основе текущей аренды и доходности — не обещание будущих доходов.",
+    "pricePerformance": "Динамика цены",
+    "yieldPerformance": "Динамика доходности",
+    "simulatedHistoryNote": "Смоделированная история для наглядности — не обещание будущих доходов.",
+    "holderDonutTitle": "Распределение держателей",
+    "totalHolders": "Всего держателей",
+    "holder.others": "Другие",
+    "holderPrivacyNote": "Держатели как анонимные категории — без личных данных.",
+    "holderStatsTitle": "Статистика держателей",
+    "statTotalHolders": "Всего держателей",
+    "statAvgHolding": "Среднее владение",
+    "statMedianHolding": "Медианное владение",
+    "statTop5Ownership": "Топ-5 доля",
+    "statNewHolders30d": "Новые за 30 дн.",
+    "statLargestHolder": "Крупнейший держатель",
+    "sharesWord": "долей",
+    "shareWord": "акция",
+    "donutTapHint": "Нажмите на сегмент для деталей",
+    "topHoldersTitle": "Крупнейшие держатели",
+    "treemapTitle": "Карта владения",
+    "treemapTapHint": "Нажмите на блок для деталей",
+    "distributionOverTimeTitle": "Распределение долей по времени",
+    "distributionTapHint": "Нажмите на график для деталей на эту дату",
+    "bubbleChartTitle": "Пузырьковая диаграмма",
+    "bubbleTapHint": "Нажмите на пузырь для деталей",
+    "holder.A": "Держатель A",
+    "holder.B": "Держатель B",
+    "holder.C": "Держатель C",
+    "holder.D": "Держатель D",
+    "holder.E": "Держатель E",
+    "holder.F": "Держатель F",
+    "fundedCaptionShort": "{pct}% профинансировано",
+    "incomeHistoryTitle": "История доходов",
+    "cumulativeYieldPerShare": "Накопленная доходность на акцию",
+    "incomeMonthsWord": "месяцев истории",
+    "perShareWord": "на акцию",
+    "poolWord": "пул",
+    "incomeTapHint": "Нажмите на столбец, чтобы увидеть выплату за этот месяц.",
+    "payoutHistoryTitle": "История выплат",
+    "payoutHistoryNote": "Смоделированная история доходов · проверяемая on-chain после MVP.",
+    "incomeRatiosTitle": "Показатели недвижимости",
+    "annualYieldRate": "Годовая ставка доходности",
+    "incomeRatiosNote": "Получены из аренды и стоимости объекта. Чистая доходность, ставка капитализации, NOI и доля расходов не показаны — в наборе данных нет этих полей.",
+    "incomeProjectionsTitle": "Прогнозируемый доход",
+    "incomeProjectionsNote": "Используйте калькулятор дохода на вкладке «Обзор» — он рассчитает ваш доход по выбранному числу акций; это прогнозы, а не обещания.",
+    "marketTitle": "Рынок",
+    "orderBook": "Стакан заявок",
+    "bids": "Ставки",
+    "asks": "Заявки",
+    "best": "лучшая",
+    "lastTrade": "Последняя",
+    "recentTrades": "Последние сделки",
+    "tradesLoadError": "Не удалось загрузить последние сделки.",
+    "tradesEmpty": "Сделок пока нет — рынок откроется, когда распродадут первичное предложение.",
+    "galleryPages": "Страницы галереи",
+    "showImage": "Показать изображение {n}",
+    "expectedAnnualYield": "Ожидаемая годовая доходность",
+    "basedOnLease": "По текущему договору · {count} {unit} платежей вовремя",
+    "monthWord": "месяц",
+    "monthsWord": "месяца",
+    "buySharesAt": "Купить акции · {price}",
+    "buyAt": "Купить за {price}",
+    "offeringSoldOut": "Первичное предложение распродано",
+    "stickyBuyShares": "Купить акции · {price}",
+    "stickyBuy": "Купить · {price}",
+    "sell": "Продать",
+    "pricePerShareMetric": "Цена за акцию",
+    "monthlyYieldPerShare": "Доходность в месяц / акция",
+    "totalPropertyValue": "Полная стоимость объекта",
+    "moreDetails": "Подробнее",
+    "sizeLabel": "Площадь",
+    "yearBuilt": "Год постройки",
+    "typeLabel": "Тип",
+    "rentalStatusLabel": "Статус аренды",
+    "leaseUntil": "Аренда до",
+    "trustTitle": "Почему стоит инвестировать",
+    "trustSimulatedNote": "История платежей отражает смоделированные демо-данные.",
+    "similarProperties": "Похожие объекты",
+    "documents": "Документы",
+    "documentsEmpty": "Документов пока нет",
+    "downloadDoc": "Скачать {title}",
+    "docKindOffering": "Размещение",
+    "docKindFinancial": "Финансовый",
+    "docKindLegal": "Юридический",
+    "docKindOther": "Другое",
+    "documentsError": "Не удалось загрузить документы.",
+    "simulatedPriceNote": "Смоделированная история цен для наглядности — не обещание будущей доходности.",
+    "bannerLockCta": "Заблокируйте акции, чтобы начать зарабатывать",
+    "youOwn": "У вас {count} {unit} · {locked} заблокировано",
+    "earningNow": "Приносит доход",
+    "notEarningYet": "Пока не приносит доход",
+    "bannerLockNote": "Акции приносят доход, только пока заблокированы. Блокировка бесплатна — разблокировка занимает 2–3 дня, если передумаете.",
+    "yieldSection": "Доходность",
+    "monthlyYield": "Доходность в месяц",
+    "onLockedSharesNote": "На заблокированные акции · недельный вариант платит ставку − 1%",
+    "yourShares": "Ваши акции",
+    "freeToLock": "Доступно к блокировке",
+    "buyFirstNote": "Сначала купите акции, затем заблокируйте их, чтобы зарабатывать с первого дня.",
+    "allLocked": "Все заблокировано",
+    "lockCta": "Заблокировать",
+    "requestUnlock": "Запросить разблокировку",
+    "requesting": "Отправка запроса…",
+    "unlockPendingNote": "Доходность остановлена по вашему запросу. Акции станут продаваемыми через 2–3 дня.",
+    "nShares": "{count} акций",
+    "accruingWeekly": "Накопление · еженедельно",
+    "accruingMonthly": "Накопление · ежемесячно",
+    "unlocksOn": "Разблокировка {date}",
+    "unlockingInDays": "2–3 дня",
+    "perWeek": "В неделю",
+    "perMonth": "В месяц",
+    "unlockConfirmTitle": "Разблокировать акции",
+    "unlockConfirmBody": "Разблокировка сразу останавливает доходность этих акций. Продать их можно будет через 2–3 дня.",
+    "unlockConfirmCta": "Подтвердить разблокировку",
+    "unlockPendingLabel": "Разблокировка…",
+    "unlockSuccessTitle": "Разблокировка запрошена",
+    "unlockSuccessBody": "Доходность остановлена. Акции можно будет продать через 2–3 дня.",
+    "propertyLabel": "Объект",
+    "sharesLabel": "Акции",
+    "payoutPeriodLabel": "Период выплат",
+    "weeklyLabel": "Еженедельно",
+    "monthlyLabel": "Ежемесячно",
+    "accruedUnpaidLabel": "Начислено, не выплачено",
+    "lockSheetTitle": "Заблокировать акции",
+    "lockSheetIntro": "Заблокированные акции приносят доход с 1-го дня. Выберите периодичность выплат.",
+    "payoutPeriodMonthly": "Ежемесячно",
+    "payoutPeriodWeekly": "Еженедельно",
+    "payoutPeriodMonthlyHint": "полная ставка, 1 выплата / месяц",
+    "payoutPeriodWeeklyHint": "ставка − 1%, 4 выплаты / месяц",
+    "payoutPeriodAria": "Выплата {period}",
+    "monthlyRate": "Месячная ставка",
+    "maxCta": "Макс.",
+    "quantityInvalid": "Количество должно быть от 1 до {max}.",
+    "lockedPrincipal": "Заблокированный капитал",
+    "monthlyPayout": "Ежемесячная выплата",
+    "weeklyPayout": "Еженедельная выплата",
+    "perMonthWord": "/ месяц",
+    "perWeekWord": "/ неделя",
+    "timesFourMonth": "× 4 / месяц",
+    "lockConfirmCta": "Заблокировать {count} {unit} и зарабатывать",
+    "lockingPending": "Блокировка…",
+    "lockWarningNote": "Заблокированные акции продать нельзя. Разблокировка занимает 2–3 дня и останавливает доходность.",
+    "lockedSuccessTitle": "Акции заблокированы",
+    "earningFromDay1": "{count} {unit} приносят доход с 1-го дня",
+    "sellSheetTitle": "Продать акции",
+    "confirmInstantSale": "Подтвердить мгновенную продажу",
+    "sellModeAria": "Режим продажи",
+    "sellModeAriaOf": "Продать {mode}",
+    "instantMode": "Мгновенно",
+    "customPriceMode": "Своя цена",
+    "instantSellReview": "Проверить продажу · {amount}",
+    "instantSellReviewBody": "Платформа выкупает эти акции по цене каталога − 7%. Отменить нельзя.",
+    "feeLabel": "Комиссия (7%)",
+    "youReceive": "Вы получите",
+    "confirmSell": "Подтвердить продажу",
+    "sellingPending": "Продаётся…",
+    "placingPending": "Размещение…",
+    "lockedInOrders": "Заблокировано / в заявках",
+    "notSellable": "не продаётся",
+    "onTrade": "со сделки",
+    "instantSellEnded": "Мгновенная продажа завершена — первичное предложение распродано. Укажите свою цену.",
+    "queueSellOrder": "Поставить заявку на продажу в очередь",
+    "placeSellOrder": "Разместить заявку на продажу",
+    "queuedUntilSellout": "В очереди до распродажи первичного предложения — затем заявка автоматически выйдет на рынок.",
+    "platformBuybackNote": "Платформа выкупает по цене каталога − 7%. Зачисляется на инвестиционный баланс.",
+    "sellSuccessTitle": "Акции проданы",
+    "creditedNote": "Зачисляется на инвестиционный баланс.",
+    "backCta": "Назад",
+    "sellOrderPlacedToast": "Заявка на продажу размещена",
+    "sellOrderPlacedBody": "Отслеживайте в Портфеле → Открытые заявки",
+    "buyOnMarket": "Купить на рынке",
+    "lastPrice": "Последняя цена",
+    "marketFeeLabel": "Рыночная комиссия",
+    "heldInEscrow": "В депозите (эскроу)",
+    "escrowNote": "Средства удерживаются с инвестиционного баланса до исполнения заявки — или её отмены.",
+    "buyOrderPlacedToast": "Заявка на покупку размещена",
+    "buyOrderPlacedBody": "Средства в депозите до исполнения заявки",
+    "placeBuyOrder": "Разместить заявку на покупку",
+    "freeSharesLabel": "Свободные акции",
+    "orderValue": "Сумма заявки",
+    "valueRow": "Стоимость",
+    "doneCta": "Готово",
+    "decreaseQty": "Уменьшить количество",
+    "increaseQty": "Увеличить количество",
+    "pricePerShareLabel": "Цена за акцию",
+    "reviewSaleCta": "Проверить продажу · {amount}",
+    "calcTitle": "Сколько я могу заработать?",
+    "calcYouOwn": "У вас {count}",
+    "calcLockedSuffix": " · {count} заблокировано",
+    "calcSharesLabel": "Акции",
+    "calcDecreaseShares": "Уменьшить акции",
+    "calcIncreaseShares": "Увеличить акции",
+    "calcSharesInput": "Количество акций",
+    "calcSharesSlider": "Ползунок акций",
+    "calcProjected": "Прогнозируемый доход",
+    "perYearWord": "/ год",
+    "calcFeesNote": "После комиссий платформы · Заблокированные акции приносят доход с 1-го дня",
+    "calcBuyCta": "Купить {count} {unit} – {cost}",
+    "scenarioConservative": "Консервативно",
+    "scenarioBase": "Базовый",
+    "scenarioOptimistic": "Оптимистично",
+    "walletLabel": "Кошелёк",
+    "availableShares": "Доступные акции",
+    "totalLabel": "Итого",
+    "estWeeklyYield": "Оцен. недельный доход",
+    "paymentCurrency": "Валюта оплаты",
+    "performanceTitle": "Показатели",
+    "connectWalletTitle": "Подключить кошелёк",
+    "connectWalletBody": "Подключите кошелёк TON, чтобы покупать акции и получать доход от аренды.",
+    "fullyFundedTitle": "Полностью профинансировано",
+    "fullyFundedBody": "Все акции первичного размещения проданы. Далее последует вторичный рынок.",
+    "buySheetTitle": "Купить акции",
+    "payWithAria": "Оплатить через {currency}",
+    "usdtUnavailableNote": "USDT сейчас недоступен — оплата будет в TON.",
+    "paidInNote": "Оплата в {currency} с подключенного кошелька.",
     "freeShares": "Свободные акции",
-
-    "investedWord": "инвестировано",
-
-    "earnedWord": "заработано",
-
-    "unrealizedWord": "нереализовано",
-
-    "orderOpen": "Открыта",
-
-    "allocationProperties": "{count} объектов",
-
-    "showDetails": "Показать детали",
-
-    "hideDetails": "Скрыть детали",
-
-    "lockedCaption": "Приносит ежемесячный доход",
-
-    "freeCaption": "Пока не приносит",
-
-    "idleShares": "{count} долей без дохода",
-
-    "lockThem": "Заблокировать",
-
-    "earningPill": "{count} приносят доход",
-
-    "idlePill": "{count} без дохода",
-
-    "estMonthly": "≈ {amount} / месяц",
-
-    "projectedMonthlyShort": "Оценка месячной аренды",
-
-    "exportCsv": "Экспорт CSV",
-
-    "exporting": "Экспорт…",
-
-    "sharesOwned": "Долей в собственности",
-
-    "avgCostPerShare": "Средняя цена / доля",
-
-    "currentValueRow": "Текущая стоимость",
-
-    "unrealizedPnl": "Нереализованный П/У",
-
-    "projectedMonthlyYield": "Прогнозируемый месячный доход",
-
-    "buyMore": "Купить ещё",
-
-    "sellComingSoon": "Продажа скоро",
-
-    "nftCollectible": "Коллекционный NFT",
-
-    "nftItem": "Объект NFT",
-
-    "collection": "Коллекция",
-
-    "viewOnExplorer": "Открыть в обозревателе",
-
-    "nftDisclaimer": "Этот NFT — коллекционный чек; база данных остаётся записью о праве собственности.",
-
-    "nftStatusPending": "Ожидает",
-
-    "nftStatusMinting": "Создание",
-
-    "nftStatusMinted": "Создан",
-
-    "nftStatusTransferring": "Передача",
-
-    "nftStatusDelivered": "Доставлен",
-
-    "nftStatusFailed": "Сбой",
-
-    "orderQueued": "В очереди"
-
+    "valueLabel": "Стоимость",
+    "bannerFunding": "Сбор открыт · {progress} · осталось {count} {unit}",
+    "bannerLiveTrading": "{status} · Активные торги",
+    "resaleWord": "Перепродажа",
+    "fullyFundedWord": "Полностью собрано",
+    "chartTrendSummary": "Тренд: {direction} с {start} до {end}.",
+    "trendUp": "рост",
+    "trendDown": "снижение",
+    "performanceSectionTitle": "Динамика",
+    "priceMode": "Цена",
+    "yieldMode": "Доходность"
   },
-
+  "earnings": {
+    "loadError": "Не удалось загрузить доход.",
+    "emptyTitle": "Пока нет дохода",
+    "emptyMessage": "Купите первую долю и начните зарабатывать со следующего месяца.",
+    "thisWeek": "Доход за эту неделю",
+    "nextPayoutIn": "Следующая выплата",
+    "totalReceived": "Всего получено",
+    "consecutivePaid": "Подряд выплаченных недель",
+    "streak": "{count} {unit} подряд ✓",
+    "noStreak": "Пока без серии",
+    "timeline": "История",
+    "disclaimer": "симулированная ежемесячная выплата · on-chain после MVP",
+    "withdrawalTerms": "Выводите в любой момент — комиссия 1%, выплата 4 еженедельными частями",
+    "yieldTitle": "Заработок",
+    "totalEarned": "Всего заработано",
+    "chartTitle": "Последние 12 недель",
+    "chartCaption": "Еженедельные арендные выплаты · симуляция до on-chain.",
+    "timelineTitle": "Ваш денежный поток",
+    "timelinePaid": "Выплачено",
+    "timelineAccruing": "Накапливается",
+    "timelineAccruingSub": "текущий месяц",
+    "timelineNext": "Следующая оценка",
+    "timelineCaption": "Ежемесячное начисление; выплаты сверяются каждое воскресенье.",
+    "withdraw": "Вывести в свой кошелёк",
+    "withdrawSubtitle": "Комиссия 1 % · 4 еженедельных платежа",
+    "yieldAccrued": "Начислено, не выплачено",
+    "yieldMonthly": "Ежемесячно",
+    "yieldNoLocks": "Нет активных блокировок — заблокируйте акции на странице объекта, чтобы начать получать доход.",
+    "yieldPayments": "Выплаты дохода",
+    "yieldFinal": "Финальная выплата"
+  },
+  "portfolio": {
+    "loadError": "Не удалось загрузить портфель.",
+    "emptyTitle": "Портфель пуст",
+    "emptyMessage": "Начните примерно с $80 — купите первую долю на маркетплейсе.",
+    "totalValue": "Общая стоимость портфеля",
+    "totalInvested": "Всего вложено",
+    "totalEarningsReceived": "Всего получено",
+    "unrealizedProfit": "Нереализованная прибыль",
+    "nextPayout": "Следующая выплата",
+    "myPropertiesCount": "Мои объекты ({count})",
+    "openOrders": "Открытые ордера",
+    "allocation": "Распределение",
+    "lockedShares": "Заблокированные акции",
+    "freeShares": "Свободные акции",
+    "investedWord": "инвестировано",
+    "earnedWord": "заработано",
+    "unrealizedWord": "нереализовано",
+    "orderOpen": "Открыта",
+    "allocationProperties": "{count} объектов",
+    "showDetails": "Показать детали",
+    "hideDetails": "Скрыть детали",
+    "lockedCaption": "Приносит ежемесячный доход",
+    "freeCaption": "Пока не приносит",
+    "idleShares": "{count} долей без дохода",
+    "lockThem": "Заблокировать",
+    "earningPill": "{count} приносят доход",
+    "idlePill": "{count} без дохода",
+    "estMonthly": "≈ {amount} / месяц",
+    "projectedMonthlyShort": "Оценка месячной аренды",
+    "exportCsv": "Экспорт CSV",
+    "exporting": "Экспорт…",
+    "sharesOwned": "Долей в собственности",
+    "avgCostPerShare": "Средняя цена / доля",
+    "currentValueRow": "Текущая стоимость",
+    "unrealizedPnl": "Нереализованный П/У",
+    "projectedMonthlyYield": "Прогнозируемый месячный доход",
+    "buyMore": "Купить ещё",
+    "sellComingSoon": "Продажа скоро",
+    "nftCollectible": "Коллекционный NFT",
+    "nftItem": "Объект NFT",
+    "collection": "Коллекция",
+    "viewOnExplorer": "Открыть в обозревателе",
+    "nftDisclaimer": "Этот NFT — коллекционный чек; база данных остаётся записью о праве собственности.",
+    "nftStatusPending": "Ожидает",
+    "nftStatusMinting": "Создание",
+    "nftStatusMinted": "Создан",
+    "nftStatusTransferring": "Передача",
+    "nftStatusDelivered": "Доставлен",
+    "nftStatusFailed": "Сбой",
+    "orderQueued": "В очереди"
+  },
   "settings": {
-
     "title": "Настройки",
-
     "wallet": "Кошелёк",
-
     "connectTitle": "Подключите TON-кошелёк",
-
     "connectHint": "Нужен для покупки долей и ежемесячного арендного дохода.",
-
     "disconnect": "Отключить кошелёк",
-
     "withdrawals": "Вывод средств",
-
     "withdrawalTitle": "Адрес вывода USDT",
-
     "withdrawalHint": "Куда выплачивается ваш доступный для вывода баланс",
-
     "withdrawalPlaceholder": "EQ… адрес USDT-TON",
-
     "withdrawalEmpty": "Адрес не указан",
-
     "withdrawalVerified": "Подтверждён",
-
     "withdrawalUnverified": "Не подтверждён",
-
     "withdrawalInvalid": "Введите действительный адрес TON",
-
     "withdrawalSave": "Сохранить",
-
     "withdrawalCancel": "Отмена",
-
     "withdrawalRequests": "Запросы на вывод",
-
     "withdrawalRequestsEmpty": "Запросов на вывод пока нет",
-
     "withdrawalStatusPaid": "Выплачено",
-
     "withdrawalStatusRequested": "Запрошено",
-
     "withdrawalStatusApproved": "Одобрено",
-
     "withdrawalStatusRejected": "Отклонено",
-
     "withdrawalInstallmentProgress": "Оплачено {paid} из {total} платежей",
-
     "withdrawalRequest": "Запросить вывод",
     "withdrawalsError": "Не удалось загрузить запросы на вывод",
-
     "referrals": "Рефералы",
-
     "inviteFriends": "Пригласить друзей",
-
     "copied": "Скопировано!",
-
     "signInToInvite": "Войдите, чтобы приглашать",
-
-
     "preferences": "Предпочтения",
-
     "displayCurrency": "Валюта отображения",
-
     "displayCurrencyHint": "Суммы в USD; оценка TON при покупке",
-
     "language": "Язык",
-
     "languageHint": "Язык приложения",
-
     "languageAuto": "Авто (Telegram)",
-
     "useTelegramTheme": "Dark / Light",
-
     "useTelegramThemeHint": "Цвета как в Telegram",
-
     "showDemoBadge": "Показать бейдж Demo",
-
     "showDemoBadgeHint": "Честная метка MVP",
-
     "help": "Помощь",
-
     "howItWorks": "Как работает FractionalLuxe",
     "transactionHistory": "История операций",
-
-
     "aboutLegal": "О приложении / Правовая информация",
-
     "aboutBody": "FractionalLuxe — мини-приложение Telegram для долей недвижимости на TON. Ежемесячный арендный доход начисляется пропорционально вашей доле.",
-
     "aboutAdvice": "Это не финансовый совет. Документы и токенизация — демонстрация до продакшен-контрактов.",
-
     "aboutCopyright": "© FractionalLuxe · MVP",
-
     "demoTxDisclaimer": "Это демо — транзакции симулируются",
-
     "payoutDisclaimer": "симулированная ежемесячная выплата · on-chain после MVP",
-
     "chooseLanguage": "Выберите язык",
-
     "account": "Аккаунт",
-
     "recoverySignIn": "Войти с кодом восстановления",
-
     "signOut": "Выйти",
-
     "signOutConfirmTitle": "Выйти?",
-
     "signOutConfirmBody": "Хотите выйти?"
-
   },
-
   "profile": {
-
     "title": "Заполните профиль",
-
     "subtitle": "Несколько данных, чтобы идентифицировать ваш аккаунт.",
-
     "settingsSection": "Профиль",
-
     "displayName": "Отображаемое имя",
-
     "displayNamePlaceholder": "Ваше имя",
-
     "phone": "Телефон",
-
     "phonePlaceholder": "+7 900 000 00 00",
-
     "phoneHint": "Необязательно. Только для поддержки аккаунта.",
-
     "phoneEmpty": "Телефон не указан",
-
     "useTelegramPhone": "Использовать номер Telegram",
-
     "requestingPhone": "Запрос…",
-
     "recoveryTitle": "Код восстановления",
-
     "recoveryWarn": "Сохраните этот код в надёжном месте. Он понадобится для входа, если Telegram недоступен. Мы не сможем восстановить его за вас.",
-
     "recoverySettingsHint": "Храните код в секрете. Любой, у кого он есть, может получить доступ к вашему аккаунту FractionalLuxe.",
-
     "copyCode": "Скопировать код восстановления",
-
     "showCode": "Показать код восстановления",
-
     "hideCode": "Скрыть код восстановления",
-
     "savedConfirm": "Я сохранил(а) код восстановления в надёжном месте",
-
     "saveContinue": "Сохранить и продолжить",
-
     "saving": "Сохранение…",
-
     "save": "Сохранить",
-
     "cancel": "Отмена",
-
     "errors": {
-
       "name": "Введите имя (минимум 2 символа)",
-
       "phone": "Введите корректный номер телефона",
-
       "saveCode": "Подтвердите, что сохранили код восстановления",
-
       "save": "Не удалось сохранить профиль"
-
     }
-
   },
-
   "recovery": {
-
     "title": "Вход с кодом восстановления",
-
     "subtitle": "Используйте код, сохранённый при настройке профиля.",
-
     "codeLabel": "Код восстановления",
-
     "signIn": "Войти",
-
     "signingIn": "Вход…",
-
     "backHome": "На главную"
-
   }
-
 }
-

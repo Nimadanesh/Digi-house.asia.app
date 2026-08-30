@@ -162,7 +162,7 @@ function PropertyCardInner({
             value={usd(displayPrice)}
           />
           <Metric label={t("monthlyPerShare")} value={usd(monthlyPerShare)} accent />
-          <Metric label={t("minPurchase")} value={usd(displayPrice)} />
+          <Metric label={t("nightFrom")} value={usd(displayPrice)} />
         </div>
 
         <div className="space-y-1.5">

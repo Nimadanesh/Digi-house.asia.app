@@ -2,6 +2,7 @@
 // File responsibility: sticky bottom CTA bar — single Buy (primary) or side-by-side
 // Buy/Sell (secondary); revealed after the hero scrolls away; clears the bottom tab
 // bar when that is visible (REDESIGN-SPEC §4.3 + CTA fixes).
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { usd } from "@/lib/format";
 
@@ -23,10 +24,11 @@ export function PropertyStickyCta({
   onSell?: () => void;
   navOffset?: boolean;
 }) {
+  const t = useTranslations("property");
   return (
     <div
       className={cn(
-        "pointer-events-none fixed inset-x-0 z-40 mx-auto max-w-[480px] px-4 pt-3",
+        "pointer-events-none fixed inset-x-0 z-40 mx-auto max-w-[480px] px-4 pt-6",
         "bg-gradient-to-t from-background via-background/95 to-background/0",
         // Above the tab bar (main's own clearance constant) or flush to the bottom.
         navOffset
@@ -43,7 +45,7 @@ export function PropertyStickyCta({
           className="pointer-events-auto flex h-[52px] w-full items-center justify-center gap-1 rounded-[12px] bg-primary text-[0.9375rem] font-semibold text-primary-foreground transition-transform duration-[120ms] ease-out active:scale-[0.98] disabled:opacity-50"
           data-testid="sticky-buy"
         >
-          Buy Shares · <span className="tnum">{usd(priceUsd)}</span>
+          {t("stickyBuyShares", { price: usd(priceUsd) })}
         </button>
       ) : (
         <div className="pointer-events-auto grid grid-cols-2 gap-2">
@@ -54,7 +56,7 @@ export function PropertyStickyCta({
             className="flex h-[52px] items-center justify-center gap-1 rounded-[12px] bg-primary text-[0.9375rem] font-semibold text-primary-foreground transition-transform duration-[120ms] ease-out active:scale-[0.98] disabled:opacity-50"
             data-testid="sticky-buy"
           >
-            Buy · <span className="tnum">{usd(priceUsd)}</span>
+            {t("stickyBuy", { price: usd(priceUsd) })}
           </button>
           <button
             type="button"
@@ -63,7 +65,7 @@ export function PropertyStickyCta({
             className="flex h-[52px] items-center justify-center rounded-[12px] border border-border bg-card text-[0.9375rem] font-semibold text-foreground transition-transform duration-[120ms] ease-out active:scale-[0.98] disabled:opacity-50"
             data-testid="sticky-sell"
           >
-            Sell
+            {t("sell")}
           </button>
         </div>
       )}

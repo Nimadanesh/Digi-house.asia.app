@@ -106,6 +106,23 @@ describe("Buy flow steps", () => {
     expect(screen.getByRole("button", { name: /connect/i })).toBeInTheDocument();
   });
 
+  it("qty step: no placeholder wallet-balance row (honest UI)", () => {
+    render(
+      <BuyQtyStep
+        listing={listing}
+        qty={1}
+        onQtyChange={() => {}}
+        walletConnected
+        currency="TON"
+        onCurrencyChange={() => {}}
+      />,
+    );
+    expect(screen.queryByText(/Wallet balance/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/chain linked/i)).not.toBeInTheDocument();
+    // The real state rows remain.
+    expect(screen.getByTestId("buy-available")).toBeInTheDocument();
+  });
+
   it("qty step: currency selector defaults to TON and switches to USDT", () => {
     const onCurrency = vi.fn();
     const { rerender } = render(

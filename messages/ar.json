@@ -1,608 +1,567 @@
 {
-
   "common": {
-
     "appName": "ديجي هاوس",
-
     "buyShare": "شراء حصة",
-
     "browseMarketplace": "تصفح السوق",
-
     "viewAll": "عرض الكل",
-
     "refresh": "تحديث",
-
     "clearFilters": "مسح الفلاتر",
-
     "tryAgain": "حاول مجددًا",
-
     "retry": "إعادة المحاولة",
-
     "skip": "تخطّي",
-
     "continue": "متابعة",
-
     "getStarted": "ابدأ",
-
     "settings": "الإعدادات",
-
     "connectWallet": "ربط المحفظة",
-
     "walletConnected": "المحفظة متصلة",
-
     "disconnectWallet": "فصل المحفظة",
-
     "share": "حصة",
-
     "shares": "حصص",
-
     "of": "من",
-
     "from": "من",
-
     "est": "تقديري",
-
     "apy": "عائد سنوي",
-
     "pending": "قيد الانتظار",
-
     "paid": "مدفوع",
-
     "hot": "رائج",
-
     "new": "جديد",
-
     "soldPct": "{pct}% مباع",
-
     "week": "أسبوع",
-
     "weeks": "أسابيع",
-
     "demoMode": "وضع تجريبي · بيانات وهمية · معاملات محاكاة",
-
     "somethingWentWrong": "حدث خطأ ما"
-
   },
-
   "tabs": {
-
     "home": "الرئيسية",
-
     "marketplace": "السوق",
-
     "earnings": "الأرباح",
-
     "portfolio": "المحفظة"
-
   },
-
   "header": {
-
     "greeting": "مرحبًا، {name}"
-
   },
-
   "onboarding": {
-
     "skip": "تخطّي",
-
     "continue": "متابعة",
-
     "getStarted": "ابدأ",
-
     "slideProgress": "{current} / {total}",
-
     "slideAria": "الشريحة {n}",
-
     "own": {
-
       "headline": "كن مالكًا لجزء من عقار حقيقي",
-
       "subtitle": "ابدأ من حوالي 80 دولارًا"
-
     },
-
     "yield": {
-
       "headline": "احصل على حصتك من الإيجار كل شهر",
-
       "subtitle": "شاهد حصتك الشهرية في الأرباح"
-
     },
-
     "sell": {
-
       "headline": "بِع في أي وقت تشاء",
-
       "subtitle": "اعرض الحصص في سوق ديجي هاوس عندما تكون مستعدًا للخروج."
-
     }
-
   },
-
   "home": {
-
     "loadError": "تعذّر تحميل الصفحة الرئيسية.",
-
     "portfolioValue": "قيمة المحفظة",
-
     "totalInvested": "إجمالي الاستثمار",
-
     "totalEarningsReceived": "إجمالي الأرباح المستلمة",
-
     "nextPayout": "الدفعة التالية",
-
     "myProperties": "عقاراتي",
-
     "myPropertiesCount": "عقاراتي ({count})",
-
     "monthlyPerShare": "شهري / حصة",
-
     "pendingThisWeek": "{amount} قيد الانتظار هذا الأسبوع",
-
     "earnedWord": "مكتسب",
-
     "viewAllCount": "+{count} في المحفظة",
-
     "featuredOpportunity": "فرصة مميزة",
-
     "featuredTag": "مميز",
-
     "moreOpportunities": "المزيد من الفرص",
-
     "emptyTitle": "رحلتك العقارية تبدأ هنا",
-
     "emptyHint": "مسار هادئ نحو دخل إيجار شهري.",
-
     "emptyStepBuy": "اشترِ أسهماً",
-
     "emptyStepLock": "أقفلها لتحقيق العائد",
-
     "emptyStepEarn": "اربح كل شهر",
-
     "emptyCta": "استكشف الفرص",
-
     "trustFooter": "يتراكم دخل الإيجار شهرياً. اسحب في أي وقت (رسوم 1٪، 4 دفعات أسبوعية). محاكاة حتى يتم on-chain."
-
   },
-
   "marketplace": {
-
     "searchPlaceholder": "البحث عن عقارات",
-
     "searchAria": "البحث عن عقارات",
-
     "clearSearch": "مسح البحث",
-
     "filtersAria": "فلاتر السوق",
-
     "loadError": "تعذّر تحميل العقارات.",
-
     "emptyTitle": "لا عقارات بعد",
-
     "emptyMessage": "تُضاف قوائم جزئية جديدة كل أسبوع — عُد قريبًا.",
-
     "noMatchesTitle": "لا نتائج",
-
     "noMatchesMessage": "جرّب بحثًا أو فلترًا آخر.",
-
     "chips": {
-
       "all": "الكل",
-
       "primary": "أساسي",
-
       "secondary": "ثانوي",
-
       "highest_yield": "أعلى عائد",
-
       "new": "جديد",
-
       "almost_sold": "شبه مباع",
-
       "low_price": "سعر منخفض"
-
     },
-
     "pricePerShare": "السعر / حصة",
-
     "monthlyPerShare": "شهري / حصة",
-
-    "minPurchase": "الحد الأدنى",
-
+    "nightFrom": "الليلة / من",
     "sharesSold": "{sold} من {total} حصة مباعة",
-
     "feesTitle": "العمولة",
-
     "feesPerTx": "تُحدَّد الفئة حسب مبلغ كل معاملة — دون حد للشراء أو البيع.",
-
     "feesRange": "المبلغ",
-
     "feesBuyPrimary": "شراء · أولي",
-
     "feesBuyMarket": "شراء · السوق",
-
     "feesSellMarket": "بيع · السوق",
-
     "feesInstantSell": "بيع فوري (الطرح)",
-
     "feesInstantNote": "رسوم ثابتة أثناء الطرح الأولي؛ تداولات السوق الثانوية تستخدم فئة السوق.",
-
     "feesNoCap": "لا حدود لمبالغ الشراء أو البيع.",
-
     "lastPrice": "آخر سعر"
-
   },
-
   "property": {
-
     "buyShare": "شراء حصة",
-
     "about": "حول",
-
     "metrics": "المؤشرات",
-
     "trust": "الثقة والشفافية",
-
     "rentalHistory": "سجل الإيجار",
-
     "incomeCalculator": "حاسبة الدخل",
-
     "salesProgress": "تقدّم البيع",
-
-    "gallery": "المعرض"
-
+    "gallery": "المعرض",
+    "tabOverview": "نظرة عامة",
+    "tabPerformance": "الأداء",
+    "tabHolders": "المالكين",
+    "tabIncome": "الدخل",
+    "tabDetails": "التفاصيل",
+    "marketBadge": "السوق الثانوي",
+    "offerPrice": "سعر الطرح",
+    "sharesSoldOf": "المباع / الإجمالي",
+    "holdersComingSoon": "تحليلات المالكين ستتوفر في التحديث القادم.",
+    "incomeComingSoon": "تحليلات الدخل ستتوفر في التحديث القادم.",
+    "fundedCaption": "تم تمويل {pct}% · تبقى {remaining} حصة",
+    "sharesRemaining": "الحصص المتبقية",
+    "totalTarget": "الهدف الإجمالي",
+    "primaryFixedPrice": "{title} عرض أولي بسعر ثابت {price} للحصة. لا يوجد سجل لسعر السوق بعد.",
+    "primaryFundingNote": "تحليلات تقدم التمويل ستتوفر في التحديث القادم.",
+    "fundamentals": "أساسيات العقار",
+    "propertyValue": "قيمة العقار",
+    "annualRent": "الإيجار السنوي",
+    "grossYield": "العائد الإجمالي",
+    "tabsLabel": "أقسام الأصل",
+    "marketSummary": "ملخص السوق",
+    "currentPrice": "السعر الحالي",
+    "bestBid": "أفضل عرض شراء",
+    "bestAsk": "أفضل عرض بيع",
+    "spread": "الفرق",
+    "vsOffer": "مقابل الطرح",
+    "positionTitle": "مركزك",
+    "positionTotal": "إجمالي الحصص",
+    "positionLocked": "مقفلة",
+    "positionFree": "حرة",
+    "positionAccrued": "مستحق غير مدفوع",
+    "positionValue": "القيمة التقديرية",
+    "positionLock": "قفل",
+    "positionSell": "بيع",
+    "fundingProgressTitle": "تقدم التمويل عبر الزمن",
+    "cumulativeSharesTitle": "إجمالي الأسهم المباعة",
+    "yieldProjectionTitle": "توقع العائد",
+    "yieldProjectionNote": "توقع بناءً على الإيجار والعائد الحاليين — ليس وعدًا بعوائد مستقبلية.",
+    "pricePerformance": "أداء السعر",
+    "yieldPerformance": "أداء العائد",
+    "simulatedHistoryNote": "تاريخ محاكى للتوضيح — ليس وعدًا بعوائد مستقبلية.",
+    "holderDonutTitle": "توزيع حاملي العملات",
+    "totalHolders": "إجمالي الحائزين",
+    "holder.others": "آخرون",
+    "holderPrivacyNote": "يظهر الحائزون كفئات مجهولة — دون أي بيانات شخصية.",
+    "holderStatsTitle": "إحصاءات الحائزين",
+    "statTotalHolders": "إجمالي الحائزين",
+    "statAvgHolding": "متوسط الحيازة",
+    "statMedianHolding": "وسيط الحيازة",
+    "statTop5Ownership": "أكبر 5 حصص",
+    "statNewHolders30d": "حائزون جدد 30 يومًا",
+    "statLargestHolder": "أكبر حائز",
+    "sharesWord": "أسهم",
+    "shareWord": "سهم",
+    "donutTapHint": "اضغط على جزء لعرض التفاصيل",
+    "topHoldersTitle": "أكبر حاملي العملات",
+    "treemapTitle": "خريطة الملكية",
+    "treemapTapHint": "اضغط على مربع لعرض التفاصيل",
+    "distributionOverTimeTitle": "توزيع العملات عبر الزمن",
+    "distributionTapHint": "اضغط على المخطط لعرض تفاصيل ذلك التاريخ",
+    "bubbleChartTitle": "مخطط فقاعات الحائزين",
+    "bubbleTapHint": "اضغط على فقاعة لعرض التفاصيل",
+    "holder.A": "الحائز أ",
+    "holder.B": "الحائز ب",
+    "holder.C": "الحائز ج",
+    "holder.D": "الحائز د",
+    "holder.E": "الحائز هـ",
+    "holder.F": "الحائز و",
+    "fundedCaptionShort": "تمويل {pct}%",
+    "incomeHistoryTitle": "سجل الدخل",
+    "cumulativeYieldPerShare": "العائد التراكمي لكل سهم",
+    "incomeMonthsWord": "أشهر من السجل",
+    "perShareWord": "لكل سهم",
+    "poolWord": "المجموع",
+    "incomeTapHint": "اضغط على عمود لعرض تفاصيل دفعة ذلك الشهر.",
+    "payoutHistoryTitle": "سجل المدفوعات",
+    "payoutHistoryNote": "سجل دخل محاكاة · قابل للتحقق على السلسلة بعد MVP.",
+    "incomeRatiosTitle": "مؤشرات العقارات",
+    "annualYieldRate": "معدل العائد السنوي",
+    "incomeRatiosNote": "مشتقة من إيجار العقار وقيمته. لا تُعرض العائد الصافي ومعدل الرسملة و NOI ونسبة المصروفات — مجموعة البيانات لا تحتوي على تلك الحقول.",
+    "incomeProjectionsTitle": "الأرباح المتوقعة",
+    "incomeProjectionsNote": "استخدم حاسبة الدخل في تبديل النظرة العامة — تحسب أرباحك من عدد الأسهم الذي تختاره، وهي توقعات لا وعود.",
+    "marketTitle": "السوق",
+    "orderBook": "سجل الأوامر",
+    "bids": "أوامر الشراء",
+    "asks": "أوامر البيع",
+    "best": "الأفضل",
+    "lastTrade": "آخر صفقة",
+    "recentTrades": "أحدث الصفقات",
+    "tradesLoadError": "تعذر تحميل أحدث الصفقات.",
+    "tradesEmpty": "لا توجد صفقات بعد — يفتح السوق عند اكتمال الطرح الأساسي.",
+    "galleryPages": "صفحات المعرض",
+    "showImage": "عرض الصورة {n}",
+    "expectedAnnualYield": "العائد السنوي المتوقع",
+    "basedOnLease": "استنادًا إلى عقد الإيجار الحالي · {count} {unit} دفعة في الوقت المحدد",
+    "monthWord": "شهر",
+    "monthsWord": "أشهر",
+    "buySharesAt": "شراء الأسهم · {price}",
+    "buyAt": "شراء بسعر {price}",
+    "offeringSoldOut": "نفدت الطروحة الأساسية",
+    "stickyBuyShares": "شراء الأسهم · {price}",
+    "stickyBuy": "شراء · {price}",
+    "sell": "بيع",
+    "pricePerShareMetric": "سعر السهم",
+    "monthlyYieldPerShare": "العائد الشهري / سهم",
+    "totalPropertyValue": "القيمة الإجمالية للعقار",
+    "moreDetails": "مزيد من التفاصيل",
+    "sizeLabel": "المساحة",
+    "yearBuilt": "سنة البناء",
+    "typeLabel": "النوع",
+    "rentalStatusLabel": "حالة التأجير",
+    "leaseUntil": "الإيجار حتى",
+    "trustTitle": "لماذا تستثمر بثقة",
+    "trustSimulatedNote": "سجل الدفعات يعكس سجلات تجريبية محاكاة.",
+    "similarProperties": "عقارات مشابهة",
+    "documents": "المستندات",
+    "documentsEmpty": "لا توجد مستندات بعد",
+    "downloadDoc": "تنزيل {title}",
+    "docKindOffering": "الطرح",
+    "docKindFinancial": "المالية",
+    "docKindLegal": "القانونية",
+    "docKindOther": "أخرى",
+    "documentsError": "تعذر تحميل المستندات.",
+    "simulatedPriceNote": "سجل سعر محاكاة للتوضيح — ليس وعدًا بعوائد مستقبلية.",
+    "bannerLockCta": "اقفل الأسهم لتبدأ الكسب",
+    "youOwn": "تملك {count} {unit} · {locked} مقفل",
+    "earningNow": "يكسب",
+    "notEarningYet": "لا يكسب بعد",
+    "bannerLockNote": "الأسهم تكسب عائدًا فقط أثناء الإقفال. الإقفال مجاني — يستغرق الفتح 2–3 أيام إذا غيّرت رأيك.",
+    "yieldSection": "العائد",
+    "monthlyYield": "العائد الشهري",
+    "onLockedSharesNote": "على الأسهم المقفلة · الخيار الأسبوعي يدفع المعدل − 1%",
+    "yourShares": "أسهمك",
+    "freeToLock": "متاحة للإقفال",
+    "buyFirstNote": "اشترِ الأسهم أولًا، ثم اقفلها لتبدأ الكسب من اليوم الأول.",
+    "allLocked": "الكل مقفل",
+    "lockCta": "إقفال",
+    "requestUnlock": "طلب فتح الإقفال",
+    "requesting": "جارٍ الإرسال…",
+    "unlockPendingNote": "توقف العائد عند طلب فتح الإقفال. تصبح الأسهم قابلة للبيع خلال 2–3 أيام.",
+    "nShares": "{count} سهم",
+    "accruingWeekly": "تتراكم · أسبوعي",
+    "accruingMonthly": "تتراكم · شهري",
+    "unlocksOn": "يُفتح في {date}",
+    "unlockingInDays": "2–3 أيام",
+    "perWeek": "أسبوعيًا",
+    "perMonth": "شهريًا",
+    "unlockConfirmTitle": "فتح إقفال الأسهم",
+    "unlockConfirmBody": "يوقف فتح الإقفال العائد على هذه الأسهم الآن. تصبح قابلة للبيع خلال 2–3 أيام.",
+    "unlockConfirmCta": "تأكيد فتح الإقفال",
+    "unlockPendingLabel": "جارٍ فتح الإقفال…",
+    "unlockSuccessTitle": "تم طلب فتح الإقفال",
+    "unlockSuccessBody": "توقف العائد. تصبح الأسهم قابلة للبيع خلال 2–3 أيام.",
+    "propertyLabel": "العقار",
+    "sharesLabel": "الأسهم",
+    "payoutPeriodLabel": "دورة الدفع",
+    "weeklyLabel": "أسبوعي",
+    "monthlyLabel": "شهري",
+    "accruedUnpaidLabel": "المستحق غير المدفوع",
+    "lockSheetTitle": "إقفال الأسهم",
+    "lockSheetIntro": "الأسهم المقفلة تكسب عائدًا من اليوم الأول. اختر عدد مرات الدفع.",
+    "payoutPeriodMonthly": "شهري",
+    "payoutPeriodWeekly": "أسبوعي",
+    "payoutPeriodMonthlyHint": "المعدل الكامل، دفعة واحدة / شهر",
+    "payoutPeriodWeeklyHint": "المعدل − 1%، 4 دفعات / شهر",
+    "payoutPeriodAria": "دورة {period}",
+    "monthlyRate": "المعدل الشهري",
+    "maxCta": "الحد الأقصى",
+    "quantityInvalid": "يجب أن تكون الكمية بين 1 و {max}.",
+    "lockedPrincipal": "أصل المبلغ المقفل",
+    "monthlyPayout": "الدفعة الشهرية",
+    "weeklyPayout": "الدفعة الأسبوعية",
+    "perMonthWord": "/ شهر",
+    "perWeekWord": "/ أسبوع",
+    "timesFourMonth": "× 4 / شهر",
+    "lockConfirmCta": "اقفل {count} {unit} واكسب",
+    "lockingPending": "جارٍ الإقفال…",
+    "lockWarningNote": "لا يمكن بيع الأسهم المقفلة. يستغرق فتح الإقفال 2–3 أيام ويوقف العائد.",
+    "lockedSuccessTitle": "تم إقفال الأسهم",
+    "earningFromDay1": "{count} {unit} تكسب من اليوم الأول",
+    "sellSheetTitle": "بيع الأسهم",
+    "confirmInstantSale": "تأكيد البيع الفوري",
+    "sellModeAria": "وضع البيع",
+    "sellModeAriaOf": "بيع {mode}",
+    "instantMode": "فوري",
+    "customPriceMode": "سعر مخصص",
+    "instantSellReview": "مراجعة البيع · {amount}",
+    "instantSellReviewBody": "تشتري المنصة هذه الأسهم بسعر القائمة − 7%. لا يمكن التراجع عن هذا.",
+    "feeLabel": "الرسوم (7%)",
+    "youReceive": "تستلم",
+    "confirmSell": "تأكيد البيع",
+    "sellingPending": "جارٍ البيع…",
+    "placingPending": "جارٍ الإرسال…",
+    "lockedInOrders": "مقفل / في الأوامر",
+    "notSellable": "غير قابلة للبيع",
+    "onTrade": "على التداول",
+    "instantSellEnded": "انتهى البيع الفوري — نفدت الطروحة الأساسية. استخدم سعرًا مخصصًا.",
+    "queueSellOrder": "جدولة أمر البيع",
+    "placeSellOrder": "إرسال أمر البيع",
+    "queuedUntilSellout": "يُجدول حتى نفاد الطروحة الأساسية — ثم يُفعَّل أمرك في السوق تلقائيًا.",
+    "platformBuybackNote": "تشتري المنصة بسعر القائمة − 7%. يُضاف إلى رصيد الاستثمار.",
+    "sellSuccessTitle": "تم بيع الأسهم",
+    "creditedNote": "يُضاف إلى رصيد الاستثمار.",
+    "backCta": "رجوع",
+    "sellOrderPlacedToast": "تم إرسال أمر البيع",
+    "sellOrderPlacedBody": "تابعها في المحفظة → الأوامر المفتوحة",
+    "buyOnMarket": "شراء من السوق",
+    "lastPrice": "آخر سعر",
+    "marketFeeLabel": "رسوم السوق",
+    "heldInEscrow": "محتجز كضمان",
+    "escrowNote": "تُحتجز الأموال من رصيد الاستثمار حتى يُنفَّذ الأمر — أو تلغيه.",
+    "buyOrderPlacedToast": "تم إرسال أمر الشراء",
+    "buyOrderPlacedBody": "تُحتجز الأموال كضمان حتى يُنفَّذ الأمر",
+    "placeBuyOrder": "إرسال أمر الشراء",
+    "freeSharesLabel": "الأسهم المتاحة",
+    "orderValue": "قيمة الأمر",
+    "valueRow": "القيمة",
+    "doneCta": "تم",
+    "decreaseQty": "تقليل الكمية",
+    "increaseQty": "زيادة الكمية",
+    "pricePerShareLabel": "السعر لكل سهم",
+    "reviewSaleCta": "مراجعة البيع · {amount}",
+    "calcTitle": "كم يمكنني أن أكسب؟",
+    "calcYouOwn": "تملك {count}",
+    "calcLockedSuffix": " · {count} مقفل",
+    "calcSharesLabel": "الأسهم",
+    "calcDecreaseShares": "تقليل الأسهم",
+    "calcIncreaseShares": "زيادة الأسهم",
+    "calcSharesInput": "عدد الأسهم",
+    "calcSharesSlider": "شريط تمرير الأسهم",
+    "calcProjected": "الأرباح المتوقعة",
+    "perYearWord": "/ سنة",
+    "calcFeesNote": "بعد رسوم المنصة · الأسهم المقفلة تكسب من اليوم الأول",
+    "calcBuyCta": "اشترِ {count} {unit} – {cost}",
+    "scenarioConservative": "متحفظ",
+    "scenarioBase": "أساسي",
+    "scenarioOptimistic": "متفائل",
+    "walletLabel": "المحفظة",
+    "availableShares": "الأسهم المتاحة",
+    "totalLabel": "الإجمالي",
+    "estWeeklyYield": "العائد الأسبوعي التقديري",
+    "paymentCurrency": "عملة الدفع",
+    "performanceTitle": "الأداء",
+    "connectWalletTitle": "ربط المحفظة",
+    "connectWalletBody": "اربط محفظة TON لشراء الأسهم وكسب عائد الإيجار.",
+    "fullyFundedTitle": "تم تمويله بالكامل",
+    "fullyFundedBody": "بيع جميع أسهم الطروحة الأساسية. إعادة البيع قادمة بعد ذلك.",
+    "buySheetTitle": "شراء الأسهم",
+    "payWithAria": "الدفع بـ {currency}",
+    "usdtUnavailableNote": "USDT غير متاح حاليًا — سوف تدفع بـ TON.",
+    "paidInNote": "يُدفع بـ {currency} من محفظتك المتصلة.",
+    "freeShares": "الأسهم المتاحة",
+    "valueLabel": "القيمة",
+    "bannerFunding": "مفتوح للتمويل · {progress} · {count} {unit} متبقٍ",
+    "bannerLiveTrading": "{status} · تداول مباشر",
+    "resaleWord": "إعادة بيع",
+    "fullyFundedWord": "تم التمويل بالكامل",
+    "chartTrendSummary": "الاتجاه: {direction} من {start} إلى {end}.",
+    "trendUp": "صاعد",
+    "trendDown": "هابط",
+    "performanceSectionTitle": "الأداء",
+    "priceMode": "السعر",
+    "yieldMode": "العائد"
   },
-
   "earnings": {
-
     "loadError": "تعذّر تحميل الأرباح.",
-
     "emptyTitle": "لم تربح بعد",
-
     "emptyMessage": "اشترِ حصتك الأولى وابدأ الربح الشهر القادم.",
-
     "thisWeek": "أرباح هذا الأسبوع",
-
     "nextPayoutIn": "الدفعة التالية",
-
     "totalReceived": "إجمالي الأرباح المستلمة",
-
     "consecutivePaid": "أسابيع مدفوعة متتالية",
-
     "streak": "{count} {unit} متتالية ✓",
-
     "noStreak": "لا سلسلة بعد",
-
     "timeline": "السجل",
-
     "disclaimer": "دفعة شهرية محاكاة · قابلة للتحقق على السلسلة بعد MVP",
-
     "withdrawalTerms": "اسحب في أي وقت — رسوم 1٪، تُدفع على 4 أقساط أسبوعية",
-
     "yieldTitle": "قوة الكسب",
-
     "totalEarned": "إجمالي المكتسب",
-
     "chartTitle": "آخر 12 أسبوعاً",
-
     "chartCaption": "مدفوعات الإيجار الأسبوعية · محاكاة حتى on-chain.",
-
     "timelineTitle": "تدفق دخلك",
-
     "timelinePaid": "مدفوع",
-
     "timelineAccruing": "متراكم",
-
     "timelineAccruingSub": "الشهر الحالي",
-
     "timelineNext": "التقدير التالي",
-
     "timelineCaption": "استحقاق شهري؛ تتم تسوية المدفوعات كل يوم أحد.",
-
     "withdraw": "اسحب إلى محفظتك",
-
     "withdrawSubtitle": "رسوم 1٪ · 4 دفعات أسبوعية",
-
     "yieldAccrued": "مستحق غير مدفوع",
-
     "yieldMonthly": "شهريًا",
-
     "yieldNoLocks": "لا توجد أقفال نشطة — أقفل الأسهم في صفحة العقار لبدء الكسب.",
-
     "yieldPayments": "مدفوعات العائد",
-
     "yieldFinal": "دفعة نهائية"
-
   },
-
   "portfolio": {
-
     "loadError": "تعذّر تحميل محفظتك.",
-
     "emptyTitle": "محفظتك فارغة",
-
     "emptyMessage": "ابدأ من حوالي 80 دولارًا — اشترِ حصتك الأولى من السوق.",
-
     "totalValue": "إجمالي قيمة المحفظة",
-
     "totalInvested": "إجمالي الاستثمار",
-
     "totalEarningsReceived": "إجمالي الأرباح المستلمة",
-
     "unrealizedProfit": "ربح غير محقق",
-
     "nextPayout": "الدفعة التالية",
-
     "myPropertiesCount": "عقاراتي ({count})",
-
     "openOrders": "أوامر مفتوحة",
-
     "allocation": "التوزيع",
-
     "lockedShares": "أسهم مقفلة",
-
     "freeShares": "أسهم متاحة",
-
     "investedWord": "مستثمر",
-
     "earnedWord": "مكتسب",
-
     "unrealizedWord": "غير محقق",
-
     "orderOpen": "مفتوح",
-
     "allocationProperties": "{count} عقارات",
-
     "showDetails": "إظهار التفاصيل",
-
     "hideDetails": "إخفاء التفاصيل",
-
     "lockedCaption": "يحقق عائداً شهرياً",
-
     "freeCaption": "لا يحقق بعد",
-
     "idleShares": "{count} أسهماً لا تحقق",
-
     "lockThem": "أقفلها",
-
     "earningPill": "{count} تحقق",
-
     "idlePill": "{count} خاملة",
-
     "estMonthly": "≈ {amount} / شهر",
-
     "projectedMonthlyShort": "إيجار شهري تقديري",
-
     "exportCsv": "تصدير CSV",
-
     "exporting": "جارٍ التصدير…",
-
     "sharesOwned": "الأسهم المملوكة",
-
     "avgCostPerShare": "متوسط التكلفة / السهم",
-
     "currentValueRow": "القيمة الحالية",
-
     "unrealizedPnl": "ربح/خسارة غير محقق",
-
     "projectedMonthlyYield": "عائد شهري متوقع",
-
     "buyMore": "شراء المزيد",
-
     "sellComingSoon": "البيع قريباً",
-
     "nftCollectible": "NFT قابل للتحصيل",
-
     "nftItem": "عنصر NFT",
-
     "collection": "مجموعة",
-
     "viewOnExplorer": "عرض في المستكشف",
-
     "nftDisclaimer": "هذا NFT إيصال قابل للتحصيل — تبقى قاعدة البيانات سجل الملكية.",
-
     "nftStatusPending": "قيد الانتظار",
-
     "nftStatusMinting": "جارٍ السك",
-
     "nftStatusMinted": "تم السك",
-
     "nftStatusTransferring": "جارٍ التحويل",
-
     "nftStatusDelivered": "تم التسليم",
-
     "nftStatusFailed": "فشل",
-
     "orderQueued": "في الانتظار"
-
   },
-
   "settings": {
-
     "title": "الإعدادات",
-
     "wallet": "المحفظة",
-
     "connectTitle": "اربط محفظة TON",
-
     "connectHint": "مطلوب لشراء الحصص واستلام دخل الإيجار الشهري.",
-
     "disconnect": "فصل المحفظة",
-
     "withdrawals": "السحوبات",
-
     "withdrawalTitle": "عنوان سحب USDT",
-
     "withdrawalHint": "حيث يتم دفع رصيدك القابل للسحب",
-
     "withdrawalPlaceholder": "EQ… عنوان USDT-TON",
-
     "withdrawalEmpty": "لم يتم تعيين عنوان",
-
     "withdrawalVerified": "تم التحقق",
-
     "withdrawalUnverified": "غير مُتحقق",
-
     "withdrawalInvalid": "أدخل عنوان TON صالحًا",
-
     "withdrawalSave": "حفظ",
-
     "withdrawalCancel": "إلغاء",
-
     "withdrawalRequests": "طلبات السحب",
-
     "withdrawalRequestsEmpty": "لا توجد طلبات سحب بعد",
-
     "withdrawalStatusPaid": "مدفوع",
-
     "withdrawalStatusRequested": "قيد الطلب",
-
     "withdrawalStatusApproved": "تمت الموافقة",
-
     "withdrawalStatusRejected": "مرفوض",
-
     "withdrawalInstallmentProgress": "تم دفع {paid} من {total} دفعات",
-
     "withdrawalRequest": "طلب سحب",
     "withdrawalsError": "تعذر تحميل طلبات السحب",
-
     "referrals": "الإحالات",
-
     "inviteFriends": "دعوة الأصدقاء",
-
     "copied": "تم النسخ!",
-
     "signInToInvite": "سجّل الدخول للدعوة",
-
-
     "preferences": "التفضيلات",
-
     "displayCurrency": "عملة العرض",
-
     "displayCurrencyHint": "الأرقام بالدولار؛ تقديرات TON عند الشراء",
-
     "language": "اللغة",
-
     "languageHint": "لغة التطبيق",
-
     "languageAuto": "تلقائي (تيليجرام)",
-
     "useTelegramTheme": "Dark / Light",
-
     "useTelegramThemeHint": "مطابقة ألوان تيليجرام",
-
     "showDemoBadge": "إظهار شارة التجريبي",
-
     "showDemoBadgeHint": "تسمية MVP صادقة عائمة",
-
     "help": "مساعدة",
-
     "howItWorks": "كيف يعمل ديجي هاوس",
     "transactionHistory": "سجل المعاملات",
-
-
     "aboutLegal": "حول / قانوني",
-
     "aboutBody": "ديجي هاوس تطبيق تيليجرام مصغّر لحصص عقارية جزئية على TON. يتراكم دخل الإيجار الشهري بنسبة ملكيتك.",
-
     "aboutAdvice": "لا شيء هنا نصيحة مالية. مستندات العقار والإفصاحات للعرض حتى تُطلق عقود الإنتاج.",
-
     "aboutCopyright": "© ديجي هاوس · MVP",
-
     "demoTxDisclaimer": "هذا عرض تجريبي – المعاملات محاكاة",
-
     "payoutDisclaimer": "دفعة شهرية محاكاة · قابلة للتحقق على السلسلة بعد MVP",
-
     "chooseLanguage": "اختر اللغة",
-
     "account": "الحساب",
-
     "recoverySignIn": "تسجيل الدخول برمز الاسترداد",
-
     "signOut": "تسجيل الخروج",
-
     "signOutConfirmTitle": "تسجيل الخروج؟",
-
     "signOutConfirmBody": "هل تريد تسجيل الخروج؟"
-
   },
-
   "profile": {
-
     "title": "أكمل ملفك الشخصي",
-
     "subtitle": "بعض التفاصيل لتعريف حسابك.",
-
     "settingsSection": "الملف الشخصي",
-
     "displayName": "الاسم المعروض",
-
     "displayNamePlaceholder": "اسمك",
-
     "phone": "الهاتف",
-
     "phonePlaceholder": "+966 5X XXX XXXX",
-
     "phoneHint": "اختياري. يُستخدم فقط لدعم الحساب.",
-
     "phoneEmpty": "لا يوجد رقم هاتف",
-
     "useTelegramPhone": "استخدام رقم تيليجرام",
-
     "requestingPhone": "جارٍ الطلب…",
-
     "recoveryTitle": "رمز الاسترداد",
-
     "recoveryWarn": "احفظ هذا الرمز في مكان آمن. ستحتاجه لتسجيل الدخول إذا لم يتوفر تيليجرام. لا يمكننا استعادته لك.",
-
     "recoverySettingsHint": "أبقِ هذا الرمز خاصًا. أي شخص يملكه يمكنه الوصول إلى حسابك في FractionalLuxe.",
-
     "copyCode": "نسخ رمز الاسترداد",
-
     "showCode": "إظهار رمز الاسترداد",
-
     "hideCode": "إخفاء رمز الاسترداد",
-
     "savedConfirm": "لقد حفظت رمز الاسترداد في مكان آمن",
-
     "saveContinue": "حفظ ومتابعة",
-
     "saving": "جارٍ الحفظ…",
-
     "save": "حفظ",
-
     "cancel": "إلغاء",
-
     "errors": {
-
       "name": "أدخل اسمًا (حرفان على الأقل)",
-
       "phone": "أدخل رقم هاتف صالحًا",
-
       "saveCode": "أكد أنك حفظت رمز الاسترداد",
-
       "save": "تعذّر حفظ الملف الشخصي"
-
     }
-
   },
-
   "recovery": {
-
     "title": "تسجيل الدخول برمز الاسترداد",
-
     "subtitle": "استخدم الرمز الذي حفظته عند إعداد ملفك الشخصي.",
-
     "codeLabel": "رمز الاسترداد",
-
     "signIn": "تسجيل الدخول",
-
     "signingIn": "جارٍ تسجيل الدخول…",
-
     "backHome": "العودة للرئيسية"
-
   }
-
 }
-

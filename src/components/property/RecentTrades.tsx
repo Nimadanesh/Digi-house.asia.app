@@ -2,6 +2,7 @@
 // File responsibility: recent executed fills on the secondary market (PD-06).
 // DESIGN_SYSTEM: grouped Block, SectionLabel header, inset hairline rows, tabular-nums money.
 // Price tinted green/red only for finance up/down vs. the previous (older) trade.
+import { useTranslations } from "next-intl";
 import { useTrades } from "@/hooks/useTrades";
 import { usd, timeAgo } from "@/lib/format";
 import { Block } from "@/components/common/Block";
@@ -9,6 +10,7 @@ import { SectionLabel } from "@/components/common/SectionLabel";
 import { Skeleton } from "@/components/common/Skeleton";
 
 export function RecentTrades({ propertyId, max }: { propertyId: string; /** Compact cap (Phase 4 market card); undefined = all. */ max?: number }) {
+  const t = useTranslations("property");
   const { data, isLoading, isError } = useTrades(propertyId, { live: true });
   const trades = data && max ? data.slice(0, max) : data;
   const loadingState = isLoading && !data;
@@ -17,7 +19,7 @@ export function RecentTrades({ propertyId, max }: { propertyId: string; /** Comp
   return (
     <Block className="overflow-hidden" data-testid="recent-trades">
       <div className="px-4 py-2">
-        <SectionLabel>Recent trades</SectionLabel>
+        <SectionLabel>{t("recentTrades")}</SectionLabel>
       </div>
       {loadingState ? (
         <div className="space-y-2 px-4 pb-4">
@@ -26,10 +28,10 @@ export function RecentTrades({ propertyId, max }: { propertyId: string; /** Comp
           <Skeleton className="h-4 w-3/5" />
         </div>
       ) : isError && !trades ? (
-        <p className="px-4 pb-4 text-xs text-muted-foreground">Couldn&apos;t load recent trades.</p>
+        <p className="px-4 pb-4 text-xs text-muted-foreground">{t("tradesLoadError")}</p>
       ) : emptyState ? (
         <p className="px-4 pb-4 text-xs text-muted-foreground" data-testid="trades-empty">
-          No trades yet — the market opens when the primary offering sells out.
+          {t("tradesEmpty")}
         </p>
       ) : (
         <div className="px-4 pb-3 text-xs font-mono" data-testid="trades-list">

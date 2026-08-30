@@ -3,6 +3,7 @@
 // Price/Yield tabs and 1M/6M/1Y/All range pills (REDESIGN-SPEC Phase 3).
 // Data comes from lib/performance-series (deterministic, anchored to current price).
 import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import type { Listing } from "@/types/property";
 import { performanceSeries, type PerfRange } from "@/lib/performance-series";
 import { usd } from "@/lib/format";
@@ -32,6 +33,7 @@ export function PerformanceChart({
   /** Single source of truth (lib/property-price) — chart's end point, defaults to list price. */
   anchorUsd?: number;
 }) {
+  const t = useTranslations("property");
   const [tab, setTab] = useState<PerfTab>("price");
   const [range, setRange] = useState<PerfRange>("1Y");
   const nowMs = useSharedNowMs();
@@ -173,7 +175,7 @@ export function PerformanceChart({
       </svg>
 
       <p className="text-xs leading-relaxed text-muted-foreground">
-        Simulated price history for illustration — not a promise of future returns.
+        {t("simulatedPriceNote")}
       </p>
     </Block>
   );

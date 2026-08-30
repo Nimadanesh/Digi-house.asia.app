@@ -1,6 +1,7 @@
-// File responsibility: hero section — status banner, title/location, yield headline,
-// trust line, and the in-page primary CTA (REDESIGN-SPEC §4.1).
+// File responsibility: property header (REDESIGN-SPEC §5) — status banner,
+// title/location, expected yield, and the in-page primary CTA.
 import { MapPin } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { pct, usd } from "@/lib/format";
 import type { Listing } from "@/types/property";
 import { annualReturnRatio } from "@/lib/property-yield";
@@ -17,6 +18,7 @@ export function PropertyHero({
   bestAskUsd?: number;
   onBuy: () => void;
 }) {
+  const t = useTranslations("property");
   const apy = annualReturnRatio(listing);
   const isPrimary = listing.status === "funding";
   const monthsPaid = listing.rentalHistory.length;
@@ -38,11 +40,13 @@ export function PropertyHero({
         <p className="text-[2.5rem] font-bold leading-none tracking-tight text-success tnum" data-testid="hero-apy">
           {pct(apy)}
         </p>
-        <p className="mt-1.5 text-sm font-medium text-muted-foreground">Expected Annual Yield</p>
+        <p className="mt-1.5 text-sm font-medium text-muted-foreground">{t("expectedAnnualYield")}</p>
         {monthsPaid > 0 ? (
           <p className="mt-1 text-xs text-muted-foreground tnum" data-testid="hero-trust-line">
-            Based on current lease · {monthsPaid}{" "}
-            {monthsPaid === 1 ? "month" : "months"} on-time payments
+            {t("basedOnLease", {
+              count: monthsPaid,
+              unit: monthsPaid === 1 ? t("monthWord") : t("monthsWord"),
+            })}
           </p>
         ) : null}
       </div>
@@ -56,16 +60,12 @@ export function PropertyHero({
       >
         {isPrimary ? (
           listing.sharesRemaining <= 0 ? (
-            "Primary offering sold out"
+            t("offeringSoldOut")
           ) : (
-            <>
-              Buy Shares · <span className="tnum">{usd(buyPriceUsd)}</span>
-            </>
+            t("buySharesAt", { price: usd(buyPriceUsd) })
           )
         ) : (
-          <>
-            Buy at <span className="tnum">{usd(buyPriceUsd)}</span>
-          </>
+          t("buyAt", { price: usd(buyPriceUsd) })
         )}
       </button>
     </div>

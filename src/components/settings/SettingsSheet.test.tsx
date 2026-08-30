@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, act } from "@testing-library/react";
 import { useSettingsStore } from "@/stores/settings.store";
 import { useUiStore } from "@/stores/ui.store";
 import { useAuthStore } from "@/stores/auth.store";
@@ -186,6 +186,40 @@ describe("SettingsSheet", () => {
     fireEvent.click(screen.getByTestId("settings-sign-out"));
     fireEvent.click(screen.getByTestId("sign-out-confirm-cancel"));
     expect(screen.queryByTestId("sign-out-confirm")).not.toBeInTheDocument();
+    expect(replace).not.toHaveBeenCalled();
+  });
+
+  it("Back closes the nested language sheet first; Settings stays open", () => {
+    render(<SettingsSheet />);
+    fireEvent.click(screen.getByTestId("language-selector"));
+    expect(screen.getByTestId("language-picker-sheet")).toBeInTheDocument();
+    // Latest registered Telegram BackButton handler = the unified stack handler.
+    const back = backOnClick.mock.calls.at(-1)?.[0] as (() => void) | undefined;
+    act(() => {
+      back?.();
+    });
+    expect(screen.queryByTestId("language-picker-sheet")).not.toBeInTheDocument();
+    expect(screen.getByTestId("settings-sheet")).toBeInTheDocument();
+    expect(replace).not.toHaveBeenCalled();
+  });
+
+  it("Back cannot dismiss the protected disconnect while it is in flight", async () => {
+    disconnect.mockReturnValue(new Promise(() => {})); // never resolves → pending
+    render(<SettingsSheet />);
+    fireEvent.click(screen.getByTestId("settings-disconnect"));
+    expect(screen.getByTestId("disconnect-confirm")).toBeInTheDocument();
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("disconnect-confirm-confirm"));
+    });
+    expect(disconnect).toHaveBeenCalledTimes(1);
+    expect(screen.getByTestId("disconnect-confirm-confirm")).toBeDisabled();
+    const back = backOnClick.mock.calls.at(-1)?.[0] as (() => void) | undefined;
+    await act(async () => {
+      back?.();
+    });
+    // Non-dismissible sheet: neither the confirm sheet nor Settings may close.
+    expect(screen.getByTestId("disconnect-confirm")).toBeInTheDocument();
+    expect(screen.getByTestId("settings-sheet")).toBeInTheDocument();
     expect(replace).not.toHaveBeenCalled();
   });
 });

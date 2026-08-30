@@ -1,10 +1,12 @@
 // File responsibility: trust signal strip — tenant/lease/payment-history/share-demand
 // checks derived from existing listing data (REDESIGN-SPEC Phase 5).
+import { useTranslations } from "next-intl";
 import { Check } from "lucide-react";
 import type { Listing } from "@/types/property";
 import { Block } from "@/components/common/Block";
 
 export function PropertyTrust({ listing }: { listing: Listing }) {
+  const t = useTranslations("property");
   const { meta } = listing;
   const leaseYear = meta.leaseUntil ? new Date(meta.leaseUntil).getUTCFullYear() : null;
   const paymentsOnTime = listing.rentalHistory.length;
@@ -27,7 +29,7 @@ export function PropertyTrust({ listing }: { listing: Listing }) {
 
   return (
     <Block className="space-y-3 p-4" data-testid="property-trust">
-      <h2 className="text-[0.9375rem] font-semibold text-foreground">Why invest with confidence</h2>
+      <h2 className="text-[0.9375rem] font-semibold text-foreground">{t("trustTitle")}</h2>
       <div className="flex flex-wrap gap-2">
         {items.map((item) => (
           <span
@@ -43,7 +45,7 @@ export function PropertyTrust({ listing }: { listing: Listing }) {
       </div>
       {paymentsOnTime > 0 ? (
         <p className="text-xs leading-relaxed text-muted-foreground">
-          Payment history reflects simulated demo records.
+          {t("trustSimulatedNote")}
         </p>
       ) : null}
     </Block>

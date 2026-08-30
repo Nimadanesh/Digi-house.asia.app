@@ -2,10 +2,12 @@
 // File responsibility: swipeable property image gallery + pagination dots (Fable §Gallery).
 import { useCallback, useRef, useState } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { haptics } from "@/lib/telegram/haptics";
 
 export function PropertyGallery({ images, title }: { images: string[]; title: string }) {
+  const t = useTranslations("property");
   const slides = images.length > 0 ? images : ["/images/properties/p1.png"];
   const [index, setIndex] = useState(0);
   const startX = useRef<number | null>(null);
@@ -50,12 +52,12 @@ export function PropertyGallery({ images, title }: { images: string[]; title: st
         ))}
       </div>
       {slides.length > 1 ? (
-        <div className="absolute bottom-3 inset-x-0 flex justify-center gap-1.5" aria-label="Gallery pages">
+        <div className="absolute bottom-3 inset-x-0 flex justify-center gap-1.5" aria-label={t("galleryPages")}>
           {slides.map((_, i) => (
             <button
               key={i}
               type="button"
-              aria-label={`Show image ${i + 1}`}
+              aria-label={t("showImage", { n: i + 1 })}
               aria-current={i === index}
               onClick={() => go(i)}
               className={cn(

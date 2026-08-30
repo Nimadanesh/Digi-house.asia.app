@@ -3,6 +3,7 @@
 // and offers "Lock shares to start earning" when unlocked shares are available
 // (REDESIGN-SPEC Phase 6). Hidden entirely while ownership is unknown/zero.
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Lock } from "lucide-react";
 import type { Listing } from "@/types/property";
 import { haptics } from "@/lib/telegram/haptics";
@@ -21,6 +22,7 @@ export function OwnershipBanner({
   /** Holder's average cost for the principal preview; defaults to list price. */
   avgCostUsd?: number;
 }) {
+  const t = useTranslations("property");
   const [sheetOpen, setSheetOpen] = useState(false);
   const freeShares = Math.max(0, ownedShares - lockedShares);
 
@@ -34,7 +36,11 @@ export function OwnershipBanner({
       <Block className="space-y-3 border border-success/25 p-4" data-testid="ownership-banner">
         <div className="flex items-center justify-between gap-2">
           <p className="text-sm font-medium text-foreground tnum" data-testid="ownership-copy">
-            You own {ownedShares} {ownedShares === 1 ? "share" : "shares"} · {lockedShares} locked
+            {t("youOwn", {
+              count: ownedShares,
+              unit: ownedShares === 1 ? t("shareWord") : t("sharesWord"),
+              locked: lockedShares,
+            })}
           </p>
           <span
             className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-semibold ${
@@ -42,7 +48,7 @@ export function OwnershipBanner({
             }`}
             data-testid="ownership-state"
           >
-            {fullyLocked ? "Earning" : "Not earning yet"}
+            {fullyLocked ? t("earningNow") : t("notEarningYet")}
           </span>
         </div>
         {!fullyLocked ? (
@@ -57,23 +63,25 @@ export function OwnershipBanner({
               data-testid="banner-lock"
             >
               <Lock size={16} strokeWidth={1.75} />
-              Lock shares to start earning
+              {t("bannerLockCta")}
             </button>
             <p className="text-xs leading-relaxed text-muted-foreground">
-              Shares only earn yield while locked. Locking is free — unlock takes 2–3
-              days if you change your mind.
+              {t("bannerLockNote")}
             </p>
           </>
         ) : null}
       </Block>
 
-      <LockSheet
-        open={sheetOpen}
-        onClose={() => setSheetOpen(false)}
-        listing={listing}
-        freeShares={freeShares}
-        avgCostUsd={avgCostUsd ?? listing.sharePriceUsd}
-      />
+      {/* Sheet mounts only while open (G10) — hooks/state initialize fresh. */}
+      {sheetOpen ? (
+        <LockSheet
+          open
+          onClose={() => setSheetOpen(false)}
+          listing={listing}
+          freeShares={freeShares}
+          avgCostUsd={avgCostUsd ?? listing.sharePriceUsd}
+        />
+      ) : null}
     </>
   );
 }

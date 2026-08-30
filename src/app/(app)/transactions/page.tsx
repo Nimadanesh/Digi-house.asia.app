@@ -8,6 +8,7 @@ import { TransactionList } from "@/components/transactions/TransactionList";
 import { TransactionFilterChips } from "@/components/transactions/TransactionFilterChips";
 import { filterTransactions, type TransactionChip } from "@/lib/transaction-filter";
 import { haptics } from "@/lib/telegram/haptics";
+import { closeTopSheet } from "@/components/common/Sheet";
 
 export default function TransactionsPage() {
   const router = useRouter();
@@ -24,6 +25,8 @@ export default function TransactionsPage() {
     try {
       off = backButton.onClick(() => {
         haptics.selection();
+        // A global sheet (e.g. Settings) opened over this page owns the back press first.
+        if (closeTopSheet()) return;
         router.back();
       });
     } catch { /* ignore */ }

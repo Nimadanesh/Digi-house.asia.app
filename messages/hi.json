@@ -1,608 +1,567 @@
 {
-
   "common": {
-
     "appName": "FractionalLuxe",
-
     "buyShare": "हिस्सा खरीदें",
-
     "browseMarketplace": "बाज़ार देखें",
-
     "viewAll": "सभी देखें",
-
     "refresh": "रिफ़्रेश",
-
     "clearFilters": "फ़िल्टर साफ़ करें",
-
     "tryAgain": "फिर कोशिश करें",
-
     "retry": "पुनः प्रयास",
-
     "skip": "छोड़ें",
-
     "continue": "आगे",
-
     "getStarted": "शुरू करें",
-
     "settings": "सेटिंग्स",
-
     "connectWallet": "वॉलेट जोड़ें",
-
     "walletConnected": "वॉलेट जुड़ा है",
-
     "disconnectWallet": "वॉलेट डिस्कनेक्ट करें",
-
     "share": "हिस्सा",
-
     "shares": "हिस्से",
-
     "of": "में से",
-
     "from": "से",
-
     "est": "अनु.",
-
     "apy": "वार्षिक प्रतिफल",
-
     "pending": "लंबित",
-
     "paid": "भुगतान",
-
     "hot": "हॉट",
-
     "new": "नया",
-
     "soldPct": "{pct}% बिका",
-
     "week": "सप्ताह",
-
     "weeks": "सप्ताह",
-
     "demoMode": "डेमो मोड · नमूना डेटा · लेन-देन सिमुलेटेड",
-
     "somethingWentWrong": "कुछ गलत हो गया"
-
   },
-
   "tabs": {
-
     "home": "होम",
-
     "marketplace": "बाज़ार",
-
     "earnings": "कमाई",
-
     "portfolio": "पोर्टफ़ोलियो"
-
   },
-
   "header": {
-
     "greeting": "नमस्ते, {name}"
-
   },
-
   "onboarding": {
-
     "skip": "छोड़ें",
-
     "continue": "आगे",
-
     "getStarted": "शुरू करें",
-
     "slideProgress": "{current} / {total}",
-
     "slideAria": "स्लाइड {n}",
-
     "own": {
-
       "headline": "वास्तविक संपत्ति के मालिक बनें",
-
       "subtitle": "लगभग $80 से शुरू करें"
-
     },
-
     "yield": {
-
       "headline": "हर महीने किराए का अपना हिस्सा पाएँ",
-
       "subtitle": "कमाई में अपना मासिक हिस्सा देखें"
-
     },
-
     "sell": {
-
       "headline": "जब चाहें बेचें",
-
       "subtitle": "बाहर निकलने के लिए तैयार हों तो FractionalLuxe बाज़ार पर हिस्से सूचीबद्ध करें।"
-
     }
-
   },
-
   "home": {
-
     "loadError": "होम लोड नहीं हो सका।",
-
     "portfolioValue": "पोर्टफ़ोलियो मूल्य",
-
     "totalInvested": "कुल निवेश",
-
     "totalEarningsReceived": "कुल प्राप्त कमाई",
-
     "nextPayout": "अगला भुगतान",
-
     "myProperties": "मेरी संपत्तियाँ",
-
     "myPropertiesCount": "मेरी संपत्तियाँ ({count})",
-
     "monthlyPerShare": "मासिक / हिस्सा",
-
     "pendingThisWeek": "इस सप्ताह {amount} लंबित",
-
     "earnedWord": "अर्जित",
-
     "viewAllCount": "पोर्टफोलियो में +{count} और",
-
     "featuredOpportunity": "विशेष अवसर",
-
     "featuredTag": "चयनित",
-
     "moreOpportunities": "अधिक अवसर",
-
     "emptyTitle": "आपकी संपत्ति यात्रा यहाँ से शुरू होती है",
-
     "emptyHint": "मासिक किराया आय का एक शांत मार्ग।",
-
     "emptyStepBuy": "शेयर खरीदें",
-
     "emptyStepLock": "रिटर्न के लिए लॉक करें",
-
     "emptyStepEarn": "हर महीने कमाएँ",
-
     "emptyCta": "अवसर देखें",
-
     "trustFooter": "किराया आय मासिक रूप से संचित होती है। कभी भी निकालें (1% शुल्क, 4 साप्ताहिक किश्तें)। ऑन-चेन होने तक सिम्युलेटेड।"
-
   },
-
   "marketplace": {
-
     "searchPlaceholder": "संपत्ति खोजें",
-
     "searchAria": "संपत्ति खोजें",
-
     "clearSearch": "खोज साफ़ करें",
-
     "filtersAria": "बाज़ार फ़िल्टर",
-
     "loadError": "संपत्तियाँ लोड नहीं हो सकीं।",
-
     "emptyTitle": "अभी कोई संपत्ति नहीं",
-
     "emptyMessage": "हर सप्ताह नई आंशिक लिस्टिंग — जल्द फिर देखें।",
-
     "noMatchesTitle": "कोई मेल नहीं",
-
     "noMatchesMessage": "दूसरी खोज या फ़िल्टर आज़माएँ।",
-
     "chips": {
-
       "all": "सभी",
-
       "primary": "प्राथमिक",
-
       "secondary": "द्वितीयक",
-
       "highest_yield": "उच्चतम प्रतिफल",
-
       "new": "नया",
-
       "almost_sold": "लगभग बिका",
-
       "low_price": "कम कीमत"
-
     },
-
     "pricePerShare": "कीमत / हिस्सा",
-
     "monthlyPerShare": "मासिक / हिस्सा",
-
-    "minPurchase": "न्यूनतम खरीद",
-
+    "nightFrom": "रात / से",
     "sharesSold": "{sold} में से {total} हिस्से बिके",
-
     "feesTitle": "कमीशन",
-
     "feesPerTx": "स्तर प्रत्येक लेनदेन राशि से तय होता है — कोई सीमा नहीं।",
-
     "feesRange": "राशि",
-
     "feesBuyPrimary": "खरीद · प्राइमरी",
-
     "feesBuyMarket": "खरीद · बाज़ार",
-
     "feesSellMarket": "बिक्री · बाज़ार",
-
     "feesInstantSell": "तुरंत बिक्री (प्राइमरी)",
-
     "feesInstantNote": "प्राइमरी चरण में निश्चित शुल्क; सेकेंडरी में मार्केट स्तर लागू।",
-
     "feesNoCap": "खरीद या बिक्री राशि पर कोई सीमा नहीं।",
-
     "lastPrice": "अंतिम मूल्य"
-
   },
-
   "property": {
-
     "buyShare": "हिस्सा खरीदें",
-
     "about": "परिचय",
-
     "metrics": "मेट्रिक्स",
-
     "trust": "विश्वास और पारदर्शिता",
-
     "rentalHistory": "किराया इतिहास",
-
     "incomeCalculator": "आय कैलकुलेटर",
-
     "salesProgress": "बिक्री प्रगति",
-
-    "gallery": "गैलरी"
-
+    "gallery": "गैलरी",
+    "tabOverview": "अवलोकन",
+    "tabPerformance": "प्रदर्शन",
+    "tabHolders": "धारक",
+    "tabIncome": "आय",
+    "tabDetails": "विवरण",
+    "marketBadge": "सेकेंडरी बाज़ार",
+    "offerPrice": "ऑफ़र मूल्य",
+    "sharesSoldOf": "बिक्री / कुल",
+    "holdersComingSoon": "धारक विश्लेषण अगले अपडेट में आएगा।",
+    "incomeComingSoon": "आय विश्लेषण अगले अपडेट में आएगा।",
+    "fundedCaption": "{pct}% फंडेड · {remaining} हिस्से शेष",
+    "sharesRemaining": "शेष हिस्से",
+    "totalTarget": "कुल लक्ष्य",
+    "primaryFixedPrice": "{title} एक प्राथमिक ऑफ़र है — प्रति हिस्सा {price} का निश्चित मूल्य। अभी कोई बाज़ार मूल्य इतिहास नहीं है।",
+    "primaryFundingNote": "फंडिंग प्रगति विश्लेषण अगले अपडेट में आएगा।",
+    "fundamentals": "संपत्ति के आधार",
+    "propertyValue": "संपत्ति मूल्य",
+    "annualRent": "वार्षिक किराया",
+    "grossYield": "सकल उपज",
+    "tabsLabel": "संपत्ति अनुभाग",
+    "marketSummary": "बाज़ार सारांश",
+    "currentPrice": "वर्तमान मूल्य",
+    "bestBid": "सर्वश्रेष्ठ बोली",
+    "bestAsk": "सर्वश्रेष्ठ पूछ",
+    "spread": "स्प्रेड",
+    "vsOffer": "ऑफ़र बनाम",
+    "positionTitle": "आपकी स्थिति",
+    "positionTotal": "कुल हिस्से",
+    "positionLocked": "लॉक",
+    "positionFree": "मुक्त",
+    "positionAccrued": "संचित अवैतनिक",
+    "positionValue": "अनुमानित मूल्य",
+    "positionLock": "लॉक",
+    "positionSell": "बेचें",
+    "fundingProgressTitle": "समय के साथ फंडिंग प्रगति",
+    "cumulativeSharesTitle": "संचयी बेची गई शेयर",
+    "yieldProjectionTitle": "उपज अनुमान",
+    "yieldProjectionNote": "वर्तमान किराए और उपज पर आधारित अनुमान — भविष्य के रिटर्न का वादा नहीं।",
+    "pricePerformance": "मूल्य प्रदर्शन",
+    "yieldPerformance": "उपज प्रदर्शन",
+    "simulatedHistoryNote": "उदाहरण के लिए अनुकरित इतिहास — भविष्य के रिटर्न का वादा नहीं।",
+    "holderDonutTitle": "शेयरधारकों का वितरण",
+    "totalHolders": "कुल धारक",
+    "holder.others": "अन्य",
+    "holderPrivacyNote": "धारक गुमनाम श्रेणियों के रूप में — कोई व्यक्तिगत डेटा नहीं।",
+    "holderStatsTitle": "धारक सांख्यिकी",
+    "statTotalHolders": "कुल धारक",
+    "statAvgHolding": "औसत धारण",
+    "statMedianHolding": "मध्यिका धारण",
+    "statTop5Ownership": "शीर्ष 5 स्वामित्व",
+    "statNewHolders30d": "नए धारक 30द",
+    "statLargestHolder": "सबसे बड़ा धारक",
+    "sharesWord": "शेयर",
+    "shareWord": "शेयर",
+    "donutTapHint": "विवरण के लिए किसी खंड को टैप करें",
+    "topHoldersTitle": "शीर्ष शेयरधारक",
+    "treemapTitle": "स्वामित्व ट्रीमैप",
+    "treemapTapHint": "विवरण के लिए किसी ब्लॉक को टैप करें",
+    "distributionOverTimeTitle": "समय के साथ शेयर वितरण",
+    "distributionTapHint": "उस तारीख के विवरण के लिए चार्ट टैप करें",
+    "bubbleChartTitle": "बुलबुला चार्ट",
+    "bubbleTapHint": "विवरण के लिए किसी बुलबुले को टैप करें",
+    "holder.A": "धारक A",
+    "holder.B": "धारक B",
+    "holder.C": "धारक C",
+    "holder.D": "धारक D",
+    "holder.E": "धारक E",
+    "holder.F": "धारक F",
+    "fundedCaptionShort": "{pct}% फंडेड",
+    "incomeHistoryTitle": "आय इतिहास",
+    "cumulativeYieldPerShare": "प्रति शेयर संचयी उपज",
+    "incomeMonthsWord": "महीनों का इतिहास",
+    "perShareWord": "प्रति शेयर",
+    "poolWord": "कुल",
+    "incomeTapHint": "उस महीने के भुगतान का विवरण देखने के लिए एक बार टैप करें।",
+    "payoutHistoryTitle": "भुगतान इतिहास",
+    "payoutHistoryNote": "सिम्युलेटेड आय इतिहास · MVP के बाद on-chain सत्यापन योग्य।",
+    "incomeRatiosTitle": "रियल-एस्टेट मेट्रिक्स",
+    "annualYieldRate": "वार्षिक उपज दर",
+    "incomeRatiosNote": "संपत्ति के किराए और मूल्य से प्राप्त। नेट यील्ड, कैप रेट, NOI और एक्सपेंस रेशियो नहीं दिखाए जाते — डेटासेट में वे फ़ील्ड नहीं हैं।",
+    "incomeProjectionsTitle": "अनुमानित आय",
+    "incomeProjectionsNote": "ओवरव्यू टैब पर आय कैलकुलेटर का उपयोग करें — यह आपके चुने गए शेयरों से आय का अनुमान देता है; ये अनुमान हैं, वादे नहीं।",
+    "marketTitle": "बाज़ार",
+    "orderBook": "ऑर्डर बुक",
+    "bids": "बिड्स",
+    "asks": "आस्क्स",
+    "best": "सर्वोत्तम",
+    "lastTrade": "अंतिम",
+    "recentTrades": "हाल के ट्रेड",
+    "tradesLoadError": "हाल के ट्रेड लोड नहीं हो सके।",
+    "tradesEmpty": "अभी कोई ट्रेड नहीं — प्राथमिक ऑफर बिकने पर बाज़ार खुलेगा।",
+    "galleryPages": "गैलरी पेज",
+    "showImage": "छवि {n} दिखाएँ",
+    "expectedAnnualYield": "अपेक्षित वार्षिक उपज",
+    "basedOnLease": "वर्तमान लीज़ पर आधारित · {count} {unit} समय पर भुगतान",
+    "monthWord": "महीना",
+    "monthsWord": "महीने",
+    "buySharesAt": "शेयर खरीदें · {price}",
+    "buyAt": "{price} पर खरीदें",
+    "offeringSoldOut": "प्राथमिक ऑफर बिक चुका",
+    "stickyBuyShares": "शेयर खरीदें · {price}",
+    "stickyBuy": "खरीदें · {price}",
+    "sell": "बेचें",
+    "pricePerShareMetric": "प्रति शेयर कीमत",
+    "monthlyYieldPerShare": "मासिक उपज / शेयर",
+    "totalPropertyValue": "कुल संपत्ति मूल्य",
+    "moreDetails": "और विवरण",
+    "sizeLabel": "आकार",
+    "yearBuilt": "निर्माण वर्ष",
+    "typeLabel": "प्रकार",
+    "rentalStatusLabel": "किराया स्थिति",
+    "leaseUntil": "लीज़ तक",
+    "trustTitle": "विश्वास से क्यों निवेश करें",
+    "trustSimulatedNote": "भुगतान इतिहास सिम्युलेटेड डेमो रिकॉर्ड दिखाता है।",
+    "similarProperties": "समान संपत्तियाँ",
+    "documents": "दस्तावेज़",
+    "documentsEmpty": "अभी कोई दस्तावेज़ नहीं",
+    "downloadDoc": "{title} डाउनलोड करें",
+    "docKindOffering": "ऑफरिंग",
+    "docKindFinancial": "वित्तीय",
+    "docKindLegal": "कानूनी",
+    "docKindOther": "अन्य",
+    "documentsError": "दस्तावेज़ लोड नहीं हो सके।",
+    "simulatedPriceNote": "उदाहरण के लिए सिम्युलेटेड मूल्य इतिहास — भविष्य के रिटर्न का वादा नहीं।",
+    "bannerLockCta": "कमाई शुरू करने के लिए शेयर लॉक करें",
+    "youOwn": "आपके पास {count} {unit} हैं · {locked} लॉक",
+    "earningNow": "कमा रहा है",
+    "notEarningYet": "अभी कमाई नहीं",
+    "bannerLockNote": "शेयर केवल लॉक होने पर उपज देते हैं। लॉक करना मुफ्त है — मन बदलने पर अनलॉक में 2–3 दिन लगते हैं।",
+    "yieldSection": "उपज",
+    "monthlyYield": "मासिक उपज",
+    "onLockedSharesNote": "लॉक शेयर पर · साप्ताहिक विकल्प दर − 1% का भुगतान करता है",
+    "yourShares": "आपके शेयर",
+    "freeToLock": "लॉक के लिए उपलब्ध",
+    "buyFirstNote": "पहले शेयर खरीदें, फिर उन्हें लॉक करें और पहले दिन से कमाई शुरू करें।",
+    "allLocked": "सब लॉक हैं",
+    "lockCta": "लॉक",
+    "requestUnlock": "अनलॉक का अनुरोध करें",
+    "requesting": "अनुरोध जारी…",
+    "unlockPendingNote": "अनलॉक अनुरोध पर उपज रुक गई। शेयर 2–3 दिन में बिकने योग्य हो जाएंगे।",
+    "nShares": "{count} शेयर",
+    "accruingWeekly": "संचय · साप्ताहिक",
+    "accruingMonthly": "संचय · मासिक",
+    "unlocksOn": "{date} को अनलॉक",
+    "unlockingInDays": "2–3 दिन",
+    "perWeek": "प्रति सप्ताह",
+    "perMonth": "प्रति माह",
+    "unlockConfirmTitle": "शेयर अनलॉक करें",
+    "unlockConfirmBody": "अनलॉक करने से इन शेयरों की उपज अभी रुक जाएगी। ये 2–3 दिन में बिकने योग्य होंगे।",
+    "unlockConfirmCta": "अनलॉक की पुष्टि करें",
+    "unlockPendingLabel": "अनलॉक हो रहा है…",
+    "unlockSuccessTitle": "अनलॉक का अनुरोध किया",
+    "unlockSuccessBody": "उपज रुक गई। शेयर 2–3 दिन में बिकने योग्य होंगे।",
+    "propertyLabel": "संपत्ति",
+    "sharesLabel": "शेयर",
+    "payoutPeriodLabel": "भुगतान अवधि",
+    "weeklyLabel": "साप्ताहिक",
+    "monthlyLabel": "मासिक",
+    "accruedUnpaidLabel": "संचित अवैतनिक",
+    "lockSheetTitle": "शेयर लॉक करें",
+    "lockSheetIntro": "लॉक शेयर पहले दिन से उपज देने लगते हैं। भुगतान की आवृत्ति चुनें।",
+    "payoutPeriodMonthly": "मासिक",
+    "payoutPeriodWeekly": "साप्ताहिक",
+    "payoutPeriodMonthlyHint": "पूरी दर, 1 भुगतान / माह",
+    "payoutPeriodWeeklyHint": "दर − 1%, 4 भुगतान / माह",
+    "payoutPeriodAria": "भुगतान {period}",
+    "monthlyRate": "मासिक दर",
+    "maxCta": "अधिकतम",
+    "quantityInvalid": "मात्रा 1 और {max} के बीच होनी चाहिए।",
+    "lockedPrincipal": "लॉक मूलधन",
+    "monthlyPayout": "मासिक भुगतान",
+    "weeklyPayout": "साप्ताहिक भुगतान",
+    "perMonthWord": "/ माह",
+    "perWeekWord": "/ सप्ताह",
+    "timesFourMonth": "× 4 / माह",
+    "lockConfirmCta": "{count} {unit} लॉक करें और कमाएँ",
+    "lockingPending": "लॉक हो रहा है…",
+    "lockWarningNote": "लॉक शेयर नहीं बेचे जा सकते। अनलॉक में 2–3 दिन लगते हैं और उपज रुक जाती है।",
+    "lockedSuccessTitle": "शेयर लॉक हो गए",
+    "earningFromDay1": "{count} {unit} पहले दिन से कमा रहे हैं",
+    "sellSheetTitle": "शेयर बेचें",
+    "confirmInstantSale": "तुरंत बिक्री की पुष्टि करें",
+    "sellModeAria": "बिक्री मोड",
+    "sellModeAriaOf": "{mode} बेचें",
+    "instantMode": "तुरंत",
+    "customPriceMode": "कस्टम कीमत",
+    "instantSellReview": "बिक्री की समीक्षा · {amount}",
+    "instantSellReviewBody": "प्लेटफ़ॉर्म इन शेयरों को सूची मूल्य − 7% पर खरीदता है। इसे पूर्ववत नहीं किया जा सकता।",
+    "feeLabel": "शुल्क (7%)",
+    "youReceive": "आपको मिलेगा",
+    "confirmSell": "बिक्री की पुष्टि करें",
+    "sellingPending": "बिक रहा है…",
+    "placingPending": "दर्ज हो रहा है…",
+    "lockedInOrders": "लॉक / ऑर्डर में",
+    "notSellable": "बिकने योग्य नहीं",
+    "onTrade": "ट्रेड पर",
+    "instantSellEnded": "तुरंत बिक्री समाप्त — प्राथमिक ऑफर बिक चुका। कस्टम कीमत का उपयोग करें।",
+    "queueSellOrder": "सेल ऑर्डर कतार में डालें",
+    "placeSellOrder": "सेल ऑर्डर दर्ज करें",
+    "queuedUntilSellout": "प्राथमिक ऑफर बिकने तक कतार में — फिर आपका ऑर्डर अपने आप बाज़ार में चालू हो जाएगा।",
+    "platformBuybackNote": "प्लेटफ़ॉर्म सूची मूल्य − 7% पर खरीदता है। आपके निवेश बैलेंस में जोड़ा जाएगा।",
+    "sellSuccessTitle": "शेयर बिक गए",
+    "creditedNote": "आपके निवेश बैलेंस में जोड़ा जाएगा।",
+    "backCta": "वापस",
+    "sellOrderPlacedToast": "सेल ऑर्डर दर्ज हो गया",
+    "sellOrderPlacedBody": "पोर्टफोलियो → खुले ऑर्डर में देखें",
+    "buyOnMarket": "बाज़ार से खरीदें",
+    "lastPrice": "अंतिम कीमत",
+    "marketFeeLabel": "मार्केट शुल्क",
+    "heldInEscrow": "एस्क्रो में रखा",
+    "escrowNote": "ऑर्डर पूरा होने तक — या आपके रद्द करने तक — राशि आपके निवेश बैलेंस से रोकी जाती है।",
+    "buyOrderPlacedToast": "बाय ऑर्डर दर्ज हो गया",
+    "buyOrderPlacedBody": "ऑर्डर पूरा होने तक राशि एस्क्रो में",
+    "placeBuyOrder": "बाय ऑर्डर दर्ज करें",
+    "freeSharesLabel": "मुफ्त शेयर",
+    "orderValue": "ऑर्डर मूल्य",
+    "valueRow": "मूल्य",
+    "doneCta": "पूर्ण",
+    "decreaseQty": "मात्रा घटाएँ",
+    "increaseQty": "मात्रा बढ़ाएँ",
+    "pricePerShareLabel": "प्रति शेयर मूल्य",
+    "reviewSaleCta": "बिक्री की समीक्षा · {amount}",
+    "calcTitle": "मैं कितना कमा सकता हूँ?",
+    "calcYouOwn": "आपके पास {count} हैं",
+    "calcLockedSuffix": " · {count} लॉक",
+    "calcSharesLabel": "शेयर",
+    "calcDecreaseShares": "शेयर घटाएँ",
+    "calcIncreaseShares": "शेयर बढ़ाएँ",
+    "calcSharesInput": "शेयरों की संख्या",
+    "calcSharesSlider": "शेयर स्लाइडर",
+    "calcProjected": "अनुमानित कमाई",
+    "perYearWord": "/ वर्ष",
+    "calcFeesNote": "प्लेटफ़ॉर्म शुल्क के बाद · लॉक शेयर पहले दिन से कमाते हैं",
+    "calcBuyCta": "{count} {unit} खरें – {cost}",
+    "scenarioConservative": "रूढ़िवादी",
+    "scenarioBase": "आधार",
+    "scenarioOptimistic": "आशावादी",
+    "walletLabel": "वॉलेट",
+    "availableShares": "उपलब्ध शेयर",
+    "totalLabel": "कुल",
+    "estWeeklyYield": "अनुमानित साप्ताहिक उपज",
+    "paymentCurrency": "भुगतान मुद्रा",
+    "performanceTitle": "प्रदर्शन",
+    "connectWalletTitle": "वॉलेट कनेक्ट करें",
+    "connectWalletBody": "शेयर खरीदने और किराया उपज कमाने के लिए TON वॉलेट कनेक्ट करें।",
+    "fullyFundedTitle": "पूर्ण वित्तपोषित",
+    "fullyFundedBody": "सभी प्राथमिक शेयर बिक चुके हैं। रीसेल आगे आएगा।",
+    "buySheetTitle": "शेयर खरीदें",
+    "payWithAria": "{currency} से भुगतान करें",
+    "usdtUnavailableNote": "USDT अभी उपलब्ध नहीं है — आप TON से भुगतान करेंगे।",
+    "paidInNote": "आपके कनेक्टेड वॉलेट से {currency} में भुगतान।",
+    "freeShares": "मुफ्त शेयर",
+    "valueLabel": "मूल्य",
+    "bannerFunding": "वित्तपोषण के लिए खुला · {progress} · {count} {unit} शेष",
+    "bannerLiveTrading": "{status} · लाइव ट्रेडिंग",
+    "resaleWord": "रीसेल",
+    "fullyFundedWord": "पूर्ण वित्तपोषित",
+    "chartTrendSummary": "रुझान: {start} से {end} तक {direction}।",
+    "trendUp": "ऊपर",
+    "trendDown": "नीचे",
+    "performanceSectionTitle": "प्रदर्शन",
+    "priceMode": "मूल्य",
+    "yieldMode": "उपज"
   },
-
   "earnings": {
-
     "loadError": "कमाई लोड नहीं हो सकी।",
-
     "emptyTitle": "अभी कमाई नहीं",
-
     "emptyMessage": "पहला हिस्सा खरीदें और अगले महीने कमाना शुरू करें।",
-
     "thisWeek": "इस सप्ताह की कमाई",
-
     "nextPayoutIn": "अगला भुगतान",
-
     "totalReceived": "कुल प्राप्त कमाई",
-
     "consecutivePaid": "लगातार भुगतान सप्ताह",
-
     "streak": "लगातार {count} {unit} ✓",
-
     "noStreak": "अभी कोई स्ट्रीक नहीं",
-
     "timeline": "इतिहास",
-
     "disclaimer": "सिमुलेटेड मासिक भुगतान · MVP के बाद ऑन-चेन सत्यापन योग्य",
-
     "withdrawalTerms": "कभी भी निकालें — 1% शुल्क, 4 साप्ताहिक किश्तों में भुगतान",
-
     "yieldTitle": "कमाई की शक्ति",
-
     "totalEarned": "कुल अर्जित",
-
     "chartTitle": "पिछले 12 सप्ताह",
-
     "chartCaption": "साप्ताहिक किराया भुगतान · ऑन-चेन होने तक सिम्युलेटेड।",
-
     "timelineTitle": "आपकी आय प्रवाह",
-
     "timelinePaid": "भुगतान किया",
-
     "timelineAccruing": "अर्जित हो रहा",
-
     "timelineAccruingSub": "वर्तमान माह",
-
     "timelineNext": "अगला अनुमान",
-
     "timelineCaption": "मासिक संचय; भुगतान हर रविवार मिलान होते हैं।",
-
     "withdraw": "अपने वॉलेट में निकालें",
-
     "withdrawSubtitle": "1% शुल्क · 4 साप्ताहिक किश्तें",
-
     "yieldAccrued": "अर्जित अवैतनिक",
-
     "yieldMonthly": "मासिक",
-
     "yieldNoLocks": "कोई सक्रिय लॉक नहीं — कमाई शुरू करने के लिए प्रॉपर्टी पेज पर शेयर लॉक करें।",
-
     "yieldPayments": "यील्ड भुगतान",
-
     "yieldFinal": "अंतिम भुगतान"
-
   },
-
   "portfolio": {
-
     "loadError": "पोर्टफ़ोलियो लोड नहीं हो सका।",
-
     "emptyTitle": "आपका पोर्टफ़ोलियो खाली है",
-
     "emptyMessage": "लगभग $80 से शुरू करें — बाज़ार पर पहला हिस्सा खरीदें।",
-
     "totalValue": "कुल पोर्टफ़ोलियो मूल्य",
-
     "totalInvested": "कुल निवेश",
-
     "totalEarningsReceived": "कुल प्राप्त कमाई",
-
     "unrealizedProfit": "अवास्तविक लाभ",
-
     "nextPayout": "अगला भुगतान",
-
     "myPropertiesCount": "मेरी संपत्तियाँ ({count})",
-
     "openOrders": "खुले ऑर्डर",
-
     "allocation": "आवंटन",
-
     "lockedShares": "लॉक्ड शेयर",
-
     "freeShares": "फ्री शेयर",
-
     "investedWord": "निवेशित",
-
     "earnedWord": "अर्जित",
-
     "unrealizedWord": "अप्राप्त",
-
     "orderOpen": "खुला",
-
     "allocationProperties": "{count} संपत्तियाँ",
-
     "showDetails": "विवरण दिखाएँ",
-
     "hideDetails": "विवरण छिपाएँ",
-
     "lockedCaption": "मासिक उपज कमा रहा",
-
     "freeCaption": "अभी नहीं कमा रहा",
-
     "idleShares": "{count} शेयर कमा नहीं रहे",
-
     "lockThem": "उन्हें लॉक करें",
-
     "earningPill": "{count} कमा रहे",
-
     "idlePill": "{count} निष्क्रिय",
-
     "estMonthly": "≈ {amount} / माह",
-
     "projectedMonthlyShort": "अनुमानित मासिक किराया",
-
     "exportCsv": "CSV निर्यात करें",
-
     "exporting": "निर्यात हो रहा…",
-
     "sharesOwned": "स्वामित्व वाले शेयर",
-
     "avgCostPerShare": "औसत लागत / शेयर",
-
     "currentValueRow": "वर्तमान मूल्य",
-
     "unrealizedPnl": "अप्राप्त लाभ/हानि",
-
     "projectedMonthlyYield": "अनुमानित मासिक उपज",
-
     "buyMore": "और खरीदें",
-
     "sellComingSoon": "बिक्री जल्द",
-
     "nftCollectible": "संग्रहणीय NFT",
-
     "nftItem": "NFT आइटम",
-
     "collection": "संग्रह",
-
     "viewOnExplorer": "एक्सप्लोरर में देखें",
-
     "nftDisclaimer": "यह NFT संग्रहणीय रसीद है — डेटाबेस ही स्वामित्व का रिकॉर्ड बना रहता है।",
-
     "nftStatusPending": "लंबित",
-
     "nftStatusMinting": "मिंट हो रहा",
-
     "nftStatusMinted": "मिंट हो गया",
-
     "nftStatusTransferring": "स्थानांतरित हो रहा",
-
     "nftStatusDelivered": "वितरित",
-
     "nftStatusFailed": "विफल",
-
     "orderQueued": "कतार में"
-
   },
-
   "settings": {
-
     "title": "सेटिंग्स",
-
     "wallet": "वॉलेट",
-
     "connectTitle": "TON वॉलेट जोड़ें",
-
     "connectHint": "हिस्से खरीदने और मासिक किराया आय पाने के लिए आवश्यक।",
-
     "disconnect": "वॉलेट डिस्कनेक्ट करें",
-
     "withdrawals": "निकासी",
-
     "withdrawalTitle": "USDT निकासी पता",
-
     "withdrawalHint": "जहाँ आपकी निकासी योग्य शेष राशि का भुगतान किया जाता है",
-
     "withdrawalPlaceholder": "EQ… USDT-TON पता",
-
     "withdrawalEmpty": "कोई पता सेट नहीं",
-
     "withdrawalVerified": "सत्यापित",
-
     "withdrawalUnverified": "सत्यापित नहीं",
-
     "withdrawalInvalid": "मान्य TON पता दर्ज करें",
-
     "withdrawalSave": "सहेजें",
-
     "withdrawalCancel": "रद्द करें",
-
     "withdrawalRequests": "निकासी अनुरोध",
-
     "withdrawalRequestsEmpty": "अभी तक कोई निकासी अनुरोध नहीं",
-
     "withdrawalStatusPaid": "भुगतान किया गया",
-
     "withdrawalStatusRequested": "अनुरोधित",
-
     "withdrawalStatusApproved": "स्वीकृत",
-
     "withdrawalStatusRejected": "अस्वीकृत",
-
     "withdrawalInstallmentProgress": "{paid} में से {total} किस्तें भुगतान हुईं",
-
     "withdrawalRequest": "निकासी का अनुरोध करें",
     "withdrawalsError": "निकासी अनुरोध लोड नहीं हो सके",
-
     "referrals": "रेफ़रल",
-
     "inviteFriends": "मित्रों को आमंत्रित करें",
-
     "copied": "कॉपी हो गया!",
-
     "signInToInvite": "आमंत्रित करने के लिए साइन इन करें",
-
-
     "preferences": "प्राथमिकताएँ",
-
     "displayCurrency": "प्रदर्शन मुद्रा",
-
     "displayCurrencyHint": "आंकड़े USD में रहते हैं; खरीद पर TON अनुमान",
-
     "language": "भाषा",
-
     "languageHint": "ऐप भाषा",
-
     "languageAuto": "ऑटो (Telegram)",
-
     "chooseLanguage": "भाषा चुनें",
-
     "useTelegramTheme": "Dark / Light",
-
     "useTelegramThemeHint": "Telegram रंगों से मिलाएँ",
-
     "showDemoBadge": "डेमो बैज दिखाएँ",
-
     "showDemoBadgeHint": "ईमानदार MVP लेबल",
-
     "help": "मदद",
-
     "howItWorks": "FractionalLuxe कैसे काम करता है",
     "transactionHistory": "लेन-देन इतिहास",
-
-
     "aboutLegal": "परिचय / कानूनी",
-
     "aboutBody": "FractionalLuxe TON पर आंशिक रियल-एस्टेट हिस्सों के लिए एक Telegram मिनी ऐप है। मासिक किराया आय आपके स्वामित्व के अनुपात में जुड़ता है।",
-
     "aboutAdvice": "यहाँ कुछ भी वित्तीय सलाह नहीं है। संपत्ति दस्तावेज़ और टोकनाइज़ेशन प्रोडक्शन कॉन्ट्रैक्ट तक प्रदर्शन के लिए हैं।",
-
     "aboutCopyright": "© FractionalLuxe · MVP",
-
     "demoTxDisclaimer": "यह एक डेमो है – लेन-देन सिमुलेटेड हैं",
-
     "payoutDisclaimer": "सिमुलेटेड मासिक भुगतान · MVP के बाद ऑन-चेन सत्यापन योग्य",
-
     "account": "खाता",
-
     "recoverySignIn": "रिकवरी कोड से साइन इन करें",
-
     "signOut": "साइन आउट करें",
-
     "signOutConfirmTitle": "क्या आप साइन आउट करेंगे?",
-
     "signOutConfirmBody": "क्या आप साइन आउट करना चाहते हैं?"
-
   },
-
   "profile": {
-
     "title": "अपनी प्रोफ़ाइल पूरी करें",
-
     "subtitle": "आपके खाते की पहचान के लिए कुछ विवरण।",
-
     "settingsSection": "प्रोफ़ाइल",
-
     "displayName": "प्रदर्शित नाम",
-
     "displayNamePlaceholder": "आपका नाम",
-
     "phone": "फ़ोन",
-
     "phonePlaceholder": "+91 98XXX XXXXX",
-
     "phoneHint": "वैकल्पिक। केवल खाता सहायता के लिए।",
-
     "phoneEmpty": "कोई फ़ोन दर्ज नहीं",
-
     "useTelegramPhone": "Telegram नंबर उपयोग करें",
-
     "requestingPhone": "अनुरोध हो रहा है…",
-
     "recoveryTitle": "रिकवरी कोड",
-
     "recoveryWarn": "इस कोड को सुरक्षित जगह सहेजें। Telegram उपलब्ध न हो तो साइन इन के लिए चाहिए। हम इसे आपके लिए पुनर्प्राप्त नहीं कर सकते।",
-
     "recoverySettingsHint": "इस कोड को निजी रखें। जिसके पास यह हो वह आपके FractionalLuxe खाते तक पहुँच सकता है।",
-
     "copyCode": "रिकवरी कोड कॉपी करें",
-
     "showCode": "रिकवरी कोड दिखाएँ",
-
     "hideCode": "रिकवरी कोड छिपाएँ",
-
     "savedConfirm": "मैंने अपना रिकवरी कोड सुरक्षित जगह सहेजा है",
-
     "saveContinue": "सहेजें और जारी रखें",
-
     "saving": "सहेजा जा रहा है…",
-
     "save": "सहेजें",
-
     "cancel": "रद्द करें",
-
     "errors": {
-
       "name": "नाम दर्ज करें (कम से कम 2 अक्षर)",
-
       "phone": "मान्य फ़ोन नंबर दर्ज करें",
-
       "saveCode": "पुष्टि करें कि आपने रिकवरी कोड सहेजा है",
-
       "save": "प्रोफ़ाइल सहेजी नहीं जा सकी"
-
     }
-
   },
-
   "recovery": {
-
     "title": "रिकवरी कोड से साइन इन",
-
     "subtitle": "प्रोफ़ाइल सेटअप पर सहेजा गया कोड उपयोग करें।",
-
     "codeLabel": "रिकवरी कोड",
-
     "signIn": "साइन इन",
-
     "signingIn": "साइन इन हो रहा है…",
-
     "backHome": "होम पर वापस"
-
   }
-
 }
-

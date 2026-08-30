@@ -58,7 +58,7 @@ describe("PropertyCard — Fable list layout", () => {
     expect(screen.getByText("Dubai Marina, UAE")).toBeInTheDocument();
     expect(screen.getByText("Price / share")).toBeInTheDocument();
     expect(screen.getByText("Monthly / share")).toBeInTheDocument();
-    expect(screen.getByText("Min. purchase")).toBeInTheDocument();
+    expect(screen.getByText("Night / From")).toBeInTheDocument();
     expect(screen.getByTestId("card-sold-label")).toHaveTextContent("920 of 1000 shares sold");
   });
 

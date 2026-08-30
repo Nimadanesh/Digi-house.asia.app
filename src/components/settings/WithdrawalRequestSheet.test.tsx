@@ -37,6 +37,7 @@ function setUser(withdrawalAddress: string | null) {
 describe("WithdrawalRequestSheet — PE-08", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mutate.mockImplementation(() => {});
     setUser("EQHq2VsN7yKwTp8rUy4mL0kHbZ6sAeF4oVgB8uTr9pXkMdH5");
   });
 
@@ -47,19 +48,45 @@ describe("WithdrawalRequestSheet — PE-08", () => {
     expect(screen.getByText("Payout address")).toBeInTheDocument();
   });
 
-  it("Max fills the withdrawable amount and submit sends cents", () => {
+  it("Max fills the amount; review itemizes the 1% fee and net before any mutation", () => {
     render(<WithdrawalRequestSheet open onClose={() => {}} />);
     fireEvent.click(screen.getByTestId("withdrawal-request-max"));
     // $500 → 50_000 cents
     expect(screen.getByTestId("withdrawal-request-amount")).toHaveValue(500);
+
+    // Form submit only advances to the review step — no mutation yet.
     fireEvent.click(screen.getByTestId("withdrawal-request-submit"));
+    expect(mutate).not.toHaveBeenCalled();
+    expect(screen.getByTestId("withdrawal-request-confirm")).toBeInTheDocument();
+    expect(screen.getByText("Fee (1%)")).toBeInTheDocument();
+    expect(screen.getByText("−$5.00")).toBeInTheDocument();
+    expect(screen.getByText("$495.00")).toBeInTheDocument();
+    expect(screen.getByText("4 weekly installments")).toBeInTheDocument();
+
+    // Confirming executes the same mutation contract as before.
+    fireEvent.click(screen.getByTestId("withdrawal-request-confirm"));
     expect(mutate).toHaveBeenCalledWith(
       { amountUsd: 50_000 },
       expect.any(Object),
     );
   });
 
-  it("blocks an amount above the withdrawable balance", () => {
+  it("success shows the completion state; Done closes the sheet", () => {
+    mutate.mockImplementation((_input: unknown, opts?: { onSuccess?: () => void }) => {
+      opts?.onSuccess?.();
+    });
+    const onClose = vi.fn();
+    render(<WithdrawalRequestSheet open onClose={onClose} />);
+    fireEvent.click(screen.getByTestId("withdrawal-request-max"));
+    fireEvent.click(screen.getByTestId("withdrawal-request-submit"));
+    fireEvent.click(screen.getByTestId("withdrawal-request-confirm"));
+    expect(screen.getByTestId("withdrawal-request-success")).toBeInTheDocument();
+    expect(screen.getByText("Withdrawal requested")).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId("withdrawal-request-done"));
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it("blocks an amount above the withdrawable balance before the review step", () => {
     render(<WithdrawalRequestSheet open onClose={() => {}} />);
     fireEvent.change(screen.getByTestId("withdrawal-request-amount"), {
       target: { value: "600" },
@@ -68,6 +95,7 @@ describe("WithdrawalRequestSheet — PE-08", () => {
       screen.getByText("Maximum withdrawable is $500.00."),
     ).toBeInTheDocument();
     fireEvent.click(screen.getByTestId("withdrawal-request-submit"));
+    expect(screen.queryByTestId("withdrawal-request-confirm")).not.toBeInTheDocument();
     expect(mutate).not.toHaveBeenCalled();
   });
 
@@ -78,5 +106,14 @@ describe("WithdrawalRequestSheet — PE-08", () => {
       screen.getByText("Set a USDT withdrawal address first."),
     ).toBeInTheDocument();
     expect(screen.getByTestId("withdrawal-request-submit")).toBeDisabled();
+  });
+
+  it("back from review keeps the entered amount and does not mutate", () => {
+    render(<WithdrawalRequestSheet open onClose={() => {}} />);
+    fireEvent.click(screen.getByTestId("withdrawal-request-max"));
+    fireEvent.click(screen.getByTestId("withdrawal-request-submit"));
+    fireEvent.click(screen.getByTestId("withdrawal-request-back"));
+    expect(screen.getByTestId("withdrawal-request-amount")).toHaveValue(500);
+    expect(mutate).not.toHaveBeenCalled();
   });
 });

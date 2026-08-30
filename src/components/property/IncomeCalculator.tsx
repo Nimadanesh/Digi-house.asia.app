@@ -4,6 +4,7 @@
 // in-card Buy CTA (REDESIGN-SPEC Phase 2).
 // Yield math stays in lib/property-yield (positionYieldUsd) — no formulas here.
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Minus, Plus } from "lucide-react";
 import { usd } from "@/lib/format";
 import type { Listing } from "@/types/property";
@@ -13,10 +14,10 @@ import { haptics } from "@/lib/telegram/haptics";
 
 type Scenario = "conservative" | "base" | "optimistic";
 
-const SCENARIOS: { id: Scenario; label: string }[] = [
-  { id: "conservative", label: "Conservative" },
-  { id: "base", label: "Base" },
-  { id: "optimistic", label: "Optimistic" },
+const SCENARIOS: { id: Scenario; labelKey: string }[] = [
+  { id: "conservative", labelKey: "scenarioConservative" },
+  { id: "base", labelKey: "scenarioBase" },
+  { id: "optimistic", labelKey: "scenarioOptimistic" },
 ];
 
 export function IncomeCalculator({
@@ -42,6 +43,7 @@ export function IncomeCalculator({
 }) {
   // REDESIGN-SPEC Phase 2: scenario coefficients don't exist yet — Base is the only
   // computed scenario; the other two reuse the same numbers until Phase 2b lands.
+  const t = useTranslations("property");
   const [scenario, setScenario] = useState<Scenario>("base");
   const [draft, setDraft] = useState<string | null>(null);
 
@@ -62,22 +64,22 @@ export function IncomeCalculator({
   return (
     <Block className="space-y-4 p-4" data-testid="income-calculator">
       <div className="flex items-center justify-between gap-2">
-        <h2 className="text-[0.9375rem] font-semibold text-foreground">How much can I earn?</h2>
+        <h2 className="text-[0.9375rem] font-semibold text-foreground">{t("calcTitle")}</h2>
         {ownedShares > 0 ? (
           <span className="rounded-full bg-success/12 px-2.5 py-0.5 text-xs font-medium text-success tnum" data-testid="owned-pill">
-            You own {ownedShares}
-            {lockedShares > 0 ? ` · ${lockedShares} locked` : ""}
+            {t("calcYouOwn", { count: ownedShares })}
+            {lockedShares > 0 ? t("calcLockedSuffix", { count: lockedShares }) : ""}
           </span>
         ) : null}
       </div>
 
       {/* Share amount: stepper + editable numeric input */}
       <div className="flex items-center justify-between gap-3">
-        <span className="text-sm text-muted-foreground">Shares</span>
+        <span className="text-sm text-muted-foreground">{t("calcSharesLabel")}</span>
         <div className="flex items-center gap-2">
           <button
             type="button"
-            aria-label="Decrease shares"
+            aria-label={t("calcDecreaseShares")}
             disabled={clamped <= min}
             onClick={() => setShares(Math.max(min, clamped - 1))}
             className="flex size-11 items-center justify-center rounded-[10px] bg-surface-2 transition-transform duration-[120ms] ease-out active:scale-[0.97] disabled:opacity-40"
@@ -87,7 +89,7 @@ export function IncomeCalculator({
           <input
             type="text"
             inputMode="numeric"
-            aria-label="Number of shares"
+            aria-label={t("calcSharesInput")}
             value={draft ?? String(clamped)}
             onChange={(e) => {
               const v = e.target.value.replace(/\D/g, "").slice(0, 6);
@@ -103,7 +105,7 @@ export function IncomeCalculator({
           />
           <button
             type="button"
-            aria-label="Increase shares"
+            aria-label={t("calcIncreaseShares")}
             disabled={clamped >= max}
             onClick={() => setShares(Math.min(max, clamped + 1))}
             className="flex size-11 items-center justify-center rounded-[10px] bg-surface-2 transition-transform duration-[120ms] ease-out active:scale-[0.97] disabled:opacity-40"
@@ -119,7 +121,7 @@ export function IncomeCalculator({
         min={min}
         max={max}
         value={clamped}
-        aria-label="Shares slider"
+        aria-label={t("calcSharesSlider")}
         onChange={(e) => setShares(Number(e.target.value))}
         className="h-2 w-full cursor-pointer appearance-none rounded-full bg-surface-2 accent-primary [&::-webkit-slider-thumb]:size-5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary"
         data-testid="income-slider"
@@ -141,25 +143,25 @@ export function IncomeCalculator({
             }`}
             data-testid={`scenario-${s.id}`}
           >
-            {s.label}
+            {t(s.labelKey)}
           </button>
         ))}
       </div>
 
       {/* Result card */}
       <div className="space-y-2 rounded-[12px] bg-surface-2 p-4" data-testid="calc-result">
-        <p className="text-xs uppercase tracking-wide text-muted-foreground">Projected earnings</p>
+        <p className="text-xs uppercase tracking-wide text-muted-foreground">{t("calcProjected")}</p>
         <div className="flex items-baseline gap-1.5">
           <span className="text-[1.75rem] font-bold leading-none tracking-tight text-success tnum" data-testid="calc-monthly">
             {usd(monthlyUsd)}
           </span>
-          <span className="text-sm text-muted-foreground">/ month</span>
+          <span className="text-sm text-muted-foreground">{t("perMonthWord")}</span>
         </div>
         <p className="text-sm text-muted-foreground tnum" data-testid="calc-yearly">
-          ≈ {usd(annualUsd)} / year
+          ≈ {usd(annualUsd)} {t("perYearWord")}
         </p>
         <p className="pt-1 text-xs leading-relaxed text-muted-foreground">
-          After platform fees · Locked shares start earning from day 1
+          {t("calcFeesNote")}
         </p>
         <button
           type="button"
@@ -171,8 +173,11 @@ export function IncomeCalculator({
           className="mt-1 flex h-11 w-full items-center justify-center rounded-[12px] bg-primary text-[0.9375rem] font-semibold text-primary-foreground transition-transform duration-[120ms] ease-out active:scale-[0.98] disabled:opacity-50"
           data-testid="calc-buy"
         >
-          Buy {clamped} {clamped === 1 ? "share" : "shares"} –{" "}
-          <span className="tnum">{usd(totalCostUsd)}</span>
+          {t("calcBuyCta", {
+            count: clamped,
+            unit: clamped === 1 ? t("shareWord") : t("sharesWord"),
+            cost: usd(totalCostUsd),
+          })}
         </button>
       </div>
     </Block>

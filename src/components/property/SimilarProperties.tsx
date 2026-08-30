@@ -4,6 +4,7 @@
 import { useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import type { Listing } from "@/types/property";
 import { useMarketplace } from "@/hooks/useMarketplace";
 import { usd, pct } from "@/lib/format";
@@ -32,6 +33,7 @@ export function pickSimilar(current: Listing, all: Listing[], count = 4): Listin
 }
 
 export function SimilarProperties({ listing }: { listing: Listing }) {
+  const t = useTranslations("property");
   const { data } = useMarketplace();
   const similar = useMemo(() => pickSimilar(listing, data ?? []), [listing, data]);
 
@@ -39,7 +41,7 @@ export function SimilarProperties({ listing }: { listing: Listing }) {
 
   return (
     <section className="space-y-2" data-testid="similar-properties">
-      <h2 className="px-0.5 text-[0.9375rem] font-semibold text-foreground">Similar properties</h2>
+      <h2 className="px-0.5 text-[0.9375rem] font-semibold text-foreground">{t("similarProperties")}</h2>
       <div className="-mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-1">
         {similar.map((l) => (
           <Link

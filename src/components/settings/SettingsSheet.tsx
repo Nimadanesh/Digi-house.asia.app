@@ -15,6 +15,7 @@ import { CurrencySegment } from "@/components/settings/CurrencySegment";
 import { LanguageSelector } from "@/components/settings/LanguageSelector";
 import { SettingsLabelStack } from "@/components/settings/SettingsLabelStack";
 import { AboutLegalSheet } from "@/components/settings/AboutLegalSheet";
+import { ConfirmActionSheet } from "@/components/common/ConfirmActionSheet";
 import { SettingsProfileSection } from "@/components/settings/SettingsProfileSection";
 import { WithdrawalAddressSection } from "@/components/settings/WithdrawalAddressSection";
 import { WithdrawalRequestsSection } from "@/components/settings/WithdrawalRequestsSection";
@@ -27,6 +28,7 @@ import { useApiAuth } from "@/hooks/useApiAuth";
 import { ROUTES } from "@/lib/constants";
 import { haptics } from "@/lib/telegram/haptics";
 import { safeBackButton } from "@/lib/telegram/chrome";
+import { closeTopSheet } from "@/components/common/Sheet";
 import { env } from "@/lib/env";
 import { useAuthStore } from "@/stores/auth.store";
 import { setApiAccessToken } from "@/lib/api/session-token";
@@ -68,6 +70,9 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
   const [aboutOpen, setAboutOpen] = useState(false);
   const [signOutOpen, setSignOutOpen] = useState(false);
   const [withdrawOpen, setWithdrawOpen] = useState(false);
+  /** Wallet disconnect is consequential (buy/payouts need it) → confirm first. */
+  const [disconnectOpen, setDisconnectOpen] = useState(false);
+  const [disconnecting, setDisconnecting] = useState(false);
 
   const user = useAuthStore((s) => s.user);
   const { data: withdrawals, isLoading: withdrawalsLoading, error: withdrawalsError } =
@@ -82,16 +87,13 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
   useEffect(() => {
     safeBackButton.show();
     const off = safeBackButton.onClick(() => {
-      if (signOutOpen) {
-        setSignOutOpen(false);
-        haptics.selection();
-        return;
-      }
-      if (aboutOpen) {
-        setAboutOpen(false);
-        haptics.selection();
-        return;
-      }
+      // Protected operation in flight: its sheet is non-dismissible (unregistered), so
+      // Back must fall through to NOTHING — not to the parent Settings sheet.
+      if (disconnectOpen && disconnecting) return;
+      // Unified stack: Back closes the topmost dismissible sheet (sign-out, about/legal,
+      // language picker, disconnect confirm, withdrawal request) — falling through to
+      // Settings itself only when no nested sheet is open.
+      if (closeTopSheet()) return;
       closeAll();
     });
     return () => {
@@ -105,11 +107,18 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
         safeBackButton.hide();
       }
     };
-  }, [aboutOpen, signOutOpen, closeAll]);
+  }, [disconnectOpen, disconnecting, closeAll]);
 
   async function onDisconnect() {
+    if (disconnecting) return;
     haptics.impact("medium");
-    await tonc.disconnect();
+    setDisconnecting(true);
+    try {
+      await tonc.disconnect();
+      setDisconnectOpen(false);
+    } finally {
+      setDisconnecting(false);
+    }
   }
 
   function onSignOut() {
@@ -201,7 +210,10 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
                 <Row className="!min-h-[52px] py-2.5">
                   <button
                     type="button"
-                    onClick={() => void onDisconnect()}
+                    onClick={() => {
+                      haptics.selection();
+                      setDisconnectOpen(true);
+                    }}
                     className="w-full py-1.5 text-start text-sm font-medium text-danger active:scale-[0.97] transition-transform duration-[120ms] ease-out"
                     data-testid="settings-disconnect"
                   >
@@ -370,6 +382,18 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
       </div>
 
       <AboutLegalSheet open={aboutOpen} onClose={() => setAboutOpen(false)} />
+      <ConfirmActionSheet
+        open={disconnectOpen}
+        onClose={() => setDisconnectOpen(false)}
+        title="Disconnect wallet"
+        description="You'll need to reconnect to buy shares or receive payouts. Your investments aren't affected."
+        details={[{ label: "Wallet", value: tonc.short ?? "" }]}
+        confirmLabel="Disconnect"
+        pendingLabel="Disconnecting…"
+        pending={disconnecting}
+        onConfirm={() => void onDisconnect()}
+        testId="disconnect-confirm"
+      />
       <SignOutConfirmSheet
         open={signOutOpen}
         onConfirm={onSignOut}

@@ -1,608 +1,567 @@
 {
-
   "common": {
-
     "appName": "FractionalLuxe",
-
     "buyShare": "Comprar participación",
-
     "browseMarketplace": "Explorar mercado",
-
     "viewAll": "Ver todo",
-
     "refresh": "Actualizar",
-
     "clearFilters": "Borrar filtros",
-
     "tryAgain": "Intentar de nuevo",
-
     "retry": "Reintentar",
-
     "skip": "Omitir",
-
     "continue": "Continuar",
-
     "getStarted": "Empezar",
-
     "settings": "Ajustes",
-
     "connectWallet": "Conectar billetera",
-
     "walletConnected": "Billetera conectada",
-
     "disconnectWallet": "Desconectar billetera",
-
     "share": "participación",
-
     "shares": "participaciones",
-
     "of": "de",
-
     "from": "Desde",
-
     "est": "Est.",
-
     "apy": "APY",
-
     "pending": "Pendiente",
-
     "paid": "Pagado",
-
     "hot": "Popular",
-
     "new": "Nuevo",
-
     "soldPct": "{pct}% vendido",
-
     "week": "semana",
-
     "weeks": "semanas",
-
     "demoMode": "Modo demo · datos de prueba · transacciones simuladas",
-
     "somethingWentWrong": "Algo salió mal"
-
   },
-
   "tabs": {
-
     "home": "Inicio",
-
     "marketplace": "Mercado",
-
     "earnings": "Ingresos",
-
     "portfolio": "Cartera"
-
   },
-
   "header": {
-
     "greeting": "Hola, {name}"
-
   },
-
   "onboarding": {
-
     "skip": "Omitir",
-
     "continue": "Continuar",
-
     "getStarted": "Empezar",
-
     "slideProgress": "{current} / {total}",
-
     "slideAria": "Diapositiva {n}",
-
     "own": {
-
       "headline": "Conviértete en dueño de un inmueble real",
-
       "subtitle": "Empieza desde unos 80 $"
-
     },
-
     "yield": {
-
       "headline": "Recibe tu parte del alquiler cada mes",
-
       "subtitle": "Mira tu parte mensual en Ingresos"
-
     },
-
     "sell": {
-
       "headline": "Vende cuando quieras",
-
       "subtitle": "Lista participaciones en el mercado FractionalLuxe cuando quieras salir."
-
     }
-
   },
-
   "home": {
-
     "loadError": "No se pudo cargar el inicio.",
-
     "portfolioValue": "Valor de la cartera",
-
     "totalInvested": "Total invertido",
-
     "totalEarningsReceived": "Ingresos totales recibidos",
-
     "nextPayout": "Próximo pago",
-
     "myProperties": "Mis propiedades",
-
     "myPropertiesCount": "Mis propiedades ({count})",
-
     "monthlyPerShare": "Mensual / part.",
-
     "pendingThisWeek": "{amount} pendiente esta semana",
-
     "earnedWord": "ganado",
-
     "viewAllCount": "+{count} más en Cartera",
-
     "featuredOpportunity": "Oportunidad destacada",
-
     "featuredTag": "Destacado",
-
     "moreOpportunities": "Más oportunidades",
-
     "emptyTitle": "Tu viaje inmobiliario comienza aquí",
-
     "emptyHint": "Un camino tranquilo hacia ingresos de alquiler mensuales.",
-
     "emptyStepBuy": "Compra acciones",
-
     "emptyStepLock": "Bloquéalas para obtener rendimiento",
-
     "emptyStepEarn": "Gana cada mes",
-
     "emptyCta": "Explora oportunidades",
-
     "trustFooter": "La renta se acumula mensualmente. Retira cuando quieras (1 % de comisión, 4 cuotas semanales). Simulado hasta que sea on-chain."
-
   },
-
   "marketplace": {
-
     "searchPlaceholder": "Buscar propiedades",
-
     "searchAria": "Buscar propiedades",
-
     "clearSearch": "Borrar búsqueda",
-
     "filtersAria": "Filtros del mercado",
-
     "loadError": "No se pudieron cargar las propiedades.",
-
     "emptyTitle": "Aún no hay propiedades",
-
     "emptyMessage": "Nuevas listas fraccionadas cada semana — vuelve pronto.",
-
     "noMatchesTitle": "Sin resultados",
-
     "noMatchesMessage": "Prueba otra búsqueda o filtro.",
-
     "chips": {
-
       "all": "Todas",
-
       "primary": "Principal",
-
       "secondary": "Secundario",
-
       "highest_yield": "Mayor rendimiento",
-
       "new": "Nuevas",
-
       "almost_sold": "Casi vendido",
-
       "low_price": "Precio bajo"
-
     },
-
     "pricePerShare": "Precio / part.",
-
     "monthlyPerShare": "Mensual / part.",
-
-    "minPurchase": "Compra mín.",
-
+    "nightFrom": "Noche / desde",
     "sharesSold": "{sold} de {total} participaciones vendidas",
-
     "feesTitle": "Comisión",
-
     "feesPerTx": "El nivel se define por el monto de cada transacción, sin límites.",
-
     "feesRange": "Monto",
-
     "feesBuyPrimary": "Compra · Primaria",
-
     "feesBuyMarket": "Compra · Mercado",
-
     "feesSellMarket": "Venta · Mercado",
-
     "feesInstantSell": "Venta instantánea (primaria)",
-
     "feesInstantNote": "Tarifa fija durante la oferta primaria; el mercado secundario usa el nivel de mercado.",
-
     "feesNoCap": "Sin límites en los montos de compra o venta.",
-
     "lastPrice": "Último precio"
-
   },
-
   "property": {
-
     "buyShare": "Comprar participación",
-
     "about": "Acerca de",
-
     "metrics": "Métricas",
-
     "trust": "Confianza y transparencia",
-
     "rentalHistory": "Historial de alquiler",
-
     "incomeCalculator": "Calculadora de ingresos",
-
     "salesProgress": "Progreso de venta",
-
-    "gallery": "Galería"
-
-  },
-
-  "earnings": {
-
-    "loadError": "No se pudieron cargar los ingresos.",
-
-    "emptyTitle": "Aún no has ganado",
-
-    "emptyMessage": "Compra tu primera participación y empieza a ganar el próximo mes.",
-
-    "thisWeek": "Ingresos de esta semana",
-
-    "nextPayoutIn": "Próximo pago",
-
-    "totalReceived": "Ingresos totales recibidos",
-
-    "consecutivePaid": "Semanas pagadas seguidas",
-
-    "streak": "{count} {unit} seguidas ✓",
-
-    "noStreak": "Aún sin racha",
-
-    "timeline": "Historial",
-
-    "disclaimer": "pago mensual simulado · verificable on-chain tras MVP",
-
-    "withdrawalTerms": "Retira en cualquier momento — 1% de comisión, pagado en 4 cuotas semanales",
-
-    "yieldTitle": "Poder de ganancia",
-
-    "totalEarned": "Total ganado",
-
-    "chartTitle": "Últimas 12 semanas",
-
-    "chartCaption": "Pagos semanales de renta · simulados hasta que sea on-chain.",
-
-    "timelineTitle": "Tu flujo de ingresos",
-
-    "timelinePaid": "Pagado",
-
-    "timelineAccruing": "Acumulando",
-
-    "timelineAccruingSub": "mes actual",
-
-    "timelineNext": "Próxima estimación",
-
-    "timelineCaption": "Acumulación mensual; los pagos se liquidan cada domingo.",
-
-    "withdraw": "Retira a tu cartera",
-
-    "withdrawSubtitle": "Comisión del 1 % · 4 cuotas semanales",
-
-    "yieldAccrued": "Devengado pendiente",
-
-    "yieldMonthly": "Mensual",
-
-    "yieldNoLocks": "Sin bloqueos activos: bloquea acciones en la página de una propiedad para empezar a ganar.",
-
-    "yieldPayments": "Pagos de rendimiento",
-
-    "yieldFinal": "Pago final"
-
-  },
-
-  "portfolio": {
-
-    "loadError": "No se pudo cargar tu cartera.",
-
-    "emptyTitle": "Tu cartera está vacía",
-
-    "emptyMessage": "Empieza desde unos 80 $ — compra tu primera participación en el mercado.",
-
-    "totalValue": "Valor total de la cartera",
-
-    "totalInvested": "Total invertido",
-
-    "totalEarningsReceived": "Ingresos totales recibidos",
-
-    "unrealizedProfit": "Ganancia no realizada",
-
-    "nextPayout": "Próximo pago",
-
-    "myPropertiesCount": "Mis propiedades ({count})",
-
-    "openOrders": "Órdenes abiertas",
-
-    "allocation": "Asignación",
-
-    "lockedShares": "Acciones bloqueadas",
-
+    "gallery": "Galería",
+    "tabOverview": "Resumen",
+    "tabPerformance": "Rendimiento",
+    "tabHolders": "Titulares",
+    "tabIncome": "Ingresos",
+    "tabDetails": "Detalles",
+    "marketBadge": "Mercado secundario",
+    "offerPrice": "Precio de oferta",
+    "sharesSoldOf": "Vendidas / total",
+    "holdersComingSoon": "Los análisis de titulares llegarán en la próxima actualización.",
+    "incomeComingSoon": "Los análisis de ingresos llegarán en la próxima actualización.",
+    "fundedCaption": "{pct}% financiado · {remaining} participaciones restantes",
+    "sharesRemaining": "Participaciones restantes",
+    "totalTarget": "Objetivo total",
+    "primaryFixedPrice": "{title} es una oferta primaria — un precio fijo de {price} por participación. Aún no hay historial de precio de mercado.",
+    "primaryFundingNote": "Los análisis de financiación llegarán en la próxima actualización.",
+    "fundamentals": "Datos de la propiedad",
+    "propertyValue": "Valor de la propiedad",
+    "annualRent": "Alquiler anual",
+    "grossYield": "Rentabilidad bruta",
+    "tabsLabel": "Secciones del activo",
+    "marketSummary": "Resumen de mercado",
+    "currentPrice": "Precio actual",
+    "bestBid": "Mejor compra",
+    "bestAsk": "Mejor venta",
+    "spread": "Diferencia",
+    "vsOffer": "vs oferta",
+    "positionTitle": "Su posición",
+    "positionTotal": "Participaciones totales",
+    "positionLocked": "Bloqueadas",
+    "positionFree": "Libres",
+    "positionAccrued": "Devengado no pagado",
+    "positionValue": "Valor estimado",
+    "positionLock": "Bloquear",
+    "positionSell": "Vender",
+    "fundingProgressTitle": "Progreso de financiación en el tiempo",
+    "cumulativeSharesTitle": "Acciones vendidas acumuladas",
+    "yieldProjectionTitle": "Proyección de rendimiento",
+    "yieldProjectionNote": "Proyección basada en la renta y el rendimiento actuales — no es una promesa de rendimientos futuros.",
+    "pricePerformance": "Rendimiento del precio",
+    "yieldPerformance": "Rendimiento de la rentabilidad",
+    "simulatedHistoryNote": "Historial simulado a modo ilustrativo — no es una promesa de rendimientos futuros.",
+    "holderDonutTitle": "Distribución de los accionistas",
+    "totalHolders": "Total de accionistas",
+    "holder.others": "Otros",
+    "holderPrivacyNote": "Accionistas como categorías anonimizadas — sin datos personales.",
+    "holderStatsTitle": "Estadísticas de accionistas",
+    "statTotalHolders": "Total de accionistas",
+    "statAvgHolding": "Tenencia media",
+    "statMedianHolding": "Tenencia mediana",
+    "statTop5Ownership": "Los 5 mayores",
+    "statNewHolders30d": "Nuevos 30 días",
+    "statLargestHolder": "Mayor accionista",
+    "sharesWord": "acciones",
+    "shareWord": "acción",
+    "donutTapHint": "Toca un segmento para ver detalles",
+    "topHoldersTitle": "Mayores accionistas",
+    "treemapTitle": "Mapa de propiedad",
+    "treemapTapHint": "Toca un bloque para ver detalles",
+    "distributionOverTimeTitle": "Distribución de acciones en el tiempo",
+    "distributionTapHint": "Toca el gráfico para ver detalles de esa fecha",
+    "bubbleChartTitle": "Diagrama de burbujas",
+    "bubbleTapHint": "Toca una burbuja para ver detalles",
+    "holder.A": "Accionista A",
+    "holder.B": "Accionista B",
+    "holder.C": "Accionista C",
+    "holder.D": "Accionista D",
+    "holder.E": "Accionista E",
+    "holder.F": "Accionista F",
+    "fundedCaptionShort": "{pct}% financiado",
+    "incomeHistoryTitle": "Historial de ingresos",
+    "cumulativeYieldPerShare": "Rendimiento acumulado por acción",
+    "incomeMonthsWord": "meses de historial",
+    "perShareWord": "por acción",
+    "poolWord": "pool",
+    "incomeTapHint": "Toca una barra para ver el pago de ese mes.",
+    "payoutHistoryTitle": "Historial de pagos",
+    "payoutHistoryNote": "Historial de ingresos simulado · verificable on-chain tras el MVP.",
+    "incomeRatiosTitle": "Métricas inmobiliarias",
+    "annualYieldRate": "Tasa de rendimiento anual",
+    "incomeRatiosNote": "Derivadas del alquiler y el valor de la propiedad. No se muestran rendimiento neto, cap rate, NOI ni ratio de gastos: el conjunto de datos no incluye esos campos.",
+    "incomeProjectionsTitle": "Ganancias proyectadas",
+    "incomeProjectionsNote": "Usa la calculadora de ingresos en la pestaña Resumen: proyecta tus ganancias según el número de acciones que elijas, claramente etiquetadas como proyecciones, no promesas.",
+    "marketTitle": "Mercado",
+    "orderBook": "Libro de órdenes",
+    "bids": "Compras",
+    "asks": "Ventas",
+    "best": "mejor",
+    "lastTrade": "Último",
+    "recentTrades": "Operaciones recientes",
+    "tradesLoadError": "No se pudieron cargar las operaciones recientes.",
+    "tradesEmpty": "Aún no hay operaciones: el mercado abre cuando se agota la oferta primaria.",
+    "galleryPages": "Páginas de galería",
+    "showImage": "Mostrar imagen {n}",
+    "expectedAnnualYield": "Rendimiento anual esperado",
+    "basedOnLease": "Basado en el contrato actual · {count} {unit} pagos puntuales",
+    "monthWord": "mes",
+    "monthsWord": "meses",
+    "buySharesAt": "Comprar acciones · {price}",
+    "buyAt": "Comprar a {price}",
+    "offeringSoldOut": "Oferta primaria agotada",
+    "stickyBuyShares": "Comprar acciones · {price}",
+    "stickyBuy": "Comprar · {price}",
+    "sell": "Vender",
+    "pricePerShareMetric": "Precio por acción",
+    "monthlyYieldPerShare": "Rendimiento mensual / acción",
+    "totalPropertyValue": "Valor total de la propiedad",
+    "moreDetails": "Más detalles",
+    "sizeLabel": "Tamaño",
+    "yearBuilt": "Año de construcción",
+    "typeLabel": "Tipo",
+    "rentalStatusLabel": "Estado de alquiler",
+    "leaseUntil": "Alquiler hasta",
+    "trustTitle": "Por qué invertir con confianza",
+    "trustSimulatedNote": "El historial de pagos refleja registros simulados de demostración.",
+    "similarProperties": "Propiedades similares",
+    "documents": "Documentos",
+    "documentsEmpty": "Aún no hay documentos",
+    "downloadDoc": "Descargar {title}",
+    "docKindOffering": "Oferta",
+    "docKindFinancial": "Financiero",
+    "docKindLegal": "Legal",
+    "docKindOther": "Otro",
+    "documentsError": "No se pudieron cargar los documentos.",
+    "simulatedPriceNote": "Historial de precios simulado a modo ilustrativo: no es una promesa de rendimientos futuros.",
+    "bannerLockCta": "Bloquea acciones para empezar a ganar",
+    "youOwn": "Tienes {count} {unit} · {locked} bloqueadas",
+    "earningNow": "Generando",
+    "notEarningYet": "Aún no genera",
+    "bannerLockNote": "Las acciones solo generan rendimiento bloqueadas. Bloquear es gratis: desbloquear tarda 2–3 días si cambia de opinión.",
+    "yieldSection": "Rendimiento",
+    "monthlyYield": "Rendimiento mensual",
+    "onLockedSharesNote": "Sobre acciones bloqueadas · la opción semanal paga tasa − 1 %",
+    "yourShares": "Tus acciones",
+    "freeToLock": "Libres para bloquear",
+    "buyFirstNote": "Compra acciones primero y bloquéalas para ganar desde el primer día.",
+    "allLocked": "Todo bloqueado",
+    "lockCta": "Bloquear",
+    "requestUnlock": "Solicitar desbloqueo",
+    "requesting": "Solicitando…",
+    "unlockPendingNote": "El rendimiento se detuvo al solicitar el desbloqueo. Las acciones se pueden vender en 2–3 días.",
+    "nShares": "{count} acciones",
+    "accruingWeekly": "Acumulando · semanal",
+    "accruingMonthly": "Acumulando · mensual",
+    "unlocksOn": "Se desbloquea {date}",
+    "unlockingInDays": "2–3 días",
+    "perWeek": "Por semana",
+    "perMonth": "Por mes",
+    "unlockConfirmTitle": "Desbloquear acciones",
+    "unlockConfirmBody": "Desbloquear detiene el rendimiento de estas acciones ahora. Se pueden vender en 2–3 días.",
+    "unlockConfirmCta": "Confirmar desbloqueo",
+    "unlockPendingLabel": "Desbloqueando…",
+    "unlockSuccessTitle": "Desbloqueo solicitado",
+    "unlockSuccessBody": "El rendimiento se ha detenido. Las acciones se pueden vender en 2–3 días.",
+    "propertyLabel": "Propiedad",
+    "sharesLabel": "Acciones",
+    "payoutPeriodLabel": "Período de pago",
+    "weeklyLabel": "Semanal",
+    "monthlyLabel": "Mensual",
+    "accruedUnpaidLabel": "Devengado no pagado",
+    "lockSheetTitle": "Bloquear acciones",
+    "lockSheetIntro": "Las acciones bloqueadas generan rendimiento desde el día 1. Elige la frecuencia de pago.",
+    "payoutPeriodMonthly": "Mensual",
+    "payoutPeriodWeekly": "Semanal",
+    "payoutPeriodMonthlyHint": "tasa completa, 1 pago / mes",
+    "payoutPeriodWeeklyHint": "tasa − 1 %, 4 pagos / mes",
+    "payoutPeriodAria": "Pago {period}",
+    "monthlyRate": "Tasa mensual",
+    "maxCta": "Máx.",
+    "quantityInvalid": "La cantidad debe estar entre 1 y {max}.",
+    "lockedPrincipal": "Principal bloqueado",
+    "monthlyPayout": "Pago mensual",
+    "weeklyPayout": "Pago semanal",
+    "perMonthWord": "/ mes",
+    "perWeekWord": "/ semana",
+    "timesFourMonth": "× 4 / mes",
+    "lockConfirmCta": "Bloquear {count} {unit} y ganar",
+    "lockingPending": "Bloqueando…",
+    "lockWarningNote": "Las acciones bloqueadas no se pueden vender. Desbloquear tarda 2–3 días y detiene el rendimiento.",
+    "lockedSuccessTitle": "Acciones bloqueadas",
+    "earningFromDay1": "{count} {unit} generan desde el día 1",
+    "sellSheetTitle": "Vender acciones",
+    "confirmInstantSale": "Confirmar venta instantánea",
+    "sellModeAria": "Modo de venta",
+    "sellModeAriaOf": "Vender {mode}",
+    "instantMode": "Instantánea",
+    "customPriceMode": "Precio personalizado",
+    "instantSellReview": "Revisar venta · {amount}",
+    "instantSellReviewBody": "La plataforma recompra estas acciones al precio de lista − 7 %. No se puede deshacer.",
+    "feeLabel": "Comisión (7 %)",
+    "youReceive": "Recibes",
+    "confirmSell": "Confirmar venta",
+    "sellingPending": "Vendiendo…",
+    "placingPending": "Enviando…",
+    "lockedInOrders": "Bloqueadas / en órdenes",
+    "notSellable": "no vendible",
+    "onTrade": "por operación",
+    "instantSellEnded": "La venta instantánea terminó: la oferta primaria está agotada. Usa un precio personalizado.",
+    "queueSellOrder": "En cola de venta",
+    "placeSellOrder": "Colocar orden de venta",
+    "queuedUntilSellout": "En cola hasta que se agote la oferta primaria; luego tu orden saldrá al mercado automáticamente.",
+    "platformBuybackNote": "La plataforma recompra al precio de lista − 7 %. Acreditado a tu saldo de inversión.",
+    "sellSuccessTitle": "Acciones vendidas",
+    "creditedNote": "Acreditado a tu saldo de inversión.",
+    "backCta": "Atrás",
+    "sellOrderPlacedToast": "Orden de venta colocada",
+    "sellOrderPlacedBody": "Síguela en Cartera → Órdenes abiertas",
+    "buyOnMarket": "Comprar en el mercado",
+    "lastPrice": "Último precio",
+    "marketFeeLabel": "Comisión de mercado",
+    "heldInEscrow": "Retenido en depósito",
+    "escrowNote": "Los fondos se retienen de tu saldo de inversión hasta que la orden se ejecute, o la cancelas.",
+    "buyOrderPlacedToast": "Orden de compra colocada",
+    "buyOrderPlacedBody": "Fondos retenidos en depósito hasta que se ejecute",
+    "placeBuyOrder": "Colocar orden de compra",
+    "freeSharesLabel": "Acciones libres",
+    "orderValue": "Valor de la orden",
+    "valueRow": "Valor",
+    "doneCta": "Listo",
+    "decreaseQty": "Disminuir cantidad",
+    "increaseQty": "Aumentar cantidad",
+    "pricePerShareLabel": "Precio por acción",
+    "reviewSaleCta": "Revisar venta · {amount}",
+    "calcTitle": "¿Cuánto puedo ganar?",
+    "calcYouOwn": "Tienes {count}",
+    "calcLockedSuffix": " · {count} bloqueadas",
+    "calcSharesLabel": "Acciones",
+    "calcDecreaseShares": "Disminuir acciones",
+    "calcIncreaseShares": "Aumentar acciones",
+    "calcSharesInput": "Número de acciones",
+    "calcSharesSlider": "Deslizador de acciones",
+    "calcProjected": "Ganancias proyectadas",
+    "perYearWord": "/ año",
+    "calcFeesNote": "Tras comisiones de plataforma · Las acciones bloqueadas generan desde el día 1",
+    "calcBuyCta": "Comprar {count} {unit} – {cost}",
+    "scenarioConservative": "Conservador",
+    "scenarioBase": "Base",
+    "scenarioOptimistic": "Optimista",
+    "walletLabel": "Cartera",
+    "availableShares": "Acciones disponibles",
+    "totalLabel": "Total",
+    "estWeeklyYield": "Rendimiento semanal est.",
+    "paymentCurrency": "Moneda de pago",
+    "performanceTitle": "Rendimiento",
+    "connectWalletTitle": "Conectar cartera",
+    "connectWalletBody": "Conecta una cartera TON para comprar acciones y ganar rendimiento de alquiler.",
+    "fullyFundedTitle": "Totalmente financiado",
+    "fullyFundedBody": "Todas las acciones primarias se han vendido. La reventa llega después.",
+    "buySheetTitle": "Comprar acciones",
+    "payWithAria": "Pagar con {currency}",
+    "usdtUnavailableNote": "USDT no está disponible ahora — pagarás con TON.",
+    "paidInNote": "Se paga en {currency} desde tu cartera conectada.",
     "freeShares": "Acciones libres",
-
-    "investedWord": "invertido",
-
-    "earnedWord": "ganado",
-
-    "unrealizedWord": "no realizado",
-
-    "orderOpen": "Abierto",
-
-    "allocationProperties": "{count} propiedades",
-
-    "showDetails": "Mostrar detalles",
-
-    "hideDetails": "Ocultar detalles",
-
-    "lockedCaption": "Generando renta mensual",
-
-    "freeCaption": "Aún no genera",
-
-    "idleShares": "{count} acciones sin generar",
-
-    "lockThem": "Bloquéalas",
-
-    "earningPill": "{count} generando",
-
-    "idlePill": "{count} inactivas",
-
-    "estMonthly": "≈ {amount} / mes",
-
-    "projectedMonthlyShort": "Renta mensual est.",
-
-    "exportCsv": "Exportar CSV",
-
-    "exporting": "Exportando…",
-
-    "sharesOwned": "Acciones en propiedad",
-
-    "avgCostPerShare": "Coste medio / acción",
-
-    "currentValueRow": "Valor actual",
-
-    "unrealizedPnl": "P/G no realizado",
-
-    "projectedMonthlyYield": "Rendimiento mensual proyectado",
-
-    "buyMore": "Comprar más",
-
-    "sellComingSoon": "Venta próximamente",
-
-    "nftCollectible": "NFT coleccionable",
-
-    "nftItem": "Elemento NFT",
-
-    "collection": "Colección",
-
-    "viewOnExplorer": "Ver en el explorador",
-
-    "nftDisclaimer": "Este NFT es un recibo coleccionable: la base de datos sigue siendo el registro de propiedad.",
-
-    "nftStatusPending": "Pendiente",
-
-    "nftStatusMinting": "Acuñando",
-
-    "nftStatusMinted": "Acuñado",
-
-    "nftStatusTransferring": "Transfiriendo",
-
-    "nftStatusDelivered": "Entregado",
-
-    "nftStatusFailed": "Fallido",
-
-    "orderQueued": "En cola"
-
+    "valueLabel": "Valor",
+    "bannerFunding": "Abierto para financiación · {progress} · quedan {count} {unit}",
+    "bannerLiveTrading": "{status} · Negociación en vivo",
+    "resaleWord": "Reventa",
+    "fullyFundedWord": "Totalmente financiado",
+    "chartTrendSummary": "Tendencia: {direction} de {start} a {end}.",
+    "trendUp": "al alza",
+    "trendDown": "a la baja",
+    "performanceSectionTitle": "Rendimiento",
+    "priceMode": "Precio",
+    "yieldMode": "Rentabilidad"
   },
-
+  "earnings": {
+    "loadError": "No se pudieron cargar los ingresos.",
+    "emptyTitle": "Aún no has ganado",
+    "emptyMessage": "Compra tu primera participación y empieza a ganar el próximo mes.",
+    "thisWeek": "Ingresos de esta semana",
+    "nextPayoutIn": "Próximo pago",
+    "totalReceived": "Ingresos totales recibidos",
+    "consecutivePaid": "Semanas pagadas seguidas",
+    "streak": "{count} {unit} seguidas ✓",
+    "noStreak": "Aún sin racha",
+    "timeline": "Historial",
+    "disclaimer": "pago mensual simulado · verificable on-chain tras MVP",
+    "withdrawalTerms": "Retira en cualquier momento — 1% de comisión, pagado en 4 cuotas semanales",
+    "yieldTitle": "Poder de ganancia",
+    "totalEarned": "Total ganado",
+    "chartTitle": "Últimas 12 semanas",
+    "chartCaption": "Pagos semanales de renta · simulados hasta que sea on-chain.",
+    "timelineTitle": "Tu flujo de ingresos",
+    "timelinePaid": "Pagado",
+    "timelineAccruing": "Acumulando",
+    "timelineAccruingSub": "mes actual",
+    "timelineNext": "Próxima estimación",
+    "timelineCaption": "Acumulación mensual; los pagos se liquidan cada domingo.",
+    "withdraw": "Retira a tu cartera",
+    "withdrawSubtitle": "Comisión del 1 % · 4 cuotas semanales",
+    "yieldAccrued": "Devengado pendiente",
+    "yieldMonthly": "Mensual",
+    "yieldNoLocks": "Sin bloqueos activos: bloquea acciones en la página de una propiedad para empezar a ganar.",
+    "yieldPayments": "Pagos de rendimiento",
+    "yieldFinal": "Pago final"
+  },
+  "portfolio": {
+    "loadError": "No se pudo cargar tu cartera.",
+    "emptyTitle": "Tu cartera está vacía",
+    "emptyMessage": "Empieza desde unos 80 $ — compra tu primera participación en el mercado.",
+    "totalValue": "Valor total de la cartera",
+    "totalInvested": "Total invertido",
+    "totalEarningsReceived": "Ingresos totales recibidos",
+    "unrealizedProfit": "Ganancia no realizada",
+    "nextPayout": "Próximo pago",
+    "myPropertiesCount": "Mis propiedades ({count})",
+    "openOrders": "Órdenes abiertas",
+    "allocation": "Asignación",
+    "lockedShares": "Acciones bloqueadas",
+    "freeShares": "Acciones libres",
+    "investedWord": "invertido",
+    "earnedWord": "ganado",
+    "unrealizedWord": "no realizado",
+    "orderOpen": "Abierto",
+    "allocationProperties": "{count} propiedades",
+    "showDetails": "Mostrar detalles",
+    "hideDetails": "Ocultar detalles",
+    "lockedCaption": "Generando renta mensual",
+    "freeCaption": "Aún no genera",
+    "idleShares": "{count} acciones sin generar",
+    "lockThem": "Bloquéalas",
+    "earningPill": "{count} generando",
+    "idlePill": "{count} inactivas",
+    "estMonthly": "≈ {amount} / mes",
+    "projectedMonthlyShort": "Renta mensual est.",
+    "exportCsv": "Exportar CSV",
+    "exporting": "Exportando…",
+    "sharesOwned": "Acciones en propiedad",
+    "avgCostPerShare": "Coste medio / acción",
+    "currentValueRow": "Valor actual",
+    "unrealizedPnl": "P/G no realizado",
+    "projectedMonthlyYield": "Rendimiento mensual proyectado",
+    "buyMore": "Comprar más",
+    "sellComingSoon": "Venta próximamente",
+    "nftCollectible": "NFT coleccionable",
+    "nftItem": "Elemento NFT",
+    "collection": "Colección",
+    "viewOnExplorer": "Ver en el explorador",
+    "nftDisclaimer": "Este NFT es un recibo coleccionable: la base de datos sigue siendo el registro de propiedad.",
+    "nftStatusPending": "Pendiente",
+    "nftStatusMinting": "Acuñando",
+    "nftStatusMinted": "Acuñado",
+    "nftStatusTransferring": "Transfiriendo",
+    "nftStatusDelivered": "Entregado",
+    "nftStatusFailed": "Fallido",
+    "orderQueued": "En cola"
+  },
   "settings": {
-
     "title": "Ajustes",
-
     "wallet": "Billetera",
-
     "connectTitle": "Conecta una billetera TON",
-
     "connectHint": "Necesaria para comprar participaciones y recibir ingresos mensuales de alquiler.",
-
     "disconnect": "Desconectar billetera",
-
     "withdrawals": "Retiros",
-
     "withdrawalTitle": "Dirección de retiro USDT",
-
     "withdrawalHint": "Donde se paga tu saldo retirable",
-
     "withdrawalPlaceholder": "EQ… dirección USDT-TON",
-
     "withdrawalEmpty": "Sin dirección configurada",
-
     "withdrawalVerified": "Verificado",
-
     "withdrawalUnverified": "Sin verificar",
-
     "withdrawalInvalid": "Ingresa una dirección TON válida",
-
     "withdrawalSave": "Guardar",
-
     "withdrawalCancel": "Cancelar",
-
     "withdrawalRequests": "Solicitudes de retiro",
-
     "withdrawalRequestsEmpty": "Aún no hay solicitudes de retiro",
-
     "withdrawalStatusPaid": "Pagado",
-
     "withdrawalStatusRequested": "Solicitado",
-
     "withdrawalStatusApproved": "Aprobado",
-
     "withdrawalStatusRejected": "Rechazado",
-
     "withdrawalInstallmentProgress": "{paid} de {total} plazos pagados",
-
     "withdrawalRequest": "Solicitar retiro",
     "withdrawalsError": "No se pudieron cargar las solicitudes de retiro",
-
     "referrals": "Referidos",
-
     "inviteFriends": "Invitar amigos",
-
     "copied": "¡Copiado!",
-
     "signInToInvite": "Inicia sesión para invitar",
-
-
     "preferences": "Preferencias",
-
     "displayCurrency": "Moneda de visualización",
-
     "displayCurrencyHint": "Las cifras siguen en USD; estimación TON al comprar",
-
     "language": "Idioma",
-
     "languageHint": "Idioma de la app",
-
     "languageAuto": "Auto (Telegram)",
-
     "chooseLanguage": "Elegir idioma",
-
     "useTelegramTheme": "Dark / Light",
-
     "useTelegramThemeHint": "Colores de Telegram",
-
     "showDemoBadge": "Mostrar insignia Demo",
-
     "showDemoBadgeHint": "Etiqueta MVP honesta flotante",
-
     "help": "Ayuda",
-
     "howItWorks": "Cómo funciona FractionalLuxe",
     "transactionHistory": "Historial de transacciones",
-
-
     "aboutLegal": "Acerca de / Legal",
-
     "aboutBody": "FractionalLuxe es una Mini App de Telegram para participaciones inmobiliarias fraccionadas en TON. El ingreso de alquiler mensual se acumula proporcional a tu propiedad.",
-
     "aboutAdvice": "Nada de esto es asesoramiento financiero. Documentos y tokenización son demostrativos hasta contratos de producción.",
-
     "aboutCopyright": "© FractionalLuxe · MVP",
-
     "demoTxDisclaimer": "Esto es una demo: las transacciones se simulan",
-
     "payoutDisclaimer": "pago mensual simulado · verificable on-chain tras MVP",
-
     "account": "Cuenta",
-
     "recoverySignIn": "Iniciar sesión con código de recuperación",
-
     "signOut": "Cerrar sesión",
-
     "signOutConfirmTitle": "¿Cerrar sesión?",
-
     "signOutConfirmBody": "¿Quieres cerrar sesión?"
-
   },
-
   "profile": {
-
     "title": "Completa tu perfil",
-
     "subtitle": "Algunos datos para identificar tu cuenta.",
-
     "settingsSection": "Perfil",
-
     "displayName": "Nombre visible",
-
     "displayNamePlaceholder": "Tu nombre",
-
     "phone": "Teléfono",
-
     "phonePlaceholder": "+34 600 000 000",
-
     "phoneHint": "Opcional. Solo para soporte de la cuenta.",
-
     "phoneEmpty": "Sin teléfono registrado",
-
     "useTelegramPhone": "Usar número de Telegram",
-
     "requestingPhone": "Solicitando…",
-
     "recoveryTitle": "Código de recuperación",
-
     "recoveryWarn": "Guarda este código en un lugar seguro. Lo necesitarás para iniciar sesión si Telegram no está disponible. No podemos recuperarlo por ti.",
-
     "recoverySettingsHint": "Mantén este código en privado. Cualquiera con él puede acceder a tu cuenta de FractionalLuxe.",
-
     "copyCode": "Copiar código de recuperación",
-
     "showCode": "Mostrar código de recuperación",
-
     "hideCode": "Ocultar código de recuperación",
-
     "savedConfirm": "Guardé mi código de recuperación en un lugar seguro",
-
     "saveContinue": "Guardar y continuar",
-
     "saving": "Guardando…",
-
     "save": "Guardar",
-
     "cancel": "Cancelar",
-
     "errors": {
-
       "name": "Introduce un nombre (al menos 2 caracteres)",
-
       "phone": "Introduce un teléfono válido",
-
       "saveCode": "Confirma que guardaste el código de recuperación",
-
       "save": "No se pudo guardar el perfil"
-
     }
-
   },
-
   "recovery": {
-
     "title": "Iniciar sesión con código de recuperación",
-
     "subtitle": "Usa el código que guardaste al configurar tu perfil.",
-
     "codeLabel": "Código de recuperación",
-
     "signIn": "Iniciar sesión",
-
     "signingIn": "Iniciando sesión…",
-
     "backHome": "Volver al inicio"
-
   }
-
 }
-

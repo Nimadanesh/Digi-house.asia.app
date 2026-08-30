@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import type { DocumentMeta } from "@/types/property-document";
 import { Block } from "@/components/common/Block";
 import { Row } from "@/components/common/Row";
@@ -18,11 +19,11 @@ function formatFileSize(bytes: number | null): string {
   return `${(bytes / 1_000_000).toFixed(1)} MB`;
 }
 
-const KIND_LABELS: Record<string, string> = {
-  offering: "Offering",
-  financial: "Financial",
-  legal: "Legal",
-  other: "Other",
+const KIND_KEYS: Record<string, string> = {
+  offering: "docKindOffering",
+  financial: "docKindFinancial",
+  legal: "docKindLegal",
+  other: "docKindOther",
 };
 
 export function PropertyDocumentsList({
@@ -31,10 +32,11 @@ export function PropertyDocumentsList({
   downloadingId,
   error,
 }: PropertyDocumentsListProps) {
+  const t = useTranslations("property");
   return (
     <section>
       <h2 className="px-1 text-[0.9375rem] font-semibold text-foreground">
-        Documents
+        {t("documents")}
       </h2>
       <Block>
         {error && (
@@ -46,15 +48,16 @@ export function PropertyDocumentsList({
           <Row
             key={doc.id}
             onClick={() => onDownload(doc.id)}
+            aria-label={t("downloadDoc", { title: doc.title })}
           >
-            <FileText className="h-5 w-5 shrink-0 text-muted-foreground" />
+            <FileText className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
             <div className="flex min-w-0 flex-1 flex-col gap-0.5">
               <span className="truncate text-sm font-medium text-foreground">
                 {doc.title}
               </span>
               <span className="flex items-center gap-2 text-xs text-muted-foreground">
                 <span className="rounded bg-secondary px-1.5 py-0.5 text-[0.625rem] font-medium uppercase tracking-wider">
-                  {KIND_LABELS[doc.kind] ?? doc.kind}
+                  {t(KIND_KEYS[doc.kind] ?? "docKindOther")}
                 </span>
                 {formatFileSize(doc.fileSize) && (
                   <span>{formatFileSize(doc.fileSize)}</span>
@@ -62,15 +65,15 @@ export function PropertyDocumentsList({
               </span>
             </div>
             {downloadingId === doc.id ? (
-              <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+              <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" aria-hidden />
             ) : (
-              <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+              <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
             )}
           </Row>
         ))}
         {documents.length === 0 && !error && (
           <div className="px-4 py-6 text-center text-sm text-muted-foreground">
-            No documents yet
+            {t("documentsEmpty")}
           </div>
         )}
       </Block>

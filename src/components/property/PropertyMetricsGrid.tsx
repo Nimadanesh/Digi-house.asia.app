@@ -1,8 +1,12 @@
-// File responsibility: 2×2 key metrics grid (REDESIGN-SPEC §4.2).
+// File responsibility: compact KPI area (REDESIGN-SPEC §6) — 2×2 key metrics grid.
+// Primary shows the fixed offering price; secondary shows the market price
+// (lib/property-price). Only available data — no invented metrics.
+import { useTranslations } from "next-intl";
 import { usd } from "@/lib/format";
 import type { Listing } from "@/types/property";
 import { shareMonthlyYieldUsd, totalValueUsd } from "@/lib/property-yield";
 import { Block } from "@/components/common/Block";
+
 function MetricCell({ label, value, className = "" }: { label: string; value: string; className?: string }) {
   return (
     <div className={`flex flex-col gap-1 p-3 min-h-[72px] ${className}`}>
@@ -20,16 +24,25 @@ export function PropertyMetricsGrid({
   /** Single source of truth (lib/property-price) — equals sharePriceUsd on primary. */
   currentPriceUsd?: number;
 }) {
+  const t = useTranslations("property");
+  const isPrimary = listing.status === "funding";
   const oneShareMonthly = shareMonthlyYieldUsd(listing);
   const pricePerShare = currentPriceUsd ?? listing.sharePriceUsd;
 
   return (
     <Block className="overflow-hidden" data-testid="metrics-grid">
       <div className="grid grid-cols-2">
-        <MetricCell label="Price per share" value={usd(pricePerShare)} className="border-b border-r border-border" />
-        <MetricCell label="Monthly yield / share" value={usd(oneShareMonthly)} className="border-b border-border" />
-        <MetricCell label="Total property value" value={usd(totalValueUsd(listing))} className="border-r border-border" />
-        <MetricCell label="Shares sold" value={listing.sharesSold.toLocaleString()} />
+        <MetricCell
+          label={isPrimary ? t("offerPrice") : t("pricePerShareMetric")}
+          value={usd(pricePerShare)}
+          className="border-b border-r border-border"
+        />
+        <MetricCell label={t("monthlyYieldPerShare")} value={usd(oneShareMonthly)} className="border-b border-border" />
+        <MetricCell label={t("totalPropertyValue")} value={usd(totalValueUsd(listing))} className="border-r border-border" />
+        <MetricCell
+          label={t("sharesSoldOf")}
+          value={`${listing.sharesSold.toLocaleString()} / ${listing.totalShares.toLocaleString()}`}
+        />
       </div>
     </Block>
   );

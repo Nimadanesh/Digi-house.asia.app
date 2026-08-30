@@ -2,29 +2,31 @@
 // right-aligned font-mono tabular-nums; Bids tinted --success, Asks --danger; best row bg --accent.
 // PD-06: depth bars (bg-success/10 / bg-danger/10) behind each level + a "Last" price header.
 // Static; no entrance animation. All money routed through format.usd (no raw toFixed — ownership guard).
+import { useTranslations } from "next-intl";
 import { Block } from "@/components/common/Block";
 import { SectionLabel } from "@/components/common/SectionLabel";
 import { usd } from "@/lib/format";
 import type { OrderBookState, OrderBookLevel } from "@/types/order";
 
 export function OrderBook({ state, maxLevels }: { state: OrderBookState; /** Compact view cap (Phase 4 market card); undefined = full depth. */ maxLevels?: number }) {
+  const t = useTranslations("property");
   const bids = maxLevels ? state.bids.slice(0, maxLevels) : state.bids;
   const asks = maxLevels ? state.asks.slice(0, maxLevels) : state.asks;
   return (
     <Block className="overflow-hidden">
       <div className="px-4 py-2">
-        <SectionLabel>Order book</SectionLabel>
+        <SectionLabel>{t("orderBook")}</SectionLabel>
       </div>
       <div className="grid grid-cols-2 pb-3 text-xs font-mono">
-        <ColumnHeader label="Bids" tint="text-success" />
-        <ColumnHeader label="Asks" tint="text-danger" />
+        <ColumnHeader label={t("bids")} tint="text-success" />
+        <ColumnHeader label={t("asks")} tint="text-danger" />
       </div>
       {state.lastTradeUsd ? (
         <div
           className="flex items-center justify-center gap-1.5 border-t border-border py-2 text-xs font-mono tnum"
           data-testid="book-last-price"
         >
-          <span className="uppercase tracking-wide text-muted-foreground text-[0.625rem] font-medium">Last</span>
+          <span className="uppercase tracking-wide text-muted-foreground text-[0.625rem] font-medium">{t("lastTrade")}</span>
           <span className="font-semibold text-foreground">{usd(state.lastTradeUsd)}</span>
         </div>
       ) : null}
@@ -37,10 +39,11 @@ export function OrderBook({ state, maxLevels }: { state: OrderBookState; /** Com
 }
 
 function ColumnHeader({ label, tint }: { label: string; tint: string }) {
+  const t = useTranslations("property");
   return (
     <div className="px-4 pb-1 flex items-center justify-between">
       <SectionLabel>{label}</SectionLabel>
-      <span className={`text-[0.625rem] font-medium uppercase tracking-wide ${tint} opacity-70`}>best</span>
+      <span className={`text-[0.625rem] font-medium uppercase tracking-wide ${tint} opacity-70`}>{t("best")}</span>
     </div>
   );
 }

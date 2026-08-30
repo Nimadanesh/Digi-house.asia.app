@@ -1,6 +1,7 @@
 "use client";
 // File responsibility: Quantity step of Buy sheet — currency selector, balance, available shares,
 // qty steppers + live total (shown in the selected rail).
+import { useTranslations } from "next-intl";
 import { Minus, Plus } from "lucide-react";
 import { usd, ton, estimateNanoTon } from "@/lib/format";
 import { positionYieldUsd } from "@/lib/property-yield";
@@ -40,6 +41,7 @@ export function BuyQtyStep({
   /** Single source of truth (lib/property-price); defaults to list price. */
   unitPriceUsd?: number;
 }) {
+  const t = useTranslations("property");
   const tonc = useTonConnect();
   const remaining = listing.sharesRemaining;
   const max = remaining;
@@ -58,10 +60,10 @@ export function BuyQtyStep({
       <div className="space-y-3.5 pb-2" data-testid="buy-qty-step">
         <div className="space-y-1.5">
           <h2 id="buy-sheet-title" className="text-[1.0625rem] font-semibold leading-snug text-foreground">
-            Connect wallet
+            {t("connectWalletTitle")}
           </h2>
           <p className="text-sm leading-relaxed text-muted-foreground pb-0.5">
-            Connect a TON wallet to buy shares and receive weekly rental yield.
+            {t("connectWalletBody")}
           </p>
         </div>
         <WalletConnectButton className="w-full" />
@@ -73,10 +75,10 @@ export function BuyQtyStep({
     return (
       <div className="space-y-1.5 pb-2" data-testid="buy-qty-step">
         <h2 id="buy-sheet-title" className="text-[1.0625rem] font-semibold leading-snug text-foreground">
-          Fully funded
+          {t("fullyFundedTitle")}
         </h2>
         <p className="text-sm leading-relaxed text-muted-foreground pb-0.5">
-          All primary shares are sold. Resale lands next.
+          {t("fullyFundedBody")}
         </p>
       </div>
     );
@@ -85,10 +87,10 @@ export function BuyQtyStep({
   return (
     <div className="space-y-4 pb-2" data-testid="buy-qty-step">
       <h2 id="buy-sheet-title" className="text-[1.0625rem] font-semibold text-foreground">
-        Buy shares
+        {t("buySheetTitle")}
       </h2>
 
-      <div className="grid grid-cols-2 gap-2" role="group" aria-label="Payment currency">
+      <div className="grid grid-cols-2 gap-2" role="group" aria-label={t("paymentCurrency")}>
         {PAY_CURRENCIES.map((opt) => {
           const selected = currency === opt.value;
           const disabled = opt.value === "USDT" && !usdtAvailable;
@@ -98,7 +100,7 @@ export function BuyQtyStep({
               type="button"
               disabled={disabled}
               aria-pressed={selected}
-              aria-label={`Pay with ${opt.value}`}
+              aria-label={t("payWithAria", { currency: opt.value })}
               onClick={() => {
                 haptics.selection();
                 onCurrencyChange(opt.value);
@@ -119,23 +121,17 @@ export function BuyQtyStep({
           className="text-[0.6875rem] leading-relaxed text-muted-foreground"
           data-testid="usdt-unavailable-note"
         >
-          USDT isn&apos;t available right now — you&apos;ll pay with TON.
+          {t("usdtUnavailableNote")}
         </p>
       ) : null}
 
       <Block>
         <Row className="!min-h-[48px]">
-          <span className="text-sm text-muted-foreground">Wallet</span>
+          <span className="text-sm text-muted-foreground">{t("walletLabel")}</span>
           <span className="ml-auto text-sm tnum text-foreground">{tonc.short || "Connected"}</span>
         </Row>
         <Row className="!min-h-[48px]">
-          <span className="text-sm text-muted-foreground">Wallet balance</span>
-          <span className="ml-auto text-sm tnum text-muted-foreground" data-testid="buy-wallet-balance">
-            — · shown when chain linked
-          </span>
-        </Row>
-        <Row className="!min-h-[48px]">
-          <span className="text-sm text-muted-foreground">Available shares</span>
+          <span className="text-sm text-muted-foreground">{t("availableShares")}</span>
           <span className="ml-auto text-sm tnum font-semibold text-foreground" data-testid="buy-available">
             {remaining}
           </span>
@@ -145,7 +141,7 @@ export function BuyQtyStep({
       <div className="flex items-center justify-center gap-4">
         <button
           type="button"
-          aria-label="Decrease quantity"
+          aria-label={t("decreaseQty")}
           disabled={qty <= 1}
           onClick={() => setQty(Math.max(1, qty - 1))}
           className="size-12 rounded-[12px] bg-surface-2 flex items-center justify-center active:scale-[0.97] transition-transform duration-[120ms] ease-out disabled:opacity-40"
@@ -157,7 +153,7 @@ export function BuyQtyStep({
         </div>
         <button
           type="button"
-          aria-label="Increase quantity"
+          aria-label={t("increaseQty")}
           disabled={qty >= max}
           onClick={() => setQty(Math.min(max, qty + 1))}
           className="size-12 rounded-[12px] bg-surface-2 flex items-center justify-center active:scale-[0.97] transition-transform duration-[120ms] ease-out disabled:opacity-40"
@@ -182,28 +178,28 @@ export function BuyQtyStep({
           onClick={() => setQty(max)}
           className="min-h-[44px] min-w-[52px] rounded-full bg-primary/15 px-3 text-sm font-semibold text-primary active:scale-[0.97] transition-transform duration-[120ms] ease-out"
         >
-          Max
+          {t("maxCta")}
         </button>
       </div>
       {invalid ? (
         <p className="text-xs text-danger text-center" role="alert">
-          Quantity must be between 1 and {remaining}.
+          {t("quantityInvalid", { max: remaining })}
         </p>
       ) : null}
       <div className="rounded-[12px] bg-surface-2 p-3 space-y-1.5">
         <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">Total</span>
+          <span className="text-muted-foreground">{t("totalLabel")}</span>
           <span className="tnum font-semibold text-foreground" data-testid="buy-qty-total">
             {currency === "USDT" ? `${usd(totalUsd)} USDT` : `${usd(totalUsd)} · ${ton(estimateNanoTon(totalUsd, TON_PRICE_USD_CENTS))}`}
           </span>
         </div>
         <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">Est. weekly yield</span>
+          <span className="text-muted-foreground">{t("estWeeklyYield")}</span>
           <span className="tnum font-medium text-success">{usd(weekly)}</span>
         </div>
       </div>
       <p className="text-[0.6875rem] text-center text-muted-foreground">
-        Paid in {currency} from your connected wallet.
+        {t("paidInNote", { currency })}
       </p>
     </div>
   );

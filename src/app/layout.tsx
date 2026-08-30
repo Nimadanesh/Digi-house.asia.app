@@ -4,7 +4,7 @@ import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: "FractionalLuxe — Fractional Property on TON",
-  description: "Buy, sell, and earn weekly rental yield from fractionalized real estate on the TON blockchain.",
+  description: "Buy, sell, and earn rental yield from fractionalized real estate on the TON blockchain.",
   applicationName: "FractionalLuxe",
 };
 
