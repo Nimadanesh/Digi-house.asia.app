@@ -8,14 +8,29 @@ export function useScrolledPast(testId: string, enabled = true): boolean {
 
   useEffect(() => {
     if (!enabled || typeof IntersectionObserver === "undefined") return;
-    const el = document.querySelector(`[data-testid="${testId}"]`);
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([entry]) => setPast(entry.isIntersecting === false),
-      { threshold: 0 },
-    );
-    io.observe(el);
-    return () => io.disconnect();
+    let io: IntersectionObserver | null = null;
+    let cancelled = false;
+    // The observed element may not exist yet on first run (skeleton render while
+    // data loads) — retry until it appears, then observe. Without this the IO
+    // never attaches (deps never change) and the hook stays false forever.
+    const findAndObserve = () => {
+      if (cancelled) return;
+      const el = document.querySelector(`[data-testid="${testId}"]`);
+      if (!el) {
+        requestAnimationFrame(findAndObserve);
+        return;
+      }
+      io = new IntersectionObserver(
+        ([entry]) => setPast(entry.isIntersecting === false),
+        { threshold: 0 },
+      );
+      io.observe(el);
+    };
+    findAndObserve();
+    return () => {
+      cancelled = true;
+      io?.disconnect();
+    };
   }, [testId, enabled]);
 
   return past;
