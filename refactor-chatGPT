@@ -9,6 +9,85 @@
 
 ---
 
+# 0. Executive decision rules — READ BEFORE CODING
+
+These rules remove ambiguity for a medium-level coding agent.
+
+### R5 default is Option A
+
+**Unless the active program step explicitly authorizes changing the house-book financial seed path, choose Option A.**
+
+```text
+DEFAULT:
+  → leave the existing house-book financial seed path alone
+  → do NOT refactor matching / settlement / escrow / wallet behavior
+  → server-side exclude house/bootstrap-origin rows from canonical Recent Trades
+  → keep PBD chart/history in a separate stream/table
+
+ONLY choose Option B when:
+  → the active FRACTIONALLUXE-PROGRAM step explicitly authorizes
+    refactoring the seed's financial execution path.
+```
+
+The agent must not interpret "improve UX" as authorization to alter financial mechanics.
+
+### Canonical Recent Trades is LIVE everywhere
+
+`Recent trades` has one meaning: **live, permitted executed activity**.
+
+This rule applies to **all endpoints**, including public property APIs such as `GET /public/properties/:id` and any authenticated equivalent.
+
+```text
+server-side filter → canonical Recent Trades → live only
+```
+
+A frontend-only filter is insufficient.
+
+### Final PBD point must be visually continuous
+
+The generator MUST enforce a hard final-point continuity constraint against the property's current canonical share price.
+
+Default implementation target:
+
+```text
+abs(finalPbdPrice - currentSharePrice) / currentSharePrice <= 0.05
+```
+
+Use a repository/product-approved bound if one already exists; otherwise **5% is the default hard ceiling**. Do not merely hope the random generator lands nearby.
+
+The final PBD observation must remain at/before `PBD_CUTOFF`.
+
+### Docker/runtime truthfulness
+
+If the required Docker/Postgres runtime is unavailable:
+
+```text
+R3/R4 = unit + static/dry-run verified
+runtime DB verification = BLOCKED
+```
+
+Never report runtime DB tests as green when they were not executed.
+
+### Existing chart library is mandatory
+
+R1 MUST identify the chart implementation already used by the property/market UI.
+
+R7 MUST reuse that implementation.
+
+```text
+existing chart library/component → wire PBD data into it
+```
+
+No new chart dependency. If the current chart is mock/gradient-only, first wire its existing rendering path to real API data rather than replacing it with another library.
+
+### Rental history is out of scope
+
+This feature creates **price/market-context PBD**, not fabricated rental history, occupancy, bookings, or rental revenue.
+
+If the current UI displays rental history, preserve the existing simulation disclosure and do not populate it with invented "real" rental records as part of this task.
+
+---
+
 # 1. Current-repo reality — important before coding
 
 This plan is intentionally adapted to the repository as it exists now, rather than assuming a green-field market-data architecture.
@@ -195,7 +274,15 @@ Existing tests            →
 Migration mechanism      →
 ```
 
-**R1 done when:** the map is complete, existing house-book behavior is understood, and all conflicts with this plan are logged.
+### R1 hard requirement: chart path
+
+Identify the exact existing chart component/library and its current data shape. If it is currently mock/gradient-only, document that fact and plan to wire its existing rendering path; do not introduce a replacement chart library.
+
+### R1 hard requirement: status semantics
+
+Record whether the product UX actually renders secondary-market history for `resale` only, or for both `resale` and `funded`. The existing house-book behavior (`resale` + `funded`) is **not** by itself permission to render a 1Y PBD chart on funding properties.
+
+**R1 done when:** the map is complete, existing house-book behavior is understood, the chart path is known, status semantics are known, and all conflicts with this plan are logged.
 
 ---
 
@@ -287,7 +374,11 @@ For a 12-month weekly series across 24 properties, the data volume is tiny. Pref
 
 Do not over-engineer partitioning, event sourcing, or snapshot infrastructure for this scale.
 
-**R3 done when:** migration is minimal, indexed for the actual chart query, and bootstrap operations have no write path to live financial tables.
+### Runtime verification rule
+
+If Docker/Postgres is unavailable, R3 may be validated with migration/static inspection and unit/dry-run tests, but **runtime DB verification must be recorded as BLOCKED**. Never substitute a claimed runtime pass for a test that was not executed.
+
+**R3 done when:** migration is minimal, indexed for the actual chart query, and bootstrap operations have no write path to live financial tables; if runtime is unavailable, that limitation is explicitly recorded.
 
 ---
 
@@ -325,6 +416,20 @@ price(t) = basePrice
 
 Keep the coefficients in one small module.
 
+### Hard final-point continuity constraint
+
+The generator MUST enforce, not merely target, continuity between the final PBD observation and the property's current canonical share price.
+
+Default:
+
+```text
+abs(finalPbdPrice - currentSharePrice) / currentSharePrice <= 0.05
+```
+
+If an existing product/business rule specifies another bound, use that bound and document it. Otherwise 5% is the hard ceiling.
+
+Do not fake a point at current price merely to satisfy the test; adjust/constrain the generated trajectory in a deterministic way so the series remains coherent.
+
 ### UX-quality constraints
 
 The generated series should:
@@ -336,21 +441,21 @@ The generated series should:
 - remain within a bounded range around the base;
 - have mild property-specific variation;
 - have plausible seasonal variation for a short-stay luxury property;
-- end at a value that does not create a jarring discontinuity with the current property price.
+- end within the hard continuity bound above.
 
 Do not optimize for "random-looking." Optimize for **coherent visual storytelling**.
 
-### Better chart data than fake trade data
+### Status guard
 
-The chart itself supplies the maturity impression. Do not manufacture customer events just to populate a ticker.
+If product UX only shows secondary history for `status=resale`, **do not render the 1Y PBD chart on funding properties**, even if the generator or house-book seed has data for them. Generation eligibility and UI eligibility are separate decisions.
 
-**R4 done when:** generator tests prove deterministic output, valid ranges, ordering, cutoff safety, property differentiation, and stable final point.
+**R4 done when:** generator tests prove deterministic output, valid ranges, ordering, cutoff safety, property differentiation, and final-point continuity.
 
 ---
 
 # 9. R5 — Reconcile the existing house-book seed
 
-This is a repository-specific step and must happen before touching `recentTrades` semantics.
+This is a repository-specific step and must happen before changing `recentTrades` semantics.
 
 Current code already has `seed-house-books.ts`, and the house-account implementation can place orders through the real matching/settlement machinery.
 
@@ -366,28 +471,31 @@ Does public recentTrades expose those trades?
 Does it run in production or only development/staging?
 ```
 
-Then choose the smallest program-compliant option:
+## Default decision: Option A
 
-### Option A — Existing house seed is an approved test/liquidity mechanism
+**Unless the active program step explicitly authorizes changing the house-book financial seed path, Option A is mandatory.**
 
-Keep it unchanged for the active program step, but:
+### Option A — Leave the financial seed path alone
 
-- mark/identify it clearly in internal provenance;
-- do not use it as the new PBD history source;
-- do not claim its records are historical customer activity;
-- ensure PBD chart data remains independent.
+Keep existing house-book financial behavior unchanged for the active program step, but:
 
-### Option B — Existing house seed is only visual scaffolding
+- do not use house-book records as the new PBD history source;
+- server-side exclude house/bootstrap-origin rows from the canonical `Recent trades` contract;
+- keep the PBD chart/history in its own stream/table;
+- do not claim house-book records are historical customer activity;
+- preserve existing financial tests and settlement behavior.
 
-If the active program authorizes changing it, refactor the visual bootstrap experience away from real matching/settlement paths and replace it with non-executable PBD market context.
+### Option B — Only with explicit program authorization
 
-### Option C — Existing house trades are currently exposed as "Recent trades"
+If and only if the active program step explicitly authorizes changing the seed's financial execution path, refactor visual bootstrap behavior away from real matching/settlement paths and replace it with non-executable PBD market context.
 
-Do not hide the problem in the frontend. Introduce a server-side filter/contract so the canonical `Recent trades` feed contains only records that the product is allowed to present as live activity.
+### Option C — Public exposure correction
+
+If existing house/bootstrap trades are currently exposed through `recentTrades`, fix the server-side contract. This is not optional: the public endpoint must have the same live-only meaning as authenticated endpoints.
 
 **Never solve this only with CSS or a frontend filter.**
 
-**R5 done when:** existing house-book behavior is documented, and PBD history cannot accidentally become executable financial state.
+**R5 done when:** the existing house-book behavior is documented, the default financial path remains untouched, and canonical Recent Trades is server-side live-only on every API path.
 
 ---
 
@@ -445,17 +553,28 @@ Combined chart:
 1. `getLiveTrades()` never returns PBD rows.
 2. `getBootstrapHistory()` never returns live rows.
 3. combined series preserves item provenance.
-4. public APIs never expose private user/wallet data.
-5. PBD never enters matching/settlement/wallet code.
-6. reseeding PBD never changes live financial rows.
-7. UI does not know seed-table implementation details.
-8. property IDs are always validated against the canonical property source.
-9. range/limit parameters are bounded server-side.
-10. API does not return unnecessary historical rows.
+4. **Every public and authenticated `Recent trades` endpoint is live-only.**
+5. public APIs never expose private user/wallet data.
+6. PBD never enters matching/settlement/wallet code.
+7. reseeding PBD never changes live financial rows.
+8. UI does not know seed-table implementation details.
+9. property IDs are always validated against the canonical property source.
+10. range/limit parameters are bounded server-side.
+11. API does not return unnecessary historical rows.
 
-**Performance:** default to a bounded 12-month range and weekly observations; cap live trade results (e.g. 5–20 for property detail) according to the existing API contract. Avoid N+1 property queries; fetch history for one property per request and reuse the existing property query where possible.
+### Performance contract
 
-**R6 done when:** service and API tests prove all invariants.
+- default chart range: 12 months;
+- weekly PBD observations (~52 points/property);
+- bounded live trade limit suitable for property detail (prefer the existing contract; otherwise 20 max);
+- one property history query per request;
+- no N+1 queries;
+- select only required columns;
+- no request-time generation of PBD data;
+- avoid duplicate fetching of property metadata already loaded by the property endpoint;
+- cache immutable `bootstrap/v1` history at the service/API layer if the existing architecture supports caching, but do not add a cache dependency solely for this feature.
+
+**R6 done when:** service and API tests prove the invariants and the public `recentTrades` path is verified explicitly.
 
 ---
 
@@ -470,7 +589,7 @@ Property identity / destination
         ↓
 Current share price + current state
         ↓
-1Y price chart
+1Y price chart (only when UX eligibility = secondary/resale)
         ↓
 PBD! — mean: Platform bootstrap data
         ↓
@@ -480,6 +599,10 @@ Live market activity
         ↓
 Order book / buy / sell actions
 ```
+
+### Existing chart implementation is mandatory
+
+Use the chart component/library discovered in R1. If it currently renders mock/gradient data, keep the component and replace only its data source/adapter. Do not add another chart dependency.
 
 ### PBD disclosure
 
@@ -514,7 +637,12 @@ Optimize for a mobile/Telegram viewport:
 - avoid rendering every point label;
 - memoize derived chart data;
 - do not refetch the entire property page on tooltip interaction;
-- preserve loading/error/empty states.
+- preserve loading/error/empty states;
+- do not create client-side polling solely for PBD history.
+
+### Status rule
+
+If the product UX defines secondary history as `resale` only, do not render the 1Y PBD chart on `funded`/funding properties. The fact that house-book seed covers funded properties is not sufficient.
 
 ### Important visual distinction
 
@@ -536,7 +664,7 @@ Historical price — PBD
 Live market activity
 ```
 
-**R7 done when:** resale property detail is materially more useful at first open and PBD disclosure is immediately visible.
+**R7 done when:** resale property detail is materially more useful at first open, PBD disclosure is immediately visible, and no funding-property chart is rendered against the product's status rules.
 
 ---
 
@@ -549,420 +677,238 @@ Canonical meaning:
 | **Recent trades** | LIVE | real post-launch executed trades permitted by product rules |
 | **Platform bootstrap history** | PBD | historical price/aggregate context, never disguised customer activity |
 
-Never show:
+Never show bootstrap observations under a plain heading of `Recent trades`.
+
+If a separate historical event/tape is genuinely useful, title it explicitly:
 
 ```text
-Alice bought 12
-Bob sold 8
-0x... tx hash
-```
-
-for PBD data.
-
-If the product needs a row-based historical component, use:
-
-```text
-Bootstrap observation
-Platform bootstrap data
-Illustrative history
-```
-
-and no fake identity/counterparty/wallet/transaction hash.
-
-### UX when there are no live trades
-
-Do not show an empty white box.
-
-Use a useful compact state:
-
-```text
-Recent trades
-No live trades yet
-Historical price context is available above.
-```
-
-This is better UX than fabricating activity.
-
-**R8 done when:** live trades are unmistakably live and PBD is unmistakably historical context.
-
----
-
-# 13. R9 — Order-book UX and safety
-
-The executable order book must be **live orders only**.
-
-Before there is live liquidity:
-
-### Preferred
-
-Show a truthful empty state:
-
-```text
-Order book
-No live orders yet
-```
-
-### Optional PBD visualization
-
-If design needs visual market depth, render a clearly non-executable illustration:
-
-```text
-Illustrative market depth
+Platform bootstrap history
 PBD! — mean: Platform bootstrap data
 ```
 
-This component must have no order ID that can be submitted, cancelled, matched, or settled.
+No synthetic names, wallets, counterparties, hashes, or "customer" identities.
 
-Never insert fake bids/asks into the same query used by matching.
+### Public API parity requirement
 
-**R9 done when:** a bootstrap depth point cannot reach order execution under any code path covered by tests.
+The same filtering/provenance rule MUST apply to:
 
----
+- `GET /public/properties/:id` and its `recentTrades` payload;
+- authenticated property-detail endpoints;
+- any secondary-market listing endpoint that exposes recent trades;
+- any aggregate endpoint whose metric is derived from recent trades.
 
-# 14. R10 — Platform-level "mature launch" metrics
+There must not be a public-vs-authenticated semantic split.
 
-The original launch goal mentions approximately 5,000 users and 9–12 months of activity.
-
-Do not create 5,000 fake authenticated users.
-
-If the product UI needs a launch-time maturity metric, use a separate explicitly named PBD metric, for example:
-
-```text
-bootstrapAudienceCount
-bootstrapActivityIndex
-historicalPlatformMetric
-```
-
-If a UI says:
-
-> 5,000 users
-
-it must represent real authenticated users. If it is bootstrap context, say so visibly:
-
-> 5,000 historical platform audience — PBD
-
-Only implement an exact "5,000" display if the product specification explicitly approves that wording.
-
-Never feed a PBD count into:
-
-- auth;
-- permissions;
-- KYC;
-- wallet ownership;
-- holdings;
-- referrals;
-- payouts;
-- real analytics;
-- investor ranking.
-
-This is lowest priority. Do it only after property detail is excellent.
+**R8 done when:** API tests demonstrate that bootstrap/house-origin records never appear in canonical Recent Trades on any exposed path.
 
 ---
 
-# 15. Seed commands and idempotency
+# 13. R9 — Order book safety
 
-Prefer separate commands:
+An order book is especially sensitive because users can interpret visible bids/asks as actionable liquidity.
 
-```text
-db:seed
-  → canonical property/application seed
+Therefore:
 
-db:seed:bootstrap-history
-  → PBD historical context only
-```
+- real order book = live orders only;
+- bootstrap mode may show an **illustrative depth/market-shape visualization** only if the UI clearly identifies it as PBD and it cannot be submitted/cancelled as if real;
+- never allow a bootstrap bid/ask to reach matching, settlement, wallet, or order execution code;
+- never mix bootstrap orders into a live matching query;
+- preserve the existing house-book behavior under the R5 decision unless an active program step explicitly authorizes changing it.
 
-If repository conventions require another name, follow them.
+If the current UI requires an order book before there are live orders, prefer an explicit empty state with an illustrative PBD visualization over fake executable orders.
 
-### Deterministic key
-
-Use an equivalent unique identity:
-
-```text
-propertyId + observedAt + provenance + bootstrapVersion
-```
-
-### Reseed guarantee
-
-Second PBD seed:
-
-```text
-same inputs → same DB state
-```
-
-PBD seed may update/prune only its own PBD version.
-
-It must never update/delete:
-
-```text
-live trades
-live orders
-real holdings
-real balances
-real transactions
-real settlements
-real NFT state
-```
-
-### Production safety
-
-Make it difficult to accidentally run a destructive PBD cleanup against live data. If the repository has environment guards, use them. If it does not, add a minimal explicit guard rather than relying on operator memory.
-
-**R10 seed done when:** double-run tests prove exact idempotency and live-row immunity.
+**R9 done when:** bootstrap data cannot be submitted, matched, settled, or mistaken for live liquidity.
 
 ---
 
-# 16. Performance strategy
+# 14. R10 — Verification gate
 
-The goal is a fast Telegram Mini App, not a generic analytics platform.
-
-### Database
-
-- weekly PBD observations are enough for a 1Y chart;
-- index `(property_id, provenance, observed_at)`;
-- select only columns required by the chart;
-- bound the requested range;
-- bound live-trade limit;
-- avoid joining user/wallet tables for public market history;
-- do not calculate the PBD series on every HTTP request.
-
-### Server
-
-Generate PBD once at seed time.
-
-Do not run the PRNG in the request handler.
-
-For a combined chart, query PBD + live observations in one service operation and sort once.
-
-If caching already exists, cache the immutable PBD response aggressively using property/version/range as the key. Do not introduce a new cache dependency merely for this feature.
-
-### Frontend
-
-- request one property-market payload rather than many independent requests;
-- avoid waterfall requests for chart + summary + trades where the API can safely compose them;
-- memoize transformed chart points;
-- keep chart point count low;
-- lazy-render below-the-fold sections if the current app architecture supports it;
-- do not add a chart library if one already exists;
-- preserve existing loading skeletons and avoid layout shift.
-
-### Target behavior
-
-At property-detail open:
-
-```text
-1 request → property + market history/summary
-optional 2nd request → live order/trade data only if architecture requires it
-```
-
-Do not turn one property screen into 8–12 API calls.
-
----
-
-# 17. UX quality bar
-
-At the Telegram WebView target (~480×840), verify:
-
-- no horizontal overflow;
-- chart is readable without zooming;
-- current price is visually dominant;
-- PBD disclosure is immediately discoverable;
-- historical vs live is understandable in <5 seconds;
-- recent-trade empty state is intentional, not broken-looking;
-- buy/sell controls remain easy to reach;
-- order-book state is truthful;
-- loading does not jump the layout;
-- error state allows retry;
-- long property titles/destinations do not break layout;
-- numbers use consistent currency/share formatting;
-- touch targets remain comfortable.
-
-Do not sacrifice the established FractionalLuxe Telegram visual language for generic dashboard aesthetics.
-
----
-
-# 18. Test matrix
-
-## Generator
-
-- same property + version → identical result;
-- different property → different trajectory;
-- correct number of observations;
-- chronological order;
-- no future observation;
-- positive prices;
-- bounded weekly change;
-- deterministic final observation;
-- version changes are isolated.
-
-## Database
-
-- migration applies cleanly;
-- unique constraint prevents duplicate PBD observations;
-- second seed is idempotent;
-- PBD cleanup only touches its own version;
-- live rows survive PBD seed;
-- 24 property IDs remain intact.
-
-## Service/API
-
-- bootstrap endpoint returns `provenance=bootstrap`;
-- live trades exclude bootstrap;
-- mixed chart preserves per-point provenance;
-- no private user data in public endpoints;
-- range/limit are bounded;
-- unknown property returns the repository's standard not-found response;
-- public endpoint remains read-only;
-- no PBD record is passed to matching/settlement.
-
-## Existing marketplace
-
-- buy still behaves exactly as before;
-- sell still behaves exactly as before;
-- live order book still uses live orders;
-- settlement tests remain green;
-- NFT hook/worker tests remain green;
-- payout code remains unchanged unless explicitly authorized.
-
-## UI
-
-- resale detail shows 1Y PBD chart;
-- PBD badge appears on first render;
-- chart does not overflow 480px;
-- live-empty state is truthful;
-- real trade appears only in Recent trades;
-- PBD never looks executable;
-- loading/error states work;
-- non-resale property detail does not regress.
-
----
-
-# 19. Verification protocol
-
-At each gate:
-
-```text
-implement one step
-→ run targeted tests
-→ verify done-when
-→ only then continue
-```
-
-Final verification:
+Run the repository-required checks, plus feature-specific verification:
 
 ```text
 npm run check
-all relevant unit/integration tests
-npm run db:seed:dryrun -w @digihouse/api   (where applicable)
-db:seed twice
-db:seed:bootstrap-history twice
+relevant unit tests
+relevant integration/API tests
+bootstrap generator twice
+public recentTrades test
+authenticated recentTrades test
+live-record preservation test
 browser/design review
 ```
 
-If Postgres/Docker is unavailable, do not fake a green runtime result. Run the dry-run/unit/static checks that are possible and mark DB runtime verification BLOCKED exactly as the program requires.
+### Runtime truthfulness
 
-If a verification fails 3 times:
+If Docker/Postgres is unavailable:
 
 ```text
-git checkout -- <files>
-mark step BLOCKED
-append reason to progress log
-continue only with an independent unblocked step
+unit/static/dry-run → report actual result
+runtime DB checks    → BLOCKED
 ```
 
+Do not manufacture a green runtime result.
+
+### Browser verification
+
+Use the existing browser/design-review workflow at approximately **480px Telegram WebView width**.
+
+Inspect:
+
+- secondary/resale property detail;
+- chart;
+- PBD disclosure;
+- recent trades;
+- empty live state;
+- order book if touched;
+- at least one non-secondary property to catch regressions.
+
+Check:
+
+```text
+no horizontal overflow
+PBD visible without interaction
+chart readable
+month labels sensible
+numbers stable/tabular where appropriate
+primary action obvious
+live/PBD distinction understandable
+loading/error/empty states intact
+```
+
+**R10 done when:** every executed check has a real result, blocked checks are explicitly labeled BLOCKED, and no unrelated changes are bundled.
+
 ---
 
-# 20. Strict execution order
+# 15. Data transition after launch
 
-| Step | Focus | Done when |
-|---|---|---|
-| R1 | Recon | actual repo map + house-book behavior understood |
-| R2 | Timeline/provenance | one explicit PBD version/cutoff contract |
-| R3 | Persistence | minimal indexed history model; live untouched |
-| R4 | Generator | deterministic 1Y history + tests |
-| R5 | Existing house-book reconciliation | no unsafe semantic mixing |
-| R6 | Service/API | provenance-safe, bounded, privacy-safe contract |
-| R7 | Property detail/chart | materially better UX + visible PBD |
-| R8 | Recent trades | live-only semantics |
-| R9 | Order book | live executable liquidity only |
-| R10 | Launch metrics + final verification | optional PBD metrics + all checks green |
+The intended lifecycle is:
 
-**Never skip directly to R7 before understanding R5.** The current repository already has a house-book seeding path through real marketplace machinery; ignoring it is the easiest way to build a visually good but semantically broken implementation.
+```text
+                    LAUNCH
+                       │
+         ┌─────────────┴─────────────┐
+         ▼                           ▼
+    PBD history                  LIVE activity
+    immutable context            actual events
+         │                           │
+         └──────────────┬────────────┘
+                        ▼
+                 provenance-aware UI
+```
+
+PBD is historical context. It should become increasingly less prominent as live activity accumulates, but it must never be rewritten to make the chart appear continuous.
+
+When the first live event occurs:
+
+- store the actual event timestamp;
+- do not backfill invented events;
+- append live history after the cutoff;
+- preserve PBD version;
+- keep PBD disclosure adjacent to PBD content.
 
 ---
 
-# 21. Definition of Done
+# 16. What NOT to build
 
-- [ ] Exactly the canonical 24 property IDs remain intact.
-- [ ] Intended resale properties have coherent ~12-month PBD price history.
-- [ ] PBD generation is deterministic and versioned.
-- [ ] PBD cutoff is explicit and stable.
-- [ ] PBD history is stored/queryable without JSON overfetch.
-- [ ] PBD is hard-separated from live financial activity.
-- [ ] Existing house-book behavior is understood and handled according to the active program.
-- [ ] No fake authenticated users are required.
-- [ ] No fabricated customer trades are presented as real.
-- [ ] No bootstrap order can be matched/settled/cancelled as a live order.
-- [ ] Real holdings/balances/orders/transactions survive PBD reseeding.
+Do not build any of the following for this feature unless a future, explicit product step changes scope:
+
+```text
+5,000 fake users
+fake customer profiles
+fake KYC
+fake wallet balances
+fake payment records
+fake rental bookings
+fake rental revenue
+fake customer trade identities
+fake transaction hashes
+fake executable orders
+full event-sourcing system
+real-time market-data infrastructure
+new chart library
+new caching infrastructure
+partitioned market-history warehouse
+```
+
+The maturity effect should come from a small amount of high-quality PBD history and better UX, not database volume.
+
+---
+
+# 17. Execution order for a medium-level coding agent
+
+Do not give the agent one giant implementation prompt. Execute these gates sequentially.
+
+## R1 — Recon
+**Stop condition:** exact architecture, chart path, status eligibility, house-book behavior, API paths, and tests identified.
+
+## R2 — Timeline
+**Stop condition:** version/cutoff/range/cadence defined once.
+
+## R3 — Persistence
+**Stop condition:** minimal schema works conceptually; runtime status is truthful.
+
+## R4 — Generator
+**Stop condition:** deterministic 52-ish point history, bounded and continuous at cutoff.
+
+## R5 — House-book reconciliation
+**Stop condition:** Option A selected by default; financial path untouched unless explicitly authorized; public/auth Recent Trades server-side live-only.
+
+## R6 — API/service
+**Stop condition:** provenance-aware contract, bounded queries, no N+1, public/auth parity.
+
+## R7 — UX
+**Stop condition:** existing chart wired, PBD visible, status eligibility respected, Telegram viewport clean.
+
+## R8 — Recent Trades
+**Stop condition:** only live activity under canonical Recent Trades everywhere.
+
+## R9 — Order book
+**Stop condition:** no bootstrap data can become executable liquidity.
+
+## R10 — Verification
+**Stop condition:** actual test results recorded; unavailable runtime marked BLOCKED.
+
+**Agent instruction:** after each gate, stop and verify before proceeding. If a gate fails, fix only that gate. Do not continue by assuming the failure is harmless.
+
+---
+
+# 18. Definition of Done
+
+- [ ] 24-property manifest contract remains intact.
+- [ ] PBD history exists only where product UX says secondary history should exist.
+- [ ] PBD history is deterministic and versioned.
+- [ ] PBD history ends at/before cutoff.
+- [ ] Final PBD point is within the hard continuity bound of current share price.
+- [ ] PBD and live data are provenance-separated.
+- [ ] No synthetic customer identities are required.
+- [ ] No fabricated executed trades are presented as real.
+- [ ] No bootstrap order can reach matching/settlement/wallet code.
+- [ ] Existing house-book financial seed path was left unchanged unless explicitly authorized.
+- [ ] Canonical Recent Trades is live-only server-side.
+- [ ] Public and authenticated Recent Trades have identical provenance semantics.
 - [ ] API exposes provenance explicitly.
-- [ ] API queries are bounded and avoid N+1 behavior.
-- [ ] Property detail has a useful 1Y chart on first open.
-- [ ] `PBD! — mean: Platform bootstrap data` is visible next to every PBD visualization.
-- [ ] `Recent trades` means live activity only.
-- [ ] Pre-live empty states are polished and truthful.
-- [ ] Chart clearly distinguishes PBD history from live observations.
-- [ ] Order-book executable state is live-only.
+- [ ] Queries are bounded and avoid N+1 behavior.
+- [ ] PBD history is persisted/read rather than generated on every request.
+- [ ] Existing chart library/component is reused.
+- [ ] Secondary-market property detail has useful one-year context.
+- [ ] `PBD! — mean: Platform bootstrap data` is visible wherever PBD is presented.
+- [ ] Funding properties do not display the chart if product UX restricts it to resale.
+- [ ] Rental history is not fabricated by this feature; existing simulation disclosure remains intact.
+- [ ] Loading/error/empty states remain intact.
 - [ ] Telegram ~480px layout has no horizontal overflow.
-- [ ] Existing buy/sell/settlement/NFT/payout behavior has no regression.
-- [ ] `npm run check` is green except documented baseline failures/warnings.
-- [ ] Targeted unit/integration/browser tests pass.
-- [ ] No unrelated formatting/refactor churn.
-- [ ] No unapproved dependencies.
-- [ ] Program progress log and Resume Here are updated according to repository rules.
+- [ ] `npm run check` is green, or baseline failures are explicitly documented.
+- [ ] Browser/design review passes for touched screens.
+- [ ] Docker/runtime limitations, if any, are reported as BLOCKED rather than falsely green.
+- [ ] No unrelated refactor/formatting churn.
+- [ ] No unapproved dependency.
 
 ---
 
-# 22. Product-quality priority
+# 19. Product success criterion
 
-If time is limited, stop after the first fully polished slice rather than spreading effort across the whole app:
+Success is not measured by the number of seeded rows.
 
-### Tier 1 — must be excellent
+Success means:
 
-**Secondary-market property detail + 1Y PBD chart + PBD disclosure + truthful live transition.**
+> A new investor opening a resale property immediately sees a coherent one-year historical market context, understands exactly which data is platform bootstrap data, can distinguish it from real live activity, and can use the actual secondary-market actions without the bootstrap layer contaminating financial state.
 
-### Tier 2 — must be safe
-
-**Live recent trades + executable order book separation.**
-
-### Tier 3 — optional launch polish
-
-**Platform-level PBD maturity metrics.**
-
-The launch should feel mature because the **property experience is mature**, not because the database contains a large pile of synthetic rows.
-
----
-
-# 23. Agent operating instruction
-
-Do not interpret this document as permission to redesign the architecture broadly.
-
-The agent should continuously optimize for:
-
-```text
-smallest correct diff
-+ strongest provenance boundary
-+ fastest property-detail experience
-+ clearest PBD disclosure
-+ zero regression to real money paths
-```
-
-When two implementations are functionally equivalent, choose the one with:
-
-1. fewer new tables;
-2. fewer API calls;
-3. fewer dependencies;
-4. fewer frontend transformations;
-5. stronger DB constraints;
-6. easier deterministic tests;
-7. smaller diff.
-
-**Final success condition:** a new investor opens a secondary-market property and immediately sees a polished, information-rich, one-year historical market context, while the application remains completely honest about which information is platform bootstrap data and which activity is real.
+That is the highest-value combination of **launch credibility, UX quality, performance, and data integrity** for this feature.
