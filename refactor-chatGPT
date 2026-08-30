@@ -1,0 +1,766 @@
+# FractionalLuxe — Refactor & Launch-Data Execution Strategy
+
+**Purpose:** give a medium-level coding agent an implementation-ready plan for making the app launch with a convincing *platform-bootstrap history* while preserving a hard boundary between bootstrap/demo data and post-launch user-generated data.
+
+> **Important:** this plan does **not** recommend manufacturing fake users, fake executed trades, fake wallets, fake payments, fake earnings, or other records that could reasonably be mistaken for real activity. The repository already requires simulated-data disclosure. The visual goal is achieved with deterministic **PBD (Platform Bootstrap Data)** history and explicit labeling, not by presenting fabricated activity as real.
+
+## 0. Non-negotiable repository rules
+
+Before touching code, the agent MUST read:
+
+1. `FRACTIONALLUXE-PROGRAM.md`
+2. `AGENTS.md`
+3. `.agent/context/PRODUCT.md`
+4. `.agent/context/BUSINESS-RULES.md`
+5. relevant specs in `docs/research/`
+6. `.agent/TEAM.md` and `.agent/ORCHESTRATOR.md` for non-trivial work
+
+The current program is authoritative. Work one step at a time and verify each `done when`. Do not modify payment/settlement/TON logic unless the active program step explicitly authorizes it. Do not add dependencies without approval. Do not mass-rename technical `DigiHouse` identifiers.
+
+The product is **FractionalLuxe** at `app.fractionalluxe.com`; the repository name may remain `Digi-house.asia.app`.
+
+The locked income model is **monthly accrual; withdrawal on request with 1% fee, paid in 4 weekly installments**. Any existing implementation conflict must be documented, not silently corrected.
+
+---
+
+# 1. What we are actually building
+
+The desired launch state is:
+
+- the portfolio is already populated from the 24-property manifest;
+- selected secondary-market properties have a historical context that begins months before launch;
+- charts have a useful historical range instead of an empty screen;
+- property detail explains that the historical series is platform-bootstrap/simulated data;
+- after launch, real user actions enter a separate live data stream;
+- live data is never overwritten by reseeding;
+- the UI can show both streams without falsely implying that bootstrap events were real customer transactions.
+
+### Critical correction to the earlier strategy
+
+Do **not** implement the naive design of inserting 200–500 synthetic users plus hundreds of `is_seed=true` executed trades and then rendering them in a `recentTrades` table. Even with a disclosure, that creates a dangerous semantic ambiguity: a row that looks like a customer trade still looks like a customer trade.
+
+Instead, model bootstrap history as its own **data provenance/type**, and only expose bootstrap metrics/events in UI components that explicitly identify them as such.
+
+The strongest implementation is:
+
+```text
+                     ┌─────────────────────┐
+                     │  Property manifest  │
+                     │   canonical data    │
+                     └──────────┬──────────┘
+                                │
+                                ▼
+                  ┌──────────────────────────┐
+                  │ Bootstrap history engine │
+                  │ deterministic + versioned│
+                  └────────────┬─────────────┘
+                               │
+             ┌─────────────────┼─────────────────┐
+             ▼                 ▼                 ▼
+      price history       market metrics     historical context
+       (PBD)                (PBD)                 (PBD)
+             │                 │                 │
+             └─────────────────┼─────────────────┘
+                               ▼
+                    ┌────────────────────┐
+                    │   API provenance    │
+                    │ bootstrap / live   │
+                    └─────────┬──────────┘
+                              ▼
+                    ┌────────────────────┐
+                    │ UI + PBD disclosure│
+                    └────────────────────┘
+                              ▲
+                              │
+                    real user activity
+                         (LIVE only)
+```
+
+---
+
+# 2. First task: repository reconnaissance, not coding
+
+The agent must first produce a short implementation map from the actual repository. Search for:
+
+```text
+properties
+orders
+transactions
+holdings
+recentTrades
+orderbook
+order-book
+chart
+priceHistory
+property/[id]
+secondary
+resale
+seed
+portfolio-manifest
+mock
+public/properties
+```
+
+Inspect at minimum:
+
+- `apps/api` schema, migrations, repositories, route handlers, tests;
+- property seed implementation and `manifest-data.ts` / `portfolio-manifest.json` integration;
+- existing `orders`, `transactions`, `holdings`, and market-related models;
+- current property detail / secondary-market components;
+- current chart and recent-trade UI;
+- existing simulated-data disclosure components/copy;
+- current mock repository layer and its contracts;
+- current phase/program state before choosing where this work fits.
+
+**Do not assume** the schema described in an old plan exists. Adapt the strategy to the actual repository.
+
+### Deliverable before implementation
+Create a compact map in the agent's task notes:
+
+```text
+Property source → ...
+Property DB model → ...
+Secondary-market source → ...
+Chart source → ...
+Recent-trades source → ...
+Order-book source → ...
+Disclosure component/source → ...
+Seed entry point → ...
+API entry points → ...
+Existing tests → ...
+```
+
+If an existing source-of-truth spec conflicts with this document, the repository spec wins and the conflict is logged.
+
+---
+
+# 3. Data architecture: provenance is a first-class concept
+
+Use the smallest schema change that gives the application an unambiguous boundary.
+
+Prefer a shared enum/string contract such as:
+
+```ts
+type DataProvenance = 'bootstrap' | 'live';
+```
+
+or, where an existing schema already has a compatible concept, extend it rather than adding another competing field.
+
+### Recommended metadata
+
+For bootstrap records that genuinely need persistence:
+
+```text
+provenance = 'bootstrap'
+bootstrap_version = 'v1'
+```
+
+For live records:
+
+```text
+provenance = 'live'
+```
+
+Do **not** use a vague boolean such as `is_seed` as the only semantic contract. A boolean answers "was this seeded?" but not "what does this record mean?" A typed provenance field is safer at API boundaries.
+
+For property-level history, also retain:
+
+```text
+property_id
+observed_at / timestamp
+value(s)
+provenance
+bootstrap_version (nullable for live)
+```
+
+Use integer minor units for money, matching repository rules.
+
+### Avoid unnecessary tables
+
+Do not create `trades`, `order_book_snapshots`, `payout_ticks`, or `price_history` merely because an earlier strategy suggested them. First determine whether existing models can support the required display semantics safely.
+
+Create a new table only when all of these are true:
+
+1. the UI requires historical rows;
+2. existing data cannot represent them cleanly;
+3. provenance can be enforced;
+4. live records cannot accidentally be reseeded or overwritten;
+5. tests can prove the boundary.
+
+---
+
+# 4. Bootstrap history design — prioritize secondary market
+
+## 4.1 Property lifecycle
+
+For each eligible resale property, derive a deterministic bootstrap start date from the property ID and a fixed launch-history anchor.
+
+Do **not** call `new Date()` inside generation logic without an explicit anchor. The output must be reproducible.
+
+Recommended configuration:
+
+```text
+BOOTSTRAP_HISTORY_VERSION = v1
+BOOTSTRAP_HISTORY_END = explicit fixed launch anchor
+BOOTSTRAP_HISTORY_MONTHS = 12
+```
+
+The exact dates should be derived from the active launch plan rather than invented independently by each script.
+
+Every property should have a coherent timeline:
+
+```text
+bootstrap start
+      ↓
+historical price observations
+      ↓
+bootstrap cutoff / launch boundary
+      ↓
+live user activity after launch
+```
+
+No bootstrap observation may accidentally be timestamped in the future relative to the bootstrap cutoff.
+
+## 4.2 Price history
+
+For resale properties, generate a compact deterministic time series suitable for the chart:
+
+- weekly observations are preferred unless the existing chart requires daily data;
+- start from the canonical manifest share price;
+- use a seeded PRNG keyed by `(bootstrapVersion, propertyId, period)`;
+- constrain changes to plausible bounded ranges;
+- introduce mild seasonal behavior only as an illustrative market pattern;
+- never claim the values are sourced from real market transactions;
+- guarantee no negative prices and no impossible jumps;
+- guarantee chronological ordering.
+
+Do not make every property follow the same curve. The deterministic seed should produce distinct but stable trajectories.
+
+### Better than random noise
+
+Use a small transparent model:
+
+```text
+price(t) = basePrice
+         × longTermDrift(t)
+         × seasonalFactor(t)
+         × boundedNoise(t)
+```
+
+Keep parameters in one module so the agent can reason about and test them. Avoid a heavyweight simulation framework.
+
+## 4.3 Volume / activity metrics
+
+If the product needs visual market activity, generate **aggregate bootstrap metrics**, not fake customer transactions:
+
+- historical activity index;
+- indicative volume band;
+- number of bootstrap observations;
+- market-interest index;
+- historical high/low;
+- indicative spread/range where the product design calls for it.
+
+Label these metrics PBD.
+
+Do not manufacture rows such as:
+
+```text
+Alice bought 12 shares
+Bob sold 8 shares
+```
+
+and render them as recent real trades.
+
+---
+
+# 5. Recent Trades: make the semantics safe
+
+This is the most important architectural decision.
+
+There are two legitimate UI concepts:
+
+### A. Live Recent Trades
+
+Only real, executed post-launch transactions.
+
+```text
+source = live
+```
+
+This is the canonical "Recent trades" feed.
+
+### B. Bootstrap Market History
+
+A separate historical component, clearly titled/disclosed, for example:
+
+```text
+Platform bootstrap history
+PBD! — mean: Platform bootstrap data
+```
+
+It may show historical price observations or **illustrative market events**, but never imply they were actual customer transactions.
+
+If product design absolutely requires a row-based historical tape, use labels such as:
+
+```text
+Bootstrap observation
+Illustrative history
+Platform bootstrap data
+```
+
+and never assign synthetic human identities, wallets, transaction hashes, or fake counterparties.
+
+### API contract
+
+Prefer an explicit response shape:
+
+```ts
+{
+  data: [...],
+  provenance: 'live' | 'bootstrap' | 'mixed',
+  disclosure: 'PBD'
+}
+```
+
+For mixed endpoints, every item should carry provenance when practical. Do not force consumers to infer provenance from timestamps.
+
+---
+
+# 6. Order book: do not fake liquidity
+
+An order book is especially sensitive because users can interpret visible bids/asks as actionable market liquidity.
+
+Therefore:
+
+- real order book = live orders only;
+- bootstrap mode may show an **illustrative depth/market-shape visualization** only if the UI clearly identifies it as PBD and it cannot be submitted/cancelled as if real;
+- never allow a bootstrap bid/ask to reach matching, settlement, wallet, or order execution code;
+- never mix bootstrap orders into a live matching query.
+
+If the current UI requires an order book before there are live orders, prefer an explicit empty state with an illustrative PBD visualization over fake executable orders.
+
+---
+
+# 7. API boundary
+
+Create one provenance-aware repository/service layer rather than putting seed/live branching throughout React components.
+
+Conceptually:
+
+```ts
+getPropertyMarketHistory(propertyId, range)
+getLiveTrades(propertyId, limit)
+getBootstrapHistory(propertyId, range)
+getMarketSummary(propertyId)
+```
+
+Then compose at the service boundary.
+
+### Required invariants
+
+1. `getLiveTrades()` never returns bootstrap rows.
+2. `getBootstrapHistory()` never returns live rows.
+3. a combined response preserves provenance;
+4. public property endpoints never expose private user data;
+5. bootstrap data cannot enter financial settlement/matching paths;
+6. reseeding never updates/deletes live rows;
+7. the frontend does not need to know database-specific seed mechanics.
+
+Add tests for all seven.
+
+---
+
+# 8. UI strategy — make the result visibly better, not merely technically correct
+
+The visual payoff should be concentrated on **secondary market property detail**.
+
+## Property detail hierarchy
+
+Recommended information order:
+
+1. property identity / destination;
+2. current share price;
+3. funding/ownership state;
+4. one-year price chart;
+5. clear PBD disclosure;
+6. market summary;
+7. live recent trades, if any;
+8. otherwise a truthful empty state plus bootstrap historical context;
+9. buy/sell action according to actual property state.
+
+Do not bury the disclosure below the chart. The disclosure belongs immediately adjacent to the historical visualization.
+
+## Required PBD badge
+
+The requested canonical UI marker is:
+
+> **PBD! — mean: Platform bootstrap data**
+
+Use it consistently in:
+
+- property detail historical chart;
+- secondary-market historical activity;
+- bootstrap market metrics;
+- any recent-history component containing bootstrap observations;
+- any illustrative order-book/depth visualization.
+
+A reusable component is preferable, e.g. `PlatformBootstrapDisclosure`, provided it fits the existing component architecture and does not require a new dependency.
+
+### Disclosure behavior
+
+It should be:
+
+- visible without opening a tooltip;
+- compact enough for a Telegram Mini App;
+- accessible with sufficient contrast;
+- semantically tied to the data section it describes;
+- consistent across screens;
+- present on initial render, not only after interaction.
+
+Do not use a tiny, low-contrast footnote as the only disclosure.
+
+---
+
+# 9. Chart behavior
+
+The chart should support a truthful transition:
+
+```text
+[PBD historical series] ────────────┐
+                                    ├── current/live region
+                                    │
+                                    ▼
+                         [live observations]
+```
+
+If live data exists, append it chronologically. Do not overwrite the historical bootstrap series.
+
+The UI should make the boundary understandable. For example:
+
+- PBD badge on the historical section;
+- optional visual boundary/label at the bootstrap cutoff;
+- live values clearly represented as live.
+
+Avoid implying that a PBD line is an actual market-price record.
+
+### Empty/live transition
+
+Before the first real trade:
+
+```text
+Historical price context — PBD
+No live trades yet
+```
+
+After the first real trade:
+
+```text
+Historical price context — PBD
+Live market activity
+```
+
+This is substantially more trustworthy than making fake trades disappear behind real ones.
+
+---
+
+# 10. Launch-state counters
+
+The original goal mentions "5,000 users" and a platform that feels 9–12 months old.
+
+Do **not** seed 5,000 fake users simply to make a dashboard number look real.
+
+Instead:
+
+- if the product genuinely needs a launch-time platform counter, define it as an explicitly disclosed **platform bootstrap metric**;
+- keep it separate from authenticated user counts;
+- never let it affect permissions, wallet ownership, holdings, KYC, referrals, payouts, or analytics that assume real identities;
+- do not call it simply `users` in an API contract if it is not a real-user count.
+
+Prefer names such as:
+
+```text
+bootstrapAudienceCount
+bootstrapActivityIndex
+historicalPlatformMetric
+```
+
+If the current product spec requires an exact "5,000 users" presentation, surface that as a product/compliance decision rather than silently implementing it.
+
+---
+
+# 11. Seed implementation
+
+Implement bootstrap generation as a separate, versioned operation rather than contaminating the normal production seed.
+
+Preferred shape:
+
+```text
+seed-properties       → canonical 24-property manifest
+seed-bootstrap-history → PBD history only
+```
+
+or equivalent existing repository commands.
+
+### Idempotency
+
+Running the bootstrap seed twice must produce exactly the same database state.
+
+Use a deterministic key such as:
+
+```text
+(propertyId, observedAt, bootstrapVersion, provenance)
+```
+
+or an equivalent unique constraint that fits the existing schema.
+
+### Safety rule
+
+A bootstrap rerun may:
+
+- insert/update bootstrap rows belonging to its own version;
+- prune obsolete bootstrap rows belonging to its own version if required;
+
+but it must **never**:
+
+- delete live rows;
+- update live rows;
+- change holdings owned by real users;
+- change real orders;
+- change real transactions;
+- change settlement/payment state.
+
+Add a regression test specifically proving this.
+
+---
+
+# 12. Versioning and launch cutover
+
+Use an explicit bootstrap version and cutoff.
+
+Example configuration:
+
+```text
+BOOTSTRAP_VERSION=v1
+BOOTSTRAP_CUTOFF=<fixed launch timestamp>
+```
+
+At launch:
+
+```text
+bootstrap: timestamp <= cutoff
+live:      timestamp > cutoff
+```
+
+If the actual first-live event happens later than the planned cutoff, do not manufacture records to fill the gap. The absence of live activity is valid.
+
+A future `v2` bootstrap regeneration must never rewrite `v1` historical data in production unless explicitly planned.
+
+---
+
+# 13. Database migration strategy
+
+Use the existing Drizzle migration mechanism and repository conventions.
+
+Migration order:
+
+1. add provenance/version/cutoff fields or the minimal new history table;
+2. add constraints/indexes;
+3. update repositories/services;
+4. update seed;
+5. update API contracts;
+6. update UI;
+7. tests;
+8. production migration verification.
+
+Recommended indexes, only where supported by actual query patterns:
+
+```text
+(property_id, observed_at)
+(property_id, provenance, observed_at)
+```
+
+Do not create broad indexes speculatively.
+
+Never hand-edit an autogenerated migration unless the repository's established workflow requires it and the final SQL has been reviewed.
+
+---
+
+# 14. Testing strategy
+
+The agent must test behavior, not just compilation.
+
+## Seed tests
+
+- deterministic output for the same version/property/date;
+- different properties do not all get identical histories;
+- valid price/share ranges;
+- chronological ordering;
+- no future timestamps beyond bootstrap cutoff;
+- idempotent second run;
+- bootstrap rerun cannot modify live records;
+- exact 24-property manifest contract remains intact.
+
+## API tests
+
+- bootstrap history returns `provenance=bootstrap`;
+- live trades endpoint excludes bootstrap data;
+- combined endpoint preserves provenance;
+- no private user/wallet data leaks;
+- unauthenticated public endpoints remain read-only;
+- rate limiting/CORS behavior remains green.
+
+## UI tests
+
+For at least one funding/funded/resale property where relevant:
+
+- chart renders historical data;
+- PBD badge is visible on initial render;
+- live-empty state is truthful;
+- a live trade appears only in live activity;
+- bootstrap rows cannot be mistaken for executable orders;
+- no horizontal overflow at Telegram's ~480px viewport;
+- loading/empty/error states remain intact;
+- touch targets remain compliant;
+- existing native-Telegram design system is preserved.
+
+---
+
+# 15. Browser verification / design review
+
+For touched screens, use the repository's existing verification workflow.
+
+At minimum verify at the Telegram WebView target width (~480px):
+
+- secondary-market property detail;
+- chart section;
+- recent activity;
+- order-book/market section if touched;
+- one non-resale property to catch regressions.
+
+Check both visual and functional behavior:
+
+```text
+no horizontal scroll
+PBD disclosure visible
+chart readable
+numbers use tabular formatting
+primary action remains obvious
+no fake live activity
+live/bootstrapped distinction understandable
+```
+
+Run the repository-required `/design-review` and `npm run check` before declaring the work done.
+
+---
+
+# 16. Execution order for a medium-level coding agent
+
+Do **not** give the coding agent one giant "implement everything" prompt. Execute these small gates in order.
+
+## Step R1 — Recon
+
+Read the source-of-truth docs and map current property/market/history architecture.
+
+**Done when:** exact files, existing models, endpoints, components, and tests are identified.
+
+## Step R2 — Contract
+
+Define the provenance contract and bootstrap cutoff/version using existing conventions.
+
+**Done when:** TypeScript/API/data-model contract is explicit and does not conflict with business rules.
+
+## Step R3 — Persistence
+
+Implement the minimal migration/model changes needed for PBD historical observations.
+
+**Done when:** migration applies, indexes are appropriate, live records remain untouched.
+
+## Step R4 — Deterministic generator
+
+Implement versioned bootstrap history generation for eligible resale properties.
+
+**Done when:** repeated generation is byte/database-state deterministic and tested.
+
+## Step R5 — Repository/service boundary
+
+Expose separate bootstrap/live retrieval methods and a safe combined market-history contract.
+
+**Done when:** unit/integration tests prove no bootstrap data enters live trade/order execution paths.
+
+## Step R6 — Secondary-market API
+
+Update property-market endpoints to expose provenance explicitly.
+
+**Done when:** API responses are stable, typed, privacy-safe, and backward compatible where required.
+
+## Step R7 — UI disclosure + chart
+
+Implement/reuse the PBD disclosure and wire the historical chart to the provenance-aware API.
+
+**Done when:** the chart has useful historical context and the PBD badge is immediately visible.
+
+## Step R8 — Live activity
+
+Keep Recent Trades strictly live. Add truthful empty-state handling and, where useful, a separate bootstrap-history section.
+
+**Done when:** a real post-launch trade can be observed without reseeding or rewriting PBD history.
+
+## Step R9 — Order book safety
+
+If an order-book visualization is required, separate illustrative PBD depth from executable live orders.
+
+**Done when:** bootstrap data cannot be submitted, matched, settled, or mistaken for live liquidity.
+
+## Step R10 — Full verification
+
+Run:
+
+```text
+npm run check
+all relevant unit/integration tests
+seed/bootstrap twice
+manual/browser design review
+```
+
+**Done when:** all gates are green and the progress log records the exact verification results.
+
+---
+
+# 17. Definition of Done
+
+This refactor is complete only when all are true:
+
+- [ ] 24-property manifest contract remains intact.
+- [ ] PBD history exists for intended resale properties.
+- [ ] PBD history is deterministic and versioned.
+- [ ] PBD history is clearly separated from live activity.
+- [ ] No synthetic customer identities are required to make the UI look active.
+- [ ] No fabricated executed trades are presented as real trades.
+- [ ] No bootstrap order can reach matching/settlement/wallet code.
+- [ ] Real user records survive every bootstrap seed/reseed.
+- [ ] API exposes provenance explicitly.
+- [ ] Secondary-market property detail has useful historical context.
+- [ ] `PBD! — mean: Platform bootstrap data` is visible wherever bootstrap data is presented.
+- [ ] Recent Trades means live trades, not disguised bootstrap events.
+- [ ] Chart distinguishes historical PBD context from live activity.
+- [ ] Empty states remain truthful before the first live trade.
+- [ ] Native Telegram visual rules remain intact.
+- [ ] `npm run check` is green, with only documented baseline exceptions if any.
+- [ ] design review passes for touched screens.
+- [ ] no unrelated refactor/formatting churn.
+- [ ] no new dependency was introduced without approval.
+- [ ] `FRACTIONALLUXE-PROGRAM.md` is updated only according to its rules: checkbox/resume/progress log.
+
+---
+
+# 18. Product outcome we are optimizing for
+
+The success criterion is **not** "the database contains lots of fake rows."
+
+The success criterion is:
+
+> When a new investor opens a resale property, the product immediately communicates a mature market context — useful one-year historical price information, coherent market context, clear property state, and a polished secondary-market experience — while a careful user can unambiguously distinguish platform-bootstrap history from actual post-launch customer activity.
+
+That produces the desired launch impression without corrupting the application's data semantics.
+
+**Priority:** secondary-market property detail > historical chart > truthful live-trade transition > order-book presentation > platform-level bootstrap metrics.
