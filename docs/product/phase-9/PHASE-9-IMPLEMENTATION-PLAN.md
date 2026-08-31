@@ -413,5 +413,27 @@ For each milestone, give the coding agent only the relevant task plus this contr
 |---|---|---|---|---|
 | 2026-08-31 | 9.0 documentation baseline | READY FOR AUDIT | `93e02fc` | Product Spec added; implementation plan added next |
 | 2026-08-31 | 1 — P0 Foundation / Contract | ACCEPTED | `e4af750` | Branch `phase-9-redesign`; pushed / synced with `origin`; tests 522/522; typecheck clean; lint 0 errors (existing warnings + noted `_propertyId` warning); financial regression none; scope compliance PASS; Slice 2 NOT STARTED |
+| 2026-08-31 | 2 — Estate Detail | ACCEPTED WITH NON-BLOCKING FINDINGS | `f64d739` | 4-tab model Estate/Income/Ownership/Details; identity-first hero; resale demoted; Owner Stay P0 presentation-only (honest unavailable); buy-flow copy only (mechanics untouched); tests 520/520; `npm run check` green; e2e 4/4 @ 480×840; screenshots in `screenshots/phase9-slice2/` |
+| 2026-09-01 | 3 — Home | ACCEPTED WITH NON-BLOCKING FINDINGS | `0298a68` | Ownership-first Home (Your Estates hero, Next Distribution labeled Expected, My Estates preview, Featured Estate without APY, More Estates, estates empty state); tests 526/526; `npm run check` exit 0; e2e home 2/2 + estate-detail regression 4/4 @ 480×840; screenshots in `screenshots/phase9-slice3/`; findings 1–4 below are deferred, not fixed |
 
-**Next action:** execute **Slice 2 — Estate Detail** (highest product priority) after Slice 1 acceptance.
+---
+
+# 14. Session Checkpoint — end of session (2026-09-01)
+
+- **Current phase:** Phase 9 — Product/UX Redesign (branch `phase-9-redesign`; spec docs in `docs/product/phase-9/`)
+- **Last accepted slice:** Slice 3 — Home (`0298a68`, ACCEPTED WITH NON-BLOCKING FINDINGS)
+- **Last commit:** `0298a68` — `feat(phase9): ownership-first home redesign (slice 3)` — pushed; HEAD == `origin/phase-9-redesign`; working tree clean
+- **Independent audit confirmation (Slice 3):** unit 526/526 (88 files); `npm run check` exit 0 (lint 0 errors, 5 pre-existing warnings); typecheck clean; production build pass; Home e2e 2/2 @ 480×840; Estate Detail regression 4/4; no financial/route/shell/API changes
+- **Next task:** **Slice 4 — Estates (`/marketplace`)** — labels, filters, cards, curation/default ordering per `PHASE-9-PRODUCT-REDESIGN.md` §6 and UI Mapping §4; ownership-first vocabulary; no financial-engine refactor, no route migration, no unrelated cleanup; preserve existing API/mock contracts and all Telegram shell behavior; no fabricated rental economics
+- **Slice 4 must NOT start automatically.** The next session must first verify git state (HEAD == `origin/phase-9-redesign`), inspect the existing Marketplace implementation, then execute ONLY Slice 4 per `PHASE-9-IMPLEMENTATION-CONTRACT.md`. Do not start Slice 5.
+
+### Deferred findings carried forward (do NOT fix opportunistically during Slice 4)
+
+1. `pickFeaturedListing` (`src/lib/home-featured.ts`) still ranks open listings by APY — a pre-existing selection heuristic, **not rendered** in Home UI. Deferred to Slice 4: determine whether a truthful/editorial curation order can be built from existing data (redesign §6 default sort = Curated, not highest yield). Do NOT invent editorial data or fake ranking semantics; if the required data does not exist, follow the contract's stop rule and report the limitation.
+2. Naive `{count}` interpolation renders “1 estates” when exactly one estate is owned (copy nit only).
+3. Dead `src/components/home/NextPayoutCard.tsx` still references the removed `home.nextPayout` key; it is never imported or rendered. Do NOT casually clean it during Slice 4.
+4. Home “rental income YTD” = paid/settled demo income (`totalEarningsUsd`, paid entries only). Never reinterpret it as expected/projected income.
+
+### Tooling note
+
+`npm run check` lint can be polluted by generated Playwright trace bundles under `e2e/reports/trace/assets/*.js` after a failing/retried e2e run (gitignored artifacts, not source errors). Slice 3's check ran clean. Do not fix lint config unless it actually blocks the assigned Slice 4 work.

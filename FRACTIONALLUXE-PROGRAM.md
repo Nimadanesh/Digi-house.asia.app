@@ -9,8 +9,8 @@
 
 | Field | Value |
 |---|---|
-| Current phase | **Phase A complete → Phase I; Property redesign Phase 8 complete; Phase 9 active — Slice 1 (P0 Foundation / Contract) ACCEPTED** |
-| Next step | **Slice 2 — Estate Detail (Phase 9, `phase-9-redesign`)**; prior pending: UI polish #07a/#07b user visual verify, I0 (contract verify) |
+| Current phase | **Phase A complete → Phase I; Property redesign Phase 8 complete; Phase 9 active — Slices 1–3 complete (Slice 1 ACCEPTED; Slices 2–3 ACCEPTED WITH NON-BLOCKING FINDINGS)** |
+| Next step | **Slice 4 — Estates (`/marketplace`, Phase 9, `phase-9-redesign`)**; prior pending: UI polish #07a/#07b user visual verify, I0 (contract verify) |
 | Blockers | No Docker on this machine → `infra:up`/`db:migrate`/`db:seed` runtime verify pending (A3 dry-run + tests cover the code path); U1/U3/U4/U6 still open |
 
 ## 1. Context you need
