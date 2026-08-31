@@ -9,6 +9,7 @@ import type { Listing } from "@/types/property";
 import type { BuyCurrency } from "@/types/buy";
 import { previewFeeUsd } from "@/types/fees";
 import { useFees } from "@/hooks/useFees";
+import { useTranslations } from "next-intl";
 import { Block } from "@/components/common/Block";
 import { Row } from "@/components/common/Row";
 
@@ -32,6 +33,7 @@ export function BuySummaryStep({
   /** Single source of truth (lib/property-price); defaults to list price. */
   unitPriceUsd?: number;
 }) {
+  const t = useTranslations("property");
   const fees = useFees();
   const unitPrice = unitPriceUsd ?? listing.sharePriceUsd;
   const totalUsd = qty * unitPrice;
@@ -75,8 +77,15 @@ export function BuySummaryStep({
           </span>
         </Row>
         <Row>
-          <span className="text-sm text-muted-foreground">Est. weekly yield</span>
+          <span className="text-sm text-muted-foreground">{t("estWeeklyYield")}</span>
           <span className="ml-auto text-sm tnum text-success font-medium">{usd(weekly)}</span>
+        </Row>
+        {/* Owner Stay — honest unavailable state in the purchase review (redesign §8). */}
+        <Row>
+          <span className="text-sm text-muted-foreground">{t("buyOwnerStay")}</span>
+          <span className="ml-auto text-sm text-muted-foreground" data-testid="buy-owner-stay-pending">
+            {t("buyOwnerStayPending")}
+          </span>
         </Row>
       </Block>
       <p className="mt-0.5 px-0.5 pb-0.5 text-[0.6875rem] leading-relaxed text-muted-foreground">

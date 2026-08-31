@@ -12,6 +12,7 @@ import { useTonConnect } from "@/hooks/useTonConnect";
 import { useBuyShares, type BuyInput, UsdtUnavailableError } from "@/hooks/useBuyShares";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { usePropertyDocuments } from "@/hooks/usePropertyDocuments";
+import { useStay } from "@/hooks/useStay";
 import { useLocks, activeLocksForProperty } from "@/hooks/useLocks";
 import { useScrolledPast } from "@/hooks/useScrolledPast";
 import { useUiStore } from "@/stores/ui.store";
@@ -38,6 +39,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
   const tOnboarding = useTranslations("onboarding");
   const property = useProperty(id);
   const orderBook = useOrderBook(id, { live: true });
+  const stayQuery = useStay(id);
   const portfolio = usePortfolio();
   const { documents, download: docDownload } = usePropertyDocuments(id);
   const locksQuery = useLocks();
@@ -237,7 +239,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
       }
       setMainButtonActive(true);
       mainButton.setParams({
-        text: tCommon("buyShare"),
+        text: tCommon("acquireOwnership"),
         isEnabled: true,
         color: "#229ED9",
         textColor: "#ffffff",
@@ -377,6 +379,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
           avgCostUsd={avgCostUsd}
           accruedUnpaidUsd={accruedUnpaidUsd}
           onBuyShares={(n) => openBuyForContext(n)}
+          stay={stayQuery.data}
           documents={documents}
           onDownloadDoc={(docId) => docDownload.mutate(docId)}
           downloadingDocId={docDownload.isPending ? String(docDownload.variables) : null}

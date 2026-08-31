@@ -1,4 +1,6 @@
-// File responsibility: full-width status banner — funding (amber) vs live trading (green).
+// File responsibility: full-width status banner — funding (amber) vs co-owned (green).
+// Phase 9: "Live Trading" vocabulary removed — secondary surfaces read as ownership
+// ("Resale market" / "Fully funded · Co-owned"), never a trading terminal.
 import { useTranslations } from "next-intl";
 import { pct } from "@/lib/format";
 import type { Listing } from "@/types/property";
@@ -27,7 +29,7 @@ export function PropertyStatusBanner({ listing }: { listing: Listing }) {
       className="rounded-[10px] bg-success/12 px-3 py-2 text-center text-[0.8125rem] font-semibold text-success"
       data-testid="status-banner"
     >
-      {t("bannerLiveTrading", { status: listing.status === "resale" ? t("resaleWord") : t("fullyFundedWord") })}
+      {listing.status === "resale" ? t("bannerResale") : t("bannerCoOwned")}
     </div>
   );
 }

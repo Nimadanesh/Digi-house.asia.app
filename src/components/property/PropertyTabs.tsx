@@ -1,18 +1,22 @@
 // File responsibility: property tab strip (REDESIGN-SPEC §7). Horizontal-scroll on
 // mobile, roving tabindex keyboard support, Telegram chip styling (flat, no shadow).
 // Safe interaction per spec §21 — tab selection is immediate, haptic 'selection'.
+//
+// Phase 9 (UI Mapping §5.1): 5 → 4 tabs — Estate / Income / Ownership / Details.
+// "Performance" and "Holders" dissolve: Performance content splits (funding charts →
+// Estate, rental/income → Income, resale charts → demoted resale block); Holders
+// content moves under Ownership. ids: overview→estate, holders→ownership.
 import { useRef } from "react";
 import { useTranslations } from "next-intl";
 import { haptics } from "@/lib/telegram/haptics";
 import { cn } from "@/lib/utils";
 
-export type PropertyTabId = "overview" | "performance" | "holders" | "income" | "details";
+export type PropertyTabId = "estate" | "income" | "ownership" | "details";
 
 export const PROPERTY_TABS: PropertyTabId[] = [
-  "overview",
-  "performance",
-  "holders",
+  "estate",
   "income",
+  "ownership",
   "details",
 ];
 

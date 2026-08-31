@@ -88,7 +88,7 @@ describe("Buy flow steps", () => {
     expect(onQty).toHaveBeenCalledWith(25);
     fireEvent.click(screen.getByRole("button", { name: "Max" }));
     expect(onQty).toHaveBeenCalledWith(360);
-    expect(screen.getByText(/Est\. weekly yield/i)).toBeInTheDocument();
+    expect(screen.getByText(/Projected income \/ week/i)).toBeInTheDocument();
     expect(screen.getByText(/Total/)).toBeInTheDocument();
   });
 

@@ -76,6 +76,9 @@ vi.mock("@/hooks/useProperty", () => ({
 vi.mock("@/hooks/useOrderBook", () => ({
   useOrderBook: () => useOrderBook(),
 }));
+vi.mock("@/hooks/useStay", () => ({
+  useStay: () => ({ data: undefined, isLoading: false }),
+}));
 vi.mock("@/hooks/useMarketplace", () => ({
   useMarketplace: () => ({ data: [], isLoading: false, isError: false }),
 }));
@@ -209,7 +212,7 @@ describe("Property detail page — states + buy happy path", () => {
     await renderPage(listing.id);
     expect(screen.getByTestId("property-detail")).toBeInTheDocument();
     expect(mainButton.setParams).toHaveBeenCalledWith(
-      expect.objectContaining({ text: "Buy Share" }),
+      expect.objectContaining({ text: "Acquire Ownership" }),
     );
   });
 
@@ -262,6 +265,7 @@ describe("Property detail page — states + buy happy path", () => {
 
   it("Phase 7 sell: owner sees the Sell sheet with free-share context via Yield section", async () => {
     useProperty.mockReturnValue({ data: listing, isLoading: false, isError: false, refetch: vi.fn() });
+    // Yield/lock management moved to the Ownership tab (Phase 9 Slice 2).
     const holding = {
       propertyId: listing.id,
       sharesOwned: 160,
@@ -284,6 +288,7 @@ describe("Property detail page — states + buy happy path", () => {
     });
     await renderPage(listing.id);
 
+    fireEvent.click(screen.getByTestId("tab-ownership"));
     fireEvent.click(await screen.findByTestId("open-sell-sheet"));
     const sheet = await screen.findByTestId("sell-sheet");
     expect(within(sheet).getByText("Free shares")).toBeInTheDocument();
@@ -326,9 +331,10 @@ describe("Property detail page — states + buy happy path", () => {
     await renderPage(resale.id);
 
     // Price before
-    expect(metricPrice("Price per share")).toBe("$132.00");
+    expect(metricPrice("Share price")).toBe("$132.00");
 
-    // Owner places an absurd custom sell at $999/share
+    // Owner places an absurd custom sell at $999/share (Yield section on Ownership tab)
+    fireEvent.click(screen.getByTestId("tab-ownership"));
     fireEvent.click(await screen.findByTestId("open-sell-sheet"));
     fireEvent.click(await screen.findByLabelText("Sell Custom price"));
     const priceInput = await screen.findByTestId("sell-price-input");
@@ -345,8 +351,10 @@ describe("Property detail page — states + buy happy path", () => {
     });
 
     // The order was placed — but the page-wide price is UNCHANGED.
-    expect(metricPrice("Price per share")).toBe("$132.00");
-    expect(screen.getByTestId("hero-cta")).toHaveTextContent(/Buy at \$132\.00/);
+    // (The owner's hero CTA reads "Manage Ownership" — the price surface is the point.)
+    expect(metricPrice("Share price")).toBe("$132.00");
+    expect(screen.getByTestId("hero-price")).toHaveTextContent("$132.00");
+    expect(screen.getByTestId("hero-cta")).toHaveTextContent("Manage Ownership");
 
     function metricPrice(label: string): string {
       const grid = screen.getByTestId("metrics-grid");

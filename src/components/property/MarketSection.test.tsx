@@ -51,12 +51,14 @@ function trade(id: string, n: number): Trade {
 }
 
 describe("MarketSection — redesign Phase 4", () => {
-  it("shows Market title and Best Bid / Best Ask highlight", () => {
+  it("shows Resale market title with Best asking price / Best offer (ownership vocabulary)", () => {
     useTrades.mockReturnValue({ data: [], isLoading: false, isError: false });
     render(<MarketSection listing={listing} orderBook={book} />);
-    expect(screen.getByText("Market")).toBeInTheDocument();
-    expect(screen.getByTestId("best-bid")).toHaveTextContent("$124.00");
+    expect(screen.getByText("Resale market")).toBeInTheDocument();
+    expect(screen.getByText("Best asking price")).toBeInTheDocument();
+    expect(screen.getByText("Best offer")).toBeInTheDocument();
     expect(screen.getByTestId("best-ask")).toHaveTextContent("$126.00");
+    expect(screen.getByTestId("best-bid")).toHaveTextContent("$124.00");
     expect(screen.getByTestId("book-last-price")).toHaveTextContent("$125.00");
   });
 

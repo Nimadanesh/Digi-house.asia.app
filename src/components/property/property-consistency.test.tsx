@@ -111,29 +111,26 @@ function renderPage(listing: Listing, orderBook?: OrderBookState) {
   );
 }
 
-/** Overview price surfaces (metrics + calculator) must show exactly this value. */
-function expectOverviewSurfacesShow(priceCents: number) {
+/** Estate-tab price surfaces (metrics) + Income-tab calculator must show exactly this value. */
+function expectPriceSurfacesShow(priceCents: number) {
   const price = usd(priceCents);
-  fireEvent.click(screen.getByTestId("tab-overview"));
-  // Primary labels the KPI "Offer price" (twice: KPI grid + FundingPanel row);
-  // secondary labels it "Price per share". Both must show the same single value.
-  const offerPriceCells = screen.queryAllByText("Offer price");
-  if (offerPriceCells.length > 0) {
-    for (const cell of offerPriceCells) {
-      expect(cell.nextElementSibling?.textContent).toBe(price);
-    }
-  } else {
-    expect(metricValue("Price per share")).toBe(price);
-  }
+  fireEvent.click(screen.getByTestId("tab-estate"));
+  // Single ownership-first KPI label carries the source-of-truth price.
+  expect(metricValue("Share price")).toBe(price);
+  // Calculator (projections) lives on the Income tab; cost basis uses the same price.
+  fireEvent.click(screen.getByTestId("tab-income"));
   expect(screen.getByTestId("calc-buy")).toHaveTextContent(`Buy 1 share – ${price}`);
-  expect(screen.getByTestId("calc-monthly").textContent).toBe(metricValue("Monthly yield / share"));
+  expect(screen.getByTestId("calc-monthly").textContent).toBe(metricValue("Projected monthly income / share"));
 }
 
-/** Chart end label must match the current price (secondary Performance tab only). */
+/** Chart end label must match the current price — chart now lives behind the resale expanders. */
 async function expectChartEndShows(priceCents: number) {
-  fireEvent.click(screen.getByTestId("tab-performance"));
+  fireEvent.click(screen.getByTestId("tab-estate"));
+  fireEvent.click(screen.getByTestId("resale-toggle"));
+  fireEvent.click(screen.getByTestId("resale-price-history-toggle"));
   expect(await screen.findByTestId("perf-end-price")).toHaveTextContent(usd(priceCents));
 }
+
 describe("getCurrentSharePrice — hierarchy", () => {
   it("primary always uses the list price", () => {
     expect(getCurrentSharePrice(primary)).toBe(12_000);
@@ -166,42 +163,42 @@ describe("getCurrentSharePrice — hierarchy", () => {
 });
 
 describe("Property page data consistency — one price everywhere", () => {
-  it("primary: hero === metrics === calculator === $120.00 — and NO price chart", () => {
+  it("primary: hero === metrics === calculator === $120.00 — and NO price chart", async () => {
     renderPage(primary);
-    expect(screen.getByTestId("hero-cta")).toHaveTextContent(`Buy Shares · ${usd(primary.sharePriceUsd)}`);
-    // Primary KPI label is the translated "Offer price" (KPI grid + FundingPanel row);
-    // both surfaces show the same single price value.
-    fireEvent.click(screen.getByTestId("tab-overview"));
-    for (const cell of screen.getAllByText("Offer price")) {
-      expect(cell.nextElementSibling?.textContent).toBe(usd(primary.sharePriceUsd));
-    }
-    expect(screen.getByTestId("calc-buy")).toHaveTextContent(`Buy 1 share – ${usd(primary.sharePriceUsd)}`);
+    expect(screen.getByTestId("hero-price")).toHaveTextContent(usd(primary.sharePriceUsd));
+    expect(screen.getByTestId("hero-cta")).toHaveTextContent(`Acquire Ownership · ${usd(primary.sharePriceUsd)}`);
+    // KPI carries the same single value.
+    fireEvent.click(screen.getByTestId("tab-estate"));
+    expect(metricValue("Share price")).toBe(usd(primary.sharePriceUsd));
     // Strict spec rule: primary never renders a price-performance chart.
-    fireEvent.click(screen.getByTestId("tab-performance"));
     expect(screen.queryByTestId("perf-svg")).not.toBeInTheDocument();
+    // Funding charts (simulated, disclosed) are the only chart surface on primary.
+    expect(await screen.findByTestId("primary-performance-charts")).toBeInTheDocument();
   });
 
   it("secondary with book: everything coherent at the live ask ($256.02)", async () => {
     renderPage(secondaryNoBook, bookForBayside);
     const ask = bookForBayside.bestAskUsd!;
-    expect(screen.getByTestId("hero-cta")).toHaveTextContent(`Buy at ${usd(ask)}`);
-    expectOverviewSurfacesShow(ask);
+    expect(screen.getByTestId("hero-price")).toHaveTextContent(usd(ask));
+    expect(screen.getByTestId("hero-cta")).toHaveTextContent("Acquire Resale Ownership");
+    expectPriceSurfacesShow(ask);
     await expectChartEndShows(ask);
-    // Best Ask highlight (Overview market summary) shows exactly the source-of-truth value.
-    fireEvent.click(screen.getByTestId("tab-overview"));
+    // Resale summary (still expanded on the Estate tab) shows the source-of-truth value.
     expect(screen.getByTestId("best-ask").textContent).toBe(usd(ask));
   });
 
   it("secondary without a book: everything coherent at the last trade ($251.00)", async () => {
     renderPage(secondaryNoBook);
-    expect(screen.getByTestId("hero-cta")).toHaveTextContent(`Buy at ${usd(25_100)}`);
-    expectOverviewSurfacesShow(25_100);
+    expect(screen.getByTestId("hero-price")).toHaveTextContent(usd(25_100));
+    expect(screen.getByTestId("hero-cta")).toHaveTextContent("Acquire Resale Ownership");
+    expectPriceSurfacesShow(25_100);
     await expectChartEndShows(25_100);
   });
 
   it("market context stays centred on the current price", () => {
     renderPage(secondaryNoBook, bookForBayside);
-    fireEvent.click(screen.getByTestId("tab-overview"));
+    fireEvent.click(screen.getByTestId("tab-estate"));
+    fireEvent.click(screen.getByTestId("resale-toggle"));
     const bidText = screen.getByTestId("best-bid").textContent!;
     const askText = screen.getByTestId("best-ask").textContent!;
     const toCents = (s: string) => Math.round(parseFloat(s.replace(/[$,]/g, "")) * 100);

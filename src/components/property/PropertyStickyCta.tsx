@@ -45,7 +45,7 @@ export function PropertyStickyCta({
           className="pointer-events-auto flex h-[52px] w-full items-center justify-center gap-1 rounded-[12px] bg-primary text-[0.9375rem] font-semibold text-primary-foreground transition-transform duration-[120ms] ease-out active:scale-[0.98] disabled:opacity-50"
           data-testid="sticky-buy"
         >
-          {t("stickyBuyShares", { price: usd(priceUsd) })}
+          {t("stickyAcquireOwnership", { price: usd(priceUsd) })}
         </button>
       ) : (
         <div className="pointer-events-auto grid grid-cols-2 gap-2">
@@ -56,7 +56,7 @@ export function PropertyStickyCta({
             className="flex h-[52px] items-center justify-center gap-1 rounded-[12px] bg-primary text-[0.9375rem] font-semibold text-primary-foreground transition-transform duration-[120ms] ease-out active:scale-[0.98] disabled:opacity-50"
             data-testid="sticky-buy"
           >
-            {t("stickyBuy", { price: usd(priceUsd) })}
+            {t("stickyAcquireOwnership", { price: usd(priceUsd) })}
           </button>
           <button
             type="button"
