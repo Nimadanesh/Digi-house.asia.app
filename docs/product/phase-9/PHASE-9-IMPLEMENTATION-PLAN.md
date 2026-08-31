@@ -412,5 +412,6 @@ For each milestone, give the coding agent only the relevant task plus this contr
 | Date | Milestone | Result | Commit | Notes |
 |---|---|---|---|---|
 | 2026-08-31 | 9.0 documentation baseline | READY FOR AUDIT | `93e02fc` | Product Spec added; implementation plan added next |
+| 2026-08-31 | 1 — P0 Foundation / Contract | ACCEPTED | `e4af750` | Branch `phase-9-redesign`; pushed / synced with `origin`; tests 522/522; typecheck clean; lint 0 errors (existing warnings + noted `_propertyId` warning); financial regression none; scope compliance PASS; Slice 2 NOT STARTED |
 
-**Next action:** perform 9.0 repository audit and fill the Current-State Matrix before any product code changes.
+**Next action:** execute **Slice 2 — Estate Detail** (highest product priority) after Slice 1 acceptance.
