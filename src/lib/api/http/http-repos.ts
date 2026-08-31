@@ -13,6 +13,7 @@ import type {
   SellsRepo,
   WithdrawalsRepo,
   NftsRepo,
+  StayRepo,
 } from "@/lib/api/repos";
 import type { HttpClient } from "@/lib/api/http/client";
 import type { DocumentMeta, DocumentDownloadUrl } from "@/types/property-document";
@@ -24,6 +25,7 @@ import type { FeeTier } from "@/types/fees";
 import type { InstantSellResult } from "@/types/sell";
 import type { Withdrawal } from "@/types/withdrawal";
 import type { HoldingNft } from "@/types/nft";
+import type { EstateStayInfo } from "@/types/stay";
 
 interface BuyPrepareResponse {
   intentId: string;
@@ -198,5 +200,11 @@ export function createHttpRepos(client: HttpClient): Repos {
     },
   };
 
-  return { marketplace, orderBook, portfolio, earnings, tx, documents, locks, me, fees, sells, withdrawals, nfts };
+  const stay: StayRepo = {
+    async get(propertyId): Promise<EstateStayInfo> {
+      return client.get(`/v1/properties/${encodeURIComponent(propertyId)}/stay`);
+    },
+  };
+
+  return { marketplace, orderBook, portfolio, earnings, tx, documents, locks, me, fees, sells, withdrawals, nfts, stay };
 }
