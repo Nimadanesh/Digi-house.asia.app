@@ -6,12 +6,14 @@ vi.mock("@/hooks/useSharedNowMs", () => ({
   useSharedNowMs: () => 1_700_000_000_000, // a fixed epoch (a Friday)
 }));
 
-describe("NextPayoutSummary", () => {
-  it("renders the next Sunday date and estimated amount, static (no countdown)", () => {
+describe("NextPayoutSummary — Next Distribution", () => {
+  it("renders the next Sunday date, Expected status and scheduled amount, static (no countdown)", () => {
     render(<NextPayoutSummary projectedUsd={3375} />);
     const card = screen.getByTestId("next-payout-summary");
     expect(card).toHaveAttribute("href", "/earnings");
-    expect(screen.getByText("Next Payout")).toBeInTheDocument();
+    expect(screen.getByText("Next Distribution")).toBeInTheDocument();
+    // Scheduled from a real schedule → labeled Expected, never "guaranteed".
+    expect(screen.getByTestId("next-distribution-status")).toHaveTextContent("Expected");
     // Static Sunday display rule — a date, never a ticking timer.
     expect(screen.getByTestId("next-payout-date")).toHaveTextContent(/sun/i);
     expect(screen.getByTestId("next-payout-amount")).toHaveTextContent("$33.75");

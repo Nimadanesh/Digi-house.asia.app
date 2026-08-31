@@ -1,10 +1,11 @@
 "use client";
-// File responsibility: a single "My Properties" ownership row on Home (redesign). Full-width row:
-// thumbnail + title + shares owned + monthly yield estimate. Calm, no FOMO.
+// File responsibility: a single "My Estates" ownership row on Home (Phase 9 Slice 3, UI Mapping §3.1).
+// Full-width row: thumbnail + estate name + ownership % (from the repo's shareRatio) + current value.
+// Plain ownership vocabulary; no per-row yield figures (those belong to Estate Detail).
 import Link from "next/link";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { usd } from "@/lib/format";
+import { usd, pct } from "@/lib/format";
 import { ROUTES } from "@/lib/constants";
 import type { Listing } from "@/types/property";
 import type { Holding } from "@/types/position";
@@ -19,10 +20,9 @@ export function HomePropertyChip({
   holding: Holding;
   onNavigateHaptic?: () => void;
 }) {
+  const t = useTranslations("home");
   const tCommon = useTranslations("common");
   const cover = listing.images[0] ?? "/images/properties/p1.png";
-  // Display-only A4 conversion: weekly figure → monthly estimate (integer minor units).
-  const monthly = Math.round((holding.pendingWeekEarningsUsd * 52) / 12);
 
   return (
     <Link
@@ -42,12 +42,18 @@ export function HomePropertyChip({
                 {listing.title}
               </p>
               <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground tnum">
+                {t("ownShareOfEstate", { pct: pct(holding.shareRatio) })} ·{" "}
                 {holding.sharesOwned} {tCommon("shares")}
               </p>
             </div>
-            <p className="shrink-0 text-xs font-medium tnum text-success">
-              ≈ {usd(monthly)}/mo
-            </p>
+            <div className="shrink-0 text-end">
+              <p className="text-xs font-semibold tnum text-foreground">
+                {usd(holding.currentValueUsd)}
+              </p>
+              <p className="mt-0.5 text-[0.6875rem] leading-snug text-muted-foreground">
+                {t("currentValue")}
+              </p>
+            </div>
           </div>
         </div>
       </Block>

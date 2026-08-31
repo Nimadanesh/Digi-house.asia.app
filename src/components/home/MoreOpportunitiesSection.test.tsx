@@ -61,7 +61,7 @@ describe("pickMoreOpportunities", () => {
     expect(picked.map((p) => p.id)).toEqual(["b", "c"]);
   });
 
-  it("respects the two-listing limit", () => {
+  it("respects the listing cap", () => {
     const listings = [fundingListing("a", "Alpha"), fundingListing("b", "Beta"), fundingListing("c", "Gamma")];
     expect(pickMoreOpportunities(listings).length).toBe(MORE_OPPORTUNITIES_LIMIT);
   });
@@ -76,7 +76,7 @@ describe("MoreOpportunitiesSection", () => {
     const listings = [fundingListing("a", "Alpha"), fundingListing("b", "Beta")];
     render(<MoreOpportunitiesSection listings={listings} />);
     expect(screen.getByTestId("more-opportunities-section")).toBeInTheDocument();
-    expect(screen.getByText("More opportunities")).toBeInTheDocument();
+    expect(screen.getByText("More Estates")).toBeInTheDocument();
     const cards = screen.getAllByTestId("more-opportunity-card");
     expect(cards).toHaveLength(2);
     expect(cards[0]).toHaveAttribute("href", "/property/a");

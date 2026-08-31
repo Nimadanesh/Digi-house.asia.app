@@ -114,10 +114,21 @@ const earnings: EarningsSummary = {
   allTimeUsd: 12_000,
   thisWeekProjectedUsd: 3_375,
   projectedNextWeekUsd: 3_375,
-  entries: [],
+  entries: [
+    {
+      id: "e1",
+      userId: "u1",
+      propertyId: listing.id,
+      weekOf: "2026-07-20T00:00:00Z",
+      amountUsd: 3375,
+      tonAmount: 0,
+      shareRatio: 0.02,
+      status: "pending",
+    },
+  ],
 };
 
-describe("Home page — calm-money redesign", () => {
+describe("Home page — ownership-first redesign", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     useMarketplace.mockReturnValue({
@@ -140,42 +151,50 @@ describe("Home page — calm-money redesign", () => {
     expect(screen.getByRole("button", { name: /try again/i })).toBeInTheDocument();
   });
 
-  it("loaded: calm hero, static next payout, my properties, featured, more opportunities, trust footer", () => {
+  it("loaded: Your Estates hero, Next Distribution (Expected), My Estates preview, Featured Estate, More Estates, trust footer", () => {
     usePortfolio.mockReturnValue({ data: summary, isLoading: false, isError: false, refetch: vi.fn() });
     render(<HomePage />);
 
-    // Calm portfolio hero: value + muted break line, no day-change badge.
-    expect(screen.getByTestId("portfolio-value-card")).toHaveAttribute("href", "/portfolio");
-    expect(screen.getByTestId("portfolio-value-amount")).toHaveTextContent("$2,500.00");
-    const heroSecondary = screen.getByTestId("portfolio-hero-secondary");
+    // Your Estates hero: value + calm estates/invested/rental-income line, no day-change badge.
+    expect(screen.getByTestId("your-estates-card")).toHaveAttribute("href", "/portfolio");
+    expect(screen.getByTestId("your-estates-amount")).toHaveTextContent("$2,500.00");
+    expect(screen.getByTestId("your-estates-cta")).toHaveTextContent("View My Estates");
+    const heroSecondary = screen.getByTestId("your-estates-secondary");
+    expect(heroSecondary).toHaveTextContent("estates");
     expect(heroSecondary).toHaveTextContent("$2,400.00 Total Invested");
-    expect(heroSecondary).toHaveTextContent("+$120.00 earned");
+    expect(heroSecondary).toHaveTextContent("+$120.00 rental income YTD");
     expect(screen.queryByTestId("day-change-badge")).not.toBeInTheDocument();
 
-    // Static next-payout summary (no ticking countdown).
+    // Next Distribution — scheduled from a real schedule → Expected, static date, no countdown.
     expect(screen.getByTestId("next-payout-summary")).toHaveAttribute("href", "/earnings");
+    expect(screen.getByText("Next Distribution")).toBeInTheDocument();
+    expect(screen.getByTestId("next-distribution-status")).toHaveTextContent("Expected");
     expect(screen.getByTestId("next-payout-date")).toHaveTextContent(/Sun/);
     expect(screen.getByTestId("next-payout-amount")).toHaveTextContent("$33.75");
     expect(screen.queryByTestId("next-payout-timer")).not.toBeInTheDocument();
 
+    // My Estates preview — ownership % + current value on the chip.
     expect(screen.getByTestId("my-properties-list")).toBeInTheDocument();
-    // Title appears in both the My-Properties chip and the Featured card.
-    expect(screen.getAllByText("Marina Vista Apt 4B").length).toBeGreaterThan(0);
+    expect(screen.getByText("My Estates (1)")).toBeInTheDocument();
+    expect(screen.getByText("All my estates")).toBeInTheDocument();
+    expect(screen.getByText("2.0% of the estate · 20 shares")).toBeInTheDocument();
 
-    // Editorial Featured — no flame/hot cue.
+    // Editorial Featured Estate — no APY badge, honest owner-stay Data pending, View Estate CTA.
     expect(screen.getByTestId("featured-card")).toBeInTheDocument();
-    expect(screen.getByText("Featured Opportunity")).toBeInTheDocument();
-    expect(screen.queryByText("Hot this week")).not.toBeInTheDocument();
+    expect(screen.getByText("Featured Estate")).toBeInTheDocument();
+    expect(screen.queryByText("APY")).not.toBeInTheDocument();
+    expect(screen.getByText("Data pending")).toBeInTheDocument();
+    expect(screen.getByTestId("featured-cta")).toHaveTextContent("View Estate");
 
-    // 1–2 primary listings in More opportunities (excludes featured + non-primary).
+    // 1–3 primary listings in More Estates (excludes featured + non-primary).
     const moreCards = screen.getAllByTestId("more-opportunity-card");
     expect(moreCards.length).toBeGreaterThan(0);
-    expect(moreCards.length).toBeLessThanOrEqual(2);
+    expect(moreCards.length).toBeLessThanOrEqual(3);
 
     expect(screen.getByTestId("home-trust-footer")).toBeInTheDocument();
   });
 
-  it("cops My Properties to a short calm set (max 3 + View all)", () => {
+  it("caps My Estates to a short calm set (max 3 + All my estates)", () => {
     const fiveProperties = [
       ...Array.from({ length: 5 }).map((_, i) => ({
         ...listing,
@@ -200,10 +219,10 @@ describe("Home page — calm-money redesign", () => {
     });
     render(<HomePage />);
     expect(screen.getAllByTestId("home-property-chip").length).toBe(3);
-    expect(screen.getByText("+2 more in Portfolio")).toBeInTheDocument();
+    expect(screen.getByText("+2 more in My Estates")).toBeInTheDocument();
   });
 
-  it("empty holdings: premium Buy shares → Lock → Earn state + Featured still visible", () => {
+  it("no ownership: estates empty state replaces the hero; Featured Estate still visible", () => {
     usePortfolio.mockReturnValue({
       data: { ...summary, holdings: [] },
       isLoading: false,
@@ -211,11 +230,15 @@ describe("Home page — calm-money redesign", () => {
       refetch: vi.fn(),
     });
     render(<HomePage />);
+    // Ownership empty state in place of the hero, with an Explore Estates CTA.
     expect(screen.getByTestId("home-empty-state")).toBeInTheDocument();
-    expect(screen.getByTestId("empty-step-buy")).toHaveTextContent("Buy shares");
-    expect(screen.getByTestId("empty-step-lock")).toHaveTextContent("Lock them to earn yield");
-    expect(screen.getByTestId("empty-step-earn")).toHaveTextContent("Earn every month");
+    expect(screen.getByText("You don't own any estates yet")).toBeInTheDocument();
     expect(screen.getByTestId("empty-browse-marketplace")).toHaveAttribute("href", "/marketplace");
+    // No $0 hero, no distribution card (nothing owned, nothing scheduled), no properties preview.
+    expect(screen.queryByTestId("your-estates-card")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("next-payout-summary")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("my-properties-section")).not.toBeInTheDocument();
+    // Discovery remains.
     expect(screen.getByTestId("featured-card")).toBeInTheDocument();
   });
 
