@@ -629,6 +629,8 @@
     "projectedIncome": "Revenu projeté / part",
     "incomePending": "Données en attente",
     "shareFraction": "1 part ≈ 1/{total} de la propriété",
-    "fundedCaption": "{pct}% financé · {remaining} parts restantes"
+    "fundedCaption": "{pct}% financé · {remaining} parts restantes",
+    "nightFrom": "Nuit / à partir de",
+    "perNight": "par nuit"
   }
 }

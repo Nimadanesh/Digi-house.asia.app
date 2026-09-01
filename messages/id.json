@@ -629,6 +629,8 @@
     "projectedIncome": "Pendapatan proyeksi / saham",
     "incomePending": "Data tertunda",
     "shareFraction": "1 saham ≈ 1/{total} dari properti",
-    "fundedCaption": "{pct}% terdanai · {remaining} saham tersisa"
+    "fundedCaption": "{pct}% terdanai · {remaining} saham tersisa",
+    "nightFrom": "Malam / mulai",
+    "perNight": "per malam"
   }
 }

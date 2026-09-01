@@ -629,6 +629,8 @@
     "projectedIncome": "Renda projetada / ação",
     "incomePending": "Dados pendentes",
     "shareFraction": "1 ação ≈ 1/{total} da propriedade",
-    "fundedCaption": "{pct}% financiado · {remaining} cotas restantes"
+    "fundedCaption": "{pct}% financiado · {remaining} cotas restantes",
+    "nightFrom": "Noite / a partir de",
+    "perNight": "por noite"
   }
 }

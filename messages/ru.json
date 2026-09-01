@@ -629,6 +629,8 @@
     "projectedIncome": "Прогнозируемый доход / доля",
     "incomePending": "Данные ожидаются",
     "shareFraction": "1 доля ≈ 1/{total} объекта",
-    "fundedCaption": "{pct}% собрано · {remaining} долей осталось"
+    "fundedCaption": "{pct}% собрано · {remaining} долей осталось",
+    "nightFrom": "Ночь / от",
+    "perNight": "за ночь"
   }
 }

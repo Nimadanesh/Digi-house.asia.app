@@ -82,6 +82,16 @@ describe("PropertyCard — Phase 9 estate card", () => {
     expect(screen.getByTestId("card-status-badge")).toHaveTextContent("New");
   });
 
+  it("nightly-rate cards show Night / From + the villa rate + Per Night (no share fraction)", () => {
+    const nightly: Listing = { ...listing, nightlyRate: "$52,200" };
+    render(<PropertyCard listing={nightly} nowMs={Date.UTC(2026, 6, 26)} />);
+    expect(screen.getByText("Night / From")).toBeInTheDocument();
+    expect(screen.getByText("$52,200")).toBeInTheDocument();
+    expect(screen.getByTestId("card-fraction")).toHaveTextContent("Per Night");
+    expect(screen.queryByText("Price / share")).not.toBeInTheDocument();
+    expect(screen.queryByText(/1 share ≈/)).not.toBeInTheDocument();
+  });
+
   it("renders 'Data pending' instead of a fabricated income figure when income data is missing", () => {
     const noIncome: Listing = { ...listing, annualRentUsd: 0 };
     render(<PropertyCard listing={noIncome} nowMs={Date.UTC(2026, 6, 26)} />);

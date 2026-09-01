@@ -21,6 +21,8 @@ export type SeedProperty = {
   meta: PropertyMetaJson;
   rentalHistory: RentalPaymentJson[];
   createdAt: string;
+  /** Nightly rate display string (mixed currencies) from the villa's source listing. */
+  nightlyRate?: string;
 };
 
 function history(prefix: string, dates: string[]): RentalPaymentJson[] {
@@ -35,6 +37,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
   {
     id: "prop-marina-vista-4b",
     title: "Grand 2 BDM Ocean Pool Villa",
+    nightlyRate: "$67,655",
     location: "JOALI Being, Maldives",
     description:
       "Waterfront one-bedroom with marina view and 24h concierge. Fully furnished, high floor, leased to a long-term corporate tenant.",
@@ -100,6 +103,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
   {
     id: "prop-soho-loft-studio",
     title: "The Aerial",
+    nightlyRate: "$52,200",
     location: "Buck Island, British Virgin Islands (BVI)",
     description:
       "Renovated Alfama studio steps from the Tagus riverside promenade. Bright open plan with original beam details.",
@@ -176,6 +180,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
   {
     id: "prop-bayside-marina-penthouse",
     title: "Syrene",
+    nightlyRate: "€40,000",
     location: "Sorrento, Italy",
     description:
       "Top-floor two-bedroom penthouse overlooking the Pinheiros marina. Private terrace and exclusive lift lobby.",
@@ -250,6 +255,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
   {
     id: "prop-alfama-terrace-flat",
     title: "Villa du Cap",
+    nightlyRate: "€38,575",
     location: "Saint-Jean-Cap-Ferrat, France",
     description:
       "Charming renovated flat with a private terrace above Alfama's lanes. Historic shell, modern interior systems.",
@@ -285,6 +291,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
   {
     id: "prop-tbilisi-riverhouse-loft",
     title: "Emerald Cay",
+    nightlyRate: "$35,714",
     location: "Silly Creek, Turks & Caicos",
     description:
       "Open-plan loft on the Mtkvari riverfront with skyline views. Exposed concrete, double-height living room.",
@@ -356,6 +363,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
   {
     id: "prop-canggu-surf-villa",
     title: "The Branson Beach Estate",
+    nightlyRate: "$35,000",
     location: "Moskito Island, British Virgin Islands (BVI)",
     description:
       "Four-bedroom villa minutes from Batu Bolong beach and rice paddies. Private pool and staff quarters.",
@@ -426,6 +434,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
 {
     id: "prop-tokyo-shibuya-studio",
     title: "Chalet Montana",
+    nightlyRate: "€27,571",
     location: "Kitzbuhel, Austria",
     description:
       "Compact studio two stops from Shibuya Crossing. Newly renovated with smart-home fit-out and a long-term tenant in place.",
@@ -519,6 +528,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
 {
     id: "prop-brooklyn-brownstone-flat",
     title: "Villa BDM",
+    nightlyRate: "$25,714",
     location: "Saint Jean, St. Barts",
     description:
       "Garden-floor one-bedroom in a restored brownstone. Private patio, exposed brick, leased through next spring.",
@@ -616,6 +626,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
 {
     id: "prop-berlin-mitte-apartment",
     title: "Trajan Villa at Caesars Palace",
+    nightlyRate: "$25,000",
     location: "Caesars Palace, Nevada",
     description:
       "Bright two-bedroom overlooking a quiet Mitte courtyard. Modern fit-out, corporate tenant on a rolling lease.",
@@ -655,6 +666,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
 {
     id: "prop-barcelona-eixample-flat",
     title: "La Datcha",
+    nightlyRate: "$35,000",
     location: "Pedregal, Los Cabos",
     description:
       "Classic Eixample flat with a wrought-iron balcony and high moulded ceilings. Walking distance to Passeig de Gracia.",
@@ -725,6 +737,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
 {
     id: "prop-london-camden-loft",
     title: "Galeazzo",
+    nightlyRate: "$18,000",
     location: "Lake Como, Italy",
     description:
       "Double-height loft in a converted canal warehouse. Exposed brick and steel, minutes from Camden Market.",
@@ -779,6 +792,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
 {
     id: "prop-sydney-harbour-apartment",
     title: "Embrace",
+    nightlyRate: "$21,428",
     location: "Gustavia, St. Barts",
     description:
       "Two-bedroom with a direct harbour outlook and wraparound balcony. Waterfront complex with gym and pool.",
@@ -868,6 +882,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
 {
     id: "prop-toronto-condo",
     title: "ANI Dominican Republic",
+    nightlyRate: "$27,000",
     location: "Cabrera, Dominican Republic",
     description:
       "One-bedroom plus den in a King West high-rise. Floor-to-ceiling windows and a walkable restaurant district.",
@@ -946,6 +961,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
 {
     id: "prop-melbourne-loft",
     title: "Mita Principe",
+    nightlyRate: "$20,000",
     location: "Ranchos Estates, Punta de Mita (Punta Mita)",
     description:
       "North-facing loft in a converted Fitzroy factory. High ceilings, timber floors, art-studio heritage.",
@@ -1067,6 +1083,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
 {
     id: "prop-miami-beach-condo",
     title: "La Dolce Vita",
+    nightlyRate: "$28,000",
     location: "Long Bay, Providenciales, Turks & Caicos",
     description:
       "Art-deco condo one block from the ocean. Flipped interiors, short-let ready, strong seasonal demand.",
@@ -1165,6 +1182,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
 {
     id: "prop-istanbul-bosphorus-flat",
     title: "Tranquility",
+    nightlyRate: "$21,500",
     location: "Leeward, Turks & Caicos",
     description:
       "Corner flat with sweeping Bosphorus views from a hillside block. Recently refurbished, long-term tenant.",
@@ -1217,6 +1235,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
 {
     id: "prop-mexico-city-penthouse",
     title: "Pearls of Long Bay Estate",
+    nightlyRate: "$28,100",
     location: "Long Bay Hills, Providenciales, Turks & Caicos",
     description:
       "Top-floor penthouse with a private rooftop terrace in Polanco. Smart lighting and full concierge.",
@@ -1343,6 +1362,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
 {
     id: "prop-kyoto-machiya",
     title: "Dream Pavilion",
+    nightlyRate: "$18,029",
     location: "Ambergris Cay, Turks & Caicos",
     description:
       "Traditional wooden machiya in Gion with a serene inner garden. Restored by a master carpenter.",
@@ -1404,6 +1424,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
 {
     id: "prop-cape-town-villa",
     title: "ANI Thailand",
+    nightlyRate: "$22,000",
     location: "Phang Nga Bay, Thailand",
     description:
       "Four-bedroom villa with sea views toward Table Bay. Private pool, staff flat, holiday-let managed.",
@@ -1462,6 +1483,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
 {
     id: "prop-bangkok-sukhumvit-condo",
     title: "ANI Sri Lanka",
+    nightlyRate: "$27,000",
     location: "Maliyadda, Sri Lanka",
     description:
       "High-floor studio with skyline views near Sukhumvit BTS. Managed short-let, high occupancy.",
@@ -1530,6 +1552,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
 {
     id: "prop-amsterdam-canal-house",
     title: "Rio Chico Private Estate",
+    nightlyRate: "$23,179",
     location: "Ocho Rios, Jamaica",
     description:
       "Renovated duplex on a quiet canal ring. Original beams, modern kitchen, prime centre location.",
@@ -1624,6 +1647,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
 {
     id: "prop-buenos-aires-recoleta-flat",
     title: "Forza Modern",
+    nightlyRate: "$12,000",
     location: "Holmby Hills, California",
     description:
       "Elegant flat in a Belle-Epoque Recoleta building. High ceilings, marble floors, doorman building.",
@@ -1708,6 +1732,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
 {
     id: "prop-seoul-gangnam-studio",
     title: "Chateau Prestige",
+    nightlyRate: "€11,815",
     location: "Bordeaux, France",
     description:
       "Fully-furnished smart studio near Gangnam station. Automated climate and security, corporate-ready.",
@@ -1774,6 +1799,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
 {
     id: "prop-nyc-chelsea-loft",
     title: "Hawksbill",
+    nightlyRate: "$16,500",
     location: "Grace Bay, Turks & Caicos",
     description:
       "Sweeping gallery loft in Chelsea with 11-ft ceilings and north light. Steps from the High Line.",

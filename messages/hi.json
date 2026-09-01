@@ -629,6 +629,8 @@
     "projectedIncome": "अनुमानित आय / शेयर",
     "incomePending": "डेटा लंबित",
     "shareFraction": "1 शेयर ≈ संपत्ति का 1/{total}",
-    "fundedCaption": "{pct}% फंडेड · {remaining} हिस्से शेष"
+    "fundedCaption": "{pct}% फंडेड · {remaining} हिस्से शेष",
+    "nightFrom": "रात / से",
+    "perNight": "प्रति रात"
   }
 }

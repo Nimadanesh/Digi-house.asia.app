@@ -36,6 +36,9 @@ export interface Property {
   rentalHistory: RentalPayment[];
   /** Whole-property value, minor units (offered = totalShares × sharePriceUsd). */
   totalValueUsd: number;
+  /** Nightly rate display string (mixed currencies, e.g. "$52,200" / "€38,575");
+   *  present on marketplace cards fed from villa source rates. */
+  nightlyRate?: string;
 }
 
 export interface Listing extends Property {

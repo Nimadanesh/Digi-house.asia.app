@@ -629,6 +629,8 @@
     "projectedIncome": "Projected income / share",
     "incomePending": "Data pending",
     "shareFraction": "1 share ≈ 1/{total} of the estate",
-    "fundedCaption": "{pct}% funded · {remaining} shares remaining"
+    "fundedCaption": "{pct}% funded · {remaining} shares remaining",
+    "nightFrom": "Night / From",
+    "perNight": "Per Night"
   }
 }

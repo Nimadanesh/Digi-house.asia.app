@@ -629,6 +629,8 @@
     "projectedIncome": "Öngörülen gelir / hisse",
     "incomePending": "Veri bekleniyor",
     "shareFraction": "1 hisse ≈ emlağın 1/{total}",
-    "fundedCaption": "%{pct} tamamlandı · {remaining} pay kaldı"
+    "fundedCaption": "%{pct} tamamlandı · {remaining} pay kaldı",
+    "nightFrom": "Gece / itibaren",
+    "perNight": "gece başına"
   }
 }

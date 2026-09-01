@@ -86,6 +86,9 @@ function PropertyCardInner({
 
   const cover = listing.images[0] ?? "/images/properties/p1.png";
   const incomeAvailable = hasIncomeData(listing);
+  // Nightly-rate cards (villa source data) replace the share-price section: label,
+  // value and secondary line. Fall back to the share-price display when absent.
+  const nightly = listing.nightlyRate;
   // PD-07: on the resale market the price is the latest executed trade, not the
   // historical offering price. getCurrentSharePrice is the single source.
   const displayPrice = getCurrentSharePrice(listing);
@@ -141,8 +144,8 @@ function PropertyCardInner({
 
         <div className="grid grid-cols-2 gap-3" data-testid="card-metrics">
           <Metric
-            label={secondary ? t("lastPrice") : t("pricePerShare")}
-            value={usd(displayPrice)}
+            label={nightly ? t("nightFrom") : secondary ? t("lastPrice") : t("pricePerShare")}
+            value={nightly ?? usd(displayPrice)}
           />
           {incomeAvailable ? (
             <Metric label={t("projectedIncome")} value={usd(projectedMonthlyIncomeUsd(listing))} />
@@ -163,7 +166,7 @@ function PropertyCardInner({
           className="text-xs leading-relaxed text-muted-foreground tnum pt-0.5"
           data-testid="card-fraction"
         >
-          {t("shareFraction", { total: listing.totalShares })}
+          {nightly ? t("perNight") : t("shareFraction", { total: listing.totalShares })}
         </p>
 
         {listing.status === "funding" ? (

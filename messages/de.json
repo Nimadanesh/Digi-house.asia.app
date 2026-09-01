@@ -629,6 +629,8 @@
     "projectedIncome": "Voraussichtliches Einkommen / Anteil",
     "incomePending": "Daten ausstehend",
     "shareFraction": "1 Anteil ≈ 1/{total} der Immobilie",
-    "fundedCaption": "{pct}% finanziert · {remaining} Anteile verbleiben"
+    "fundedCaption": "{pct}% finanziert · {remaining} Anteile verbleiben",
+    "nightFrom": "Nacht / ab",
+    "perNight": "pro Nacht"
   }
 }

@@ -629,6 +629,8 @@
     "projectedIncome": "درآمد پیش‌بینی‌شده / سهم",
     "incomePending": "داده در انتظار",
     "shareFraction": "1 سهم ≈ 1/{total} از ملک",
-    "fundedCaption": "{pct}% تأمین شد · {remaining} سهم باقی‌مانده"
+    "fundedCaption": "{pct}% تأمین شد · {remaining} سهم باقی‌مانده",
+    "nightFrom": "شب / از",
+    "perNight": "هر شب"
   }
 }

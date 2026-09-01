@@ -37,9 +37,8 @@ test.describe("Estates — /marketplace (Phase 9 Slice 4)", () => {
     // Cards are ownership-first: price / share, ownership fraction, projected income.
     const card = page.getByTestId("property-card").first();
     await expect(card).toBeVisible();
-    await expect(card).toContainText("Price / share");
-    await expect(card).toContainText("1 share ≈ 1/");
-    await expect(card).toContainText("of the estate");
+    await expect(card).toContainText("Night / From");
+    await expect(card).toContainText("Per Night");
 
     // No APY, no scarcity badges anywhere on the surface.
     await expect(page.getByText("APY")).toHaveCount(0);

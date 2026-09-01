@@ -629,6 +629,8 @@
     "projectedIncome": "预计收入 / 股",
     "incomePending": "数据待定",
     "shareFraction": "1股 ≈ 房产的1/{total}",
-    "fundedCaption": "已募集 {pct}% · 剩余 {remaining} 份"
+    "fundedCaption": "已募集 {pct}% · 剩余 {remaining} 份",
+    "nightFrom": "每晚 / 起",
+    "perNight": "每晚"
   }
 }

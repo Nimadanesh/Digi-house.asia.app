@@ -629,6 +629,8 @@
     "projectedIncome": "الدخل المتوقع / السهم",
     "incomePending": "البيانات معلقة",
     "shareFraction": "سهم واحد ≈ 1/{total} من العقار",
-    "fundedCaption": "تم تمويل {pct}% · تبقى {remaining} حصة"
+    "fundedCaption": "تم تمويل {pct}% · تبقى {remaining} حصة",
+    "nightFrom": "ليلة / يبدأ من",
+    "perNight": "في الليلة"
   }
 }
