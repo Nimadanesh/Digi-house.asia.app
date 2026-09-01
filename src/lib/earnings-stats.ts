@@ -74,3 +74,22 @@ export function thisWeekStatus(entries: EarningsEntry[]): "pending" | "paid" {
   if (entries.some((e) => e.status === "pending")) return "pending";
   return "paid";
 }
+
+/**
+ * Income by estate (UI Mapping §7.1 P0): paid-only totals grouped per property,
+ * in first-appearance order (repo returns entries newest first). Estates with no
+ * paid entries are simply absent — never a fabricated zero. Aggregation of
+ * existing fields only; no new financial math.
+ */
+export function groupIncomeByEstate(
+  entries: EarningsEntry[],
+): Map<string, { receivedUsd: number }> {
+  const map = new Map<string, { receivedUsd: number }>();
+  for (const e of entries) {
+    if (e.status !== "paid") continue;
+    const cur = map.get(e.propertyId) ?? { receivedUsd: 0 };
+    cur.receivedUsd += e.amountUsd;
+    map.set(e.propertyId, cur);
+  }
+  return map;
+}

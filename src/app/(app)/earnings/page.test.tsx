@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, within } from "@testing-library/react";
 
 vi.mock("next/image", () => ({
   default: (props: { alt: string; src: string }) => (
@@ -9,6 +9,7 @@ vi.mock("next/image", () => ({
 }));
 
 vi.mock("@/hooks/useEarnings", () => ({ useEarnings: vi.fn() }));
+vi.mock("@/hooks/useMarketplace", () => ({ useMarketplace: vi.fn() }));
 vi.mock("@/hooks/useLocks", () => ({
   useLocks: vi.fn(() => ({ data: { locks: [] }, isLoading: false })),
   useMeSummary: vi.fn(() => ({ data: { balances: { investingUsd: 0, withdrawableUsd: 1500 } } })),
@@ -34,6 +35,7 @@ vi.mock("@/hooks/useWithdrawals", () => ({
 }));
 
 import { useEarnings } from "@/hooks/useEarnings";
+import { useMarketplace } from "@/hooks/useMarketplace";
 import EarningsPage from "@/app/(app)/earnings/page";
 import type { EarningsSummary } from "@/types/earnings";
 
@@ -64,6 +66,16 @@ const loadedSummary: EarningsSummary = {
       status: "pending",
     },
   ],
+  yield: {
+    activeLocks: 1,
+    lockedShares: 100,
+    principalUsd: 1_200_000,
+    accruedUnpaidUsd: 4_200,
+    projectedInstallmentUsd: 6_000,
+    projectedMonthlyUsd: 24_000,
+    projectedWeeklyUsd: 6_000,
+    payments: [],
+  },
 };
 
 const load = (data: EarningsSummary | undefined, overrides = {}) =>
@@ -75,8 +87,30 @@ const load = (data: EarningsSummary | undefined, overrides = {}) =>
     ...overrides,
   } as never);
 
-describe("Earnings page — calm-money redesign", () => {
-  beforeEach(() => vi.clearAllMocks());
+describe("Earnings page — income redesign (slice 5)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    // Property metadata for the income-by-estate rows (existing marketplace contract).
+    vi.mocked(useMarketplace).mockReturnValue({
+      data: [
+        {
+          id: "prop-bayside-marina-penthouse",
+          title: "Bayside Marina Penthouse",
+          location: "Dubai Marina, UAE",
+          images: ["/images/properties/bayside.png"],
+        },
+        {
+          id: "prop-alfama-terrace-flat",
+          title: "Alfama Terrace Flat",
+          location: "Lisbon, Portugal",
+          images: ["/images/properties/alfama.png"],
+        },
+      ],
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    } as never);
+  });
 
   it("loading skeleton", () => {
     vi.mocked(useEarnings).mockReturnValue({
@@ -101,7 +135,7 @@ describe("Earnings page — calm-money redesign", () => {
   });
 
   it("empty motivational copy and Browse Marketplace", () => {
-    load({ ...loadedSummary, entries: [] });
+    load({ ...loadedSummary, entries: [], yield: undefined });
     render(<EarningsPage />);
     expect(screen.getByText(/haven.t earned yet/i)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /browse marketplace/i })).toHaveAttribute(
@@ -110,35 +144,58 @@ describe("Earnings page — calm-money redesign", () => {
     );
   });
 
-  it("Total-earned hero, streak, static 12-week chart, income timeline, withdraw entry", () => {
+  it("Income identity, received-in-total hero, Expected status word, timeline, accrued block, income by estate, withdraw entry", () => {
     load(loadedSummary);
     render(<EarningsPage />);
 
-    // Total earned is the hero (allTimeUsd), with the pending status pill.
+    // Income identity first (H1 + subtitle), no APY anywhere.
+    expect(screen.getByRole("heading", { level: 1, name: /income/i })).toBeInTheDocument();
+    expect(screen.getByText(/your share of the rental income/i)).toBeInTheDocument();
+
+    // Hero = "Received in total" (paid money only), with the Expected status word —
+    // the old Pending/Paid hero pill is gone.
     expect(screen.getByTestId("earnings-hero")).toBeInTheDocument();
     expect(screen.getByTestId("earnings-hero-amount")).toHaveTextContent("$120.00");
-    expect(screen.getByText("Pending")).toBeInTheDocument();
+    expect(screen.getByText("Received in total")).toBeInTheDocument();
+    expect(screen.queryByText("Pending")).not.toBeInTheDocument();
 
     // Subtle paid-streak trust signal (1 paid week behind a pending current week).
     expect(screen.getByTestId("earnings-streak")).toHaveTextContent(/1 week in a row/i);
 
-    // Upcoming payout (static date + estimate) on the hero.
+    // Next distribution: status word Expected + pending-only amount.
     expect(screen.getByTestId("earnings-upcoming")).toBeInTheDocument();
     expect(screen.getByTestId("earnings-next-date")).toHaveTextContent(/Sun/i);
+    expect(
+      within(screen.getByTestId("earnings-upcoming")).getByText("Expected"),
+    ).toBeInTheDocument();
     expect(screen.getByTestId("earnings-next-amount")).toHaveTextContent("$33.75");
 
-    // Static 12-week chart, no range/toggle controls.
+    // Accrued block (locked-share yield) — clearly separated from received.
+    expect(screen.getByTestId("yield-summary-card")).toBeInTheDocument();
+    expect(screen.getByTestId("yield-accrued-block")).toBeInTheDocument();
+    expect(screen.getByTestId("yield-accrued-unpaid")).toHaveTextContent("$42.00");
+    expect(screen.getAllByText(/paid with next distribution/i).length).toBeGreaterThan(0);
+
+    // Static 12-week chart with two-tone legend, no range/toggle controls.
     expect(screen.getByTestId("earnings-chart")).toBeInTheDocument();
     expect(screen.getAllByTestId("chart-bar").length).toBe(12);
+    expect(screen.getByTestId("chart-legend")).toBeInTheDocument();
+    expect(screen.getByText("Projected")).toBeInTheDocument();
     expect(screen.queryByTestId("chart-range-trigger")).not.toBeInTheDocument();
     expect(screen.queryByTestId("chart-mode-bar")).not.toBeInTheDocument();
-    expect(screen.queryByText(/Last 8 weeks/i)).not.toBeInTheDocument();
 
-    // Paid → Accruing → Next timeline.
+    // Paid → Accrued → Expected timeline (status words only).
     expect(screen.getByTestId("income-timeline")).toBeInTheDocument();
     expect(screen.getByTestId("timeline-paid")).toHaveTextContent("$15.00");
-    expect(screen.getByTestId("timeline-accruing")).toHaveTextContent("$15.00");
+    expect(screen.getByTestId("timeline-accrued")).toHaveTextContent("$42.00");
     expect(screen.getByTestId("timeline-next")).toHaveTextContent("$33.75");
+
+    // Income by estate: per-estate rows link to estate detail, paid-only totals.
+    expect(screen.getByTestId("income-by-estate")).toBeInTheDocument();
+    const bayside = screen.getByTestId("income-by-estate-row-prop-bayside-marina-penthouse");
+    expect(bayside).toHaveTextContent("Bayside Marina Penthouse");
+    expect(bayside).toHaveTextContent("$15.00"); // 1 paid entry × $15
+    expect(bayside).toHaveAttribute("href", "/property/prop-bayside-marina-penthouse");
 
     // Secondary Withdraw entry + withdrawable balance from useMeSummary.
     expect(screen.getByTestId("earnings-withdraw-block")).toBeInTheDocument();
@@ -146,9 +203,10 @@ describe("Earnings page — calm-money redesign", () => {
     fireEvent.click(screen.getByTestId("earnings-withdraw-row"));
     expect(screen.getByTestId("withdrawal-request-sheet")).toBeInTheDocument();
 
-    // No page-level PAYOUT_DISCLAIMER.
+    // No page-level PAYOUT_DISCLAIMER and no frequency promises ("weekly payout").
     expect(
       screen.queryByText("simulated weekly payout · on-chain verifiable post-MVP"),
     ).not.toBeInTheDocument();
+    expect(screen.queryByText(/monthly accrual/i)).not.toBeInTheDocument();
   });
 });

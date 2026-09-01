@@ -56,7 +56,17 @@ export function WeeklyEarningsChart({ entries }: { entries: EarningsEntry[] }) {
             </div>
           ))}
         </div>
-        <p className="mt-3 border-t border-border pt-2 text-[0.6875rem] leading-relaxed text-muted-foreground">
+        <div className="mt-2 flex items-center justify-center gap-4 border-t border-border pt-2" data-testid="chart-legend">
+          <span className="flex items-center gap-1.5 text-[0.6875rem] text-muted-foreground">
+            <span className="size-2 rounded-full bg-primary" aria-hidden />
+            {t("chartLegendPaid")}
+          </span>
+          <span className="flex items-center gap-1.5 text-[0.6875rem] text-muted-foreground">
+            <span className="size-2 rounded-full bg-warning/80" aria-hidden />
+            {t("chartLegendProjected")}
+          </span>
+        </div>
+        <p className="mt-2 text-[0.6875rem] leading-relaxed text-muted-foreground">
           {t("chartCaption")}
         </p>
       </Block>

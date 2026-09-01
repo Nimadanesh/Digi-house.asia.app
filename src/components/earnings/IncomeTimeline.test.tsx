@@ -14,39 +14,57 @@ const base: Omit<EarningsEntry, "id" | "weekOf" | "amountUsd" | "status"> = {
   shareRatio: 0.01,
 };
 
-describe("IncomeTimeline — Paid → Accruing → Next estimated", () => {
+describe("IncomeTimeline — Paid → Accrued → Expected (status words only)", () => {
   const entries: EarningsEntry[] = [
     { ...base, id: "e1", weekOf: "2026-07-13T00:00:00Z", amountUsd: 1000, status: "paid" },
     { ...base, id: "e2", weekOf: "2026-07-13T00:00:00Z", amountUsd: 500, status: "paid" },
     { ...base, id: "e3", weekOf: "2026-07-20T00:00:00Z", amountUsd: 400, status: "pending" },
   ];
 
-  it("sums the newest fully-paid week, the pending week, and shows the next estimate", () => {
-    render(<IncomeTimeline entries={entries} projectedNextUsd={475} />);
+  it("shows Paid (actual week total), Accrued (repo figure), Expected (pending-only + date)", () => {
+    render(
+      <IncomeTimeline entries={entries} projectedNextUsd={475} accruedUsd={1234} />,
+    );
     expect(screen.getByTestId("income-timeline")).toBeInTheDocument();
     // Paid = sum of both paid entries in the same week: 1_500¢.
     expect(screen.getByTestId("timeline-paid")).toHaveTextContent("$15.00");
-    // Accruing = pending entries only.
-    expect(screen.getByTestId("timeline-accruing")).toHaveTextContent("$4.00");
-    // Next estimated uses the passed repo figure.
+    // Accrued comes from the repo accrued-unpaid figure, not pending entries.
+    expect(screen.getByTestId("timeline-accrued")).toHaveTextContent("$12.34");
+    expect(screen.getByTestId("timeline-accrued")).toHaveTextContent(
+      "paid with next distribution",
+    );
+    // Expected uses the passed repo figure + the Sunday display date.
     expect(screen.getByTestId("timeline-next")).toHaveTextContent("$4.75");
     expect(screen.getByTestId("timeline-next")).toHaveTextContent(/sun/i);
+    // Status words only — no frequency claims.
+    expect(screen.getByText("Paid")).toBeInTheDocument();
+    expect(screen.getByText("Accrued")).toBeInTheDocument();
+    expect(screen.getByText("Expected")).toBeInTheDocument();
   });
 
-  it("shows zero for accruing when nothing is pending", () => {
+  it("hides the Accrued row when no lock/yield data exists (never a fake zero)", () => {
     const paidOnly: EarningsEntry[] = [
       { ...base, id: "e1", weekOf: "2026-07-13T00:00:00Z", amountUsd: 1000, status: "paid" },
     ];
     render(<IncomeTimeline entries={paidOnly} projectedNextUsd={475} />);
-    expect(screen.getByTestId("timeline-accruing")).toHaveTextContent("$0.00");
+    expect(screen.queryByTestId("timeline-accrued")).not.toBeInTheDocument();
     expect(screen.getByTestId("timeline-paid")).toHaveTextContent("$10.00");
+  });
+
+  it("hides the Expected row when nothing is pending (never a fake $0 Expected)", () => {
+    const paidOnly: EarningsEntry[] = [
+      { ...base, id: "e1", weekOf: "2026-07-13T00:00:00Z", amountUsd: 1000, status: "paid" },
+    ];
+    render(<IncomeTimeline entries={paidOnly} projectedNextUsd={0} accruedUsd={500} />);
+    expect(screen.queryByTestId("timeline-next")).not.toBeInTheDocument();
+    expect(screen.getByTestId("timeline-accrued")).toHaveTextContent("$5.00");
   });
 
   it("shows an em dash for the paid week when nothing has been paid yet", () => {
     const nonePaid: EarningsEntry[] = [
       { ...base, id: "e3", weekOf: "2026-07-20T00:00:00Z", amountUsd: 400, status: "pending" },
     ];
-    render(<IncomeTimeline entries={nonePaid} projectedNextUsd={475} />);
+    render(<IncomeTimeline entries={nonePaid} projectedNextUsd={475} accruedUsd={100} />);
     expect(screen.getByTestId("timeline-paid")).toHaveTextContent("—");
   });
 });

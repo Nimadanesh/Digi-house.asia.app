@@ -24,18 +24,25 @@ export function YieldSummaryCard({ summary }: { summary: YieldSummary }) {
           </p>
         ) : (
           <>
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2 min-w-0">
-                <Lock size={16} strokeWidth={1.75} className="shrink-0 text-muted-foreground" />
-                <span className="text-sm font-medium text-foreground tnum">
-                  {summary.lockedShares} shares
-                </span>
-              </div>
-              <span className="text-sm font-semibold tnum text-success" data-testid="yield-accrued-unpaid">
+            <div data-testid="yield-accrued-block">
+              <p className="text-[0.6875rem] leading-snug text-muted-foreground">{t("yieldAccrued")}</p>
+              <p
+                className="mt-1 text-[1.375rem] font-bold leading-none tracking-[-0.02em] tnum text-success"
+                data-testid="yield-accrued-unpaid"
+              >
                 {usd(summary.accruedUnpaidUsd)}
+              </p>
+              <p className="mt-1.5 text-[0.6875rem] leading-snug text-muted-foreground">
+                {t("yieldAccruedSub")}
+              </p>
+            </div>
+            <div className="flex items-center gap-2 min-w-0 border-t border-border pt-3">
+              <Lock size={16} strokeWidth={1.75} className="shrink-0 text-muted-foreground" />
+              <span className="text-sm font-medium text-foreground tnum">
+                {summary.lockedShares} shares
               </span>
             </div>
-            <div className="space-y-3 border-t border-border pt-3">
+            <div className="space-y-3">
               <div>
                 <p className="mb-1 text-[0.6875rem] leading-snug text-muted-foreground">
                   {t("yieldMonthly")}
