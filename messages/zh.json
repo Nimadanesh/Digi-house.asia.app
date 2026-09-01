@@ -91,28 +91,6 @@
     "currentValue": "当前价值"
   },
   "marketplace": {
-    "searchPlaceholder": "搜索房产",
-    "searchAria": "搜索房产",
-    "clearSearch": "清除搜索",
-    "filtersAria": "市场筛选",
-    "loadError": "无法加载房产。",
-    "emptyTitle": "暂无房产",
-    "emptyMessage": "每周都有新的份额上架 — 请稍后再来。",
-    "noMatchesTitle": "无匹配结果",
-    "noMatchesMessage": "试试其他搜索或筛选。",
-    "chips": {
-      "all": "全部",
-      "primary": "一级",
-      "secondary": "二级",
-      "highest_yield": "最高收益",
-      "new": "最新",
-      "almost_sold": "即将售罄",
-      "low_price": "低价"
-    },
-    "pricePerShare": "单价 / 份",
-    "monthlyPerShare": "每月 / 份",
-    "nightFrom": "晚 / 起",
-    "sharesSold": "已售 {sold} / {total} 份",
     "feesTitle": "佣金",
     "feesPerTx": "费率等级按每笔交易金额确定——无买卖上限。",
     "feesRange": "金额",
@@ -121,8 +99,7 @@
     "feesSellMarket": "卖出 · 市场",
     "feesInstantSell": "即时卖出（一级）",
     "feesInstantNote": "一级发行阶段为固定费率；二级交易按市场等级收费。",
-    "feesNoCap": "买卖金额无上限。",
-    "lastPrice": "最新价格"
+    "feesNoCap": "买卖金额无上限。"
   },
   "property": {
     "buyShare": "购买份额",
@@ -607,5 +584,44 @@
     "signIn": "登录",
     "signingIn": "登录中…",
     "backHome": "返回首页"
+  },
+  "estates": {
+    "title": "房产",
+    "subtitle": "拥有一处优质房产的股份。",
+    "searchPlaceholder": "搜索别墅、目的地或地区",
+    "searchAria": "搜索别墅、目的地或地区",
+    "filtersAria": "房产筛选",
+    "sortAria": "排序房产",
+    "sortLabel": "排序",
+    "sort": {
+      "curated": "精选推荐",
+      "income": "租金收入",
+      "price": "入门价格",
+      "newest": "最新"
+    },
+    "loadError": "无法加载房产。",
+    "emptyTitle": "暂无房产",
+    "emptyMessage": "每周都有新的房产上架 — 敬请期待。",
+    "ownerStayEmptyMessage": "业主入住数据暂不可用。",
+    "featuredEmptyMessage": "精选推荐暂不可用。",
+    "clearSearch": "清除搜索",
+    "chips": {
+      "all": "全部",
+      "featured": "精选",
+      "new": "新品",
+      "income": "收益",
+      "owner_stay": "业主入住",
+      "resale": "转售"
+    },
+    "noMatchesTitle": "无匹配结果",
+    "noMatchesMessage": "试试其他搜索或筛选。",
+    "ownerStayEmptyTitle": "业主入住",
+    "featuredEmptyTitle": "精选",
+    "pricePerShare": "单价 / 份",
+    "lastPrice": "最新价格",
+    "projectedIncome": "预计收入 / 股",
+    "incomePending": "数据待定",
+    "shareFraction": "1股 ≈ 房产的1/{total}",
+    "fundedCaption": "已募集 {pct}% · 剩余 {remaining} 份"
   }
 }

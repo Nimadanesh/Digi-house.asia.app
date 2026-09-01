@@ -91,28 +91,6 @@
     "currentValue": "Valor atual"
   },
   "marketplace": {
-    "searchPlaceholder": "Buscar imóveis",
-    "searchAria": "Buscar imóveis",
-    "clearSearch": "Limpar busca",
-    "filtersAria": "Filtros do mercado",
-    "loadError": "Não foi possível carregar os imóveis.",
-    "emptyTitle": "Ainda não há imóveis",
-    "emptyMessage": "Novas listagens fracionadas toda semana — volte em breve.",
-    "noMatchesTitle": "Sem resultados",
-    "noMatchesMessage": "Tente outra busca ou filtro.",
-    "chips": {
-      "all": "Todos",
-      "primary": "Primário",
-      "secondary": "Secundário",
-      "highest_yield": "Maior rendimento",
-      "new": "Novos",
-      "almost_sold": "Quase esgotado",
-      "low_price": "Preço baixo"
-    },
-    "pricePerShare": "Preço / cota",
-    "monthlyPerShare": "Mensal / cota",
-    "nightFrom": "Noite / a partir de",
-    "sharesSold": "{sold} de {total} cotas vendidas",
     "feesTitle": "Comissão",
     "feesPerTx": "O nível é definido pelo valor de cada transação — sem limites.",
     "feesRange": "Valor",
@@ -121,8 +99,7 @@
     "feesSellMarket": "Venda · Mercado",
     "feesInstantSell": "Venda instantânea (primária)",
     "feesInstantNote": "Taxa fixa durante a oferta primária; o secundário usa o nível de mercado.",
-    "feesNoCap": "Sem limites nos valores de compra ou venda.",
-    "lastPrice": "Último preço"
+    "feesNoCap": "Sem limites nos valores de compra ou venda."
   },
   "property": {
     "buyShare": "Comprar cota",
@@ -607,5 +584,44 @@
     "signIn": "Entrar",
     "signingIn": "A entrar…",
     "backHome": "Voltar ao início"
+  },
+  "estates": {
+    "title": "Propriedades",
+    "subtitle": "Possua uma parte de propriedades excepcionais.",
+    "searchPlaceholder": "Busque villas, destinos ou regiões",
+    "searchAria": "Busque villas, destinos ou regiões",
+    "filtersAria": "Filtros de propriedades",
+    "sortAria": "Ordenar propriedades",
+    "sortLabel": "Ordenar",
+    "sort": {
+      "curated": "Seleção",
+      "income": "Renda de aluguel",
+      "price": "Preço de entrada",
+      "newest": "Mais recentes"
+    },
+    "loadError": "Não foi possível carregar as propriedades.",
+    "emptyTitle": "Ainda não há propriedades",
+    "emptyMessage": "Novas propriedades são adicionadas toda semana — volte em breve.",
+    "ownerStayEmptyMessage": "Os dados de estadia do proprietário ainda não estão disponíveis.",
+    "featuredEmptyMessage": "A seleção em destaque ainda não está disponível.",
+    "clearSearch": "Limpar busca",
+    "chips": {
+      "all": "Todos",
+      "featured": "Destaque",
+      "new": "Novo",
+      "income": "Renda",
+      "owner_stay": "Estadia do proprietário",
+      "resale": "Revenda"
+    },
+    "noMatchesTitle": "Sem resultados",
+    "noMatchesMessage": "Tente outra busca ou filtro.",
+    "ownerStayEmptyTitle": "Estadia do proprietário",
+    "featuredEmptyTitle": "Destaque",
+    "pricePerShare": "Preço / cota",
+    "lastPrice": "Último preço",
+    "projectedIncome": "Renda projetada / ação",
+    "incomePending": "Dados pendentes",
+    "shareFraction": "1 ação ≈ 1/{total} da propriedade",
+    "fundedCaption": "{pct}% financiado · {remaining} cotas restantes"
   }
 }

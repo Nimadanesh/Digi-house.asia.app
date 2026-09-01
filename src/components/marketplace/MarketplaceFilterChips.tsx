@@ -1,22 +1,20 @@
 "use client";
-// File responsibility: horizontal filter chips for marketplace (Fable §Header chips).
+// File responsibility: horizontal estate filter chips (Phase 9 — All/Featured/New/Income/
+// Owner Stay/Resale per redesign §6 / UI Mapping §4.3). Labels via `estates.chips.*`.
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
-import {
-  MARKETPLACE_CHIP_IDS,
-  type MarketplaceChip,
-} from "@/lib/marketplace-filter";
+import { ESTATE_FILTER_IDS, type EstateFilter } from "@/lib/marketplace-filter";
 
 export function MarketplaceFilterChips({
   value,
   onChange,
   onSelectHaptic,
 }: {
-  value: MarketplaceChip;
-  onChange: (chip: MarketplaceChip) => void;
+  value: EstateFilter;
+  onChange: (filter: EstateFilter) => void;
   onSelectHaptic?: () => void;
 }) {
-  const t = useTranslations("marketplace");
+  const t = useTranslations("estates");
 
   return (
     <div
@@ -24,9 +22,9 @@ export function MarketplaceFilterChips({
       style={{ WebkitOverflowScrolling: "touch" }}
       role="tablist"
       aria-label={t("filtersAria")}
-      data-testid="marketplace-filters"
+      data-testid="estates-filters"
     >
-      {MARKETPLACE_CHIP_IDS.map((id) => {
+      {ESTATE_FILTER_IDS.map((id) => {
         const active = id === value;
         return (
           <button

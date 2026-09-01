@@ -91,28 +91,6 @@
     "currentValue": "Aktueller Wert"
   },
   "marketplace": {
-    "searchPlaceholder": "Immobilien suchen",
-    "searchAria": "Immobilien suchen",
-    "clearSearch": "Suche löschen",
-    "filtersAria": "Marktplatz-Filter",
-    "loadError": "Immobilien konnten nicht geladen werden.",
-    "emptyTitle": "Noch keine Immobilien",
-    "emptyMessage": "Neue fraktionierte Angebote jede Woche — schau bald wieder vorbei.",
-    "noMatchesTitle": "Keine Treffer",
-    "noMatchesMessage": "Andere Suche oder anderen Filter versuchen.",
-    "chips": {
-      "all": "Alle",
-      "primary": "Primär",
-      "secondary": "Sekundär",
-      "highest_yield": "Höchste Rendite",
-      "new": "Neu",
-      "almost_sold": "Fast ausverkauft",
-      "low_price": "Günstiger Preis"
-    },
-    "pricePerShare": "Preis / Anteil",
-    "monthlyPerShare": "Monatlich / Anteil",
-    "nightFrom": "Nacht / ab",
-    "sharesSold": "{sold} von {total} Anteilen verkauft",
     "feesTitle": "Provision",
     "feesPerTx": "Die Stufe richtet sich nach dem Betrag jeder Transaktion — ohne Limits.",
     "feesRange": "Betrag",
@@ -121,8 +99,7 @@
     "feesSellMarket": "Verkauf · Markt",
     "feesInstantSell": "Sofortverkauf (Primär)",
     "feesInstantNote": "Pauschal während des Primärangebots; Secondary-Handel nach Marktstufe.",
-    "feesNoCap": "Keine Begrenzung der Kauf- oder Verkaufsbeträge.",
-    "lastPrice": "Letzter Preis"
+    "feesNoCap": "Keine Begrenzung der Kauf- oder Verkaufsbeträge."
   },
   "property": {
     "buyShare": "Anteil kaufen",
@@ -607,5 +584,44 @@
     "signIn": "Anmelden",
     "signingIn": "Anmeldung…",
     "backHome": "Zur Startseite"
+  },
+  "estates": {
+    "title": "Immobilien",
+    "subtitle": "Besitzen Sie einen Anteil an außergewöhnlichen Immobilien.",
+    "searchPlaceholder": "Suchen Sie nach Villen, Reisezielen oder Regionen",
+    "searchAria": "Suchen Sie nach Villen, Reisezielen oder Regionen",
+    "filtersAria": "Immobilienfilter",
+    "sortAria": "Immobilien sortieren",
+    "sortLabel": "Sortieren",
+    "sort": {
+      "curated": "Kuratierte Auswahl",
+      "income": "Mieteinnahmen",
+      "price": "Einstiegspreis",
+      "newest": "Neueste"
+    },
+    "loadError": "Immobilien konnten nicht geladen werden.",
+    "emptyTitle": "Noch keine Immobilien",
+    "emptyMessage": "Jede Woche kommen neue Immobilien hinzu — schauen Sie bald wieder vorbei.",
+    "ownerStayEmptyMessage": "Daten zum Eigentümer-Aufenthalt sind noch nicht verfügbar.",
+    "featuredEmptyMessage": "Die kuratierte Auswahl ist noch nicht verfügbar.",
+    "clearSearch": "Suche löschen",
+    "chips": {
+      "all": "Alle",
+      "featured": "Empfohlen",
+      "new": "Neu",
+      "income": "Einkommen",
+      "owner_stay": "Eigentümer-Aufenthalt",
+      "resale": "Weiterverkauf"
+    },
+    "noMatchesTitle": "Keine Treffer",
+    "noMatchesMessage": "Andere Suche oder anderen Filter versuchen.",
+    "ownerStayEmptyTitle": "Eigentümer-Aufenthalt",
+    "featuredEmptyTitle": "Empfohlen",
+    "pricePerShare": "Preis / Anteil",
+    "lastPrice": "Letzter Preis",
+    "projectedIncome": "Voraussichtliches Einkommen / Anteil",
+    "incomePending": "Daten ausstehend",
+    "shareFraction": "1 Anteil ≈ 1/{total} der Immobilie",
+    "fundedCaption": "{pct}% finanziert · {remaining} Anteile verbleiben"
   }
 }

@@ -91,28 +91,6 @@
     "currentValue": "ارزش فعلی"
   },
   "marketplace": {
-    "searchPlaceholder": "جستجوی املاک",
-    "searchAria": "جستجوی املاک",
-    "clearSearch": "پاک کردن جستجو",
-    "filtersAria": "فیلترهای بازار",
-    "loadError": "بارگذاری املاک ممکن نشد.",
-    "emptyTitle": "هنوز ملکی نیست",
-    "emptyMessage": "فهرست‌های کسری جدید هر هفته اضافه می‌شوند — به‌زودی سر بزنید.",
-    "noMatchesTitle": "موردی یافت نشد",
-    "noMatchesMessage": "جستجو یا فیلتر دیگری را امتحان کنید.",
-    "chips": {
-      "all": "همه",
-      "primary": "اولیه",
-      "secondary": "ثانویه",
-      "highest_yield": "بیشترین بازده",
-      "new": "جدید",
-      "almost_sold": "تقریباً فروخته",
-      "low_price": "قیمت پایین"
-    },
-    "pricePerShare": "قیمت / سهم",
-    "monthlyPerShare": "ماهانه / سهم",
-    "nightFrom": "شب / از",
-    "sharesSold": "{sold} از {total} سهم فروخته‌شده",
     "feesTitle": "کارمزد",
     "feesPerTx": "سطح کارمزد بر اساس مبلغ هر تراکنش تعیین می‌شود — بدون سقف خرید یا فروش.",
     "feesRange": "مبلغ",
@@ -121,8 +99,7 @@
     "feesSellMarket": "فروش · بازار",
     "feesInstantSell": "فروش آنی (عرضه اولیه)",
     "feesInstantNote": "در مرحله عرضه اولیه ثابت است؛ معاملات ثانویه از سطح بازار استفاده می‌کنند.",
-    "feesNoCap": "هیچ سقفی برای مبلغ خرید یا فروش وجود ندارد.",
-    "lastPrice": "آخرین قیمت"
+    "feesNoCap": "هیچ سقفی برای مبلغ خرید یا فروش وجود ندارد."
   },
   "property": {
     "buyShare": "خرید سهم",
@@ -607,5 +584,44 @@
     "signIn": "ورود",
     "signingIn": "در حال ورود…",
     "backHome": "بازگشت به خانه"
+  },
+  "estates": {
+    "title": "املاک",
+    "subtitle": "سهمی از املاک استثنایی داشته باشید.",
+    "searchPlaceholder": "جستجوی ویلا، مقصد یا منطقه",
+    "searchAria": "جستجوی ویلا، مقصد یا منطقه",
+    "filtersAria": "فیلترهای املاک",
+    "sortAria": "مرتب‌سازی املاک",
+    "sortLabel": "مرتب‌سازی",
+    "sort": {
+      "curated": "انتخاب‌شده",
+      "income": "درآمد اجاره",
+      "price": "قیمت ورود",
+      "newest": "جدیدترین"
+    },
+    "loadError": "امکان بارگذاری املاک وجود ندارد.",
+    "emptyTitle": "هنوز املاکی نیست",
+    "emptyMessage": "هر هفته املاک جدید اضافه می‌شود — به‌زودی دوباره سر بزنید.",
+    "ownerStayEmptyMessage": "داده‌های اقامت مالک هنوز در دسترس نیست.",
+    "featuredEmptyMessage": "انتخاب ویژه هنوز در دسترس نیست.",
+    "clearSearch": "پاک کردن جستجو",
+    "chips": {
+      "all": "همه",
+      "featured": "ویژه",
+      "new": "جدید",
+      "income": "درآمد",
+      "owner_stay": "اقامت مالک",
+      "resale": "فروش دوباره"
+    },
+    "noMatchesTitle": "موردی یافت نشد",
+    "noMatchesMessage": "جستجو یا فیلتر دیگری را امتحان کنید.",
+    "ownerStayEmptyTitle": "اقامت مالک",
+    "featuredEmptyTitle": "ویژه",
+    "pricePerShare": "قیمت / سهم",
+    "lastPrice": "آخرین قیمت",
+    "projectedIncome": "درآمد پیش‌بینی‌شده / سهم",
+    "incomePending": "داده در انتظار",
+    "shareFraction": "1 سهم ≈ 1/{total} از ملک",
+    "fundedCaption": "{pct}% تأمین شد · {remaining} سهم باقی‌مانده"
   }
 }

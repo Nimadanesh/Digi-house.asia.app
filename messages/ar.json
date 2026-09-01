@@ -91,28 +91,6 @@
     "currentValue": "القيمة الحالية"
   },
   "marketplace": {
-    "searchPlaceholder": "البحث عن عقارات",
-    "searchAria": "البحث عن عقارات",
-    "clearSearch": "مسح البحث",
-    "filtersAria": "فلاتر السوق",
-    "loadError": "تعذّر تحميل العقارات.",
-    "emptyTitle": "لا عقارات بعد",
-    "emptyMessage": "تُضاف قوائم جزئية جديدة كل أسبوع — عُد قريبًا.",
-    "noMatchesTitle": "لا نتائج",
-    "noMatchesMessage": "جرّب بحثًا أو فلترًا آخر.",
-    "chips": {
-      "all": "الكل",
-      "primary": "أساسي",
-      "secondary": "ثانوي",
-      "highest_yield": "أعلى عائد",
-      "new": "جديد",
-      "almost_sold": "شبه مباع",
-      "low_price": "سعر منخفض"
-    },
-    "pricePerShare": "السعر / حصة",
-    "monthlyPerShare": "شهري / حصة",
-    "nightFrom": "الليلة / من",
-    "sharesSold": "{sold} من {total} حصة مباعة",
     "feesTitle": "العمولة",
     "feesPerTx": "تُحدَّد الفئة حسب مبلغ كل معاملة — دون حد للشراء أو البيع.",
     "feesRange": "المبلغ",
@@ -121,8 +99,7 @@
     "feesSellMarket": "بيع · السوق",
     "feesInstantSell": "بيع فوري (الطرح)",
     "feesInstantNote": "رسوم ثابتة أثناء الطرح الأولي؛ تداولات السوق الثانوية تستخدم فئة السوق.",
-    "feesNoCap": "لا حدود لمبالغ الشراء أو البيع.",
-    "lastPrice": "آخر سعر"
+    "feesNoCap": "لا حدود لمبالغ الشراء أو البيع."
   },
   "property": {
     "buyShare": "شراء حصة",
@@ -607,5 +584,44 @@
     "signIn": "تسجيل الدخول",
     "signingIn": "جارٍ تسجيل الدخول…",
     "backHome": "العودة للرئيسية"
+  },
+  "estates": {
+    "title": "العقارات",
+    "subtitle": "امتلك حصة من عقارات استثنائية.",
+    "searchPlaceholder": "ابحث عن الفلل أو الوجهات أو المناطق",
+    "searchAria": "ابحث عن الفلل أو الوجهات أو المناطق",
+    "filtersAria": "فلاتر العقارات",
+    "sortAria": "ترتيب العقارات",
+    "sortLabel": "ترتيب",
+    "sort": {
+      "curated": "منسَّق",
+      "income": "دخل الإيجار",
+      "price": "سعر الدخول",
+      "newest": "الأحدث"
+    },
+    "loadError": "تعذر تحميل العقارات.",
+    "emptyTitle": "لا توجد عقارات بعد",
+    "emptyMessage": "تُضاف عقارات جديدة كل أسبوع — عد قريبًا.",
+    "ownerStayEmptyMessage": "بيانات إقامة المالك غير متاحة بعد.",
+    "featuredEmptyMessage": "الاختيار المميز غير متاح بعد.",
+    "clearSearch": "مسح البحث",
+    "chips": {
+      "all": "الكل",
+      "featured": "مميز",
+      "new": "جديد",
+      "income": "الدخل",
+      "owner_stay": "إقامة المالك",
+      "resale": "إعادة بيع"
+    },
+    "noMatchesTitle": "لا نتائج",
+    "noMatchesMessage": "جرّب بحثًا أو فلترًا آخر.",
+    "ownerStayEmptyTitle": "إقامة المالك",
+    "featuredEmptyTitle": "مميز",
+    "pricePerShare": "السعر / حصة",
+    "lastPrice": "آخر سعر",
+    "projectedIncome": "الدخل المتوقع / السهم",
+    "incomePending": "البيانات معلقة",
+    "shareFraction": "سهم واحد ≈ 1/{total} من العقار",
+    "fundedCaption": "تم تمويل {pct}% · تبقى {remaining} حصة"
   }
 }

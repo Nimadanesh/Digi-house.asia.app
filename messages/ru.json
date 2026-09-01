@@ -91,28 +91,6 @@
     "currentValue": "Текущая стоимость"
   },
   "marketplace": {
-    "searchPlaceholder": "Поиск объектов",
-    "searchAria": "Поиск объектов",
-    "clearSearch": "Очистить поиск",
-    "filtersAria": "Фильтры маркетплейса",
-    "loadError": "Не удалось загрузить объекты.",
-    "emptyTitle": "Пока нет объектов",
-    "emptyMessage": "Новые доли появляются каждую неделю — загляните позже.",
-    "noMatchesTitle": "Ничего не найдено",
-    "noMatchesMessage": "Попробуйте другой поиск или фильтр.",
-    "chips": {
-      "all": "Все",
-      "primary": "Первичный",
-      "secondary": "Вторичный",
-      "highest_yield": "Высший доход",
-      "new": "Новые",
-      "almost_sold": "Почти продано",
-      "low_price": "Низкая цена"
-    },
-    "pricePerShare": "Цена / доля",
-    "monthlyPerShare": "В месяц / доля",
-    "nightFrom": "Ночь / от",
-    "sharesSold": "{sold} из {total} долей продано",
     "feesTitle": "Комиссия",
     "feesPerTx": "Уровень определяется суммой каждой сделки — без лимитов.",
     "feesRange": "Сумма",
@@ -121,8 +99,7 @@
     "feesSellMarket": "Продажа · рынок",
     "feesInstantSell": "Мгновенная продажа (праймери)",
     "feesInstantNote": "Фиксированный сбор на этапе первичного размещения; вторичные сделки — по рыночной шкале.",
-    "feesNoCap": "Ограничений на суммы покупки/продажи нет.",
-    "lastPrice": "Последняя цена"
+    "feesNoCap": "Ограничений на суммы покупки/продажи нет."
   },
   "property": {
     "buyShare": "Купить долю",
@@ -607,5 +584,44 @@
     "signIn": "Войти",
     "signingIn": "Вход…",
     "backHome": "На главную"
+  },
+  "estates": {
+    "title": "Объекты",
+    "subtitle": "Владейте долей выдающихся объектов.",
+    "searchPlaceholder": "Поиск вилл, направлений или регионов",
+    "searchAria": "Поиск вилл, направлений или регионов",
+    "filtersAria": "Фильтры объектов",
+    "sortAria": "Сортировать объекты",
+    "sortLabel": "Сортировка",
+    "sort": {
+      "curated": "Подборка",
+      "income": "Арендный доход",
+      "price": "Цена входа",
+      "newest": "Самые новые"
+    },
+    "loadError": "Не удалось загрузить объекты.",
+    "emptyTitle": "Пока нет объектов",
+    "emptyMessage": "Новые объекты добавляются каждую неделю — загляните позже.",
+    "ownerStayEmptyMessage": "Данные о проживании владельца пока недоступны.",
+    "featuredEmptyMessage": "Подборка ещё недоступна.",
+    "clearSearch": "Очистить поиск",
+    "chips": {
+      "all": "Все",
+      "featured": "Избранное",
+      "new": "Новое",
+      "income": "Доход",
+      "owner_stay": "Проживание владельца",
+      "resale": "Перепродажа"
+    },
+    "noMatchesTitle": "Ничего не найдено",
+    "noMatchesMessage": "Попробуйте другой поиск или фильтр.",
+    "ownerStayEmptyTitle": "Проживание владельца",
+    "featuredEmptyTitle": "Избранное",
+    "pricePerShare": "Цена / доля",
+    "lastPrice": "Последняя цена",
+    "projectedIncome": "Прогнозируемый доход / доля",
+    "incomePending": "Данные ожидаются",
+    "shareFraction": "1 доля ≈ 1/{total} объекта",
+    "fundedCaption": "{pct}% собрано · {remaining} долей осталось"
   }
 }

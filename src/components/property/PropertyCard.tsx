@@ -1,20 +1,20 @@
 "use client";
-// File responsibility: Marketplace listing card — Fable vertical card (image badges, 3 metrics, scarcity bar).
-// Whole-card tap → Property detail. Press scale 0.98. Flat block (no drop shadow).
-// Yield figures are rate-based (§0.4) via lib/property-yield — consistent with detail + buy sheet.
+// File responsibility: Estates listing card (Phase 9 Slice 4 — redesign §6 / UI Mapping §4.5).
+// Identity-first vertical card: premium image with a single quiet status badge, estate name +
+// location/type, price per share (single source getCurrentSharePrice), projected income per
+// share (or an honest "Data pending" chip — never 0), the ownership fraction one share
+// represents, and availability only for primary offerings. No APY, no scarcity/flame cues, no
+// per-card Buy — the whole card opens the estate detail. Flat block (no drop shadow).
 import { memo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin, Flame } from "lucide-react";
+import { Info, MapPin } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
-import { usd, pct } from "@/lib/format";
-import {
-  annualReturnRatio,
-  shareWeeklyYieldUsd,
-} from "@/lib/property-yield";
+import { usd } from "@/lib/format";
+import { getCurrentSharePrice } from "@/lib/property-price";
+import { projectedMonthlyIncomeUsd, hasIncomeData, listingStatusBadge, MARKETPLACE_DEMO_CLOCK_MS } from "@/lib/marketplace-filter";
 import { ROUTES } from "@/lib/constants";
-import { listingStatusBadge } from "@/lib/marketplace-filter";
 import type { Listing } from "@/types/property";
 import { FundingBar } from "./FundingBar";
 import { FeeInfoButton } from "@/components/common/FeeInfoButton";
@@ -32,13 +32,13 @@ function PropertyCardInner({
   variant?: "list" | "mini";
   holding?: { sharesOwned: number; currentValueUsd: number; pendingWeekEarningsUsd: number };
   className?: string;
-  /** Epoch ms for status badge age (inject in tests; 0 → skip "New" age window). */
+  /** Epoch ms for status badge age (inject in tests; 0 → shared demo-tape clock). */
   nowMs?: number;
   onNavigateHaptic?: () => void;
   /** LCP hint for the first marketplace card. */
   priority?: boolean;
 }) {
-  const t = useTranslations("marketplace");
+  const t = useTranslations("estates");
   const tHome = useTranslations("home");
   const tCommon = useTranslations("common");
 
@@ -85,25 +85,15 @@ function PropertyCardInner({
   }
 
   const cover = listing.images[0] ?? "/images/properties/p1.png";
-  const apy = annualReturnRatio(listing);
-  const monthlyPerShare = (shareWeeklyYieldUsd(listing) * 52) / 12;
-  const funded = listing.fundingProgressRatio >= 1;
-  // PD-07: on the secondary market the price is the latest executed trade, not the
-  // historical offering price. Fall back to the offering price before the first fill.
-  const secondary =
-    listing.status === "resale" || listing.status === "funded";
-  const displayPrice = secondary
-    ? (listing.lastTradeUsd ?? listing.sharePriceUsd)
-    : listing.sharePriceUsd;
-  const clock = nowMs > 0 ? nowMs : Date.UTC(2026, 6, 26);
+  const incomeAvailable = hasIncomeData(listing);
+  // PD-07: on the resale market the price is the latest executed trade, not the
+  // historical offering price. getCurrentSharePrice is the single source.
+  const displayPrice = getCurrentSharePrice(listing);
+  const secondary = listing.status === "resale" || listing.status === "funded";
+  // Shared demo-tape clock: keeps the "New" badge and the "New" filter in agreement.
+  const clock = nowMs > 0 ? nowMs : MARKETPLACE_DEMO_CLOCK_MS;
   const badge = listingStatusBadge(listing, clock);
-
-  const badgeLabel =
-    badge.kind === "new"
-      ? tCommon("new")
-      : badge.kind === "hot"
-        ? tCommon("hot")
-        : tCommon("soldPct", { pct: badge.soldPct ?? 0 });
+  const showNewBadge = badge.kind === "new";
 
   return (
     <Link
@@ -124,24 +114,14 @@ function PropertyCardInner({
           className="object-cover"
           sizes="(max-width: 480px) 100vw, 480px"
         />
-        <span
-          className={cn(
-            "absolute top-2.5 start-2.5 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[0.6875rem] font-semibold",
-            badge.kind === "hot"
-              ? "bg-danger/90 text-white"
-              : "bg-black/55 text-white",
-          )}
-          data-testid="card-status-badge"
-        >
-          {badge.kind === "hot" ? <Flame size={12} strokeWidth={2.25} aria-hidden /> : null}
-          {badgeLabel}
-        </span>
-        <span
-          className="absolute top-2.5 end-2.5 rounded-full bg-success px-2.5 py-1 text-xs font-semibold text-white tnum shadow-sm"
-          data-testid="card-apy-badge"
-        >
-          {pct(apy)} {tCommon("apy")}
-        </span>
+        {showNewBadge ? (
+          <span
+            className="absolute top-2.5 start-2.5 inline-flex items-center rounded-full bg-black/55 px-2.5 py-0.5 text-[0.6875rem] font-semibold text-white"
+            data-testid="card-status-badge"
+          >
+            {tCommon("new")}
+          </span>
+        ) : null}
         <span className="absolute bottom-2.5 end-2.5">
           <FeeInfoButton variant="icon" />
         </span>
@@ -152,28 +132,54 @@ function PropertyCardInner({
           <h2 className="text-[0.9375rem] font-semibold leading-snug text-foreground">{listing.title}</h2>
           <p className="mt-1.5 flex items-center gap-1 text-sm leading-relaxed text-muted-foreground">
             <MapPin size={14} strokeWidth={1.75} className="shrink-0" aria-hidden />
-            <span className="truncate">{listing.location}</span>
+            <span className="truncate">
+              {listing.location}
+              {listing.meta.propertyType ? <span> · {listing.meta.propertyType}</span> : null}
+            </span>
           </p>
         </div>
 
-        <div className="grid grid-cols-3 gap-2" data-testid="card-metrics">
+        <div className="grid grid-cols-2 gap-3" data-testid="card-metrics">
           <Metric
             label={secondary ? t("lastPrice") : t("pricePerShare")}
             value={usd(displayPrice)}
           />
-          <Metric label={t("monthlyPerShare")} value={usd(monthlyPerShare)} accent />
-          <Metric label={t("nightFrom")} value={usd(displayPrice)} />
+          {incomeAvailable ? (
+            <Metric label={t("projectedIncome")} value={usd(projectedMonthlyIncomeUsd(listing))} />
+          ) : (
+            <div className="min-w-0" data-testid="card-income-pending">
+              <div className="mb-1 text-[0.625rem] uppercase tracking-wide leading-tight text-muted-foreground">
+                {t("projectedIncome")}
+              </div>
+              <span className="inline-flex items-center gap-1 rounded-full bg-surface-2 px-2 py-0.5 text-[0.6875rem] font-medium text-muted-foreground">
+                <Info size={12} strokeWidth={1.75} aria-hidden />
+                {t("incomePending")}
+              </span>
+            </div>
+          )}
         </div>
 
-        <div className="space-y-1.5">
-          <FundingBar progress={listing.fundingProgressRatio} funded={funded} />
-          <p
-            className="text-xs leading-relaxed text-muted-foreground tnum pt-0.5"
-            data-testid="card-sold-label"
-          >
-            {t("sharesSold", { sold: listing.sharesSold, total: listing.totalShares })}
-          </p>
-        </div>
+        <p
+          className="text-xs leading-relaxed text-muted-foreground tnum pt-0.5"
+          data-testid="card-fraction"
+        >
+          {t("shareFraction", { total: listing.totalShares })}
+        </p>
+
+        {listing.status === "funding" ? (
+          <div className="space-y-1.5">
+            <FundingBar progress={listing.fundingProgressRatio} funded={listing.fundingProgressRatio >= 1} />
+            <p
+              className="text-xs leading-relaxed text-muted-foreground tnum pt-0.5"
+              data-testid="card-availability"
+            >
+              {t("fundedCaption", {
+                pct: Math.round(listing.fundingProgressRatio * 100),
+                remaining: listing.sharesRemaining,
+              })}
+            </p>
+          </div>
+        ) : null}
       </div>
     </Link>
   );
@@ -184,23 +190,16 @@ export const PropertyCard = memo(PropertyCardInner);
 function Metric({
   label,
   value,
-  accent = false,
 }: {
   label: string;
   value: string;
-  accent?: boolean;
 }) {
   return (
     <div className="min-w-0">
       <div className="mb-1 text-[0.625rem] uppercase tracking-wide leading-tight text-muted-foreground">
         {label}
       </div>
-      <div
-        className={cn(
-          "truncate text-[0.8125rem] font-semibold tnum",
-          accent ? "text-success" : "text-foreground",
-        )}
-      >
+      <div className="truncate text-[0.8125rem] font-semibold tnum text-foreground">
         {value}
       </div>
     </div>

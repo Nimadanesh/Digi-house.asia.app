@@ -91,28 +91,6 @@
     "currentValue": "Current value"
   },
   "marketplace": {
-    "searchPlaceholder": "Search properties",
-    "searchAria": "Search properties",
-    "clearSearch": "Clear search",
-    "filtersAria": "Marketplace filters",
-    "loadError": "Couldn't load properties.",
-    "emptyTitle": "No properties yet",
-    "emptyMessage": "New fractional listings land every week — check back soon.",
-    "noMatchesTitle": "No matches",
-    "noMatchesMessage": "Try another search or filter chip.",
-    "chips": {
-      "all": "All",
-      "primary": "Primary",
-      "secondary": "Secondary",
-      "highest_yield": "Highest Yield",
-      "new": "New",
-      "almost_sold": "Almost Sold",
-      "low_price": "Low Price"
-    },
-    "pricePerShare": "Price / share",
-    "monthlyPerShare": "Monthly / share",
-    "nightFrom": "Night / From",
-    "sharesSold": "{sold} of {total} shares sold",
     "feesTitle": "Commission",
     "feesPerTx": "Tier is set by each transaction amount — no buy/sell caps.",
     "feesRange": "Amount",
@@ -121,8 +99,7 @@
     "feesSellMarket": "Sell · Market",
     "feesInstantSell": "Instant sell (primary)",
     "feesInstantNote": "Flat fee while a property is in its primary offering; secondary trades use the market tier.",
-    "feesNoCap": "No caps on buy or sell amounts.",
-    "lastPrice": "Last price"
+    "feesNoCap": "No caps on buy or sell amounts."
   },
   "property": {
     "buyShare": "Buy Share",
@@ -607,5 +584,44 @@
     "signIn": "Sign in",
     "signingIn": "Signing in…",
     "backHome": "Back to home"
+  },
+  "estates": {
+    "title": "Estates",
+    "subtitle": "Own a share of exceptional properties.",
+    "searchPlaceholder": "Search villas, destinations or regions.",
+    "searchAria": "Search villas, destinations or regions.",
+    "filtersAria": "Estate filters",
+    "sortAria": "Sort estates",
+    "sortLabel": "Sort",
+    "sort": {
+      "curated": "Curated",
+      "income": "Rental income",
+      "price": "Entry price",
+      "newest": "Newest"
+    },
+    "loadError": "Couldn't load estates.",
+    "emptyTitle": "No estates yet",
+    "emptyMessage": "New estates are added every week — check back soon.",
+    "ownerStayEmptyMessage": "Owner Stay data is not available yet.",
+    "featuredEmptyMessage": "Featured curation is not available yet.",
+    "clearSearch": "Clear search",
+    "chips": {
+      "all": "All",
+      "featured": "Featured",
+      "new": "New",
+      "income": "Income",
+      "owner_stay": "Owner Stay",
+      "resale": "Resale"
+    },
+    "noMatchesTitle": "No matches",
+    "noMatchesMessage": "Try another search or filter chip.",
+    "ownerStayEmptyTitle": "Owner Stay",
+    "featuredEmptyTitle": "Featured",
+    "pricePerShare": "Price / share",
+    "lastPrice": "Last price",
+    "projectedIncome": "Projected income / share",
+    "incomePending": "Data pending",
+    "shareFraction": "1 share ≈ 1/{total} of the estate",
+    "fundedCaption": "{pct}% funded · {remaining} shares remaining"
   }
 }

@@ -91,28 +91,6 @@
     "currentValue": "वर्तमान मूल्य"
   },
   "marketplace": {
-    "searchPlaceholder": "संपत्ति खोजें",
-    "searchAria": "संपत्ति खोजें",
-    "clearSearch": "खोज साफ़ करें",
-    "filtersAria": "बाज़ार फ़िल्टर",
-    "loadError": "संपत्तियाँ लोड नहीं हो सकीं।",
-    "emptyTitle": "अभी कोई संपत्ति नहीं",
-    "emptyMessage": "हर सप्ताह नई आंशिक लिस्टिंग — जल्द फिर देखें।",
-    "noMatchesTitle": "कोई मेल नहीं",
-    "noMatchesMessage": "दूसरी खोज या फ़िल्टर आज़माएँ।",
-    "chips": {
-      "all": "सभी",
-      "primary": "प्राथमिक",
-      "secondary": "द्वितीयक",
-      "highest_yield": "उच्चतम प्रतिफल",
-      "new": "नया",
-      "almost_sold": "लगभग बिका",
-      "low_price": "कम कीमत"
-    },
-    "pricePerShare": "कीमत / हिस्सा",
-    "monthlyPerShare": "मासिक / हिस्सा",
-    "nightFrom": "रात / से",
-    "sharesSold": "{sold} में से {total} हिस्से बिके",
     "feesTitle": "कमीशन",
     "feesPerTx": "स्तर प्रत्येक लेनदेन राशि से तय होता है — कोई सीमा नहीं।",
     "feesRange": "राशि",
@@ -121,8 +99,7 @@
     "feesSellMarket": "बिक्री · बाज़ार",
     "feesInstantSell": "तुरंत बिक्री (प्राइमरी)",
     "feesInstantNote": "प्राइमरी चरण में निश्चित शुल्क; सेकेंडरी में मार्केट स्तर लागू।",
-    "feesNoCap": "खरीद या बिक्री राशि पर कोई सीमा नहीं।",
-    "lastPrice": "अंतिम मूल्य"
+    "feesNoCap": "खरीद या बिक्री राशि पर कोई सीमा नहीं।"
   },
   "property": {
     "buyShare": "हिस्सा खरीदें",
@@ -607,5 +584,44 @@
     "signIn": "साइन इन",
     "signingIn": "साइन इन हो रहा है…",
     "backHome": "होम पर वापस"
+  },
+  "estates": {
+    "title": "संपत्तियाँ",
+    "subtitle": "असाधारण संपत्तियों का शेयर पाएँ।",
+    "searchPlaceholder": "विला, गंतव्य या क्षेत्र खोजें",
+    "searchAria": "विला, गंतव्य या क्षेत्र खोजें",
+    "filtersAria": "संपत्ति फ़िल्टर",
+    "sortAria": "संपत्तियाँ क्रमबद्ध करें",
+    "sortLabel": "क्रम",
+    "sort": {
+      "curated": "चुनिंदा",
+      "income": "किराया आय",
+      "price": "प्रवेश मूल्य",
+      "newest": "नवीनतम"
+    },
+    "loadError": "संपत्तियाँ लोड नहीं हो सकीं।",
+    "emptyTitle": "अभी कोई संपत्ति नहीं",
+    "emptyMessage": "हर हफ़्ते नई संपत्तियाँ जोड़ी जाती हैं — जल्द वापस आएँ।",
+    "ownerStayEmptyMessage": "मालिक प्रवास डेटा अभी उपलब्ध नहीं है।",
+    "featuredEmptyMessage": "विशेष चयन अभी उपलब्ध नहीं है।",
+    "clearSearch": "खोज साफ़ करें",
+    "chips": {
+      "all": "सभी",
+      "featured": "चयनित",
+      "new": "नया",
+      "income": "आय",
+      "owner_stay": "मालिक का प्रवास",
+      "resale": "रीसेल"
+    },
+    "noMatchesTitle": "कोई मेल नहीं",
+    "noMatchesMessage": "दूसरी खोज या फ़िल्टर आज़माएँ।",
+    "ownerStayEmptyTitle": "मालिक का प्रवास",
+    "featuredEmptyTitle": "चयनित",
+    "pricePerShare": "कीमत / हिस्सा",
+    "lastPrice": "अंतिम मूल्य",
+    "projectedIncome": "अनुमानित आय / शेयर",
+    "incomePending": "डेटा लंबित",
+    "shareFraction": "1 शेयर ≈ संपत्ति का 1/{total}",
+    "fundedCaption": "{pct}% फंडेड · {remaining} हिस्से शेष"
   }
 }

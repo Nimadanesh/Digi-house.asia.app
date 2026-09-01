@@ -91,28 +91,6 @@
     "currentValue": "Güncel değer"
   },
   "marketplace": {
-    "searchPlaceholder": "Mülk ara",
-    "searchAria": "Mülk ara",
-    "clearSearch": "Aramayı temizle",
-    "filtersAria": "Pazar filtreleri",
-    "loadError": "Mülkler yüklenemedi.",
-    "emptyTitle": "Henüz mülk yok",
-    "emptyMessage": "Yeni fraksiyonel listeler her hafta gelir — yakında tekrar bak.",
-    "noMatchesTitle": "Eşleşme yok",
-    "noMatchesMessage": "Başka arama veya filtre dene.",
-    "chips": {
-      "all": "Tümü",
-      "primary": "Birincil",
-      "secondary": "İkincil",
-      "highest_yield": "En yüksek getiri",
-      "new": "Yeni",
-      "almost_sold": "Neredeyse tükendi",
-      "low_price": "Düşük fiyat"
-    },
-    "pricePerShare": "Fiyat / pay",
-    "monthlyPerShare": "Aylık / pay",
-    "nightFrom": "Gece / itibaren",
-    "sharesSold": "{sold} / {total} pay satıldı",
     "feesTitle": "Komisyon",
     "feesPerTx": "Kadem, her işlem tutarına göre belirlenir — alım/satım sınırı yoktur.",
     "feesRange": "Tutar",
@@ -121,8 +99,7 @@
     "feesSellMarket": "Satış · Piyasa",
     "feesInstantSell": "Anında satış (birincil)",
     "feesInstantNote": "Birincil aşamada sabit ücret; ikincil işlemler piyasa kademesini kullanır.",
-    "feesNoCap": "Alım/satım tutarlarında sınır yoktur.",
-    "lastPrice": "Son fiyat"
+    "feesNoCap": "Alım/satım tutarlarında sınır yoktur."
   },
   "property": {
     "buyShare": "Pay satın al",
@@ -607,5 +584,44 @@
     "signIn": "Giriş yap",
     "signingIn": "Giriş yapılıyor…",
     "backHome": "Ana sayfaya dön"
+  },
+  "estates": {
+    "title": "Emlaklar",
+    "subtitle": "Olağanüstü emlakların hissesine sahip olun.",
+    "searchPlaceholder": "Villa, destinasyon veya bölge ara",
+    "searchAria": "Villa, destinasyon veya bölge ara",
+    "filtersAria": "Emlak filtreleri",
+    "sortAria": "Emlakları sırala",
+    "sortLabel": "Sırala",
+    "sort": {
+      "curated": "Editör seçkisi",
+      "income": "Kira geliri",
+      "price": "Giriş fiyatı",
+      "newest": "En yeni"
+    },
+    "loadError": "Emlaklar yüklenemedi.",
+    "emptyTitle": "Henüz emlak yok",
+    "emptyMessage": "Her hafta yeni emlaklar ekleniyor — yakında tekrar bakın.",
+    "ownerStayEmptyMessage": "Sahip konaklama verisi henüz mevcut değil.",
+    "featuredEmptyMessage": "Öne çıkan seçki henüz mevcut değil.",
+    "clearSearch": "Aramayı temizle",
+    "chips": {
+      "all": "Tümü",
+      "featured": "Öne çıkan",
+      "new": "Yeni",
+      "income": "Gelir",
+      "owner_stay": "Sahip konaklaması",
+      "resale": "İkinci el satış"
+    },
+    "noMatchesTitle": "Eşleşme yok",
+    "noMatchesMessage": "Başka arama veya filtre dene.",
+    "ownerStayEmptyTitle": "Sahip konaklaması",
+    "featuredEmptyTitle": "Öne çıkan",
+    "pricePerShare": "Fiyat / pay",
+    "lastPrice": "Son fiyat",
+    "projectedIncome": "Öngörülen gelir / hisse",
+    "incomePending": "Veri bekleniyor",
+    "shareFraction": "1 hisse ≈ emlağın 1/{total}",
+    "fundedCaption": "%{pct} tamamlandı · {remaining} pay kaldı"
   }
 }

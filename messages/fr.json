@@ -91,28 +91,6 @@
     "currentValue": "Valeur actuelle"
   },
   "marketplace": {
-    "searchPlaceholder": "Rechercher des biens",
-    "searchAria": "Rechercher des biens",
-    "clearSearch": "Effacer la recherche",
-    "filtersAria": "Filtres du marché",
-    "loadError": "Impossible de charger les biens.",
-    "emptyTitle": "Aucun bien pour l’instant",
-    "emptyMessage": "De nouvelles offres fractionnées chaque semaine — revenez bientôt.",
-    "noMatchesTitle": "Aucun résultat",
-    "noMatchesMessage": "Essayez une autre recherche ou un autre filtre.",
-    "chips": {
-      "all": "Tous",
-      "primary": "Principal",
-      "secondary": "Secondaire",
-      "highest_yield": "Meilleur rendement",
-      "new": "Nouveau",
-      "almost_sold": "Presque vendu",
-      "low_price": "Prix bas"
-    },
-    "pricePerShare": "Prix / part",
-    "monthlyPerShare": "Mensuel / part",
-    "nightFrom": "Nuit / à partir de",
-    "sharesSold": "{sold} sur {total} parts vendues",
     "feesTitle": "Commission",
     "feesPerTx": "Le palier dépend du montant de chaque transaction — sans plafond.",
     "feesRange": "Montant",
@@ -121,8 +99,7 @@
     "feesSellMarket": "Vente · Marché",
     "feesInstantSell": "Vente instantanée (primaire)",
     "feesInstantNote": "Forfait pendant l'offre primaire ; le secondaire suit le palier marché.",
-    "feesNoCap": "Aucun plafond sur les montants d'achat ou de vente.",
-    "lastPrice": "Dernier prix"
+    "feesNoCap": "Aucun plafond sur les montants d'achat ou de vente."
   },
   "property": {
     "buyShare": "Acheter une part",
@@ -607,5 +584,44 @@
     "signIn": "Se connecter",
     "signingIn": "Connexion…",
     "backHome": "Retour à l’accueil"
+  },
+  "estates": {
+    "title": "Biens",
+    "subtitle": "Possédez une part de biens exceptionnels.",
+    "searchPlaceholder": "Recherchez villas, destinations ou régions",
+    "searchAria": "Recherchez villas, destinations ou régions",
+    "filtersAria": "Filtres de biens",
+    "sortAria": "Trier les biens",
+    "sortLabel": "Trier",
+    "sort": {
+      "curated": "Sélection éditoriale",
+      "income": "Revenus locatifs",
+      "price": "Prix d'entrée",
+      "newest": "Plus récents"
+    },
+    "loadError": "Impossible de charger les biens.",
+    "emptyTitle": "Aucun bien pour l'instant",
+    "emptyMessage": "De nouveaux biens sont ajoutés chaque semaine — revenez bientôt.",
+    "ownerStayEmptyMessage": "Les données de séjour du propriétaire ne sont pas encore disponibles.",
+    "featuredEmptyMessage": "La sélection à la une n'est pas encore disponible.",
+    "clearSearch": "Effacer la recherche",
+    "chips": {
+      "all": "Tous",
+      "featured": "À la une",
+      "new": "Nouveau",
+      "income": "Revenus",
+      "owner_stay": "Séjour du propriétaire",
+      "resale": "Revente"
+    },
+    "noMatchesTitle": "Aucun résultat",
+    "noMatchesMessage": "Essayez une autre recherche ou un autre filtre.",
+    "ownerStayEmptyTitle": "Séjour du propriétaire",
+    "featuredEmptyTitle": "À la une",
+    "pricePerShare": "Prix / part",
+    "lastPrice": "Dernier prix",
+    "projectedIncome": "Revenu projeté / part",
+    "incomePending": "Données en attente",
+    "shareFraction": "1 part ≈ 1/{total} de la propriété",
+    "fundedCaption": "{pct}% financé · {remaining} parts restantes"
   }
 }

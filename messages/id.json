@@ -91,28 +91,6 @@
     "currentValue": "Nilai saat ini"
   },
   "marketplace": {
-    "searchPlaceholder": "Cari properti",
-    "searchAria": "Cari properti",
-    "clearSearch": "Hapus pencarian",
-    "filtersAria": "Filter pasar",
-    "loadError": "Tidak dapat memuat properti.",
-    "emptyTitle": "Belum ada properti",
-    "emptyMessage": "Listing fraksional baru setiap minggu — cek lagi nanti.",
-    "noMatchesTitle": "Tidak ada hasil",
-    "noMatchesMessage": "Coba pencarian atau filter lain.",
-    "chips": {
-      "all": "Semua",
-      "primary": "Primer",
-      "secondary": "Sekunder",
-      "highest_yield": "Imbal hasil tertinggi",
-      "new": "Baru",
-      "almost_sold": "Hampir habis",
-      "low_price": "Harga rendah"
-    },
-    "pricePerShare": "Harga / saham",
-    "monthlyPerShare": "Bulanan / saham",
-    "nightFrom": "Malam / dari",
-    "sharesSold": "{sold} dari {total} saham terjual",
     "feesTitle": "Komisi",
     "feesPerTx": "Tingkat ditentukan oleh nilai setiap transaksi — tanpa batas.",
     "feesRange": "Nilai",
@@ -121,8 +99,7 @@
     "feesSellMarket": "Jual · Pasar",
     "feesInstantSell": "Jual instan (primer)",
     "feesInstantNote": "Biaya tetap saat penawaran primer; sekunder memakai tingkat pasar.",
-    "feesNoCap": "Tanpa batas nilai beli atau jual.",
-    "lastPrice": "Harga terakhir"
+    "feesNoCap": "Tanpa batas nilai beli atau jual."
   },
   "property": {
     "buyShare": "Beli saham",
@@ -607,5 +584,44 @@
     "signIn": "Masuk",
     "signingIn": "Sedang masuk…",
     "backHome": "Kembali ke beranda"
+  },
+  "estates": {
+    "title": "Properti",
+    "subtitle": "Milikilah saham properti istimewa.",
+    "searchPlaceholder": "Cari vila, destinasi, atau wilayah",
+    "searchAria": "Cari vila, destinasi, atau wilayah",
+    "filtersAria": "Filter properti",
+    "sortAria": "Urutkan properti",
+    "sortLabel": "Urutkan",
+    "sort": {
+      "curated": "Kurasi",
+      "income": "Pendapatan sewa",
+      "price": "Harga masuk",
+      "newest": "Terbaru"
+    },
+    "loadError": "Properti tidak dapat dimuat.",
+    "emptyTitle": "Belum ada properti",
+    "emptyMessage": "Properti baru ditambahkan setiap minggu — kunjungi lagi nanti.",
+    "ownerStayEmptyMessage": "Data menginap pemilik belum tersedia.",
+    "featuredEmptyMessage": "Kurasi unggulan belum tersedia.",
+    "clearSearch": "Hapus pencarian",
+    "chips": {
+      "all": "Semua",
+      "featured": "Pilihan",
+      "new": "Baru",
+      "income": "Pendapatan",
+      "owner_stay": "Menginap pemilik",
+      "resale": "Jual kembali"
+    },
+    "noMatchesTitle": "Tidak ada hasil",
+    "noMatchesMessage": "Coba pencarian atau filter lain.",
+    "ownerStayEmptyTitle": "Menginap pemilik",
+    "featuredEmptyTitle": "Pilihan",
+    "pricePerShare": "Harga / saham",
+    "lastPrice": "Harga terakhir",
+    "projectedIncome": "Pendapatan proyeksi / saham",
+    "incomePending": "Data tertunda",
+    "shareFraction": "1 saham ≈ 1/{total} dari properti",
+    "fundedCaption": "{pct}% terdanai · {remaining} saham tersisa"
   }
 }
