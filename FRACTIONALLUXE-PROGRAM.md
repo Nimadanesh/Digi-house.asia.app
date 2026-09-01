@@ -9,8 +9,8 @@
 
 | Field | Value |
 |---|---|
-| Current phase | **Phase A complete → Phase I; Property redesign Phase 8 complete; Phase 9 active — Slices 1–3 complete (Slice 1 ACCEPTED; Slices 2–3 ACCEPTED WITH NON-BLOCKING FINDINGS); Slice 4 (Estates) implemented & pushed on `phase-9-redesign`, PENDING FORMAL ACCEPTANCE** |
-| Next step | **Slice 5 — Income (`/earnings`, Phase 9) once Slice 4 is formally ACCEPTED**; prior pending: Slice 4 acceptance review, UI polish #07a/#07b user visual verify, I0 (contract verify) |
+| Current phase | **Phase A complete → Phase I; Property redesign Phase 8 complete; Phase 9 active — Slices 1–4 complete (Slice 1 ACCEPTED; Slices 2–4 ACCEPTED WITH NON-BLOCKING FINDINGS); Slice 5 (Income) in progress on `phase-9-redesign`** |
+| Next step | **Slice 5 — Income (`/earnings`, Phase 9) — implement & push, then record checkpoint**; prior pending: UI polish #07a/#07b user visual verify, I0 (contract verify) |
 | Blockers | No Docker on this machine → `infra:up`/`db:migrate`/`db:seed` runtime verify pending (A3 dry-run + tests cover the code path); U1/U3/U4/U6 still open |
 
 ## 1. Context you need
