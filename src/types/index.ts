@@ -8,3 +8,4 @@ export * from "./telegram";
 export * from "./units";
 export * from "./estate";
 export * from "./estate-share";
+export * from "./estate-plan";

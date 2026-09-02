@@ -240,5 +240,15 @@ export type {
   EstateUserPosition,
 } from "./estate-share";
 
-/** PlanEngine (future slice). Placeholder — plan terms are product decisions, not invented. */
-export type EstatePlanEngine = never;
+/** PlanEngine (Slice D): canonical plan configuration, evaluation and projection types. */
+export type {
+  PlanConfig,
+  PlanDistributionMode,
+  PlanEvaluationOverrides,
+  PlanEstateSnapshotRef,
+  PlanPayoutCadence,
+  PlanProjection,
+  PlanProvenance,
+  PlanScheduleEntry,
+} from "./estate-plan";
+export { PLAN_TARGET_RATE_ENVELOPE } from "./estate-plan";
