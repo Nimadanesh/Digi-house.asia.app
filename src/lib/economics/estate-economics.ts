@@ -20,6 +20,7 @@ import type {
   EstateCostLine,
   EstateEconomics,
   EstateProfitBreakdown,
+  EstateReconciliation,
   EstateScenario,
   Provenance,
 } from "@/types/estate";
@@ -236,7 +237,7 @@ export function computeEstateEconomics(
   const gross = grossAnnualRevenueUsd(adr.adrUsd, scenario.occupancyRate);
   const costs = costLines(estate, scenario);
   const profit = profitBreakdown(gross, costs);
-  return {
+  const result: EstateEconomics = {
     revenue: {
       occupiedNights: occupiedNights(scenario.occupancyRate),
       guestNights:
@@ -248,12 +249,52 @@ export function computeEstateEconomics(
     costs,
     profit,
     travelAgencyShareUsd: travelAgencyShareUsd(gross),
+    reconciliation: {
+      grossRevenueUsd: 0,
+      totalConfiguredCostsUsd: 0,
+      netProfitUsd: 0,
+      ownerProfitUsd: 0,
+      operatorProfitUsd: 0,
+      netProfitReconciles: false,
+      allocationReconciles: false,
+    },
   };
+  // Derive the contract-required reconciliation artifact from the ALREADY-COMPUTED
+  // result (verification only — no formula is re-run), then attach and return.
+  result.reconciliation = reconcileEconomics(result);
+  return result;
 }
 
 /** Convenience: economics under the estate's own baseline scenario. */
 export function computeBaselineEstateEconomics(estate: Estate): EstateEconomics {
   return computeEstateEconomics(estate, estate.baselineScenario);
+}
+
+// ---------------------------------------------------------------------------
+// Reconciliation (verification artifact — NOT a second calculation engine)
+// ---------------------------------------------------------------------------
+
+/**
+ * Build the contract-required reconciliation result from the ALREADY-COMPUTED values of
+ * one economics result. No formula is re-run: each field is reused verbatim from the
+ * result it travels with, so the artifact can never diverge from that result.
+ * Flags report the two contract identities over integer cents:
+ *   1. net profit = gross revenue − total configured costs
+ *   2. owner profit + operator profit = net profit
+ */
+function reconcileEconomics(result: EstateEconomics): EstateReconciliation {
+  const { revenue, profit } = result;
+  return {
+    grossRevenueUsd: revenue.grossAnnualRevenueUsd,
+    totalConfiguredCostsUsd: profit.totalCostsUsd,
+    netProfitUsd: profit.netProfitUsd,
+    ownerProfitUsd: profit.ownerProfitUsd,
+    operatorProfitUsd: profit.operatorProfitUsd,
+    netProfitReconciles:
+      profit.netProfitUsd === revenue.grossAnnualRevenueUsd - profit.totalCostsUsd,
+    allocationReconciles:
+      profit.ownerProfitUsd + profit.operatorProfitUsd === profit.netProfitUsd,
+  };
 }
 
 // ---------------------------------------------------------------------------

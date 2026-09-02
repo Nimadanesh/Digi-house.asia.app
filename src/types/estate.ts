@@ -202,6 +202,32 @@ export interface EstateProfitBreakdown {
 }
 
 /**
+ * Calculation reconciliation artifact (Slice A execution prompt: "Add a calculation
+ * reconciliation result so tests can verify that net profit = gross revenue − all
+ * configured cost lines; owner + operator = net profit.").
+ *
+ * Purely a VERIFICATION aid: every value is reused from the same already-computed
+ * economics result (no formula is re-run), so it can never diverge from the result
+ * it travels with. Flags report the two contract identities over integer cents.
+ */
+export interface EstateReconciliation {
+  /** Gross annual revenue (minor units) — reused from `revenue.grossAnnualRevenueUsd`. */
+  grossRevenueUsd: number;
+  /** Sum of the configured cost lines (minor units) — reused from `profit.totalCostsUsd`. */
+  totalConfiguredCostsUsd: number;
+  /** Net profit (minor units) — reused from `profit.netProfitUsd`. */
+  netProfitUsd: number;
+  /** Owner allocation (minor units) — reused from `profit.ownerProfitUsd`. */
+  ownerProfitUsd: number;
+  /** Operator allocation (minor units) — reused from `profit.operatorProfitUsd`. */
+  operatorProfitUsd: number;
+  /** true ⇔ netProfitUsd = grossRevenueUsd − totalConfiguredCostsUsd (integer-cent identity). */
+  netProfitReconciles: boolean;
+  /** true ⇔ ownerProfitUsd + operatorProfitUsd = netProfitUsd (integer-cent identity). */
+  allocationReconciles: boolean;
+}
+
+/**
  * Canonical economic result. One shape, one producer. Components receive this —
  * they never compute economics themselves.
  */
@@ -215,6 +241,11 @@ export interface EstateEconomics {
    * revenue); the two must remain distinct (Slice A §6).
    */
   travelAgencyShareUsd: number;
+  /**
+   * Contract-required reconciliation artifact — verification only, derived from the
+   * already-computed values in this same result (see `EstateReconciliation`).
+   */
+  reconciliation: EstateReconciliation;
 }
 
 // ---------------------------------------------------------------------------

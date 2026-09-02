@@ -280,7 +280,83 @@ describe("profit and allocations (baseline with guests defined)", () => {
         netProfitKnown: true,
       },
       travelAgencyShareUsd: Math.round(gross * 0.18),
+      reconciliation: {
+        grossRevenueUsd: gross,
+        totalConfiguredCostsUsd: totalCosts,
+        netProfitUsd: net,
+        ownerProfitUsd: Math.round(net * 0.4),
+        operatorProfitUsd: Math.round(net * 0.6),
+        netProfitReconciles: true,
+        allocationReconciles: true,
+      },
     });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Calculation reconciliation (contract-required artifact — Slice A)
+// ---------------------------------------------------------------------------
+
+describe("calculation reconciliation artifact", () => {
+  it("baseline known scenario: both contract identities hold (asserted on the artifact flags)", () => {
+    const { estate, scenario } = withGuests(ESTATE, 4);
+    const result = computeEstateEconomics(estate, scenario);
+    expect(result.reconciliation.netProfitReconciles).toBe(true);
+    expect(result.reconciliation.allocationReconciles).toBe(true);
+  });
+
+  it("carries the contract identities as field-level facts, not recomputed formulas", () => {
+    const { estate, scenario } = withGuests(ESTATE, 4);
+    const r = computeEstateEconomics(estate, scenario).reconciliation;
+    // Identity A and B verified FROM the artifact's own published fields:
+    expect(r.grossRevenueUsd - r.totalConfiguredCostsUsd).toBe(r.netProfitUsd);
+    expect(r.ownerProfitUsd + r.operatorProfitUsd).toBe(r.netProfitUsd);
+    // Every field is reused verbatim from the same result (no second computation):
+    const result = computeEstateEconomics(estate, scenario);
+    expect(r.grossRevenueUsd).toBe(result.revenue.grossAnnualRevenueUsd);
+    expect(r.totalConfiguredCostsUsd).toBe(result.profit.totalCostsUsd);
+    expect(r.netProfitUsd).toBe(result.profit.netProfitUsd);
+    expect(r.ownerProfitUsd).toBe(result.profit.ownerProfitUsd);
+    expect(r.operatorProfitUsd).toBe(result.profit.operatorProfitUsd);
+  });
+
+  it("edge case 0% occupancy (known guests): negative net still reconciles exactly", () => {
+    const { estate, scenario } = withGuests(ESTATE, 2);
+    const result = computeEstateEconomics(estate, { ...scenario, occupancyRate: 0 });
+    const r = result.reconciliation;
+    expect(r.grossRevenueUsd).toBe(0);
+    expect(r.totalConfiguredCostsUsd).toBe(Math.round(800_000_000 * 0.015)); // reserve only
+    expect(r.netProfitUsd).toBe(0 - r.totalConfiguredCostsUsd); // negative net is exact
+    expect(r.netProfitReconciles).toBe(true);
+    expect(r.allocationReconciles).toBe(true); // round(−x·0.4)+round(−x·0.6) = −x exactly
+  });
+
+  it("edge case 100% occupancy (known guests): full-rate revenue reconciles", () => {
+    const { estate, scenario } = withGuests(ESTATE, 2);
+    const result = computeEstateEconomics(estate, { ...scenario, occupancyRate: 1 });
+    expect(result.reconciliation.netProfitReconciles).toBe(true);
+    expect(result.reconciliation.allocationReconciles).toBe(true);
+  });
+
+  it("when the model declines to assert net profit (unknown guests) the flag is honestly false", () => {
+    // Baseline seed has unknown guests → the model publishes netProfitUsd 0 with
+    // netProfitKnown: false. The published numbers then do NOT satisfy identity A
+    // (0 ≠ gross − costs) — the flag must report that, not paper over it.
+    const result = computeBaselineEstateEconomics(ESTATE);
+    expect(result.profit.netProfitKnown).toBe(false);
+    expect(result.reconciliation.netProfitReconciles).toBe(false);
+  });
+
+  it("flags hold across a sweep of scenarios whenever net profit is known", () => {
+    for (const guests of [2, 4, 6]) {
+      for (const occupancyRate of [0, 0.6, 0.75, 0.9, 1]) {
+        const { estate, scenario } = withGuests(ESTATE, guests);
+        const result = computeEstateEconomics(estate, { ...scenario, occupancyRate });
+        expect(result.profit.netProfitKnown).toBe(true);
+        expect(result.reconciliation.netProfitReconciles).toBe(true);
+        expect(result.reconciliation.allocationReconciles).toBe(true);
+      }
+    }
   });
 });
 
