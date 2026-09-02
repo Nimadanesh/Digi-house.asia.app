@@ -249,17 +249,21 @@ export interface EstateEconomics {
 }
 
 // ---------------------------------------------------------------------------
-// Future rebuild layers (Slice B+ scaffolding placeholders — do not implement yet)
+// Scenario Engine (Slice B): canonical scenario input/result types. The engine
+// lives in src/lib/economics/scenario-engine.ts and is pure orchestration above
+// the EconomicModel. Named Conservative/Base/High DEFAULTS are not defined (product
+// decision pending) — named scenarios are configuration-driven data only.
 // ---------------------------------------------------------------------------
 
-export type EstateScenarioKind = "conservative" | "baseline" | "ambitious";
-
-/** ScenarioEngine (Slice B): bounds-driven scenario set derived from asset ranges. */
-export interface EstateScenarioSet {
-  conservative: EstateScenario;
-  baseline: EstateScenario;
-  ambitious: EstateScenario;
-}
+export type {
+  NamedScenarioDefinition,
+  ScenarioEnvelopeResult,
+  ScenarioEvaluationKind,
+  ScenarioInput,
+  ScenarioResolution,
+  ScenarioResult,
+  ScenarioValue,
+} from "./estate-scenario";
 
 /** ShareModel (Slice C): canonical share configuration, states and calculation types. */
 export type {

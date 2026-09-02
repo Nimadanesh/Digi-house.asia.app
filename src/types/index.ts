@@ -9,3 +9,4 @@ export * from "./units";
 export * from "./estate";
 export * from "./estate-share";
 export * from "./estate-plan";
+export * from "./estate-scenario";
