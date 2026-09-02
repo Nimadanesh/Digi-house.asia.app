@@ -7,3 +7,4 @@ export * from "./transaction";
 export * from "./telegram";
 export * from "./units";
 export * from "./estate";
+export * from "./estate-share";

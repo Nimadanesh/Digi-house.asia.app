@@ -230,8 +230,15 @@ export interface EstateScenarioSet {
   ambitious: EstateScenario;
 }
 
-/** ShareModel (future slice). Placeholder — share supply is a product decision, not invented. */
-export type EstateShareModel = never;
+/** ShareModel (Slice C): canonical share configuration, states and calculation types. */
+export type {
+  EstateSecondaryListing,
+  EstateShareConfig,
+  EstateShareMarketState,
+  EstateShareState,
+  EstateShareStructure,
+  EstateUserPosition,
+} from "./estate-share";
 
 /** PlanEngine (future slice). Placeholder — plan terms are product decisions, not invented. */
 export type EstatePlanEngine = never;
