@@ -123,4 +123,11 @@ describe("LimitBuySheet — PD-06", () => {
     renderSheet();
     expect(screen.getByText("Insufficient funds")).toBeInTheDocument();
   });
+
+  it("falls back to the list price when the book is unknown (never blocks entry)", () => {
+    render(<LimitBuySheet open onClose={() => {}} listing={listing} orderBook={undefined} />);
+    // $120.00 list price anchors the input; totals still preview.
+    expect(screen.getByTestId("limit-buy-price-input")).toHaveValue(120);
+    expect(screen.getByTestId("limit-buy-summary")).toBeInTheDocument();
+  });
 });

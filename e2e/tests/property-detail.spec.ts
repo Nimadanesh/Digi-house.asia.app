@@ -21,7 +21,7 @@ test.describe("Estate Detail — Phase 9 4-tab model", () => {
     // Hero: ownership proposition with share price + fraction; no APY hero number.
     await expect(page.getByTestId("hero-price")).toBeVisible();
     await expect(page.getByTestId("hero-fraction")).toBeVisible();
-    await expect(page.getByTestId("hero-cta")).toContainText("Acquire Ownership");
+    await expect(page.getByTestId("hero-cta")).toContainText("Buy ·");
     await expect(page.getByTestId("hero-apy")).toHaveCount(0);
 
     // 4 tabs; Estate is the default.
@@ -56,6 +56,9 @@ test.describe("Estate Detail — Phase 9 4-tab model", () => {
     await skipOnboarding(page);
     await page.goto("/property/prop-bayside-marina-penthouse");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
+    // Let the 40+ gallery images settle: progressive loads shift layout and can
+    // park low-page toggles under the fixed bottom chrome mid-click.
+    await page.waitForLoadState("networkidle", { timeout: 30_000 }).catch(() => {});
 
     // Resale block collapsed by default — no market content in the default scroll.
     await expect(page.getByTestId("resale-block")).toBeVisible();
@@ -63,8 +66,12 @@ test.describe("Estate Detail — Phase 9 4-tab model", () => {
     // Hero CTA is ownership-state-aware (seed user owns this estate → Manage Ownership).
     await expect(page.getByTestId("hero-cta")).toContainText(/Manage Ownership|Acquire Resale Ownership/);
 
-    // Expand → ownership-vocabulary summary + acquire CTA.
-    await page.getByTestId("resale-toggle").click();
+    // Expand → ownership-vocabulary summary + acquire CTA. The block sits low
+    // on the tab under the fixed sticky CTA + tab bar (test env lifts the bar
+    // for a MainButton that isn't there), so activate via keyboard — the same
+    // path keyboard/AT users take, with no layout hit-testing involved.
+    await page.getByTestId("resale-toggle").focus();
+    await page.keyboard.press("Enter");
     await expect(page.getByTestId("resale-block-content")).toBeVisible();
     await expect(page.getByTestId("resale-acquire-cta")).toBeVisible();
     await expect(page.getByText("Best asking price")).toBeVisible();
@@ -72,7 +79,8 @@ test.describe("Estate Detail — Phase 9 4-tab model", () => {
 
     // Price/OHLC/volume charts stay hidden until the simulated-history expander opens.
     await expect(page.getByTestId("price-svg")).toHaveCount(0);
-    await page.getByTestId("resale-price-history-toggle").click();
+    await page.getByTestId("resale-price-history-toggle").focus();
+    await page.keyboard.press("Enter");
     await expect(page.getByTestId("price-svg")).toBeVisible();
     await expect(page.getByText("Price history (simulated)")).toBeVisible();
     await expect(page.getByText("Simulated history for illustration", { exact: false })).toBeVisible();

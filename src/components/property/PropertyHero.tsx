@@ -9,8 +9,11 @@ import { pct, usd } from "@/lib/format";
 import type { Listing } from "@/types/property";
 import type { EstateVerification } from "@/types/verification";
 import { isVerified } from "@/types/verification";
+import type { Provenance } from "@/types/estate";
+import type { EstateShareMarketState } from "@/types/estate-share";
 import { getCurrentSharePrice } from "@/lib/property-price";
 import { PropertyStatusBanner } from "./PropertyStatusBanner";
+import { ProvenanceInfo } from "@/components/common/ProvenanceInfo";
 
 export function PropertyHero({
   listing,
@@ -20,6 +23,11 @@ export function PropertyHero({
   verification,
   onManageOwnership,
   onViewResale,
+  estateValueUsd,
+  estateValueProvenance,
+  market,
+  canonicalName,
+  canonicalLocation,
 }: {
   listing: Listing;
   /** Live ask for secondary listings (single price source flows through getCurrentSharePrice). */
@@ -33,20 +41,54 @@ export function PropertyHero({
   onManageOwnership?: () => void;
   /** Sold-out primary → opens + scrolls to the Resale market block. */
   onViewResale?: () => void;
+  /**
+   * Canonical estate value (minor units) with provenance — Slice E contract §6A.
+   * Shown ONLY when provided (canonical model); unknown stays hidden, never a
+   * legacy mock figure presented as canonical.
+   */
+  estateValueUsd?: number | null;
+  estateValueProvenance?: Provenance;
+  /**
+   * ShareModel market state (Slice E contract §9) — drives the CTA when provided.
+   * Absent → the legacy status-based derivation (identical outcomes; kept for
+   * backward compatibility with existing callers/tests).
+   */
+  market?: EstateShareMarketState;
+  /**
+   * Canonical Estate24 identity (PROMPT 03) — preferred over the legacy
+   * fixture title/location whenever the view-model provides it. Absent →
+   * listing identity (unknown ids only; never for the 24 canonical estates).
+   */
+  canonicalName?: string | null;
+  canonicalLocation?: string | null;
 }) {
   const t = useTranslations("property");
   const isPrimary = listing.status === "funding";
-  const monthsPaid = listing.rentalHistory.length;
+  // PROMPT 03 canonical identity — the Estate24 record is authoritative for
+  // user-visible name/location; the fixture fallback serves unknown ids only.
+  const displayName = canonicalName ?? listing.title;
+  const displayLocation = canonicalLocation ?? listing.location;
   // Single source of truth — same value as Metrics / Calculator / Chart / Sticky CTA.
   const buyPriceUsd = getCurrentSharePrice(listing, { bestAskUsd });
   const verified = isVerified(verification);
   const ownedPct = listing.totalShares > 0 ? ownedShares / listing.totalShares : 0;
 
   const soldOut = isPrimary && listing.sharesRemaining <= 0;
-  const canBuy = isPrimary ? !soldOut : bestAskUsd != null;
+  // Slice E §9: the CTA follows the ShareModel market state when provided; the
+  // status-based derivation is outcome-identical for all reachable states (kept
+  // for callers without a view-model). primaryAvailable ⟺ supply exists.
+  // Sold-out primary always routes to the resale block (never a dead buy entry —
+  // the primary buy entry rejects zero supply). A live ask also enables resale
+  // acquisition (legacy price signal; the engine sees the same book levels).
+  const primaryOpen = market
+    ? market === "primaryAvailable" || market === "primaryNearlySoldOut"
+    : isPrimary && !soldOut;
+  const canBuySecondary = market
+    ? market === "secondaryAvailable" || bestAskUsd != null
+    : bestAskUsd != null;
 
   // CTA state machine (UI Mapping §5.2 hero row): owner → Manage; else primary →
-  // Acquire Ownership; else secondary → Acquire Resale Ownership; sold-out primary →
+  // Buy; else secondary → Acquire Resale Ownership; sold-out primary →
   // View Resale Opportunities when a resale market exists, otherwise calm sold-out.
   let ctaLabel: string;
   let ctaDisabled = false;
@@ -54,12 +96,12 @@ export function PropertyHero({
   if (ownedShares > 0 && onManageOwnership) {
     ctaLabel = t("heroManageOwnership");
     onCta = onManageOwnership;
-  } else if (isPrimary && !soldOut) {
+  } else if (primaryOpen) {
     ctaLabel = t("heroAcquireOwnership", { price: usd(buyPriceUsd) });
     onCta = onBuy;
   } else if (!isPrimary) {
     ctaLabel = t("heroAcquireResale");
-    ctaDisabled = !canBuy;
+    ctaDisabled = !canBuySecondary;
     onCta = onBuy;
   } else if (onViewResale) {
     // Sold-out primary with a resale market available.
@@ -75,12 +117,12 @@ export function PropertyHero({
     <div className="space-y-3" data-testid="property-hero">
       <PropertyStatusBanner listing={listing} />
 
-      <h1 className="text-[1.375rem] font-bold leading-tight text-foreground">{listing.title}</h1>
+      <h1 className="text-[1.375rem] font-bold leading-tight tracking-tight text-balance text-foreground">{displayName}</h1>
 
       <div className="flex items-center gap-2">
         <p className="flex min-w-0 items-center gap-1 text-sm text-muted-foreground">
           <MapPin size={15} className="shrink-0" aria-hidden />
-          <span className="truncate">{listing.location}</span>
+          <span className="truncate">{displayLocation}</span>
         </p>
         {verified ? (
           <span
@@ -95,7 +137,7 @@ export function PropertyHero({
 
       {/* Ownership proposition — share price + fraction of the estate */}
       <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 pt-0.5">
-        <span className="text-[2.25rem] font-bold leading-none tracking-tight text-foreground tnum" data-testid="hero-price">
+        <span className="text-[2.25rem] font-bold leading-none tracking-tight text-foreground tnum break-words" data-testid="hero-price">
           {usd(buyPriceUsd)}
         </span>
         <span className="text-sm text-muted-foreground" data-testid="hero-fraction">
@@ -103,21 +145,30 @@ export function PropertyHero({
         </span>
       </div>
 
+      {/* Money-chain primer — answers "how does it make money" in the first
+          viewport without numbers or formulas (engines A/B stay the source).
+          The full breakdown lives in the Estate tab below. */}
+      <p
+        className="text-[0.8125rem] leading-relaxed text-muted-foreground"
+        data-testid="hero-money-chain"
+      >
+        {t("heroMoneyChain")}
+      </p>
+
+      {/* Canonical estate value — Slice E §6A (model only; unknown stays hidden). */}
+      {estateValueUsd != null ? (
+        <p className="flex items-center gap-1.5 text-sm tnum text-muted-foreground" data-testid="hero-estate-value">
+          {t("estateValue")}: <span className="font-semibold text-foreground">{usd(estateValueUsd)}</span>
+          {estateValueProvenance ? <ProvenanceInfo provenance={estateValueProvenance} /> : null}
+        </p>
+      ) : null}
+
       {ownedShares > 0 ? (
         <p className="text-sm font-medium text-foreground tnum" data-testid="hero-ownership">
           {t("heroYouOwn", {
             count: ownedShares,
             unit: ownedShares === 1 ? t("shareWord") : t("sharesWord"),
             pct: pct(ownedPct),
-          })}
-        </p>
-      ) : null}
-
-      {monthsPaid > 0 ? (
-        <p className="text-xs text-muted-foreground tnum" data-testid="hero-trust-line">
-          {t("basedOnLease", {
-            count: monthsPaid,
-            unit: monthsPaid === 1 ? t("monthWord") : t("monthsWord"),
           })}
         </p>
       ) : null}
@@ -131,6 +182,20 @@ export function PropertyHero({
       >
         {ctaLabel}
       </button>
+
+      {/* Genuine supply constraint only — primary offerings with known
+          remaining shares. Never rendered for secondary or unknown supply. */}
+      {isPrimary && !soldOut && listing.sharesRemaining > 0 ? (
+        <p
+          className="text-center text-xs leading-relaxed text-muted-foreground tnum"
+          data-testid="hero-supply"
+        >
+          {t("fundedCaption", {
+            pct: Math.round((listing.fundingProgressRatio ?? 0) * 100),
+            remaining: listing.sharesRemaining,
+          })}
+        </p>
+      ) : null}
     </div>
   );
 }

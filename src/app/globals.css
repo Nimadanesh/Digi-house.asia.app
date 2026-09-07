@@ -282,7 +282,12 @@
   }
 }
 .page-enter {
-  animation: dh-page-in 180ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  /* backwards (not both): holding the final keyframe with fill-forwards keeps a
+     computed transform on the wrapper forever, which silently becomes the
+     containing block for every position:fixed descendant (sticky CTA, compact
+     top bar) and un-floats them onto the document end. backwards replays the
+     identical enter frames while leaving post-animation styles natural. */
+  animation: dh-page-in 180ms cubic-bezier(0.23, 1, 0.32, 1) backwards;
 }
 
 /* Braille Flipwave loader — ellipsis dots pulsing in sync. */

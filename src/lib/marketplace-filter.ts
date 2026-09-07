@@ -11,7 +11,33 @@
 // - The "New" window uses the shared demo-tape clock so the filter always agrees with the
 //   card's "New" badge (both default to MARKETPLACE_DEMO_CLOCK_MS).
 import type { Listing } from "@/types/property";
-import { shareWeeklyYieldUsd } from "@/lib/property-yield";
+
+/**
+ * Slice F: minimal filter input shared by legacy `Listing` fixtures and the
+ * canonical `MarketplaceEstate` view model. Both satisfy this shape; the view
+ * model carries canonical `name` (observed Rental Escapes identity) instead of
+ * the fixture `title` shorthand — search reads either.
+ */
+export interface FilterableEstate {
+  id: string;
+  title?: string;
+  name?: string;
+  location: string;
+  description: string;
+  status: Listing["status"];
+  sharePriceUsd: number;
+  annualRentUsd: number;
+  monthlyYieldRate: number;
+  createdAt: string;
+  fundingProgressRatio: number;
+  sharesRemaining: number;
+  estateValue?: { value: number } | null;
+}
+
+/** Display title: canonical `name` wins, fixture `title` is the fallback. */
+function displayTitle(l: FilterableEstate): string {
+  return l.name ?? l.title ?? "";
+}
 
 /** Phase 9 Estates filters — exactly these six (redesign §6, UI Mapping §4.3). */
 export type EstateFilter =
@@ -22,8 +48,11 @@ export type EstateFilter =
   | "owner_stay"
   | "resale";
 
-/** Estates sort options (UI Mapping §4.4). Curated = stable manifest feed order. */
-export type EstateSort = "curated" | "income" | "price" | "newest";
+/**
+ * Estates sort options (UI Mapping §4.4 + Slice F).
+ * Curated = stable manifest feed order. Value = canonical Estate Value desc.
+ */
+export type EstateSort = "curated" | "income" | "price" | "newest" | "value";
 
 /** Filter ids only — labels live in messages via i18n (`estates.chips.*`). */
 export const ESTATE_FILTER_IDS: readonly EstateFilter[] = [
@@ -41,6 +70,7 @@ export const ESTATE_SORT_IDS: readonly EstateSort[] = [
   "income",
   "price",
   "newest",
+  "value",
 ] as const;
 
 /**
@@ -51,12 +81,14 @@ export const MARKETPLACE_DEMO_CLOCK_MS = Date.UTC(2026, 6, 26);
 
 export const NEW_ESTATE_WINDOW_MS = 30 * 24 * 60 * 60 * 1000;
 
-function createdMs(l: Listing): number {
+function createdMs(l: FilterableEstate): number {
   return new Date(l.createdAt).getTime();
 }
 
 /** A rental-income metric is only shown when its source data exists (UI Mapping §4.5). */
-export function hasIncomeData(l: Listing): boolean {
+export function hasIncomeData(
+  l: Pick<FilterableEstate, "annualRentUsd" | "monthlyYieldRate" | "sharePriceUsd">,
+): boolean {
   return l.annualRentUsd > 0 && l.monthlyYieldRate > 0 && l.sharePriceUsd > 0;
 }
 
@@ -66,17 +98,28 @@ export function hasIncomeData(l: Listing): boolean {
  * weekly mock ×52/12 presentation conversion, labeled a projection, formatted
  * by usd() at render. Returns 0 (never a fabricated number) without data.
  */
-export function projectedMonthlyIncomeUsd(l: Listing): number {
+export function projectedMonthlyIncomeUsd(
+  l: Pick<FilterableEstate, "annualRentUsd" | "monthlyYieldRate" | "sharePriceUsd">,
+): number {
   if (!hasIncomeData(l)) return 0;
-  return (shareWeeklyYieldUsd(l) * 52) / 12;
+  return (
+    (Math.round((l.sharePriceUsd * (l.monthlyYieldRate - 1)) / 100 / 4) * 52) /
+    12
+  );
+}
+
+/** Canonical Estate Value for sorting (0 when unknown → sorts last desc). */
+function estateValueCents(l: FilterableEstate): number {
+  return l.estateValue?.value ?? 0;
 }
 
 /**
- * Filter by free-text query (title / location / description), then apply the
- * Phase 9 filter, then the sort. Curated keeps the stable feed (manifest) order.
+ * Filter by free-text query (canonical name / title / location / description),
+ * then apply the Phase 9 filter, then the sort. Curated keeps the stable feed
+ * (manifest) order.
  */
-export function filterEstates(
-  listings: Listing[],
+export function filterEstates<T extends FilterableEstate>(
+  listings: T[],
   opts: {
     query?: string;
     filter?: EstateFilter;
@@ -84,7 +127,7 @@ export function filterEstates(
     /** Epoch ms for the "New" window (inject in tests; defaults to demo clock). */
     nowMs?: number;
   } = {},
-): Listing[] {
+): T[] {
   const q = (opts.query ?? "").trim().toLowerCase();
   const filter = opts.filter ?? "all";
   const sort = opts.sort ?? "curated";
@@ -94,7 +137,7 @@ export function filterEstates(
   if (q) {
     next = next.filter(
       (l) =>
-        l.title.toLowerCase().includes(q) ||
+        displayTitle(l).toLowerCase().includes(q) ||
         l.location.toLowerCase().includes(q) ||
         l.description.toLowerCase().includes(q),
     );
@@ -128,7 +171,7 @@ export function filterEstates(
 
   switch (sort) {
     case "income": {
-      const rank = (l: Listing) => (hasIncomeData(l) ? 1 : 0);
+      const rank = (l: FilterableEstate) => (hasIncomeData(l) ? 1 : 0);
       return next.sort(
         (a, b) =>
           rank(b) - rank(a) ||
@@ -139,6 +182,9 @@ export function filterEstates(
       return next.sort((a, b) => a.sharePriceUsd - b.sharePriceUsd);
     case "newest":
       return next.sort((a, b) => createdMs(b) - createdMs(a));
+    case "value":
+      // Canonical Estate Value descending; unknown (0) sorts last.
+      return next.sort((a, b) => estateValueCents(b) - estateValueCents(a));
     case "curated":
     default:
       // Stable manifest/feed order — the only truthful "editorial" order today.
@@ -158,7 +204,7 @@ export type CardStatusBadge = {
  * `nowMs` injected for purity/tests. Phase 9 estate cards render only the `new` kind
  * (no scarcity/FOMO badges); the other kinds remain for library/purity callers.
  */
-export function listingStatusBadge(listing: Listing, nowMs: number): CardStatusBadge {
+export function listingStatusBadge(listing: FilterableEstate, nowMs: number): CardStatusBadge {
   const ageMs = nowMs - new Date(listing.createdAt).getTime();
   if (ageMs >= 0 && ageMs <= NEW_ESTATE_WINDOW_MS) {
     return { kind: "new", label: "New" };

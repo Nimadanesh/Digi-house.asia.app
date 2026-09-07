@@ -9,6 +9,7 @@ import type { Listing } from "@/types/property";
 import { getPropertyAnalytics, sliceRange, type AnalyticsRange } from "@/lib/property-analytics";
 import { usd } from "@/lib/format";
 import { Block } from "@/components/common/Block";
+import { MutedText } from "@/components/common/MutedText";
 import {
   CHART_W,
   CHART_H,
@@ -153,17 +154,13 @@ export function PrimaryPerformanceCharts({ listing }: { listing: Listing }) {
         </h3>
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <p className="text-[0.6875rem] uppercase tracking-wide text-muted-foreground">
-              {t("annualRent")}
-            </p>
+            <MutedText variant="meta">{t("annualRent")}</MutedText>
             <p className="text-[1.375rem] font-bold leading-none text-foreground tnum">
               {usd(analytics.metrics.annualRentUsd)}
             </p>
           </div>
           <div>
-            <p className="text-[0.6875rem] uppercase tracking-wide text-muted-foreground">
-              {t("grossYield")}
-            </p>
+            <MutedText variant="meta">{t("grossYield")}</MutedText>
             <p className="text-[1.375rem] font-bold leading-none text-foreground tnum">
               {(analytics.metrics.grossYieldRatio * 100).toFixed(1)}%
             </p>

@@ -1,20 +1,21 @@
-// File responsibility: Estate tab rental-economics story (Phase 9 UI Mapping §5.2 —
-// "Estate tab — rental/income story"). A 3-line narrative from EXISTING data only:
-// projected annual rent (AVAILABLE as a projection) → operating costs → net
-// distributable income (both UNAVAILABLE — rendered via the Slice 1 unavailable
-// vocabulary, never a fabricated number).
+// File responsibility: Estate tab rental-performance story (all-24 data
+// completion) — a 3-line narrative from canonical data only: the observed
+// nightly rental display (Rental Escapes fact, provenance on demand) →
+// operating costs → net distributable income (both pending until operating
+// reports exist — rendered via the unavailable vocabulary, never a fabricated
+// number, never a mock annual-rent figure).
 import { useTranslations } from "next-intl";
-import { usd } from "@/lib/format";
 import { unavailableLabel } from "@/lib/availability";
-import type { Listing } from "@/types/property";
 import { Block } from "@/components/common/Block";
 import { Row } from "@/components/common/Row";
+import { ProvenanceInfo } from "@/components/common/ProvenanceInfo";
 
 export function RentalStoryBlock({
-  listing,
+  nightlyDisplay,
   onShowIncome,
 }: {
-  listing: Listing;
+  /** Canonical observed nightly display verbatim (rate semantics intact). */
+  nightlyDisplay: string | null;
   /** Switches to the Income tab (projections + income history live there). */
   onShowIncome: () => void;
 }) {
@@ -29,10 +30,20 @@ export function RentalStoryBlock({
       <Block className="p-4">
         <div className="space-y-3">
           <Row>
-            <span className="text-sm text-muted-foreground">{t("rentalStoryProjectedRent")}</span>
-            <span className="ml-auto text-sm tnum font-semibold text-foreground" data-testid="rental-story-rent">
-              {usd(listing.annualRentUsd)}
-              <span className="ml-1.5 text-xs font-medium text-muted-foreground">{t("projectedTag")}</span>
+            <span className="text-sm text-muted-foreground">{t("rentalStoryNightlyRate")}</span>
+            <span className="ml-auto flex min-w-0 items-center gap-1.5" data-testid="rental-story-rent">
+              {nightlyDisplay != null ? (
+                <>
+                  <span className="truncate text-sm tnum font-semibold text-foreground">
+                    {nightlyDisplay}
+                  </span>
+                  <ProvenanceInfo provenance="observed" />
+                </>
+              ) : (
+                <span className="text-sm text-muted-foreground">
+                  {unavailableLabel("backend_absent")}
+                </span>
+              )}
             </span>
           </Row>
           <Row>

@@ -1,6 +1,6 @@
 import { test, expect, type Page } from "@playwright/test";
 
-// Phase 9 Slice 4 — Estates (/marketplace), redesign §6 / UI Mapping §4. Viewport 480×840 (config).
+// Slice F — canonical 24-property marketplace (/marketplace). Viewport 480×840 (config).
 
 /** Skip the onboarding carousel so the app shell unlocks (settings store persists). */
 async function skipOnboarding(page: Page) {
@@ -11,8 +11,8 @@ async function skipOnboarding(page: Page) {
   await page.waitForURL("**/home", { timeout: 15_000 });
 }
 
-test.describe("Estates — /marketplace (Phase 9 Slice 4)", () => {
-  test("Estates header, search, six filters, Curated default sort and ownership-first cards", async ({ page }) => {
+test.describe("Estates — /marketplace (Slice F canonical)", () => {
+  test("Estates header, search, six filters, Curated default sort and canonical cards", async ({ page }) => {
     await skipOnboarding(page);
     await page.goto("/marketplace");
     await page.waitForSelector('[data-testid="estates-page"]', { timeout: 15_000 });
@@ -30,15 +30,20 @@ test.describe("Estates — /marketplace (Phase 9 Slice 4)", () => {
     // Curated default sort (never highest yield) + the sort options.
     await expect(page.getByTestId("estates-sort")).toBeVisible();
     await expect(page.getByRole("button", { name: /curated/i })).toHaveAttribute("aria-pressed", "true");
-    for (const label of ["Rental income", "Entry price", "Newest"]) {
+    for (const label of ["Rental income", "Entry price", "Newest", "Estate value"]) {
       await expect(page.getByRole("button", { name: label })).toBeVisible();
     }
 
-    // Cards are ownership-first: price / share, ownership fraction, projected income.
+    // Exactly the 24 canonical estates — no legacy, no duplicates.
+    await expect(page.getByTestId("property-card")).toHaveCount(24);
+
+    // Slice F cards: canonical identity + share price, nightly, Estate Value,
+    // projected income and the ownership fraction — never Per Night alone.
     const card = page.getByTestId("property-card").first();
     await expect(card).toBeVisible();
     await expect(card).toContainText("Night / From");
-    await expect(card).toContainText("Per Night");
+    await expect(card).toContainText("Estate value");
+    await expect(card).toContainText("1 share");
 
     // No APY, no scarcity badges anywhere on the surface.
     await expect(page.getByText("APY")).toHaveCount(0);

@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import type { Listing } from "@/types/property";
 import { performanceSeries, type PerfRange } from "@/lib/performance-series";
+import { getEstate24ByRuntimeId } from "@/lib/economics/estates/estate-24-data";
 import { usd } from "@/lib/format";
 import { useSharedNowMs } from "@/hooks/useSharedNowMs";
 import { Block } from "@/components/common/Block";
@@ -37,6 +38,7 @@ export function PerformanceChart({
   const [tab, setTab] = useState<PerfTab>("price");
   const [range, setRange] = useState<PerfRange>("1Y");
   const nowMs = useSharedNowMs();
+  // PROMPT 03: canonical name for the accessible label (fixture shorthand is not a fact).
 
   const points = useMemo(
     () => performanceSeries(listing, range, nowMs, anchorUsd),
@@ -117,7 +119,7 @@ export function PerformanceChart({
         viewBox={`0 0 ${W} ${H}`}
         className="w-full"
         role="img"
-        aria-label={`${listing.title} ${tab} chart, ${range}`}
+        aria-label={`${getEstate24ByRuntimeId(listing.id)?.name ?? listing.title} ${tab} chart, ${range}`}
         data-testid="perf-svg"
       >
         {/* quiet hairlines — no heavy grid */}

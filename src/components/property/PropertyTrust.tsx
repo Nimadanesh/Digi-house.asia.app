@@ -19,19 +19,21 @@ export function PropertyTrust({
   verification?: EstateVerification;
 }) {
   const t = useTranslations("property");
-  const { meta } = listing;
-  const leaseYear = meta.leaseUntil ? new Date(meta.leaseUntil).getUTCFullYear() : null;
   const paymentsOnTime = listing.rentalHistory.length;
   const verified = isVerified(verification);
+  const pending = "Data pending";
 
+  // Reconciliation: tenant/lease facts have no approved source → labeled pending
+  // chips (About shows the same pending states; no contradiction). Payment
+  // history is disclosed demo data (footnote below), shares are market mechanics.
   const items: { ok: boolean; label: string }[] = [
     {
-      ok: meta.activeTenant,
-      label: meta.activeTenant ? "Active tenant" : "No active tenant",
+      ok: false,
+      label: `Tenant status · ${pending}`,
     },
     {
-      ok: Boolean(leaseYear),
-      label: leaseYear ? `Lease until ${leaseYear}` : "Lease not set",
+      ok: false,
+      label: `Lease terms · ${pending}`,
     },
     ...(paymentsOnTime > 0
       ? [{ ok: true, label: `${paymentsOnTime} on-time ${paymentsOnTime === 1 ? "payment" : "payments"}` }]

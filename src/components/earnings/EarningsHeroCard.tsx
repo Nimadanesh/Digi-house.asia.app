@@ -23,10 +23,10 @@ export function EarningsHeroCard({ summary }: { summary: EarningsSummary }) {
 
   return (
     <Block className="p-4 space-y-4" data-testid="earnings-hero">
-      <div className="text-center space-y-1.5">
+      <div className="text-center space-y-1.5 min-w-0">
         <p className="text-xs font-medium text-muted-foreground">{t("totalEarned")}</p>
         <p
-          className="text-[2rem] font-bold tracking-[-0.02em] tnum text-foreground leading-none"
+          className="text-[2rem] font-bold tracking-[-0.02em] tnum text-foreground leading-none break-words"
           data-testid="earnings-hero-amount"
         >
           {usd(summary.allTimeUsd)}

@@ -7,6 +7,8 @@ export * from "./transaction";
 export * from "./telegram";
 export * from "./units";
 export * from "./estate";
+export * from "./estate-24-data";
+export * from "./estate-canonical";
 export * from "./estate-share";
 export * from "./estate-plan";
 export * from "./estate-scenario";

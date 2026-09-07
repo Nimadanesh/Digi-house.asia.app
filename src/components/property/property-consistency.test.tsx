@@ -166,7 +166,7 @@ describe("Property page data consistency — one price everywhere", () => {
   it("primary: hero === metrics === calculator === $120.00 — and NO price chart", async () => {
     renderPage(primary);
     expect(screen.getByTestId("hero-price")).toHaveTextContent(usd(primary.sharePriceUsd));
-    expect(screen.getByTestId("hero-cta")).toHaveTextContent(`Acquire Ownership · ${usd(primary.sharePriceUsd)}`);
+    expect(screen.getByTestId("hero-cta")).toHaveTextContent(`Buy · ${usd(primary.sharePriceUsd)}`);
     // KPI carries the same single value.
     fireEvent.click(screen.getByTestId("tab-estate"));
     expect(metricValue("Share price")).toBe(usd(primary.sharePriceUsd));

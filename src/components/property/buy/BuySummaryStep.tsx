@@ -2,15 +2,18 @@
 // Primary-market commission (approved model): the property Commission Card is authoritative
 // when available; until cards are provided the amount-based tier table is the fallback — the
 // preview mirrors the server math, the server always computes the actual charge.
-import { usd, ton, estimateNanoTon } from "@/lib/format";
+import { useState } from "react";
+import { pct, usd, ton, estimateNanoTon } from "@/lib/format";
 import { positionYieldUsd } from "@/lib/property-yield";
+import { previewBuyQuote } from "@/lib/buy-quote";
+import { unavailableLabel } from "@/lib/availability";
 import { TON_PRICE_USD_CENTS } from "@/lib/constants";
 import type { Listing } from "@/types/property";
 import type { BuyCurrency } from "@/types/buy";
-import { previewFeeUsd } from "@/types/fees";
 import { useFees } from "@/hooks/useFees";
 import { useTranslations } from "next-intl";
 import { Block } from "@/components/common/Block";
+import { Disclosure } from "@/components/common/Disclosure";
 import { Row } from "@/components/common/Row";
 
 export function BuySummaryStep({
@@ -21,6 +24,8 @@ export function BuySummaryStep({
   pending,
   verifying,
   unitPriceUsd,
+  displayName,
+  displayLocation,
 }: {
   listing: Listing;
   qty: number;
@@ -32,53 +37,69 @@ export function BuySummaryStep({
   verifying?: boolean;
   /** Single source of truth (lib/property-price); defaults to list price. */
   unitPriceUsd?: number;
+  /** Canonical Estate24 name/location (PROMPT 03); fallback listing facts. */
+  displayName?: string;
+  displayLocation?: string;
 }) {
   const t = useTranslations("property");
   const fees = useFees();
+  const [assumptionsOpen, setAssumptionsOpen] = useState(false);
   const unitPrice = unitPriceUsd ?? listing.sharePriceUsd;
-  const totalUsd = qty * unitPrice;
+  // Single total computation shared with the MainButton confirm label.
+  const { feesUsd, totalPayableUsd } = previewBuyQuote(qty, unitPrice, fees.data ?? []);
   const weekly = positionYieldUsd(listing, qty).weeklyUsd;
-  // Primary-market commission preview (tier fallback — the Commission Card seam stays null).
-  const feesUsd = previewFeeUsd(fees.data ?? [], totalUsd, "buy_primary") ?? 0;
-  const totalPayableUsd = totalUsd + feesUsd;
+  const ownership =
+    listing.totalShares > 0
+      ? t("buyShareOfEstate", { qty, pct: pct(qty / listing.totalShares) })
+      : unavailableLabel("backend_absent");
 
   return (
     <div className="space-y-3 pb-2" data-testid="buy-summary-step">
       <h2 id="buy-sheet-title" className="text-[1.0625rem] font-semibold text-foreground">
-        Order summary
+        {t("buySummaryTitle")}
       </h2>
       <Block>
         <Row>
-          <span className="text-sm text-muted-foreground">Property</span>
-          <span className="ml-auto text-sm text-foreground text-right max-w-[60%] truncate">{listing.title}</span>
+          <span className="text-sm text-muted-foreground">{t("buySummaryProperty")}</span>
+          <span className="ml-auto text-sm text-foreground text-right max-w-[60%] truncate">{displayName ?? listing.title}</span>
         </Row>
         <Row>
-          <span className="text-sm text-muted-foreground">Quantity</span>
+          <span className="text-sm text-muted-foreground">{t("buySummaryLocation")}</span>
+          <span className="ml-auto text-sm text-foreground text-right max-w-[60%] truncate">{displayLocation ?? listing.location}</span>
+        </Row>
+        <Row>
+          <span className="text-sm text-muted-foreground">{t("buySummaryQuantity")}</span>
           <span className="ml-auto text-sm tnum text-foreground">{qty}</span>
         </Row>
         <Row>
-          <span className="text-sm text-muted-foreground">Price / share</span>
+          <span className="text-sm text-muted-foreground">{t("buyOwnership")}</span>
+          <span className="ml-auto text-sm tnum text-foreground" data-testid="buy-ownership">{ownership}</span>
+        </Row>
+        <Row>
+          <span className="text-sm text-muted-foreground">{t("pricePerShareLabel")}</span>
           <span className="ml-auto text-sm tnum text-foreground">{usd(unitPrice)}</span>
         </Row>
         <Row>
-          <span className="text-sm text-muted-foreground">Pay with</span>
+          <span className="text-sm text-muted-foreground">{t("buySummaryPayWith")}</span>
           <span className="ml-auto text-sm tnum text-foreground" data-testid="buy-pay-with">
             {currency === "USDT" ? "USDT" : "TON"}
           </span>
         </Row>
         <Row>
-          <span className="text-sm text-muted-foreground">Fees</span>
+          <span className="text-sm text-muted-foreground">{t("buySummaryFees")}</span>
           <span className="ml-auto text-sm tnum text-foreground" data-testid="buy-fees">{usd(feesUsd)}</span>
         </Row>
-        <Row>
-          <span className="text-sm font-medium text-foreground">Total</span>
-          <span className="ml-auto text-sm tnum font-semibold text-foreground" data-testid="buy-total">
+        <Row className="border-t border-border">
+          <span className="text-[0.9375rem] font-semibold text-foreground">{t("totalLabel")}</span>
+          <span className="ml-auto text-[0.9375rem] tnum font-bold tracking-tight text-foreground" data-testid="buy-total">
             {currency === "USDT" ? `${usd(totalPayableUsd)} USDT` : `${usd(totalPayableUsd)} · ${ton(estimateNanoTon(totalPayableUsd, TON_PRICE_USD_CENTS))}`}
           </span>
         </Row>
         <Row>
           <span className="text-sm text-muted-foreground">{t("estWeeklyYield")}</span>
-          <span className="ml-auto text-sm tnum text-success font-medium">{usd(weekly)}</span>
+          {/* Projected — never success-green (Paid-only color); the label
+              already carries the Projected state. */}
+          <span className="ml-auto text-sm tnum font-semibold text-foreground">{usd(weekly)}</span>
         </Row>
         {/* Owner Stay — honest unavailable state in the purchase review (redesign §8). */}
         <Row>
@@ -89,16 +110,31 @@ export function BuySummaryStep({
         </Row>
       </Block>
       <p className="mt-0.5 px-0.5 pb-0.5 text-[0.6875rem] leading-relaxed text-muted-foreground">
-        Total includes the primary-market commission. No other fees.
+        {t("buySummaryCommissionNote")}
       </p>
+      <Disclosure
+        title={<span className="text-sm text-muted-foreground">{t("buyAssumptionsTitle")}</span>}
+        open={assumptionsOpen}
+        onOpenChange={setAssumptionsOpen}
+        toggleTestId="buy-assumptions-toggle"
+        contentTestId="buy-assumptions-content"
+        contentClassName="border-t border-border px-4 py-3"
+      >
+        <div className="space-y-1.5 text-xs leading-relaxed text-muted-foreground">
+          <p>{t("buyAssumptionRate", { rate: listing.monthlyYieldRate })}</p>
+          <p>{t("buyFirstNote")}</p>
+          <p>{t("onLockedSharesNote")}</p>
+          <p>{t("invPlansNote")}</p>
+        </div>
+      </Disclosure>
       {pending ? (
         <p
           className="text-center text-sm leading-relaxed text-muted-foreground"
           data-testid="buy-pending"
         >
           {verifying
-            ? "Confirming on blockchain…"
-            : "Confirming in your wallet…"}
+            ? t("buySummaryConfirmingChain")
+            : t("buySummaryConfirmingWallet")}
         </p>
       ) : null}
       {error ? (

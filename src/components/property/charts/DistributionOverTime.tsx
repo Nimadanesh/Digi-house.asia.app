@@ -18,6 +18,7 @@ import {
   RangePills,
   HitZones,
   useHitZones,
+  useChartSelection,
   shortDate,
 } from "../charts/shared";
 
@@ -39,7 +40,9 @@ const RANGE_WEEKS: Record<RangeKey, number> = {
 export function DistributionOverTime({ history }: { history: OwnershipPoint[] }) {
   const t = useTranslations("property");
   const [range, setRange] = useState<RangeKey>("1Y");
-  const [sel, setSel] = useState<number | null>(null);
+  // Split interaction: transient mouse hover (HitZones onIndex) + persistent
+  // touch-tap selection (HitZones onSelect). Tap survives finger lift.
+  const selection = useChartSelection<number>();
 
   const points = useMemo(
     () => history.slice(Math.max(0, history.length - RANGE_WEEKS[range])),
@@ -90,7 +93,20 @@ export function DistributionOverTime({ history }: { history: OwnershipPoint[] })
   }, [points]);
 
   const xs = useHitZones(points.length);
-  const selPoint = sel != null ? points[sel] : null;
+  const sel = selection.active;
+  const selPoint = sel != null && sel < points.length ? points[sel] : null;
+  // Restrained selected-week marker (touch-persistent state only — hover keeps
+  // the existing marker-free look).
+  const markerX =
+    selection.selected != null && selection.selected < xs.length
+      ? xs[selection.selected]
+      : null;
+
+  function handleRangeChange(next: RangeKey) {
+    // A new slice invalidates the old week index — never show a stale week.
+    selection.clearSelected();
+    setRange(next);
+  }
 
   return (
     <div className="space-y-3" data-testid="distribution-over-time">
@@ -113,7 +129,19 @@ export function DistributionOverTime({ history }: { history: OwnershipPoint[] })
             data-testid={`stack-band-${band.key.replace("holder.", "")}`}
           />
         ))}
-        <HitZones xs={xs} onIndex={setSel} />
+        <HitZones xs={xs} onIndex={selection.setHover} onSelect={selection.toggle} />
+        {markerX != null ? (
+          <line
+            x1={markerX}
+            x2={markerX}
+            y1={PAD_TOP}
+            y2={CHART_H - PAD_BOTTOM}
+            stroke="currentColor"
+            strokeWidth="1.5"
+            className="text-primary/60"
+            data-testid="distribution-selected-marker"
+          />
+        ) : null}
         <DateLabels
           firstAt={points[0]?.at ?? ""}
           lastAt={points[points.length - 1]?.at ?? ""}
@@ -123,7 +151,7 @@ export function DistributionOverTime({ history }: { history: OwnershipPoint[] })
       <RangePills
         ranges={RANGES as unknown as RangeKey[]}
         active={range}
-        onChange={setRange}
+        onChange={handleRangeChange}
         label={rangeLabel}
         testIdPrefix="dist"
       />
@@ -132,6 +160,7 @@ export function DistributionOverTime({ history }: { history: OwnershipPoint[] })
       <div
         className="min-h-[4.5rem] rounded-[10px] bg-surface-2 px-3 py-2 text-xs leading-relaxed text-foreground"
         data-testid="distribution-tooltip"
+        aria-live="polite"
       >
         {selPoint ? (
           <>

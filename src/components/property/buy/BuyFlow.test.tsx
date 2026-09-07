@@ -169,6 +169,36 @@ describe("Buy flow steps", () => {
     expect(screen.getByTestId("usdt-unavailable-note")).toBeInTheDocument();
   });
 
+  it("qty step: lock-to-earn footnote names the earning requirement", () => {
+    render(
+      <BuyQtyStep
+        listing={listing}
+        qty={10}
+        onQtyChange={() => {}}
+        walletConnected
+        currency="TON"
+        onCurrencyChange={() => {}}
+      />,
+    );
+    expect(screen.getByTestId("buy-lock-note")).toHaveTextContent(
+      "Buy shares first, then lock them",
+    );
+  });
+
+  it("qty step: out-of-range quantity shows the invalid message", () => {
+    render(
+      <BuyQtyStep
+        listing={listing}
+        qty={999}
+        onQtyChange={() => {}}
+        walletConnected
+        currency="TON"
+        onCurrencyChange={() => {}}
+      />,
+    );
+    expect(screen.getByRole("alert")).toHaveTextContent("between 1 and 360");
+  });
+
   it("summary step: property, qty, total, fees", () => {
     useFees.mockReturnValue({ data: DEFAULT_FEE_TIERS, isLoading: false, isError: false });
     render(<BuySummaryStep listing={listing} qty={10} currency="TON" />);
@@ -194,6 +224,57 @@ describe("Buy flow steps", () => {
     render(<BuySummaryStep listing={listing} qty={10} currency="USDT" />);
     expect(screen.getByTestId("buy-fees")).toHaveTextContent("$0.00");
     expect(screen.getByTestId("buy-total")).toHaveTextContent("$1,250.00 USDT");
+  });
+
+  it("summary step: location, ownership, and assumptions disclosure", () => {
+    useFees.mockReturnValue({ data: DEFAULT_FEE_TIERS, isLoading: false, isError: false });
+    render(<BuySummaryStep listing={listing} qty={10} currency="TON" />);
+    expect(screen.getByText("Dubai Marina, UAE")).toBeInTheDocument();
+    // 10 / 1000 shares = 1.0% (same pct() formatting as the qty step).
+    expect(screen.getByTestId("buy-ownership")).toHaveTextContent("10 shares · 1.0% of the estate");
+    fireEvent.click(screen.getByTestId("buy-assumptions-toggle"));
+    expect(screen.getByTestId("buy-assumptions-content")).toHaveTextContent(
+      "Projection assumes a 6.25% monthly rental rate.",
+    );
+    expect(screen.getByTestId("buy-assumptions-content")).toHaveTextContent(
+      "Buy shares first, then lock them",
+    );
+    expect(screen.getByTestId("buy-assumptions-content")).toHaveTextContent(
+      "Investment plans are not configured",
+    );
+  });
+
+  it("summary step: values follow the listing, never Grand-specific figures", () => {
+    useFees.mockReturnValue({ data: DEFAULT_FEE_TIERS, isLoading: false, isError: false });
+    const trajan: Listing = {
+      ...listing,
+      id: "prop-berlin-mitte-apartment",
+      title: "Trajan Villa",
+      location: "Las Vegas, USA",
+      sharePriceUsd: 9500,
+      monthlyYieldRate: 7.19,
+      totalShares: 1600,
+    };
+    render(<BuySummaryStep listing={trajan} qty={8} currency="TON" />);
+    expect(screen.getByText("Trajan Villa")).toBeInTheDocument();
+    expect(screen.getByText("Las Vegas, USA")).toBeInTheDocument();
+    // 8 × $95.00 = $760.00 principal; $500–$2k tier (2.5%) → $19.00 fee.
+    expect(screen.getByTestId("buy-fees")).toHaveTextContent("$19.00");
+    expect(screen.getByTestId("buy-total")).toHaveTextContent("$779.00");
+    expect(screen.getByTestId("buy-ownership")).toHaveTextContent("8 shares · 0.5% of the estate");
+    fireEvent.click(screen.getByTestId("buy-assumptions-toggle"));
+    expect(screen.getByTestId("buy-assumptions-content")).toHaveTextContent(
+      "Projection assumes a 7.19% monthly rental rate.",
+    );
+  });
+
+  it("summary step: no raw i18n keys leak into labels", () => {
+    useFees.mockReturnValue({ data: DEFAULT_FEE_TIERS, isLoading: false, isError: false });
+    const { container } = render(<BuySummaryStep listing={listing} qty={10} currency="TON" />);
+    const text = container.textContent ?? "";
+    for (const key of ["buySummaryTitle", "buySummaryProperty", "buyOwnership", "buyAssumptionsTitle", "totalLabel"]) {
+      expect(text).not.toContain(key);
+    }
   });
 
   it("summary step shows sticky error and pending copy", () => {
@@ -229,6 +310,17 @@ describe("Buy flow steps", () => {
     expect(onClose).toHaveBeenCalled();
     expect(push).toHaveBeenCalledWith("/portfolio");
     expect(screen.getByRole("button", { name: /share/i })).toBeInTheDocument();
+  });
+
+  it("success step: no raw i18n keys leak into copy", () => {
+    const { container } = render(
+      <BuySuccessStep propertyTitle="Marina Vista Apt 4B" qty={10} onClose={() => {}} />,
+    );
+    const text = container.textContent ?? "";
+    for (const key of ["buySuccessTitle", "buySuccessMessage", "buySuccessNextPayout", "buySuccessEverySunday"]) {
+      expect(text).not.toContain(key);
+    }
+    expect(screen.getByText(/Every Sunday/)).toBeInTheDocument();
   });
 
   it("BuySheet hosts the active step inside a dialog when open", () => {

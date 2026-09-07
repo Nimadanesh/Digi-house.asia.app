@@ -18,17 +18,14 @@ import type { DocumentMeta } from "@/types/property-document";
 import type { EstateVerification } from "@/types/verification";
 import type { EstateStayInfo } from "@/types/stay";
 import { getCurrentSharePrice } from "@/lib/property-price";
+import { useEstateDetailViewModel } from "@/hooks/useEstateDetailViewModel";
 import dynamic from "next/dynamic";
-import { Block } from "@/components/common/Block";
-import { Skeleton } from "@/components/common/Skeleton";
+import { TabPanelSkeleton } from "@/components/common/Skeleton";
 import { PropertyGallery } from "./PropertyGallery";
 import { PropertyHero } from "./PropertyHero";
 import { PropertyMetricsGrid } from "./PropertyMetricsGrid";
 import { PropertyTabs, type PropertyTabId } from "./PropertyTabs";
-import { FundingPanel } from "./FundingPanel";
-import { PropertyFundamentals } from "./PropertyFundamentals";
-import { RentalStoryBlock } from "./RentalStoryBlock";
-import { ResaleBlock } from "./ResaleBlock";
+import { EstateTabPanel } from "./EstateTabPanel";
 import { IncomeCalculator } from "./IncomeCalculator";
 import { PositionCard } from "./PositionCard";
 import { OwnershipBanner } from "./OwnershipBanner";
@@ -56,27 +53,6 @@ const IncomeAnalytics = dynamic(
     ssr: false,
   },
 );
-const PrimaryPerformanceCharts = dynamic(
-  () => import("./PrimaryPerformanceCharts").then((m) => m.PrimaryPerformanceCharts),
-  {
-    loading: () => <TabPanelSkeleton />,
-    ssr: false,
-  },
-);
-
-/** Skeleton matching the tab-panel block rhythm (Phase 8 loading states). */
-function TabPanelSkeleton() {
-  return (
-    <div className="space-y-5" data-testid="tab-panel-skeleton">
-      {[0, 1, 2].map((i) => (
-        <Block key={i} className="space-y-3 p-4">
-          <Skeleton className="h-4 w-40" />
-          <Skeleton className="h-[200px] w-full" />
-        </Block>
-      ))}
-    </div>
-  );
-}
 
 export function PropertyDetail({
   listing,
@@ -122,10 +98,27 @@ export function PropertyDetail({
 }) {
   // REDESIGN-SPEC §4.4 — funding = Primary; funded/resale = Secondary.
   const isPrimary = listing.status === "funding";
+  // Buyability drives fixed bottom chrome (MainButton owns the bottom when a
+  // purchase is possible, otherwise tab bar + lifted sticky) — the Estate tab
+  // tail follows it. Mirrors page.tsx canBuy (same fields, same rule).
+  const canBuy = listing.sharesRemaining > 0;
   const [tab, setTab] = useState<PropertyTabId>("estate");
   /** Resale market block — collapsed by default; opened by "View Resale Opportunities". */
   const [resaleOpen, setResaleOpen] = useState(false);
   const scrollYBeforeTabRef = useRef<number | null>(null);
+
+  // Slice E — canonical view-model via the hooks boundary (UI never touches
+  // engines directly). Economics/scenario/share/CTA states flow from here.
+  const {
+    vm: estateVm,
+    bound: scenarioBound,
+    onBoundChange: handleBoundChange,
+    selected: selectedScenario,
+  } = useEstateDetailViewModel(listing, {
+    asks: orderBook?.asks,
+    sharesOwned: ownedShares,
+    acquisitionPricePerShareUsd: avgCostUsd ?? null,
+  });
 
   // Phase 8 (#06) — keep the viewport stable when swapping tab panels: panels have
   // very different heights, and the browser clamps the scroll offset mid-swap when
@@ -168,7 +161,8 @@ export function PropertyDetail({
   return (
     <div className="space-y-4" data-testid="property-detail">
       {/* ═══ Layer A — Estate header (gallery + hero) ═══ */}
-      <PropertyGallery images={listing.images} title={listing.title} />
+      {/* PROMPT 03: canonical Estate24 identity drives user-visible name. */}
+      <PropertyGallery images={listing.images} title={estateVm.identity?.name ?? listing.title} />
       <div className="px-0">
         <PropertyHero
           listing={listing}
@@ -178,48 +172,43 @@ export function PropertyDetail({
           verification={verification}
           onManageOwnership={() => handleTabChange("ownership")}
           onViewResale={handleViewResale}
+          market={estateVm.share.state.market}
+          estateValueUsd={estateVm.valuation?.value ?? null}
+          estateValueProvenance={estateVm.valuation?.provenance}
+          canonicalName={estateVm.identity?.name}
+          canonicalLocation={estateVm.identity?.location}
         />
       </div>
 
       {/* KPI area — ownership-first labels, available data only */}
-      <PropertyMetricsGrid listing={listing} currentPriceUsd={currentPriceUsd} />
+      <PropertyMetricsGrid
+        listing={listing}
+        currentPriceUsd={currentPriceUsd}
+        totalValueUsdOverride={estateVm.valuation?.value ?? null}
+        totalValueDisplay={estateVm.valuationDisplay}
+      />
 
       {/* Tabs — horizontal scroll, immediate switch */}
       <PropertyTabs active={tab} onChange={handleTabChange} />
 
       {/* ═══ Tab panels ═══ */}
       {tab === "estate" ? (
-        <div
-          role="tabpanel"
-          id="panel-estate"
-          aria-labelledby="tab-estate"
-          className="space-y-5"
-          data-testid="panel-estate"
-        >
-          {/* Primary: funding story leads (calm, no urgency) */}
-          {isPrimary ? <FundingPanel listing={listing} /> : null}
-
-          {/* Secondary / sold-out: resale market demoted to a collapsed block */}
-          {hasResaleSurface ? (
-            <ResaleBlock
-              listing={listing}
-              orderBook={orderBook}
-              anchorUsd={currentPriceUsd}
-              onBuy={onBuy}
-              open={resaleOpen}
-              onOpenChange={setResaleOpen}
-            />
-          ) : null}
-
-          {/* Rental economics narrative — projected rent, honest unavailable steps */}
-          <RentalStoryBlock listing={listing} onShowIncome={() => handleTabChange("income")} />
-
-          {/* Primary: funding progress charts (shared simulated dataset, disclosed) */}
-          {isPrimary ? <PrimaryPerformanceCharts listing={listing} /> : null}
-
-          {/* Property fundamentals — existing data only */}
-          <PropertyFundamentals listing={listing} />
-        </div>
+        <EstateTabPanel
+          listing={listing}
+          orderBook={orderBook}
+          currentPriceUsd={currentPriceUsd}
+          isPrimary={isPrimary}
+          hasResaleSurface={hasResaleSurface}
+          resaleOpen={resaleOpen}
+          onResaleOpenChange={setResaleOpen}
+          onBuy={onBuy}
+          estateVm={estateVm}
+          selectedScenario={selectedScenario}
+          scenarioBound={scenarioBound}
+          onBoundChange={handleBoundChange}
+          onShowIncome={() => handleTabChange("income")}
+          canBuy={canBuy}
+        />
       ) : null}
 
       {tab === "income" ? (
@@ -263,6 +252,7 @@ export function PropertyDetail({
               accruedUnpaidUsd={accruedUnpaidUsd}
               avgCostUsd={avgCostUsd}
               currentPriceUsd={currentPriceUsd}
+              orderBook={orderBook}
             />
           ) : (
             <OwnershipBanner
@@ -296,7 +286,12 @@ export function PropertyDetail({
           <PropertyTrust listing={listing} verification={verification} />
 
           {/* About + More details */}
-          <PropertyAbout listing={listing} />
+          <PropertyAbout
+            listing={listing}
+            aboutText={estateVm.aboutText}
+            sizeText={estateVm.sizeText}
+            displayName={estateVm.identity?.name}
+          />
 
           {/* Documents */}
           {onDownloadDoc ? (

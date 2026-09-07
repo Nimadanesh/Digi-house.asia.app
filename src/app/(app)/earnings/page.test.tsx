@@ -36,6 +36,9 @@ vi.mock("@/hooks/useWithdrawals", () => ({
 
 import { useEarnings } from "@/hooks/useEarnings";
 import { useMarketplace } from "@/hooks/useMarketplace";
+import { useLocks, useMeSummary } from "@/hooks/useLocks";
+import { usePortfolio } from "@/hooks/usePortfolio";
+import { useWithdrawals } from "@/hooks/useWithdrawals";
 import EarningsPage from "@/app/(app)/earnings/page";
 import type { EarningsSummary } from "@/types/earnings";
 
@@ -176,13 +179,17 @@ describe("Earnings page — income redesign (slice 5)", () => {
     expect(screen.getByTestId("yield-accrued-unpaid")).toHaveTextContent("$42.00");
     expect(screen.getAllByText(/paid with next distribution/i).length).toBeGreaterThan(0);
 
-    // Static 12-week chart with two-tone legend, no range/toggle controls.
-    expect(screen.getByTestId("earnings-chart")).toBeInTheDocument();
-    expect(screen.getAllByTestId("chart-bar").length).toBe(12);
-    expect(screen.getByTestId("chart-legend")).toBeInTheDocument();
-    expect(screen.getByText("Projected")).toBeInTheDocument();
-    expect(screen.queryByTestId("chart-range-trigger")).not.toBeInTheDocument();
-    expect(screen.queryByTestId("chart-mode-bar")).not.toBeInTheDocument();
+    // Income journey chart: ranges + explorable paid/projected columns + legend.
+    // (Slice I observatory replaces the static 12-week chart; bars are now
+    // tappable columns with a detail panel.)
+    expect(screen.getByTestId("income-journey")).toBeInTheDocument();
+    expect(screen.getAllByTestId("journey-bar").length).toBe(12);
+    expect(screen.getByTestId("journey-legend")).toBeInTheDocument();
+    expect(
+      within(screen.getByTestId("journey-legend")).getByText("Projected"),
+    ).toBeInTheDocument();
+    expect(screen.getByTestId("journey-ranges")).toBeInTheDocument();
+    expect(screen.getByTestId("journey-detail")).toBeInTheDocument();
 
     // Paid → Accrued → Expected timeline (status words only).
     expect(screen.getByTestId("income-timeline")).toBeInTheDocument();
@@ -191,9 +198,12 @@ describe("Earnings page — income redesign (slice 5)", () => {
     expect(screen.getByTestId("timeline-next")).toHaveTextContent("$33.75");
 
     // Income by estate: per-estate rows link to estate detail, paid-only totals.
+    // PROMPT 03-C: identity is canonical (ESTATE-24) even though the mocked
+    // marketplace contract still carries legacy fixture facts.
     expect(screen.getByTestId("income-by-estate")).toBeInTheDocument();
     const bayside = screen.getByTestId("income-by-estate-row-prop-bayside-marina-penthouse");
-    expect(bayside).toHaveTextContent("Bayside Marina Penthouse");
+    expect(bayside).toHaveTextContent("Villa Syrene");
+    expect(bayside).toHaveTextContent("Sorrento, Amalfi Coast, Italy");
     expect(bayside).toHaveTextContent("$15.00"); // 1 paid entry × $15
     expect(bayside).toHaveAttribute("href", "/property/prop-bayside-marina-penthouse");
 
@@ -208,5 +218,158 @@ describe("Earnings page — income redesign (slice 5)", () => {
       screen.queryByText("simulated weekly payout · on-chain verifiable post-MVP"),
     ).not.toBeInTheDocument();
     expect(screen.queryByText(/monthly accrual/i)).not.toBeInTheDocument();
+  });
+
+  it("payout pipeline distinguishes eligible, requested, scheduled and paid-out", () => {
+    load(loadedSummary);
+    vi.mocked(useWithdrawals).mockReturnValue({
+      data: [
+        {
+          id: "wd-1",
+          amountUsd: 10_000,
+          feeUsd: 100,
+          netUsd: 9_900,
+          address: "EQtest",
+          status: "requested",
+          txHash: null,
+          installments: [
+            { seq: 1, amountUsd: 2_475, status: "paid", dueAt: "2026-07-08T00:00:00Z", paidAt: "2026-07-08T00:00:00Z", txHash: "sim:1" },
+            { seq: 2, amountUsd: 2_475, status: "pending", dueAt: "2026-07-15T00:00:00Z", paidAt: null, txHash: null },
+            { seq: 3, amountUsd: 2_475, status: "pending", dueAt: "2026-07-22T00:00:00Z", paidAt: null, txHash: null },
+            { seq: 4, amountUsd: 2_475, status: "pending", dueAt: "2026-07-29T00:00:00Z", paidAt: null, txHash: null },
+          ],
+          createdAt: "2026-07-01T00:00:00Z",
+          updatedAt: "2026-07-01T00:00:00Z",
+        },
+      ],
+      isLoading: false,
+    } as never);
+    vi.mocked(useMeSummary).mockReturnValue({
+      data: { balances: { investingUsd: 0, withdrawableUsd: 3_000 } },
+    } as never);
+    render(<EarningsPage />);
+
+    expect(screen.getByTestId("dist-status")).toBeInTheDocument();
+    expect(screen.getByTestId("dist-eligible")).toHaveTextContent("$30.00");
+    expect(screen.getByTestId("dist-requested")).toHaveTextContent("$100.00");
+    expect(screen.getByTestId("dist-scheduled")).toHaveTextContent("$74.25");
+    expect(screen.getByTestId("dist-paidout")).toHaveTextContent("$24.75");
+    // Requested money is never presented as received.
+    expect(screen.getByTestId("earnings-hero-amount")).toHaveTextContent("$120.00");
+  });
+
+  it("empty pipeline renders honest empty lines, unknown balance renders Pending", () => {
+    load(loadedSummary);
+    vi.mocked(useWithdrawals).mockReturnValue({ data: [], isLoading: false } as never);
+    vi.mocked(useMeSummary).mockReturnValue({ data: undefined, isLoading: false } as never);
+    render(<EarningsPage />);
+
+    expect(screen.getByTestId("dist-status")).toBeInTheDocument();
+    expect(screen.getByTestId("dist-eligible")).toHaveTextContent("Pending");
+    expect(screen.getByText("No payout requested")).toBeInTheDocument();
+    expect(
+      within(screen.getByTestId("dist-scheduled")).getByText("Not scheduled"),
+    ).toBeInTheDocument();
+  });
+
+  it("extends income-by-estate rows with position states when portfolio data exists", () => {
+    load({
+      ...loadedSummary,
+      entries: [
+        {
+          id: "e1",
+          userId: "u1",
+          propertyId: "prop-bayside-marina-penthouse",
+          weekOf: "2026-07-13T00:00:00Z",
+          amountUsd: 1_500,
+          tonAmount: 7_500_000_000,
+          shareRatio: 0.075,
+          status: "paid",
+        },
+        {
+          id: "e2",
+          userId: "u1",
+          propertyId: "prop-bayside-marina-penthouse",
+          weekOf: "2026-07-20T00:00:00Z",
+          amountUsd: 500,
+          tonAmount: 2_500_000_000,
+          shareRatio: 0.075,
+          status: "pending",
+        },
+      ],
+    });
+    vi.mocked(usePortfolio).mockReturnValue({
+      data: {
+        holdings: [
+          {
+            propertyId: "prop-bayside-marina-penthouse",
+            sharesOwned: 160,
+            avgCostUsd: 12_000,
+            currentValueUsd: 1_920_000,
+            pendingWeekEarningsUsd: 0,
+            shareRatio: 0.16,
+          },
+        ],
+        openOrders: [],
+      },
+      isLoading: false,
+      isError: false,
+    } as never);
+    vi.mocked(useLocks).mockReturnValue({
+      data: {
+        locks: [
+          {
+            id: "lock-1",
+            propertyId: "prop-bayside-marina-penthouse",
+            shares: 100,
+            principalUsd: 1_200_000,
+            payoutPeriod: "monthly",
+            monthlyRate: 6,
+            status: "locked",
+            lockedAt: "2026-07-01T00:00:00Z",
+            unlockRequestedAt: null,
+            maturedAt: null,
+            nextPayoutAt: "2026-08-01T00:00:00Z",
+            maturesAt: null,
+            accruedUnpaidUsd: 4_200,
+            installmentUsd: 5_000,
+            projectedMonthlyUsd: 5_000,
+            projectedWeeklyUsd: 1_200,
+          },
+        ],
+      },
+      isLoading: false,
+    } as never);
+    vi.mocked(useWithdrawals).mockReturnValue({ data: [], isLoading: false } as never);
+    vi.mocked(useMeSummary).mockReturnValue({
+      data: { balances: { investingUsd: 0, withdrawableUsd: 1_500 } },
+    } as never);
+    render(<EarningsPage />);
+
+    const row = screen.getByTestId("income-by-estate-row-prop-bayside-marina-penthouse");
+    expect(row).toHaveTextContent("160 shares");
+    expect(row).toHaveTextContent("$5.00"); // projected (pending ledger only)
+    expect(row).toHaveTextContent("$42.00"); // accrued (lock engine only)
+    expect(row).toHaveTextContent("$15.00"); // paid (paid ledger only)
+  });
+
+  it("other returns stay honest with no plans, no history and no listings", () => {
+    load(loadedSummary);
+    vi.mocked(useWithdrawals).mockReturnValue({ data: [], isLoading: false } as never);
+    vi.mocked(useMeSummary).mockReturnValue({
+      data: { balances: { investingUsd: 0, withdrawableUsd: 1_500 } },
+    } as never);
+    vi.mocked(usePortfolio).mockReturnValue({
+      data: { holdings: [], openOrders: [] },
+      isLoading: false,
+      isError: false,
+    } as never);
+    render(<EarningsPage />);
+
+    expect(screen.getByTestId("other-returns")).toBeInTheDocument();
+    expect(screen.getByTestId("other-plan")).toHaveTextContent("No investment plans configured");
+    expect(screen.getByTestId("other-appreciation")).toHaveTextContent("Pending");
+    expect(screen.getByText("No open listings")).toBeInTheDocument();
+    expect(screen.getByTestId("income-origin")).toBeInTheDocument();
   });
 });

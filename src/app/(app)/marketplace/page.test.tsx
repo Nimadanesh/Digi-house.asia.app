@@ -69,10 +69,16 @@ const listings: Listing[] = [
   },
 ];
 
-const useMarketplace = vi.fn();
-vi.mock("@/hooks/useMarketplace", () => ({
-  useMarketplace: () => useMarketplace(),
+import { toMarketplaceEstates } from "@/lib/economics/marketplace-view-model";
+
+const useMarketplaceEstates = vi.fn();
+vi.mock("@/hooks/useMarketplaceEstates", () => ({
+  useMarketplaceEstates: () => useMarketplaceEstates(),
 }));
+
+function mockEstates() {
+  return toMarketplaceEstates(listings);
+}
 vi.mock("@/hooks/useTelegram", () => ({
   useTelegram: () => ({
     haptics: { selection: vi.fn(), impact: vi.fn(), notification: vi.fn() },
@@ -87,26 +93,26 @@ describe("Estates (marketplace) page", () => {
   });
 
   it("loading: skeleton for search, chips, sort and cards", () => {
-    useMarketplace.mockReturnValue({ data: undefined, isLoading: true, isError: false, refetch: vi.fn() });
+    useMarketplaceEstates.mockReturnValue({ estates: [], isLoading: true, isError: false, refetch: vi.fn() });
     render(<MarketplacePage />);
     expect(screen.getByTestId("estates-skeleton")).toBeInTheDocument();
     expect(document.querySelectorAll(".animate-pulse").length).toBeGreaterThan(0);
   });
 
   it("error: Retry", () => {
-    useMarketplace.mockReturnValue({ data: undefined, isLoading: false, isError: true, refetch: vi.fn() });
+    useMarketplaceEstates.mockReturnValue({ estates: [], isLoading: false, isError: true, refetch: vi.fn() });
     render(<MarketplacePage />);
     expect(screen.getByRole("button", { name: /try again/i })).toBeInTheDocument();
   });
 
   it("empty estate list", () => {
-    useMarketplace.mockReturnValue({ data: [], isLoading: false, isError: false, refetch: vi.fn() });
+    useMarketplaceEstates.mockReturnValue({ estates: [], isLoading: false, isError: false, refetch: vi.fn() });
     render(<MarketplacePage />);
     expect(screen.getByText("No estates yet")).toBeInTheDocument();
   });
 
   it("loaded: Estates header, search, the six Phase 9 filters, sort and cards", () => {
-    useMarketplace.mockReturnValue({ data: listings, isLoading: false, isError: false, refetch: vi.fn() });
+    useMarketplaceEstates.mockReturnValue({ estates: mockEstates(), isLoading: false, isError: false, refetch: vi.fn() });
     render(<MarketplacePage />);
     expect(screen.getByRole("heading", { name: "Estates" })).toBeInTheDocument();
     expect(screen.getByText("Own a share of exceptional properties.")).toBeInTheDocument();
@@ -127,7 +133,7 @@ describe("Estates (marketplace) page", () => {
   });
 
   it("search filters the list client-side", async () => {
-    useMarketplace.mockReturnValue({ data: listings, isLoading: false, isError: false, refetch: vi.fn() });
+    useMarketplaceEstates.mockReturnValue({ estates: mockEstates(), isLoading: false, isError: false, refetch: vi.fn() });
     render(<MarketplacePage />);
     fireEvent.change(screen.getByLabelText("Search villas, destinations or regions."), {
       target: { value: "lisbon" },
@@ -139,7 +145,7 @@ describe("Estates (marketplace) page", () => {
   });
 
   it("default sort is Curated — feed order, not highest yield", () => {
-    useMarketplace.mockReturnValue({ data: listings, isLoading: false, isError: false, refetch: vi.fn() });
+    useMarketplaceEstates.mockReturnValue({ estates: mockEstates(), isLoading: false, isError: false, refetch: vi.fn() });
     render(<MarketplacePage />);
     const cards = screen.getAllByTestId("property-card");
     expect(cards[0]).toHaveTextContent("Alpha Marina");
@@ -148,7 +154,7 @@ describe("Estates (marketplace) page", () => {
   });
 
   it("Entry price sort reorders by share price", () => {
-    useMarketplace.mockReturnValue({ data: listings, isLoading: false, isError: false, refetch: vi.fn() });
+    useMarketplaceEstates.mockReturnValue({ estates: mockEstates(), isLoading: false, isError: false, refetch: vi.fn() });
     render(<MarketplacePage />);
     fireEvent.click(screen.getByRole("button", { name: "Entry price" }));
     const cards = screen.getAllByTestId("property-card");
@@ -157,7 +163,7 @@ describe("Estates (marketplace) page", () => {
   });
 
   it("Resale filter keeps only resale estates", () => {
-    useMarketplace.mockReturnValue({ data: listings, isLoading: false, isError: false, refetch: vi.fn() });
+    useMarketplaceEstates.mockReturnValue({ estates: mockEstates(), isLoading: false, isError: false, refetch: vi.fn() });
     render(<MarketplacePage />);
     fireEvent.click(screen.getByRole("tab", { name: "Resale" }));
     const cards = screen.getAllByTestId("property-card");
@@ -166,7 +172,7 @@ describe("Estates (marketplace) page", () => {
   });
 
   it("Owner Stay filter shows the honest unavailable empty state — no fake matches", () => {
-    useMarketplace.mockReturnValue({ data: listings, isLoading: false, isError: false, refetch: vi.fn() });
+    useMarketplaceEstates.mockReturnValue({ estates: mockEstates(), isLoading: false, isError: false, refetch: vi.fn() });
     render(<MarketplacePage />);
     fireEvent.click(screen.getByRole("tab", { name: "Owner Stay" }));
     expect(screen.getByText("Owner Stay data is not available yet.")).toBeInTheDocument();
@@ -174,7 +180,7 @@ describe("Estates (marketplace) page", () => {
   });
 
   it("Featured filter shows the honest unavailable empty state — no fake matches", () => {
-    useMarketplace.mockReturnValue({ data: listings, isLoading: false, isError: false, refetch: vi.fn() });
+    useMarketplaceEstates.mockReturnValue({ estates: mockEstates(), isLoading: false, isError: false, refetch: vi.fn() });
     render(<MarketplacePage />);
     fireEvent.click(screen.getByRole("tab", { name: "Featured" }));
     expect(screen.getByText("Featured curation is not available yet.")).toBeInTheDocument();
@@ -182,7 +188,7 @@ describe("Estates (marketplace) page", () => {
   });
 
   it("no-match empty state clears filters", async () => {
-    useMarketplace.mockReturnValue({ data: listings, isLoading: false, isError: false, refetch: vi.fn() });
+    useMarketplaceEstates.mockReturnValue({ estates: mockEstates(), isLoading: false, isError: false, refetch: vi.fn() });
     render(<MarketplacePage />);
     fireEvent.change(screen.getByLabelText("Search villas, destinations or regions."), {
       target: { value: "zzzz" },
@@ -194,5 +200,34 @@ describe("Estates (marketplace) page", () => {
     await waitFor(() => {
       expect(screen.getByText("Alpha Marina")).toBeInTheDocument();
     });
+  });
+
+  it("Slice F: Estate value sort is offered and reorders deterministically", async () => {
+    const { PROPERTIES } = await import("@/lib/mock/seed/properties");
+    const { toMarketplaceEstates: toVM } = await import("@/lib/economics/marketplace-view-model");
+    useMarketplaceEstates.mockReturnValue({ estates: toVM(PROPERTIES), isLoading: false, isError: false, refetch: vi.fn() });
+    render(<MarketplacePage />);
+    const valueSort = screen.getByRole("button", { name: "Estate value" });
+    expect(valueSort).toBeInTheDocument();
+    fireEvent.click(valueSort);
+    const cards = screen.getAllByTestId("property-card");
+    expect(cards.length).toBe(24);
+    // Highest approved Estate Value first (Pearls of Long Bay).
+    expect(cards[0]).toHaveTextContent("Pearls of Long Bay Estate");
+  });
+
+  it("Slice F: search matches canonical identity (Raa Atoll → Grand 2 BDM)", async () => {
+    const { PROPERTIES } = await import("@/lib/mock/seed/properties");
+    const { toMarketplaceEstates: toVM } = await import("@/lib/economics/marketplace-view-model");
+    useMarketplaceEstates.mockReturnValue({ estates: toVM(PROPERTIES), isLoading: false, isError: false, refetch: vi.fn() });
+    render(<MarketplacePage />);
+    fireEvent.change(screen.getByLabelText("Search villas, destinations or regions."), {
+      target: { value: "Raa Atoll" },
+    });
+    await waitFor(() => {
+      expect(screen.queryByText("Pearls of Long Bay Estate")).not.toBeInTheDocument();
+    });
+    expect(screen.getByText("Grand 2 BDM Ocean Pool Villa (JOALI Being)")).toBeInTheDocument();
+    expect(screen.getAllByTestId("property-card")).toHaveLength(1);
   });
 });

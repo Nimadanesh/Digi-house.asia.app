@@ -1,11 +1,13 @@
 "use client";
-// File responsibility: Estates screen (Phase 9 Slice 4 — redesign §6 / UI Mapping §4).
+// File responsibility: Estates screen (Slice F — canonical 24-property marketplace).
 // Page header → search → filter chips (All/Featured/New/Income/Owner Stay/Resale) → sort
-// (Curated default) → estate card stack; whole-card navigation, no per-card Buy.
-// Data via useMarketplace; client filter/sort via pure filterEstates (no API changes).
+// (Curated default, Estate Value available) → estate card stack; whole-card
+// navigation, no per-card Buy.
+// Data flow: Canonical Estate Data → useMarketplaceEstates (view model) →
+// client filter/sort via pure filterEstates (no API changes, no business logic).
 import { useCallback, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import { useMarketplace } from "@/hooks/useMarketplace";
+import { useMarketplaceEstates } from "@/hooks/useMarketplaceEstates";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { haptics } from "@/lib/telegram/haptics";
 import {
@@ -25,15 +27,15 @@ import { Button } from "@/components/ui/button";
 export default function MarketplacePage() {
   const t = useTranslations("estates");
   const tCommon = useTranslations("common");
-  const { data, isLoading, isError, refetch } = useMarketplace();
+  const { estates, isLoading, isError, refetch } = useMarketplaceEstates();
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<EstateFilter>("all");
   const [sort, setSort] = useState<EstateSort>("curated");
   const debouncedQuery = useDebouncedValue(query, 150);
 
   const listings = useMemo(
-    () => filterEstates(data ?? [], { query: debouncedQuery, filter, sort }),
-    [data, debouncedQuery, filter, sort],
+    () => filterEstates(estates ?? [], { query: debouncedQuery, filter, sort }),
+    [estates, debouncedQuery, filter, sort],
   );
 
   const onNavigateHaptic = useCallback(() => haptics.selection(), []);
@@ -46,7 +48,7 @@ export default function MarketplacePage() {
     haptics.selection();
   }, []);
 
-  if (isLoading && !data) {
+  if (isLoading && estates.length === 0) {
     return (
       <div className="mt-2 pb-2">
         <MarketplaceSkeleton />
@@ -54,7 +56,7 @@ export default function MarketplacePage() {
     );
   }
 
-  if (isError && !data) {
+  if (isError && estates.length === 0) {
     return (
       <ErrorState
         className="mt-4"
@@ -68,7 +70,7 @@ export default function MarketplacePage() {
     );
   }
 
-  const emptyAll = !data || data.length === 0;
+  const emptyAll = estates.length === 0;
   const emptyFiltered = !emptyAll && listings.length === 0;
 
   // Honest unavailable states for filters whose data does not exist yet (no fake matches).
@@ -134,10 +136,10 @@ export default function MarketplacePage() {
             onSelectHaptic={onChipHaptic}
           />
           <div className="space-y-3 pt-0.5" data-testid="estates-list">
-            {listings.map((listing, i) => (
+            {listings.map((estate, i) => (
               <PropertyCard
-                key={listing.id}
-                listing={listing}
+                key={estate.id}
+                estate={estate}
                 priority={i === 0}
                 onNavigateHaptic={onNavigateHaptic}
               />

@@ -11,6 +11,7 @@ import type { Listing } from "@/types/property";
 import type { ShareLock } from "@/types/lock";
 import { usd } from "@/lib/format";
 import { haptics } from "@/lib/telegram/haptics";
+import { getEstateDisplayName } from "@/lib/economics/estates/estate-display-identity";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { useLocks, useRequestUnlock, activeLocksForProperty } from "@/hooks/useLocks";
 import { Block } from "@/components/common/Block";
@@ -126,7 +127,7 @@ export function YieldLockSection({ listing }: { listing: Listing }) {
             {t("buyFirstNote")}
           </p>
         ) : (
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-2 pt-2">
             <button
               type="button"
               disabled={free === 0}
@@ -175,7 +176,15 @@ export function YieldLockSection({ listing }: { listing: Listing }) {
         title={t("unlockConfirmTitle")}
         description={t("unlockConfirmBody")}
         details={[
-          { label: t("propertyLabel"), value: unlockTarget?.propertyTitle ?? listing.title },
+          // PROMPT 03-C: canonical ESTATE-24 name wins for the 24; lock/listing
+          // titles remain the honest fallback for unknown/unmapped ids only.
+          {
+            label: t("propertyLabel"),
+            value: getEstateDisplayName(
+              unlockTarget?.propertyId ?? listing.id,
+              unlockTarget?.propertyTitle ?? listing.title,
+            ),
+          },
           { label: t("sharesLabel"), value: unlockTarget?.shares ?? 0 },
           {
             label: t("payoutPeriodLabel"),
@@ -223,6 +232,7 @@ export function YieldLockSection({ listing }: { listing: Listing }) {
           listing={listing}
           freeShares={free}
           avgCostUsd={holding?.avgCostUsd ?? listing.sharePriceUsd}
+          ownedShares={owned}
         />
       ) : null}
     </section>

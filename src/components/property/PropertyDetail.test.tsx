@@ -146,14 +146,15 @@ describe("PropertyDetail — Phase 9 Slice 2 (4-tab Estate Detail)", () => {
     expect(screen.getByTestId("funding-panel")).toBeInTheDocument();
     expect(screen.getByTestId("funding-pct")).toHaveTextContent("92%");
     expect(screen.getByTestId("funding-caption")).toHaveTextContent(/92% funded · 80 shares remaining/);
-    // Rental-economics narrative with honest unavailable steps.
+    // Rental-performance narrative: canonical observed nightly rate (Grand range
+    // display) with honest unavailable steps — never mock annual rent.
     expect(screen.getByTestId("rental-story")).toBeInTheDocument();
-    expect(screen.getByTestId("rental-story-rent")).toHaveTextContent("$5,200.00");
+    expect(screen.getByTestId("rental-story-rent")).toHaveTextContent("$67,655–$76,458");
     expect(screen.getByTestId("rental-story-costs")).toHaveTextContent("Not yet reported");
     expect(screen.getByTestId("rental-story-net")).toHaveTextContent("Not yet reported");
-    // Fundamentals (existing data only)
-    expect(screen.getByTestId("property-fundamentals")).toBeInTheDocument();
-    expect(screen.getByTestId("fundamentals-value")).toHaveTextContent("$80,000.00");
+    // Legacy fundamentals removed (reconciliation): canonical value lives in
+    // hero/metrics/investment; rent/yield have no approved source (Slice I).
+    expect(screen.queryByTestId("property-fundamentals")).not.toBeInTheDocument();
     // Primary never gets a resale block while shares remain.
     expect(screen.queryByTestId("resale-block")).not.toBeInTheDocument();
     // Funding progress charts stay on the Estate tab (simulated, disclosed).
@@ -170,7 +171,7 @@ describe("PropertyDetail — Phase 9 Slice 2 (4-tab Estate Detail)", () => {
     expect(screen.queryByTestId("resale-block-content")).not.toBeInTheDocument();
     expect(screen.queryByTestId("market-summary")).not.toBeInTheDocument();
     expect(screen.getByTestId("rental-story")).toBeInTheDocument();
-    expect(screen.getByTestId("property-fundamentals")).toBeInTheDocument();
+    expect(screen.queryByTestId("property-fundamentals")).not.toBeInTheDocument();
   });
 
   it("resale block expands: ownership-value summary + acquire CTA; charts behind nested expander", async () => {
@@ -260,11 +261,18 @@ describe("PropertyDetail — Phase 9 Slice 2 (4-tab Estate Detail)", () => {
     expect(screen.getByTestId("property-trust")).toBeInTheDocument();
     expect(screen.getByTestId("trust-verification-pending")).toHaveTextContent("Verification pending");
     expect(screen.getByTestId("trust-management")).toHaveTextContent(/not yet published/);
+    // Reconciled: tenant/lease have no approved source (About shows the same).
+    expect(screen.getByTestId("property-trust")).toHaveTextContent("Tenant status");
+    expect(screen.getByTestId("property-trust")).toHaveTextContent("Lease terms");
     expect(screen.getByTestId("property-about")).toBeInTheDocument();
 
     fireEvent.click(screen.getByTestId("about-more"));
     expect(screen.getByTestId("sheet-panel")).toBeInTheDocument();
-    expect(screen.getByText("72 m²")).toBeInTheDocument();
+    // Reconciled: approved research copy + size; mock facts are pending rows.
+    expect(screen.getByTestId("sheet-panel")).toHaveTextContent("Overwater luxury villa");
+    expect(screen.getByTestId("about-size")).toHaveTextContent("382 m² total");
+    expect(screen.getByTestId("about-year")).toHaveTextContent("Data pending");
+    expect(screen.getByTestId("about-lease")).toHaveTextContent("Data pending");
 
     expect(screen.getByText("Documents")).toBeInTheDocument();
     expect(screen.getByText("Offering Memorandum")).toBeInTheDocument();
@@ -296,10 +304,10 @@ describe("PropertyDetail — Phase 9 Slice 2 (4-tab Estate Detail)", () => {
     expect(screen.getByTestId("hero-verified")).toHaveTextContent("Verified 2026-08-01");
   });
 
-  it("hero CTA states: primary non-owner → Acquire Ownership", () => {
+  it("hero CTA states: primary non-owner → Buy", () => {
     const onBuy = vi.fn();
     render(<PropertyDetail listing={listing} onBuy={onBuy} previewShares={1} onSharesChange={() => {}} onBuyShares={() => {}} />);
-    expect(screen.getByTestId("hero-cta")).toHaveTextContent(/Acquire Ownership · \$125\.00/);
+    expect(screen.getByTestId("hero-cta")).toHaveTextContent(/Buy · \$125\.00/);
     fireEvent.click(screen.getByTestId("hero-cta"));
     expect(onBuy).toHaveBeenCalledOnce();
   });

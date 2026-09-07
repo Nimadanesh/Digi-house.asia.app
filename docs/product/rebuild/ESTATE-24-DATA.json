@@ -1,0 +1,1341 @@
+[
+  {
+    "id": 1,
+    "listingId": "128862",
+    "name": "Grand 2 BDM Ocean Pool Villa (JOALI Being)",
+    "slug": "grand-2-bdm-ocean-pool-villa-joali-being",
+    "location": {
+      "country": "Maldives",
+      "region": "Raa Atoll",
+      "place": "Bodufushi, JOALI Being",
+      "full": "Bodufushi, JOALI Being, Raa Atoll, Maldives"
+    },
+    "propertyType": "Overwater Villa",
+    "sourceUrl": "https://www.rentalescapes.com/rentals/luxury-villa-rentals-asia/maldives/bodufushi/joali-being/grand-2-bdm-ocean-pool-villa-128862",
+    "specs": {
+      "guests": 5,
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "sizeInteriorM2": 159,
+      "sizeTotalM2": 382,
+      "poolM2": 33,
+      "landHa": null,
+      "landNote": null
+    },
+    "description": {
+      "short": "Luxurious two-bedroom overwater villa with 33 m² infinity pool and expansive indoor-outdoor spaces.",
+      "full": "Blending the brilliant blues of the ocean with a clean and modern palette, this luxurious two bedroom ocean villa defines the ultimate Maldives overwater experience. Ideal for up to five guests, your wellbeing villa offers a 33 square metre infinity pool and expansive indoor-outdoor spaces.",
+      "seasonality": "Dry Maldives season roughly Nov–Apr busier; May–Oct wetter/lower demand. Overwater luxury villa, private infinity pool, lagoon access, wellbeing/family positioning."
+    },
+    "amenities": {
+      "general": ["Air Conditioning", "Pool", "Wifi"],
+      "outdoor": ["Infinity Pool", "Dining Table", "Lounging Area", "Poolside Lounge Chairs", "Terrace", "Private Pool"],
+      "indoor": ["Bed Linens", "Pool/Beach Towels", "Toiletries", "Safe", "Telephone", "Hair Dryer", "Bath Towels"],
+      "kitchen": ["Coffee Maker"],
+      "entertainment": ["Sound System"],
+      "activities": ["Sailing", "Scuba Diving", "Water Skiing", "Wind Surfing", "Swimming", "Beachcombing", "Jet Skiing", "Snorkeling", "Parasailing", "Yoga/Pilates"],
+      "nearby": ["Fitness Center", "Massage Therapist", "Restaurants", "Health & Beauty Spa"]
+    },
+    "services": {
+      "included": ["One-time complimentary laundry service on arrival (10 pieces)", "Roundtrip Private Regular Seaplane transfer (max 8 passengers) often included in rate"],
+      "staff": [],
+      "extraCost": ["Meal plans"]
+    },
+    "rates": {
+      "nightly": "$67,655–$76,458",
+      "type": "RANGE",
+      "currency": "USD",
+      "notes": "Rates inclusive of 10% service charge and 17% Tourism Goods & Service Tax in many published rates. Children over 12 considered adults. No charges for children under 5.",
+      "observedPeriod": "Sep–Oct 2026"
+    },
+    "taxesAndFees": {
+      "tourismTax": { "type": "percentage", "value": 17, "name": "TGST", "note": "Tourism Goods and Services Tax" },
+      "serviceCharge": { "type": "percentage", "value": 10 },
+      "greenTax": { "type": "fixed", "value": 12, "unit": "USD per guest per night", "note": "From 1 January 2025; children under 2 exempt" },
+      "damageWaiver": { "type": "fixed", "value": 299, "currency": "USD", "note": "Non-refundable (up to $2,000)" },
+      "other": []
+    },
+    "costStructureDefaults": {
+      "tourismTaxPct": 17,
+      "serviceChargePct": 10,
+      "agencyOtaPct": 18,
+      "operatorPct": 12.5,
+      "greenTaxPerGuestNight": 12,
+      "repairInsurancePctOfValue": 1.5
+    },
+    "estimates": {
+      "valueCentral": 13500000,
+      "valueRange": [9600000, 18000000],
+      "occupancy": null,
+      "provenance": "ESTIMATED / FRACTIONALLUXE"
+    },
+    "research": {
+      "confidence": "MEDIUM",
+      "lastUpdated": "2026-09-05",
+      "sources": ["Rental Escapes listing 128862", "MIRA Green Tax rules 2025"]
+    }
+  },
+  {
+    "id": 2,
+    "listingId": "126855",
+    "name": "The Aerial",
+    "slug": "the-aerial-buck-island",
+    "location": {
+      "country": "British Virgin Islands",
+      "region": "Buck Island",
+      "place": "Buck Island",
+      "full": "Buck Island, British Virgin Islands"
+    },
+    "propertyType": "Private Island Estate",
+    "sourceUrl": "https://www.rentalescapes.com/rentals/luxury-villa-rentals-caribbean/british-virgin-islands/buck-island/the-aerial-126855",
+    "specs": {
+      "guests": 32,
+      "bedrooms": 17,
+      "bathrooms": 17,
+      "sizeInteriorM2": 2787,
+      "sizeTotalM2": null,
+      "poolM2": null,
+      "landHa": 43.5,
+      "landNote": "~43–44 ha private island"
+    },
+    "description": {
+      "short": "All-inclusive private island destination with five residences focused on purpose luxury and wellness.",
+      "full": "The Aerial BVI, a new all-inclusive private island destination, brings together the unparalleled beauty of the BVI with an authentic, transformative experience for its guests. The property has been designed as a bespoke island resort, delivering a new never-before-seen kind of luxury - 'purpose Luxury.' The experience provides guests with the space to find their center again, eat healing food, connect back to nature and discover what matters most. Set on Buck Island overlooking 14 surrounding islands and the Sir Francis Drake Channel, with over 43 acres.",
+      "seasonality": "Nov–Apr high season; summer/early fall lower. Private island, wellness, local food, water activities, horses, full staff."
+    },
+    "amenities": {
+      "general": ["Air Conditioning", "Pool", "Wifi", "Staff"],
+      "outdoor": ["Garden", "Kayak", "Infinity Pool", "Dining Table", "Outdoor Shower", "Lounging Area", "Poolside Lounge Chairs", "Private Pool", "Beachfront", "Backup Generator", "Fire Pit", "Beach Chairs", "Pool (Saltwater)", "Snorkeling Equipment", "Watersports Equipment", "Private Beach"],
+      "indoor": ["Bed Linens", "Pool/Beach Towels", "Toiletries", "Gym/Fitness Room", "Bar"],
+      "kitchen": ["Fully Equipped Kitchen", "Microwave", "Stove Top Burners", "Oven", "Refrigerator", "Coffee Maker", "Cooking Utensils", "Freezer", "Toaster", "Blender", "Dining Area", "Pizza Oven"],
+      "entertainment": ["Table Tennis"],
+      "activities": ["Sailing", "Scuba Diving", "Fishing", "Horseback Riding", "Swimming", "Eco Tourism", "Beachcombing", "Snorkeling", "Bird Watching", "Hiking", "Deepsea Fishing", "Stand-up Paddle Board", "Yoga/Pilates"],
+      "nearby": ["Massage Therapist", "Restaurants", "Health & Beauty Spa"]
+    },
+    "services": {
+      "included": ["Personal service by villa staff including world-class chefs, housekeeping, groundskeeping and wellness director", "Private airport transportation", "All food and beverages including alcohol", "Beach Gym and water-sports", "Hiking trails"],
+      "staff": ["Chef", "Housekeeper(s)"],
+      "extraCost": []
+    },
+    "rates": {
+      "nightly": "$52,200–$75,800+",
+      "type": "RANGE",
+      "currency": "USD",
+      "notes": "Rates for use of 17 bedrooms hosting up to 32 guests. 7-night minimum during Festive season. Experience inclusive of luxury accommodations and elevated dining with private chef.",
+      "observedPeriod": "Sep–Oct 2026"
+    },
+    "taxesAndFees": {
+      "tourismTax": { "type": "percentage", "value": 10, "name": "Hotel Accommodation Tax", "note": "For stays of six months or less" },
+      "serviceCharge": { "type": "percentage", "value": 5, "name": "Gratuity" },
+      "greenTax": null,
+      "damageWaiver": { "type": "fixed", "value": 299, "currency": "USD", "note": "Non-refundable (up to $2,000)" },
+      "other": []
+    },
+    "costStructureDefaults": {
+      "tourismTaxPct": 10,
+      "serviceChargePct": 5,
+      "agencyOtaPct": 18,
+      "operatorPct": 12.5,
+      "greenTaxPerGuestNight": null,
+      "repairInsurancePctOfValue": 1.5
+    },
+    "estimates": {
+      "valueCentral": 20000000,
+      "valueRange": [14400000, 26400000],
+      "occupancy": null,
+      "provenance": "ESTIMATED / FRACTIONALLUXE"
+    },
+    "research": {
+      "confidence": "MEDIUM",
+      "lastUpdated": "2026-09-05",
+      "sources": ["Rental Escapes listing 126855", "BVI Hotel Accommodation Tax rules"]
+    }
+  },
+  {
+    "id": 3,
+    "listingId": "108924",
+    "name": "Villa Syrene",
+    "slug": "villa-syrene-sorrento",
+    "location": {
+      "country": "Italy",
+      "region": "Amalfi Coast",
+      "place": "Sorrento",
+      "full": "Sorrento, Amalfi Coast, Italy"
+    },
+    "propertyType": "Neoclassical Cliff Villa",
+    "sourceUrl": "https://www.rentalescapes.com/rentals/luxury-vacation-rentals-europe/italy/amalfi-coast/sorrento/villa-syrene-108924",
+    "specs": {
+      "guests": 12,
+      "bedrooms": 6,
+      "bathrooms": 6,
+      "sizeInteriorM2": null,
+      "sizeTotalM2": null,
+      "poolM2": null,
+      "landHa": null,
+      "landNote": "Large private garden"
+    },
+    "description": {
+      "short": "Elegant neoclassical villa on a promontory with 270° sea views over the Gulf of Naples and private sea access.",
+      "full": "Located in the centre of Sorrento, among the Lands of the Sirens, this property stands on the top of a promontory with a sheer drop into the sea. Thanks to its marvelous position smack on the Mediterranean’s seafront, this unique villa enjoys stunning sea views out over the entire Gulf of Naples, with Mount Vesuvius, the Island of Procida, and the Sorrento Coast right in front of you. The villa, with own private descent to the sea, is built in an elegant and luxurious neoclassical style on four levels and is adorned by tens of archaeological objects of inestimable value. The property enjoys 270-degree sea views, while the entire Western, Eastern, and Southern sides are surrounded by a large, private garden.",
+      "seasonality": "Summer and Italian holidays busier; fall/winter quieter. Neoclassical cliff villa, 270° Gulf of Naples view, private garden/sea access, chef/housekeeper."
+    },
+    "amenities": {
+      "general": ["Air Conditioning", "Pool", "Wifi", "Staff"],
+      "outdoor": ["Garden", "Parking", "Garden Chairs", "Dining Table", "Lounging Area", "Poolside Lounge Chairs", "Terrace", "Private Pool"],
+      "indoor": ["Washer/Dryer", "Bed Linens", "Pool/Beach Towels", "Toiletries", "Heating"],
+      "kitchen": ["Fully Equipped Kitchen", "Microwave", "Stove Top Burners", "Oven", "Refrigerator", "Coffee Maker", "Dish Washer", "Cooking Utensils", "Freezer", "Toaster", "Dining Area"],
+      "entertainment": ["Television", "Dvd Player", "Satellite Or Cable", "Books"],
+      "activities": ["Sailing", "Tennis", "Cycling", "Fishing", "Golf", "Swimming", "Eco Tourism", "Beachcombing", "Bird Watching", "Hiking"],
+      "nearby": ["Fitness Center", "Marina", "Groceries", "Massage Therapist", "Shopping", "Restaurants", "Health & Beauty Spa"]
+    },
+    "services": {
+      "included": ["Daily Housekeeping (Mon-Sat 08:30-14:30; Sunday mornings 4 hours)", "Cook", "Two Gardeners", "Waiter", "Porter upon arrival and departure", "Elevator", "Bed linen and towels changed every three days", "Dishwasher (dinner service only)"],
+      "staff": ["Cook", "Gardener", "Housekeeper(s)", "Waiter"],
+      "extraCost": ["Butler (optional)", "Food and beverages"]
+    },
+    "rates": {
+      "nightly": "~€40,000",
+      "type": "APPROXIMATE",
+      "currency": "EUR",
+      "notes": "Cook meal service hours specified. Rates subject to change.",
+      "observedPeriod": "Sep–Oct 2026"
+    },
+    "taxesAndFees": {
+      "tourismTax": { "type": "fixed", "value": 4, "unit": "EUR per person per night", "name": "Imposta di soggiorno", "note": "Approximate for villas / non-hotel; typically capped after limited nights" },
+      "serviceCharge": { "type": "percentage", "value": 10, "name": "Tax (as listed on site)" },
+      "greenTax": null,
+      "damageWaiver": null,
+      "other": [
+        { "type": "fixed", "value": 35000, "currency": "EUR", "name": "Security Deposit", "note": "Refundable" }
+      ]
+    },
+    "costStructureDefaults": {
+      "tourismTaxPct": null,
+      "tourismTaxFixedPerPersonNight": 4,
+      "serviceChargePct": 10,
+      "agencyOtaPct": 18,
+      "operatorPct": 12.5,
+      "greenTaxPerGuestNight": null,
+      "repairInsurancePctOfValue": 1.5
+    },
+    "estimates": {
+      "valueCentral": 14000000,
+      "valueRange": [9600000, 19200000],
+      "occupancy": null,
+      "provenance": "ESTIMATED / FRACTIONALLUXE"
+    },
+    "research": {
+      "confidence": "MEDIUM",
+      "lastUpdated": "2026-09-05",
+      "sources": ["Rental Escapes listing 108924", "Sorrento / Amalfi Coast tourist tax regulations"]
+    }
+  },
+  {
+    "id": 4,
+    "listingId": "123861",
+    "name": "Villa du Cap",
+    "slug": "villa-du-cap-saint-jean-cap-ferrat",
+    "location": {
+      "country": "France",
+      "region": "French Riviera",
+      "place": "Saint-Jean-Cap-Ferrat",
+      "full": "Saint-Jean-Cap-Ferrat, French Riviera, France"
+    },
+    "propertyType": "Mediterranean Luxury Villa",
+    "sourceUrl": "https://www.rentalescapes.com/rentals/luxury-vacation-rentals-europe/france/french-riviera/saint-jean-cap-ferrat/villa-du-cap-123861",
+    "specs": {
+      "guests": 8,
+      "bedrooms": 4,
+      "bathrooms": 4,
+      "sizeInteriorM2": null,
+      "sizeTotalM2": null,
+      "poolM2": null,
+      "landHa": null,
+      "landNote": "Exquisitely landscaped grounds with private tennis court"
+    },
+    "description": {
+      "short": "Commanding position on Cap Ferrat with infinity pool, private tennis court, sauna and fitness room.",
+      "full": "Set directly on the prestigious point of Cap Ferrat, this villa enjoys a commanding position overlooking the crystal-blue Mediterranean Sea. Its prime location, neighboring the renowned Grand Hotel du Cap Ferrat, is complemented by exquisitely landscaped grounds... A stone pathway leads to the private infinity swimming pool and sun-drenched sundeck, while a pool house with a summer kitchen and outdoor dining area creates the perfect setting for alfresco gatherings. A private synthetic clay tennis court is discreetly positioned within the grounds. Inside, the villa exudes timeless sophistication... A private sauna and fitness room add indulgent touches.",
+      "seasonality": "Summer, Cannes festival and Monaco GP busier. Mediterranean views, infinity pool, private tennis, sauna, gym, housekeeper/butler."
+    },
+    "amenities": {
+      "general": ["Air Conditioning", "Pool", "Wifi", "Staff"],
+      "outdoor": ["Balcony", "Garden", "Patio", "Private Tennis Court", "Parking", "Garden Chairs", "Outdoor Grill", "Infinity Pool", "Lounging Area", "Poolside Lounge Chairs", "Terrace", "Private Pool", "Furnished Terrace/Balcony"],
+      "indoor": ["Washer/Dryer", "Bed Linens", "Pool/Beach Towels", "Toiletries", "Safe", "Bath Towels", "Sauna"],
+      "kitchen": ["Fully Equipped Kitchen", "Microwave", "Stove Top Burners", "Oven", "Iron & Board", "Refrigerator", "Coffee Maker", "Dish Washer", "Cooking Utensils", "Freezer", "Toaster", "Dining Area", "Food Processor"],
+      "entertainment": ["Television", "Satellite Or Cable"],
+      "activities": ["Tennis", "Cycling", "Swimming", "Beachcombing", "Hiking"],
+      "nearby": ["Fitness Center", "Groceries", "Massage Therapist", "Shopping", "Restaurants", "Health & Beauty Spa"]
+    },
+    "services": {
+      "included": ["Housekeeper", "Butler (7 AM to 11 PM)", "Pool maintenance", "Gardener", "Continental breakfast", "One round-trip Airport transfer with meet and greet"],
+      "staff": ["Gardener", "Housekeeper(s)", "Butler(s)", "Pool Maintenance Worker"],
+      "extraCost": ["Chef (optional)", "Driver (optional)", "Babysitter (optional)", "Food and beverages"]
+    },
+    "rates": {
+      "nightly": "~€38,575",
+      "type": "APPROXIMATE",
+      "currency": "EUR",
+      "notes": "Special rates apply for Grand Prix of Monaco, Cannes Film Festival and Christmas.",
+      "observedPeriod": "Sep–Oct 2026"
+    },
+    "taxesAndFees": {
+      "tourismTax": { "type": "variable", "value": null, "name": "Taxe de séjour", "note": "Variable by accommodation category (typically 0.20–3.60 EUR+ per person per night)" },
+      "serviceCharge": { "type": "percentage", "value": 8 },
+      "greenTax": null,
+      "damageWaiver": null,
+      "other": [
+        { "type": "fixed", "value": 10000, "currency": "EUR", "name": "Security Deposit", "note": "Refundable" }
+      ]
+    },
+    "costStructureDefaults": {
+      "tourismTaxPct": null,
+      "tourismTaxNote": "Taxe de séjour variable",
+      "serviceChargePct": 8,
+      "agencyOtaPct": 18,
+      "operatorPct": 12.5,
+      "greenTaxPerGuestNight": null,
+      "repairInsurancePctOfValue": 1.5
+    },
+    "estimates": {
+      "valueCentral": 30000000,
+      "valueRange": [20000000, 42000000],
+      "occupancy": null,
+      "provenance": "ESTIMATED / FRACTIONALLUXE"
+    },
+    "research": {
+      "confidence": "MEDIUM",
+      "lastUpdated": "2026-09-05",
+      "sources": ["Rental Escapes listing 123861", "French taxe de séjour regulations"]
+    }
+  },
+  {
+    "id": 5,
+    "listingId": "125643",
+    "name": "Emerald Cay",
+    "slug": "emerald-cay-silly-creek",
+    "location": {
+      "country": "Turks and Caicos",
+      "region": "Providenciales",
+      "place": "Silly Creek",
+      "full": "Silly Creek, Providenciales, Turks and Caicos"
+    },
+    "propertyType": "Private Island Estate",
+    "sourceUrl": "https://www.rentalescapes.com/rentals/luxury-villa-rentals-caribbean/turks-and-caicos/providenciales/silly-creek/emerald-cay-125643",
+    "specs": {
+      "guests": 16,
+      "bedrooms": 8,
+      "bathrooms": 8,
+      "sizeInteriorM2": 2787,
+      "sizeTotalM2": 2787,
+      "poolM2": null,
+      "landHa": 2.1,
+      "landNote": "2+ ha private man-made island"
+    },
+    "description": {
+      "short": "30,000 sq ft private island estate with swing bridge access, wine cellar, theatre, tennis court and multiple pools.",
+      "full": "This 30,000-square-foot private island estate is without a doubt the most impressive property in the Turks & Caicos Islands... Located on a two-plus-acre private man-made island in the exclusive and scenic Silly Creek... Accessed by a one-of-a-kind remote-controlled swing bridge... Includes a detached two-level primary bedroom, three guest suites, a two-bedroom boat house and a two-bedroom guest house. Amenities include a 6,000-bottle wine cellar, ten-seat movie theatre, full-size tennis court, two free-form pools with waterfall and spa, state-of-the-art fitness center, Crestron automation system.",
+      "seasonality": "Dec–Apr busier; summer quieter. Private island, drawbridge, multiple pools, theatre, 6,000-bottle wine cellar, tennis, gym."
+    },
+    "amenities": {
+      "general": ["Fireplace", "Air Conditioning", "Pool", "Hot Tub", "Wifi", "Staff"],
+      "outdoor": ["Balcony", "Garden", "Private Tennis Court", "Kayak", "Parking", "Outdoor Grill", "Dining Table", "Outdoor Shower", "Lounging Area", "Poolside Lounge Chairs", "Private Pool", "Beachfront", "Backup Generator", "Fire Pit", "Snorkeling Equipment", "Private Beach"],
+      "indoor": ["Washer/Dryer", "Bed Linens", "Pool/Beach Towels", "Toiletries", "Safe", "Wine Cellar", "Gym/Fitness Room", "Wine Fridge", "Jacuzzi Tub", "Telephone", "Breakfast Bar", "Baby Equipment", "Hair Dryer", "Bath Towels", "Piano"],
+      "kitchen": ["Fully Equipped Kitchen", "Microwave", "Stove Top Burners", "Ice Maker", "Oven", "Refrigerator", "Coffee Maker", "Cooking Utensils", "Freezer", "Toaster", "Dining Area"],
+      "entertainment": ["Television", "Dvd Player", "Satellite Or Cable", "Books", "Cd Player", "Board Games", "Movie Theatre", "Apple Tv"],
+      "activities": ["Sailing", "Tennis", "Cycling", "Scuba Diving", "Fishing", "Water Skiing", "Golf", "Surfing", "Wind Surfing", "Swimming", "Beachcombing", "Jet Skiing", "Snorkeling", "Bird Watching", "Hiking", "Deepsea Fishing", "Stand-up Paddle Board", "Yoga/Pilates"],
+      "nearby": ["Marina", "Groceries", "Massage Therapist", "Restaurants", "Health & Beauty Spa"]
+    },
+    "services": {
+      "included": ["Housekeeper (daily service)", "Chef (10 hours per day)", "Butler"],
+      "staff": ["Chef", "Housekeeper(s)", "Butler(s)"],
+      "extraCost": ["Additional housekeeping service"]
+    },
+    "rates": {
+      "nightly": "$35,714–~$50,000",
+      "type": "RANGE",
+      "currency": "USD",
+      "notes": "Rates are dynamic. Price listed is a starting rate.",
+      "observedPeriod": "Sep–Oct 2026"
+    },
+    "taxesAndFees": {
+      "tourismTax": { "type": "percentage", "value": 12, "name": "Hotel and Tourism Tax" },
+      "serviceCharge": { "type": "percentage", "value": 10 },
+      "greenTax": null,
+      "damageWaiver": null,
+      "other": [
+        { "type": "fixed", "value": 10000, "currency": "USD", "name": "Security Deposit", "note": "Refundable" }
+      ]
+    },
+    "costStructureDefaults": {
+      "tourismTaxPct": 12,
+      "serviceChargePct": 10,
+      "agencyOtaPct": 18,
+      "operatorPct": 12.5,
+      "greenTaxPerGuestNight": null,
+      "repairInsurancePctOfValue": 1.5
+    },
+    "estimates": {
+      "valueCentral": 31500000,
+      "valueRange": [22400000, 42000000],
+      "occupancy": null,
+      "provenance": "ESTIMATED / FRACTIONALLUXE"
+    },
+    "research": {
+      "confidence": "MEDIUM",
+      "lastUpdated": "2026-09-05",
+      "sources": ["Rental Escapes listing 125643", "Turks and Caicos Hotel & Tourism Tax Ordinance"]
+    }
+  },
+  {
+    "id": 6,
+    "listingId": "130393",
+    "name": "The Branson Beach Estate",
+    "slug": "the-branson-beach-estate-moskito-island",
+    "location": {
+      "country": "British Virgin Islands",
+      "region": "Moskito Island",
+      "place": "Moskito Island",
+      "full": "Moskito Island, British Virgin Islands"
+    },
+    "propertyType": "Private Island Estate (3 connected villas)",
+    "sourceUrl": "https://www.rentalescapes.com/rentals/luxury-villa-rentals-caribbean/british-virgin-islands/moskito-island/the-branson-beach-estate-130393",
+    "specs": {
+      "guests": 22,
+      "bedrooms": 11,
+      "bathrooms": 11,
+      "sizeInteriorM2": null,
+      "sizeTotalM2": null,
+      "poolM2": null,
+      "landHa": 125,
+      "landNote": "125-acre Moskito Island; three standalone villas (Headland, Mangrove, Beach)"
+    },
+    "description": {
+      "short": "Three spectacular standalone villas connected by elevated walkways on Moskito Island with private beach.",
+      "full": "The 125-acre Moskito Island is a jewel of the British Virgin Islands... Perched on a dramatic outcrop commanding elevated sea views... The Branson Beach Estate. Made up of three spectacular standalone villas... cleverly connected by elevated wooden walkways... own private beach – the epitome of barefoot luxury living. The Estate’s three villas - Headland House, Mangrove Villa and Beach Villa - sleep 6, 8 and 8 guests... total of 22 guests across all 11 bedrooms.",
+      "seasonality": "Nov–Apr and holidays busier. Three connected villas on Moskito Island, private beach, pools, island amenities, barefoot luxury."
+    },
+    "amenities": {
+      "general": ["Pool", "Hot Tub", "Wifi"],
+      "outdoor": ["Private Tennis Court", "Infinity Pool", "Dining Table", "Lounging Area", "Poolside Lounge Chairs", "Private Pool"],
+      "indoor": ["Bed Linens", "Toiletries", "Gym/Fitness Room", "Breakfast Bar", "Bath Towels"],
+      "kitchen": ["Fully Equipped Kitchen", "Microwave", "Stove Top Burners", "Oven", "Refrigerator", "Cooking Utensils", "Freezer", "Dining Area"],
+      "entertainment": ["Television"],
+      "activities": ["Sailing", "Tennis", "Swimming", "Eco Tourism", "Beachcombing", "Snorkeling", "Bird Watching", "Hiking", "Stand-up Paddle Board"],
+      "nearby": ["Fitness Center"]
+    },
+    "services": {
+      "included": ["Personal service by the villa staff including Chef", "All meals and drinks (including all alcoholic beverages)", "Return launch transfers from airports at Beef Island (EIS) and Virgin Gorda (VIJ)"],
+      "staff": ["Chef"],
+      "extraCost": ["Babysitter (optional)"]
+    },
+    "rates": {
+      "nightly": "~$35,000",
+      "type": "APPROXIMATE",
+      "currency": "USD",
+      "notes": "Inquire for Thanksgiving and Festive season. Environmental and tourism levy $10/pp on arrival. $50 departure tax/pp.",
+      "observedPeriod": "Sep–Oct 2026"
+    },
+    "taxesAndFees": {
+      "tourismTax": { "type": "percentage", "value": 10, "name": "Hotel Accommodation Tax (BVI standard); site shows BVI Hotel Tax 3% + Service Fee 2.5%" },
+      "serviceCharge": { "type": "percentage", "value": 2.5, "name": "Service Fee" },
+      "greenTax": null,
+      "damageWaiver": null,
+      "other": []
+    },
+    "costStructureDefaults": {
+      "tourismTaxPct": 10,
+      "serviceChargePct": 2.5,
+      "agencyOtaPct": 18,
+      "operatorPct": 12.5,
+      "greenTaxPerGuestNight": null,
+      "repairInsurancePctOfValue": 1.5
+    },
+    "estimates": {
+      "valueCentral": 35000000,
+      "valueRange": [24000000, 48000000],
+      "occupancy": null,
+      "provenance": "ESTIMATED / FRACTIONALLUXE"
+    },
+    "research": {
+      "confidence": "MEDIUM",
+      "lastUpdated": "2026-09-05",
+      "sources": ["Rental Escapes listing 130393", "BVI Hotel Accommodation Tax"]
+    }
+  },
+  {
+    "id": 7,
+    "listingId": "130901",
+    "name": "Chalet Montana",
+    "slug": "chalet-montana-kitzbuhel",
+    "location": {
+      "country": "Austria",
+      "region": "Tyrol",
+      "place": "Kitzbühel",
+      "full": "Kitzbühel, Tyrol, Austria"
+    },
+    "propertyType": "Luxury Chalet",
+    "sourceUrl": "https://www.rentalescapes.com/rentals/luxury-vacation-rentals-europe/austria/tyrol/kitzbuhel/chalet-montana-130901",
+    "specs": {
+      "guests": 16,
+      "bedrooms": 8,
+      "bathrooms": 9,
+      "sizeInteriorM2": null,
+      "sizeTotalM2": null,
+      "poolM2": null,
+      "landHa": null,
+      "landNote": null
+    },
+    "description": {
+      "short": "Presidential Suite of Kitzbühel with vast primary suite, guest chalet, advanced spa with snow/ice crystal maker and colour therapy plunge pool.",
+      "full": "There are chalets and there are palaces... The sheer space of it resembles a palace... A vast primary suite presides over the main living area while the 4 guest suites... The guest chalet with 3 bedrooms... The spa area is another extraordinary feature. With a snow/ice crystal maker... colour therapy plunge pool... The sauna and glass steam room float above the pool. Amazing mountain views... quiet and prestige neighbourhood.",
+      "seasonality": "Winter ski season busiest; summer quieter. Luxury chalet, advanced spa, sauna, steam room, plunge pool, full staff."
+    },
+    "amenities": {
+      "general": ["Fireplace", "Air Conditioning", "Pool", "Wifi", "Staff"],
+      "outdoor": ["Balcony", "Garden", "Parking", "Dining Table", "Lounging Area", "Terrace"],
+      "indoor": ["Bed Linens", "Toiletries", "Wine Cellar", "Wine Fridge", "Steam Room/Hammam", "Bar", "Bath Towels", "Elevator", "Sauna", "Indoor Plunge Pool"],
+      "kitchen": ["Fully Equipped Kitchen", "Microwave", "Stove Top Burners", "Oven", "Refrigerator", "Coffee Maker", "Dish Washer", "Cooking Utensils", "Freezer", "Dining Area"],
+      "entertainment": ["Television", "Sonos/Bose Speakers"],
+      "activities": ["Skiing", "Swimming", "Hiking", "Snowboarding"],
+      "nearby": ["Restaurants"]
+    },
+    "services": {
+      "included": ["Personal service by the villa staff, including a chef, butler & housekeeping"],
+      "staff": ["Chef", "Housekeeper(s)", "Butler(s)"],
+      "extraCost": ["Driver (optional)"]
+    },
+    "rates": {
+      "nightly": "~€27,571",
+      "type": "APPROXIMATE",
+      "currency": "EUR",
+      "notes": "",
+      "observedPeriod": "Sep–Oct 2026"
+    },
+    "taxesAndFees": {
+      "tourismTax": { "type": "fixed", "value": 5, "unit": "EUR per person per night", "name": "Aufenthaltsabgabe", "note": "Approx. €5 from age 15; may vary by length of stay" },
+      "serviceCharge": null,
+      "greenTax": null,
+      "damageWaiver": { "type": "fixed", "value": 299, "currency": "EUR", "note": "Non-refundable (up to $2,000 equivalent)" },
+      "other": []
+    },
+    "costStructureDefaults": {
+      "tourismTaxPct": null,
+      "tourismTaxFixedPerPersonNight": 5,
+      "serviceChargePct": null,
+      "agencyOtaPct": 18,
+      "operatorPct": 12.5,
+      "greenTaxPerGuestNight": null,
+      "repairInsurancePctOfValue": 1.5
+    },
+    "estimates": {
+      "valueCentral": 15000000,
+      "valueRange": [9600000, 21600000],
+      "occupancy": null,
+      "provenance": "ESTIMATED / FRACTIONALLUXE"
+    },
+    "research": {
+      "confidence": "MEDIUM",
+      "lastUpdated": "2026-09-05",
+      "sources": ["Rental Escapes listing 130901", "Kitzbühel / Tyrol Aufenthaltsabgabe"]
+    }
+  },
+  {
+    "id": 8,
+    "listingId": "131293",
+    "name": "Villa BDM",
+    "slug": "villa-bdm-saint-jean",
+    "location": {
+      "country": "St. Barthélemy",
+      "region": "Saint Jean",
+      "place": "Saint Jean Beach",
+      "full": "Saint Jean Beach, St. Barthélemy"
+    },
+    "propertyType": "Beachfront Villa",
+    "sourceUrl": "https://www.rentalescapes.com/rentals/luxury-villa-rentals-caribbean/st-barthelemy/saint-jean/villa-bdm-131293",
+    "specs": {
+      "guests": 14,
+      "bedrooms": 7,
+      "bathrooms": 8,
+      "sizeInteriorM2": null,
+      "sizeTotalM2": null,
+      "poolM2": null,
+      "landHa": null,
+      "landNote": "Direct path to St-Jean Beach"
+    },
+    "description": {
+      "short": "Prestigious beachfront seven-bedroom villa on St-Jean Beach with pool, fitness room and professional kitchen.",
+      "full": "Villa BDM is a prestigious beachfront property located on St-Jean Beach... seven-bedroom... swimming pool, fitness room, and professional kitchen... Spread across three levels... direct path leads you straight to St-Jean Beach... seven air-conditioned bedrooms with en-suite bathrooms...",
+      "seasonality": "Dec–Apr busier. Beachfront St-Jean villa, pool, fitness room, professional kitchen, terraces, direct beach access."
+    },
+    "amenities": {
+      "general": ["Air Conditioning", "Pool", "Wifi"],
+      "outdoor": ["Garden", "Parking", "Outdoor Grill", "Heated Pool", "Dining Table", "Lounging Area", "Poolside Lounge Chairs", "Terrace", "Private Pool", "Beachfront", "Beach Chairs", "Bocce/Petanque Court"],
+      "indoor": ["Bed Linens", "Pool/Beach Towels", "Toiletries", "Safe", "Gym/Fitness Room", "Breakfast Bar", "Hair Dryer", "Bath Towels"],
+      "kitchen": ["Fully Equipped Kitchen", "Microwave", "Oven", "Refrigerator", "Dish Washer", "Cooking Utensils", "Freezer", "Toaster", "Blender", "Dining Area", "Nespresso Machine"],
+      "entertainment": ["Television", "Satellite Or Cable", "Foosball", "Apple Tv", "Table Tennis"],
+      "activities": ["Sailing", "Scuba Diving", "Surfing", "Swimming", "Beachcombing", "Snorkeling", "Deepsea Fishing"],
+      "nearby": ["Shopping", "Restaurants", "Health & Beauty Spa"]
+    },
+    "services": {
+      "included": ["Daily housekeeper (except Sundays & Holidays)", "Welcome amenities on arrival", "Pool Maintenance"],
+      "staff": ["Housekeeper(s)", "Pool Maintenance Worker"],
+      "extraCost": ["Butler (optional)", "Chef (optional)", "Driver (optional)", "Babysitter (optional)", "Grocery pre-stocking"]
+    },
+    "rates": {
+      "nightly": "~$25,714",
+      "type": "APPROXIMATE",
+      "currency": "USD",
+      "notes": "",
+      "observedPeriod": "Sep–Oct 2026"
+    },
+    "taxesAndFees": {
+      "tourismTax": { "type": "percentage", "value": 5, "name": "Taxe de séjour / Tourism Tax" },
+      "serviceCharge": { "type": "percentage", "value": 10 },
+      "greenTax": null,
+      "damageWaiver": { "type": "fixed", "value": 299, "currency": "USD", "note": "Non-refundable (up to $2,000)" },
+      "other": []
+    },
+    "costStructureDefaults": {
+      "tourismTaxPct": 5,
+      "serviceChargePct": 10,
+      "agencyOtaPct": 18,
+      "operatorPct": 12.5,
+      "greenTaxPerGuestNight": null,
+      "repairInsurancePctOfValue": 1.5
+    },
+    "estimates": {
+      "valueCentral": 21500000,
+      "valueRange": [14400000, 30000000],
+      "occupancy": null,
+      "provenance": "ESTIMATED / FRACTIONALLUXE"
+    },
+    "research": {
+      "confidence": "MEDIUM",
+      "lastUpdated": "2026-09-05",
+      "sources": ["Rental Escapes listing 131293", "St. Barthélemy taxe de séjour 5%"]
+    }
+  },
+  {
+    "id": 9,
+    "listingId": "128529",
+    "name": "Trajan Villa at Caesars Palace",
+    "slug": "trajan-villa-caesars-palace",
+    "location": {
+      "country": "USA",
+      "region": "Nevada",
+      "place": "Las Vegas, Caesars Palace",
+      "full": "Caesars Palace, Las Vegas, Nevada, USA"
+    },
+    "propertyType": "Resort Villa",
+    "sourceUrl": "https://www.rentalescapes.com/rentals/luxury-vacation-rentals-usa/nevada/las-vegas/caesars-palace/trajan-128529",
+    "specs": {
+      "guests": 6,
+      "bedrooms": 3,
+      "bathrooms": 3.5,
+      "sizeInteriorM2": 966,
+      "sizeTotalM2": 966,
+      "poolM2": null,
+      "landHa": null,
+      "landNote": "10,400 ft² Tuscan-themed villa"
+    },
+    "description": {
+      "short": "10,400 sq ft Tuscan-themed villa with fireplace, billiards, media room, aquarium, plunge pool and jacuzzi.",
+      "full": "This 10,400 sq ft, 3-bedroom Tuscan-themed Las Vegas villa features a rustic yet elegant design... living room fireplace, wet bar, billiard table, dining room that seats 10 people, aquarium, media room, and a private backyard with a heated plunge pool and separate whirlpool spa.",
+      "seasonality": "Weekends, conventions and holidays busier. Tuscan-style Caesars Palace villa, fireplace, billiards, media room, aquarium, courtyard, plunge pool and jacuzzi."
+    },
+    "amenities": {
+      "general": ["Fireplace", "Air Conditioning", "Pool", "Hot Tub", "Wifi"],
+      "outdoor": ["Garden", "Patio", "Heated Pool", "Lounging Area", "Poolside Lounge Chairs", "Private Pool", "Plunge Pool", "Furnished Terrace/Balcony"],
+      "indoor": ["Bed Linens", "Pool/Beach Towels", "Toiletries", "Wet Bar", "Bath Towels", "Elevator"],
+      "kitchen": ["Microwave", "Refrigerator", "Coffee Maker", "Cooking Utensils", "Freezer", "Toaster", "Dining Area"],
+      "entertainment": ["Television", "Satellite Or Cable", "Pool Table", "Movie Theatre", "Sound System"],
+      "activities": ["Tennis", "Golf", "Swimming", "Hiking", "Yoga/Pilates"],
+      "nearby": ["ATM/Bank", "Fitness Center", "Groceries", "Massage Therapist", "Shopping", "Restaurants", "Health & Beauty Spa"]
+    },
+    "services": {
+      "included": ["Butler and housekeeping", "Aquarium", "Private backyard", "VIP Airport Transfers", "Private express elevators"],
+      "staff": ["Butler(s)"],
+      "extraCost": []
+    },
+    "rates": {
+      "nightly": "from ~$25,000",
+      "type": "STARTING_FROM",
+      "currency": "USD",
+      "notes": "Rates are dynamic. Contact for exact pricing.",
+      "observedPeriod": "Sep–Oct 2026"
+    },
+    "taxesAndFees": {
+      "tourismTax": { "type": "percentage", "value": 13.0, "name": "Transient Lodging / Room Tax", "note": "13%–13.38% depending on Primary Gaming Corridor" },
+      "serviceCharge": null,
+      "greenTax": null,
+      "damageWaiver": { "type": "fixed", "value": 299, "currency": "USD", "note": "Non-refundable (up to $2,000)" },
+      "other": []
+    },
+    "costStructureDefaults": {
+      "tourismTaxPct": 13.2,
+      "serviceChargePct": null,
+      "agencyOtaPct": 18,
+      "operatorPct": 12.5,
+      "greenTaxPerGuestNight": null,
+      "repairInsurancePctOfValue": 1.5
+    },
+    "estimates": {
+      "valueCentral": 10000000,
+      "valueRange": [6400000, 14400000],
+      "occupancy": null,
+      "provenance": "ESTIMATED / FRACTIONALLUXE"
+    },
+    "research": {
+      "confidence": "MEDIUM",
+      "lastUpdated": "2026-09-05",
+      "sources": ["Rental Escapes listing 128529", "Clark County / Las Vegas Transient Lodging Tax"]
+    }
+  },
+  {
+    "id": 10,
+    "listingId": "123320",
+    "name": "Villa La Datcha",
+    "slug": "villa-la-datcha-pedregal",
+    "location": {
+      "country": "Mexico",
+      "region": "Los Cabos",
+      "place": "Pedregal, Cabo San Lucas",
+      "full": "Pedregal, Cabo San Lucas, Los Cabos, Mexico"
+    },
+    "propertyType": "Beachfront Estate",
+    "sourceUrl": "https://www.rentalescapes.com/rentals/luxury-vacation-rentals-mexico/los-cabos/cabo/pedregal/villa-la-datcha-123320",
+    "specs": {
+      "guests": 20,
+      "bedrooms": 10,
+      "bathrooms": 10,
+      "sizeInteriorM2": null,
+      "sizeTotalM2": null,
+      "poolM2": null,
+      "landHa": null,
+      "landNote": "Three interconnected buildings, beachfront"
+    },
+    "description": {
+      "short": "Beachfront estate of three interconnected buildings with infinity pool, gym, spa (incl. snow room), whale watching views.",
+      "full": "La Datcha Cabo San Lucas is located on the Pacific coast... beachfront location... three interconnected buildings... two large and eight regular-size bedrooms... gym... spa area equipped with a sauna, Turkish bath and massage parlour... Mexico’s first ever snow room... infinity pool... From November to April, witness blue and humpback whales...",
+      "seasonality": "Nov–Apr busier; Aug–Oct closed for storm/hurricane season. Three connected buildings, infinity pool, gym/spa, whale watching, full staff."
+    },
+    "amenities": {
+      "general": ["Gated Community", "Fireplace", "Air Conditioning", "Pool", "Hot Tub", "Wifi", "Staff"],
+      "outdoor": ["Balcony", "Garden", "Parking", "Garden Chairs", "Dining Table", "Lounging Area", "Poolside Lounge Chairs", "Terrace", "Private Pool", "Beachfront", "Furnished Terrace/Balcony"],
+      "indoor": ["Washer/Dryer", "Bed Linens", "Pool/Beach Towels", "Toiletries", "Safe", "Wine Cellar", "Steam Room/Hammam", "Hair Dryer", "Bath Towels"],
+      "kitchen": ["Fully Equipped Kitchen", "Microwave", "Stove Top Burners", "Oven", "Iron & Board", "Refrigerator", "Coffee Maker", "Dish Washer", "Cooking Utensils", "Freezer", "Toaster", "Espresso Machine", "Dining Area"],
+      "entertainment": ["Television", "Music Library", "Satellite Or Cable", "Netflix", "Apple Tv"],
+      "activities": ["Sailing", "Tennis", "Cycling", "Scuba Diving", "Fishing", "Water Skiing", "Golf", "Surfing", "Wind Surfing", "Swimming", "Eco Tourism", "Beachcombing", "Jet Skiing", "Snorkeling", "Bird Watching", "Hiking", "Deepsea Fishing", "Stand-up Paddle Board", "Whale Watching (In-season)"],
+      "nearby": ["Fitness Center", "Groceries", "Massage Therapist", "Shopping", "Restaurants", "Health & Beauty Spa"]
+    },
+    "services": {
+      "included": ["Housekeepers, Chef, Butlers, Fitness Trainer, Masseur (treatments extra), Private Security", "Two Chauffeurs with 2 cars (roundtrip airport + San Lucas Marina transfers)"],
+      "staff": ["Chef", "Housekeeper(s)", "Security Guard(s)", "Butler(s)", "Driver", "Fitness Trainer"],
+      "extraCost": ["Masseur treatments"]
+    },
+    "rates": {
+      "nightly": "$23,750–$43,750",
+      "type": "RANGE",
+      "currency": "USD",
+      "notes": "Closed 15 Aug–15 Oct for hurricane season. Rates based on four nights; alternate pricing for longer stays.",
+      "observedPeriod": "Sep–Oct 2026 (note seasonal closure)"
+    },
+    "taxesAndFees": {
+      "tourismTax": { "type": "percentage", "value": 20, "name": "Tax (as listed); includes ISH ~4% + IVA 16% + possible other", "note": "Plus Baja California Sur Embrace It tourist tax ~470–488 MXN per person one-time for stays >24h" },
+      "serviceCharge": null,
+      "greenTax": null,
+      "damageWaiver": { "type": "fixed", "value": 299, "currency": "USD", "note": "Non-refundable (up to $2,000)" },
+      "other": []
+    },
+    "costStructureDefaults": {
+      "tourismTaxPct": 20,
+      "serviceChargePct": null,
+      "agencyOtaPct": 18,
+      "operatorPct": 12.5,
+      "greenTaxPerGuestNight": null,
+      "repairInsurancePctOfValue": 1.5
+    },
+    "estimates": {
+      "valueCentral": 17500000,
+      "valueRange": [12000000, 24000000],
+      "occupancy": null,
+      "provenance": "ESTIMATED / FRACTIONALLUXE"
+    },
+    "research": {
+      "confidence": "MEDIUM",
+      "lastUpdated": "2026-09-05",
+      "sources": ["Rental Escapes listing 123320", "Baja California Sur tourist tax / ISH / IVA"]
+    }
+  },
+  {
+    "id": 11,
+    "listingId": "109098",
+    "name": "Villa Galeazzo",
+    "slug": "villa-galeazzo-lake-como",
+    "location": {"country": "Italy", "region": "Lombardy", "place": "Tremezzo, Lake Como", "full": "Tremezzo, Lake Como, Lombardy, Italy"},
+    "propertyType": "Historic Palazzo",
+    "sourceUrl": "https://www.rentalescapes.com/rentals/luxury-vacation-rentals-europe/italy/lombardy/lake-como/galeazzo-109098",
+    "specs": {"guests": 12, "bedrooms": 6, "bathrooms": 6, "sizeInteriorM2": null, "sizeTotalM2": null, "poolM2": null, "landHa": null, "landNote": "Formal garden + large rear garden with pool; private mooring"},
+    "description": {
+      "short": "16th-century lakeside Palazzo restored in baroque style with private mooring, antique furnishings, heated pool and full staff.",
+      "full": "Villa Galeazzo is a historic residence that dates back to the 16th century... restored in a baroque style... located in Tremezzo on the western shore of Lake Como... private mooring and gated steps from the lake... furnished throughout with antique furniture and art... 6 bedroom suites have lakeside views... stunning gardens, a superb swimming pool... fully staffed with maid service and private chef.",
+      "seasonality": "Summer/early fall busier. Historic 16th–17th century palazzo, private dock, formal gardens, heated pool, antiques, full staff."
+    },
+    "amenities": {
+      "general": ["Air Conditioning", "Pool", "Wifi", "Staff"],
+      "outdoor": ["Garden", "Private Tennis Court", "Parking", "Garden Chairs", "Heated Pool", "Dining Table", "Lounging Area", "Poolside Lounge Chairs", "Terrace", "Private Pool", "Beachfront", "Furnished Terrace/Balcony"],
+      "indoor": ["Bed Linens", "Pool/Beach Towels", "Toiletries", "Heating"],
+      "kitchen": ["Fully Equipped Kitchen", "Stove Top Burners", "Oven", "Refrigerator", "Coffee Maker", "Cooking Utensils", "Freezer", "Dining Area"],
+      "entertainment": ["Television", "Dvd Player", "Satellite Or Cable"],
+      "activities": ["Tennis", "Golf", "Swimming", "Eco Tourism", "Bird Watching", "Hiking"],
+      "nearby": ["Fitness Center", "Marina", "Groceries", "Shopping", "Restaurants", "Health & Beauty Spa"]
+    },
+    "services": {
+      "included": ["Daily Housekeeping", "Butler", "Chef", "Daily Breakfast", "Pool heating", "Private boat dock"],
+      "staff": ["Chef", "Housekeeper(s)", "Butler(s)"],
+      "extraCost": []
+    },
+    "rates": {"nightly": "$18,000–$24,000", "type": "RANGE", "currency": "USD", "notes": "City tax per person per night cash on site. Security Deposit = 20% of total cost. Pets not allowed.", "observedPeriod": "Sep–Oct 2026"},
+    "taxesAndFees": {
+      "tourismTax": {"type": "fixed", "value": 3, "unit": "EUR per person per night", "name": "Imposta di soggiorno (Como area)", "note": "Approx. €3; typically limited nights"},
+      "serviceCharge": {"type": "percentage", "value": 10},
+      "greenTax": null,
+      "damageWaiver": null,
+      "other": [{"type": "percentage", "value": 20, "name": "Security Deposit", "note": "Of total cost"}]
+    },
+    "costStructureDefaults": {"tourismTaxFixedPerPersonNight": 3, "serviceChargePct": 10, "agencyOtaPct": 18, "operatorPct": 12.5, "repairInsurancePctOfValue": 1.5},
+    "estimates": {"valueCentral": 15000000, "valueRange": [9600000, 21600000], "occupancy": null, "provenance": "ESTIMATED / FRACTIONALLUXE"},
+    "research": {"confidence": "MEDIUM", "lastUpdated": "2026-09-05", "sources": ["Rental Escapes listing 109098", "Lake Como tourist tax"]}
+  },
+  {
+    "id": 12,
+    "listingId": "127825",
+    "name": "Embrace",
+    "slug": "embrace-gustavia",
+    "location": {"country": "St. Barthélemy", "region": "Gustavia", "place": "Gustavia Heights", "full": "Gustavia Heights, St. Barthélemy"},
+    "propertyType": "Contemporary Luxury Villa",
+    "sourceUrl": "https://www.rentalescapes.com/rentals/luxury-villa-rentals-caribbean/st-barthelemy/gustavia/embrace-127825",
+    "specs": {"guests": 10, "bedrooms": 5, "bathrooms": 5, "sizeInteriorM2": null, "sizeTotalM2": null, "poolM2": null, "landHa": null, "landNote": "Three levels with ocean views and sunsets"},
+    "description": {
+      "short": "Most exclusive contemporary villa in St-Barths with two infinity pools, cinema, games room, hammam and panoramic sunsets.",
+      "full": "A tribute to art, architecture and beauty, villa Embrace is the most exclusive property in St-Barths... heights of Gustavia... five magnificent suites... two infinity swimming pools (30m and 15m)... cinema room... game room... massage room and hammam...",
+      "seasonality": "Dec–Apr busier. Contemporary luxury villa, two infinity pools, cinema, games room, hammam, massage room, panoramic sunset."
+    },
+    "amenities": {
+      "general": ["Air Conditioning", "Pool", "Wifi", "Staff"],
+      "outdoor": ["Garden", "Parking", "Outdoor Grill", "Heated Pool", "Infinity Pool", "Lounging Area", "Poolside Lounge Chairs", "Private Pool"],
+      "indoor": ["Bed Linens", "Pool/Beach Towels", "Toiletries", "Safe", "Wine Cellar", "Gym/Fitness Room", "Steam Room/Hammam", "Home Office", "Bar", "Breakfast Bar", "Hair Dryer", "Bath Towels"],
+      "kitchen": ["Fully Equipped Kitchen", "Stove Top Burners", "Oven", "Refrigerator", "Coffee Maker", "Cooking Utensils", "Freezer", "Toaster", "Dining Area"],
+      "entertainment": ["Television", "Satellite Or Cable", "Sound System"],
+      "activities": ["Sailing", "Scuba Diving", "Fishing", "Swimming", "Beachcombing", "Snorkeling", "Deepsea Fishing"],
+      "nearby": ["Marina", "Groceries", "Massage Therapist", "Restaurants", "Health & Beauty Spa"]
+    },
+    "services": {
+      "included": ["Daily housekeeper (except Sundays and holidays)", "Gardener", "Pool maintenance", "Escort to the villa", "Welcome amenities", "Personalized island port or airport meet and greet"],
+      "staff": ["Gardener", "Housekeeper(s)", "Pool Maintenance Worker"],
+      "extraCost": ["Butler (optional)", "Chef (optional)", "Driver (optional)", "Yacht provisioning"]
+    },
+    "rates": {"nightly": "~$21,428", "type": "APPROXIMATE", "currency": "USD", "notes": "", "observedPeriod": "Sep–Oct 2026"},
+    "taxesAndFees": {
+      "tourismTax": {"type": "percentage", "value": 5, "name": "Tourism Tax / Taxe de séjour"},
+      "serviceCharge": {"type": "percentage", "value": 10},
+      "greenTax": null,
+      "damageWaiver": {"type": "fixed", "value": 299, "currency": "USD", "note": "Non-refundable (up to $2,000)"},
+      "other": []
+    },
+    "costStructureDefaults": {"tourismTaxPct": 5, "serviceChargePct": 10, "agencyOtaPct": 18, "operatorPct": 12.5, "repairInsurancePctOfValue": 1.5},
+    "estimates": {"valueCentral": 40000000, "valueRange": [28000000, 54000000], "occupancy": null, "provenance": "ESTIMATED / FRACTIONALLUXE"},
+    "research": {"confidence": "MEDIUM", "lastUpdated": "2026-09-05", "sources": ["Rental Escapes listing 127825", "St. Barthélemy 5% tourist tax"]}
+  },
+  {
+    "id": 13,
+    "listingId": "122422",
+    "name": "ANI Dominican Republic",
+    "slug": "ani-dominican-republic-cabrera",
+    "location": {"country": "Dominican Republic", "region": "North Coast", "place": "Cabrera", "full": "Cabrera, North Coast, Dominican Republic"},
+    "propertyType": "Private Resort (All-Inclusive)",
+    "sourceUrl": "https://www.rentalescapes.com/rentals/luxury-villa-rentals-caribbean/dominican-republic/cabrera/ani-dominican-republic-122422",
+    "specs": {"guests": 28, "bedrooms": 14, "bathrooms": 14, "sizeInteriorM2": null, "sizeTotalM2": null, "poolM2": null, "landHa": 4.2, "landNote": "4.2-acre (also noted 1.7 ha in sources – CONFLICTED) private peninsula"},
+    "description": {
+      "short": "All-inclusive private resort on its own peninsula with 14 suites, infinity pools, tennis, wellness center and 30+ staff.",
+      "full": "Claiming its own private peninsula... ÀNI offers an all-inclusive, 4.2-acre private resort... up to 28 guests across eight Ocean View Suites, two Bay View Suites... Villa Larimar and Villa Amber... infinity pools... Wellness Center... tennis court... team of over 30 staff...",
+      "seasonality": "Dry Caribbean season busier. Private resort, two villas, infinity pools, tennis, wellness, private beach, 30+ staff, all-inclusive."
+    },
+    "amenities": {
+      "general": ["Air Conditioning", "Pool", "Wifi", "Golf", "Staff"],
+      "outdoor": ["Balcony", "Garden", "Patio", "Private Tennis Court", "Parking", "Garden Chairs", "Outdoor Grill", "Dining Table", "Lounging Area", "Poolside Lounge Chairs", "Terrace", "Private Pool", "Beachfront", "Snorkeling Equipment", "Furnished Terrace/Balcony"],
+      "indoor": ["Bed Linens", "Pool/Beach Towels", "Toiletries", "Safe", "Gym/Fitness Room", "Bar"],
+      "kitchen": ["Fully Equipped Kitchen", "Microwave", "Stove Top Burners", "Ice Maker", "Oven", "Refrigerator", "Coffee Maker", "Cooking Utensils", "Freezer", "Toaster", "Dining Area"],
+      "entertainment": ["Television", "Satellite Or Cable", "Pool Table", "Netflix", "Apple Tv"],
+      "activities": ["Sailing", "Tennis", "Cycling", "Mountain Biking", "Scuba Diving", "Fishing", "Golf", "Horseback Riding", "Swimming", "Eco Tourism", "Beachcombing", "Snorkeling", "Bird Watching", "Hiking", "Deepsea Fishing", "Stand-up Paddle Board", "Yoga/Pilates"],
+      "nearby": ["Marina", "Groceries", "Massage Therapist", "Shopping", "Restaurants", "Health & Beauty Spa"]
+    },
+    "services": {
+      "included": ["Full-board gourmet menus", "Free-flow beverages", "Daily traditional spa treatments (up to 12/day)", "Babysitting up to 8h/day + kids program", "Beach butler + one beach BBQ", "One airport transfer + one sunset cruise", "Cooking/cocktail/cigar classes", "Daily laundry", "Unpacking/packing"],
+      "staff": ["Chef", "Housekeeper(s)", "Butler(s)"],
+      "extraCost": ["Babysitter beyond included"]
+    },
+    "rates": {"nightly": "~$27,000", "type": "APPROXIMATE", "currency": "USD", "notes": "All-inclusive. Kosher packages available.", "observedPeriod": "Sep–Oct 2026"},
+    "taxesAndFees": {
+      "tourismTax": {"type": "percentage", "value": 18, "name": "ITBIS"},
+      "serviceCharge": {"type": "percentage", "value": 10},
+      "greenTax": null,
+      "damageWaiver": {"type": "fixed", "value": 299, "currency": "USD", "note": "Non-refundable (up to $2,000)"},
+      "other": []
+    },
+    "costStructureDefaults": {"tourismTaxPct": 18, "serviceChargePct": 10, "agencyOtaPct": 18, "operatorPct": 12.5, "repairInsurancePctOfValue": 1.5},
+    "estimates": {"valueCentral": 60000000, "valueRange": [40000000, 84000000], "occupancy": null, "provenance": "ESTIMATED / FRACTIONALLUXE"},
+    "research": {"confidence": "MEDIUM", "lastUpdated": "2026-09-05", "sources": ["Rental Escapes listing 122422", "Dominican Republic ITBIS 18%"]}
+  },
+  {
+    "id": 14,
+    "listingId": "129548",
+    "name": "Mita Principe",
+    "slug": "mita-principe-punta-mita",
+    "location": {"country": "Mexico", "region": "Punta Mita", "place": "Ranchos Estates", "full": "Ranchos Estates, Punta Mita, Mexico"},
+    "propertyType": "Beachfront Estate",
+    "sourceUrl": "https://www.rentalescapes.com/rentals/luxury-vacation-rentals-mexico/punta-mita/ranchos-estates/mita-principe-129548",
+    "specs": {"guests": 18, "bedrooms": 9, "bathrooms": 9, "sizeInteriorM2": 2323, "sizeTotalM2": 2323, "poolM2": null, "landHa": null, "landNote": "25,000 ft² on prime beach"},
+    "description": {
+      "short": "9-bedroom 25,000 sq ft beachfront estate with heated infinity pool, Dolby Atmos cinema, rooftop sky bar, private spa and Technogym.",
+      "full": "Mita Principe is an extraordinary 9-bedroom, 25,000 square-foot estate... prime beach within the exclusive Ranchos community... panoramic views of the Bay of Banderas... massive heated infinity pool... Mexico’s only commercial-grade Dolby Atmos private cinema... rooftop sky bar... private spa... Technogym equipment.",
+      "seasonality": "Nov–Apr busier. Beachfront estate, heated infinity pool, Dolby Atmos cinema, rooftop sky bar, private spa and Technogym."
+    },
+    "amenities": {
+      "general": ["Air Conditioning", "Pool", "Hot Tub", "Wifi", "Staff"],
+      "outdoor": ["Infinity Pool", "Dining Table", "Lounging Area", "Terrace", "Private Pool", "Beachfront", "Beach Chairs", "Heated Pool"],
+      "indoor": ["Bed Linens", "Pool/Beach Towels", "Toiletries", "Gym/Fitness Room", "Bath Towels"],
+      "kitchen": ["Fully Equipped Kitchen", "Stove Top Burners", "Oven", "Refrigerator", "Coffee Maker", "Cooking Utensils", "Freezer", "Toaster", "Dining Area"],
+      "entertainment": ["Sonos/Bose Speakers", "Movie Theatre", "Smart Tv"],
+      "activities": ["Sailing", "Tennis", "Fishing", "Golf", "Surfing", "Swimming", "Beachcombing", "Jet Skiing", "Snorkeling"],
+      "nearby": ["Fitness Center", "Groceries", "Shopping", "Restaurants", "Health & Beauty Spa"]
+    },
+    "services": {
+      "included": ["Housekeeper, waiter, bartender, chef (three meals a day), house manager and laundry", "Six-person Golf Cart"],
+      "staff": ["Chef", "House Manager", "Housekeeper(s)", "Waiter", "Bartender/Mixologist"],
+      "extraCost": []
+    },
+    "rates": {"nightly": "~$20,000", "type": "APPROXIMATE", "currency": "USD", "notes": "Security Deposit = one night. F&B deposit $150/pp/day. 15% service charge on final bill. Resort fee for facilities.", "observedPeriod": "Sep–Oct 2026"},
+    "taxesAndFees": {
+      "tourismTax": {"type": "percentage", "value": 16, "name": "Tax (IVA)"},
+      "serviceCharge": {"type": "percentage", "value": 10, "name": "Service Fee"},
+      "greenTax": null,
+      "damageWaiver": null,
+      "other": [{"type": "percentage", "value": 10, "name": "Admin Fee"}]
+    },
+    "costStructureDefaults": {"tourismTaxPct": 16, "serviceChargePct": 10, "agencyOtaPct": 18, "operatorPct": 12.5, "repairInsurancePctOfValue": 1.5},
+    "estimates": {"valueCentral": 30000000, "valueRange": [20000000, 42000000], "occupancy": null, "provenance": "ESTIMATED / FRACTIONALLUXE"},
+    "research": {"confidence": "MEDIUM", "lastUpdated": "2026-09-05", "sources": ["Rental Escapes listing 129548", "Nayarit ISH ~3% + IVA 16%"]}
+  },
+  {
+    "id": 15,
+    "listingId": "122903",
+    "name": "La Dolce Vita",
+    "slug": "la-dolce-vita-long-bay",
+    "location": {"country": "Turks and Caicos", "region": "Providenciales", "place": "Long Bay", "full": "Long Bay, Providenciales, Turks and Caicos"},
+    "propertyType": "Beachfront Mansion",
+    "sourceUrl": "https://www.rentalescapes.com/rentals/luxury-villa-rentals-caribbean/turks-and-caicos/providenciales/long-bay/la-dolce-vita--122903",
+    "specs": {"guests": 18, "bedrooms": 9, "bathrooms": 9, "sizeInteriorM2": null, "sizeTotalM2": null, "poolM2": null, "landHa": null, "landNote": "12,300+ ft² interior; 430 ft private beach"},
+    "description": {
+      "short": "Classic New England-style mansion with 430 ft private beach, ocean-view pools, jacuzzi, gym and separate guest house.",
+      "full": "This Long Bay Mansion is a study in timeless classic architecture... 430 feet of idyllic private beachfront... Over 12,300 square feet... Nine en suite bedrooms... primary King Suite with outdoor bathing area... private pool table and well-equipped gym... wraparound infinity pool...",
+      "seasonality": "Dec–Apr busier. Classic New England architecture, long private beach, ocean-view pools, jacuzzi, gym, separate guest house."
+    },
+    "amenities": {
+      "general": ["Air Conditioning", "Pool", "Hot Tub", "Wifi", "Staff"],
+      "outdoor": ["Balcony", "Garden", "Patio", "Parking", "Dining Table", "Lounging Area", "Poolside Lounge Chairs", "Terrace", "Private Pool", "Beachfront", "Fire Pit"],
+      "indoor": ["Washer/Dryer", "Bed Linens", "Pool/Beach Towels", "Toiletries", "Gym/Fitness Room", "Wet Bar", "Bar", "Breakfast Bar", "Bath Towels"],
+      "kitchen": ["Fully Equipped Kitchen", "Microwave", "Stove Top Burners", "Oven", "Refrigerator", "Coffee Maker", "Cooking Utensils", "Freezer", "Toaster", "Dining Area"],
+      "entertainment": ["Television", "Satellite Or Cable"],
+      "activities": ["Sailing", "Tennis", "Cycling", "Scuba Diving", "Fishing", "Golf", "Swimming", "Beachcombing", "Snorkeling", "Bird Watching", "Hiking"],
+      "nearby": ["Fitness Center", "Marina", "Groceries", "Massage Therapist", "Shopping", "Restaurants", "Health & Beauty Spa"]
+    },
+    "services": {
+      "included": ["Housekeeping, chef service & butlers", "VIP round-trip airport transfers", "Non-motorized watersports"],
+      "staff": ["Chef", "Housekeeper(s)", "Butler(s)"],
+      "extraCost": ["Driver (optional)", "Food and beverages", "Grocery pre-stocking"]
+    },
+    "rates": {"nightly": "DYNAMIC", "type": "DYNAMIC", "currency": "USD", "notes": "Exact dates required for pricing.", "observedPeriod": "Dynamic"},
+    "taxesAndFees": {
+      "tourismTax": {"type": "percentage", "value": 12, "name": "Hotel and Tourism Tax"},
+      "serviceCharge": {"type": "percentage", "value": 10},
+      "greenTax": null,
+      "damageWaiver": {"type": "fixed", "value": 299, "currency": "USD", "note": "Non-refundable (up to $2,000)"},
+      "other": [{"type": "percentage", "value": 5, "name": "Facility Fee"}]
+    },
+    "costStructureDefaults": {"tourismTaxPct": 12, "serviceChargePct": 10, "agencyOtaPct": 18, "operatorPct": 12.5, "repairInsurancePctOfValue": 1.5},
+    "estimates": {"valueCentral": 32000000, "valueRange": [25600000, 38400000], "occupancy": null, "provenance": "ESTIMATED / FRACTIONALLUXE"},
+    "research": {"confidence": "HIGH", "lastUpdated": "2026-09-05", "sources": ["Rental Escapes listing 122903", "Turks and Caicos 12% Hotel & Tourism Tax"]}
+  },
+  {
+    "id": 16,
+    "listingId": "126870",
+    "name": "Tranquility",
+    "slug": "tranquility-leeward",
+    "location": {"country": "Turks and Caicos", "region": "Providenciales", "place": "Leeward / Grace Bay", "full": "Leeward / Grace Bay area, Providenciales, Turks and Caicos"},
+    "propertyType": "Oceanfront Estate",
+    "sourceUrl": "https://www.rentalescapes.com/rentals/luxury-villa-rentals-caribbean/turks-and-caicos/providenciales/leeward/tranquility--126870",
+    "specs": {"guests": 22, "bedrooms": 11, "bathrooms": 13, "sizeInteriorM2": null, "sizeTotalM2": null, "poolM2": null, "landHa": 11, "landNote": "11 acres landscaped grounds; 8-bed main house + 3-bed guest house"},
+    "description": {
+      "short": "Grand oceanfront estate on 11 acres with resort-style pool, tennis/pickleball, gym, sauna, spa, private dock and 9 staff.",
+      "full": "A grand oceanfront estate offering unparalleled amenities and absolute privacy on Grace Bay... 11 acres... eight-bedroom main house and a secluded three-bedroom guest house... resort-style pool... floodlit tennis/pickleball/basketball court... full gym, yoga pavilion, sauna, spa and hot tub... private dock... staff of nine.",
+      "seasonality": "High Caribbean season busier. 8-bedroom main house + 3-bedroom guest house, resort-style pool, tennis/pickleball, gym, sauna, spa, private dock, 9 staff."
+    },
+    "amenities": {
+      "general": ["Air Conditioning", "Pool", "Hot Tub", "Wifi", "Staff"],
+      "outdoor": ["Garden", "Private Tennis Court", "Heated Pool", "Dining Table", "Outdoor Shower", "Lounging Area", "Sauna", "Poolside Lounge Chairs", "Private Pool", "Beachfront", "Fire Pit", "Mosquito System", "Furnished Terrace/Balcony"],
+      "indoor": ["Bed Linens", "Pool/Beach Towels", "Toiletries", "Safe", "Gym/Fitness Room", "Security System", "Bath Towels", "Elevator"],
+      "kitchen": ["Fully Equipped Kitchen", "Microwave", "Stove Top Burners", "Ice Maker", "Oven", "Iron & Board", "Refrigerator", "Coffee Maker", "Cooking Utensils", "Freezer", "Toaster", "Dining Area"],
+      "entertainment": ["Satellite Or Cable", "Books", "Movie Theatre", "Apple Tv", "Table Tennis", "Smart Tv"],
+      "activities": ["Sailing", "Tennis", "Scuba Diving", "Fishing", "Golf", "Horseback Riding", "Swimming", "Beachcombing", "Jet Skiing", "Snorkeling", "Bird Watching", "Hiking", "Deepsea Fishing", "Stand-up Paddle Board", "Parasailing", "Yoga/Pilates"],
+      "nearby": ["Fitness Center", "Marina", "Groceries", "Massage Therapist", "Shopping", "Restaurants", "Health & Beauty Spa"]
+    },
+    "services": {
+      "included": ["Housekeeper (3x), Chef (2x) and butler (4x)", "Round trip airport transfer"],
+      "staff": ["Chef", "Housekeeper(s)", "Butler(s)"],
+      "extraCost": ["Babysitter (optional)"]
+    },
+    "rates": {"nightly": "~$21,500", "type": "APPROXIMATE", "currency": "USD", "notes": "Security deposit equal to one night's stay.", "observedPeriod": "Sep–Oct 2026"},
+    "taxesAndFees": {
+      "tourismTax": {"type": "percentage", "value": 12, "name": "Hotel and Tourism Tax"},
+      "serviceCharge": {"type": "percentage", "value": 10},
+      "greenTax": null,
+      "damageWaiver": null,
+      "other": []
+    },
+    "costStructureDefaults": {"tourismTaxPct": 12, "serviceChargePct": 10, "agencyOtaPct": 18, "operatorPct": 12.5, "repairInsurancePctOfValue": 1.5},
+    "estimates": {"valueCentral": 40000000, "valueRange": [28000000, 54000000], "occupancy": null, "provenance": "ESTIMATED / FRACTIONALLUXE"},
+    "research": {"confidence": "MEDIUM", "lastUpdated": "2026-09-05", "sources": ["Rental Escapes listing 126870", "Turks and Caicos 12% tax"]}
+  },
+  {
+    "id": 17,
+    "listingId": "130397",
+    "name": "Pearls of Long Bay Estate",
+    "slug": "pearls-of-long-bay-estate",
+    "location": {"country": "Turks and Caicos", "region": "Providenciales", "place": "Long Bay", "full": "Long Bay, Providenciales, Turks and Caicos"},
+    "propertyType": "Beachfront Estate (3 villas)",
+    "sourceUrl": "https://www.rentalescapes.com/rentals/luxury-villa-rentals-caribbean/turks-and-caicos/providenciales/long-bay/pearls-of-long-bay-estate-130397",
+    "specs": {"guests": 56, "bedrooms": 28, "bathrooms": 28, "sizeInteriorM2": null, "sizeTotalM2": null, "poolM2": null, "landHa": null, "landNote": "Each villa ~12,000 ft²; 450 ft beachfront"},
+    "description": {
+      "short": "Three large beachfront villas (two 8-bed, one 7-bed) with championship tennis, gym, Turkish sauna, steam room and massage pavilion.",
+      "full": "Located along Provo’s stunning Long Bay Beach... three expansive homes... 450ft of beachfront... two 8 bed, 8.5 bath and one 7 bed, 7.5 bath beachfront villas... each spanning 12,000 square feet... championship tennis court, state-of-the-art gym, Turkish sauna, steam room and massage pavilion.",
+      "seasonality": "High season busier. Three large beachfront villas, championship tennis, gym, Turkish sauna, steam room, massage pavilion."
+    },
+    "amenities": {
+      "general": ["Air Conditioning", "Pool", "Hot Tub", "Wifi", "Staff"],
+      "outdoor": ["Balcony", "Patio", "Private Tennis Court", "Kayak", "Parking", "Outdoor Grill", "Dining Table", "Outdoor Shower", "Lounging Area", "Sauna", "Poolside Lounge Chairs", "Terrace", "Private Pool", "Fire Pit", "Snorkeling Equipment", "Private Pickleball Court", "Outdoor Play Area/Playground"],
+      "indoor": ["Washer/Dryer", "Bed Linens", "Pool/Beach Towels", "Toiletries", "Safe", "Gym/Fitness Room", "Wine Fridge", "Steam Room/Hammam", "Home Office", "Breakfast Bar", "Bath Towels"],
+      "kitchen": ["Fully Equipped Kitchen", "Microwave", "Stove Top Burners", "Ice Maker", "Oven", "Iron & Board", "Refrigerator", "Coffee Maker", "Dish Washer", "Cooking Utensils", "Dining Area", "Nespresso Machine"],
+      "entertainment": ["Television", "Dvd Player", "Satellite Or Cable", "Bluray Player", "Board Games", "Netflix", "Sonos/Bose Speakers", "Movie Theatre", "Apple Tv", "Smart Tv", "Sound System", "Amazon Prime Video"],
+      "activities": ["Sailing", "Tennis", "Cycling", "Scuba Diving", "Fishing", "Golf", "Horseback Riding", "Swimming", "Beachcombing", "Snorkeling", "Deepsea Fishing", "Stand-up Paddle Board"],
+      "nearby": ["Fitness Center", "Marina", "Groceries", "Massage Therapist", "Shopping", "Restaurants", "Health & Beauty Spa"]
+    },
+    "services": {
+      "included": ["Butler (daily 7am-9pm), chef (7am-9pm, 3 meals), housekeeper (daily 7am-7pm), security guard (8pm-6am)", "Two round-trip airport transfers per villa"],
+      "staff": ["Chef", "Housekeeper(s)", "Security Guard(s)", "Butler(s)"],
+      "extraCost": ["Bartender, extra security, fitness instructor, driver", "Villa pre-stocking", "Laundry", "Spa"]
+    },
+    "rates": {"nightly": "~$28,100", "type": "APPROXIMATE", "currency": "USD", "notes": "No pets. Non-smoking.", "observedPeriod": "Sep–Oct 2026"},
+    "taxesAndFees": {
+      "tourismTax": {"type": "percentage", "value": 12, "name": "Hotel and Tourism Tax"},
+      "serviceCharge": {"type": "percentage", "value": 10},
+      "greenTax": null,
+      "damageWaiver": null,
+      "other": [{"type": "fixed", "value": 2000, "currency": "USD", "name": "Security Deposit", "note": "Refundable"}]
+    },
+    "costStructureDefaults": {"tourismTaxPct": 12, "serviceChargePct": 10, "agencyOtaPct": 18, "operatorPct": 12.5, "repairInsurancePctOfValue": 1.5},
+    "estimates": {"valueCentral": 70000000, "valueRange": [48000000, 96000000], "occupancy": null, "provenance": "ESTIMATED / FRACTIONALLUXE"},
+    "research": {"confidence": "MEDIUM", "lastUpdated": "2026-09-05", "sources": ["Rental Escapes listing 130397", "Turks and Caicos 12% tax"]}
+  },
+  {
+    "id": 18,
+    "listingId": "127483",
+    "name": "Dream Pavilion",
+    "slug": "dream-pavilion-ambergris-cay",
+    "location": {"country": "Turks and Caicos", "region": "Ambergris Cay", "place": "Ambergris Cay", "full": "Ambergris Cay, Turks and Caicos"},
+    "propertyType": "Private Island Villa",
+    "sourceUrl": "https://www.rentalescapes.com/rentals/luxury-villa-rentals-caribbean/turks-and-caicos/ambergris-cay/dream-pavilion-127483",
+    "specs": {"guests": 14, "bedrooms": 6, "bathrooms": 6, "sizeInteriorM2": null, "sizeTotalM2": null, "poolM2": null, "landHa": null, "landNote": "Largest residence on private island; private beach cove"},
+    "description": {
+      "short": "Largest and most luxurious villa on private Ambergris Cay with two pools, private chef & butler, private air transfer and non-motorized water sports.",
+      "full": "Dream Pavilion is one of the most exclusive luxury villas in Turks and Caicos... private island of Ambergris Cay... 6-bedroom villa... lush private garden, 2 swimming pools... private chef and butler... private air transfers... non-motorized water sports...",
+      "seasonality": "High season busier. Private-island villa with two pools, private garden/beach, dedicated chef/butler, private air transfer, non-motorized water activities."
+    },
+    "amenities": {
+      "general": ["Air Conditioning", "Pool", "Wifi", "Staff"],
+      "outdoor": ["Garden", "Kayak", "Outdoor Grill", "Bicycles", "Communal Pool", "Infinity Pool", "Dining Table", "Lounging Area", "Poolside Lounge Chairs", "Terrace", "Private Pool", "Beachfront", "Fire Pit", "Snorkeling Equipment", "Watersports Equipment"],
+      "indoor": ["Bed Linens", "Pool/Beach Towels", "Toiletries", "Safe", "Bar", "Breakfast Bar", "Hair Dryer", "Bath Towels"],
+      "kitchen": ["Fully Equipped Kitchen", "Microwave", "Stove Top Burners", "Oven", "Refrigerator", "Coffee Maker", "Cooking Utensils", "Freezer", "Toaster", "Dining Area"],
+      "entertainment": ["Television", "Satellite Or Cable", "Smart Tv"],
+      "activities": ["Sailing", "Cycling", "Scuba Diving", "Fishing", "Swimming", "Eco Tourism", "Beachcombing", "Snorkeling", "Hiking", "Deepsea Fishing", "Stand-up Paddle Board", "Yoga/Pilates"],
+      "nearby": ["Groceries", "Massage Therapist", "Restaurants", "Health & Beauty Spa"]
+    },
+    "services": {
+      "included": ["Chef, butler and daily housekeeping (nightly turndown)", "Roundtrip private air transfers from PLS", "Gourmet dining options at Cay restaurants", "Unlimited domestic/premium beverages", "Non-motorized water sports", "Island amenities (pool, tennis, pickleball, fitness, e-bikes)", "Bone fishing lesson, guided walks/tours"],
+      "staff": ["Chef", "Housekeeper(s)", "Butler(s)"],
+      "extraCost": ["Babysitter, yoga instructor", "Spa", "Motorized water excursions", "Reserve wines"]
+    },
+    "rates": {"nightly": "~$18,029", "type": "APPROXIMATE", "currency": "USD", "notes": "", "observedPeriod": "Sep–Oct 2026"},
+    "taxesAndFees": {
+      "tourismTax": {"type": "percentage", "value": 12, "name": "Hotel and Tourism Tax"},
+      "serviceCharge": null,
+      "greenTax": null,
+      "damageWaiver": {"type": "fixed", "value": 299, "currency": "USD", "note": "Non-refundable (up to $2,000)"},
+      "other": []
+    },
+    "costStructureDefaults": {"tourismTaxPct": 12, "serviceChargePct": null, "agencyOtaPct": 18, "operatorPct": 12.5, "repairInsurancePctOfValue": 1.5},
+    "estimates": {"valueCentral": 24000000, "valueRange": [16000000, 33600000], "occupancy": null, "provenance": "ESTIMATED / FRACTIONALLUXE"},
+    "research": {"confidence": "MEDIUM", "lastUpdated": "2026-09-05", "sources": ["Rental Escapes listing 127483", "Turks and Caicos 12% tax"]}
+  },
+  {
+    "id": 19,
+    "listingId": "108856",
+    "name": "ANI Thailand",
+    "slug": "ani-thailand-koh-yao-noi",
+    "location": {"country": "Thailand", "region": "Phang Nga Bay", "place": "Koh Yao Noi", "full": "Koh Yao Noi, Phang Nga Bay, Thailand"},
+    "propertyType": "Private Resort (All-Inclusive)",
+    "sourceUrl": "https://www.rentalescapes.com/rentals/luxury-villa-rentals-asia/thailand/koh-yaonoi/phang-ngabay/ani-thailand-108856",
+    "specs": {"guests": 20, "bedrooms": 10, "bathrooms": 10, "sizeInteriorM2": null, "sizeTotalM2": null, "poolM2": null, "landHa": 2, "landNote": "~2 ha (half a hectare noted in some text – use 2 ha from original research)"},
+    "description": {
+      "short": "All-inclusive private resort on Koh Yao Noi with Lanna-inspired architecture, pools, private beach, spa, gym and 22 staff.",
+      "full": "Located on the unspoiled island of Koh Yao Noi within two acres of lush gardens... all-inclusive private resort... up to 20 guests across two Ocean Villas, two Family Villas and four Pool Suites... direct access to sandy beach... Lanna architecture... 22 staff...",
+      "seasonality": "Nov–Apr busier. Private resort, Lanna-inspired architecture, pools, private beach, spa, gym, 20+ staff, all-inclusive."
+    },
+    "amenities": {
+      "general": ["Air Conditioning", "Pool", "Wifi", "Staff"],
+      "outdoor": ["Balcony", "Garden", "Bicycles", "Dining Table", "Lounging Area", "Poolside Lounge Chairs", "Terrace", "Private Pool", "Beachfront", "Furnished Terrace/Balcony"],
+      "indoor": ["Bed Linens", "Pool/Beach Towels", "Toiletries", "Bath Towels"],
+      "kitchen": ["Fully Equipped Kitchen", "Microwave", "Stove Top Burners", "Oven", "Iron & Board", "Refrigerator", "Coffee Maker", "Cooking Utensils", "Freezer", "Toaster", "Dining Area"],
+      "entertainment": ["Television", "Satellite Or Cable", "Netflix"],
+      "activities": ["Sailing", "Tennis", "Cycling", "Scuba Diving", "Fishing", "Water Skiing", "Golf", "Wind Surfing", "Swimming", "Eco Tourism", "Beachcombing", "Jet Skiing", "Snorkeling", "Bird Watching", "Hiking", "Stand-up Paddle Board", "Yoga/Pilates"],
+      "nearby": ["Fitness Center", "Marina", "Groceries", "Massage Therapist", "Shopping", "Restaurants", "Health & Beauty Spa"]
+    },
+    "services": {
+      "included": ["Roundtrip transfers from Phuket or Krabi (once per group)", "VIP airport experience", "Up to 10 spa treatments/day", "Private yoga + Sound Bowl Healing (once per stay)", "Daily laundry", "Gourmet full meals", "Babysitting up to 8h/day"],
+      "staff": ["Housekeeper(s)", "Laundress", "Babysitter"],
+      "extraCost": []
+    },
+    "rates": {"nightly": "~$22,000", "type": "APPROXIMATE", "currency": "USD", "notes": "Additional guests may be permitted at extra fee.", "observedPeriod": "Sep–Oct 2026"},
+    "taxesAndFees": {
+      "tourismTax": {"type": "percentage", "value": 8.7, "name": "Tax (as listed)"},
+      "serviceCharge": {"type": "percentage", "value": 10},
+      "greenTax": null,
+      "damageWaiver": {"type": "fixed", "value": 299, "currency": "USD", "note": "Non-refundable (up to $2,000)"},
+      "other": []
+    },
+    "costStructureDefaults": {"tourismTaxPct": 8.7, "serviceChargePct": 10, "agencyOtaPct": 18, "operatorPct": 12.5, "repairInsurancePctOfValue": 1.5},
+    "estimates": {"valueCentral": 52500000, "valueRange": [36000000, 72000000], "occupancy": null, "provenance": "ESTIMATED / FRACTIONALLUXE"},
+    "research": {"confidence": "MEDIUM", "lastUpdated": "2026-09-05", "sources": ["Rental Escapes listing 108856", "Thailand tourism VAT context"]}
+  },
+  {
+    "id": 20,
+    "listingId": "108860",
+    "name": "ANI Sri Lanka",
+    "slug": "ani-sri-lanka-maliyadda",
+    "location": {"country": "Sri Lanka", "region": "South Coast", "place": "Maliyadda", "full": "Maliyadda, South Coast, Sri Lanka"},
+    "propertyType": "Private Coastal Resort (All-Inclusive)",
+    "sourceUrl": "https://www.rentalescapes.com/rentals/luxury-villa-rentals-asia/sri-lanka/maliyadda/ani-sri-lanka-108860",
+    "specs": {"guests": 30, "bedrooms": 15, "bathrooms": 15, "sizeInteriorM2": null, "sizeTotalM2": null, "poolM2": null, "landHa": 5, "landNote": "Garden ~5 ha; two main villas (Monara & Divia)"},
+    "description": {
+      "short": "All-inclusive private coastal resort with two infinity pools, beach access, spa and full staff on Sri Lanka’s south coast.",
+      "full": "Embraced by verdant jungle on an idyllic, palm-fringed beach... panoramic views of the Indian Ocean... two infinity swimming pools... two poolside Living Salas (Villa Monara and Villa Divia)... direct beach access... Tropical Modernism design...",
+      "seasonality": "Dry season on south coast busier. Private coastal resort, two main villas, infinity pools, beach access, spa and full staff."
+    },
+    "amenities": {
+      "general": ["Air Conditioning", "Pool", "Wifi", "Staff"],
+      "outdoor": ["Garden", "Patio", "Private Tennis Court", "Parking", "Dining Table", "Shuffleboard", "Lounging Area", "Poolside Lounge Chairs", "Terrace", "Private Pool", "Beachfront", "Plunge Pool"],
+      "indoor": ["Washer/Dryer", "Bed Linens", "Pool/Beach Towels", "Toiletries", "Bath Towels"],
+      "kitchen": ["Fully Equipped Kitchen", "Microwave", "Stove Top Burners", "Oven", "Refrigerator", "Coffee Maker", "Cooking Utensils", "Freezer", "Toaster", "Dining Area"],
+      "entertainment": ["Television", "Satellite Or Cable", "Books", "Pool Table", "Netflix", "Apple Tv"],
+      "activities": ["Sailing", "Tennis", "Cycling", "Mountain Biking", "Fishing", "Surfing", "Swimming", "Beachcombing", "Bird Watching", "Hiking", "Yoga/Pilates"],
+      "nearby": ["Fitness Center", "Groceries", "Massage Therapist", "Shopping", "Restaurants", "Health & Beauty Spa"]
+    },
+    "services": {
+      "included": ["Gourmet full meals + daily snacks", "Free-flow beverages", "Daily massages and spa treatments", "One round-trip airport transfer (Colombo)", "Laundry (wash and fold)", "High-speed Wi-Fi, Netflix, Apple TV, Apple Music"],
+      "staff": ["Chef", "Housekeeper(s)", "Laundress", "Babysitter", "Fitness Trainer"],
+      "extraCost": ["Yoga Instructor (optional)"]
+    },
+    "rates": {"nightly": "~$27,000", "type": "APPROXIMATE", "currency": "USD", "notes": "7-night minimum over Easter/Passover.", "observedPeriod": "Sep–Oct 2026"},
+    "taxesAndFees": {
+      "tourismTax": {"type": "percentage", "value": 22.16, "name": "Government Taxes (includes VAT 18% + TDL + SSCL components)"},
+      "serviceCharge": {"type": "percentage", "value": 13},
+      "greenTax": null,
+      "damageWaiver": null,
+      "other": []
+    },
+    "costStructureDefaults": {"tourismTaxPct": 22.16, "serviceChargePct": 13, "agencyOtaPct": 18, "operatorPct": 12.5, "repairInsurancePctOfValue": 1.5},
+    "estimates": {"valueCentral": 57500000, "valueRange": [40000000, 78000000], "occupancy": null, "provenance": "ESTIMATED / FRACTIONALLUXE"},
+    "research": {"confidence": "MEDIUM", "lastUpdated": "2026-09-05", "sources": ["Rental Escapes listing 108860", "Sri Lanka VAT 18% + TDL + SSCL"]}
+  },
+  {
+    "id": 21,
+    "listingId": "106441",
+    "name": "Rio Chico Private Estate",
+    "slug": "rio-chico-private-estate-ocho-rios",
+    "location": {"country": "Jamaica", "region": "Ocho Rios", "place": "Ocho Rios", "full": "Ocho Rios, Jamaica"},
+    "propertyType": "Clifftop Private Estate",
+    "sourceUrl": "https://www.rentalescapes.com/rentals/luxury-villa-rentals-caribbean/jamaica/ocho-rios/rio-chico-private-estate-106441",
+    "specs": {"guests": 24, "bedrooms": 12, "bathrooms": 12, "sizeInteriorM2": null, "sizeTotalM2": null, "poolM2": null, "landHa": 14, "landNote": "14-acre estate with multiple pools including ocean-edge and Dunn’s River natural pool"},
+    "description": {
+      "short": "14-acre clifftop estate with multiple pools (including hidden ocean pool and Dunn’s River natural pool), tropical gardens, tennis and full staff.",
+      "full": "Pass through the wrought iron gates... 14-acre estate... Set high on the cliffs overlooking the Caribbean Sea... bluff-top main pool... second hidden pool steps down directly into the ocean... Dunn’s River Pool (natural river pool)... lagoon-style infinity-edge pool... tennis court...",
+      "seasonality": "Caribbean winter season busier. Clifftop estate, multiple pools including hidden ocean pool and Dunn's River natural pool, tropical gardens, tennis, full staff."
+    },
+    "amenities": {
+      "general": ["Air Conditioning", "Pool", "Wifi", "Staff"],
+      "outdoor": ["Balcony", "Garden", "Patio", "Private Tennis Court", "Kayak", "Parking", "Garden Chairs", "Outdoor Grill", "Infinity Pool", "Dining Table", "Lounging Area", "Poolside Lounge Chairs", "Terrace", "Private Pool", "Beachfront", "Fire Pit", "Beach Chairs", "Watersports Equipment", "Furnished Terrace/Balcony", "Gazebo", "Private Beach", "Private Pickleball Court"],
+      "indoor": ["Bed Linens", "Pool/Beach Towels", "Toiletries", "Gym/Fitness Room", "Home Office", "Bar", "Bath Towels"],
+      "kitchen": ["Fully Equipped Kitchen", "Microwave", "Stove Top Burners", "Oven", "Refrigerator", "Coffee Maker", "Cooking Utensils", "Freezer", "Toaster", "Dining Area"],
+      "entertainment": ["Television", "Dvd Player", "Satellite Or Cable", "Videogames", "Cd Player", "Pool Table", "Board Games"],
+      "activities": ["Sailing", "Tennis", "Cycling", "Scuba Diving", "Fishing", "Water Skiing", "Golf", "Surfing", "Wind Surfing", "Horseback Riding", "Swimming", "Eco Tourism", "Beachcombing", "Jet Skiing", "Snorkeling", "Bird Watching", "Hiking", "Deepsea Fishing", "Stand-up Paddle Board", "Yoga/Pilates"],
+      "nearby": ["ATM/Bank", "Fitness Center", "Groceries", "Medical Services", "Massage Therapist", "Shopping", "Restaurants", "Health & Beauty Spa"]
+    },
+    "services": {
+      "included": ["Executive Chef, two butlers and housekeeping", "Oversized freshwater Jacuzzi", "Full-size tennis court, half basketball, darts, croquet, trampoline", "Sea toys (sailboat, kayaks, paddleboards, windsurfer, paddleboat)"],
+      "staff": ["Chef", "Housekeeper(s)", "Security Guard(s)", "Laundress", "Butler(s)"],
+      "extraCost": ["Driver (optional)", "Babysitter (optional)", "Food and beverage stock", "Spa services"]
+    },
+    "rates": {"nightly": "~$23,179", "type": "APPROXIMATE", "currency": "USD", "notes": "Dynamic rates. Staff gratuity 10–15% of villa rate. Security Deposit $10,000 refundable.", "observedPeriod": "Sep–Oct 2026"},
+    "taxesAndFees": {
+      "tourismTax": {"type": "percentage", "value": 10, "name": "GCT / Accommodation Tax (Jamaica)", "note": "Approx. 10–15% combined GCT + tourism components typical"},
+      "serviceCharge": null,
+      "greenTax": null,
+      "damageWaiver": null,
+      "other": [{"type": "fixed", "value": 10000, "currency": "USD", "name": "Security Deposit", "note": "Refundable"}, {"type": "percentage", "value": 10, "name": "Staff Gratuity", "note": "10% high / 15% low season"}]
+    },
+    "costStructureDefaults": {"tourismTaxPct": 10, "serviceChargePct": null, "agencyOtaPct": 18, "operatorPct": 12.5, "repairInsurancePctOfValue": 1.5},
+    "estimates": {"valueCentral": 25000000, "valueRange": [16000000, 36000000], "occupancy": null, "provenance": "ESTIMATED / FRACTIONALLUXE"},
+    "research": {"confidence": "MEDIUM", "lastUpdated": "2026-09-05", "sources": ["Rental Escapes listing 106441", "Jamaica GCT / tourism tax context"]}
+  },
+  {
+    "id": 22,
+    "listingId": "129549",
+    "name": "Forza Modern",
+    "slug": "forza-modern-holmby-hills",
+    "location": {"country": "USA", "region": "California", "place": "Holmby Hills, Los Angeles", "full": "Holmby Hills, Los Angeles, California, USA"},
+    "propertyType": "Modern Architectural Estate",
+    "sourceUrl": "https://www.rentalescapes.com/rentals/luxury-vacation-rentals-usa/california/los-angeles-california/holmby-hills/forza-modern-129549",
+    "specs": {"guests": 12, "bedrooms": 6, "bathrooms": 10.5, "sizeInteriorM2": null, "sizeTotalM2": null, "poolM2": null, "landHa": null, "landNote": "3-level modern estate with valley/mountain views"},
+    "description": {
+      "short": "Newly built modern architectural estate with chef’s kitchen, theatre, gym/spa, pool, elevator and valley/mountain views.",
+      "full": "The Forza Modern, a stunning, newly built architectural estate... 6-bedroom, 12-bathroom sanctuary across 3 expansive levels... chef’s kitchen... state-of-the-art theater... resort-inspired gym and spa... sparkling pool and spa... fully equipped BBQ kitchen...",
+      "seasonality": "Demand high year-round in Los Angeles. Modern architectural home, professional kitchen, theatre, gym/spa, pool, elevator, valley/mountain views."
+    },
+    "amenities": {
+      "general": ["Fireplace", "Air Conditioning", "Pool", "Hot Tub", "Wifi"],
+      "outdoor": ["Balcony", "Outdoor Grill", "Dining Table", "Lounging Area", "Sauna", "Poolside Lounge Chairs", "Terrace", "Private Pool", "Furnished Terrace/Balcony", "Security Cameras"],
+      "indoor": ["Bed Linens", "Pool/Beach Towels", "Toiletries", "Gym/Fitness Room", "Home Office", "Breakfast Bar", "Hair Dryer", "Smoke Alarm", "Bath Towels"],
+      "kitchen": ["Fully Equipped Kitchen", "Stove Top Burners", "Oven", "Refrigerator", "Coffee Maker", "Cooking Utensils", "Freezer", "Dining Area"],
+      "entertainment": ["Television", "Pool Table", "Movie Theatre"],
+      "activities": ["Cycling", "Golf", "Swimming", "Hiking", "Yoga/Pilates"],
+      "nearby": ["Fitness Center", "Groceries", "Shopping", "Restaurants", "Health & Beauty Spa"]
+    },
+    "services": {
+      "included": [],
+      "staff": [],
+      "extraCost": []
+    },
+    "rates": {"nightly": "from ~$12,000", "type": "STARTING_FROM", "currency": "USD", "notes": "Dynamic rates. Exit Cleaning $2,000. Pool Heat $500/day optional. Security Deposit $50,000 refundable.", "observedPeriod": "Dynamic"},
+    "taxesAndFees": {
+      "tourismTax": {"type": "percentage", "value": 14, "name": "Transient Occupancy Tax (TOT) + other", "note": "Los Angeles TOT is typically 14%"},
+      "serviceCharge": null,
+      "greenTax": null,
+      "damageWaiver": null,
+      "other": [
+        {"type": "fixed", "value": 2000, "currency": "USD", "name": "Exit Cleaning Fee"},
+        {"type": "fixed", "value": 500, "currency": "USD", "name": "Pool Heat", "note": "Per day, optional"},
+        {"type": "fixed", "value": 50000, "currency": "USD", "name": "Security Deposit", "note": "Refundable"}
+      ]
+    },
+    "costStructureDefaults": {"tourismTaxPct": 14, "serviceChargePct": null, "agencyOtaPct": 18, "operatorPct": 12.5, "repairInsurancePctOfValue": 1.5},
+    "estimates": {"valueCentral": 30000000, "valueRange": [20000000, 42000000], "occupancy": null, "provenance": "ESTIMATED / FRACTIONALLUXE"},
+    "research": {"confidence": "MEDIUM", "lastUpdated": "2026-09-05", "sources": ["Rental Escapes listing 129549", "Los Angeles TOT 14%"]}
+  },
+  {
+    "id": 23,
+    "listingId": "123919",
+    "name": "Chateau Prestige",
+    "slug": "chateau-prestige-bordeaux",
+    "location": {"country": "France", "region": "Southwest France / Bordeaux", "place": "Near Saint-Émilion", "full": "Near Saint-Émilion, Bordeaux region, France"},
+    "propertyType": "Historic Château",
+    "sourceUrl": "https://www.rentalescapes.com/rentals/luxury-vacation-rentals-europe/france/southwest-france/bordeaux/chateau-prestige-123919",
+    "specs": {"guests": 24, "bedrooms": 11, "bathrooms": 11, "sizeInteriorM2": null, "sizeTotalM2": null, "poolM2": null, "landHa": 37, "landNote": "37 hectares of fenced vineyards"},
+    "description": {
+      "short": "15th-century chartreuse set in 37 ha of vineyards with two heated pools, gardens, private helipad, French billiards, library and full staff.",
+      "full": "Just north of Bordeaux, near the celebrated vineyards of Saint-Émilion... elegant 15th-century chartreuse... thirty-seven hectares of fenced vineyards... two heated swimming pools... private helipad... French billiards room... library... eleven luxurious bedrooms...",
+      "seasonality": "Harvest season and summer busier. 15th-century château, two heated pools, gardens, private helipad, French billiards, library, full staff."
+    },
+    "amenities": {
+      "general": ["Fireplace", "Air Conditioning", "Pool", "Hot Tub", "Wifi", "Staff"],
+      "outdoor": ["Balcony", "Garden", "Patio", "Parking", "Garden Chairs", "Outdoor Grill", "Bicycles", "Heated Pool", "Dining Table", "Lounging Area", "Poolside Lounge Chairs", "Terrace", "Private Pool"],
+      "indoor": ["Washer/Dryer", "Bed Linens", "Pool/Beach Towels", "Toiletries", "Safe", "Wine Cellar", "Bath Towels", "Piano"],
+      "kitchen": ["Fully Equipped Kitchen", "Microwave", "Stove Top Burners", "Ice Maker", "Oven", "Iron & Board", "Refrigerator", "Coffee Maker", "Dish Washer", "Cooking Utensils", "Freezer", "Toaster", "Dining Area"],
+      "entertainment": ["Television", "Satellite Or Cable", "Pool Table"],
+      "activities": ["Cycling", "Swimming", "Hiking"],
+      "nearby": ["Groceries", "Shopping", "Restaurants"]
+    },
+    "services": {
+      "included": ["Housekeeping, butler, chef (half board: continental breakfast + buffet dinner)", "Meet and greet upon arrival", "Quad and electric scooters available"],
+      "staff": ["Chef", "Housekeeper(s)", "Butler(s)"],
+      "extraCost": ["Food and beverages", "Airport transfers", "Domain tour", "Spa services", "Tourist Local tax"]
+    },
+    "rates": {"nightly": "~€11,815", "type": "APPROXIMATE", "currency": "EUR", "notes": "Local Tourist Tax not included. No smoking in bedrooms/castle. Security Deposit €10,000 refundable.", "observedPeriod": "Sep–Oct 2026"},
+    "taxesAndFees": {
+      "tourismTax": {"type": "fixed", "value": 2.5, "unit": "EUR per person per night", "name": "Taxe de séjour", "note": "Variable by commune; typically €1–€4+"},
+      "serviceCharge": {"type": "percentage", "value": 8},
+      "greenTax": null,
+      "damageWaiver": null,
+      "other": [{"type": "fixed", "value": 10000, "currency": "EUR", "name": "Security Deposit", "note": "Refundable"}]
+    },
+    "costStructureDefaults": {"tourismTaxFixedPerPersonNight": 2.5, "serviceChargePct": 8, "agencyOtaPct": 18, "operatorPct": 12.5, "repairInsurancePctOfValue": 1.5},
+    "estimates": {"valueCentral": 15000000, "valueRange": [9600000, 21600000], "occupancy": null, "provenance": "ESTIMATED / FRACTIONALLUXE"},
+    "research": {"confidence": "MEDIUM", "lastUpdated": "2026-09-05", "sources": ["Rental Escapes listing 123919", "French taxe de séjour"]}
+  },
+  {
+    "id": 24,
+    "listingId": "122113",
+    "name": "Hawksbill",
+    "slug": "hawksbill-grace-bay",
+    "location": {"country": "Turks and Caicos", "region": "Providenciales", "place": "Grace Bay", "full": "Grace Bay, Providenciales, Turks and Caicos"},
+    "propertyType": "Beachfront Estate",
+    "sourceUrl": "https://www.rentalescapes.com/rentals/luxury-villa-rentals-caribbean/turks-and-caicos/providenciales/grace-bay/hawksbill-122113",
+    "specs": {"guests": 18, "bedrooms": 8, "bathrooms": 8, "sizeInteriorM2": null, "sizeTotalM2": null, "poolM2": null, "landHa": 4, "landNote": "4 acres tropical gardens; multiple buildings (main + guest + beach house)"},
+    "description": {
+      "short": "Fully staffed beachfront estate on 4 acres with two pools, tennis, gym, private dock and multi-building accommodation.",
+      "full": "An expansive, fully staffed beachfront property... four acres of tropical gardens... two pools (lap + relaxing)... private dock... fully equipped gym... floodlit tennis court, half basketball, pickleball... media and games room... guest house + beach house...",
+      "seasonality": "Dec–Apr busier. Large beachfront estate, two pools, tennis, gym, private dock, full staff."
+    },
+    "amenities": {
+      "general": ["Air Conditioning", "Pool", "Hot Tub", "Wifi", "Staff"],
+      "outdoor": ["Balcony", "Garden", "Patio", "Private Tennis Court", "Kayak", "Parking", "Heated Pool", "Infinity Pool", "Dining Table", "Outdoor Shower", "Shuffleboard", "Lounging Area", "Poolside Lounge Chairs", "Terrace", "Private Pool", "Beachfront", "Fire Pit", "Mosquito System"],
+      "indoor": ["Bed Linens", "Pool/Beach Towels", "Toiletries", "Safe", "Gym/Fitness Room", "Security System", "Breakfast Bar", "Bath Towels"],
+      "kitchen": ["Fully Equipped Kitchen", "Microwave", "Stove Top Burners", "Oven", "Refrigerator", "Coffee Maker", "Cooking Utensils", "Freezer", "Toaster", "Dining Area"],
+      "entertainment": ["Television", "Satellite Or Cable", "Board Games", "Apple Tv", "Smart Tv", "Sound System"],
+      "activities": ["Sailing", "Tennis", "Scuba Diving", "Fishing", "Golf", "Swimming", "Eco Tourism", "Beachcombing", "Snorkeling", "Bird Watching", "Hiking", "Deepsea Fishing", "Stand-up Paddle Board"],
+      "nearby": ["ATM/Bank", "Fitness Center", "Groceries", "Massage Therapist", "Shopping", "Restaurants", "Health & Beauty Spa"]
+    },
+    "services": {
+      "included": ["Private chef, 2 butlers and housekeeper", "Floodlit tennis, half basketball, beach volleyball", "Lap pool", "Massage room", "Media room", "Non-motorized watersports", "Complimentary round-trip airport transfer"],
+      "staff": ["Chef", "Housekeeper(s)", "Butler(s)"],
+      "extraCost": ["Driver (optional)"]
+    },
+    "rates": {"nightly": "~$16,500", "type": "APPROXIMATE", "currency": "USD", "notes": "Security Deposit $10,000 refundable.", "observedPeriod": "Sep–Oct 2026"},
+    "taxesAndFees": {
+      "tourismTax": {"type": "percentage", "value": 12, "name": "Hotel and Tourism Tax"},
+      "serviceCharge": {"type": "percentage", "value": 10},
+      "greenTax": null,
+      "damageWaiver": null,
+      "other": [{"type": "fixed", "value": 10000, "currency": "USD", "name": "Security Deposit", "note": "Refundable"}]
+    },
+    "costStructureDefaults": {"tourismTaxPct": 12, "serviceChargePct": 10, "agencyOtaPct": 18, "operatorPct": 12.5, "repairInsurancePctOfValue": 1.5},
+    "estimates": {"valueCentral": 28000000, "valueRange": [20000000, 38400000], "occupancy": null, "provenance": "ESTIMATED / FRACTIONALLUXE"},
+    "research": {"confidence": "MEDIUM", "lastUpdated": "2026-09-05", "sources": ["Rental Escapes listing 122113", "Turks and Caicos 12% tax"]}
+  }
+]
+
+
+
+
+
+

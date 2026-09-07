@@ -198,19 +198,26 @@ export function BuyQtyStep({
         </p>
       ) : null}
       <div className="rounded-[12px] bg-surface-2 p-3 space-y-1.5">
-        <div className="flex justify-between text-sm">
+        <div className="flex justify-between gap-2 text-sm">
           <span className="text-muted-foreground">{t("totalLabel")}</span>
-          <span className="tnum font-semibold text-foreground" data-testid="buy-qty-total">
+          <span className="tnum font-bold tracking-tight text-foreground text-end" data-testid="buy-qty-total">
             {currency === "USDT" ? `${usd(totalUsd)} USDT` : `${usd(totalUsd)} · ${ton(estimateNanoTon(totalUsd, TON_PRICE_USD_CENTS))}`}
           </span>
         </div>
-        <div className="flex justify-between text-sm">
+        <div className="flex justify-between gap-2 text-sm">
           <span className="text-muted-foreground">{t("estWeeklyYield")}</span>
-          <span className="tnum font-medium text-success">{usd(weekly)}</span>
+          {/* Projected — foreground, never Paid-green. */}
+          <span className="tnum font-semibold text-foreground">{usd(weekly)}</span>
         </div>
       </div>
       <p className="text-[0.6875rem] text-center text-muted-foreground">
         {t("paidInNote", { currency })}
+      </p>
+      <p
+        className="text-[0.6875rem] text-center leading-relaxed text-muted-foreground"
+        data-testid="buy-lock-note"
+      >
+        {t("buyFirstNote")}
       </p>
     </div>
   );

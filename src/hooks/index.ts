@@ -14,6 +14,12 @@ export { useTelegramUser } from "./useTelegramUser";
 export { useTelegramBackButton } from "./useTelegramBackButton";
 export { usePropertyDocuments } from "./usePropertyDocuments";
 export {
+  useEstateDetailViewModel,
+  type EstateDetailViewModel,
+  type ScenarioBound,
+  type SelectedScenario,
+} from "./useEstateDetailViewModel";
+export {
   useLocks,
   useMeSummary,
   useCreateLock,

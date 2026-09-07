@@ -8,6 +8,7 @@ import { useState } from "react";
 import { Lock, TrendingDown } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { Listing } from "@/types/property";
+import type { OrderBookState } from "@/types/order";
 import { usd } from "@/lib/format";
 import { haptics } from "@/lib/telegram/haptics";
 import { Block } from "@/components/common/Block";
@@ -22,6 +23,7 @@ export function PositionCard({
   accruedUnpaidUsd,
   avgCostUsd,
   currentPriceUsd,
+  orderBook,
 }: {
   listing: Listing;
   ownedShares: number;
@@ -32,6 +34,8 @@ export function PositionCard({
   avgCostUsd?: number;
   /** Single source of truth (lib/property-price) for the estimated value. */
   currentPriceUsd: number;
+  /** Live book when known — drives the sell sheet's honest liquidity state. */
+  orderBook?: OrderBookState | null;
 }) {
   const t = useTranslations("property");
   const [lockOpen, setLockOpen] = useState(false);
@@ -96,7 +100,8 @@ export function PositionCard({
             </span>
           </Row>
         </Block>
-        <div className="grid grid-cols-2 gap-2">
+        {/* 24px breathing room above the bottom button row (8px section rhythm + 16px). */}
+        <div className="grid grid-cols-2 gap-2 pt-4">
           <button
             type="button"
             disabled={freeShares === 0}
@@ -143,6 +148,8 @@ export function PositionCard({
           listing={listing}
           freeShares={freeShares}
           avgCostUsd={avgCostUsd ?? listing.sharePriceUsd}
+          ownedShares={ownedShares}
+          orderBook={orderBook}
         />
       ) : null}
     </>

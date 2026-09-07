@@ -37,12 +37,22 @@ test.describe("Income — /earnings (Phase 9 Slice 5)", () => {
     await expect(page.getByText("Accrued, paid with next distribution").first()).toBeVisible();
     await expect(page.getByTestId("yield-accrued-unpaid")).toHaveText(/\$[\d,]+\.\d{2}/);
 
-    // Chart: static 12-week bars + Paid/Projected two-tone legend, no trader controls.
-    await expect(page.getByTestId("earnings-chart")).toBeVisible();
-    await expect(page.getByTestId("chart-bar")).toHaveCount(12);
-    await expect(page.getByTestId("chart-legend")).toBeVisible();
-    await expect(page.getByTestId("chart-legend")).toContainText("Paid");
-    await expect(page.getByTestId("chart-legend")).toContainText("Projected");
+    // Income journey: ranges + explorable paid/projected columns + cumulative
+    // line legend. (Slice I observatory replaces the static 12-week chart with
+    // tappable columns and a detail panel.)
+    await expect(page.getByTestId("income-journey")).toBeVisible();
+    await expect(page.getByTestId("journey-bar")).toHaveCount(12);
+    await expect(page.getByTestId("journey-legend")).toBeVisible();
+    await expect(page.getByTestId("journey-legend")).toContainText("Paid");
+    await expect(page.getByTestId("journey-legend")).toContainText("Projected");
+    // Tap the latest (pending-only) week: projected total + estate drill-down.
+    await page.getByTestId("journey-bar").nth(11).click();
+    await expect(page.getByTestId("journey-detail")).toContainText("$603.47");
+    await expect(page.getByTestId("journey-detail")).toContainText("Syrene");
+    // ALL range constrains honestly to data weeks.
+    await page.getByTestId("journey-range-ALL").click();
+    await expect(page.getByTestId("journey-bar")).toHaveCount(4);
+    await page.getByTestId("journey-range-12W").click();
 
     // Timeline: status words only — Paid / Accrued / Expected.
     await expect(page.getByTestId("timeline-paid")).toBeVisible();
@@ -56,16 +66,43 @@ test.describe("Income — /earnings (Phase 9 Slice 5)", () => {
     ).toBeVisible();
 
     // Income by estate: per-estate rows with paid-only totals.
+    // NOTE (Slice I): "Syrene" is the current seed title (Slice E reconciliation
+    // renamed it from "Bayside Marina Penthouse"); rows resolve live marketplace
+    // names, so the spec follows the catalog.
     await expect(page.getByTestId("income-by-estate")).toBeVisible();
     await expect(page.getByText("Income by estate")).toBeVisible();
     const bayside = page.getByTestId("income-by-estate-row-prop-bayside-marina-penthouse");
     await expect(bayside).toBeVisible();
-    await expect(bayside).toContainText("Bayside Marina Penthouse");
+    await expect(bayside).toContainText("Syrene");
     await expect(bayside).toContainText("$882.72"); // 3 paid weeks × $294.24
     await expect(bayside).toHaveAttribute("href", "/property/prop-bayside-marina-penthouse");
     await expect(
       page.getByTestId("income-by-estate-row-prop-alfama-terrace-flat"),
     ).toContainText("$927.69"); // 3 paid weeks × $309.23
+    // Slice I: rows carry position states from their own sources.
+    await expect(bayside).toContainText("160 shares");
+    await expect(bayside).toContainText("$294.24"); // projected (pending ledger)
+
+    // Slice I: payout pipeline states are explicit (eligible/requested/scheduled/paid-out).
+    await expect(page.getByTestId("dist-status")).toBeVisible();
+    await expect(page.getByTestId("dist-eligible")).toBeVisible();
+    await expect(page.getByTestId("dist-requested")).toContainText("$48.00");
+    await expect(page.getByTestId("dist-scheduled")).toContainText("$47.52");
+    await expect(page.getByTestId("dist-paidout")).toContainText("$123.75");
+
+    // Slice I: other returns stay separate — no plans, no valuation history,
+    // live sell listing with its proposed (never paid) gain.
+    await expect(page.getByTestId("other-returns")).toBeVisible();
+    await expect(page.getByTestId("other-plan")).toContainText("No investment plans configured");
+    await expect(page.getByTestId("other-appreciation")).toContainText("Pending");
+    const resale = page.getByTestId("other-secondary-ord-aria-alfama-sell-1");
+    await expect(resale).toContainText("+$30.00");
+    await expect(resale).toContainText("Gain");
+
+    // Slice I: income origin explainer (collapsed, progressive disclosure).
+    await expect(page.getByTestId("income-origin")).toBeVisible();
+    await page.getByTestId("income-origin-toggle").click();
+    await expect(page.getByTestId("income-origin-content")).toContainText("Net operating profit");
 
     // No APY, no scarcity, no guarantees, no trading-terminal framing.
     await expect(page.getByText("APY")).toHaveCount(0);

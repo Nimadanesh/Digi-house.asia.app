@@ -64,10 +64,16 @@ const mainButton = {
     };
   }),
 };
+let backHandler: (() => void) | null = null;
 const backButton = {
   show: vi.fn(),
   hide: vi.fn(),
-  onClick: vi.fn(() => () => {}),
+  onClick: vi.fn((fn: () => void) => {
+    backHandler = fn;
+    return () => {
+      backHandler = null;
+    };
+  }),
 };
 
 vi.mock("@/hooks/useProperty", () => ({
@@ -103,22 +109,35 @@ vi.mock("@/hooks/useTelegram", () => ({
     themeParams: {},
   }),
 }));
+const useTonConnect = vi.fn(() => ({
+  connected: true,
+  openModal: vi.fn(),
+  address: "EQxxx",
+  short: "EQxx…",
+  restoring: false,
+  network: "testnet",
+  disconnect: vi.fn(),
+  send: vi.fn(),
+}));
 vi.mock("@/hooks/useTonConnect", () => ({
-  useTonConnect: () => ({
-    connected: true,
-    openModal: vi.fn(),
-    address: "EQxxx",
-    short: "EQxx…",
-    restoring: false,
-    network: "testnet",
-    disconnect: vi.fn(),
-    send: vi.fn(),
-  }),
+  useTonConnect: () => useTonConnect(),
 }));
 const mutateAsync = vi.fn();
-vi.mock("@/hooks/useBuyShares", () => ({
-  useBuyShares: () => ({ mutateAsync, isPending: false, phase: "idle" }),
-}));
+vi.mock("@/hooks/useBuyShares", () => {
+  // Mirrors the real class contract (name + message); identity matches the
+  // page's import because both resolve through this mocked module.
+  class UsdtUnavailableError extends Error {
+    constructor() {
+      super("USDT payments aren't available right now.");
+      this.name = "UsdtUnavailableError";
+    }
+  }
+  return {
+    useBuyShares: () => ({ mutateAsync, isPending: false, phase: "idle" }),
+    UsdtUnavailableError,
+  };
+});
+const pushToast = vi.fn();
 vi.mock("@/stores/ui.store", () => ({
   useUiStore: (sel: (s: Record<string, unknown>) => unknown) =>
     sel({
@@ -126,6 +145,7 @@ vi.mock("@/stores/ui.store", () => ({
       mainButtonActive: false,
       stickyCtaVisible: false,
       setStickyCtaVisible: vi.fn(),
+      pushToast,
     }),
 }));
 
@@ -157,13 +177,21 @@ vi.mock("@/hooks/useSells", () => ({
     isError: false,
     error: null,
   }),
+  useCancelOrder: vi.fn(() => ({ mutate: vi.fn(), isPending: false, isError: false, error: null, variables: null })),
 }));
 
+const useFees = vi.fn((): { data: unknown[]; isLoading: boolean; isError: boolean } => ({
+  data: [],
+  isLoading: false,
+  isError: false,
+}));
 vi.mock("@/hooks/useFees", () => ({
-  useFees: vi.fn(() => ({ data: [], isLoading: false, isError: false })),
+  useFees: () => useFees(),
 }));
 
 
+import { UsdtUnavailableError } from "@/hooks/useBuyShares";
+import { DEFAULT_FEE_TIERS } from "@/lib/mock/fees";
 import PropertyDetailPage from "@/app/(app)/property/[id]/page";
 
 async function renderPage(id: string) {
@@ -178,6 +206,18 @@ describe("Property detail page — states + buy happy path", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mainHandler = null;
+    backHandler = null;
+    useTonConnect.mockReturnValue({
+      connected: true,
+      openModal: vi.fn(),
+      address: "EQxxx",
+      short: "EQxx…",
+      restoring: false,
+      network: "testnet",
+      disconnect: vi.fn(),
+      send: vi.fn(),
+    });
+    useFees.mockReturnValue({ data: [], isLoading: false, isError: false });
     mutateAsync.mockResolvedValue({ ok: true, txHash: "simulated:test" });
   });
 
@@ -212,7 +252,7 @@ describe("Property detail page — states + buy happy path", () => {
     await renderPage(listing.id);
     expect(screen.getByTestId("property-detail")).toBeInTheDocument();
     expect(mainButton.setParams).toHaveBeenCalledWith(
-      expect.objectContaining({ text: "Acquire Ownership" }),
+      expect.objectContaining({ text: "Buy" }),
     );
   });
 
@@ -240,6 +280,132 @@ describe("Property detail page — states + buy happy path", () => {
     });
     expect(await screen.findByTestId("buy-success-step")).toBeInTheDocument();
     expect(screen.getByText(/Congratulations/i)).toBeInTheDocument();
+  });
+
+  it("buy: MainButton confirm label matches the fee-inclusive sheet total", async () => {
+    useFees.mockReturnValue({ data: DEFAULT_FEE_TIERS, isLoading: false, isError: false });
+    useProperty.mockReturnValue({ data: listing, isLoading: false, isError: false, refetch: vi.fn() });
+    await renderPage(listing.id);
+
+    await act(async () => {
+      await mainHandler?.();
+    });
+    expect(await screen.findByTestId("buy-qty-step")).toBeInTheDocument();
+    // Raise to 10 shares through the real stepper, then continue.
+    const increase = screen.getByRole("button", { name: "Increase quantity" });
+    for (let i = 0; i < 9; i++) {
+      fireEvent.click(increase);
+    }
+    await act(async () => {
+      await mainHandler?.();
+    });
+    expect(await screen.findByTestId("buy-summary-step")).toBeInTheDocument();
+    // 10 × $125.00 + 2.5% commission = $1,281.25 payable — the label must agree.
+    expect(mainButton.setParams).toHaveBeenCalledWith(
+      expect.objectContaining({ text: "Confirm & Pay — $1,281.25" }),
+    );
+    expect(screen.getByTestId("buy-total")).toHaveTextContent("$1,281.25");
+  });
+
+  it("buy: USDT-unavailable falls back to TON with an inline error", async () => {
+    useProperty.mockReturnValue({ data: listing, isLoading: false, isError: false, refetch: vi.fn() });
+    mutateAsync.mockRejectedValueOnce(new UsdtUnavailableError());
+    await renderPage(listing.id);
+
+    await act(async () => {
+      await mainHandler?.();
+    });
+    await act(async () => {
+      await mainHandler?.();
+    });
+    await act(async () => {
+      await mainHandler?.();
+    });
+    expect(await screen.findByTestId("buy-summary-error")).toHaveTextContent(
+      /USDT payments aren't available/i,
+    );
+    expect(pushToast).toHaveBeenCalledWith(
+      "error",
+      "USDT unavailable",
+      expect.stringContaining("TON"),
+    );
+  });
+
+  it("buy: failed purchase surfaces the error inline", async () => {
+    useProperty.mockReturnValue({ data: listing, isLoading: false, isError: false, refetch: vi.fn() });
+    mutateAsync.mockResolvedValueOnce({ ok: false, error: "No shares were issued" });
+    await renderPage(listing.id);
+
+    await act(async () => {
+      await mainHandler?.();
+    });
+    await act(async () => {
+      await mainHandler?.();
+    });
+    await act(async () => {
+      await mainHandler?.();
+    });
+    expect(await screen.findByTestId("buy-summary-error")).toHaveTextContent(/No shares were issued/i);
+  });
+
+  it("buy: rejected wallet surfaces the rejection inline", async () => {
+    useProperty.mockReturnValue({ data: listing, isLoading: false, isError: false, refetch: vi.fn() });
+    mutateAsync.mockRejectedValueOnce(new Error("wallet rejected the transaction"));
+    await renderPage(listing.id);
+
+    await act(async () => {
+      await mainHandler?.();
+    });
+    await act(async () => {
+      await mainHandler?.();
+    });
+    await act(async () => {
+      await mainHandler?.();
+    });
+    expect(await screen.findByTestId("buy-summary-error")).toHaveTextContent(
+      /wallet rejected the transaction/i,
+    );
+  });
+
+  it("buy: disconnected wallet offers Connect wallet on the MainButton", async () => {
+    useTonConnect.mockReturnValue({
+      connected: false,
+      openModal: vi.fn(),
+      address: "",
+      short: "",
+      restoring: false,
+      network: "testnet",
+      disconnect: vi.fn(),
+      send: vi.fn(),
+    });
+    useProperty.mockReturnValue({ data: listing, isLoading: false, isError: false, refetch: vi.fn() });
+    await renderPage(listing.id);
+
+    await act(async () => {
+      await mainHandler?.();
+    });
+    expect(await screen.findByTestId("buy-qty-step")).toBeInTheDocument();
+    expect(mainButton.setParams).toHaveBeenCalledWith(
+      expect.objectContaining({ text: "Connect wallet" }),
+    );
+  });
+
+  it("buy: BackButton on the summary step returns to quantity (cancels review)", async () => {
+    useProperty.mockReturnValue({ data: listing, isLoading: false, isError: false, refetch: vi.fn() });
+    await renderPage(listing.id);
+
+    await act(async () => {
+      await mainHandler?.();
+    });
+    await act(async () => {
+      await mainHandler?.();
+    });
+    expect(await screen.findByTestId("buy-summary-step")).toBeInTheDocument();
+    expect(backHandler).not.toBeNull();
+    await act(async () => {
+      backHandler?.();
+    });
+    expect(await screen.findByTestId("buy-qty-step")).toBeInTheDocument();
   });
 
   it("Phase 7 secondary: hero Buy-at CTA opens the market (limit) buy sheet", async () => {
@@ -291,8 +457,9 @@ describe("Property detail page — states + buy happy path", () => {
     fireEvent.click(screen.getByTestId("tab-ownership"));
     fireEvent.click(await screen.findByTestId("open-sell-sheet"));
     const sheet = await screen.findByTestId("sell-sheet");
-    expect(within(sheet).getByText("Free shares")).toBeInTheDocument();
-    expect(within(sheet).getByText("160")).toBeInTheDocument();
+    fireEvent.click(within(sheet).getByRole("button", { name: /sell custom price/i }));
+    expect(within(sheet).getByText("Available to sell")).toBeInTheDocument();
+    expect(within(sheet).getByText("160 shares")).toBeInTheDocument();
   });
 
   it("Phase 7 regression: a custom limit sell never changes the displayed current price", async () => {    // Secondary property with a live book; page price source of truth = bestAsk $132.00.
@@ -341,6 +508,8 @@ describe("Property detail page — states + buy happy path", () => {
     await act(async () => {
       fireEvent.change(priceInput, { target: { value: "999" } });
     });
+    // Slice H: the custom flow confirms the listing details before placing.
+    fireEvent.click(screen.getByTestId("custom-sell-review"));
     fireEvent.click(screen.getByTestId("custom-sell-confirm"));
 
     await waitFor(() => {

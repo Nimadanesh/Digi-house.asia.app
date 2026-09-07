@@ -10,6 +10,8 @@ import { useOrderBook } from "@/hooks/useOrderBook";
 import { useTelegram } from "@/hooks/useTelegram";
 import { useTonConnect } from "@/hooks/useTonConnect";
 import { useBuyShares, type BuyInput, UsdtUnavailableError } from "@/hooks/useBuyShares";
+import { useFees } from "@/hooks/useFees";
+import { previewBuyQuote } from "@/lib/buy-quote";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { usePropertyDocuments } from "@/hooks/usePropertyDocuments";
 import { useStay } from "@/hooks/useStay";
@@ -19,6 +21,7 @@ import { useUiStore } from "@/stores/ui.store";
 import { haptics } from "@/lib/telegram/haptics";
 import { usd } from "@/lib/format";
 import { getCurrentSharePrice } from "@/lib/property-price";
+import { getEstate24ByRuntimeId } from "@/lib/economics/estates/estate-24-data";
 import type { BuyCurrency } from "@/types/buy";
 import { PropertyDetail } from "@/components/property/PropertyDetail";
 import { PropertyDetailSkeleton } from "@/components/property/PropertyDetailSkeleton";
@@ -37,6 +40,8 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
   const { id } = use(params);
   const tCommon = useTranslations("common");
   const tOnboarding = useTranslations("onboarding");
+  const tProperty = useTranslations("property");
+  const feesQuery = useFees();
   const property = useProperty(id);
   const orderBook = useOrderBook(id, { live: true });
   const stayQuery = useStay(id);
@@ -291,10 +296,13 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
 
     if (step === "summary") {
       const valid = qty >= 1 && qty <= remaining;
-      const totalUsd = qty * listing.sharePriceUsd;
+      // Same payable total the sheet shows (principal + primary commission).
+      const { totalPayableUsd } = previewBuyQuote(qty, listing.sharePriceUsd, feesQuery.data ?? []);
       const pending = buy.isPending;
       mainButton.setParams({
-        text: pending ? "Confirming…" : `Confirm & Pay — ${usd(totalUsd)}`,
+        text: pending
+          ? tProperty("confirmingPending")
+          : tProperty("confirmPayTotal", { total: usd(totalPayableUsd) }),
         isEnabled: valid && !pending,
         color: "#229ED9",
         textColor: "#ffffff",
@@ -320,8 +328,10 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
     effectivePreviewShares,
     buy.isPending,
     confirmBuy,
+    feesQuery.data,
     tCommon,
     tOnboarding,
+    tProperty,
     mainButton,
   ]);
 
@@ -363,7 +373,11 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
   return (
     <>
       {/* Compact top bar (#07b) — back + property name on scroll-up past the hero. */}
-      <PropertyCompactTopBar title={listing.title} visible={compactBarVisible} />
+      {/* PROMPT 03: canonical Estate24 name (legacy fixture title is not a fact). */}
+      <PropertyCompactTopBar
+        title={getEstate24ByRuntimeId(listing.id)?.name ?? listing.title}
+        visible={compactBarVisible}
+      />
       {/* Tight CTA clearance (#08): 96px = 52px sticky bar + scrim + breathing room.
           The AppShell's own bottom inset (88px + safe area) remains as the
           Telegram-chrome clearance — no excess blank block. */}
@@ -443,6 +457,8 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
           listing={listing}
           freeShares={freeShares}
           avgCostUsd={avgCostUsd ?? listing.sharePriceUsd}
+          ownedShares={ownedShares}
+          orderBook={orderBook.data}
         />
       ) : null}
     </>

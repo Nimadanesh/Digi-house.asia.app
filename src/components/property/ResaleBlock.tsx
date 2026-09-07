@@ -14,6 +14,7 @@ import type { OrderBookState } from "@/types/order";
 import { usd } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { Block } from "@/components/common/Block";
+import { Disclosure } from "@/components/common/Disclosure";
 import { Skeleton } from "@/components/common/Skeleton";
 import { MarketSummary } from "./MarketSection";
 import { OrderBook } from "./OrderBook";
@@ -88,30 +89,18 @@ export function ResaleBlock({
           </button>
 
           {/* Demoted: price/OHLC/volume charts + book + recent fills behind an expander. */}
-          <Block className="overflow-hidden">
-            <button
-              type="button"
-              aria-expanded={historyOpen}
-              onClick={() => setHistoryOpen((v) => !v)}
-              className="flex w-full items-center justify-between px-4 py-3 text-left"
-              data-testid="resale-price-history-toggle"
-            >
-              <span className="text-sm font-medium text-foreground">{t("resalePriceHistory")}</span>
-              <ChevronDown
-                size={16}
-                strokeWidth={1.75}
-                aria-hidden
-                className={cn("transition-transform duration-200 ease-out", historyOpen ? "rotate-180" : "")}
-              />
-            </button>
-            {historyOpen ? (
-              <div className="space-y-4 border-t border-border p-4" data-testid="resale-price-history-content">
-                <SecondaryPerformanceCharts listing={listing} anchorUsd={anchorUsd} />
-                {orderBook ? <OrderBook state={orderBook} maxLevels={4} /> : null}
-                <RecentTrades propertyId={listing.id} max={5} />
-              </div>
-            ) : null}
-          </Block>
+          <Disclosure
+            title={<span className="text-sm font-medium text-foreground">{t("resalePriceHistory")}</span>}
+            open={historyOpen}
+            onOpenChange={setHistoryOpen}
+            toggleTestId="resale-price-history-toggle"
+            contentTestId="resale-price-history-content"
+            contentClassName="space-y-4 border-t border-border p-4"
+          >
+            <SecondaryPerformanceCharts listing={listing} anchorUsd={anchorUsd} />
+            {orderBook ? <OrderBook state={orderBook} maxLevels={4} /> : null}
+            <RecentTrades propertyId={listing.id} max={5} />
+          </Disclosure>
         </div>
       ) : null}
     </section>

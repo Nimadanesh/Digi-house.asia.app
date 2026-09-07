@@ -3,6 +3,7 @@
 // Primary actions stay on Telegram MainButton (page-owned); this sheet is content only.
 import type { Listing } from "@/types/property";
 import type { BuyCurrency } from "@/types/buy";
+import { getEstate24ByRuntimeId } from "@/lib/economics/estates/estate-24-data";
 import { Sheet } from "@/components/common/Sheet";
 import { BuyQtyStep } from "./BuyQtyStep";
 import { BuySummaryStep } from "./BuySummaryStep";
@@ -43,6 +44,10 @@ export function BuySheet({
   /** Single source of truth (lib/property-price); defaults to list price. */
   unitPriceUsd?: number;
 }) {
+  // PROMPT 03: canonical Estate24 identity for user-visible property facts.
+  const canonical = getEstate24ByRuntimeId(listing.id);
+  const displayName = canonical?.name ?? listing.title;
+  const displayLocation = canonical?.location.full ?? listing.location;
   return (
     <Sheet open={open} onClose={onClose} labelledBy="buy-sheet-title">
       {step === "qty" ? (
@@ -66,10 +71,12 @@ export function BuySheet({
           pending={buyPending}
           verifying={buyVerifying}
           unitPriceUsd={unitPriceUsd}
+          displayName={displayName}
+          displayLocation={displayLocation}
         />
       ) : null}
       {step === "success" ? (
-        <BuySuccessStep propertyTitle={listing.title} qty={qty} onClose={onClose} />
+        <BuySuccessStep propertyTitle={displayName} qty={qty} onClose={onClose} />
       ) : null}
     </Sheet>
   );
