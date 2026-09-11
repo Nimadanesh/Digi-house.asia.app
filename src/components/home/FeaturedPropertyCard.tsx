@@ -9,7 +9,7 @@ import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { usd } from "@/lib/format";
-import { shareWeeklyYieldUsd } from "@/lib/property-yield";
+import { getPresentedMonthlyIncome } from "@/lib/economics/property-presentation";
 import { ROUTES } from "@/lib/constants";
 import type { Listing } from "@/types/property";
 import { Block } from "@/components/common/Block";
@@ -24,7 +24,9 @@ export function FeaturedPropertyCard({
 }) {
   const t = useTranslations("home");
   const tCommon = useTranslations("common");
-  const monthly = (shareWeeklyYieldUsd(listing) * 52) / 12;
+  // Slice 2: projected monthly income from the single presentation layer (V1,
+  // or pending — never the fixture yield shortcut).
+  const monthly = getPresentedMonthlyIncome(listing.id).cents;
   const cover = listing.images[0] ?? "/images/properties/p1.png";
 
   return (
@@ -63,7 +65,16 @@ export function FeaturedPropertyCard({
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">{t("projectedIncomePerShare")}</span>
-              <span className="font-medium tnum text-success">{usd(monthly)}</span>
+              {monthly != null ? (
+                <span className="font-medium tnum text-success">{usd(monthly)}</span>
+              ) : (
+                <span
+                  className="rounded-full bg-surface-2 px-2 py-0.5 text-[0.6875rem] font-medium tnum text-muted-foreground"
+                  data-testid="featured-income-pending"
+                >
+                  {t("dataPending")}
+                </span>
+              )}
             </div>
             <div className="flex items-center justify-between text-sm">
               <span className="text-muted-foreground">{t("ownerStay")}</span>

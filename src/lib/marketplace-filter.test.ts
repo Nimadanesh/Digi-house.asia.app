@@ -7,36 +7,23 @@ import {
   MARKETPLACE_DEMO_CLOCK_MS,
   type EstateFilter,
   type EstateSort,
+  type FilterableEstate,
 } from "@/lib/marketplace-filter";
-import { shareWeeklyYieldUsd } from "@/lib/property-yield";
-import type { Listing } from "@/types/property";
 
-function base(over: Partial<Listing> & Pick<Listing, "id" | "title">): Listing {
+// Slice 2: filter/sort income basis is the single presentation layer (V1 monthly
+// cents, null = unknown) — never fixture rent/rate fields.
+function base(
+  over: Partial<FilterableEstate> & Pick<FilterableEstate, "id" | "title">,
+): FilterableEstate {
   return {
     location: "City",
     description: "Desc",
-    images: ["/images/properties/p1.png"],
-    totalShares: 1000,
     sharePriceUsd: 10_000,
     status: "funding",
-    ownerWalletAddress: "EQA",
-    annualRentUsd: 520_000,
+    presentedMonthlyIncomeCents: 625,
     createdAt: "2026-01-01T00:00:00Z",
-    sharesSold: 100,
     sharesRemaining: 900,
     fundingProgressRatio: 0.1,
-    monthlyYieldRate: 6.25,
-    totalValueUsd: 8_000_000,
-    meta: {
-      sizeSqm: 50,
-      yearBuilt: 2020,
-      propertyType: "Apt",
-      rentalStatus: "rented",
-      leaseUntil: "2026-12-31",
-      activeTenant: true,
-      tokenizationDocUrl: "#",
-    },
-    rentalHistory: [],
     ...over,
   };
 }
@@ -44,16 +31,14 @@ function base(over: Partial<Listing> & Pick<Listing, "id" | "title">): Listing {
 // nowMs for the "New" window: Jul 26 2026 (shared demo-tape clock).
 const NOW = MARKETPLACE_DEMO_CLOCK_MS;
 
-const list: Listing[] = [
+const list: FilterableEstate[] = [
   base({
     id: "a",
     title: "Alpha Marina",
     sharePriceUsd: 20_000,
-    annualRentUsd: 1_000_000,
+    presentedMonthlyIncomeCents: 2000,
     createdAt: "2026-01-01T00:00:00Z",
     fundingProgressRatio: 0.9,
-    monthlyYieldRate: 6.25,
-    sharesSold: 900,
     sharesRemaining: 100,
     status: "funding",
   }),
@@ -62,22 +47,18 @@ const list: Listing[] = [
     title: "Beta Loft",
     location: "Lisbon",
     sharePriceUsd: 5_000,
-    annualRentUsd: 100_000,
+    presentedMonthlyIncomeCents: 500,
     createdAt: "2026-07-20T00:00:00Z",
     fundingProgressRatio: 0.3,
-    monthlyYieldRate: 6.25,
-    sharesSold: 300,
     sharesRemaining: 700,
   }),
   base({
     id: "c",
     title: "Gamma Mid",
     sharePriceUsd: 12_000,
-    annualRentUsd: 400_000,
+    presentedMonthlyIncomeCents: 1200,
     createdAt: "2026-06-01T00:00:00Z",
     fundingProgressRatio: 0.6,
-    monthlyYieldRate: 6.25,
-    sharesSold: 600,
     sharesRemaining: 400,
     status: "funding",
   }),
@@ -114,8 +95,8 @@ describe("filterEstates — filters (redesign §6 set)", () => {
     expect(r.every((x) => NOW - new Date(x.createdAt).getTime() <= 30 * 24 * 60 * 60 * 1000)).toBe(true);
   });
 
-  it("income matches estates whose rental-income metric is available", () => {
-    const missing = base({ id: "d", title: "Delta", annualRentUsd: 0 });
+  it("income matches estates whose presented income is known (unknown excluded, never fabricated)", () => {
+    const missing = base({ id: "d", title: "Delta", presentedMonthlyIncomeCents: null });
     const r = filterEstates([...list, missing], { filter: "income" });
     expect(r.map((x) => x.id)).toEqual(["a", "b", "c"]);
   });
@@ -152,29 +133,28 @@ describe("filterEstates — sorting (never highest yield by default)", () => {
     expect(r.map((x) => x.id)).toEqual(["b", "c", "a"]);
   });
 
-  it("income sorts by projected per-share income descending, data-less estates last", () => {
-    const noData = base({ id: "d", title: "Delta", annualRentUsd: 0 });
+  it("income sorts by presented per-share income descending, unknown estates last", () => {
+    const noData = base({ id: "d", title: "Delta", presentedMonthlyIncomeCents: null });
     const r = filterEstates([...list, noData], { sort: "income" as EstateSort });
+    expect(r.map((x) => x.id)).toEqual(["a", "c", "b", "d"]);
     const scores = r.map((x) => projectedMonthlyIncomeUsd(x));
     expect(scores[0]).toBeGreaterThanOrEqual(scores[1]);
     expect(scores[1]).toBeGreaterThanOrEqual(scores[2]);
-    expect(scores[3]).toBe(0); // no data → last
-    expect(r[3]?.id).toBe("d");
+    expect(scores[3]).toBe(0); // unknown → last, never fabricated
   });
 });
 
-describe("projectedMonthlyIncomeUsd / hasIncomeData", () => {
-  it("returns 0 and false when income data is missing", () => {
-    const missing = base({ id: "d", title: "Delta", annualRentUsd: 0 });
+describe("projectedMonthlyIncomeUsd / hasIncomeData (Slice 2 presentation basis)", () => {
+  it("returns 0 and false when presented income is unknown", () => {
+    const missing = base({ id: "d", title: "Delta", presentedMonthlyIncomeCents: null });
     expect(hasIncomeData(missing)).toBe(false);
     expect(projectedMonthlyIncomeUsd(missing)).toBe(0);
   });
 
-  it("is consistent with the weekly-x52/12 presentation conversion used on Home", () => {
+  it("passes the presented V1 figure through unchanged", () => {
     const l = list[0]!;
-    // shareWeeklyYieldUsd rounds weekly to integer cents first — same chain as the
-    // slice-3 Featured Estate card: (shareWeeklyYieldUsd(listing) * 52) / 12.
-    expect(projectedMonthlyIncomeUsd(l)).toBe((shareWeeklyYieldUsd(l) * 52) / 12);
+    expect(hasIncomeData(l)).toBe(true);
+    expect(projectedMonthlyIncomeUsd(l)).toBe(2000);
   });
 });
 
@@ -197,8 +177,6 @@ describe("listingStatusBadge", () => {
         title: "S",
         createdAt: "2025-01-01T00:00:00Z",
         fundingProgressRatio: 0.85,
-        monthlyYieldRate: 6.25,
-        totalValueUsd: 8_000_000,
         sharesRemaining: 150,
         status: "funding",
       }),
@@ -214,8 +192,6 @@ describe("listingStatusBadge", () => {
         title: "H",
         createdAt: "2025-01-01T00:00:00Z",
         fundingProgressRatio: 0.55,
-        monthlyYieldRate: 6.25,
-        totalValueUsd: 8_000_000,
         sharesRemaining: 400,
         status: "funding",
       }),

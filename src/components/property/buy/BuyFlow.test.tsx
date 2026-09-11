@@ -71,7 +71,7 @@ describe("Buy flow steps", () => {
     push.mockClear();
   });
 
-  it("qty step: stepper, quick buttons, live total + weekly", () => {
+  it("qty step: stepper, quick buttons, live total + monthly projection", () => {
     const onQty = vi.fn();
     render(
       <BuyQtyStep
@@ -88,7 +88,9 @@ describe("Buy flow steps", () => {
     expect(onQty).toHaveBeenCalledWith(25);
     fireEvent.click(screen.getByRole("button", { name: "Max" }));
     expect(onQty).toHaveBeenCalledWith(360);
-    expect(screen.getByText(/Projected income \/ week/i)).toBeInTheDocument();
+    expect(screen.getByText(/Projected income \/ month/i)).toBeInTheDocument();
+    // Slice 2: Grand V1 $16.29/share/mo → 10 shares = $162.90/mo.
+    expect(screen.getByTestId("buy-est-monthly")).toHaveTextContent("$162.90");
     expect(screen.getByText(/Total/)).toBeInTheDocument();
   });
 
@@ -232,9 +234,11 @@ describe("Buy flow steps", () => {
     expect(screen.getByText("Dubai Marina, UAE")).toBeInTheDocument();
     // 10 / 1000 shares = 1.0% (same pct() formatting as the qty step).
     expect(screen.getByTestId("buy-ownership")).toHaveTextContent("10 shares · 1.0% of the estate");
+    // Slice 2: summary monthly matches the qty step (single presentation layer).
+    expect(screen.getByTestId("buy-summary-monthly")).toHaveTextContent("$162.90");
     fireEvent.click(screen.getByTestId("buy-assumptions-toggle"));
     expect(screen.getByTestId("buy-assumptions-content")).toHaveTextContent(
-      "Projection assumes a 6.25% monthly rental rate.",
+      "Projection uses the estate's projected monthly income per share",
     );
     expect(screen.getByTestId("buy-assumptions-content")).toHaveTextContent(
       "Buy shares first, then lock them",
@@ -264,8 +268,10 @@ describe("Buy flow steps", () => {
     expect(screen.getByTestId("buy-ownership")).toHaveTextContent("8 shares · 0.5% of the estate");
     fireEvent.click(screen.getByTestId("buy-assumptions-toggle"));
     expect(screen.getByTestId("buy-assumptions-content")).toHaveTextContent(
-      "Projection assumes a 7.19% monthly rental rate.",
+      "Projection uses the estate's projected monthly income per share",
     );
+    // Slice 2: Trajan (V1-unknown) shows pending, never a fixture figure.
+    expect(screen.getByTestId("buy-summary-monthly")).toHaveTextContent("Data pending");
   });
 
   it("summary step: no raw i18n keys leak into labels", () => {

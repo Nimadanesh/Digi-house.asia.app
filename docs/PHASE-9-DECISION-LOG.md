@@ -54,19 +54,20 @@ An agent may discover and record findings, but may not change the product contra
 
 ### DEC-004 — Slice 0: card/detail monthly-income divergence carried to Slice 2
 - Date: 2026-09-11
-- Status: OPEN
+- Status: RESOLVED in Slice 2 (commit `slice-2` — see plan status)
 - Finding: Marketplace card prints fixture income (`$7.19` on Grand #1) while the detail grid prints V1 income (`$16.29`); the old `sharePrice × monthlyYieldRate` shortcut is still live on cards/home parallel to the V1 engine.
 - Evidence: `docs/PHASE-9-BASELINE.md` §E.1–E.3, §F P0-1 (live 480×840 probe + `src/lib/marketplace-filter.ts:102-107` vs `src/components/property/PropertyMetricsGrid.tsx:53`).
 - Affected slice: Slice 2 (single canonical financial presentation layer).
 - Severity: P0
-- Proposed decision: None in this slice (audit-only). Slice 1 tables it; Slice 2 removes the divergence.
+- Proposed decision: None in this slice (audit-only).
 - Product approval:
-- Implementation slice:
-- Verification:
+- Implementation slice: Slice 2
+- Verification: `property-presentation.test.ts` 8/8 (24-villa parity) + live 480×840 probe
+  (card == detail on Grand/Emerald/Trajan/Syrene) + full suite 1107/1107 + E2E 40/6.
 
 ### DEC-005 — Slice 1: card/detail secondary price gap (lastTrade vs seeded bestAsk +2%)
 - Date: 2026-09-11
-- Status: OPEN
+- Status: RESOLVED in Slice 2 (commit `slice-2` — see plan status)
 - Finding: On all 18 funded/resale villas the card prints `lastTrade` (no book) while the
   detail hero prints the seeded `bestAsk` (`lastTrade × 1.02`, `seed/orderbooks.ts:13`),
   e.g. Syrene $251.00 → $256.02. Same share, two prices on adjacent screens.
@@ -75,8 +76,9 @@ An agent may discover and record findings, but may not change the product contra
 - Severity: P0
 - Proposed decision: None in this slice (audit-only).
 - Product approval:
-- Implementation slice:
-- Verification:
+- Implementation slice: Slice 2
+- Verification: `property-presentation.test.ts` card-price parity 24/24 + live probe
+  (Syrene $256.02 card == hero; Emerald $81.60) + full suite 1107/1107 + E2E 40/6.
 
 ### DEC-006 — Slice 1: `funded` status contradicts the demo ledger
 - Date: 2026-09-11

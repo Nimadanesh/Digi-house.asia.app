@@ -26,8 +26,11 @@ export interface FilterableEstate {
   description: string;
   status: Listing["status"];
   sharePriceUsd: number;
-  annualRentUsd: number;
-  monthlyYieldRate: number;
+  /**
+   * Presented monthly income per share, minor units (Slice 2 single presentation
+   * layer = V1). Null = UNKNOWN. Replaces the fixture rent/rate inputs.
+   */
+  presentedMonthlyIncomeCents: number | null;
   createdAt: string;
   fundingProgressRatio: number;
   sharesRemaining: number;
@@ -85,27 +88,23 @@ function createdMs(l: FilterableEstate): number {
   return new Date(l.createdAt).getTime();
 }
 
-/** A rental-income metric is only shown when its source data exists (UI Mapping §4.5). */
+/** A rental-income metric is only shown when the presentation layer knows it (UI Mapping §4.5). */
 export function hasIncomeData(
-  l: Pick<FilterableEstate, "annualRentUsd" | "monthlyYieldRate" | "sharePriceUsd">,
+  l: Pick<FilterableEstate, "presentedMonthlyIncomeCents">,
 ): boolean {
-  return l.annualRentUsd > 0 && l.monthlyYieldRate > 0 && l.sharePriceUsd > 0;
+  return l.presentedMonthlyIncomeCents != null && l.presentedMonthlyIncomeCents > 0;
 }
 
 /**
  * Projected per-share monthly income used by the estate card and the "Rental
- * income" sort. Identical figure to the Featured Estate card on Home (slice 3):
- * weekly mock ×52/12 presentation conversion, labeled a projection, formatted
- * by usd() at render. Returns 0 (never a fabricated number) without data.
+ * income" sort (Slice 2 single presentation layer = V1). Returns 0 (never a
+ * fabricated number) without data — callers check hasIncomeData first and render
+ * pending instead.
  */
 export function projectedMonthlyIncomeUsd(
-  l: Pick<FilterableEstate, "annualRentUsd" | "monthlyYieldRate" | "sharePriceUsd">,
+  l: Pick<FilterableEstate, "presentedMonthlyIncomeCents">,
 ): number {
-  if (!hasIncomeData(l)) return 0;
-  return (
-    (Math.round((l.sharePriceUsd * (l.monthlyYieldRate - 1)) / 100 / 4) * 52) /
-    12
-  );
+  return l.presentedMonthlyIncomeCents ?? 0;
 }
 
 /** Canonical Estate Value for sorting (0 when unknown → sorts last desc). */

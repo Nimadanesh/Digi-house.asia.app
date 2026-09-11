@@ -49,4 +49,11 @@ export interface Listing extends Property {
   monthlyYieldRate: number;
   /** Latest secondary-market executed price, minor units (PD-04/PD-07); absent before the first fill. */
   lastTradeUsd?: number;
+  /**
+   * Seeded order-book best ask snapshot, minor units (Slice 2 presentation layer).
+   * Attached at the mock boundary from the same seed the live order book serves, so
+   * book-less surfaces (marketplace cards) agree with book-fed surfaces (detail).
+   * Absent on funding listings (no book) and unknown ids.
+   */
+  bestAskUsd?: number | null;
 }

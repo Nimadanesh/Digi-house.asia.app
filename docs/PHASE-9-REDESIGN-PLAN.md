@@ -254,3 +254,32 @@ At the end of every slice, append a short entry to this file:
 - Remaining issues: P0-1/P0-2 → Slice 2; P1-1/P1-2/P1-3 → Slice 4 (P1-3 via Slice 2);
   P2-1/P3-2 → Slice 8; P2-2/P2-3/P3-1 → Slice 7/6/3; P2-4 → Slice 5 (see report §5)
 - Next slice: Slice 2 — one canonical financial presentation layer
+
+### Slice 2 — One canonical financial presentation layer
+
+- Status: `PASS`
+- Commit: (this commit — code + tests + docs)
+- Scope completed: new `src/lib/economics/property-presentation.ts` (single approved
+  paths: $100 primary price, V1 monthly income-or-pending, book-consistent current
+  price, canonical valuation/supply/ledger progress); cards, featured card, income
+  calculator, and buy qty/summary previews rewired to it; seeded bestAsk snapshot
+  attached at the mock boundary (`toCanonicalListing`) so cards agree with the live
+  book; fixture monthly/annual display shortcuts deleted from `property-yield.ts`
+  (legacy weekly settlement math untouched); `buyAssumptionRate` copy rewritten ×12
+  locales; Income filter/sort now use presented income (9 known match)
+- Files changed: presentation module (new) + its 24-villa parity tests (new);
+  `types/property.ts` (optional `bestAskUsd`); mock boundary (`canonical-listing.ts`
+  newly tracked — pre-existing untracked V1-era content plus the Slice 2 bestAsk delta);
+  marketplace view model + filter; 5 components; `property-yield` cleanup; 8 updated
+  test files; 12 locale files; plan status; decision log (DEC-004/DEC-005 RESOLVED)
+- Tests run and results: new parity tests 8/8 (RED-verified before implementation);
+  full vitest 124 files 1107/1107; typecheck clean; lint 0 errors (7 pre-existing
+  warnings); build green (13 routes); Playwright 40 passed/6 expected skips
+- Design/UI QA result: PASS at 480×840 (live parity Grand $16.29 / Emerald $2.27 /
+  Syrene $256.02 / Trajan pending; no overflow; screenshots read); fa RTL via E2E
+  estate-rtl + buy/sell RTL gates (green, no new layout primitives)
+- Remaining issues: P1-2 (ask/last-trade labeling) + P1-1/P1-3 → Slice 4; P2-4 → Slice 5;
+  P2-1/P3-2 → Slice 8; P2-2/P2-3 → Slice 7/6; P3-1 → Slice 3; Income filter now 9-match
+  (honest) — Slice 6 may revisit empty-state guidance; lock/chart/seed-contract
+  fixture-rate paths intentionally preserved (settlement, out of scope)
+- Next slice: Slice 3 — resolve `Data pending` villa by villa

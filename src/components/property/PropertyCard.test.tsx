@@ -73,8 +73,12 @@ describe("PropertyCard — Slice F canonical estate card", () => {
 
   it("Estate Value carries compact ⓘ provenance (estimated) — never a visible debug label", () => {
     render(<PropertyCard estate={estate} nowMs={Date.UTC(2026, 6, 26)} />);
-    const info = screen.getByTestId("provenance-info");
-    expect(info).toHaveAttribute("data-provenance", "estimated");
+    // PROMPT 04: estate value + growth potential each carry compact provenance.
+    const infos = screen.getAllByTestId("provenance-info");
+    expect(infos.length).toBeGreaterThanOrEqual(2);
+    for (const info of infos) {
+      expect(info).toHaveAttribute("data-provenance", "estimated");
+    }
     expect(screen.queryByText("Estimated")).not.toBeInTheDocument();
     expect(screen.queryByText("Observed")).not.toBeInTheDocument();
     expect(screen.queryByText("Calculated")).not.toBeInTheDocument();
@@ -100,13 +104,23 @@ describe("PropertyCard — Slice F canonical estate card", () => {
     expect(screen.getByTestId("card-status-badge")).toHaveTextContent("New");
   });
 
-  it("renders 'Data pending' instead of a fabricated income figure when income data is missing", () => {
-    const noIncome = toMarketplaceEstate({ ...listing, annualRentUsd: 0 });
+  it("renders 'Data pending' instead of a fabricated income figure when V1 income is unknown", () => {
+    // Slice 2: pending follows the presentation layer (V1 unknown), not fixture fields.
+    const noIncome = toMarketplaceEstate({
+      ...listing,
+      id: "prop-brooklyn-brownstone-flat",
+    });
     render(<PropertyCard estate={noIncome} nowMs={Date.UTC(2026, 6, 26)} />);
     expect(screen.getByTestId("card-income-pending")).toBeInTheDocument();
     expect(screen.getByText("Data pending")).toBeInTheDocument();
     // Never a zero dollar figure.
     expect(screen.queryByText("$0.00")).not.toBeInTheDocument();
+  });
+
+  it("shows the presented V1 monthly income for a computable villa (Grand: $16.29)", () => {
+    render(<PropertyCard estate={estate} nowMs={Date.UTC(2026, 6, 26)} />);
+    expect(screen.queryByTestId("card-income-pending")).not.toBeInTheDocument();
+    expect(screen.getByText("$16.29")).toBeInTheDocument();
   });
 
   it("resale card labels the price as 'Last price', shows the market price and no availability (PD-07)", () => {
@@ -129,9 +143,10 @@ describe("PropertyCard — Slice F canonical estate card", () => {
     expect(screen.queryByTestId("card-availability")).not.toBeInTheDocument();
   });
 
-  it("PROMPT 03: Grand shows the $8M–$10M range with $18M growth potential (no percentage)", () => {
+  it("PROMPT 05: Grand shows exactly $8M with $18M growth potential (no percentage)", () => {
     render(<PropertyCard estate={estate} nowMs={Date.UTC(2026, 6, 26)} />);
-    expect(screen.getByTestId("card-estate-value")).toHaveTextContent("$8M–$10M");
+    expect(screen.getByTestId("card-estate-value")).toHaveTextContent("$8M");
+    expect(screen.getByTestId("card-estate-value")).not.toHaveTextContent("$10M");
     expect(screen.getByTestId("card-growth-potential")).toHaveTextContent(
       "Estimated Growth Potential",
     );
@@ -146,8 +161,8 @@ describe("PropertyCard — Slice F canonical estate card", () => {
       totalShares: 1000,
     });
     render(<PropertyCard estate={aerial} nowMs={Date.UTC(2026, 6, 26)} />);
-    expect(screen.getByTestId("card-estate-value")).toHaveTextContent("$20M");
+    expect(screen.getByTestId("card-estate-value")).toHaveTextContent("$18M");
     expect(screen.getByTestId("card-growth-potential")).toHaveTextContent("$26.4M");
-    expect(screen.getByTestId("card-growth-potential")).toHaveTextContent("+32%");
+    expect(screen.getByTestId("card-growth-potential")).toHaveTextContent("+46.7%");
   });
 });

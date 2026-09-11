@@ -4,7 +4,8 @@
 import { useTranslations } from "next-intl";
 import { Minus, Plus } from "lucide-react";
 import { usd, ton, estimateNanoTon, pct } from "@/lib/format";
-import { positionYieldUsd } from "@/lib/property-yield";
+import { presentPositionMonthlyIncome } from "@/lib/economics/property-presentation";
+import { unavailableLabel } from "@/lib/availability";
 import { TON_PRICE_USD_CENTS } from "@/lib/constants";
 import type { Listing } from "@/types/property";
 import type { BuyCurrency } from "@/types/buy";
@@ -47,7 +48,9 @@ export function BuyQtyStep({
   const max = remaining;
   const unitPrice = unitPriceUsd ?? listing.sharePriceUsd;
   const totalUsd = qty * unitPrice;
-  const weekly = positionYieldUsd(listing, qty).weeklyUsd;
+  // Slice 2: projected income from the single presentation layer (V1, or
+  // pending) — never the fixture yield shortcut.
+  const monthly = presentPositionMonthlyIncome(listing.id, qty);
   const invalid = qty < 1 || qty > remaining;
   // Ownership-first framing (redesign §8): the share count is expressed as a stake.
   const sharePct = listing.totalShares > 0 ? pct(qty / listing.totalShares) : pct(0);
@@ -205,9 +208,11 @@ export function BuyQtyStep({
           </span>
         </div>
         <div className="flex justify-between gap-2 text-sm">
-          <span className="text-muted-foreground">{t("estWeeklyYield")}</span>
+          <span className="text-muted-foreground">{t("estMonthlyYield")}</span>
           {/* Projected — foreground, never Paid-green. */}
-          <span className="tnum font-semibold text-foreground">{usd(weekly)}</span>
+          <span className="tnum font-semibold text-foreground" data-testid="buy-est-monthly">
+            {monthly != null ? usd(monthly) : unavailableLabel("backend_absent")}
+          </span>
         </div>
       </div>
       <p className="text-[0.6875rem] text-center text-muted-foreground">

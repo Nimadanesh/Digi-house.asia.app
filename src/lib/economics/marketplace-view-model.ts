@@ -13,7 +13,10 @@
 //   routing/deep-links never crash on an unmapped id.
 import type { Provenance } from "@/types/estate";
 import type { Listing } from "@/types/property";
-import { getCurrentSharePrice } from "@/lib/property-price";
+import {
+  getPresentedCurrentPrice,
+  getPresentedMonthlyIncome,
+} from "./property-presentation";
 import { getCanonicalEstate } from "./estates/canonical-24";
 import { getEstate24ByRuntimeId } from "./estates/estate-24-data";
 import {
@@ -68,9 +71,11 @@ export interface MarketplaceEstate {
   sharesRemaining: number;
   fundingProgressRatio: number;
   createdAt: string;
-  /** Mock trading-layer income inputs (preserved for hasIncomeData continuity). */
-  annualRentUsd: number;
-  monthlyYieldRate: number;
+  /**
+   * Presented monthly income per share, minor units (Slice 2 single presentation
+   * layer = V1). Null = UNKNOWN → callers render pending, never 0.
+   */
+  presentedMonthlyIncomeCents: number | null;
 }
 
 export function toMarketplaceEstate(listing: Listing): MarketplaceEstate {
@@ -101,14 +106,13 @@ export function toMarketplaceEstate(listing: Listing): MarketplaceEstate {
         : null,
     status: listing.status,
     sharePriceUsd: listing.sharePriceUsd,
-    currentPriceUsd: getCurrentSharePrice(listing),
+    currentPriceUsd: getPresentedCurrentPrice(listing),
     totalShares: listing.totalShares,
     sharesSold: listing.sharesSold,
     sharesRemaining: listing.sharesRemaining,
     fundingProgressRatio: listing.fundingProgressRatio,
     createdAt: listing.createdAt,
-    annualRentUsd: listing.annualRentUsd,
-    monthlyYieldRate: listing.monthlyYieldRate,
+    presentedMonthlyIncomeCents: getPresentedMonthlyIncome(listing.id).cents,
   };
 }
 

@@ -4,7 +4,7 @@
 // preview mirrors the server math, the server always computes the actual charge.
 import { useState } from "react";
 import { pct, usd, ton, estimateNanoTon } from "@/lib/format";
-import { positionYieldUsd } from "@/lib/property-yield";
+import { presentPositionMonthlyIncome } from "@/lib/economics/property-presentation";
 import { previewBuyQuote } from "@/lib/buy-quote";
 import { unavailableLabel } from "@/lib/availability";
 import { TON_PRICE_USD_CENTS } from "@/lib/constants";
@@ -47,7 +47,9 @@ export function BuySummaryStep({
   const unitPrice = unitPriceUsd ?? listing.sharePriceUsd;
   // Single total computation shared with the MainButton confirm label.
   const { feesUsd, totalPayableUsd } = previewBuyQuote(qty, unitPrice, fees.data ?? []);
-  const weekly = positionYieldUsd(listing, qty).weeklyUsd;
+  // Slice 2: projected income from the single presentation layer (V1, or
+  // pending) — identical basis to the qty step. No weekly-yield presentation here.
+  const monthly = presentPositionMonthlyIncome(listing.id, qty);
   const ownership =
     listing.totalShares > 0
       ? t("buyShareOfEstate", { qty, pct: pct(qty / listing.totalShares) })
@@ -96,10 +98,15 @@ export function BuySummaryStep({
           </span>
         </Row>
         <Row>
-          <span className="text-sm text-muted-foreground">{t("estWeeklyYield")}</span>
+          <span className="text-sm text-muted-foreground">{t("estMonthlyYield")}</span>
           {/* Projected — never success-green (Paid-only color); the label
               already carries the Projected state. */}
-          <span className="ml-auto text-sm tnum font-semibold text-foreground">{usd(weekly)}</span>
+          <span
+            className="ml-auto text-sm tnum font-semibold text-foreground"
+            data-testid="buy-summary-monthly"
+          >
+            {monthly != null ? usd(monthly) : unavailableLabel("backend_absent")}
+          </span>
         </Row>
         {/* Owner Stay — honest unavailable state in the purchase review (redesign §8). */}
         <Row>
@@ -121,9 +128,8 @@ export function BuySummaryStep({
         contentClassName="border-t border-border px-4 py-3"
       >
         <div className="space-y-1.5 text-xs leading-relaxed text-muted-foreground">
-          <p>{t("buyAssumptionRate", { rate: listing.monthlyYieldRate })}</p>
+          <p>{t("buyAssumptionRate")}</p>
           <p>{t("buyFirstNote")}</p>
-          <p>{t("onLockedSharesNote")}</p>
           <p>{t("invPlansNote")}</p>
         </div>
       </Disclosure>

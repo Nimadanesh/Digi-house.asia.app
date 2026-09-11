@@ -99,6 +99,7 @@ function PropertyCardInner({
   }
 
   const cover = estate.images[0] ?? "/images/properties/p1.png";
+  // Slice 2: income comes from the single presentation layer (V1, or pending).
   const incomeAvailable = hasIncomeData(estate);
   const secondary = estate.status === "resale" || estate.status === "funded";
   // Shared demo-tape clock: keeps the "New" badge and the "New" filter in agreement.
@@ -210,10 +211,13 @@ function PropertyCardInner({
             (no extra badge beside every card); never mixed with income. */}
         {estate.growthPotential ? (
           <p
-            className="flex min-w-0 items-baseline justify-between gap-2 text-xs leading-relaxed tnum"
+            className="flex min-w-0 items-center justify-between gap-2 text-xs leading-relaxed tnum"
             data-testid="card-growth-potential"
           >
-            <span className="min-w-0 truncate text-muted-foreground">{tProperty("growthPotentialTitle")}</span>
+            <span className="flex min-w-0 items-center gap-1 truncate text-muted-foreground">
+              <span className="min-w-0 truncate">{tProperty("growthPotentialTitle")}</span>
+              <ProvenanceInfo provenance={estate.growthPotential.provenance} className="!size-5" />
+            </span>
             <span className="shrink-0 font-semibold text-foreground">
               {usdCompact(estate.growthPotential.potentialValue)}
               {formatGrowthPct(estate.growthPotential.potentialPct) != null
