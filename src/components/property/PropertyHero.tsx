@@ -256,20 +256,8 @@ export function PropertyHero({
       >
         {ctaLabel}
       </button>
-
-      {/* Genuine supply constraint only — primary offerings with known
-          remaining shares. Never rendered for secondary or unknown supply. */}
-      {isPrimary && !soldOut && listing.sharesRemaining > 0 ? (
-        <p
-          className="text-center text-xs leading-relaxed text-muted-foreground tnum"
-          data-testid="hero-supply"
-        >
-          {t("fundedCaption", {
-            pct: Math.round((listing.fundingProgressRatio ?? 0) * 100),
-            remaining: listing.sharesRemaining,
-          })}
-        </p>
-      ) : null}
     </div>
   );
 }
+// Slice 6 note: the under-CTA funding caption duplicated the status banner
+// above and the metrics sold/total below — removed; both remain.

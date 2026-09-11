@@ -58,6 +58,7 @@ vi.mock("@/hooks/useSells", () => ({
 }));
 
 import { usePortfolio } from "@/hooks/usePortfolio";
+import { useCancelOrder } from "@/hooks/useSells";
 import { useLocks } from "@/hooks/useLocks";
 import PortfolioPage from "@/app/(app)/portfolio/page";
 import type { PortfolioSummary } from "@/types/position";
@@ -192,6 +193,80 @@ describe("Portfolio page", () => {
     expect(
       screen.queryByText("simulated weekly payout · on-chain verifiable post-MVP"),
     ).not.toBeInTheDocument();
+  });
+
+  it("cancel sheet states the honest outcome, never an investing-balance fiction", () => {
+    vi.mocked(usePortfolio).mockReturnValue({
+      data: {
+        ...loadedSummary,
+        holdings: [holding],
+        openOrders: [
+          {
+            id: "ord-1",
+            propertyId: "prop-bayside-marina-penthouse",
+            makerAddress: "EQ",
+            side: "sell",
+            priceUsd: 26000,
+            quantity: 5,
+            filledQuantity: 0,
+            status: "open",
+            createdAt: "2026-07-18T00:00:00Z",
+          },
+        ],
+      },
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    } as never);
+    render(<PortfolioPage />);
+    fireEvent.click(screen.getByTestId("cancel-order-ord-1"));
+    expect(screen.getByTestId("cancel-order-confirm")).toHaveTextContent(
+      /nothing will be bought or sold/i,
+    );
+    expect(
+      screen.getByTestId("cancel-order-confirm").textContent?.toLowerCase(),
+    ).not.toContain("investing balance");
+  });
+
+  it("cancel success states the honest outcome, never an investing-balance fiction", () => {
+    vi.mocked(useCancelOrder).mockReturnValue({
+      mutate: ((id: string, opts?: { onSuccess?: () => void }) => opts?.onSuccess?.()) as never,
+      isPending: false,
+      isError: false,
+      error: null,
+      variables: null,
+    } as never);
+    vi.mocked(usePortfolio).mockReturnValue({
+      data: {
+        ...loadedSummary,
+        holdings: [holding],
+        openOrders: [
+          {
+            id: "ord-1",
+            propertyId: "prop-bayside-marina-penthouse",
+            makerAddress: "EQ",
+            side: "sell",
+            priceUsd: 26000,
+            quantity: 5,
+            filledQuantity: 0,
+            status: "open",
+            createdAt: "2026-07-18T00:00:00Z",
+          },
+        ],
+      },
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    } as never);
+    render(<PortfolioPage />);
+    fireEvent.click(screen.getByTestId("cancel-order-ord-1"));
+    fireEvent.click(screen.getByTestId("cancel-order-confirm-confirm"));
+    expect(screen.getByTestId("cancel-order-confirm-success")).toHaveTextContent(
+      /nothing was bought or sold/i,
+    );
+    expect(
+      screen.getByTestId("cancel-order-confirm-success").textContent?.toLowerCase(),
+    ).not.toContain("investing balance");
   });
 
   it("loaded: shows open orders when present", () => {

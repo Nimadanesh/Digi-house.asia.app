@@ -80,6 +80,21 @@ An agent may discover and record findings, but may not change the product contra
 - Verification: `property-presentation.test.ts` card-price parity 24/24 + live probe
   (Syrene $256.02 card == hero; Emerald $81.60) + full suite 1107/1107 + E2E 40/6.
 
+### DEC-008 — Slice 6: portfolio cancel sheet copy is hardcoded English
+- Date: 2026-09-11
+- Status: OPEN
+- Finding: The cancel-confirm sheet on Portfolio (title, description, detail labels,
+  confirm/keep labels, success copy) is hardcoded English in `page.tsx`, bypassing
+  the locale catalogs. Slice 6 reworded two misleading sentences in place (no worse
+  for i18n, honest now) but did not convert the sheet.
+- Evidence: `src/app/(app)/portfolio/page.tsx:228-271`.
+- Affected slice: Slice 7 (design/UI + i18n/RTL polish).
+- Severity: P3
+- Proposed decision: Convert the sheet to `portfolio.*` keys with translator follow-up.
+- Product approval:
+- Implementation slice:
+- Verification:
+
 ### DEC-006 — Slice 1: `funded` status contradicts the demo ledger
 - Date: 2026-09-11
 - Status: RESOLVED in Slice 5 (commit `slice-5` — see plan status)

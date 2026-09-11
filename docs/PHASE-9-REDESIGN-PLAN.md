@@ -370,3 +370,33 @@ At the end of every slice, append a short entry to this file:
   holdings + wallet gate) — covered by unit tests. Primary-buy E2E stops at the
   honest wallet gate (existing). P2-1 naming (DEC-007 → Slice 8).
 - Next slice: Slice 6 — rebuild the first-time buyer journey
+
+### Slice 6 — Rebuild the first-time buyer journey
+
+- Status: `PASS`
+- Commit: (this commit — code + tests + docs)
+- Scope completed: reviewed all 8 journey steps live at 480×840. Three minimal
+  improvements: (1) removed the under-CTA funding caption duplicating the status
+  banner + metrics sold/total (no test referenced it); (2) thesis ANR carries the
+  plain-language note resolving the range-vs-average stall (new `v1ThesisAnrNote`
+  key ×12 locales); (3) cancel-confirm/success copy no longer implies an
+  investing-balance account (reworded in place; sheet i18n conversion logged as
+  DEC-008 for Slice 7). Verified keep-as-is with evidence: marketplace/cards, hero
+  price/fraction/CTA, money-chain primer, rental-story + trust explainers, V1
+  methodology on Income (kept — the popover carries only generic provenance, so the
+  inline method is the audit trail, already fine-print, off the first viewport),
+  primary/secondary CTA routing, buy/sell review flows, success next-states.
+- Files changed: `PropertyHero` (dedup), `EstateV1Thesis` (ANR note), portfolio
+  `page.tsx` (cancel copy); `buyer-journey.test.tsx` (new), portfolio `page.test`
+  (cancel copy tests); `buyer-journey.spec.ts` (new journey spine E2E);
+  `v1ThesisAnrNote` ×12 locales; plan status; decision log (DEC-008 OPEN)
+- Tests run and results: new/updated tests RED-verified (4 unit fail) before
+  implementation (one failure was a test-tense bug, fixed in the test);
+  full vitest 128 files 1135/1135; typecheck clean; lint 0 errors
+  (7 pre-existing warnings); build green; Playwright 51 tests: 45 passed
+  (incl. 2 new journey tests), 6 expected skips, 0 failed
+- Design/UI QA result: PASS at 480×840 (trimmed hero + thesis note screenshots read;
+  zero overflow asserted in every new test; fa RTL via existing gates — new strings
+  reuse existing primitives)
+- Remaining issues: DEC-007 naming → Slice 8; DEC-008 cancel-sheet i18n → Slice 7.
+- Next slice: Slice 7 — design/UI and responsive polish pass

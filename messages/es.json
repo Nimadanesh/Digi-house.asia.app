@@ -523,6 +523,7 @@
     "scenarioAverage": "Average",
     "v1ThesisTitle": "Why this estate",
     "v1ThesisAnr": "Average nightly rate",
+    "v1ThesisAnrNote": "Feeds the revenue model — not a bookable nightly rate.",
     "v1ThesisRevenue": "Modeled annual revenue",
     "v1ThesisPerShare": "Projected income / share",
     "v1ThesisSeeIncome": "See how the economics work",

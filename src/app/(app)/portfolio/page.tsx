@@ -229,7 +229,7 @@ export default function PortfolioPage() {
         open={cancelTarget != null}
         onClose={closeCancelSheet}
         title="Cancel order"
-        description="The funds held in escrow for this order return to your investing balance."
+        description="Cancelling releases this order — nothing will be bought or sold."
         details={[
           {
             label: "Property",
@@ -259,7 +259,7 @@ export default function PortfolioPage() {
           cancelDone
             ? {
                 title: "Order cancelled",
-                message: "The escrowed funds are back in your investing balance.",
+                message: "Nothing was bought or sold — your position is unchanged.",
               }
             : null
         }
