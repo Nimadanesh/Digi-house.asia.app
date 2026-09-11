@@ -36,17 +36,25 @@ function HeroMarketContext({
   if (ask == null && last == null) return null;
   // Short-form basis vocabulary, shared with the metrics label ("Ask price" /
   // "Last price") — the MarketSummary below keeps its established Best ask/offer
-  // trio untouched.
-  const parts: string[] = [];
-  if (ask != null) parts.push(`${tc("askPrice")}: ${usd(ask)}`);
-  if (last != null && last !== ask) parts.push(`${tc("lastPrice")}: ${usd(last)}`);
-  if (parts.length === 0) return null;
+  // trio untouched. Each figure is bidi-isolated so ask/last never reorder
+  // in RTL locales (Slice 7).
+  const showLast = last != null && last !== ask;
   return (
     <p
       className="text-xs leading-relaxed text-muted-foreground tnum"
       data-testid="hero-market-context"
     >
-      {parts.join(" · ")}
+      {ask != null ? (
+        <>
+          {tc("askPrice")}: <span dir="ltr">{usd(ask)}</span>
+        </>
+      ) : null}
+      {ask != null && showLast ? " · " : null}
+      {showLast ? (
+        <>
+          {tc("lastPrice")}: <span dir="ltr">{usd(last)}</span>
+        </>
+      ) : null}
     </p>
   );
 }

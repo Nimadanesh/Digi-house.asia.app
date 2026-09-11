@@ -54,7 +54,7 @@ export function LockedFreeCard({
           </span>
           <span className="inline-flex shrink-0 items-center gap-0.5 text-[0.8125rem] font-semibold text-primary">
             {t("lockThem")}
-            <ChevronRight size={16} strokeWidth={1.75} aria-hidden />
+            <ChevronRight size={16} strokeWidth={1.75} aria-hidden className="rtl:rotate-180" />
           </span>
         </Link>
       ) : null}

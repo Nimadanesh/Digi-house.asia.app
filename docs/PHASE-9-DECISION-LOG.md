@@ -82,7 +82,7 @@ An agent may discover and record findings, but may not change the product contra
 
 ### DEC-008 — Slice 6: portfolio cancel sheet copy is hardcoded English
 - Date: 2026-09-11
-- Status: OPEN
+- Status: RESOLVED in Slice 7 (commit `slice-7` — see plan status)
 - Finding: The cancel-confirm sheet on Portfolio (title, description, detail labels,
   confirm/keep labels, success copy) is hardcoded English in `page.tsx`, bypassing
   the locale catalogs. Slice 6 reworded two misleading sentences in place (no worse
@@ -91,6 +91,27 @@ An agent may discover and record findings, but may not change the product contra
 - Affected slice: Slice 7 (design/UI + i18n/RTL polish).
 - Severity: P3
 - Proposed decision: Convert the sheet to `portfolio.*` keys with translator follow-up.
+- Product approval:
+- Implementation slice: Slice 7
+- Verification: 13 `cancelOrder*` keys ×12 locales; EN output byte-identical
+  (existing unit + order-lifecycle E2E green); fa key-presence test.
+
+### DEC-009 — Slice 7: secondary chips/pills below the 44px touch-target rule
+- Date: 2026-09-11
+- Status: OPEN
+- Finding: Filter chips (36px), sort pills (32px), tab chips (36px), chart range
+  pills (32px), income-by-estate rows (28px), demo badge (32px) are below the
+  ≥44px rule (AGENTS.md + DESIGN_SYSTEM DO-list). All primary CTAs, steppers, and
+  sheet buttons are ≥44px. Enlarging chips to 44px would break Telegram density
+  (the STRICT DESIGN RULE outranks the generic minimum).
+- Evidence: Slice 7 automated sweep (8 routes × 3 viewports × 2 locales = 48
+  combos; tap-target audit + screenshots) recorded in the plan's Slice 7 entry —
+  counts stable, no overflow, no mis-taps in E2E.
+- Affected slice: product decision (no code change until APPROVED).
+- Severity: P3
+- Proposed decision: Accept 32–36px secondary chips per Telegram parity; keep 44px+
+  for primary actions. Alternatives: enlarge all chips (visual churn) or per-chip
+  min-heights (incoherent).
 - Product approval:
 - Implementation slice:
 - Verification:

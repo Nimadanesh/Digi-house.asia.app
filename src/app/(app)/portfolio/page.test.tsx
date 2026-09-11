@@ -60,6 +60,8 @@ vi.mock("@/hooks/useSells", () => ({
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { useCancelOrder } from "@/hooks/useSells";
 import { useLocks } from "@/hooks/useLocks";
+import enMessages from "../../../../messages/en.json";
+import faMessages from "../../../../messages/fa.json";
 import PortfolioPage from "@/app/(app)/portfolio/page";
 import type { PortfolioSummary } from "@/types/position";
 
@@ -267,6 +269,30 @@ describe("Portfolio page", () => {
     expect(
       screen.getByTestId("cancel-order-confirm-success").textContent?.toLowerCase(),
     ).not.toContain("investing balance");
+  });
+
+  it("cancel sheet copy lives in locale catalogs (DEC-008, en + fa)", () => {
+    const keys = [
+      "cancelOrderTitle",
+      "cancelOrderDesc",
+      "cancelOrderProperty",
+      "cancelOrderOrder",
+      "cancelOrderBuy",
+      "cancelOrderSell",
+      "cancelOrderPrice",
+      "cancelOrderValue",
+      "cancelOrderConfirm",
+      "cancelOrderKeep",
+      "cancelOrderCancelling",
+      "cancelOrderCancelled",
+      "cancelOrderDoneMsg",
+    ] as const;
+    const en = enMessages.portfolio as Record<string, string | undefined>;
+    const fa = faMessages.portfolio as Record<string, string | undefined>;
+    for (const key of keys) {
+      expect(en[key]?.length, `en ${key}`).toBeGreaterThan(0);
+      expect(fa[key]?.length, `fa ${key}`).toBeGreaterThan(0);
+    }
   });
 
   it("loaded: shows open orders when present", () => {

@@ -34,7 +34,8 @@ export function RentalStoryBlock({
             <span className="ml-auto flex min-w-0 items-center gap-1.5" data-testid="rental-story-rent">
               {nightlyDisplay != null ? (
                 <>
-                  <span className="truncate text-sm tnum font-semibold text-foreground">
+                  {/* Slice 7: bidi isolation for $-ranges in RTL locales. */}
+                  <span dir="ltr" className="truncate text-sm tnum font-semibold text-foreground">
                     {nightlyDisplay}
                   </span>
                   <ProvenanceInfo provenance="observed" />

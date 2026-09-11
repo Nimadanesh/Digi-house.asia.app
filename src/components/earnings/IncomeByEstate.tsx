@@ -227,7 +227,7 @@ function IncomeRow({
         <ChevronRight
           size={18}
           strokeWidth={1.75}
-          className="shrink-0 text-muted-foreground"
+          className="shrink-0 text-muted-foreground rtl:rotate-180"
           aria-hidden
         />
       </div>

@@ -218,7 +218,7 @@ function PropertyCardInner({
               <span className="min-w-0 truncate">{tProperty("growthPotentialTitle")}</span>
               <ProvenanceInfo provenance={estate.growthPotential.provenance} className="!size-5" />
             </span>
-            <span className="shrink-0 font-semibold text-foreground">
+            <span dir="ltr" className="shrink-0 font-semibold text-foreground">
               {usdCompact(estate.growthPotential.potentialValue)}
               {formatGrowthPct(estate.growthPotential.potentialPct) != null
                 ? ` · ${formatGrowthPct(estate.growthPotential.potentialPct)}`
@@ -278,7 +278,10 @@ function Metric({
       <div className="mb-1 text-[0.625rem] uppercase tracking-wide leading-tight text-muted-foreground">
         {label}
       </div>
+      {/* Slice 7: numeric figures keep LTR order in RTL locales (bidi isolation;
+          no-op in LTR). */}
       <div
+        dir="ltr"
         className={
           strong
             ? "truncate text-[0.9375rem] font-bold tnum tracking-tight text-foreground"

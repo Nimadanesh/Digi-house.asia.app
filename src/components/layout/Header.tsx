@@ -59,7 +59,7 @@ export function Header() {
             data-testid="header-back"
             className="absolute left-0 flex items-center justify-center size-[44px] -ml-2 active:scale-[0.97] transition-transform duration-[120ms] ease-out text-foreground"
           >
-            <ChevronLeft size={24} strokeWidth={1.75} />
+            <ChevronLeft size={24} strokeWidth={1.75} className="rtl:rotate-180" />
           </button>
         ) : null}
         <span

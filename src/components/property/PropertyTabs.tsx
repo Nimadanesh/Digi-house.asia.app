@@ -37,9 +37,15 @@ export function PropertyTabs({
 
   function handleKeyDown(e: React.KeyboardEvent) {
     const idx = PROPERTY_TABS.indexOf(active);
+    // Slice 7: arrow direction follows document direction (WAI-APG) — in RTL,
+    // ArrowLeft advances visually-left (next), ArrowRight goes back.
+    const rtl =
+      typeof document !== "undefined" && document.documentElement.dir === "rtl";
+    const forward = rtl ? "ArrowLeft" : "ArrowRight";
+    const backward = rtl ? "ArrowRight" : "ArrowLeft";
     let next: number | null = null;
-    if (e.key === "ArrowRight") next = (idx + 1) % PROPERTY_TABS.length;
-    else if (e.key === "ArrowLeft") next = (idx - 1 + PROPERTY_TABS.length) % PROPERTY_TABS.length;
+    if (e.key === forward) next = (idx + 1) % PROPERTY_TABS.length;
+    else if (e.key === backward) next = (idx - 1 + PROPERTY_TABS.length) % PROPERTY_TABS.length;
     else if (e.key === "Home") next = 0;
     else if (e.key === "End") next = PROPERTY_TABS.length - 1;
     if (next === null) return;

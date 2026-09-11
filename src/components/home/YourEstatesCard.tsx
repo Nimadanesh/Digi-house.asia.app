@@ -58,7 +58,7 @@ export function YourEstatesCard({
           data-testid="your-estates-cta"
         >
           {t("viewMyEstates")}
-          <ChevronRight size={16} strokeWidth={2.25} aria-hidden />
+          <ChevronRight size={16} strokeWidth={2.25} aria-hidden className="rtl:rotate-180" />
         </div>
       </Block>
     </Link>

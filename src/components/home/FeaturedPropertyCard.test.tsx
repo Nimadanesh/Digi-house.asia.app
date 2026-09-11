@@ -69,6 +69,12 @@ describe("FeaturedPropertyCard — Featured Estate (identity first)", () => {
     expect(screen.queryByText("$16.29")).not.toBeInTheDocument();
   });
 
+  it("view-estate chevron mirrors in RTL", () => {
+    const { container } = render(<FeaturedPropertyCard listing={listing} />);
+    const icon = container.querySelector('[data-testid="featured-cta"] svg');
+    expect(icon?.getAttribute("class") ?? "").toMatch(/rtl:rotate-180/);
+  });
+
   it("exposes no APY hero metric or scarcity cues", () => {
     render(<FeaturedPropertyCard listing={listing} />);
     expect(screen.queryByText("APY")).not.toBeInTheDocument();

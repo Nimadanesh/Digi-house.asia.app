@@ -88,7 +88,7 @@ export function FeaturedPropertyCard({
               data-testid="featured-cta"
             >
               {t("viewEstate")}
-              <ChevronRight size={16} strokeWidth={2.25} aria-hidden />
+              <ChevronRight size={16} strokeWidth={2.25} aria-hidden className="rtl:rotate-180" />
             </div>
           </div>
         </Block>

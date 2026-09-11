@@ -400,3 +400,46 @@ At the end of every slice, append a short entry to this file:
   reuse existing primitives)
 - Remaining issues: DEC-007 naming → Slice 8; DEC-008 cancel-sheet i18n → Slice 7.
 - Next slice: Slice 7 — design/UI and responsive polish pass
+
+### Slice 7 — Design/UI and responsive polish pass
+
+- Status: `PASS`
+- Commit: (this commit — code + tests + docs)
+- Scope completed: automated sweep (8 routes × 360×740/480×840/1280×800 × en/fa =
+  48 combos: zero overflow, zero wide nodes, zero raw keys, zero page errors).
+  Fixed with evidence: (1) RTL bidi isolation — fa reversed $-ranges
+  ($76,458–$67,655) now render LTR-correct (card nightly/growth, rental story,
+  about sheet, hero caption per-figure spans; verified live in fa); (2) directional
+  chevron mirroring — back chevrons (Header, compact top bar) + 10 forward chevrons
+  (Featured, YourEstates, IncomeByEstate, EarningsWithdrawEntry, SettingsSheet×5 —
+  4 already flipped, LanguageSelector already flipped, LockedFreeCard, DocumentsList);
+  (3) tab-strip arrow keys follow document direction (WAI-APG); (4) DEC-008 —
+  cancel sheet fully keyed (`cancelOrder*` ×13 ×12 locales, EN output identical).
+  Investigated, no change: hydration console warnings (3/48 loads, 0/4 repro runs,
+  no user-visible symptom — timing-flake hypothesis, timers use fixed SSR epoch);
+  sort-strip clipping (scrollable by design); floating pill/tab-bar overlap (standard
+  overlay, all content reachable, clearance by construction); desktop margins
+  (intended 480px Telegram canvas); fa digit localization (consistent native fa UX).
+  States audit: loading/empty/error present on home/marketplace/portfolio/earnings/
+  transactions (list-level empty included); keyboard focus visible via themed
+  outline-color + UA default; icon buttons labelled; reduced-motion honored.
+  Translator backlog measured: 0 missing keys in all locales, ~206–219 EN-mirrored
+  keys/locale (no code change — translators follow up).
+- Files changed: 4 bidi sites + hero caption; `PropertyTabs` RTL keys; 12 chevron
+  flips; portfolio page (DEC-008);   `rtl-bidi.test.tsx` + `PropertyTabs.test.tsx` +
+  `Header.test.tsx` (new); Featured/portfolio test additions; `estate-rtl.spec`
+  (variant test); 13 cancel keys ×12 locales; plan status; decision log
+  (DEC-008 RESOLVED, DEC-009 OPEN)
+- Tests run and results: new tests RED-verified (9 unit + 1 E2E fail) before
+  implementation (one misdiagnosis corrected by experiment: the `rtl:` variant IS
+  built into Tailwind v4 — verified `rotate=180deg` with and without a custom
+  definition, so no globals.css change shipped); full vitest 131 files 1146/1146;
+  typecheck clean; lint 0 errors (7 pre-existing warnings); build green;
+  Playwright 52 tests: 46 passed (incl. RTL variant test), 6 expected skips, 0 failed
+- Design/UI QA result: PASS — fa marketplace/detail re-screenshots read (range order
+  correct, chevrons mirrored, no overflow); en/desktop screenshots read; no raw keys
+  in 12 locales (automated); icons have labels; sheets focus-safe (existing patterns)
+- Remaining issues: DEC-007 naming → Slice 8; DEC-009 tap-target acceptance (product
+  decision, no code); translator backlog (~210 keys/locale, no code); hydration
+  flake note (P3, revisit only with user-visible repro)
+- Next slice: Slice 8 — cross-surface consistency and regression hardening
