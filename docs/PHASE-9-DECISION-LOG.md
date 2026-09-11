@@ -1,0 +1,107 @@
+# Phase 9 Decision Log
+
+This is the only place where findings, exceptions, and approved changes to the Phase 9 plan are recorded.
+
+## Status vocabulary
+
+- `OPEN`: finding recorded, no decision yet.
+- `ACCEPTED`: intentionally deferred or accepted with rationale.
+- `APPROVED`: explicit product decision authorizes a change.
+- `RESOLVED`: implemented and verified.
+- `BLOCKED`: prevents safe continuation.
+
+## Change rule
+
+An agent may discover and record findings, but may not change the product contract, reorder slices, expand scope, or introduce new architecture without an explicit `APPROVED` decision. If a finding is outside the active slice, record it and continue only if safe.
+
+## Decision record template
+
+```md
+### DEC-XXX — Short title
+- Date:
+- Status:
+- Finding:
+- Evidence:
+- Affected slice:
+- Severity: P0 / P1 / P2 / P3
+- Proposed decision:
+- Product approval:
+- Implementation slice:
+- Verification:
+```
+
+## Initial decisions
+
+### DEC-001 — Phase 9 execution control
+- Status: APPROVED
+- Decision: Execute one small slice at a time. The agent must stop after the active slice and wait for the user command `next slice`.
+
+### DEC-002 — Baseline before correction
+- Status: APPROVED
+- Decision: The first execution step is audit-only. No broad fixes are allowed before the actual baseline is recorded.
+
+### DEC-003 — Slice 0: diverged branch + uncommitted body must be acknowledged before Slice 1
+- Date: 2026-09-11
+- Status: OPEN
+- Finding: `phase-9-redesign` is ahead 10 / behind 12 vs `origin/phase-9-redesign`; the working tree carries ~100 modified files plus ~19 untracked files (incl. the +7589-line `ESTATE-24-DATA.json` rewrite and the uncommitted V1 engine). Slice 0 changed nothing and committed nothing.
+- Evidence: `docs/PHASE-9-BASELINE.md` §A (branch, HEAD `7ba236e`, status, commit lists).
+- Affected slice: Slice 1 entry.
+- Severity: P2 (process — blocks safe Slice 1 start, not a product defect)
+- Proposed decision: User decides commit/stash + upstream reconcile (merge vs rebase) before `next slice`.
+- Product approval:
+- Implementation slice:
+- Verification:
+
+### DEC-004 — Slice 0: card/detail monthly-income divergence carried to Slice 2
+- Date: 2026-09-11
+- Status: OPEN
+- Finding: Marketplace card prints fixture income (`$7.19` on Grand #1) while the detail grid prints V1 income (`$16.29`); the old `sharePrice × monthlyYieldRate` shortcut is still live on cards/home parallel to the V1 engine.
+- Evidence: `docs/PHASE-9-BASELINE.md` §E.1–E.3, §F P0-1 (live 480×840 probe + `src/lib/marketplace-filter.ts:102-107` vs `src/components/property/PropertyMetricsGrid.tsx:53`).
+- Affected slice: Slice 2 (single canonical financial presentation layer).
+- Severity: P0
+- Proposed decision: None in this slice (audit-only). Slice 1 tables it; Slice 2 removes the divergence.
+- Product approval:
+- Implementation slice:
+- Verification:
+
+### DEC-005 — Slice 1: card/detail secondary price gap (lastTrade vs seeded bestAsk +2%)
+- Date: 2026-09-11
+- Status: OPEN
+- Finding: On all 18 funded/resale villas the card prints `lastTrade` (no book) while the
+  detail hero prints the seeded `bestAsk` (`lastTrade × 1.02`, `seed/orderbooks.ts:13`),
+  e.g. Syrene $251.00 → $256.02. Same share, two prices on adjacent screens.
+- Evidence: `docs/PHASE-9-SLICE-1.md` §2 (24-row table) + §4 (ladder + call sites).
+- Affected slice: Slice 2 (single price path); label fix in Slice 4.
+- Severity: P0
+- Proposed decision: None in this slice (audit-only).
+- Product approval:
+- Implementation slice:
+- Verification:
+
+### DEC-006 — Slice 1: `funded` status contradicts the demo ledger
+- Date: 2026-09-11
+- Status: OPEN
+- Finding: 4 villas read `funded` with 160/200/0/0 shares sold of 120k–250k (0–0.13%);
+  #14 shows `SHARES SOLD / TOTAL 0 / 250,000` under a sold-out status. Status is fixture
+  with no canonical source.
+- Evidence: `docs/PHASE-9-SLICE-1.md` §2 rows #3/#4/#14/#18 + §5 P1-1.
+- Affected slice: Slice 4 (market-context rules) / Slice 5 (stateful vs disclosed demo).
+- Severity: P1
+- Proposed decision: None in this slice (audit-only).
+- Product approval:
+- Implementation slice:
+- Verification:
+
+### DEC-007 — Slice 1: identity spelling differs by surface (R2 vs estate24 names)
+- Date: 2026-09-11
+- Status: OPEN
+- Finding: Cards use R2 canonical names (`Syrene (Villa Syrene)`), portfolio and detail
+  hero use estate24 names (`Villa Syrene`). Same villa, two names.
+- Evidence: `docs/PHASE-9-SLICE-1.md` §5 P2-1 (`portfolio/page.tsx:172`,
+  `property/[id]/page.tsx:375`, `marketplace-view-model.ts:86`).
+- Affected slice: Slice 8 (cross-surface consistency).
+- Severity: P2
+- Proposed decision: None in this slice (audit-only).
+- Product approval:
+- Implementation slice:
+- Verification:
