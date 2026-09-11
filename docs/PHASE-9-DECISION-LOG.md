@@ -82,7 +82,7 @@ An agent may discover and record findings, but may not change the product contra
 
 ### DEC-006 — Slice 1: `funded` status contradicts the demo ledger
 - Date: 2026-09-11
-- Status: OPEN
+- Status: RESOLVED in Slice 5 (commit `slice-5` — see plan status)
 - Finding: 4 villas read `funded` with 160/200/0/0 shares sold of 120k–250k (0–0.13%);
   #14 shows `SHARES SOLD / TOTAL 0 / 250,000` under a sold-out status. Status is fixture
   with no canonical source.
@@ -91,8 +91,17 @@ An agent may discover and record findings, but may not change the product contra
 - Severity: P1
 - Proposed decision: None in this slice (audit-only).
 - Product approval:
-- Implementation slice:
-- Verification:
+- Implementation slice: Slice 5
+- Verification: `demo-ledger.test.ts` 7/7 + `order-lifecycle.spec.ts` 3/3 + full suite
+  127 files 1131/1131 + E2E 43 passed / 6 expected skips.
+- Resolution (Slice 5 decision — STATEFUL in-session demo, documented): the demo
+  ledger is live module state — buys mutate holdings/sold/remaining/progress/totals,
+  instant sells settle holdings + ledger tx, orders surface in Portfolio until
+  cancelled, confirmBuy is idempotent, placed orders never move best. Fixture
+  statuses (`funding/funded/resale`) stay as the curated demo scenario mix (deriving
+  them from the ledger would destroy the mix and cascade into CTAs/E2E); both are
+  disclosed (global Demo badge, demo-tx disclaimer on buy success, demo order-book
+  note). Reload resets demo state — pinned by E2E, never persisted.
 
 ### DEC-007 — Slice 1: identity spelling differs by surface (R2 vs estate24 names)
 - Date: 2026-09-11

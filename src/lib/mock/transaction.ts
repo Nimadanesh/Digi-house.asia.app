@@ -9,6 +9,8 @@ import type { BuyPrepareResult, BuyVerifyResult } from "@/types/buy";
 import { previewFeeUsd } from "@/types/fees";
 import { seed } from "./seed";
 import { PROPERTIES } from "./seed/properties";
+import { getCanonicalListing } from "./canonical-listing";
+import { CANONICAL_BASE_PRICE_USD } from "@/lib/economics/canonical-offering";
 import { DEFAULT_FEE_TIERS } from "./fees";
 import { sleep, jitter } from "./sleep";
 import { makeSyntheticTxHash } from "@/lib/ton/synthetic-tx";
@@ -17,6 +19,8 @@ import { TON_PRICE_USD_CENTS } from "@/lib/constants";
 
 const INTENT_TTL_MS = 15 * 60 * 1000;
 const intents: BuyPrepareResult[] = [];
+/** Slice 5 — intents already settled (confirmBuy is idempotent per intent). */
+const settledIntentIds = new Set<string>();
 
 export function MockTxRepo(): TxRepo {
   return {
@@ -73,6 +77,11 @@ export function MockTxRepo(): TxRepo {
       if (!intent) {
         throw new Error(`MockTxRepo.confirmBuy: intent not found: ${input.intentId}`);
       }
+      // Slice 5 — idempotent replay: a retried confirmation returns the settled
+      // result WITHOUT minting shares twice (repeated actions stay consistent).
+      if (settledIntentIds.has(input.intentId)) {
+        return { intentId: input.intentId, status: "confirmed" };
+      }
       const property: Listing | undefined = PROPERTIES.find((p) => p.id === intent.propertyId)
         ?? seed.properties.find((p) => p.id === intent.propertyId);
       if (!property) throw new Error(`MockTxRepo.confirmBuy: property not found: ${intent.propertyId}`);
@@ -83,9 +92,14 @@ export function MockTxRepo(): TxRepo {
       const newAvgCost = holding && holding.sharesOwned > 0
         ? Math.round((holding.avgCostUsd * holding.sharesOwned + intent.priceUsdPerShare * intent.quantity) / newShares)
         : intent.priceUsdPerShare;
-      const newCurrentValue = newShares * property.sharePriceUsd;
-      const newShareRatio = newShares / property.totalShares;
-      const newPending = projectedYield(weeklyRent(property.annualRentUsd), newShares, property.totalShares);
+      // Canonical ownership math (Final PO Decisions 1–2): value at the $100 base
+      // price, ratio against the canonical V1 supply. The fixture record below is
+      // used ONLY for the demo rent-basis parameter (no canonical fact).
+      const canonical = getCanonicalListing(intent.propertyId);
+      const canonicalTotal = canonical?.totalShares ?? property.totalShares;
+      const newCurrentValue = newShares * CANONICAL_BASE_PRICE_USD;
+      const newShareRatio = canonicalTotal > 0 ? newShares / canonicalTotal : 0;
+      const newPending = projectedYield(weeklyRent(property.annualRentUsd), newShares, canonicalTotal);
       const updatedHolding = {
         propertyId: intent.propertyId,
         sharesOwned: newShares,
@@ -116,6 +130,7 @@ export function MockTxRepo(): TxRepo {
         createdAt: new Date().toISOString(),
       };
       seed.transactions.push(tx);
+      settledIntentIds.add(intent.intentId);
 
       return { intentId: intent.intentId, status: "confirmed" };
     },

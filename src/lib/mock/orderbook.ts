@@ -10,6 +10,17 @@ import { sleep, jitter } from "./sleep";
 /** Live demo orders (module state so the book reacts to placements). */
 const placed: Order[] = [];
 
+/**
+ * Slice 5 — live user-placed orders still open (copies). The portfolio summary
+ * merges these with the seed baseline so a placed order surfaces on every
+ * surface (never succeeds invisibly). Cancelled orders drop out here.
+ */
+export function liveOpenOrders(): Order[] {
+  return placed
+    .filter((o) => o.status === "open" || o.status === "queued")
+    .map((o) => ({ ...o }));
+}
+
 function bookFromPlaced(propertyId: string) {
   const seedBook = seed.orderBooks.find((b) => b.propertyId === propertyId);
   const bids = new Map<number, { quantity: number }>();

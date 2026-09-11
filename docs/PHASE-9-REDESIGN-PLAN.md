@@ -341,3 +341,32 @@ At the end of every slice, append a short entry to this file:
 - Remaining issues: P1-1 numbers half (DEC-006 → Slice 5); P2-1 naming (DEC-007 →
   Slice 8); sell-side context stays with the sheet review flow (Slice 5 owns sell honesty)
 - Next slice: Slice 5 — make Buy and Sell behavior honest and coherent
+
+### Slice 5 — Make Buy and Sell behavior honest and coherent
+
+- Status: `PASS`
+- Commit: (this commit — code + tests + docs)
+- Scope completed: full Buy/order flow traced (prepare → TonConnect send → record →
+  poll verify-and-settle; mock settles optimistically in confirmBuy per ADR-005).
+  DECISION (documented in DEC-006): stateful in-session demo ledger. Fixes: placed
+  limit-buy/custom-sell/queued orders now surface in Portfolio open orders
+  (`liveOpenOrders` merge — previously invisible); instant sell records an
+  `instant_sell` ledger tx (buys already did); `freeSharesAfter` double-subtract
+  fixed (exact remainder); `confirmBuy` idempotent per intent (no double-mint on
+  replay). No economics/settlement-rule changes (7% instant fee, tiered buy fees,
+  best-ask immutability all preserved and pinned by existing tests).
+- Files changed: `mock/orderbook.ts` (`liveOpenOrders`), `mock/portfolio.ts` (merge),
+  `mock/transaction.ts` (idempotent confirm), `mock/sells.ts` (ledger tx + remainder
+  fix); `demo-ledger.test.ts` (new, 7 tests); `order-lifecycle.spec.ts` (new, 3
+  journey tests); plan status; decision log (DEC-006 RESOLVED)
+- Tests run and results: new unit tests RED-verified (5 fail) before implementation;
+  full vitest 127 files 1131/1131; typecheck clean; lint 0 errors
+  (7 pre-existing warnings); build green; Playwright 49 tests: 43 passed
+  (incl. 3 new order-lifecycle journeys), 6 expected skips, 0 failed
+- Design/UI QA result: PASS at 480×840 (journeys use only existing surfaces;
+  screenshots in existing slice-g/h folders unchanged; new spec takes no screenshots
+  beyond its flow; zero overflow asserted in every new test; fa RTL via existing gates)
+- Remaining issues: none new. Instant-sell E2E unreachable in-browser (no funding
+  holdings + wallet gate) — covered by unit tests. Primary-buy E2E stops at the
+  honest wallet gate (existing). P2-1 naming (DEC-007 → Slice 8).
+- Next slice: Slice 6 — rebuild the first-time buyer journey
