@@ -88,8 +88,11 @@ export function toMarketplaceEstate(listing: Listing): MarketplaceEstate {
   const estate24 = getEstate24ByRuntimeId(listing.id) ?? null;
   return {
     id: listing.id,
-    name: canonical?.name.value ?? listing.title,
-    location: canonical?.location.value ?? listing.location,
+    // Slice 8 (DEC-007): user-visible identity comes from the adopted Estate24
+    // record — the same source portfolio, detail, home, and CSV use — so one
+    // villa never shows two names. R2 observed values remain the fallback.
+    name: estate24?.name ?? canonical?.name.value ?? listing.title,
+    location: estate24?.location.full ?? canonical?.location.value ?? listing.location,
     description: estate24?.description.short ?? listing.description,
     propertyType: estate24?.propertyType ?? null,
     valuationDisplay: getValuationDisplay(listing.id),

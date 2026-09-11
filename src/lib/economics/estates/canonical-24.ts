@@ -15,11 +15,12 @@
 // `docs/product/rebuild/research/24-PROPERTY-RESEARCH-DATASET.md`.
 // Observed identity fields (name/location/rate/images) are Rental Escapes facts.
 // FractionalLuxe economics are a separate layer with explicit provenance.
-// Valuations (product valuation decision, supersedes the R2 UNKNOWN default):
-// Grand 2 BDM keeps the approved ~$8–10M band as the canonical $8M seed value;
-// the other 23 carry their research central estimates as approved
-// ESTIMATED/MODELED product values — range centrals as documented midpoints
-// (La Dolce Vita $32M point), ranges preserved verbatim in research context.
+// Valuations (PM decision 2026-09-09 lowest-valid-value rule, supersedes the R2
+// UNKNOWN default and the prior midpoint decision): Grand 2 BDM keeps the
+// approved ~$8–10M band low as the canonical $8M value; the other 23 carry
+// their research-band LOW ends as approved ESTIMATED/MODELED product values
+// (La Dolce Vita $32M single point), ranges preserved verbatim in research
+// context. Legacy $82M stays CONFLICTED evidence; nothing is labeled observed/exact.
 // Legacy $82M stays CONFLICTED evidence; nothing is labeled observed/exact.
 
 import type {
@@ -177,12 +178,12 @@ const ROWS: readonly EstateRow[] = [
     estimatedValueText: "$12–15M; $9.6–18M",
     confidence: "MEDIUM",
     fixtureShares: 2500,
-    fixtureSharePriceUsd: 8000,
+    fixtureSharePriceUsd: 10000,
     fixtureStatus: "funding",
     // Approved band ~$8–10M ESTIMATED/MODELED; existing canonical $8M seed retained.
     valuationUsd: 800_000_000,
     valuationSource:
-      "product valuation decision: approved ~$8–10M ESTIMATED/MODELED reference (canonical $8M seed retained; research $12–15M stays research context)",
+      "pm-decision-2026-09-09 lowest-valid-value rule: approved $8-10M band low = $8M ESTIMATED/MODELED (research $12-15M stays research context)",
     legacyNote:
       "Legacy fixture totalValueUsd $82M retained as LEGACY/CONFLICTED evidence only; must never enter canonical economics.",
   },
@@ -208,9 +209,9 @@ const ROWS: readonly EstateRow[] = [
     fixtureShares: 1000,
     fixtureSharePriceUsd: 12000,
     fixtureStatus: "funding",
-    valuationUsd: 2_000_000_000,
+    valuationUsd: 1_800_000_000,
     valuationSource:
-      "research-dataset central $18–22M midpoint (product valuation decision: approved ESTIMATED/MODELED; range preserved in research context)",
+      "pm-decision-2026-09-09 lowest-valid-value rule: research $18-22M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
     propertyId: "prop-bayside-marina-penthouse",
@@ -234,9 +235,9 @@ const ROWS: readonly EstateRow[] = [
     fixtureShares: 2500,
     fixtureSharePriceUsd: 12000,
     fixtureStatus: "funded",
-    valuationUsd: 1_400_000_000,
+    valuationUsd: 1_200_000_000,
     valuationSource:
-      "research-dataset central $12–16M midpoint (product valuation decision: approved ESTIMATED/MODELED; range preserved in research context)",
+      "pm-decision-2026-09-09 lowest-valid-value rule: research $12-16M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
     propertyId: "prop-alfama-terrace-flat",
@@ -260,9 +261,9 @@ const ROWS: readonly EstateRow[] = [
     fixtureShares: 1000,
     fixtureSharePriceUsd: 10500,
     fixtureStatus: "funded",
-    valuationUsd: 3_000_000_000,
+    valuationUsd: 2_500_000_000,
     valuationSource:
-      "research-dataset central $25–35M midpoint (product valuation decision: approved ESTIMATED/MODELED; range preserved in research context)",
+      "pm-decision-2026-09-09 lowest-valid-value rule: research $25-35M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
     propertyId: "prop-tbilisi-riverhouse-loft",
@@ -286,9 +287,9 @@ const ROWS: readonly EstateRow[] = [
     fixtureShares: 600,
     fixtureSharePriceUsd: 12000,
     fixtureStatus: "resale",
-    valuationUsd: 3_150_000_000,
+    valuationUsd: 2_800_000_000,
     valuationSource:
-      "research-dataset central $28–35M midpoint (product valuation decision: approved ESTIMATED/MODELED; range preserved in research context)",
+      "pm-decision-2026-09-09 lowest-valid-value rule: research $28-35M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
     propertyId: "prop-canggu-surf-villa",
@@ -312,9 +313,9 @@ const ROWS: readonly EstateRow[] = [
     fixtureShares: 1200,
     fixtureSharePriceUsd: 15000,
     fixtureStatus: "resale",
-    valuationUsd: 3_500_000_000,
+    valuationUsd: 3_000_000_000,
     valuationSource:
-      "research-dataset central $30–40M midpoint (product valuation decision: approved ESTIMATED/MODELED; range preserved in research context)",
+      "pm-decision-2026-09-09 lowest-valid-value rule: research $30-40M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
     propertyId: "prop-tokyo-shibuya-studio",
@@ -338,9 +339,9 @@ const ROWS: readonly EstateRow[] = [
     fixtureShares: 1200,
     fixtureSharePriceUsd: 11000,
     fixtureStatus: "funding",
-    valuationUsd: 1_500_000_000,
+    valuationUsd: 1_200_000_000,
     valuationSource:
-      "research-dataset central $12–18M midpoint (product valuation decision: approved ESTIMATED/MODELED; range preserved in research context)",
+      "pm-decision-2026-09-09 lowest-valid-value rule: research $12-18M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
     propertyId: "prop-brooklyn-brownstone-flat",
@@ -364,9 +365,9 @@ const ROWS: readonly EstateRow[] = [
     fixtureShares: 800,
     fixtureSharePriceUsd: 13000,
     fixtureStatus: "funding",
-    valuationUsd: 2_150_000_000,
+    valuationUsd: 1_800_000_000,
     valuationSource:
-      "research-dataset central $18–25M midpoint (product valuation decision: approved ESTIMATED/MODELED; range preserved in research context)",
+      "pm-decision-2026-09-09 lowest-valid-value rule: research $18-25M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
     propertyId: "prop-berlin-mitte-apartment",
@@ -390,9 +391,9 @@ const ROWS: readonly EstateRow[] = [
     fixtureShares: 1600,
     fixtureSharePriceUsd: 9500,
     fixtureStatus: "funding",
-    valuationUsd: 1_000_000_000,
+    valuationUsd: 800_000_000,
     valuationSource:
-      "research-dataset central $8–12M midpoint (product valuation decision: approved ESTIMATED/MODELED; range preserved in research context)",
+      "pm-decision-2026-09-09 lowest-valid-value rule: research $8-12M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
     propertyId: "prop-barcelona-eixample-flat",
@@ -416,9 +417,9 @@ const ROWS: readonly EstateRow[] = [
     fixtureShares: 1000,
     fixtureSharePriceUsd: 10500,
     fixtureStatus: "funding",
-    valuationUsd: 1_750_000_000,
+    valuationUsd: 1_500_000_000,
     valuationSource:
-      "research-dataset central $15–20M midpoint (product valuation decision: approved ESTIMATED/MODELED; range preserved in research context)",
+      "pm-decision-2026-09-09 lowest-valid-value rule: research $15-20M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
     propertyId: "prop-london-camden-loft",
@@ -442,9 +443,9 @@ const ROWS: readonly EstateRow[] = [
     fixtureShares: 900,
     fixtureSharePriceUsd: 14000,
     fixtureStatus: "resale",
-    valuationUsd: 1_500_000_000,
+    valuationUsd: 1_200_000_000,
     valuationSource:
-      "research-dataset central $12–18M midpoint (product valuation decision: approved ESTIMATED/MODELED; range preserved in research context)",
+      "pm-decision-2026-09-09 lowest-valid-value rule: research $12-18M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
     propertyId: "prop-sydney-harbour-apartment",
@@ -468,9 +469,9 @@ const ROWS: readonly EstateRow[] = [
     fixtureShares: 700,
     fixtureSharePriceUsd: 15000,
     fixtureStatus: "resale",
-    valuationUsd: 4_000_000_000,
+    valuationUsd: 3_500_000_000,
     valuationSource:
-      "research-dataset central $35–45M midpoint (product valuation decision: approved ESTIMATED/MODELED; range preserved in research context)",
+      "pm-decision-2026-09-09 lowest-valid-value rule: research $35-45M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
     propertyId: "prop-toronto-condo",
@@ -495,9 +496,9 @@ const ROWS: readonly EstateRow[] = [
     fixtureShares: 1100,
     fixtureSharePriceUsd: 12000,
     fixtureStatus: "resale",
-    valuationUsd: 6_000_000_000,
+    valuationUsd: 5_000_000_000,
     valuationSource:
-      "research-dataset central $50–70M midpoint (product valuation decision: approved ESTIMATED/MODELED; range preserved in research context)",
+      "pm-decision-2026-09-09 lowest-valid-value rule: research $50-70M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
     propertyId: "prop-melbourne-loft",
@@ -521,9 +522,9 @@ const ROWS: readonly EstateRow[] = [
     fixtureShares: 1000,
     fixtureSharePriceUsd: 10000,
     fixtureStatus: "funded",
-    valuationUsd: 3_000_000_000,
+    valuationUsd: 2_500_000_000,
     valuationSource:
-      "research-dataset central $25–35M midpoint (product valuation decision: approved ESTIMATED/MODELED; range preserved in research context)",
+      "pm-decision-2026-09-09 lowest-valid-value rule: research $25-35M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
     propertyId: "prop-miami-beach-condo",
@@ -549,7 +550,7 @@ const ROWS: readonly EstateRow[] = [
     fixtureStatus: "resale",
     valuationUsd: 3_200_000_000,
     valuationSource:
-      "research-dataset central $32M point estimate, HIGH confidence (product valuation decision: approved ESTIMATED/MODELED)",
+      "pm-decision-2026-09-09 lowest-valid-value rule: single $32M point adopted ESTIMATED/MODELED (HIGH confidence)",
   },
   {
     propertyId: "prop-istanbul-bosphorus-flat",
@@ -573,9 +574,9 @@ const ROWS: readonly EstateRow[] = [
     fixtureShares: 1400,
     fixtureSharePriceUsd: 9000,
     fixtureStatus: "resale",
-    valuationUsd: 4_000_000_000,
+    valuationUsd: 3_500_000_000,
     valuationSource:
-      "research-dataset central $35–45M midpoint (product valuation decision: approved ESTIMATED/MODELED; range preserved in research context)",
+      "pm-decision-2026-09-09 lowest-valid-value rule: research $35-45M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
     propertyId: "prop-mexico-city-penthouse",
@@ -599,9 +600,9 @@ const ROWS: readonly EstateRow[] = [
     fixtureShares: 900,
     fixtureSharePriceUsd: 12500,
     fixtureStatus: "resale",
-    valuationUsd: 7_000_000_000,
+    valuationUsd: 6_000_000_000,
     valuationSource:
-      "research-dataset central $60–80M midpoint (product valuation decision: approved ESTIMATED/MODELED; range preserved in research context)",
+      "pm-decision-2026-09-09 lowest-valid-value rule: research $60-80M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
     propertyId: "prop-kyoto-machiya",
@@ -625,9 +626,9 @@ const ROWS: readonly EstateRow[] = [
     fixtureShares: 600,
     fixtureSharePriceUsd: 11000,
     fixtureStatus: "funded",
-    valuationUsd: 2_400_000_000,
+    valuationUsd: 2_000_000_000,
     valuationSource:
-      "research-dataset central $20–28M midpoint (product valuation decision: approved ESTIMATED/MODELED; range preserved in research context)",
+      "pm-decision-2026-09-09 lowest-valid-value rule: research $20-28M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
     propertyId: "prop-cape-town-villa",
@@ -651,9 +652,9 @@ const ROWS: readonly EstateRow[] = [
     fixtureShares: 1200,
     fixtureSharePriceUsd: 10000,
     fixtureStatus: "resale",
-    valuationUsd: 5_250_000_000,
+    valuationUsd: 4_500_000_000,
     valuationSource:
-      "research-dataset central $45–60M midpoint (product valuation decision: approved ESTIMATED/MODELED; range preserved in research context)",
+      "pm-decision-2026-09-09 lowest-valid-value rule: research $45-60M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
     propertyId: "prop-bangkok-sukhumvit-condo",
@@ -677,9 +678,9 @@ const ROWS: readonly EstateRow[] = [
     fixtureShares: 1500,
     fixtureSharePriceUsd: 8500,
     fixtureStatus: "resale",
-    valuationUsd: 5_750_000_000,
+    valuationUsd: 5_000_000_000,
     valuationSource:
-      "research-dataset central $50–65M midpoint (product valuation decision: approved ESTIMATED/MODELED; range preserved in research context)",
+      "pm-decision-2026-09-09 lowest-valid-value rule: research $50-65M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
     propertyId: "prop-amsterdam-canal-house",
@@ -703,9 +704,9 @@ const ROWS: readonly EstateRow[] = [
     fixtureShares: 600,
     fixtureSharePriceUsd: 14500,
     fixtureStatus: "resale",
-    valuationUsd: 3_000_000_000,
+    valuationUsd: 2_500_000_000,
     valuationSource:
-      "research-dataset central $25–35M midpoint (product valuation decision: approved ESTIMATED/MODELED; range preserved in research context)",
+      "pm-decision-2026-09-09 lowest-valid-value rule: research $25-35M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
     propertyId: "prop-buenos-aires-recoleta-flat",
@@ -729,9 +730,9 @@ const ROWS: readonly EstateRow[] = [
     fixtureShares: 1300,
     fixtureSharePriceUsd: 9000,
     fixtureStatus: "resale",
-    valuationUsd: 2_300_000_000,
+    valuationUsd: 1_800_000_000,
     valuationSource:
-      "research-dataset central $18–28M midpoint (product valuation decision: approved ESTIMATED/MODELED; range preserved in research context)",
+      "pm-decision-2026-09-09 lowest-valid-value rule: research $18-28M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
     propertyId: "prop-seoul-gangnam-studio",
@@ -755,9 +756,9 @@ const ROWS: readonly EstateRow[] = [
     fixtureShares: 1000,
     fixtureSharePriceUsd: 11500,
     fixtureStatus: "resale",
-    valuationUsd: 1_850_000_000,
+    valuationUsd: 1_500_000_000,
     valuationSource:
-      "research-dataset central $15–22M midpoint (product valuation decision: approved ESTIMATED/MODELED; range preserved in research context)",
+      "pm-decision-2026-09-09 lowest-valid-value rule: research $15-22M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
     propertyId: "prop-nyc-chelsea-loft",
@@ -781,9 +782,9 @@ const ROWS: readonly EstateRow[] = [
     fixtureShares: 800,
     fixtureSharePriceUsd: 15000,
     fixtureStatus: "resale",
-    valuationUsd: 2_600_000_000,
+    valuationUsd: 2_200_000_000,
     valuationSource:
-      "research-dataset central $22–30M midpoint (product valuation decision: approved ESTIMATED/MODELED; range preserved in research context)",
+      "pm-decision-2026-09-09 lowest-valid-value rule: research $22-30M band low ESTIMATED/MODELED (range preserved in research context)",
   },
 ];
 

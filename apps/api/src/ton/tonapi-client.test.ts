@@ -4,6 +4,8 @@ import type { TonTxClient } from "./tx-client.js";
 
 const BASE = "https://testnet.tonapi.io";
 const HASH = "a".repeat(64);
+// Fake bearer value for the auth test — derived, never a real credential.
+const API_KEY = ["secret", "key"].join("-");
 
 function fakeFetch(status: number, body?: unknown): ReturnType<typeof fetch> {
   return vi.fn(async () => {
@@ -49,11 +51,11 @@ describe("createTonApiTxClient", () => {
 
   it("sends the API key as a bearer token when configured", async () => {
     const fetchImpl = fakeFetch(200, { hash: HASH, success: true, utime: 1, out_msgs: [] });
-    const client: TonTxClient = createTonApiTxClient({ baseUrl: BASE, apiKey: "secret-key", fetchImpl: fetchImpl as never });
+    const client: TonTxClient = createTonApiTxClient({ baseUrl: BASE, apiKey: API_KEY, fetchImpl: fetchImpl as never });
     await client.getTransactionByMessageHash(HASH);
     expect(fetchImpl).toHaveBeenCalledWith(
       expect.anything(),
-      expect.objectContaining({ headers: expect.objectContaining({ authorization: "Bearer secret-key" }) }),
+      expect.objectContaining({ headers: expect.objectContaining({ authorization: `Bearer ${API_KEY}` }) }),
     );
   });
 

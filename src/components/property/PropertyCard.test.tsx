@@ -67,7 +67,8 @@ describe("PropertyCard — Slice F canonical estate card", () => {
     expect(screen.getByText("Estate value")).toBeInTheDocument();
     expect(screen.getByTestId("card-estate-value")).toHaveTextContent("$8M");
     expect(screen.getByText("Projected income / share")).toBeInTheDocument();
-    expect(screen.getByTestId("card-fraction")).toHaveTextContent("1 share ≈ 1/1000 of the estate");
+    // Slice 8 (P2-3): grouped digits — matches the detail hero fraction format.
+    expect(screen.getByTestId("card-fraction")).toHaveTextContent("1 share ≈ 1/1,000 of the estate");
     expect(screen.getByTestId("card-availability")).toHaveTextContent("92% funded · 80 shares remaining");
   });
 

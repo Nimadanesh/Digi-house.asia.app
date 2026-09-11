@@ -44,6 +44,7 @@ export function SellListingStatus({
   cancelError,
   onCancel,
   onDone,
+  listingName,
 }: {
   order: Order;
   /** Live book when known; undefined = unknown → generic pending (never "no buyer"). */
@@ -54,6 +55,8 @@ export function SellListingStatus({
   cancelError: string | null;
   onCancel: (orderId: string) => void;
   onDone: () => void;
+  /** Canonical estate name for orientation (PROMPT 04 Matrix identity.name primary). */
+  listingName?: string | null;
 }) {
   const t = useTranslations("property");
   const [armed, setArmed] = useState(false);
@@ -80,6 +83,11 @@ export function SellListingStatus({
         </h2>
         <StatusMeta status={status} />
       </div>
+      {listingName ? (
+        <p className="truncate text-sm text-muted-foreground" data-testid="sell-listed-estate">
+          {listingName}
+        </p>
+      ) : null}
 
       <Block>
         <Row>

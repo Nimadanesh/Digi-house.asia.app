@@ -128,10 +128,12 @@ describe("MockTxRepo prepareBuy + confirmBuy (mock keeps optimistic settlement)"
     const afterHolding = seed.holdings.find((h) => h.propertyId === property.id);
     expect(afterHolding).toBeDefined();
     expect(afterHolding!.sharesOwned).toBe(beforeShares + 7);
-    // shareRatio recomputed against totalShares
-    expect(afterHolding!.shareRatio).toBeCloseTo(afterHolding!.sharesOwned / property.totalShares, 6);
+    // Canonical ownership math (Final PO Decisions 1–2): value at the $100 base
+    // price, ratio against the canonical V1 supply (Aerial $18M → 180,000).
+    expect(afterHolding!.currentValueUsd).toBe(afterHolding!.sharesOwned * 10_000);
+    expect(afterHolding!.shareRatio).toBeCloseTo(afterHolding!.sharesOwned / 180_000, 6);
     // pendingWeekEarningsUsd = weeklyRent(annualRentUsd) × shareRatio (integer floor per DATA_MODELS)
-    const expectedPending = projectedYield(weeklyRent(property.annualRentUsd), afterHolding!.sharesOwned, property.totalShares);
+    const expectedPending = projectedYield(weeklyRent(property.annualRentUsd), afterHolding!.sharesOwned, 180_000);
     expect(afterHolding!.pendingWeekEarningsUsd).toBe(expectedPending);
   });
 });

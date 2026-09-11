@@ -14,6 +14,7 @@ import type { Listing } from "@/types/property";
 import { useMarketplace } from "@/hooks/useMarketplace";
 import { usd } from "@/lib/format";
 import { getCanonicalEstate } from "@/lib/economics/estates/canonical-24";
+import { getEstate24ByRuntimeId } from "@/lib/economics/estates/estate-24-data";
 import { getCurrentSharePrice } from "@/lib/property-price";
 import { ROUTES } from "@/lib/constants";
 import { haptics } from "@/lib/telegram/haptics";
@@ -26,9 +27,12 @@ function countryOf(location: string): string {
 /** Canonical display identity for a rail card (legacy fallback for unmapped ids). */
 function cardIdentity(l: Listing): { name: string; location: string; image: string | null; nightly: string | null } {
   const canonical = getCanonicalEstate(l.id);
+  const estate24 = getEstate24ByRuntimeId(l.id);
   return {
-    name: canonical?.name.value ?? l.title,
-    location: canonical?.location.value ?? l.location,
+    // Slice 8 (DEC-007): the adopted Estate24 name/location is the single
+    // user-visible identity — same source as cards, detail, portfolio, home.
+    name: estate24?.name ?? canonical?.name.value ?? l.title,
+    location: estate24?.location.full ?? canonical?.location.value ?? l.location,
     image: canonical?.images.urls[0] ?? l.images[0] ?? null,
     nightly: canonical?.observedRentalRate.display ?? l.nightlyRate ?? null,
   };
@@ -39,14 +43,20 @@ function canonicalValueCents(l: Listing): number {
   return getCanonicalEstate(l.id)?.fractionalLuxe.valuationUsd.value ?? 0;
 }
 
+/** Canonical country for ranking (legacy fixture location is fallback for unmapped ids only). */
+function canonicalCountry(l: Listing): string {
+  return countryOf(getCanonicalEstate(l.id)?.location.value ?? l.location);
+}
+
 /** Same country first, then closest canonical Estate Value; never the current listing. */
 export function pickSimilar(current: Listing, all: Listing[], count = 4): Listing[] {
   const value = canonicalValueCents(current);
+  const currentCountry = canonicalCountry(current);
   return all
     .filter((l) => l.id !== current.id)
     .sort((a, b) => {
-      const sameA = countryOf(a.location) === countryOf(current.location) ? 0 : 1;
-      const sameB = countryOf(b.location) === countryOf(current.location) ? 0 : 1;
+      const sameA = canonicalCountry(a) === currentCountry ? 0 : 1;
+      const sameB = canonicalCountry(b) === currentCountry ? 0 : 1;
       if (sameA !== sameB) return sameA - sameB;
       return Math.abs(canonicalValueCents(a) - value) - Math.abs(canonicalValueCents(b) - value);
     })

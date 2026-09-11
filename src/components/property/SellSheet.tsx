@@ -243,6 +243,7 @@ export function SellSheet({
           cancelError={cancelOrder.error instanceof Error ? cancelOrder.error.message : null}
           onCancel={cancelListing}
           onDone={onClose}
+          listingName={displayTitle}
         />
       ) : (
         <div className="space-y-4 pb-2" data-testid="sell-sheet">

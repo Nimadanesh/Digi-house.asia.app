@@ -6,8 +6,13 @@ import type { Estate24Record } from "@/types/estate-24-data";
 import raw24 from "../../../../docs/product/rebuild/ESTATE-24-DATA.json";
 import { CANONICAL_RECONCILIATION } from "./canonical-24";
 
-/** 24 authoritative records, preserved exactly as given in the JSON. */
-export const ESTATE_24_DATA: readonly Estate24Record[] = raw24 as Estate24Record[];
+/** 24 authoritative records, preserved exactly as given in the JSON.
+ * Double assertion: TS widens resolveJsonModule literals (string vs literal
+ * unions, number[] vs tuples), so a direct `as` cannot express the import's
+ * relation to the precise record type. Runtime shape is guarded by
+ * estate-24-data.test.ts (verbatim PROMPT 02 fields) and
+ * estate-24-consolidation.test.ts (consolidation layer). */
+export const ESTATE_24_DATA: readonly Estate24Record[] = raw24 as unknown as Estate24Record[];
 
 /** Lookup by Rental Escapes Listing ID (authoritative JSON key). */
 export const ESTATE_24_BY_LISTING_ID: Readonly<Record<string, Estate24Record>> =

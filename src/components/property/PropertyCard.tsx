@@ -203,7 +203,9 @@ function PropertyCardInner({
           className="text-xs leading-relaxed text-muted-foreground tnum pt-0.5"
           data-testid="card-fraction"
         >
-          {t("shareFraction", { total: estate.totalShares })}
+          {/* Slice 8 (P2-3): grouped digits — same primitive as the detail hero
+              fraction, so card and detail never disagree ("1/80000" vs "1/80,000"). */}
+          {t("shareFraction", { total: estate.totalShares.toLocaleString() })}
         </p>
 
         {/* Growth Potential (PROMPT 03 §4–§6) — research-range upper, estimated.
@@ -236,7 +238,8 @@ function PropertyCardInner({
             >
               {t("fundedCaption", {
                 pct: Math.round(estate.fundingProgressRatio * 100),
-                remaining: estate.sharesRemaining,
+                // Slice 8 (P2-3): grouped digits — same as detail/banner counts.
+                remaining: estate.sharesRemaining.toLocaleString(),
               })}
             </p>
           </div>

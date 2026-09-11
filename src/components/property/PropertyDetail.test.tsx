@@ -100,7 +100,6 @@ function renderDetail(
     orderBook?: OrderBookState;
     ownedShares?: number;
     lockedShares?: number;
-    onBuyShares?: (n: number) => void;
     documents?: { id: string; title: string; kind: "legal" | "financial" | "offering" | "other"; fileSize: number | null; createdAt: string }[];
     onDownloadDoc?: (docId: string) => void;
     accruedUnpaidUsd?: number;
@@ -113,12 +112,9 @@ function renderDetail(
       listing={l}
       orderBook={overrides?.orderBook}
       onBuy={() => {}}
-      previewShares={1}
-      onSharesChange={() => {}}
       ownedShares={overrides?.ownedShares ?? 0}
       lockedShares={overrides?.lockedShares ?? 0}
       accruedUnpaidUsd={overrides?.accruedUnpaidUsd}
-      onBuyShares={overrides?.onBuyShares ?? (() => {})}
       documents={overrides?.documents}
       onDownloadDoc={overrides?.onDownloadDoc}
       verification={overrides?.verification}
@@ -141,26 +137,38 @@ describe("PropertyDetail — Phase 9 Slice 2 (4-tab Estate Detail)", () => {
     expect(screen.queryByTestId("tab-holders")).not.toBeInTheDocument();
   });
 
-  it("PRIMARY Estate tab: funding panel leads, rental story + fundamentals follow", async () => {
+  it("PRIMARY Estate tab: V1 thesis leads, no legacy dashboard, no funding panel", async () => {
     renderDetail(listing);
-    expect(screen.getByTestId("funding-panel")).toBeInTheDocument();
-    expect(screen.getByTestId("funding-pct")).toHaveTextContent("92%");
-    expect(screen.getByTestId("funding-caption")).toHaveTextContent(/92% funded · 80 shares remaining/);
+    // PROMPT 05 desire: rental story + V1 thesis + V1 investment; legacy
+    // funding panel / Slice A economics / simulated funding charts retired.
+    expect(screen.queryByTestId("funding-panel")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("estate-economics")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("estate-costs")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("estate-allocation")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("primary-performance-charts")).not.toBeInTheDocument();
     // Rental-performance narrative: canonical observed nightly rate (Grand range
     // display) with honest unavailable steps — never mock annual rent.
     expect(screen.getByTestId("rental-story")).toBeInTheDocument();
     expect(screen.getByTestId("rental-story-rent")).toHaveTextContent("$67,655–$76,458");
     expect(screen.getByTestId("rental-story-costs")).toHaveTextContent("Not yet reported");
     expect(screen.getByTestId("rental-story-net")).toHaveTextContent("Not yet reported");
+    // V1 thesis: ANR basis, modeled revenue range, projected per-share.
+    expect(screen.getByTestId("estate-v1-thesis")).toBeInTheDocument();
+    expect(screen.getByTestId("thesis-anr")).toBeInTheDocument();
+    expect(screen.getByTestId("thesis-revenue")).toBeInTheDocument();
+    expect(screen.getByTestId("thesis-pershare")).toBeInTheDocument();
+    // V1 investment: $8M single value, 80,000 shares at $100.
+    expect(screen.getByTestId("estate-investment")).toBeInTheDocument();
+    expect(screen.getByTestId("investment-estate-value")).toHaveTextContent("$8M");
+    expect(screen.getByTestId("investment-total-shares")).toHaveTextContent("80,000");
     // Legacy fundamentals removed (reconciliation): canonical value lives in
     // hero/metrics/investment; rent/yield have no approved source (Slice I).
     expect(screen.queryByTestId("property-fundamentals")).not.toBeInTheDocument();
     // Primary never gets a resale block while shares remain.
     expect(screen.queryByTestId("resale-block")).not.toBeInTheDocument();
-    // Funding progress charts stay on the Estate tab (simulated, disclosed).
-    expect(await screen.findByTestId("primary-performance-charts")).toBeInTheDocument();
     // The default tab ships WITHOUT the heavy analytics chunks.
     expect(screen.queryByTestId("income-analytics")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("holder-analytics")).not.toBeInTheDocument();
   });
 
   it("SECONDARY Estate tab: resale block collapsed by default; no funding panel", () => {
@@ -205,27 +213,38 @@ describe("PropertyDetail — Phase 9 Slice 2 (4-tab Estate Detail)", () => {
     expect(screen.getByTestId("market-delta")).toHaveTextContent("+4.8% vs offer");
   });
 
-  it("Income tab: analytics + projections calculator", async () => {
+  it("Income tab: V1 conviction story (no simulated analytics, no yield calculator)", async () => {
     renderDetail(listing);
     fireEvent.click(screen.getByTestId("tab-income"));
-    expect(await screen.findByTestId("income-analytics")).toBeInTheDocument();
-    expect(screen.getByTestId("income-calculator")).toBeInTheDocument();
+    expect(await screen.findByTestId("income-v1-story")).toBeInTheDocument();
+    expect(screen.getByTestId("income-v1-basis")).toBeInTheDocument();
+    expect(screen.getByTestId("income-v1-scenarios")).toBeInTheDocument();
+    expect(screen.getByTestId("income-v1-costs")).toBeInTheDocument();
+    expect(screen.getByTestId("income-v1-pershare")).toBeInTheDocument();
+    // Legacy primary story retired from this tab (files kept, no longer wired).
+    expect(screen.queryByTestId("income-analytics")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("income-calculator")).not.toBeInTheDocument();
   });
 
-  it("Ownership tab (secondary): position card, owner stay, yield-lock, holder analytics", async () => {
+  it("Ownership tab (secondary): V1 decision facts, position card, no simulated holders", async () => {
     renderDetail(secondaryListing, { orderBook, ownedShares: 160, lockedShares: 100, accruedUnpaidUsd: 1250 });
     fireEvent.click(screen.getByTestId("tab-ownership"));
+    // PROMPT 05 decision: V1 $100/total/position/consequences first.
+    expect(await screen.findByTestId("ownership-v1-panel")).toBeInTheDocument();
+    expect(screen.getByTestId("ownership-v1-price")).toHaveTextContent("$100.00");
+    // Simulated holder analytics never render as real activity.
+    expect(screen.queryByTestId("holder-analytics")).not.toBeInTheDocument();
+    expect(screen.getByTestId("ownership-v1-holders-note")).toBeInTheDocument();
     expect(await screen.findByTestId("position-card")).toBeInTheDocument();
     expect(screen.getByTestId("position-total")).toHaveTextContent("160");
     expect(screen.getByTestId("position-locked")).toHaveTextContent("100");
     expect(screen.getByTestId("position-free")).toHaveTextContent("60");
     expect(screen.getByTestId("position-accrued")).toHaveTextContent("$12.50");
     expect(screen.getByTestId("position-value")).toHaveTextContent("$21,120.00");
-    // Owner Stay P0 preview + lock management + holder analytics.
+    // Owner Stay P0 preview + lock management (holder analytics retired).
     expect(screen.getByTestId("owner-stay-card")).toBeInTheDocument();
     expect(screen.getByTestId("owner-stay-calendar-cta")).toBeDisabled();
     expect(screen.getByTestId("yield-lock-section")).toBeInTheDocument();
-    expect(await screen.findByTestId("holder-analytics")).toBeInTheDocument();
     // Lock still opens the existing LockSheet flow.
     fireEvent.click(screen.getByTestId("position-lock"));
     expect(screen.getByTestId("lock-sheet")).toBeInTheDocument();
@@ -248,9 +267,6 @@ describe("PropertyDetail — Phase 9 Slice 2 (4-tab Estate Detail)", () => {
       <PropertyDetail
         listing={listing}
         onBuy={() => {}}
-        previewShares={1}
-        onSharesChange={() => {}}
-        onBuyShares={() => {}}
         documents={[{ id: "d1", title: "Offering Memorandum", kind: "offering", fileSize: 1_200_000, createdAt: "2026-01-01" }]}
         onDownloadDoc={() => {}}
       />,
@@ -273,6 +289,18 @@ describe("PropertyDetail — Phase 9 Slice 2 (4-tab Estate Detail)", () => {
     expect(screen.getByTestId("about-size")).toHaveTextContent("382 m² total");
     expect(screen.getByTestId("about-year")).toHaveTextContent("Data pending");
     expect(screen.getByTestId("about-lease")).toHaveTextContent("Data pending");
+    // PROMPT 04 Matrix Detail truth: canonical identity/economics/valuation facts.
+    expect(screen.getByTestId("about-location")).toHaveTextContent(
+      "Bodufushi, JOALI Being, Raa Atoll, Maldives",
+    );
+    expect(screen.getByTestId("about-type")).toHaveTextContent("Overwater Villa");
+    expect(screen.getByTestId("about-nightly")).toHaveTextContent("$67,655–$76,458");
+    expect(screen.getByTestId("about-valuation")).toHaveTextContent("$8M");
+    expect(screen.getByTestId("about-growth")).toHaveTextContent("$18,000,000.00");
+    expect(screen.getByTestId("about-listing-id")).toHaveTextContent("128862");
+    expect(screen.getByTestId("about-growth-note")).toHaveTextContent(
+      "Not a projection or guarantee",
+    );
 
     expect(screen.getByText("Documents")).toBeInTheDocument();
     expect(screen.getByText("Offering Memorandum")).toBeInTheDocument();
@@ -306,7 +334,7 @@ describe("PropertyDetail — Phase 9 Slice 2 (4-tab Estate Detail)", () => {
 
   it("hero CTA states: primary non-owner → Buy", () => {
     const onBuy = vi.fn();
-    render(<PropertyDetail listing={listing} onBuy={onBuy} previewShares={1} onSharesChange={() => {}} onBuyShares={() => {}} />);
+    render(<PropertyDetail listing={listing} onBuy={onBuy} />);
     expect(screen.getByTestId("hero-cta")).toHaveTextContent(/Buy · \$125\.00/);
     fireEvent.click(screen.getByTestId("hero-cta"));
     expect(onBuy).toHaveBeenCalledOnce();
@@ -315,7 +343,8 @@ describe("PropertyDetail — Phase 9 Slice 2 (4-tab Estate Detail)", () => {
   it("hero CTA states: owner → Manage Ownership switches to the Ownership tab", async () => {
     renderDetail(listing, { ownedShares: 160 });
     expect(screen.getByTestId("hero-cta")).toHaveTextContent("Manage Ownership");
-    expect(screen.getByTestId("hero-ownership")).toHaveTextContent(/You own 160 shares · 16% of this estate/);
+    // V1 canonical fraction (80,000 shares for Grand): 160 → 0.2% of the estate.
+    expect(screen.getByTestId("hero-ownership")).toHaveTextContent(/You own 160 shares · 0\.2% of this estate/);
     fireEvent.click(screen.getByTestId("hero-cta"));
     expect(await screen.findByTestId("panel-ownership")).toBeInTheDocument();
   });
@@ -323,7 +352,7 @@ describe("PropertyDetail — Phase 9 Slice 2 (4-tab Estate Detail)", () => {
   it("hero CTA states: resale → Acquire Resale Ownership", () => {
     const onBuy = vi.fn();
     render(
-      <PropertyDetail listing={secondaryListing} orderBook={orderBook} onBuy={onBuy} previewShares={1} onSharesChange={() => {}} onBuyShares={() => {}} />,
+      <PropertyDetail listing={secondaryListing} orderBook={orderBook} onBuy={onBuy} />,
     );
     expect(screen.getByTestId("hero-cta")).toHaveTextContent("Acquire Resale Ownership");
     fireEvent.click(screen.getByTestId("hero-cta"));
@@ -341,11 +370,11 @@ describe("PropertyDetail — Phase 9 Slice 2 (4-tab Estate Detail)", () => {
   it("metrics grid uses ownership-first labels", () => {
     renderDetail(listing);
     expect(screen.getByText("Share price")).toBeInTheDocument();
-    expect(screen.getByText("Projected monthly income / share")).toBeInTheDocument();
+    expect(screen.getByText("Monthly Income")).toBeInTheDocument();
     expect(screen.getByText("Total property value")).toBeInTheDocument();
     expect(screen.getByText("Shares sold / total")).toBeInTheDocument();
-    // KPI grid + funding panel (primary charts may repeat the figure — be tolerant).
-    expect(screen.getAllByText("920 / 1,000").length).toBeGreaterThanOrEqual(2);
+    // KPI grid (funding panel retired from Estate — the figure lives in metrics only).
+    expect(screen.getAllByText("920 / 1,000").length).toBeGreaterThanOrEqual(1);
   });
 
   it("owner stay card: non-owner sees the privilege explainer; owner sees the disabled calendar CTA", () => {

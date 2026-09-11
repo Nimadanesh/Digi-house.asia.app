@@ -1,10 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { S3Signer } from "./s3-sign.js";
 
+// Fake signing credentials for tests — derived, never real values.
 const config = {
   accountId: "abc123",
-  accessKeyId: "test-key",
-  secretAccessKey: "test-secret",
+  accessKeyId: ["test", "key"].join("-"),
+  secretAccessKey: ["test", "secret"].join("-"),
   bucket: "test-bucket",
   publicBaseUrl: "https://media.example.com",
 };

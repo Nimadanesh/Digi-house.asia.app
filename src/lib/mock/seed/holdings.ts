@@ -4,25 +4,28 @@ import type { Holding } from "@/types/position";
 // Notional FX rate for MVP seed math: 1 TON = $2.00 (200 minor). nanoTON per minor cent = 1e9 / 200.
 export const NANO_PER_USD_MINOR = 5_000_000;
 
-// Larger demo portfolio (wow numbers) while preserving integrity:
-// Bayside 160/800 = 0.2 → weekly floor(1_040_000/52)*0.2 = 4000
-// Alfama 200/1000 = 0.2 → weekly floor(1_300_000/52)*0.2 = 5000
+// Larger demo portfolio (wow numbers) while preserving integrity.
+// Canonical ownership (Final PO Decisions 1–2): $100 base cost, value at $100,
+// ratios against the canonical V1 supply (Bayside→Syrene $12M = 120,000 shares;
+// Alfama→Villa du Cap $25M = 250,000 shares).
+// Pending amounts are weekly-settlement tape (next transfer batch), always
+// labeled monthly via the ×52/12 presentation conversion at render.
 export const HOLDINGS: Holding[] = [
   {
     propertyId: "prop-bayside-marina-penthouse",
     sharesOwned: 160,
-    avgCostUsd: 12000,
-    currentValueUsd: 160 * 12000,
+    avgCostUsd: 10000,
+    currentValueUsd: 160 * 10000,
     pendingWeekEarningsUsd: 29424,
-    shareRatio: 0.2,
+    shareRatio: 160 / 120000,
   },
   {
     propertyId: "prop-alfama-terrace-flat",
     sharesOwned: 200,
-    avgCostUsd: 10500,
-    currentValueUsd: 200 * 10500,
+    avgCostUsd: 10000,
+    currentValueUsd: 200 * 10000,
     pendingWeekEarningsUsd: 30923,
-    shareRatio: 0.2,
+    shareRatio: 200 / 250000,
   },
 ];
 

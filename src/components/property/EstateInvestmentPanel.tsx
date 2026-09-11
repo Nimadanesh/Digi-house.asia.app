@@ -1,28 +1,34 @@
-// File responsibility: Estate tab investment-opportunity section (contract §6F) —
-// connect estate economics to the investor position from the ShareModel overview:
-// supply, the three DISTINCT prices (primary / reference / secondary), ownership
-// per share, and availability. Plans render an honest unconfigured note (no plan
-// presets exist in the repo — product decision pending). No invented supply.
+// File responsibility: Estate tab investment-opportunity section (PROMPT 05) —
+// connect V1 canonical fractionalization to the investor position: the Current
+// Estimated Value ($8M single for Grand), Growth Potential ($18M, estimated,
+// never ROI/profit), V1 total shares (valuation ÷ $100), the $100 nominal
+// share price, ownership per share (1/N), and the $100 reference value per
+// share (valuation ÷ V1 shares = NAV). Market/supply state lives in Resale +
+// Ownership (never duplicated here); plans render an honest unconfigured note.
+// No fixture totals/prices drive this panel when V1 exists; UNKNOWN stays honest.
 import { useTranslations } from "next-intl";
 import { usd } from "@/lib/format";
 import { unavailableLabel } from "@/lib/availability";
 import type { EstateShareOverview } from "@/types/estate-share";
+import type { FinancialModelV1PropertyModel } from "@/types/financial-model-v1";
 import { Block } from "@/components/common/Block";
 import { Row } from "@/components/common/Row";
 import { ProvenanceInfo } from "@/components/common/ProvenanceInfo";
 import type { Provenance } from "@/types/estate";
 import {
   formatGrowthPct,
-  formatValuationDisplay,
+  formatValuationDisplayShort,
   type GrowthPotential,
   type ValuationDisplay,
 } from "@/lib/economics/estates/growth-potential";
+import { V1_NOMINAL_SHARE_PRICE_CENTS } from "./OwnershipV1Panel";
 
 export function EstateInvestmentPanel({
   share,
   estateValue,
   estateValueDisplay,
   growthPotential,
+  v1,
 }: {
   share: EstateShareOverview;
   /**
@@ -32,21 +38,26 @@ export function EstateInvestmentPanel({
    */
   estateValue?: { value: number; provenance: Provenance } | null;
   /**
-   * Current Estimated Value for DISPLAY (PROMPT 03 §4–§5) — Grand 2 BDM
-   * renders the approved $8M–$10M range. Preferred over `estateValue` when
-   * provided; both are null only without a canonical record.
+   * Current Estimated Value for DISPLAY (PROMPT 05): Grand 2 BDM renders the
+   * approved $8M single value (V1 canonical). Preferred over `estateValue`
+   * when provided; both are null only without a canonical record.
    */
   estateValueDisplay?: ValuationDisplay | null;
   /**
-   * Growth Potential (PROMPT 03 §4–§6) — the upper end of the researched
-   * valuation range (estimated, never a forecast or promise). Grand 2 BDM →
-   * $18M with no percentage (current is a range). Null when unavailable.
+   * Growth Potential (PROMPT 03 §4–§6, PROMPT 05 §9) — the upper end of the
+   * researched valuation range (estimated, never a forecast or promise).
+   * Grand 2 BDM → $18M with no percentage. Null when unavailable.
    * Never mixed with rental income or market figures.
    */
   growthPotential?: GrowthPotential | null;
+  /**
+   * Financial Model V1 evaluation (PROMPT 05 sole authority). When present,
+   * fractionalization rows use V1 (total = valuation ÷ $100, nominal $100,
+   * reference $100); fixture trading counts never drive these rows.
+   */
+  v1?: FinancialModelV1PropertyModel | null;
 }) {
   const t = useTranslations("property");
-  const { config, structure, state } = share;
   // Display resolution: the range-aware PROMPT 03 value wins; the legacy
   // single-value prop stays as the fallback for callers without a view-model.
   const display: ValuationDisplay | null =
@@ -55,6 +66,13 @@ export function EstateInvestmentPanel({
       ? { kind: "single", value: estateValue.value, provenance: estateValue.provenance }
       : null);
   const growthPct = formatGrowthPct(growthPotential?.potentialPct ?? null);
+  // V1 fractionalization wins whenever the model exists (all 24 estates);
+  // fixture counts survive only as the fallback for unknown ids (never the 24).
+  const totalShares = v1?.totalShares ?? share.config.totalShares;
+  const referenceCents =
+    v1 != null ? v1.valuation.valueCents / v1.totalShares : share.structure.referenceAssetValuePerShare?.value ?? null;
+  const referenceProvenance =
+    v1 != null ? ("calculated" as const) : (share.structure.referenceAssetValuePerShare?.provenance ?? "unknown");
 
   return (
     <section className="space-y-2" data-testid="estate-investment">
@@ -69,7 +87,7 @@ export function EstateInvestmentPanel({
               {display != null ? (
                 <>
                   <span className="text-sm tnum font-semibold text-foreground">
-                    {formatValuationDisplay(display)}
+                    {formatValuationDisplayShort(display)}
                   </span>
                   <ProvenanceInfo provenance={display.provenance} />
                 </>
@@ -94,22 +112,33 @@ export function EstateInvestmentPanel({
                   {usd(growthPotential.potentialValue)}
                   {growthPct != null ? ` · ${growthPct}` : null}
                 </span>
+                <ProvenanceInfo provenance={growthPotential.provenance} />
               </span>
             </Row>
           ) : null}
           <Row>
             <span className="text-sm text-muted-foreground">{t("invTotalShares")}</span>
-            <span className="ml-auto text-sm tnum font-semibold text-foreground" data-testid="investment-total-shares">
-              {config.totalShares.toLocaleString()}
+            <span className="ml-auto flex items-center gap-1.5" data-testid="investment-total-shares">
+              <span className="text-sm tnum font-semibold text-foreground">
+                {totalShares.toLocaleString()}
+              </span>
+              {v1 != null ? <ProvenanceInfo provenance="calculated" /> : null}
             </span>
           </Row>
           <Row>
             <span className="text-sm text-muted-foreground">{t("invPricePerShare")}</span>
             <span className="ml-auto flex items-center gap-1.5" data-testid="investment-primary-price">
-              {config.primarySharePrice != null ? (
+              {v1 != null ? (
                 <>
                   <span className="text-sm tnum font-semibold text-foreground">
-                    {usd(config.primarySharePrice)}
+                    {usd(V1_NOMINAL_SHARE_PRICE_CENTS)}
+                  </span>
+                  <ProvenanceInfo provenance="estimated" />
+                </>
+              ) : share.config.primarySharePrice != null ? (
+                <>
+                  <span className="text-sm tnum font-semibold text-foreground">
+                    {usd(share.config.primarySharePrice)}
                   </span>
                   <ProvenanceInfo provenance="observed" />
                 </>
@@ -119,38 +148,24 @@ export function EstateInvestmentPanel({
             </span>
           </Row>
           <Row>
-            <span className="text-sm text-muted-foreground">{t("invAvailable")}</span>
-            <span className="ml-auto text-sm tnum font-semibold text-foreground" data-testid="investment-available">
-              {config.primarySharesAvailable.toLocaleString()}
-            </span>
-          </Row>
-          <Row>
             <span className="text-sm text-muted-foreground">{t("invOwnershipPerShare")}</span>
             <span className="ml-auto flex items-center gap-1.5" data-testid="investment-ownership-per-share">
-              {structure.ownershipPerShare != null ? (
-                <>
-                  {/* Exact fraction: pct() would round 1/2500 to a misleading "0.0%". */}
-                  <span className="text-sm tnum font-semibold text-foreground">
-                    1 / {config.totalShares.toLocaleString()}
-                  </span>
-                  <ProvenanceInfo provenance="calculated" />
-                </>
-              ) : (
-                <span className="text-sm text-muted-foreground">
-                  {unavailableLabel("backend_absent")}
-                </span>
-              )}
+              {/* Exact fraction: pct() would round 1/80000 to a misleading "0.0%". */}
+              <span className="text-sm tnum font-semibold text-foreground">
+                1 / {totalShares.toLocaleString()}
+              </span>
+              <ProvenanceInfo provenance="calculated" />
             </span>
           </Row>
           <Row>
             <span className="text-sm text-muted-foreground">{t("invReferenceValue")}</span>
             <span className="ml-auto flex items-center gap-1.5" data-testid="investment-reference-value">
-              {structure.referenceAssetValuePerShare != null ? (
+              {referenceCents != null ? (
                 <>
                   <span className="text-sm tnum font-semibold text-foreground">
-                    {usd(structure.referenceAssetValuePerShare.value)}
+                    {usd(referenceCents)}
                   </span>
-                  <ProvenanceInfo provenance={structure.referenceAssetValuePerShare.provenance} />
+                  <ProvenanceInfo provenance={referenceProvenance} />
                 </>
               ) : (
                 <>
@@ -162,37 +177,12 @@ export function EstateInvestmentPanel({
               )}
             </span>
           </Row>
-          <Row>
-            <span className="text-sm text-muted-foreground">{t("invSecondaryPrice")}</span>
-            <span className="ml-auto flex items-center gap-1.5" data-testid="investment-secondary-price">
-              {share.secondaryMarketPrice != null ? (
-                <>
-                  <span className="text-sm tnum font-semibold text-foreground">
-                    {usd(share.secondaryMarketPrice.value)}
-                  </span>
-                  <ProvenanceInfo provenance={share.secondaryMarketPrice.provenance} />
-                </>
-              ) : (
-                <span className="text-sm text-muted-foreground">
-                  {state.secondaryAvailableListings > 1
-                    ? t("invSecondaryUnknown")
-                    : unavailableLabel("backend_absent")}
-                </span>
-              )}
-            </span>
-          </Row>
-          {share.lowestActiveAskUsd != null ? (
-            <Row>
-              <span className="text-sm text-muted-foreground">{t("invLowestAsk")}</span>
-              <span className="ml-auto flex items-center gap-1.5" data-testid="investment-lowest-ask">
-                <span className="text-sm tnum font-semibold text-foreground">
-                  {usd(share.lowestActiveAskUsd)}
-                </span>
-                <ProvenanceInfo provenance="observed" />
-              </span>
-            </Row>
-          ) : null}
         </div>
+        {growthPotential != null ? (
+          <p className="px-4 pb-1 text-[0.6875rem] leading-relaxed text-muted-foreground" data-testid="investment-growth-note">
+            {t("growthPotentialNote")}
+          </p>
+        ) : null}
         <p className="border-t border-border px-4 py-3 text-xs leading-relaxed text-muted-foreground" data-testid="investment-plans-note">
           {t("invPlansNote")}
         </p>

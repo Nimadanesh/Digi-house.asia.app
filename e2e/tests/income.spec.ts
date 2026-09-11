@@ -96,7 +96,8 @@ test.describe("Income — /earnings (Phase 9 Slice 5)", () => {
     await expect(page.getByTestId("other-plan")).toContainText("No investment plans configured");
     await expect(page.getByTestId("other-appreciation")).toContainText("Pending");
     const resale = page.getByTestId("other-secondary-ord-aria-alfama-sell-1");
-    await expect(resale).toContainText("+$30.00");
+    // (Final PO Decision 2: canonical $100 base cost — was +$30.00 at $105 fixture cost.)
+    await expect(resale).toContainText("+$80.00");
     await expect(resale).toContainText("Gain");
 
     // Slice I: income origin explainer (collapsed, progressive disclosure).

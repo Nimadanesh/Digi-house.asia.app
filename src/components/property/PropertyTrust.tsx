@@ -26,6 +26,8 @@ export function PropertyTrust({
   // Reconciliation: tenant/lease facts have no approved source → labeled pending
   // chips (About shows the same pending states; no contradiction). Payment
   // history is disclosed demo data (footnote below), shares are market mechanics.
+  // Final PO Decision 7: the sold-shares row renders only from the demo ledger
+  // when shares were actually sold — never a "0 sold" or completion claim.
   const items: { ok: boolean; label: string }[] = [
     {
       ok: false,
@@ -38,7 +40,9 @@ export function PropertyTrust({
     ...(paymentsOnTime > 0
       ? [{ ok: true, label: `${paymentsOnTime} on-time ${paymentsOnTime === 1 ? "payment" : "payments"}` }]
       : []),
-    { ok: true, label: `${listing.sharesSold.toLocaleString()} shares sold` },
+    ...(listing.sharesSold > 0
+      ? [{ ok: true, label: `${listing.sharesSold.toLocaleString()} shares sold` }]
+      : []),
     { ok: true, label: "Tokenization docs available" },
   ];
 

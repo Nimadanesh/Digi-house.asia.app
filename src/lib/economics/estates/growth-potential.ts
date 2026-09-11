@@ -3,8 +3,9 @@
 //
 // Two distinct valuation concepts (never mixed):
 //   - Current Estimated Value — the currently approved FractionalLuxe valuation.
-//     A single numeric value for 23 estates; an explicit $8M–$10M RANGE for
-//     Grand 2 BDM (so no Growth Potential percentage is ever derived for Grand).
+//     A single numeric value for all 24 estates, including Grand 2 BDM at exactly
+//     $8M (Financial Model V1 canonical value; the $8M–$10M band and $9.6M–$18M
+//     research range remain provenance/evidence only, never the active value).
 //   - Growth Potential — the upper end of the researched valuation range that the
 //     Estate may potentially reach. Estimated/research-derived, never a forecast,
 //     guaranteed return, promised appreciation, market prediction, or advice.
@@ -13,7 +14,9 @@
 // income, paid/projected/accrued income, or secondary-market gain.
 //
 // Data discipline (no invention):
-//   - Current values come ONLY from the approved canonical layer (canonical-24).
+//   - Current values come ONLY from the approved canonical layer (canonical-24)
+//     and Financial Model V1 ($8M single for Grand 2 BDM — never the $8M–$10M
+//     band, $9.6M–$18M range, $13.5M central, or $82M legacy figure as active).
 //   - Research ranges come ONLY from the adopted ESTATE-24-DATA.json (verbatim).
 //   - The legacy $82M figure is never admitted (kept CONFLICTED evidence only).
 //   - The Grand $13.5M research central stays research evidence, never current.
@@ -30,12 +33,15 @@ import { usd, usdCompact } from "@/lib/format";
 import { getCanonicalEstate } from "./canonical-24";
 import { getEstate24ByRuntimeId } from "./estate-24-data";
 
-/** Runtime listing id whose current valuation is the approved $8M–$10M band. */
+/** Runtime listing id whose current valuation is the approved $8M single value. */
 export const GRAND_2_BDM_RUNTIME_ID = "prop-marina-vista-4b";
 
-/** Approved Grand 2 BDM Current Estimated Value band, minor units. */
-export const GRAND_CURRENT_MIN_CENTS = 800_000_000; // $8M
-export const GRAND_CURRENT_MAX_CENTS = 1_000_000_000; // $10M
+/** Approved Grand 2 BDM Current Estimated Value, minor units (V1 canonical). */
+export const GRAND_CURRENT_CENTS = 800_000_000; // $8M exactly
+
+/** Retired band bounds — provenance/evidence only, never the active display. */
+export const GRAND_CURRENT_MIN_CENTS = 800_000_000; // $8M (band low = active)
+export const GRAND_CURRENT_MAX_CENTS = 1_000_000_000; // $10M (band high, retired)
 
 /** Grand 2 BDM Growth Potential upper value = research range upper, minor units. */
 export const GRAND_POTENTIAL_CENTS = 1_800_000_000; // $18M
@@ -80,16 +86,16 @@ export interface GrowthPotential {
 }
 
 /**
- * Current Estimated Value for a runtime estate. Grand 2 BDM resolves to the
- * approved $8M–$10M range; other canonical estates resolve to their approved
- * single ESTIMATED value; unknown ids resolve to null (never legacy/invented).
+ * Current Estimated Value for a runtime estate. All 24 resolve to their
+ * approved single ESTIMATED value — Grand 2 BDM resolves to exactly $8M
+ * (Financial Model V1 canonical; the $8M–$10M band is retired as active).
+ * Unknown ids resolve to null (never legacy/invented).
  */
 export function getValuationDisplay(propertyId: string): ValuationDisplay | null {
   if (propertyId === GRAND_2_BDM_RUNTIME_ID) {
     return {
-      kind: "range",
-      min: GRAND_CURRENT_MIN_CENTS,
-      max: GRAND_CURRENT_MAX_CENTS,
+      kind: "single",
+      value: GRAND_CURRENT_CENTS,
       provenance: "estimated",
     };
   }
@@ -103,7 +109,8 @@ export function getValuationDisplay(propertyId: string): ValuationDisplay | null
 /**
  * Growth Potential for a runtime estate, or null when it cannot be honestly
  * derived (no canonical current, no research range, or legacy conflict).
- * Grand 2 BDM: $18M potential, no percentage (current is a range).
+ * Grand 2 BDM: $18M potential, no percentage (preserved PROMPT 03 presentation —
+ * never labeled ROI/return/profit, never mixed with rental income).
  */
 export function getGrowthPotential(propertyId: string): GrowthPotential | null {
   if (propertyId === GRAND_2_BDM_RUNTIME_ID) {
@@ -145,6 +152,24 @@ export function formatValuationDisplayCompact(display: ValuationDisplay): string
   return display.kind === "range"
     ? `${usdCompact(display.min)}–${usdCompact(display.max)}`
     : usdCompact(display.value);
+}
+
+/**
+ * Ultra-compact valuation display for tight metric contexts (metrics grid,
+ * investment panel), e.g. "$8–10M" for the Grand range or "$20M" for singles.
+ * Same approved Current Estimated Value as the other formatters — display only.
+ */
+export function formatValuationDisplayShort(display: ValuationDisplay): string {
+  if (display.kind !== "range") return usdCompact(display.value);
+  const min = usdCompact(display.min);
+  const max = usdCompact(display.max);
+  // Shared magnitude suffix stated once: "$8M" + "$10M" → "$8–10M".
+  for (const suffix of ["M", "K"]) {
+    if (min.endsWith(suffix) && max.endsWith(suffix)) {
+      return `$${min.slice(1, -suffix.length)}–${max.slice(1)}`;
+    }
+  }
+  return `${min}–${max}`;
 }
 
 /** Growth percentage display, e.g. "+32%". Null in → null out (never invented). */

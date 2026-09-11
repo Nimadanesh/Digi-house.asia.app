@@ -87,6 +87,17 @@ describe("SimilarProperties — redesign Phase 5", () => {
     expect(screen.getByText("$52,200–$75,800+")).toBeInTheDocument();
   });
 
+  it("DEC-007: prints the adopted Estate24 name where R2 spelling drifts (Syrene)", () => {
+    // R2 records "Syrene (Villa Syrene)"; the adopted Estate24 record is
+    // "Villa Syrene" — the same name portfolio/detail/home print. The rail
+    // must not resurrect the drifted R2 spelling.
+    const syrene = { ...listing("prop-bayside-marina-penthouse", "Marina, UAE") };
+    useMarketplace.mockReturnValue({ data: [current, syrene], isLoading: false, isError: false });
+    render(<SimilarProperties listing={current} />);
+    expect(screen.getByText("Villa Syrene")).toBeInTheDocument();
+    expect(screen.queryByText("Syrene (Villa Syrene)")).not.toBeInTheDocument();
+  });
+
   it("renders nothing when there are no other properties", () => {
     useMarketplace.mockReturnValue({ data: [current], isLoading: false, isError: false });
     const { container } = render(<SimilarProperties listing={current} />);

@@ -63,3 +63,7 @@ e2e/test-results/
 # Database backups (P5-04)
 backups/
 
+
+# Playwright artifacts (root-level runner output)
+/test-results/
+.mimosa/

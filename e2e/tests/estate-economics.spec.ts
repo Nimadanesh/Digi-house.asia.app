@@ -1,5 +1,5 @@
-// Slice E QA — canonical economics sections on Estate Detail at 480×840.
-// Grand 2 BDM (engine-wired) + funding/resale peers (honest unavailable),
+// PROMPT 05 QA — V1 canonical economics on Estate Detail at 480×840.
+// Grand 2 BDM (full V1 chain) + funding/resale peers (V1 with honest UNKNOWN),
 // overflow audit across all three, screenshots for visual review.
 import { test, expect, type Page } from "@playwright/test";
 
@@ -16,26 +16,34 @@ async function expectNoOverflow(page: Page) {
   expect(overflow).toBeLessThanOrEqual(1);
 }
 
-test.describe("Slice E — canonical economics QA", () => {
-  test("Grand 2 BDM: canonical sections render with engine figures", async ({ page }) => {
+test.describe("Prompt 05 — V1 canonical economics QA", () => {
+  test("Grand 2 BDM: V1 thesis + $8M single value + investment facts", async ({ page }) => {
     await skipOnboarding(page);
     await page.goto("/property/prop-marina-vista-4b");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
 
+    // PROMPT 05: hero shows exactly $8M single (V1 canonical — never the band).
     await expect(page.getByTestId("hero-estate-value")).toContainText("$8,000,000.00");
-    await expect(page.getByTestId("estate-economics")).toBeVisible();
-    await expect(page.getByTestId("economics-gross")).toContainText("$20,120,625.00");
-    await expect(page.getByTestId("estate-costs")).toBeVisible();
-    await expect(page.getByTestId("estate-allocation")).toBeVisible();
+    await expect(page.getByTestId("hero-estate-value")).not.toContainText("10,000,000");
+    // V1 thesis: ANR $97,230.25, modeled revenue range, $195.43/yr projected.
+    await expect(page.getByTestId("estate-v1-thesis")).toBeVisible();
+    await expect(page.getByTestId("thesis-anr")).toContainText("$97,230.25");
+    await expect(page.getByTestId("thesis-revenue")).toContainText("$21,390,655.00");
+    await expect(page.getByTestId("thesis-revenue")).toContainText("$31,891,522.00");
+    await expect(page.getByTestId("thesis-pershare")).toContainText("$195.43");
+    // V1 investment: 80,000 shares at $100 (never fixture 2,500 / $80).
     await expect(page.getByTestId("estate-investment")).toBeVisible();
-    await expect(page.getByTestId("economics-nightly")).toContainText("$67,000.00");
-    await expect(page.getByTestId("economics-nightly")).toContainText("$80,000.00");
-    await expect(page.getByTestId("economics-adr")).toContainText("$73,500.00");
+    await expect(page.getByTestId("investment-total-shares")).toContainText("80,000");
+    await expect(page.getByTestId("investment-primary-price")).toContainText("$100.00");
+    // Legacy Slice A sections never render.
+    await expect(page.getByTestId("estate-economics")).toHaveCount(0);
+    await expect(page.getByTestId("estate-costs")).toHaveCount(0);
+    await expect(page.getByTestId("estate-allocation")).toHaveCount(0);
     // Provenance on demand: no visible wording, tap reveals the explanation.
-    await expect(page.getByTestId("economics-gross")).not.toContainText("Calculated");
-    await page.getByTestId("economics-gross").getByTestId("provenance-info").click();
-    await expect(page.getByTestId("provenance-sheet")).toContainText("Calculated figure");
-    await expect(page.getByTestId("provenance-sheet")).toContainText("Not historical performance");
+    await expect(page.getByTestId("thesis-pershare")).not.toContainText("Projected figure");
+    await page.getByTestId("thesis-pershare").getByTestId("provenance-info").click();
+    await expect(page.getByTestId("provenance-sheet")).toContainText("Projected figure");
+    await expect(page.getByTestId("provenance-sheet")).toContainText("Not guaranteed income");
     await page.screenshot({ path: "screenshots/slice-e-qa/provenance-sheet-open.png", fullPage: false });
     // Sheet dismisses via backdrop/Esc like every app sheet — close before continuing.
     await page.keyboard.press("Escape");
@@ -43,20 +51,26 @@ test.describe("Slice E — canonical economics QA", () => {
     await expectNoOverflow(page);
     await page.screenshot({ path: "screenshots/slice-e-qa/grand-estate-tab.png", fullPage: false });
 
-    // Canonical sections: scenario pills switch evaluations; costs expand with
-    // all six lines and the green tax honestly pending (guests unconfigured).
-    await page.getByTestId("estate-economics").scrollIntoViewIfNeeded();
-    await expect(page.getByTestId("scenario-pill-base")).toHaveAttribute("aria-pressed", "true");
-    await page.getByTestId("costs-toggle").click();
-    await expect(page.getByTestId("costs-content")).toBeVisible();
-    for (const id of ["tourismTax", "serviceCharge", "greenTax", "agencyRentalOta", "operatorOperating", "repairInsuranceMaintenance"]) {
-      await expect(page.getByTestId(`cost-line-${id}`)).toBeVisible();
-    }
-    await expect(page.getByTestId("cost-line-greenTax")).toContainText("Data pending");
-    await expect(page.getByTestId("allocation-owner")).toContainText("Data pending");
-    await expect(page.getByTestId("allocation-agency")).toContainText("$3,621,712.50");
+    // Income tab: V1 chain with base gross $26,543,858.25 + 5%/7.5%/1.5% costs.
+    await page.getByTestId("tab-income").click();
+    await expect(page.getByTestId("income-v1-story")).toBeVisible();
+    await expect(page.getByTestId("income-v1-gross")).toContainText("$26,543,858.25");
+    await expect(page.getByTestId("income-v1-cost-agency")).toBeVisible();
+    await expect(page.getByTestId("income-v1-owner")).toBeVisible();
+    await expect(page.getByTestId("income-v1-pershare-annual")).toContainText("$195.43");
+    // Scenario pills switch modeled evaluations (optimistic $31,891,522.00).
+    await page.getByTestId("scenario-v1-optimistic").click();
+    await expect(page.getByTestId("income-v1-gross")).toContainText("$31,891,522.00");
     await expectNoOverflow(page);
     await page.screenshot({ path: "screenshots/slice-e-qa/grand-economics-sections.png", fullPage: false });
+
+    // Ownership tab: V1 decision facts, no simulated holders.
+    await page.getByTestId("tab-ownership").click();
+    await expect(page.getByTestId("ownership-v1-panel")).toBeVisible();
+    await expect(page.getByTestId("ownership-v1-price")).toContainText("$100.00");
+    await expect(page.getByTestId("ownership-v1-total")).toContainText("80,000");
+    await expect(page.getByTestId("holder-analytics")).toHaveCount(0);
+    await expectNoOverflow(page);
 
     // Reconciled About (Details tab): approved research copy + size; mock
     // facts render as labeled pending rows.
@@ -65,33 +79,24 @@ test.describe("Slice E — canonical economics QA", () => {
     await expect(page.getByTestId("about-details")).toContainText("382 m");
     await expect(page.getByTestId("about-year")).toContainText("Data pending");
     await expect(page.getByTestId("about-lease")).toContainText("Data pending");
+    await expect(page.getByTestId("about-valuation")).toContainText("$8M");
     await expectNoOverflow(page);
   });
 
-  test("funding peer (RANGE rate): same sections with pending states, no empty shell", async ({ page }) => {
+  test("funding peer (RANGE rate): V1 thesis with known per-share, no legacy shell", async ({ page }) => {
     await skipOnboarding(page);
     await page.goto("/property/prop-soho-loft-studio");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
 
     // Rental performance leads with the observed nightly display (range kept).
     await expect(page.getByTestId("rental-story-rent")).toContainText("$52,200");
-    // Same section architecture as Grand: economics + costs + allocation render,
-    // derived rows pending with the missing input named.
-    await expect(page.getByTestId("estate-economics")).toBeVisible();
-    await expect(page.getByTestId("economics-pending-note")).toBeVisible();
-    // All three bound tabs render and stay selectable without engine inputs.
-    await expect(page.getByTestId("scenario-pill-lower")).toBeVisible();
-    await expect(page.getByTestId("scenario-pill-base")).toHaveAttribute("aria-pressed", "true");
-    await expect(page.getByTestId("scenario-pill-upper")).toBeVisible();
-    await page.getByTestId("scenario-pill-lower").click();
-    await expect(page.getByTestId("scenario-pill-lower")).toHaveAttribute("aria-pressed", "true");
-    await expect(page.getByTestId("scenario-pill-base")).toHaveAttribute("aria-pressed", "false");
-    await expect(page.getByTestId("economics-gross")).toContainText("Data pending");
-    await expect(page.getByTestId("estate-costs")).toBeVisible();
-    await expect(page.getByTestId("estate-allocation")).toBeVisible();
-    await expect(page.getByTestId("allocation-owner")).toContainText("Data pending");
+    // V1 thesis renders (Aerial: ANR $64,000, BVI 0% tax → known per-share).
+    await expect(page.getByTestId("estate-v1-thesis")).toBeVisible();
+    await expect(page.getByTestId("thesis-anr")).toContainText("$64,000.00");
     await expect(page.getByTestId("estate-economics-empty")).toHaveCount(0);
-    await expect(page.getByTestId("hero-estate-value")).toContainText("$20,000,000.00");
+    // V1 investment: 180,000 shares at $100.
+    await expect(page.getByTestId("investment-total-shares")).toContainText("180,000");
+    await expect(page.getByTestId("hero-estate-value")).toContainText("$18,000,000.00");
     await expect(page.getByTestId("estate-investment")).toBeVisible();
     // Reserve Villa CTA closes the tab with The Aerial's official listing URL.
     const reserve = page.getByTestId("reserve-villa-cta");
@@ -102,8 +107,12 @@ test.describe("Slice E — canonical economics QA", () => {
     );
     await reserve.scrollIntoViewIfNeeded();
     await page.screenshot({ path: "screenshots/slice-e-qa/peer-funding-reserve.png", fullPage: false });
-    await page.getByTestId("estate-economics").scrollIntoViewIfNeeded();
+    await page.getByTestId("estate-v1-thesis").scrollIntoViewIfNeeded();
     await page.screenshot({ path: "screenshots/slice-e-qa/peer-funding-economics.png", fullPage: false });
+    // Income pills work for peers with known V1 (Aerial base $17,472,000.00).
+    await page.getByTestId("tab-income").click();
+    await expect(page.getByTestId("income-v1-gross")).toContainText("$17,472,000.00");
+    await expectNoOverflow(page);
     // Peer About carries its own approved research copy (no fixture prose).
     await page.getByTestId("tab-details").click();
     await page.getByTestId("about-more").click();
@@ -112,7 +121,7 @@ test.describe("Slice E — canonical economics QA", () => {
     await page.screenshot({ path: "screenshots/slice-e-qa/peer-funding-estate-tab.png", fullPage: false });
   });
 
-  test("resale peer (DYNAMIC rate): pending economics, investment distinguishes prices", async ({ page }) => {
+  test("resale peer (DYNAMIC rate): V1 investment at NAV, no legacy market rows", async ({ page }) => {
     await skipOnboarding(page);
     await page.goto("/property/prop-miami-beach-condo");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
@@ -128,45 +137,37 @@ test.describe("Slice E — canonical economics QA", () => {
     await page.screenshot({ path: "screenshots/slice-e-qa/peer-resale-reserve.png", fullPage: false });
     // La Dolce Vita keeps its DYNAMIC no-rate anchor (never normalized to ADR).
     await expect(page.getByTestId("rental-story-rent")).toContainText("DYNAMIC");
-    await expect(page.getByTestId("estate-economics")).toBeVisible();
-    await expect(page.getByTestId("scenario-pill-lower")).toBeVisible();
-    await expect(page.getByTestId("scenario-pill-base")).toBeVisible();
-    await expect(page.getByTestId("scenario-pill-upper")).toBeVisible();
-    await expect(page.getByTestId("economics-pending-note")).toBeVisible();
-    await expect(page.getByTestId("estate-costs")).toBeVisible();
-    await expect(page.getByTestId("investment-secondary-price")).toContainText("No single market price");
-    await expect(page.getByTestId("investment-lowest-ask")).toBeVisible();
+    await expect(page.getByTestId("estate-v1-thesis")).toBeVisible();
+    // V1 fractionalization at NAV ($32M → 320,000 shares at $100).
+    await expect(page.getByTestId("investment-total-shares")).toContainText("320,000");
+    await expect(page.getByTestId("investment-primary-price")).toContainText("$100.00");
     await expectNoOverflow(page);
-    await page.getByTestId("estate-economics").scrollIntoViewIfNeeded();
+    await page.getByTestId("estate-v1-thesis").scrollIntoViewIfNeeded();
     await page.screenshot({ path: "screenshots/slice-e-qa/peer-resale-economics.png", fullPage: false });
     await page.screenshot({ path: "screenshots/slice-e-qa/peer-resale-estate-tab.png", fullPage: false });
   });
 
-  test("STARTING_FROM peer: nightly semantics preserved, sections consistent", async ({ page }) => {
+  test("STARTING_FROM peer: nightly semantics preserved, V1 UNKNOWN stays honest", async ({ page }) => {
     await skipOnboarding(page);
     await page.goto("/property/prop-berlin-mitte-apartment");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
 
     await expect(page.getByTestId("rental-story-rent")).toContainText("25,000");
-    await expect(page.getByTestId("estate-economics")).toBeVisible();
-    await expect(page.getByTestId("scenario-pill-lower")).toBeVisible();
-    await expect(page.getByTestId("scenario-pill-base")).toBeVisible();
-    await expect(page.getByTestId("scenario-pill-upper")).toBeVisible();
-    await expect(page.getByTestId("estate-costs")).toBeVisible();
-    await expect(page.getByTestId("estate-allocation")).toBeVisible();
+    await expect(page.getByTestId("estate-v1-thesis")).toBeVisible();
+    // Trajan (USA/Nevada, unknown tax): per-share honestly UNKNOWN.
+    await expect(page.getByTestId("thesis-pershare")).toContainText("Data pending");
     await expect(page.getByTestId("estate-investment")).toBeVisible();
     await expectNoOverflow(page);
     await page.screenshot({ path: "screenshots/slice-e-qa/peer-starting-from-estate-tab.png", fullPage: false });
   });
 
-  test("high-value peer: $70M estate value with pending derivatives", async ({ page }) => {
+  test("high-value peer: $60M estate value with V1 investment facts", async ({ page }) => {
     await skipOnboarding(page);
     await page.goto("/property/prop-mexico-city-penthouse");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
 
-    await expect(page.getByTestId("hero-estate-value")).toContainText("$70,000,000.00");
-    await expect(page.getByTestId("estate-economics")).toBeVisible();
-    await expect(page.getByTestId("economics-pending-note")).toBeVisible();
+    await expect(page.getByTestId("hero-estate-value")).toContainText("$60,000,000.00");
+    await expect(page.getByTestId("estate-v1-thesis")).toBeVisible();
     await expect(page.getByTestId("estate-investment")).toBeVisible();
     await expectNoOverflow(page);
     await page.screenshot({ path: "screenshots/slice-e-qa/peer-high-value-estate-tab.png", fullPage: false });
@@ -229,7 +230,7 @@ test.describe("Slice E — canonical economics QA", () => {
     }
   });
 
-  test("all-24 sweep: identical section architecture, honest states, no overflow", async ({ page }) => {
+  test("all-24 sweep: V1 architecture, honest states, no overflow", async ({ page }) => {
     test.setTimeout(180_000);
     await skipOnboarding(page);
     const ids = [
@@ -262,17 +263,15 @@ test.describe("Slice E — canonical economics QA", () => {
     for (const id of ids) {
       await page.goto(`/property/${id}`);
       await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
-      // The six canonical sections render for every estate…
+      // The V1 Estate architecture renders for every estate…
       await expect(page.getByTestId("rental-story"), `${id} rental performance`).toBeVisible();
-      await expect(page.getByTestId("estate-economics"), `${id} rental economics`).toBeVisible();
-      await expect(page.getByTestId("estate-costs"), `${id} cost structure`).toBeVisible();
-      await expect(page.getByTestId("estate-allocation"), `${id} profit allocation`).toBeVisible();
+      await expect(page.getByTestId("estate-v1-thesis"), `${id} V1 thesis`).toBeVisible();
       await expect(page.getByTestId("estate-investment"), `${id} investment`).toBeVisible();
-      // …exactly three bound tabs (24 × 3 = 72 instances)…
-      await expect(page.getByTestId("scenario-pill-lower"), `${id} lower tab`).toBeVisible();
-      await expect(page.getByTestId("scenario-pill-base"), `${id} base tab`).toBeVisible();
-      await expect(page.getByTestId("scenario-pill-upper"), `${id} upper tab`).toBeVisible();
-      // …with approved ESTIMATED provenance on the hero value…
+      // …with no legacy Slice A sections anywhere on the tab…
+      await expect(page.getByTestId("estate-economics"), `${id} no legacy economics`).toHaveCount(0);
+      await expect(page.getByTestId("estate-costs"), `${id} no legacy costs`).toHaveCount(0);
+      await expect(page.getByTestId("estate-allocation"), `${id} no legacy allocation`).toHaveCount(0);
+      // …approved ESTIMATED provenance on the hero value…
       await expect(
         page.getByTestId("hero-estate-value").getByTestId("provenance-info"),
         `${id} provenance`,
@@ -285,9 +284,18 @@ test.describe("Slice E — canonical economics QA", () => {
       expect(href, `${id} official listing URL`).toMatch(/^https:\/\/www\.rentalescapes\.com\/.+-\d+$/);
       // …and no fabricated numbers, no legacy wording, no empty shell.
       await expect(page.getByTestId("estate-economics-empty"), `${id} no empty shell`).toHaveCount(0);
-      const body = await page.getByTestId("panel-estate").innerText();
-      expect(body, `${id} no zero-fabrication`).not.toContain("$0.00");
-      expect(body, `${id} no misleading rent label`).not.toContain("Projected annual rent");
+      const thesis = await page.getByTestId("estate-v1-thesis").innerText();
+      expect(thesis, `${id} no misleading rent label`).not.toContain("Projected annual rent");
+      // …Income carries the four V1 scenario pills…
+      await page.getByTestId("tab-income").click();
+      await expect(page.getByTestId("scenario-v1-conservative"), `${id} conservative`).toBeVisible();
+      await expect(page.getByTestId("scenario-v1-base"), `${id} base`).toBeVisible();
+      await expect(page.getByTestId("scenario-v1-optimistic"), `${id} optimistic`).toBeVisible();
+      await expect(page.getByTestId("scenario-v1-average"), `${id} average`).toBeVisible();
+      // …Ownership carries V1 decision facts with no simulated holders…
+      await page.getByTestId("tab-ownership").click();
+      await expect(page.getByTestId("ownership-v1-panel"), `${id} ownership V1`).toBeVisible();
+      await expect(page.getByTestId("holder-analytics"), `${id} no simulated holders`).toHaveCount(0);
       await expectNoOverflow(page);
     }
   });

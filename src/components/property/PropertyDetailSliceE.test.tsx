@@ -1,7 +1,9 @@
-// Slice E route wiring tests: PropertyDetail composes the canonical view-model —
-// Grand 2 BDM gets engine-wired economics + hero value, other listings degrade
-// honestly, scenario pills switch evaluations, and the hero CTA follows the
-// ShareModel market state. Existing flows (sheets, tabs, resale) untouched.
+// Slice E route wiring tests (PROMPT 05): PropertyDetail composes the canonical
+// view-model + V1 projected economics — Grand 2 BDM gets the V1 thesis +
+// $8M single hero value, other listings degrade honestly, Income carries the
+// V1 chain, Ownership carries V1 decision facts (no simulated holders), and
+// the hero CTA follows the ShareModel market state. Existing flows (sheets,
+// tabs, resale) untouched.
 
 import { describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
@@ -45,7 +47,7 @@ const grandListing: Listing = {
   description: "Waterfront one-bedroom.",
   images: ["/images/properties/joali-being-01.jpg"],
   totalShares: 2500,
-  sharePriceUsd: 8000,
+  sharePriceUsd: 10000,
   status: "funding",
   ownerWalletAddress: "EQTest",
   annualRentUsd: 17256000,
@@ -54,7 +56,7 @@ const grandListing: Listing = {
   sharesRemaining: 200,
   fundingProgressRatio: 0.92,
   monthlyYieldRate: 7.19,
-  totalValueUsd: 82000000,
+  totalValueUsd: 8000000,
   nightlyRate: "$67,655",
   meta: {
     sizeSqm: 72,
@@ -82,30 +84,37 @@ function renderDetail(listing: Listing, orderBook?: OrderBookState) {
       listing={listing}
       orderBook={orderBook}
       onBuy={() => {}}
-      previewShares={1}
-      onSharesChange={() => {}}
       ownedShares={0}
       lockedShares={0}
-      onBuyShares={() => {}}
     />,
   );
 }
 
-describe("Slice E wiring (Grand 2 BDM)", () => {
-  it("shows canonical economics, hero value with provenance, and all four sections", () => {
+describe("Slice E wiring (Grand 2 BDM, PROMPT 05 V1)", () => {
+  it("shows the V1 thesis, $8M single hero value, and V1 investment facts", () => {
     renderDetail(grandListing);
-    expect(screen.getByTestId("estate-economics")).toBeInTheDocument();
-    expect(screen.getByTestId("economics-gross")).toHaveTextContent("$20,120,625.00");
-    expect(screen.getByTestId("estate-costs")).toBeInTheDocument();
-    expect(screen.getByTestId("estate-allocation")).toBeInTheDocument();
+    // V1 thesis: ANR $97,230.25, modeled revenue $21.39M–$31.89M, $195.43/yr.
+    expect(screen.getByTestId("estate-v1-thesis")).toBeInTheDocument();
+    expect(screen.getByTestId("thesis-anr")).toHaveTextContent("$97,230.25");
+    expect(screen.getByTestId("thesis-revenue")).toHaveTextContent("$21,390,655.00");
+    expect(screen.getByTestId("thesis-revenue")).toHaveTextContent("$31,891,522.00");
+    expect(screen.getByTestId("thesis-pershare")).toHaveTextContent("$195.43");
     expect(screen.getByTestId("estate-investment")).toBeInTheDocument();
+    // PROMPT 05: hero shows exactly $8M single (V1 canonical — never the band).
     expect(screen.getByTestId("hero-estate-value")).toHaveTextContent("$8,000,000.00");
+    expect(screen.getByTestId("hero-estate-value")).not.toHaveTextContent("10,000,000");
     expect(
       screen.getByTestId("hero-estate-value").querySelector('[aria-label="Estimated value"]'),
     ).toBeInTheDocument();
-    // QA: metrics KPI prefers the same canonical figure (no $8M-vs-legacy clash).
-    expect(screen.getByTestId("metrics-grid")).toHaveTextContent("$8,000,000.00");
-    expect(screen.getByTestId("investment-estate-value")).toHaveTextContent("$8,000,000.00");
+    // QA: metrics KPI prefers the same canonical figure; investment shows V1 shares.
+    expect(screen.getByTestId("metrics-grid")).toHaveTextContent("$8M");
+    expect(screen.getByTestId("investment-estate-value")).toHaveTextContent("$8M");
+    expect(screen.getByTestId("investment-total-shares")).toHaveTextContent("80,000");
+    expect(screen.getByTestId("investment-primary-price")).toHaveTextContent("$100.00");
+    // Legacy Slice A sections never render on the Estate tab.
+    expect(screen.queryByTestId("estate-economics")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("estate-costs")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("estate-allocation")).not.toBeInTheDocument();
     // Reserve Villa CTA closes the Estate tab with the official listing URL.
     const panel = screen.getByTestId("panel-estate");
     expect(panel.lastElementChild).toHaveAttribute("data-testid", "reserve-villa-cta");
@@ -115,48 +124,70 @@ describe("Slice E wiring (Grand 2 BDM)", () => {
     );
   });
 
-  it("switches scenario evaluations without touching canonical inputs", () => {
+  it("Income tab carries the V1 chain; scenario pills switch modeled evaluations", () => {
     renderDetail(grandListing);
-    fireEvent.click(screen.getByTestId("scenario-pill-upper"));
-    expect(screen.getByTestId("economics-gross")).toHaveTextContent("$24,144,750.00");
-    expect(screen.getByTestId("economics-occupancy")).toHaveTextContent("90%");
+    fireEvent.click(screen.getByTestId("tab-income"));
+    expect(screen.getByTestId("income-v1-story")).toBeInTheDocument();
+    expect(screen.getByTestId("income-v1-gross")).toHaveTextContent("$26,543,858.25");
+    fireEvent.click(screen.getByTestId("scenario-v1-optimistic"));
+    expect(screen.getByTestId("income-v1-gross")).toHaveTextContent("$31,891,522.00");
+    fireEvent.click(screen.getByTestId("scenario-v1-conservative"));
+    expect(screen.getByTestId("income-v1-gross")).toHaveTextContent("$21,390,655.00");
+    // V1-only cost lines (5% / 7.5% / 1.5%) — no legacy 17%/10%/18%/12.5%.
+    expect(screen.getByTestId("income-v1-cost-agency")).toHaveTextContent("$1,069,532.75");
+    expect(screen.getByTestId("income-v1-pershare-annual")).toHaveTextContent("$195.43");
+  });
+
+  it("Ownership tab carries V1 decision facts with no simulated holders", () => {
+    renderDetail(grandListing);
+    fireEvent.click(screen.getByTestId("tab-ownership"));
+    expect(screen.getByTestId("ownership-v1-panel")).toBeInTheDocument();
+    expect(screen.getByTestId("ownership-v1-price")).toHaveTextContent("$100.00");
+    expect(screen.getByTestId("ownership-v1-total")).toHaveTextContent("80,000");
+    expect(screen.queryByTestId("holder-analytics")).not.toBeInTheDocument();
   });
 });
 
-describe("Slice E wiring (non-Grand listing)", () => {
-  it("same section architecture with honest pending states (no empty shell)", () => {
+describe("Slice E wiring (non-Grand listing, PROMPT 05 V1)", () => {
+  it("V1 thesis + investment with honest architecture (no legacy sections)", () => {
     renderDetail(plainListing);
-    // All four sections render — economics/costs/allocation pending, investment live.
-    expect(screen.getByTestId("estate-economics")).toBeInTheDocument();
-    expect(screen.getByTestId("economics-nightly")).toHaveTextContent("$52,200–$75,800+");
-    expect(screen.getByTestId("economics-pending-note")).toBeInTheDocument();
+    // Rental performance leads with the observed nightly display (range kept).
+    expect(screen.getByTestId("rental-story-rent")).toHaveTextContent("$52,200");
+    // V1 thesis renders for every V1 estate (Aerial: ANR $64,000, BVI 0% tax).
+    expect(screen.getByTestId("estate-v1-thesis")).toBeInTheDocument();
+    expect(screen.getByTestId("thesis-anr")).toHaveTextContent("$64,000.00");
     expect(screen.queryByTestId("estate-economics-empty")).not.toBeInTheDocument();
-    expect(screen.getByTestId("estate-costs")).toBeInTheDocument();
-    expect(screen.getByTestId("estate-allocation")).toBeInTheDocument();
-    expect(screen.getByTestId("allocation-owner")).toHaveTextContent("Data pending");
-    // Aerial $20M approved ESTIMATED/MODELED (central $18–22M midpoint).
-    expect(screen.getByTestId("hero-estate-value")).toHaveTextContent("$20,000,000.00");
+    // Legacy Slice A sections never render.
+    expect(screen.queryByTestId("estate-economics")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("estate-costs")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("estate-allocation")).not.toBeInTheDocument();
+    // Aerial $18M approved ESTIMATED (research $18–22M band low per PM lowest-value rule).
+    expect(screen.getByTestId("hero-estate-value")).toHaveTextContent("$18,000,000.00");
     expect(
       screen.getByTestId("hero-estate-value").querySelector('[aria-label="Estimated value"]'),
     ).toBeInTheDocument();
-    // Share facts still work, now with an approved reference value.
-    expect(screen.getByTestId("investment-total-shares")).toHaveTextContent("1,000");
-    expect(screen.getByTestId("investment-reference-value")).toHaveTextContent("$20,000.00");
+    // V1 fractionalization: 180,000 shares at $100 (never fixture 1,000).
+    expect(screen.getByTestId("investment-total-shares")).toHaveTextContent("180,000");
+    expect(screen.getByTestId("investment-reference-value")).toHaveTextContent("$100.00");
+    expect(screen.getByTestId("estate-investment")).toBeVisible();
     // Reserve Villa CTA closes the Estate tab even without engine economics.
     const panel = screen.getByTestId("panel-estate");
     expect(panel.lastElementChild).toHaveAttribute("data-testid", "reserve-villa-cta");
     expect(screen.getByTestId("reserve-villa-cta").getAttribute("href")).toMatch(/-126855$/);
   });
 
-  it("scenario tabs stay selectable without engine inputs (bound state is per-estate)", () => {
+  it("Income V1 pills stay selectable and never fabricate (Aerial base gross)", () => {
     renderDetail(plainListing);
-    expect(screen.getByTestId("scenario-pill-base")).toHaveAttribute("aria-pressed", "true");
-    fireEvent.click(screen.getByTestId("scenario-pill-upper"));
-    expect(screen.getByTestId("scenario-pill-upper")).toHaveAttribute("aria-pressed", "true");
-    expect(screen.getByTestId("scenario-pill-base")).toHaveAttribute("aria-pressed", "false");
-    // Selection fabricates nothing: derived rows stay pending.
-    expect(screen.getByTestId("economics-gross")).toHaveTextContent("Data pending");
-    expect(screen.queryByText("$0.00")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByTestId("tab-income"));
+    expect(screen.getByTestId("scenario-v1-base")).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByTestId("income-v1-gross")).toHaveTextContent("$17,472,000.00");
+    fireEvent.click(screen.getByTestId("scenario-v1-conservative"));
+    expect(screen.getByTestId("scenario-v1-conservative")).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByTestId("scenario-v1-base")).toHaveAttribute("aria-pressed", "false");
+    expect(screen.getByTestId("income-v1-gross")).toHaveTextContent("$14,080,000.00");
+    // Honest zeros only: 0% BVI tax and no-lock accrued may read $0.00, but
+    // modeled gross never fabricates a zero.
+    expect(screen.getByTestId("income-v1-gross")).not.toHaveTextContent("$0.00");
   });
 
   it("resale (non-funding) listing renders the CTA last with its own URL (no funding guard)", () => {

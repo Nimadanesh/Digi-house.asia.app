@@ -130,4 +130,14 @@ describe("LimitBuySheet — PD-06", () => {
     expect(screen.getByTestId("limit-buy-price-input")).toHaveValue(120);
     expect(screen.getByTestId("limit-buy-summary")).toBeInTheDocument();
   });
+
+  it("PROMPT 04: confirms the selected estate with canonical identity (Matrix identity.name primary)", () => {
+    renderSheet();
+    // prop-tbilisi-riverhouse-loft maps to the canonical Emerald Cay record —
+    // the fixture shorthand must never render for a known Estate.
+    const identity = screen.getByTestId("limit-buy-estate");
+    expect(identity).toHaveTextContent("Emerald Cay");
+    expect(identity).toHaveTextContent("Silly Creek, Providenciales, Turks and Caicos");
+    expect(identity.textContent).not.toContain("Tbilisi Riverhouse Loft");
+  });
 });

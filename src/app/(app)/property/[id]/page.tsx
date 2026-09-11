@@ -56,8 +56,6 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
   const settingsOpen = useUiStore((s) => s.settingsOpen);
   const pushToast = useUiStore((s) => s.pushToast);
 
-  /** null = untouched — derives from owned shares once the portfolio loads (Phase 2 prefill). */
-  const [previewShares, setPreviewShares] = useState<number | null>(null);
   const [qty, setQty] = useState(10);
   const [currency, setCurrency] = useState<BuyCurrency>("TON");
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -88,7 +86,6 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
   // Phase 3 — display-only accrued unpaid yield across this property's active locks.
   const accruedUnpaidUsd = activeLocks.reduce((sum, lock) => sum + lock.accruedUnpaidUsd, 0);
   const avgCostUsd = portfolio.data?.holdings.find((h) => h.propertyId === id)?.avgCostUsd;
-  const effectivePreviewShares = previewShares ?? Math.max(1, ownedShares);
   const freeShares = Math.max(0, ownedShares - lockedShares);
   const mainButtonActive = useUiStore((s) => s.mainButtonActive);
   const setStickyCtaVisible = useUiStore((s) => s.setStickyCtaVisible);
@@ -114,7 +111,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
     ? getCurrentSharePrice(listing, { bestAskUsd: orderBook.data?.bestAskUsd })
     : 0;
 
-  // Single buy entry — hero CTA, sticky CTA, calculator and MainButton all route here.
+  // Single buy entry — hero CTA, sticky CTA, Ownership panel and MainButton route here.
   // Primary offering opens the TON/USDT BuySheet; a secondary listing opens the
   // market (limit) buy sheet anchored to the best ask (Phase 7).
   const openBuyForContext = useCallback((n?: number) => {
@@ -122,7 +119,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
     if (listing.status === "funding") {
       if (remaining <= 0) return;
       haptics.impact("light");
-      setQty(Math.min(remaining, Math.max(1, n ?? effectivePreviewShares)));
+      setQty(Math.min(remaining, Math.max(1, n ?? Math.max(1, ownedShares))));
       setCurrency("TON");
       setStep("qty");
       setSheetOpen(true);
@@ -130,7 +127,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
     }
     haptics.impact("light");
     setLimitBuyOpen(true);
-  }, [listing, remaining, effectivePreviewShares]);
+  }, [listing, remaining, ownedShares]);
 
   // BackButton — safe chrome never throws (even if TG unavailable).
   useEffect(() => {
@@ -325,7 +322,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
     qty,
     remaining,
     ton.connected,
-    effectivePreviewShares,
+    ownedShares,
     buy.isPending,
     confirmBuy,
     feesQuery.data,
@@ -386,13 +383,10 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
           listing={listing}
           orderBook={orderBook.data}
           onBuy={() => openBuyForContext()}
-          previewShares={effectivePreviewShares}
-          onSharesChange={setPreviewShares}
           ownedShares={ownedShares}
           lockedShares={lockedShares}
           avgCostUsd={avgCostUsd}
           accruedUnpaidUsd={accruedUnpaidUsd}
-          onBuyShares={(n) => openBuyForContext(n)}
           stay={stayQuery.data}
           documents={documents}
           onDownloadDoc={(docId) => docDownload.mutate(docId)}

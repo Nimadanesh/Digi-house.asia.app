@@ -19,20 +19,21 @@ import {
   formatGrowthPct,
   formatValuationDisplay,
   formatValuationDisplayCompact,
+  formatValuationDisplayShort,
   getGrowthPotential,
   getValuationDisplay,
 } from "../estates/growth-potential";
 
-describe("PROMPT 03: Grand 2 BDM critical valuation rule", () => {
-  it("keeps Current Estimated Value as the $8M–$10M range (not $13.5M, not $82M)", () => {
+describe("PROMPT 05: Grand 2 BDM critical valuation rule ($8M single)", () => {
+  it("keeps Current Estimated Value as exactly $8M single (V1 canonical)", () => {
     const display = getValuationDisplay(GRAND_2_BDM_RUNTIME_ID)!;
-    expect(display.kind).toBe("range");
+    expect(display.kind).toBe("single");
     expect(display).toMatchObject({
-      min: 800_000_000,
-      max: 1_000_000_000,
+      value: 800_000_000,
       provenance: "estimated",
     });
-    expect(formatValuationDisplayCompact(display)).toBe("$8M–$10M");
+    expect(formatValuationDisplayCompact(display)).toBe("$8M");
+    expect(formatValuationDisplayShort(display)).toBe("$8M");
   });
 
   it("sets Growth Potential upper value to $18M with estimated provenance", () => {
@@ -46,7 +47,7 @@ describe("PROMPT 03: Grand 2 BDM critical valuation rule", () => {
     expect(growth.researchRange).toEqual({ min: 960_000_000, max: 1_800_000_000 });
   });
 
-  it("calculates NO Growth Potential percentage for Grand (current is a range)", () => {
+  it("calculates NO Growth Potential percentage for Grand (preserved presentation)", () => {
     expect(getGrowthPotential(GRAND_2_BDM_RUNTIME_ID)!.potentialPct).toBeNull();
     expect(formatGrowthPct(getGrowthPotential(GRAND_2_BDM_RUNTIME_ID)!.potentialPct)).toBeNull();
   });
@@ -55,9 +56,7 @@ describe("PROMPT 03: Grand 2 BDM critical valuation rule", () => {
     const grand24 = getEstate24ByListingId("128862")!;
     expect(grand24.estimates.valueCentral).toBe(13_500_000);
     const display = getValuationDisplay(GRAND_2_BDM_RUNTIME_ID)!;
-    const currentValues =
-      display.kind === "range" ? [display.min, display.max] : [display.value];
-    expect(currentValues).not.toContain(1_350_000_000);
+    expect(display).toEqual({ kind: "single", value: 800_000_000, provenance: "estimated" });
   });
 
   it("never displays the legacy $82M value anywhere", () => {
@@ -78,12 +77,12 @@ describe("PROMPT 03: Grand 2 BDM critical valuation rule", () => {
 
 describe("PROMPT 03: general Growth Potential rule", () => {
   it("derives potential from the research range upper with an unambiguous percentage", () => {
-    // The Aerial: current $20M single, research $14.4M–$26.4M → +32%.
+    // The Aerial: current $18M single (PM lowest-valid-value rule), research $14.4M–$26.4M → +46.7%.
     const growth = getGrowthPotential("prop-soho-loft-studio")!;
     expect(growth.potentialValue).toBe(2_640_000_000);
-    expect(growth.potentialPct).toBe(32);
+    expect(growth.potentialPct).toBe(46.7);
     expect(growth.provenance).toBe("estimated");
-    expect(formatGrowthPct(growth.potentialPct)).toBe("+32%");
+    expect(formatGrowthPct(growth.potentialPct)).toBe("+46.7%");
   });
 
   it("resolves growth potential for all 24 canonical estates (none invented)", () => {
@@ -104,9 +103,19 @@ describe("PROMPT 03: general Growth Potential rule", () => {
 
   it("formats single valuations exactly (no rounding, no currency conversion)", () => {
     const display = getValuationDisplay("prop-soho-loft-studio")!;
-    expect(display).toEqual({ kind: "single", value: 2_000_000_000, provenance: "estimated" });
-    expect(formatValuationDisplay(display)).toBe("$20,000,000.00");
-    expect(formatValuationDisplayCompact(display)).toBe("$20M");
+    expect(display).toEqual({ kind: "single", value: 1_800_000_000, provenance: "estimated" });
+    expect(formatValuationDisplay(display)).toBe("$18,000,000.00");
+    expect(formatValuationDisplayCompact(display)).toBe("$18M");
+  });
+
+  it("formats the short metric display as $8M for the Grand single value", () => {
+    const display = getValuationDisplay(GRAND_2_BDM_RUNTIME_ID)!;
+    expect(formatValuationDisplayShort(display)).toBe("$8M");
+  });
+
+  it("formats short singles with the compact value (no invented range)", () => {
+    const display = getValuationDisplay("prop-soho-loft-studio")!;
+    expect(formatValuationDisplayShort(display)).toBe("$18M");
   });
 });
 

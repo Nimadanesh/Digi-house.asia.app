@@ -9,6 +9,18 @@ export function usd(minor: number): string {
 }
 
 /**
+ * EUR money for V1 modeled economics (Financial Model V1 calculates EUR
+ * properties in EUR with no FX invention — never render them with usd()).
+ * Integer minor units (cents) in.
+ */
+export function eur(minor: number): string {
+  return `€${(minor / 100).toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
+}
+
+/**
  * Compact money for tables/chips: $80, $500, $2K, $1.5K, $500K, $10M.
  * Integer cents in; drops decimals, uses K/M suffixes above $1,000.
  */

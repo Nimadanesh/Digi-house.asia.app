@@ -310,11 +310,11 @@ describe("share wiring from listing facts (all 24 listings)", () => {
     const vm = buildEstateDetailViewModel(
       makeListing({ id: "prop-soho-loft-studio", totalShares: 1000 }),
     );
-    expect(vm.valuation).toEqual({ value: 2_000_000_000, provenance: "estimated" });
-    expect(vm.share.config.estateValue).toEqual({ value: 2_000_000_000, provenance: "estimated" });
-    // 20,000,000 / 1000 = $20,000.00 per share reference (calculated, not a price).
+    expect(vm.valuation).toEqual({ value: 1_800_000_000, provenance: "estimated" });
+    expect(vm.share.config.estateValue).toEqual({ value: 1_800_000_000, provenance: "estimated" });
+    // 18,000,000 / 1000 = $18,000.00 per share reference (calculated, not a price).
     expect(vm.share.structure.referenceAssetValuePerShare).toEqual({
-      value: 2_000_000,
+      value: 1_800_000,
       provenance: "calculated",
     });
   });
@@ -407,12 +407,11 @@ describe("PROMPT 03: canonical property facts on the view model", () => {
     expect(vm.descriptionFull).toContain("ocean villa");
   });
 
-  it("shows Current Estimated Value as the $8M–$10M range with $18M growth (no percentage) for Grand", () => {
+  it("shows Current Estimated Value as exactly $8M single with $18M growth (no percentage) for Grand", () => {
     const vm = buildEstateDetailViewModel(makeListing({ id: "prop-marina-vista-4b" }));
     expect(vm.valuationDisplay).toEqual({
-      kind: "range",
-      min: 800_000_000,
-      max: 1_000_000_000,
+      kind: "single",
+      value: 800_000_000,
       provenance: "estimated",
     });
     expect(vm.growthPotential?.potentialValue).toBe(1_800_000_000);
@@ -430,11 +429,11 @@ describe("PROMPT 03: canonical property facts on the view model", () => {
     expect(vm.propertyType).toBe("Private Island Estate");
     expect(vm.valuationDisplay).toEqual({
       kind: "single",
-      value: 2_000_000_000,
+      value: 1_800_000_000,
       provenance: "estimated",
     });
     expect(vm.growthPotential?.potentialValue).toBe(2_640_000_000);
-    expect(vm.growthPotential?.potentialPct).toBe(32);
+    expect(vm.growthPotential?.potentialPct).toBe(46.7);
   });
 
   it("resolves canonical identity for all 24 estates (never legacy fallback)", () => {

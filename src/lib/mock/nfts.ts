@@ -5,16 +5,28 @@
 import type { NftsRepo } from "@/lib/api/repos";
 import type { HoldingNft } from "@/types/nft";
 import { HOLDINGS } from "./seed/holdings";
-import { PROPERTIES } from "./seed/properties";
 import { USER } from "./seed/user";
+import { getEstateDisplayIdentity } from "@/lib/economics/estates/estate-display-identity";
+import { PROPERTIES } from "./seed/properties";
 import { sleep, jitter } from "./sleep";
 
 function titleFor(propertyId: string): string {
-  return PROPERTIES.find((p) => p.id === propertyId)?.title ?? propertyId;
+  // Canonical display identity (Final PO Decision 6); fixture fallback for unmapped ids.
+  const fixture = PROPERTIES.find((p) => p.id === propertyId);
+  return getEstateDisplayIdentity(propertyId, {
+    title: fixture?.title,
+    location: fixture?.location,
+    images: fixture?.images,
+  }).name;
 }
 
 function locationFor(propertyId: string): string {
-  return PROPERTIES.find((p) => p.id === propertyId)?.location ?? "";
+  const fixture = PROPERTIES.find((p) => p.id === propertyId);
+  return getEstateDisplayIdentity(propertyId, {
+    title: fixture?.title,
+    location: fixture?.location,
+    images: fixture?.images,
+  }).location;
 }
 
 function sharesFor(propertyId: string): number {

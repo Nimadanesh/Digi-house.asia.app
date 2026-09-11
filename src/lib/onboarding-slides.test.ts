@@ -9,11 +9,12 @@ describe("onboarding slides content", () => {
 
   it("slide 1 own-property hook", () => {
     expect(ONBOARDING_SLIDES[0]!.headline).toMatch(/owner of a real property/i);
-    expect(ONBOARDING_SLIDES[0]!.subtitle).toMatch(/\$80/);
+    expect(ONBOARDING_SLIDES[0]!.subtitle).toMatch(/\$100/);
   });
 
-  it("slide 2 weekly yield without wallet overpromise", () => {
-    expect(ONBOARDING_SLIDES[1]!.headline).toMatch(/rental share every week/i);
+  it("slide 2 monthly income without wallet overpromise", () => {
+    expect(ONBOARDING_SLIDES[1]!.headline).toMatch(/rental share every month/i);
+    expect(ONBOARDING_SLIDES[1]!.headline.toLowerCase()).not.toMatch(/week/);
     expect(ONBOARDING_SLIDES[1]!.subtitle.toLowerCase()).not.toMatch(/landed in your wallet/);
   });
 

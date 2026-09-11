@@ -1,5 +1,9 @@
-/** Share locks + yield (PRODUCT-PLAN §0.4). Money: integer cents (minor units). */
-
+/** Share locks + yield (PRODUCT-PLAN §0.4). Money: integer cents (minor units).
+ *
+ * Final PO Decision 4: new locks are monthly-only. `payoutPeriod: "weekly"`
+ * survives solely for preserved historical records (labeled legacy in UI);
+ * it is never offered for new creation.
+ */
 export type PayoutPeriod = "monthly" | "weekly";
 export type LockStatus = "locked" | "unlock_requested" | "matured";
 
@@ -25,6 +29,11 @@ export interface ShareLock {
   installmentUsd: number;
   /** Comparison figures for the monthly ↔ weekly toggle. */
   projectedMonthlyUsd: number;
+  /**
+   * Legacy weekly-installment figure (Final PO Decisions 4–5): computed with the
+   * legacy −1pp display-rate adjustment for preserved weekly records. Never shown
+   * for new monthly locks; never confused with the withdrawal 1% fee.
+   */
   projectedWeeklyUsd: number;
 }
 

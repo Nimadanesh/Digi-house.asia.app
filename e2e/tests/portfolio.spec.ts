@@ -1,9 +1,19 @@
-import { test, expect } from "@playwright/test";
-import { ensureAuthenticated } from "../helpers/auth";
+import { test, expect, type Page } from "@playwright/test";
+
+// (Stale-helper fix: the obsolete ensureAuthenticated helper bypasses the
+// onboarding gate, so the app never reaches /portfolio. Every other spec uses
+// skipOnboarding — aligned here with documented reason.)
+async function skipOnboarding(page: Page) {
+  await page.goto("/");
+  const skip = page.getByTestId("onboarding-skip");
+  await skip.waitFor({ state: "visible", timeout: 20_000 });
+  await skip.click();
+  await page.waitForURL("**/home", { timeout: 15_000 });
+}
 
 test.describe("Portfolio", () => {
   test.beforeEach(async ({ page }) => {
-    await ensureAuthenticated(page);
+    await skipOnboarding(page);
     await page.goto("/portfolio");
     await page.waitForTimeout(2000);
   });
@@ -19,12 +29,13 @@ test.describe("Portfolio", () => {
     await page.waitForTimeout(3000);
     const body = page.locator("body");
     const text = await body.innerText();
+    // Seeded demo holdings render "My Properties (2)"; without holdings the
+    // empty state offers the marketplace CTA.
     const hasContent =
-      text.includes("Property") ||
-      text.includes("holding") ||
       text.includes("My Properties") ||
       text.includes("Explore Marketplace") ||
-      text.includes("No holdings");
+      text.includes("Browse") ||
+      text.includes("empty");
     expect(hasContent).toBeTruthy();
   });
 

@@ -36,8 +36,13 @@ test.describe("Estate Detail — Phase 9 4-tab model", () => {
       await expect(page.getByTestId(`tab-${tab}`)).toHaveCount(0);
     }
 
-    // Estate tab: funding story + rental-economics narrative with honest unavailable steps.
-    await expect(page.getByTestId("funding-panel")).toBeVisible();
+    // Estate tab: V1 investment opportunity + rental-economics narrative with
+    // honest unavailable steps. (FundingPanel retired by the V1 rebuild — the
+    // canonical investment facts live in estate-investment; see
+    // PRODUCT-DECISION-LOCK.md §6. Final PO Decisions 1–2: 80,000 shares @ $100.)
+    await expect(page.getByTestId("estate-investment")).toBeVisible();
+    await expect(page.getByTestId("investment-total-shares")).toContainText("80,000");
+    await expect(page.getByTestId("investment-primary-price")).toContainText("$100.00");
     await expect(page.getByTestId("rental-story-costs")).toContainText("Not yet reported");
     await expect(page.getByTestId("rental-story-net")).toContainText("Not yet reported");
     // No resale market on a funding estate with shares remaining.

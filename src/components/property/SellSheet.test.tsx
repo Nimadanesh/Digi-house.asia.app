@@ -427,6 +427,9 @@ describe("SellSheet — custom price listing (form → review → listed)", () =
     fireEvent.click(screen.getByTestId("custom-sell-review"));
     fireEvent.click(screen.getByTestId("custom-sell-confirm"));
     expect(screen.getByTestId("sell-listed")).toBeInTheDocument();
+    // PROMPT 04 Matrix identity.name primary: the listed state keeps estate
+    // orientation (canonical displayTitle; fixture fallback for unmapped ids).
+    expect(screen.getByTestId("sell-listed-estate")).toHaveTextContent("Villa One");
     // Heading + status must never read as a completed sale.
     expect(screen.getByText("Your listing is active")).toBeInTheDocument();
     expect(screen.getByText("Active")).toBeInTheDocument();

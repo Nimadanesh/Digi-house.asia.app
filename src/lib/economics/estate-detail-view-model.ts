@@ -19,12 +19,14 @@
 
 import { ESTATE_COST_RATES, type Estate, type EstateCostLine, type Provenance } from "@/types/estate";
 import type { Estate24Record } from "@/types/estate-24-data";
+import type { FinancialModelV1PropertyModel } from "@/types/financial-model-v1";
 import type { OrderBookLevel } from "@/types/order";
 import type { Listing } from "@/types/property";
 import type { ScenarioEnvelopeResult, ScenarioResult } from "@/types/estate-scenario";
 import type { EstateShareOverview, EstateUserPosition } from "@/types/estate-share";
 import { getCanonicalEstate } from "./estates/canonical-24";
 import { getEstate24ByRuntimeId } from "./estates/estate-24-data";
+import { getFinancialModelV1 } from "./estates/financial-model-v1-inputs";
 import {
   getGrowthPotential,
   getValuationDisplay,
@@ -123,6 +125,12 @@ export interface EstateDetailViewModel {
   /** Canonical estate when configured; null → economics sections show Unknown. */
   estate: Estate | null;
   economicsAvailable: boolean;
+  /**
+   * Financial Model V1 evaluation for this property (PROMPT 05 sole economic
+   * authority). Null only when no V1 input exists (never a legacy model).
+   * V1 feeds Projected economics only — never presented as Paid/Accrued.
+   */
+  v1: FinancialModelV1PropertyModel | null;
   /**
    * Adopted canonical Estate24 record (PROMPT 02 verbatim dataset) — the
    * authoritative source for user-visible PROPERTY FACTS (identity, specs,
@@ -297,6 +305,7 @@ export function buildEstateDetailViewModel(
   return {
     estate,
     economicsAvailable: baseline != null,
+    v1: getFinancialModelV1(listing.id) ?? null,
     estate24,
     identity,
     propertyType: estate24?.propertyType ?? null,

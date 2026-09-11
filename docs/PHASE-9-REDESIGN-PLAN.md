@@ -443,3 +443,42 @@ At the end of every slice, append a short entry to this file:
   decision, no code); translator backlog (~210 keys/locale, no code); hydration
   flake note (P3, revisit only with user-visible repro)
 - Next slice: Slice 8 — cross-surface consistency and regression hardening
+
+### Slice 8 — Cross-surface consistency and regression hardening
+
+- Status: `PASS`
+- Commit: (this commit — code + tests + docs; includes the long-standing
+  uncommitted body the slice is built on, see report §8)
+- Scope completed: DEC-007 naming unified on the adopted Estate24 record for all
+  24 villas (3 R2 spelling drifts retired: `Syrene (Villa Syrene)`→`Villa Syrene`,
+  La Datcha, Galeazzo; last `.name.value` render site in SimilarProperties fixed;
+  new DEC-007 identity-parity tests for cards + rail). Consolidated 24-villa
+  cross-surface matrix through the real view models (identity, $100 primary,
+  V1 supply ÷ $100, demo-ledger sold/remaining, card==book price, status→CTA);
+  15 pending incomes all classified (5× EUR mixed-currency, 10× unknown owner
+  tax) as genuine canonical UNKNOWNs — not defects. P2-3 numeric-format residue
+  fixed (card fraction, funding banner, availability caption now grouped like
+  the hero/metrics). Dead legacy paths removed after proving zero imports
+  (Slice-A panels, FundingPanel, HolderAnalytics, IncomeAnalytics,
+  PerformanceChart(s), PrimaryPerformanceCharts, estate-plan-engine, full
+  MarketSection composition; `estate-economics.spec` pins they never render;
+  P3-2 ownership-touch deletion confirmed intentional). Coverage-gap pass: every
+  fixed Phase 9 defect mapped to its regression test (report §4); new tests for
+  DEC-007 + P2-3. Full report: `docs/PHASE-9-SLICE-8.md`.
+- Files changed: `marketplace-view-model.ts`, `SimilarProperties.tsx` (+ test),
+  `PropertyCard.tsx` (+ test), `PropertyStatusBanner.tsx`; dead-path deletions
+  (11 components/lib files + 6 test files); `docs/PHASE-9-SLICE-8.md` (new),
+  plan status, decision log (DEC-007 RESOLVED); plus the pre-existing uncommitted
+  body (V1 engine, PROMPT 05, decision-lock + PO-decision sessions — see report §8)
+- Tests run and results: full vitest 126 files 1057/1057 (new/updated tests
+  RED-verified before implementation); typecheck clean; lint 0 errors
+  (6 pre-existing warnings, one in a removed file); build green (13 routes);
+  Playwright 480×840: 46 passed / 6 expected skips / 0 failed
+- Design/UI QA result: PASS at 480×840 — screenshots read (`screenshots/slice8-qa/`):
+  card==detail identity/price/fraction/income on primary, resale, and pending
+  villas; grouped counts everywhere; fa RTL correct (bidi holding, no overflow,
+  no raw keys; EN-mirrored backlog unchanged)
+- Remaining issues: DEC-009 tap-target acceptance (product decision); translator
+  backlog (~210 keys/locale); P2-2 New badge accepted (coherent demo clock);
+  upstream branch reconcile (user decision)
+- Next slice: Slice 9 — final release-readiness audit (NOT STARTED)

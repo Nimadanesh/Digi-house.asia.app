@@ -1,6 +1,9 @@
-// File responsibility: full-width status banner — funding (amber) vs co-owned (green).
+// File responsibility: full-width status banner — funding (amber) vs resale (green).
 // Phase 9: "Live Trading" vocabulary removed — secondary surfaces read as ownership
-// ("Resale market" / "Fully funded · Co-owned"), never a trading terminal.
+// ("Resale market"), never a trading terminal.
+// Final PO Decision 7: no "Fully funded" completion claim — the canonical supply has
+// no canonical sales ledger, so funded/resale demo states both surface honestly as
+// the resale market (numbers, when shown, are demo-ledger facts, never completion).
 import { useTranslations } from "next-intl";
 import { pct } from "@/lib/format";
 import type { Listing } from "@/types/property";
@@ -17,7 +20,8 @@ export function PropertyStatusBanner({ listing }: { listing: Listing }) {
       >
         {t("bannerFunding", {
           progress: pct(listing.fundingProgressRatio),
-          count: listing.sharesRemaining,
+          // Slice 8 (P2-3): grouped digits — matches the metrics grid below.
+          count: listing.sharesRemaining.toLocaleString(),
           unit: listing.sharesRemaining === 1 ? t("shareWord") : t("sharesWord"),
         })}
       </div>
@@ -29,7 +33,7 @@ export function PropertyStatusBanner({ listing }: { listing: Listing }) {
       className="rounded-[10px] bg-success/12 px-3 py-2 text-center text-[0.8125rem] font-semibold text-success"
       data-testid="status-banner"
     >
-      {listing.status === "resale" ? t("bannerResale") : t("bannerCoOwned")}
+      {t("bannerResale")}
     </div>
   );
 }

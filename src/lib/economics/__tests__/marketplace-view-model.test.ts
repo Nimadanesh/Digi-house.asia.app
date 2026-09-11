@@ -4,6 +4,8 @@
 import { describe, expect, it } from "vitest";
 
 import { PROPERTIES } from "@/lib/mock/seed/properties";
+import { toCanonicalListing } from "@/lib/mock/canonical-listing";
+import { getEstate24ByRuntimeId } from "@/lib/economics/estates/estate-24-data";
 import {
   CANONICAL_MARKETPLACE_ESTATES,
   getCanonicalEstate,
@@ -21,6 +23,17 @@ function fixture(id: string) {
   if (!f) throw new Error(`missing fixture ${id}`);
   return f;
 }
+
+describe("marketplace view model — identity matches the adopted Estate24 record (DEC-007)", () => {
+  it("name and location agree with portfolio/detail/home for all 24 villas", () => {
+    for (const f of PROPERTIES) {
+      const vm = toMarketplaceEstate(toCanonicalListing(f));
+      const e24 = getEstate24ByRuntimeId(f.id)!;
+      expect(vm.name, `${f.id} name`).toBe(e24.name);
+      expect(vm.location, `${f.id} location`).toBe(e24.location.full);
+    }
+  });
+});
 
 describe("marketplace view model — canonical identity", () => {
   it("maps Grand 2 BDM to its canonical Rental Escapes identity (not fixture shorthand)", () => {
@@ -97,15 +110,16 @@ describe("marketplace view model — canonical identity", () => {
     expect(isCanonicalMarketplaceId("prop-does-not-exist")).toBe(false);
   });
 
-  it("PROMPT 03: carries canonical property type, description, valuation display and growth", () => {
+  it("PROMPT 05: carries canonical property type, description, valuation display and growth", () => {
     const grand = toMarketplaceEstate(fixture("prop-marina-vista-4b"));
     // Source-supported type — never the legacy fixture type.
     expect(grand.propertyType).toBe("Overwater Villa");
     expect(grand.description).toContain("overwater villa");
+    // PROMPT 05: Grand active valuation is exactly $8M single (V1 canonical —
+    // never the retired $8M–$10M band, $9.6M–$18M range, $13.5M or $82M).
     expect(grand.valuationDisplay).toEqual({
-      kind: "range",
-      min: 800_000_000,
-      max: 1_000_000_000,
+      kind: "single",
+      value: 800_000_000,
       provenance: "estimated",
     });
     expect(grand.growthPotential?.potentialValue).toBe(1_800_000_000);
@@ -115,10 +129,10 @@ describe("marketplace view model — canonical identity", () => {
     expect(aerial.propertyType).toBe("Private Island Estate");
     expect(aerial.valuationDisplay).toEqual({
       kind: "single",
-      value: 2_000_000_000,
+      value: 1_800_000_000,
       provenance: "estimated",
     });
-    expect(aerial.growthPotential?.potentialPct).toBe(32);
+    expect(aerial.growthPotential?.potentialPct).toBe(46.7);
 
     // All 24 resolve canonical facts (legacy "Apartment"/"Studio" nowhere).
     for (const vm of toMarketplaceEstates(PROPERTIES)) {

@@ -12,3 +12,4 @@ export * from "./estate-canonical";
 export * from "./estate-share";
 export * from "./estate-plan";
 export * from "./estate-scenario";
+export * from "./financial-model-v1";

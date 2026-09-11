@@ -42,14 +42,16 @@ test.describe("Buy flow — primary entry + wallet gate (LTR)", () => {
     await expect(page.getByTestId("buy-qty-step")).toHaveCount(0);
   });
 
-  test("calculator Buy CTA opens the same sheet (entry diversity)", async ({ page }) => {
+  // (IncomeCalculator retired by the V1 rebuild — retargeted to the live
+  // Ownership V1 buy entry; see PRODUCT-DECISION-LOCK.md §6.)
+  test("ownership V1 Buy CTA opens the same sheet (entry diversity)", async ({ page }) => {
     await skipOnboarding(page);
     await page.goto("/property/prop-marina-vista-4b");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
 
-    await page.getByTestId("tab-income").click();
-    await expect(page.getByTestId("calc-buy")).toBeVisible({ timeout: 10_000 });
-    await page.getByTestId("calc-buy").click();
+    await page.getByTestId("tab-ownership").click();
+    await expect(page.getByTestId("ownership-v1-buy")).toBeVisible({ timeout: 10_000 });
+    await page.getByTestId("ownership-v1-buy").click();
     await expect(page.getByTestId("buy-qty-step")).toBeVisible({ timeout: 10_000 });
     await expectNoOverflow(page);
   });

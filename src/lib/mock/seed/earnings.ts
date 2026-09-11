@@ -1,4 +1,7 @@
-// File responsibility: weekly earnings entries (paid with synthetic txHash; pending without).
+// File responsibility: weekly-transfer entries (paid with synthetic txHash; pending without).
+// Amounts are weekly-settlement tape (transfer batches), always labeled through the
+// monthly presentation contract in UI. shareRatio is the canonical V1 ownership
+// fraction (Bayside 160/120,000; Alfama 200/250,000 — Final PO Decision 1).
 import type { EarningsEntry } from "@/types/earnings";
 import { makeSyntheticTxHash } from "@/lib/ton/synthetic-tx";
 import { USER } from "./user";
@@ -13,7 +16,7 @@ export const EARNINGS_ENTRIES: EarningsEntry[] = [
     weekOf: WEEKS[0],
     amountUsd: PAYOUT_BAYSIDE,
     tonAmount: TON_BAYSIDE,
-    shareRatio: 0.2,
+    shareRatio: 160 / 120000,
     status: "paid",
     txHash: makeSyntheticTxHash(),
   },
@@ -24,7 +27,7 @@ export const EARNINGS_ENTRIES: EarningsEntry[] = [
     weekOf: WEEKS[0],
     amountUsd: PAYOUT_ALFAMA,
     tonAmount: TON_ALFAMA,
-    shareRatio: 0.2,
+    shareRatio: 200 / 250000,
     status: "paid",
     txHash: makeSyntheticTxHash(),
   },
@@ -35,7 +38,7 @@ export const EARNINGS_ENTRIES: EarningsEntry[] = [
     weekOf: WEEKS[1],
     amountUsd: PAYOUT_BAYSIDE,
     tonAmount: TON_BAYSIDE,
-    shareRatio: 0.2,
+    shareRatio: 160 / 120000,
     status: "paid",
     txHash: makeSyntheticTxHash(),
   },
@@ -46,7 +49,7 @@ export const EARNINGS_ENTRIES: EarningsEntry[] = [
     weekOf: WEEKS[1],
     amountUsd: PAYOUT_ALFAMA,
     tonAmount: TON_ALFAMA,
-    shareRatio: 0.2,
+    shareRatio: 200 / 250000,
     status: "paid",
     txHash: makeSyntheticTxHash(),
   },
@@ -57,7 +60,7 @@ export const EARNINGS_ENTRIES: EarningsEntry[] = [
     weekOf: WEEKS[2],
     amountUsd: PAYOUT_BAYSIDE,
     tonAmount: TON_BAYSIDE,
-    shareRatio: 0.2,
+    shareRatio: 160 / 120000,
     status: "paid",
     txHash: makeSyntheticTxHash(),
   },
@@ -68,7 +71,7 @@ export const EARNINGS_ENTRIES: EarningsEntry[] = [
     weekOf: WEEKS[2],
     amountUsd: PAYOUT_ALFAMA,
     tonAmount: TON_ALFAMA,
-    shareRatio: 0.2,
+    shareRatio: 200 / 250000,
     status: "paid",
     txHash: makeSyntheticTxHash(),
   },
@@ -79,7 +82,7 @@ export const EARNINGS_ENTRIES: EarningsEntry[] = [
     weekOf: WEEKS[3],
     amountUsd: PAYOUT_BAYSIDE,
     tonAmount: TON_BAYSIDE,
-    shareRatio: 0.2,
+    shareRatio: 160 / 120000,
     status: "pending",
   },
   {
@@ -89,7 +92,7 @@ export const EARNINGS_ENTRIES: EarningsEntry[] = [
     weekOf: WEEKS[3],
     amountUsd: PAYOUT_ALFAMA,
     tonAmount: TON_ALFAMA,
-    shareRatio: 0.2,
+    shareRatio: 200 / 250000,
     status: "pending",
   },
 ];

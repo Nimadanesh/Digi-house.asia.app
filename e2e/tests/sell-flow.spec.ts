@@ -46,10 +46,13 @@ test.describe("Sell flow — quote follows qty and price (LTR)", () => {
     expect(Number(await price.inputValue())).toBeGreaterThan(0);
 
     // Break-even at cost, then gain above and loss below.
+    // (Final PO Decision 2: canonical $100 base cost — was $120 fixture cost.)
     await expect(page.getByTestId("sell-gain-loss")).toContainText("Break-even");
     await price.fill("130");
     await expect(page.getByTestId("sell-gain-loss")).toContainText("Gain");
     await price.fill("100");
+    await expect(page.getByTestId("sell-gain-loss")).toContainText("Break-even");
+    await price.fill("90");
     await expect(page.getByTestId("sell-gain-loss")).toContainText("Loss");
     await price.fill("120");
 

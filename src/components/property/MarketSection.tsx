@@ -1,46 +1,19 @@
 "use client";
-// File responsibility: secondary resale-market section (REDESIGN-SPEC §9 / Phase 9
+// File responsibility: secondary resale-market summary (REDESIGN-SPEC §9 / Phase 9
 // UI Mapping §8.1). Market summary with ownership vocabulary — "Current ownership
 // value per share" leads; "Best asking price" leads over "Best offer"; spread shown
 // only when both sides exist. No financial logic: all figures are existing data
-// routed through lib/format. The full section (summary + book + trades) remains
-// available; the Estate Detail resale block composes MarketSummary + demoted chart.
+// routed through lib/format. The Estate Detail resale block composes this summary
+// with the demoted chart, book, and trades.
 import { useTranslations } from "next-intl";
 import type { Listing } from "@/types/property";
 import type { OrderBookState } from "@/types/order";
 import { usd } from "@/lib/format";
 import { getCurrentSharePrice } from "@/lib/property-price";
 import { Block } from "@/components/common/Block";
-import { Skeleton } from "@/components/common/Skeleton";
-import { OrderBook } from "./OrderBook";
-import { RecentTrades } from "./RecentTrades";
 
-export function MarketSection({
-  listing,
-  orderBook,
-}: {
-  listing: Listing;
-  orderBook?: OrderBookState;
-}) {
-  const t = useTranslations("property");
-  return (
-    <section className="space-y-2" data-testid="market-section">
-      <h2 className="px-0.5 text-[0.9375rem] font-semibold text-foreground">{t("marketTitle")}</h2>
-      <MarketSummary listing={listing} state={orderBook} />
-      {orderBook ? (
-        <OrderBook state={orderBook} maxLevels={4} />
-      ) : (
-        <Block className="space-y-2 p-4" data-testid="market-skeleton">
-          <Skeleton className="h-4 w-24" />
-          <Skeleton className="h-6 w-full" />
-          <Skeleton className="h-6 w-4/5" />
-          <Skeleton className="h-6 w-3/5" />
-        </Block>
-      )}
-      <RecentTrades propertyId={listing.id} max={5} />
-    </section>
-  );
-}
+// Slice 8: the full MarketSection composition was superseded by ResaleBlock
+// (which composes MarketSummary + book + trades live); only MarketSummary ships.
 
 export function MarketSummary({ listing, state }: { listing: Listing; state?: OrderBookState }) {
   const t = useTranslations("property");
@@ -77,9 +50,8 @@ export function MarketSummary({ listing, state }: { listing: Listing; state?: Or
           </span>
         ) : null}
       </div>
-      {/* §8.1 — asking leads, offer demoted, spread last. */}
-      <div className="grid grid-cols-3 divide-x divide-border" data-testid="best-bid-ask">
-        <div className="flex flex-col items-center gap-1 px-2 py-2">
+            {/* §8.1 — asking leads, offer demoted, spread last. */}
+      <div className="grid grid-cols-3 divide-x divide-border" data-testid="best-bid-ask">        <div className="flex flex-col items-center gap-1 px-2 py-2">
           <span className="text-[1.375rem] font-bold leading-none text-danger tnum" data-testid="best-ask">
             {ask != null ? usd(ask) : "—"}
           </span>
@@ -98,6 +70,11 @@ export function MarketSummary({ listing, state }: { listing: Listing; state?: Or
           <span className="text-xs text-muted-foreground">{t("spread")}</span>
         </div>
       </div>
+      {/* Final PO Decision 7: the book is demo tape for technical testing — the
+          caption keeps demo levels unmistakable from real market activity. */}
+      <p className="text-[0.6875rem] leading-relaxed text-muted-foreground" data-testid="market-demo-note">
+        {t("demoOrderBookNote")}
+      </p>
     </Block>
   );
 }
