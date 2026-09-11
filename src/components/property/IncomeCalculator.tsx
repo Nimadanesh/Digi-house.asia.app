@@ -9,7 +9,11 @@ import { useTranslations } from "next-intl";
 import { Minus, Plus } from "lucide-react";
 import { usd } from "@/lib/format";
 import type { Listing } from "@/types/property";
-import { presentPositionMonthlyIncome } from "@/lib/economics/property-presentation";
+import {
+  presentPositionMonthlyIncome,
+  getPresentedMonthlyIncome,
+  presentedIncomeUnknownCaption,
+} from "@/lib/economics/property-presentation";
 import { unavailableLabel } from "@/lib/availability";
 import { Block } from "@/components/common/Block";
 import { haptics } from "@/lib/telegram/haptics";
@@ -55,6 +59,10 @@ export function IncomeCalculator({
   const clamped = Math.min(max, Math.max(min, shares));
   const monthlyUsd = presentPositionMonthlyIncome(listing.id, clamped);
   const annualUsd = monthlyUsd == null ? null : monthlyUsd * 12;
+  // Slice 3: a pending projection carries its human-readable reason.
+  const incomeReason = presentedIncomeUnknownCaption(
+    getPresentedMonthlyIncome(listing.id).unknownKind,
+  );
   // Cost basis uses the same single source of truth as Hero/Metrics/Sticky/Chart.
   const unitPriceUsd = currentPriceUsd ?? listing.sharePriceUsd;
   const totalCostUsd = clamped * unitPriceUsd;
@@ -169,6 +177,7 @@ export function IncomeCalculator({
         ) : (
           <p className="text-sm text-muted-foreground" data-testid="calc-pending">
             {unavailableLabel("backend_absent")}
+            {incomeReason != null ? ` — ${incomeReason}` : ""}
           </p>
         )}
         <p className="pt-1 text-xs leading-relaxed text-muted-foreground">

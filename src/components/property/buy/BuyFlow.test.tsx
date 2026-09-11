@@ -94,6 +94,26 @@ describe("Buy flow steps", () => {
     expect(screen.getByText(/Total/)).toBeInTheDocument();
   });
 
+  it("qty step: V1-unknown villa shows pending WITH the reason (never a fixture figure)", () => {
+    const trajan: Listing = {
+      ...listing,
+      id: "prop-berlin-mitte-apartment",
+      sharesRemaining: 360,
+    };
+    render(
+      <BuyQtyStep
+        listing={trajan}
+        qty={10}
+        onQtyChange={() => {}}
+        walletConnected
+        currency="TON"
+        onCurrencyChange={() => {}}
+      />,
+    );
+    expect(screen.getByTestId("buy-est-monthly")).toHaveTextContent("Data pending");
+    expect(screen.getByTestId("buy-est-monthly")).toHaveTextContent(/tax/i);
+  });
+
   it("qty step: disconnected prompts connect", () => {
     render(
       <BuyQtyStep
@@ -272,6 +292,8 @@ describe("Buy flow steps", () => {
     );
     // Slice 2: Trajan (V1-unknown) shows pending, never a fixture figure.
     expect(screen.getByTestId("buy-summary-monthly")).toHaveTextContent("Data pending");
+    // Slice 3: the pending state carries its human-readable reason.
+    expect(screen.getByTestId("buy-summary-monthly")).toHaveTextContent(/tax/i);
   });
 
   it("summary step: no raw i18n keys leak into labels", () => {

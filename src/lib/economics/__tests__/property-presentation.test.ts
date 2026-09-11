@@ -15,6 +15,7 @@ import {
   presentPositionMonthlyIncome,
   getPresentedCurrentPrice,
   getPresentedPrimaryPrice,
+  presentedIncomeUnknownCaption,
 } from "@/lib/economics/property-presentation";
 
 const listings = PROPERTIES.map(toCanonicalListing);
@@ -28,6 +29,7 @@ describe("property presentation — single monthly-income path (V1)", () => {
     expect(getPresentedMonthlyIncome("prop-marina-vista-4b")).toEqual({
       cents: 1629,
       currency: "USD",
+      unknownKind: null,
     });
   });
 
@@ -52,6 +54,41 @@ describe("property presentation — single monthly-income path (V1)", () => {
     expect(presentPositionMonthlyIncome("prop-marina-vista-4b", 10)).toBe(16_290);
     expect(presentPositionMonthlyIncome("prop-marina-vista-4b", 1)).toBe(1629);
     expect(presentPositionMonthlyIncome("prop-brooklyn-brownstone-flat", 10)).toBeNull();
+  });
+});
+
+describe("property presentation — unknown reasons (Slice 3)", () => {
+  it("classifies all 15 unknown villas: 5 EUR mixed-currency, 10 unknown owner-tax", () => {
+    const kinds = new Map(
+      listings
+        .filter((l) => v1Monthly(l.id) == null)
+        .map((l) => [l.id, getPresentedMonthlyIncome(l.id).unknownKind]),
+    );
+    expect(kinds.size).toBe(15);
+    expect(
+      listings
+        .filter((l) => getFinancialModelV1(l.id)?.currency === "EUR")
+        .map((l) => kinds.get(l.id)),
+    ).toEqual(["eur_mixed_currency", "eur_mixed_currency", "eur_mixed_currency", "eur_mixed_currency", "eur_mixed_currency"]);
+    for (const l of listings) {
+      if (v1Monthly(l.id) == null && getFinancialModelV1(l.id)?.currency !== "EUR") {
+        expect(kinds.get(l.id), l.id).toBe("unknown_owner_tax");
+      } else if (v1Monthly(l.id) != null) {
+        expect(getPresentedMonthlyIncome(l.id).unknownKind, l.id).toBeNull();
+      }
+    }
+  });
+
+  it("every unknown villa carries the engine's stated reason (surfaced on the Income tab)", () => {
+    for (const l of listings.filter((x) => v1Monthly(x.id) == null)) {
+      expect(getFinancialModelV1(l.id)?.perShare.unknownReason, l.id).toBeTruthy();
+    }
+  });
+
+  it("short human-readable captions exist for both unknown kinds (never blank)", () => {
+    expect(presentedIncomeUnknownCaption("eur_mixed_currency")).toMatch(/EUR/);
+    expect(presentedIncomeUnknownCaption("unknown_owner_tax")).toMatch(/tax/i);
+    expect(presentedIncomeUnknownCaption(null)).toBeNull();
   });
 });
 

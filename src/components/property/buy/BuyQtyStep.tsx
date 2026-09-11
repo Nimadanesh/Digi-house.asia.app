@@ -4,7 +4,11 @@
 import { useTranslations } from "next-intl";
 import { Minus, Plus } from "lucide-react";
 import { usd, ton, estimateNanoTon, pct } from "@/lib/format";
-import { presentPositionMonthlyIncome } from "@/lib/economics/property-presentation";
+import {
+  presentPositionMonthlyIncome,
+  getPresentedMonthlyIncome,
+  presentedIncomeUnknownCaption,
+} from "@/lib/economics/property-presentation";
 import { unavailableLabel } from "@/lib/availability";
 import { TON_PRICE_USD_CENTS } from "@/lib/constants";
 import type { Listing } from "@/types/property";
@@ -51,6 +55,10 @@ export function BuyQtyStep({
   // Slice 2: projected income from the single presentation layer (V1, or
   // pending) — never the fixture yield shortcut.
   const monthly = presentPositionMonthlyIncome(listing.id, qty);
+  // Slice 3: a pending projection carries its human-readable reason.
+  const incomeReason = presentedIncomeUnknownCaption(
+    getPresentedMonthlyIncome(listing.id).unknownKind,
+  );
   const invalid = qty < 1 || qty > remaining;
   // Ownership-first framing (redesign §8): the share count is expressed as a stake.
   const sharePct = listing.totalShares > 0 ? pct(qty / listing.totalShares) : pct(0);
@@ -211,7 +219,9 @@ export function BuyQtyStep({
           <span className="text-muted-foreground">{t("estMonthlyYield")}</span>
           {/* Projected — foreground, never Paid-green. */}
           <span className="tnum font-semibold text-foreground" data-testid="buy-est-monthly">
-            {monthly != null ? usd(monthly) : unavailableLabel("backend_absent")}
+            {monthly != null
+              ? usd(monthly)
+              : `${unavailableLabel("backend_absent")}${incomeReason != null ? ` — ${incomeReason}` : ""}`}
           </span>
         </div>
       </div>

@@ -15,15 +15,32 @@
 //   (toCanonicalListing; real demo facts under the global DEMO disclosure)
 import type { Listing } from "@/types/property";
 import type { FinancialModelV1Currency } from "@/types/financial-model-v1";
-import { getFinancialModelV1 } from "./estates/financial-model-v1-inputs";
+import {
+  getFinancialModelV1,
+  getFinancialModelV1Input,
+} from "./estates/financial-model-v1-inputs";
 import { CANONICAL_BASE_PRICE_USD } from "./canonical-offering";
 import { getCurrentSharePrice } from "@/lib/property-price";
+
+/**
+ * Why presented monthly income is UNKNOWN (Slice 3). Classified from the V1
+ * input — never string-matched, never invented:
+ * - eur_mixed_currency: rental income is non-USD while the reserve is USD
+ *   denominated and no approved FX rate exists;
+ * - unknown_owner_tax: the V1 input records explicitly unknown owner-side tax
+ *   (listing taxes carry revenueTreatment UNKNOWN).
+ */
+export type PresentedIncomeUnknownKind =
+  | "eur_mixed_currency"
+  | "unknown_owner_tax";
 
 /** Presented monthly income per share. Null cents = UNKNOWN → render pending. */
 export interface PresentedMonthlyIncome {
   /** V1 per-share monthly income, minor units. Null when V1 cannot compute. */
   cents: number | null;
   currency: FinancialModelV1Currency;
+  /** Machine-readable unknown cause (null when known, or when no V1 input exists). */
+  unknownKind: PresentedIncomeUnknownKind | null;
 }
 
 /** Single approved primary share price for every villa. */
@@ -34,10 +51,45 @@ export function getPresentedPrimaryPrice(): number {
 /** Single approved monthly income per share for a villa (V1, or UNKNOWN). */
 export function getPresentedMonthlyIncome(propertyId: string): PresentedMonthlyIncome {
   const v1 = getFinancialModelV1(propertyId);
+  if (v1?.perShare.monthlyCents != null) {
+    return {
+      cents: v1.perShare.monthlyCents,
+      currency: v1.perShare.currency,
+      unknownKind: null,
+    };
+  }
+  const input = getFinancialModelV1Input(propertyId);
+  const unknownKind =
+    input == null
+      ? null
+      : input.anr.currency !== "USD"
+        ? "eur_mixed_currency"
+        : input.ownerTax.kind === "unknown"
+          ? "unknown_owner_tax"
+          : null;
   return {
-    cents: v1?.perShare.monthlyCents ?? null,
-    currency: v1?.perShare.currency ?? "USD",
+    cents: null,
+    currency: v1?.perShare.currency ?? input?.anr.currency ?? "USD",
+    unknownKind,
   };
+}
+
+/**
+ * Short human-readable caption for an unknown income figure (Slice 3). Null
+ * when known — callers render the value instead. English-only, same precedent
+ * as the unavailable vocabulary (translators follow up per locale process).
+ */
+export function presentedIncomeUnknownCaption(
+  kind: PresentedIncomeUnknownKind | null,
+): string | null {
+  switch (kind) {
+    case "eur_mixed_currency":
+      return "Income is in EUR — no approved USD conversion.";
+    case "unknown_owner_tax":
+      return "Owner-side tax is not published yet.";
+    default:
+      return null;
+  }
 }
 
 /** Presented monthly income for a position of `shares` shares (null when UNKNOWN). */

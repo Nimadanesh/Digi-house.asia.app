@@ -283,3 +283,32 @@ At the end of every slice, append a short entry to this file:
   (honest) — Slice 6 may revisit empty-state guidance; lock/chart/seed-contract
   fixture-rate paths intentionally preserved (settlement, out of scope)
 - Next slice: Slice 3 — resolve `Data pending` villa by villa
+
+### Slice 3 — Resolve `Data pending` villa by villa
+
+- Status: `PASS`
+- Commit: (this commit — code + tests + docs)
+- Scope completed: every pending adjudicated villa by villa against
+  `ESTATE-24-DATA.json` (sizes: 8× genuinely absent in source specs; owner tax: 10×
+  `revenueTreatment UNKNOWN` in listing taxes — both keep pending, no invention; EUR 5×
+  keep pending — no approved FX; legacy Slice-A baseline stays Grand-only by contract —
+  no second engine). Presentation layer now classifies the unknown cause
+  (`eur_mixed_currency` ×5 / `unknown_owner_tax` ×10) with short human-readable
+  captions; metrics grid, income calculator, and buy qty/summary previews render the
+  reason with every pending (provenance already on V1-story/ownership rows).
+  Card/featured pending chips stay bare by design (space; whole-card nav leads to the
+  explained detail — progressive disclosure). About-sheet size/year/lease/status rows
+  stay pending (self-evident backlog labels, values never invented).
+- Files changed: `property-presentation.ts` (unknownKind + captions);
+  `PropertyMetricsGrid` (reason caption), `IncomeCalculator`, `BuyQtyStep`,
+  `BuySummaryStep` (reason with pending); `pending-states.test.tsx` (new — 24-villa
+  matrix); extended presentation + buy-flow tests; plan status
+- Tests run and results: new/updated tests RED-verified before implementation; full
+  vitest 125 files 1113/1113; typecheck clean; lint 0 errors (7 pre-existing warnings);
+  build green; Playwright 40 passed/6 expected skips
+- Design/UI QA result: PASS at 480×840 — live 24/24 probe (15 pending each with the
+  correct reason, 9 valued, CTA hierarchy intact, zero overflow; screenshots read);
+  fa RTL via E2E estate-rtl + buy/sell gates (green; captions reuse existing primitives)
+- Remaining issues: none new. DEC-006 (`funded` vs ledger) and DEC-007 (naming) stay
+  OPEN for Slices 4–5/8. Card-chip bare pending is intentional (see above).
+- Next slice: Slice 4 — clarify primary offering versus secondary market

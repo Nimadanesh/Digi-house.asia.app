@@ -4,7 +4,11 @@
 // preview mirrors the server math, the server always computes the actual charge.
 import { useState } from "react";
 import { pct, usd, ton, estimateNanoTon } from "@/lib/format";
-import { presentPositionMonthlyIncome } from "@/lib/economics/property-presentation";
+import {
+  presentPositionMonthlyIncome,
+  getPresentedMonthlyIncome,
+  presentedIncomeUnknownCaption,
+} from "@/lib/economics/property-presentation";
 import { previewBuyQuote } from "@/lib/buy-quote";
 import { unavailableLabel } from "@/lib/availability";
 import { TON_PRICE_USD_CENTS } from "@/lib/constants";
@@ -50,6 +54,10 @@ export function BuySummaryStep({
   // Slice 2: projected income from the single presentation layer (V1, or
   // pending) — identical basis to the qty step. No weekly-yield presentation here.
   const monthly = presentPositionMonthlyIncome(listing.id, qty);
+  // Slice 3: a pending projection carries its human-readable reason.
+  const incomeReason = presentedIncomeUnknownCaption(
+    getPresentedMonthlyIncome(listing.id).unknownKind,
+  );
   const ownership =
     listing.totalShares > 0
       ? t("buyShareOfEstate", { qty, pct: pct(qty / listing.totalShares) })
@@ -105,7 +113,9 @@ export function BuySummaryStep({
             className="ml-auto text-sm tnum font-semibold text-foreground"
             data-testid="buy-summary-monthly"
           >
-            {monthly != null ? usd(monthly) : unavailableLabel("backend_absent")}
+            {monthly != null
+              ? usd(monthly)
+              : `${unavailableLabel("backend_absent")}${incomeReason != null ? ` — ${incomeReason}` : ""}`}
           </span>
         </Row>
         {/* Owner Stay — honest unavailable state in the purchase review (redesign §8). */}
