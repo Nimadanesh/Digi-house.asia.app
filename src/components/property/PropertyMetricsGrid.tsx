@@ -12,6 +12,7 @@ import type { FinancialModelV1PropertyModel } from "@/types/financial-model-v1";
 import { totalValueUsd } from "@/lib/property-yield";
 import {
   getPresentedMonthlyIncome,
+  getPresentedPrimaryPrice,
   presentedIncomeUnknownCaption,
 } from "@/lib/economics/property-presentation";
 import { formatValuationDisplayShort, type ValuationDisplay } from "@/lib/economics/estates/growth-potential";
@@ -47,6 +48,7 @@ function MetricCell({
 export function PropertyMetricsGrid({
   listing,
   currentPriceUsd,
+  bestAskUsd,
   totalValueUsdOverride,
   totalValueDisplay,
   v1,
@@ -54,6 +56,8 @@ export function PropertyMetricsGrid({
   listing: Listing;
   /** Single source of truth (lib/property-price) — equals sharePriceUsd on primary. */
   currentPriceUsd?: number;
+  /** Live book ask when known — labels the price basis honestly (Slice 4). */
+  bestAskUsd?: number | null;
   /**
    * Canonical total estate value (minor units) — Slice E QA: preferred over the
    * legacy mock figure when the canonical model provides one (Grand 2 BDM).
@@ -86,6 +90,21 @@ export function PropertyMetricsGrid({
         : usd(monthly)
       : unavailableLabel("backend_absent");
   const pricePerShare = currentPriceUsd ?? listing.sharePriceUsd;
+  // Slice 4: the price label follows the price basis — the $100 primary offering,
+  // a resale ask, or a last trade are never presented under one shared name.
+  const isPrimary = listing.status === "funding";
+  const askUsd = bestAskUsd ?? listing.bestAskUsd ?? null;
+  const priceLabel = isPrimary
+    ? t("sharePrice")
+    : askUsd != null && pricePerShare === askUsd
+      ? t("askPrice")
+      : listing.lastTradeUsd != null && pricePerShare === listing.lastTradeUsd
+        ? t("lastPrice")
+        : t("sharePrice");
+  // Slice 4: primary states the $100 base explicitly, where it applies.
+  const primaryNote = isPrimary
+    ? t("primaryBasePriceNote", { price: usd(getPresentedPrimaryPrice()) })
+    : null;
   const totalValueText =
     totalValueDisplay != null
       ? formatValuationDisplayShort(totalValueDisplay)
@@ -95,9 +114,11 @@ export function PropertyMetricsGrid({
     <Block className="overflow-hidden" data-testid="metrics-grid">
       <div className="grid grid-cols-2">
         <MetricCell
-          label={t("sharePrice")}
+          label={priceLabel}
           value={usd(pricePerShare)}
           className="border-b border-r border-border"
+          hint={primaryNote ?? undefined}
+          hintTestId={primaryNote != null ? "metrics-primary-note" : undefined}
         />
         <MetricCell
           label={t("metricProjectedIncome")}

@@ -4,7 +4,7 @@
 // bar when that is visible (REDESIGN-SPEC §4.3 + CTA fixes).
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
-import { usd } from "@/lib/format";
+import { usdCompact } from "@/lib/format";
 
 export function PropertyStickyCta({
   variant,
@@ -45,7 +45,7 @@ export function PropertyStickyCta({
           className="pointer-events-auto flex h-[52px] w-full items-center justify-center gap-1 rounded-[12px] bg-primary text-[0.9375rem] font-semibold text-primary-foreground transition-transform duration-[120ms] ease-out active:scale-[0.98] disabled:opacity-50"
           data-testid="sticky-buy"
         >
-          {t("stickyAcquireOwnership", { price: usd(priceUsd) })}
+          {t("stickyBuy", { price: usdCompact(priceUsd) })}
         </button>
       ) : (
         <div className="pointer-events-auto grid grid-cols-2 gap-2">
@@ -56,7 +56,8 @@ export function PropertyStickyCta({
             className="flex h-[52px] items-center justify-center gap-1 rounded-[12px] bg-primary text-[0.9375rem] font-semibold text-primary-foreground transition-transform duration-[120ms] ease-out active:scale-[0.98] disabled:opacity-50"
             data-testid="sticky-buy"
           >
-            {t("stickyAcquireOwnership", { price: usd(priceUsd) })}
+            {/* Slice 4: the sticky buy repeats off-hero, so it names the ask basis. */}
+            {t("stickyBuyAsk", { price: usdCompact(priceUsd) })}
           </button>
           <button
             type="button"

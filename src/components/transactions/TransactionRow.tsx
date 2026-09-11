@@ -42,7 +42,9 @@ const KIND_LABEL: Record<TxKind, string> = {
   trade_buy: "Trade buy",
   trade_sell: "Trade sell",
   yield_monthly: "Monthly yield",
-  yield_weekly: "Weekly yield",
+  // Slice 4: profit is described as monthly even when the payout process used
+  // weekly installments (contract) — the ledger kind is preserved in data.
+  yield_weekly: "Yield",
 };
 
 function showSimulatedTxBadge(

@@ -12,8 +12,44 @@ import { isVerified } from "@/types/verification";
 import type { Provenance } from "@/types/estate";
 import type { EstateShareMarketState } from "@/types/estate-share";
 import { getCurrentSharePrice } from "@/lib/property-price";
+import {
+  formatValuationDisplayShort,
+  type ValuationDisplay,
+} from "@/lib/economics/estates/growth-potential";
 import { PropertyStatusBanner } from "./PropertyStatusBanner";
 import { ProvenanceInfo } from "@/components/common/ProvenanceInfo";
+
+/**
+ * Slice 4 resale market caption: names the ask and/or last trade behind the
+ * hero figure, using only observed values — never invents a missing side.
+ */
+function HeroMarketContext({
+  listing,
+  bestAskUsd,
+}: {
+  listing: Listing;
+  bestAskUsd?: number;
+}) {
+  const tc = useTranslations("property");
+  const ask = bestAskUsd ?? listing.bestAskUsd ?? null;
+  const last = listing.lastTradeUsd ?? null;
+  if (ask == null && last == null) return null;
+  // Short-form basis vocabulary, shared with the metrics label ("Ask price" /
+  // "Last price") — the MarketSummary below keeps its established Best ask/offer
+  // trio untouched.
+  const parts: string[] = [];
+  if (ask != null) parts.push(`${tc("askPrice")}: ${usd(ask)}`);
+  if (last != null && last !== ask) parts.push(`${tc("lastPrice")}: ${usd(last)}`);
+  if (parts.length === 0) return null;
+  return (
+    <p
+      className="text-xs leading-relaxed text-muted-foreground tnum"
+      data-testid="hero-market-context"
+    >
+      {parts.join(" · ")}
+    </p>
+  );
+}
 
 export function PropertyHero({
   listing,
@@ -25,9 +61,11 @@ export function PropertyHero({
   onViewResale,
   estateValueUsd,
   estateValueProvenance,
+  estateValueDisplay,
   market,
   canonicalName,
   canonicalLocation,
+  totalSharesOverride,
 }: {
   listing: Listing;
   /** Live ask for secondary listings (single price source flows through getCurrentSharePrice). */
@@ -49,6 +87,13 @@ export function PropertyHero({
   estateValueUsd?: number | null;
   estateValueProvenance?: Provenance;
   /**
+   * Current Estimated Value for DISPLAY (PROMPT 05): Grand 2 BDM renders the
+   * approved $8M single value (V1 canonical). Preferred over the single
+   * `estateValueUsd` when provided; both null → the row stays hidden (unknown,
+   * never a legacy figure).
+   */
+  estateValueDisplay?: ValuationDisplay | null;
+  /**
    * ShareModel market state (Slice E contract §9) — drives the CTA when provided.
    * Absent → the legacy status-based derivation (identical outcomes; kept for
    * backward compatibility with existing callers/tests).
@@ -61,6 +106,12 @@ export function PropertyHero({
    */
   canonicalName?: string | null;
   canonicalLocation?: string | null;
+  /**
+   * V1 canonical total shares (PROMPT 05: valuation ÷ $100, e.g. 80,000 for
+   * Grand). Preferred over the listing supply count for the ownership
+   * fraction; absent → listing total (unknown ids only).
+   */
+  totalSharesOverride?: number | null;
 }) {
   const t = useTranslations("property");
   const isPrimary = listing.status === "funding";
@@ -68,10 +119,13 @@ export function PropertyHero({
   // user-visible name/location; the fixture fallback serves unknown ids only.
   const displayName = canonicalName ?? listing.title;
   const displayLocation = canonicalLocation ?? listing.location;
+  // PROMPT 05 fractionalization — the V1 canonical total (80,000 for Grand)
+  // drives the ownership fraction; the trading supply count never does.
+  const fractionTotal = totalSharesOverride ?? listing.totalShares;
   // Single source of truth — same value as Metrics / Calculator / Chart / Sticky CTA.
   const buyPriceUsd = getCurrentSharePrice(listing, { bestAskUsd });
   const verified = isVerified(verification);
-  const ownedPct = listing.totalShares > 0 ? ownedShares / listing.totalShares : 0;
+  const ownedPct = fractionTotal > 0 ? ownedShares / fractionTotal : 0;
 
   const soldOut = isPrimary && listing.sharesRemaining <= 0;
   // Slice E §9: the CTA follows the ShareModel market state when provided; the
@@ -117,7 +171,10 @@ export function PropertyHero({
     <div className="space-y-3" data-testid="property-hero">
       <PropertyStatusBanner listing={listing} />
 
-      <h1 className="text-[1.375rem] font-bold leading-tight tracking-tight text-balance text-foreground">{displayName}</h1>
+      {/* Estate name — restrained single-line treatment (never the visual dominant;
+          the share price below carries the hero). Canonical name is authoritative
+          and must never be clipped, so wrapping stays allowed for narrow screens. */}
+      <h1 className="text-[1.0625rem] font-semibold leading-snug tracking-tight text-balance text-foreground">{displayName}</h1>
 
       <div className="flex items-center gap-2">
         <p className="flex min-w-0 items-center gap-1 text-sm text-muted-foreground">
@@ -141,9 +198,14 @@ export function PropertyHero({
           {usd(buyPriceUsd)}
         </span>
         <span className="text-sm text-muted-foreground" data-testid="hero-fraction">
-          {t("heroShareFraction", { total: listing.totalShares })}
+          {t("heroShareFraction", { total: fractionTotal.toLocaleString() })}
         </span>
       </div>
+
+      {/* Slice 4: secondary market context BEFORE the CTA — the hero figure is a
+          resale ask and/or last trade, never the primary price. Primary needs no
+          caption: the $100 offering (plus supply line below) is the context. */}
+      {!isPrimary ? <HeroMarketContext listing={listing} bestAskUsd={bestAskUsd} /> : null}
 
       {/* Money-chain primer — answers "how does it make money" in the first
           viewport without numbers or formulas (engines A/B stay the source).
@@ -155,8 +217,20 @@ export function PropertyHero({
         {t("heroMoneyChain")}
       </p>
 
-      {/* Canonical estate value — Slice E §6A (model only; unknown stays hidden). */}
-      {estateValueUsd != null ? (
+      {/* Canonical estate value — Slice E §6A + PROMPT 04 valuation-consistency:
+          the range-aware display wins (Grand $8–10M); the single value is the
+          fallback for callers without a view-model. Unknown stays hidden. */}
+      {estateValueDisplay != null ? (
+        <p className="flex items-center gap-1.5 text-sm tnum text-muted-foreground" data-testid="hero-estate-value">
+          {t("estateValue")}:{" "}
+          <span className="font-semibold text-foreground">
+            {estateValueDisplay.kind === "range"
+              ? formatValuationDisplayShort(estateValueDisplay)
+              : usd(estateValueDisplay.value)}
+          </span>
+          <ProvenanceInfo provenance={estateValueDisplay.provenance} />
+        </p>
+      ) : estateValueUsd != null ? (
         <p className="flex items-center gap-1.5 text-sm tnum text-muted-foreground" data-testid="hero-estate-value">
           {t("estateValue")}: <span className="font-semibold text-foreground">{usd(estateValueUsd)}</span>
           {estateValueProvenance ? <ProvenanceInfo provenance={estateValueProvenance} /> : null}

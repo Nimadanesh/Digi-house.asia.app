@@ -103,24 +103,22 @@ function renderPage(listing: Listing, orderBook?: OrderBookState) {
       listing={listing}
       orderBook={orderBook}
       onBuy={() => {}}
-      previewShares={1}
-      onSharesChange={() => {}}
       ownedShares={0}
-      onBuyShares={() => {}}
     />,
   );
 }
 
-/** Estate-tab price surfaces (metrics) + Income-tab calculator must show exactly this value. */
-function expectPriceSurfacesShow(priceCents: number) {
+/** Estate-tab price surfaces (hero + metrics KPI) must show exactly this value. */
+function expectPriceSurfacesShow(priceCents: number, priceLabel = "Share price") {
   const price = usd(priceCents);
   fireEvent.click(screen.getByTestId("tab-estate"));
   // Single ownership-first KPI label carries the source-of-truth price.
-  expect(metricValue("Share price")).toBe(price);
-  // Calculator (projections) lives on the Income tab; cost basis uses the same price.
+  // Slice 4: the label follows the basis (Ask price / Last price on secondary).
+  expect(metricValue(priceLabel)).toBe(price);
+  // PROMPT 05: the Income tab carries the V1 conviction story (no calculator).
   fireEvent.click(screen.getByTestId("tab-income"));
-  expect(screen.getByTestId("calc-buy")).toHaveTextContent(`Buy 1 share – ${price}`);
-  expect(screen.getByTestId("calc-monthly").textContent).toBe(metricValue("Projected monthly income / share"));
+  expect(screen.getByTestId("income-v1-story")).toBeInTheDocument();
+  expect(screen.queryByTestId("income-calculator")).not.toBeInTheDocument();
 }
 
 /** Chart end label must match the current price — chart now lives behind the resale expanders. */
@@ -163,7 +161,7 @@ describe("getCurrentSharePrice — hierarchy", () => {
 });
 
 describe("Property page data consistency — one price everywhere", () => {
-  it("primary: hero === metrics === calculator === $120.00 — and NO price chart", async () => {
+  it("primary: hero === metrics === $120.00 — V1 thesis replaces the funding dashboard", async () => {
     renderPage(primary);
     expect(screen.getByTestId("hero-price")).toHaveTextContent(usd(primary.sharePriceUsd));
     expect(screen.getByTestId("hero-cta")).toHaveTextContent(`Buy · ${usd(primary.sharePriceUsd)}`);
@@ -172,8 +170,10 @@ describe("Property page data consistency — one price everywhere", () => {
     expect(metricValue("Share price")).toBe(usd(primary.sharePriceUsd));
     // Strict spec rule: primary never renders a price-performance chart.
     expect(screen.queryByTestId("perf-svg")).not.toBeInTheDocument();
-    // Funding charts (simulated, disclosed) are the only chart surface on primary.
-    expect(await screen.findByTestId("primary-performance-charts")).toBeInTheDocument();
+    // PROMPT 05: legacy funding panel + simulated funding charts retired from Estate.
+    expect(screen.queryByTestId("funding-panel")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("primary-performance-charts")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("estate-economics")).not.toBeInTheDocument();
   });
 
   it("secondary with book: everything coherent at the live ask ($256.02)", async () => {
@@ -181,7 +181,7 @@ describe("Property page data consistency — one price everywhere", () => {
     const ask = bookForBayside.bestAskUsd!;
     expect(screen.getByTestId("hero-price")).toHaveTextContent(usd(ask));
     expect(screen.getByTestId("hero-cta")).toHaveTextContent("Acquire Resale Ownership");
-    expectPriceSurfacesShow(ask);
+    expectPriceSurfacesShow(ask, "Ask price");
     await expectChartEndShows(ask);
     // Resale summary (still expanded on the Estate tab) shows the source-of-truth value.
     expect(screen.getByTestId("best-ask").textContent).toBe(usd(ask));
@@ -191,7 +191,7 @@ describe("Property page data consistency — one price everywhere", () => {
     renderPage(secondaryNoBook);
     expect(screen.getByTestId("hero-price")).toHaveTextContent(usd(25_100));
     expect(screen.getByTestId("hero-cta")).toHaveTextContent("Acquire Resale Ownership");
-    expectPriceSurfacesShow(25_100);
+    expectPriceSurfacesShow(25_100, "Last price");
     await expectChartEndShows(25_100);
   });
 

@@ -497,8 +497,8 @@ describe("Property detail page — states + buy happy path", () => {
     });
     await renderPage(resale.id);
 
-    // Price before
-    expect(metricPrice("Share price")).toBe("$132.00");
+    // Price before (Slice 4: ask-basis label).
+    expect(metricPrice("Ask price")).toBe("$132.00");
 
     // Owner places an absurd custom sell at $999/share (Yield section on Ownership tab)
     fireEvent.click(screen.getByTestId("tab-ownership"));
@@ -521,7 +521,7 @@ describe("Property detail page — states + buy happy path", () => {
 
     // The order was placed — but the page-wide price is UNCHANGED.
     // (The owner's hero CTA reads "Manage Ownership" — the price surface is the point.)
-    expect(metricPrice("Share price")).toBe("$132.00");
+    expect(metricPrice("Ask price")).toBe("$132.00");
     expect(screen.getByTestId("hero-price")).toHaveTextContent("$132.00");
     expect(screen.getByTestId("hero-cta")).toHaveTextContent("Manage Ownership");
 

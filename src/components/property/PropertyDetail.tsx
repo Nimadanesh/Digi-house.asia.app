@@ -1,15 +1,13 @@
 "use client";
-// File responsibility: compose the Estate Detail layout — Phase 9 Slice 2
-// (PHASE-9-IMPLEMENTATION-CONTRACT Slice 2; UI Mapping §5): header (gallery + hero)
-// + KPI grid, then a 4-tab architecture (Estate | Income | Ownership | Details).
-//
-// Phase 9 branching rules (UI Mapping §5.2):
-// - Estate tab: funding story leads (Primary); resale market DEMOTED to a collapsed
-//   block (Secondary/sold-out); rental-economics narrative; property fundamentals.
-// - Income tab: income history (simulated, disclosed) + the projections calculator.
-// - Ownership tab: position snapshot (banner/card), Owner Stay P0 preview (honest
-//   unavailable), yield/lock management, holder analytics.
-// - Details tab: trust (verification states + management), about, documents, similar.
+// File responsibility: compose the Estate Detail layout — 4-tab architecture
+// (Estate | Income | Ownership | Details) on the PROMPT 05 funnel:
+// - Estate tab: desire (rental performance + V1 thesis + V1 fractionalization;
+//   resale demoted to a collapsed block; canonical Reserve CTA closes).
+// - Income tab: conviction (the V1 economic chain for THIS estate + honest
+//   position income; Projected never presented as Paid/Accrued).
+// - Ownership tab: decision (V1 $100/80k facts + position snapshot, Owner Stay
+//   honest unavailable, yield/lock management; no simulated holder analytics).
+// - Details tab: trust, about, documents, similar.
 // The primary action (Buy sheet, MainButton) stays page-owned in route page.tsx.
 import { useLayoutEffect, useRef, useState } from "react";
 import type { Listing } from "@/types/property";
@@ -18,15 +16,15 @@ import type { DocumentMeta } from "@/types/property-document";
 import type { EstateVerification } from "@/types/verification";
 import type { EstateStayInfo } from "@/types/stay";
 import { getCurrentSharePrice } from "@/lib/property-price";
+import { getFinancialModelV1 } from "@/lib/economics/estates/financial-model-v1-inputs";
 import { useEstateDetailViewModel } from "@/hooks/useEstateDetailViewModel";
-import dynamic from "next/dynamic";
-import { TabPanelSkeleton } from "@/components/common/Skeleton";
 import { PropertyGallery } from "./PropertyGallery";
 import { PropertyHero } from "./PropertyHero";
 import { PropertyMetricsGrid } from "./PropertyMetricsGrid";
 import { PropertyTabs, type PropertyTabId } from "./PropertyTabs";
 import { EstateTabPanel } from "./EstateTabPanel";
-import { IncomeCalculator } from "./IncomeCalculator";
+import { IncomeV1Story } from "./IncomeV1Story";
+import { OwnershipV1Panel, V1_NOMINAL_SHARE_PRICE_CENTS } from "./OwnershipV1Panel";
 import { PositionCard } from "./PositionCard";
 import { OwnershipBanner } from "./OwnershipBanner";
 import { YieldLockSection } from "./YieldLockSection";
@@ -36,34 +34,13 @@ import { PropertyAbout } from "./PropertyAbout";
 import { SimilarProperties } from "./SimilarProperties";
 import { PropertyDocumentsList } from "@/components/documents/PropertyDocumentsList";
 
-// Phase 8 performance: the heavy analytics tab panels (Phase 5–7 chart suites)
-// are code-split and loaded on demand — the Estate tab (default) ships without
-// their chart JS. Panels render a skeleton fallback while the chunk loads.
-const HolderAnalytics = dynamic(
-  () => import("./HolderAnalytics").then((m) => m.HolderAnalytics),
-  {
-    loading: () => <TabPanelSkeleton />,
-    ssr: false,
-  },
-);
-const IncomeAnalytics = dynamic(
-  () => import("./IncomeAnalytics").then((m) => m.IncomeAnalytics),
-  {
-    loading: () => <TabPanelSkeleton />,
-    ssr: false,
-  },
-);
-
 export function PropertyDetail({
   listing,
   orderBook,
   onBuy,
-  previewShares,
-  onSharesChange,
   ownedShares = 0,
   lockedShares = 0,
   avgCostUsd,
-  onBuyShares,
   documents = [],
   onDownloadDoc,
   downloadingDocId,
@@ -75,15 +52,11 @@ export function PropertyDetail({
   listing: Listing;
   orderBook?: OrderBookState;
   onBuy: () => void;
-  /** Calculator share count (page-owned so MainButton stays in sync). */
-  previewShares: number;
-  onSharesChange: (n: number) => void;
   ownedShares?: number;
   /** Shares currently locked and earning (Phase 6). */
   lockedShares?: number;
   /** Holder's average cost, for lock principal preview. */
   avgCostUsd?: number;
-  onBuyShares: (n: number) => void;
   documents?: DocumentMeta[];
   onDownloadDoc?: (docId: string) => void;
   downloadingDocId?: string | null;
@@ -107,14 +80,10 @@ export function PropertyDetail({
   const [resaleOpen, setResaleOpen] = useState(false);
   const scrollYBeforeTabRef = useRef<number | null>(null);
 
-  // Slice E — canonical view-model via the hooks boundary (UI never touches
-  // engines directly). Economics/scenario/share/CTA states flow from here.
-  const {
-    vm: estateVm,
-    bound: scenarioBound,
-    onBoundChange: handleBoundChange,
-    selected: selectedScenario,
-  } = useEstateDetailViewModel(listing, {
+  // PROMPT 05 — canonical view-model via the hooks boundary (UI never touches
+  // engines directly). Identity/valuation/share states flow from here; V1
+  // projected economics arrive as estateVm.v1 (sole calculation authority).
+  const { vm: estateVm } = useEstateDetailViewModel(listing, {
     asks: orderBook?.asks,
     sharesOwned: ownedShares,
     acquisitionPricePerShareUsd: avgCostUsd ?? null,
@@ -155,6 +124,10 @@ export function PropertyDetail({
   // Single source of truth for "current share price" — computed ONCE here and fed to
   // every price display (lib/property-price). No section may re-derive it.
   const currentPriceUsd = getCurrentSharePrice(listing, { bestAskUsd: orderBook?.bestAskUsd });
+  // V1 canonical fractionalization for the hero fraction (1/N of the estate).
+  // Falls back to the listing supply only without a V1 input (never the 24).
+  const v1ForHero = getFinancialModelV1(listing.id);
+  const heroTotalShares = v1ForHero?.totalShares ?? listing.totalShares;
   // Resale block renders for secondary listings AND sold-out primary offerings.
   const hasResaleSurface = !isPrimary || listing.sharesRemaining <= 0;
 
@@ -175,17 +148,21 @@ export function PropertyDetail({
           market={estateVm.share.state.market}
           estateValueUsd={estateVm.valuation?.value ?? null}
           estateValueProvenance={estateVm.valuation?.provenance}
+          estateValueDisplay={estateVm.valuationDisplay}
           canonicalName={estateVm.identity?.name}
           canonicalLocation={estateVm.identity?.location}
+          totalSharesOverride={heroTotalShares}
         />
       </div>
 
-      {/* KPI area — ownership-first labels, available data only */}
+      {/* KPI area — V1 projected monthly per share; canonical $8M value */}
       <PropertyMetricsGrid
         listing={listing}
         currentPriceUsd={currentPriceUsd}
+        bestAskUsd={orderBook?.bestAskUsd ?? listing.bestAskUsd}
         totalValueUsdOverride={estateVm.valuation?.value ?? null}
         totalValueDisplay={estateVm.valuationDisplay}
+        v1={estateVm.v1}
       />
 
       {/* Tabs — horizontal scroll, immediate switch */}
@@ -197,15 +174,11 @@ export function PropertyDetail({
           listing={listing}
           orderBook={orderBook}
           currentPriceUsd={currentPriceUsd}
-          isPrimary={isPrimary}
           hasResaleSurface={hasResaleSurface}
           resaleOpen={resaleOpen}
           onResaleOpenChange={setResaleOpen}
           onBuy={onBuy}
           estateVm={estateVm}
-          selectedScenario={selectedScenario}
-          scenarioBound={scenarioBound}
-          onBoundChange={handleBoundChange}
           onShowIncome={() => handleTabChange("income")}
           canBuy={canBuy}
         />
@@ -219,18 +192,14 @@ export function PropertyDetail({
           className="space-y-5"
           data-testid="panel-income"
         >
-          {/* Income history chart + payout history (SIMULATED — disclosure kept) */}
-          <IncomeAnalytics listing={listing} />
-
-          {/* Projections calculator — the estate's income projections */}
-          <IncomeCalculator
-            listing={listing}
-            shares={previewShares}
-            onSharesChange={onSharesChange}
+          {/* PROMPT 05 conviction story — V1 chain + honest position income.
+              Legacy simulated analytics + yield-rate calculator are retired
+              from this tab (files kept, no longer the economic story). */}
+          <IncomeV1Story
+            v1={estateVm.v1}
+            accruedUnpaidUsd={accruedUnpaidUsd}
             ownedShares={ownedShares}
-            lockedShares={lockedShares}
-            onBuy={onBuyShares}
-            currentPriceUsd={currentPriceUsd}
+            scalePosition={listing.sharePriceUsd === V1_NOMINAL_SHARE_PRICE_CENTS}
           />
         </div>
       ) : null}
@@ -243,6 +212,17 @@ export function PropertyDetail({
           className="space-y-5"
           data-testid="panel-ownership"
         >
+          {/* PROMPT 05 decision facts — V1 $100/total/position/consequences + Buy entry.
+              Sell entries stay in the existing position flows below. */}
+          <OwnershipV1Panel
+            v1={estateVm.v1}
+            ownedShares={ownedShares}
+            sharesRemaining={listing.sharesRemaining}
+            isPrimary={isPrimary}
+            scalePosition={listing.sharePriceUsd === V1_NOMINAL_SHARE_PRICE_CENTS}
+            onBuy={onBuy}
+          />
+
           {/* Position snapshot — PositionCard (secondary) / OwnershipBanner (primary) */}
           {!isPrimary ? (
             <PositionCard
@@ -268,9 +248,6 @@ export function PropertyDetail({
 
           {/* Yield + lock/unlock management */}
           <YieldLockSection listing={listing} />
-
-          {/* Holder analytics (SIMULATED buckets — disclosure kept) */}
-          <HolderAnalytics listing={listing} />
         </div>
       ) : null}
 
@@ -285,12 +262,19 @@ export function PropertyDetail({
           {/* Trust: verification states + management partner */}
           <PropertyTrust listing={listing} verification={verification} />
 
-          {/* About + More details */}
+          {/* About + More details (PROMPT 04 Matrix Detail truth reference) */}
           <PropertyAbout
             listing={listing}
             aboutText={estateVm.aboutText}
             sizeText={estateVm.sizeText}
             displayName={estateVm.identity?.name}
+            propertyType={estateVm.propertyType}
+            descriptionFull={estateVm.descriptionFull}
+            location={estateVm.identity?.location}
+            nightlyDisplay={estateVm.nightlyDisplayText}
+            valuationDisplay={estateVm.valuationDisplay}
+            growthPotential={estateVm.growthPotential}
+            listingId={estateVm.identity?.listingId}
           />
 
           {/* Documents */}

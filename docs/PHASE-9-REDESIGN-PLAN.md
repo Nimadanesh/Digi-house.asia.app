@@ -312,3 +312,32 @@ At the end of every slice, append a short entry to this file:
 - Remaining issues: none new. DEC-006 (`funded` vs ledger) and DEC-007 (naming) stay
   OPEN for Slices 4–5/8. Card-chip bare pending is intentional (see above).
 - Next slice: Slice 4 — clarify primary offering versus secondary market
+
+### Slice 4 — Clarify primary offering versus secondary market
+
+- Status: `PASS`
+- Commit: (this commit — code + tests + docs)
+- Scope completed: secondary hero carries the market context before the CTA
+  (`Ask price: $X · Last price: $Y`, observed values only, never invented);
+  metrics price label follows the basis (Share price / Ask price / Last price);
+  primary states the $100 base explicitly (metrics note); secondary sticky buy names
+  the ask (`Buy · Ask $X`); `Weekly yield` transaction label removed (`Yield`;
+  `Monthly yield` kept — kind enum and ledger untouched; legacy weekly-lock copy is
+  accurately gated and preserved). No feed restructure, no status/economics changes.
+  DEC-006 Slice-4 half discharged (funded banner/CTA already honest resale handling —
+  numbers decision stays with Slice 5; DEC-006 remains OPEN).
+- Files changed: `PropertyHero` (market caption), `PropertyMetricsGrid` (basis label +
+  primary note), `PropertyDetail` (ask passthrough), `PropertyStickyCta` (ask basis),
+  `TransactionRow` (label); `market-context.test.tsx` (new, 11 tests);
+  consistency/page/transaction test updates; 3 new i18n keys ×12 locales; plan status
+- Tests run and results: new tests RED-verified (8 fail) before implementation; full
+  vitest 126 files 1124/1124; typecheck clean; lint 0 errors (7 pre-existing warnings);
+  build green; Playwright 40 passed/6 expected skips (one E2E strict-mode collision
+  from the duplicated ask string resolved by sharing the short `askPrice` vocabulary —
+  no E2E edit needed)
+- Design/UI QA result: PASS at 480×840 (primary/secondary/funded heroes + metrics +
+  sticky read as designed; screenshots read; zero overflow); fa RTL via E2E gates
+  (green; captions reuse existing primitives)
+- Remaining issues: P1-1 numbers half (DEC-006 → Slice 5); P2-1 naming (DEC-007 →
+  Slice 8); sell-side context stays with the sheet review flow (Slice 5 owns sell honesty)
+- Next slice: Slice 5 — make Buy and Sell behavior honest and coherent
