@@ -40,7 +40,9 @@
     "weeks": "周",
     "demoMode": "演示模式 · 示例数据 · 交易为模拟",
     "somethingWentWrong": "出了点问题",
-    "acquireOwnership": "获取所有权"
+    "acquireOwnership": "获取所有权",
+    "showMore": "Show more",
+    "showLess": "Show less"
   },
   "tabs": {
     "home": "首页",
@@ -478,7 +480,7 @@
     "performanceSectionTitle": "行情",
     "priceMode": "价格",
     "yieldMode": "收益",
-    "tabEstate": "房产",
+    "tabEstate": "Overview",
     "tabOwnership": "所有权",
     "sharePrice": "每股价格",
     "askPrice": "Ask price",

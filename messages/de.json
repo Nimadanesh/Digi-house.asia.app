@@ -40,7 +40,9 @@
     "weeks": "Wochen",
     "demoMode": "Demo-Modus · Seed-Daten · Transaktionen simuliert",
     "somethingWentWrong": "Etwas ist schiefgelaufen",
-    "acquireOwnership": "Eigentum erwerben"
+    "acquireOwnership": "Eigentum erwerben",
+    "showMore": "Show more",
+    "showLess": "Show less"
   },
   "tabs": {
     "home": "Start",
@@ -478,7 +480,7 @@
     "performanceSectionTitle": "Performance",
     "priceMode": "Preis",
     "yieldMode": "Rendite",
-    "tabEstate": "Immobilie",
+    "tabEstate": "Overview",
     "tabOwnership": "Eigentum",
     "sharePrice": "Preis pro Anteil",
     "askPrice": "Ask price",

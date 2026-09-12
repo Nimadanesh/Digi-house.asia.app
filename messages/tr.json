@@ -40,7 +40,9 @@
     "weeks": "hafta",
     "demoMode": "Demo · örnek veri · işlemler simüle",
     "somethingWentWrong": "Bir şeyler ters gitti",
-    "acquireOwnership": "Mülkiyet edinin"
+    "acquireOwnership": "Mülkiyet edinin",
+    "showMore": "Show more",
+    "showLess": "Show less"
   },
   "tabs": {
     "home": "Ana sayfa",
@@ -478,7 +480,7 @@
     "performanceSectionTitle": "Performans",
     "priceMode": "Fiyat",
     "yieldMode": "Getiri",
-    "tabEstate": "Emlak",
+    "tabEstate": "Overview",
     "tabOwnership": "Mülkiyet",
     "sharePrice": "Hisse fiyatı",
     "askPrice": "Ask price",

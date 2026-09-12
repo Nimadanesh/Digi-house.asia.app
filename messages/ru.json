@@ -40,7 +40,9 @@
     "weeks": "недель",
     "demoMode": "Демо · тестовые данные · транзакции симулируются",
     "somethingWentWrong": "Что-то пошло не так",
-    "acquireOwnership": "Приобрести владение"
+    "acquireOwnership": "Приобрести владение",
+    "showMore": "Show more",
+    "showLess": "Show less"
   },
   "tabs": {
     "home": "Главная",
@@ -478,7 +480,7 @@
     "performanceSectionTitle": "Динамика",
     "priceMode": "Цена",
     "yieldMode": "Доходность",
-    "tabEstate": "Недвижимость",
+    "tabEstate": "Overview",
     "tabOwnership": "Владение",
     "sharePrice": "Цена за долю",
     "askPrice": "Ask price",

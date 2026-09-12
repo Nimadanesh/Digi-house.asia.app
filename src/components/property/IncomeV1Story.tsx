@@ -7,25 +7,24 @@
 // v1 model prop, components never recompute. Projected is never presented as
 // Paid/Accrued; UNKNOWN (unknown tax, EUR mixed currency) stays UNKNOWN with
 // the engine's stated reason; guest-paid charges are disclosed, never deducted.
+// DEC-014 (Layer 2): every figure row renders through FactRow — ⓘ leads the
+// label, the whole row opens the provenance sheet, figures are compact money
+// (M/K) and never wrap; long explanatory notes clamp with Show more/less so a
+// content-heavy tab can never break row alignment.
 "use client";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { eur, usd } from "@/lib/format";
+import { moneySmart, usd } from "@/lib/format";
 import { unavailableLabel } from "@/lib/availability";
 import type {
   FinancialModelV1PropertyModel,
   FinancialModelV1ScenarioResult,
 } from "@/types/financial-model-v1";
 import { Block } from "@/components/common/Block";
-import { Row } from "@/components/common/Row";
-import { ProvenanceInfo } from "@/components/common/ProvenanceInfo";
+import { FactRow } from "@/components/common/FactRow";
 import { v1AnrToCents } from "@/lib/economics/financial-model-v1";
 
 type V1Key = "conservative" | "base" | "optimistic" | "average";
-
-function money(cents: number, currency: "USD" | "EUR"): string {
-  return currency === "EUR" ? eur(cents) : usd(cents);
-}
 
 function ScenarioPills({
   selected,
@@ -98,6 +97,7 @@ export function IncomeV1Story({
   const anrProvenance = v1.anr.provenance === "OBSERVED_DERIVED" ? "observed" : "estimated";
   const perShare = v1.perShare;
   const pending = unavailableLabel("backend_absent");
+  const cur = (cents: number) => moneySmart(cents, selected.currency);
 
   return (
     <div className="space-y-5" data-testid="income-v1-story">
@@ -107,19 +107,18 @@ export function IncomeV1Story({
           {t("incomeV1Basis")}
         </h2>
         <Block className="p-4" data-testid="income-v1-basis">
-          <Row>
-            <span className="text-sm text-muted-foreground">{t("v1ThesisAnr")}</span>
-            <span className="ml-auto flex min-w-0 items-center gap-1.5" data-testid="income-v1-anr">
-              <span className="truncate text-sm tnum font-semibold text-foreground">
-                {money(anrCents, v1.currency)}
-              </span>
-              <ProvenanceInfo provenance={anrProvenance} />
-            </span>
-          </Row>
-          <p className="pt-3 text-xs leading-relaxed text-muted-foreground">{t("v1AnrNote")}</p>
-          <p className="pt-1 text-xs leading-relaxed text-muted-foreground" data-testid="income-v1-anr-method">
-            {v1.anr.method}
-          </p>
+          <FactRow
+            label={t("v1ThesisAnr")}
+            value={moneySmart(anrCents, v1.currency)}
+            valueTestId="income-v1-anr"
+            provenance={anrProvenance}
+            caption={t("v1AnrNote")}
+          />
+          <div className="pb-1 pt-1">
+            <p className="text-xs leading-relaxed text-muted-foreground" data-testid="income-v1-anr-method">
+              {v1.anr.method}
+            </p>
+          </div>
         </Block>
       </section>
 
@@ -140,27 +139,25 @@ export function IncomeV1Story({
             }}
           />
           <div className="py-1">
-            <Row>
-              <span className="text-sm text-muted-foreground">
-                {scenario === "average" ? t("scenarioAverage") : t("v1ThesisRevenue")}
-              </span>
-              <span className="ml-auto flex items-center gap-1.5 text-sm tnum font-semibold text-foreground" data-testid="income-v1-gross">
-                {money(selected.grossCents, selected.currency)}
-                <ProvenanceInfo provenance="calculated" />
-              </span>
-            </Row>
-            <Row>
-              <span className="text-sm text-muted-foreground">
-                {selected.nights != null ? `${selected.nights} nights` : "Mean gross"}
-              </span>
-              <span className="ml-auto text-sm tnum text-muted-foreground" data-testid="income-v1-nights">
-                {selected.nights != null
+            <FactRow
+              label={scenario === "average" ? t("scenarioAverage") : t("v1ThesisRevenue")}
+              value={cur(selected.grossCents)}
+              valueTestId="income-v1-gross"
+              provenance="calculated"
+              caption={t("v1ScenarioNote")}
+            />
+            <FactRow
+              label={selected.nights != null ? `${selected.nights} nights` : "Mean gross"}
+              value={
+                selected.nights != null
                   ? `ANR × ${selected.nights}`
-                  : "Mean of the three scenarios"}
-              </span>
-            </Row>
+                  : "Mean of the three scenarios"
+              }
+              valueTestId="income-v1-nights"
+              muted
+              valueMuted
+            />
           </div>
-          <p className="px-4 pb-3 text-xs leading-relaxed text-muted-foreground">{t("v1ScenarioNote")}</p>
         </Block>
       </section>
 
@@ -171,35 +168,26 @@ export function IncomeV1Story({
         </h2>
         <Block className="overflow-hidden" data-testid="income-v1-costs">
           <div className="py-1">
-            <Row>
-              <span className="text-sm text-foreground">{t("incomeV1CostAgency")}</span>
-              <span className="ml-auto flex items-center gap-1.5" data-testid="income-v1-cost-agency">
-                <span className="text-sm tnum font-semibold text-foreground">
-                  {money(selected.agencyCents, selected.currency)}
-                </span>
-                <ProvenanceInfo provenance="calculated" />
-              </span>
-            </Row>
-            <Row>
-              <span className="text-sm text-foreground">{t("incomeV1CostOperator")}</span>
-              <span className="ml-auto flex items-center gap-1.5" data-testid="income-v1-cost-operator">
-                <span className="text-sm tnum font-semibold text-foreground">
-                  {money(selected.operatorCents, selected.currency)}
-                </span>
-                <ProvenanceInfo provenance="calculated" />
-              </span>
-            </Row>
-            <Row>
-              <span className="text-sm text-foreground">{t("incomeV1CostReserve")}</span>
-              <span className="ml-auto flex items-center gap-1.5" data-testid="income-v1-cost-reserve">
-                <span className="text-sm tnum font-semibold text-foreground">
-                  {money(selected.reserveCents, selected.reserveCurrency)}
-                </span>
-                <ProvenanceInfo provenance="calculated" />
-              </span>
-            </Row>
+            <FactRow
+              label={t("incomeV1CostAgency")}
+              value={cur(selected.agencyCents)}
+              valueTestId="income-v1-cost-agency"
+              provenance="calculated"
+            />
+            <FactRow
+              label={t("incomeV1CostOperator")}
+              value={cur(selected.operatorCents)}
+              valueTestId="income-v1-cost-operator"
+              provenance="calculated"
+            />
+            <FactRow
+              label={t("incomeV1CostReserve")}
+              value={moneySmart(selected.reserveCents, selected.reserveCurrency)}
+              valueTestId="income-v1-cost-reserve"
+              provenance="calculated"
+              caption={t("incomeV1ReserveNote")}
+            />
           </div>
-          <p className="px-4 pb-3 text-xs leading-relaxed text-muted-foreground">{t("incomeV1ReserveNote")}</p>
         </Block>
       </section>
 
@@ -210,30 +198,19 @@ export function IncomeV1Story({
         </h2>
         <Block className="overflow-hidden" data-testid="income-v1-tax">
           <div className="py-1">
-            <Row>
-              <span className="text-sm text-muted-foreground">
-                {v1.ownerTax.kind === "rate"
+            <FactRow
+              label={
+                v1.ownerTax.kind === "rate"
                   ? `${v1.ownerTax.jurisdiction} · ${Math.round(v1.ownerTax.rate * 1000) / 10}%`
-                  : v1.ownerTax.jurisdiction}
-              </span>
-              <span className="ml-auto flex items-center gap-1.5" data-testid="income-v1-tax-amount">
-                {selected.ownerTaxCents != null ? (
-                  <>
-                    <span className="text-sm tnum font-semibold text-foreground">
-                      {money(selected.ownerTaxCents, selected.currency)}
-                    </span>
-                    <ProvenanceInfo provenance="calculated" />
-                  </>
-                ) : (
-                  <>
-                    <span className="text-sm text-muted-foreground">{pending}</span>
-                    <ProvenanceInfo provenance="unknown" />
-                  </>
-                )}
-              </span>
-            </Row>
+                  : v1.ownerTax.jurisdiction
+              }
+              value={selected.ownerTaxCents != null ? cur(selected.ownerTaxCents) : pending}
+              valueTestId="income-v1-tax-amount"
+              provenance={selected.ownerTaxCents != null ? "calculated" : "unknown"}
+              valueMuted={selected.ownerTaxCents == null}
+              caption={t("incomeV1TaxNote")}
+            />
           </div>
-          <p className="px-4 pb-3 text-xs leading-relaxed text-muted-foreground">{t("incomeV1TaxNote")}</p>
         </Block>
       </section>
 
@@ -242,29 +219,14 @@ export function IncomeV1Story({
           {t("incomeV1Net")}
         </h2>
         <Block className="p-4" data-testid="income-v1-net">
-          <Row>
-            <span className="text-sm text-muted-foreground">{t("incomeV1Net")}</span>
-            <span className="ml-auto flex items-center gap-1.5" data-testid="income-v1-net-amount">
-              {selected.netCents != null ? (
-                <>
-                  <span className="text-sm tnum font-semibold text-foreground">
-                    {money(selected.netCents, selected.currency)}
-                  </span>
-                  <ProvenanceInfo provenance="calculated" />
-                </>
-              ) : (
-                <>
-                  <span className="text-sm text-muted-foreground">{pending}</span>
-                  <ProvenanceInfo provenance="unknown" />
-                </>
-              )}
-            </span>
-          </Row>
-          {selected.netCents == null && selected.unknownReason ? (
-            <p className="pt-3 text-xs leading-relaxed text-muted-foreground" data-testid="income-v1-unknown-note">
-              {selected.unknownReason}
-            </p>
-          ) : null}
+          <FactRow
+            label={t("incomeV1Net")}
+            value={selected.netCents != null ? cur(selected.netCents) : pending}
+            valueTestId="income-v1-net-amount"
+            provenance={selected.netCents != null ? "calculated" : "unknown"}
+            valueMuted={selected.netCents == null}
+            caption={selected.netCents == null && selected.unknownReason ? selected.unknownReason : null}
+          />
         </Block>
       </section>
 
@@ -273,25 +235,14 @@ export function IncomeV1Story({
           {t("incomeV1Owner")}
         </h2>
         <Block className="p-4" data-testid="income-v1-owner">
-          <Row>
-            <span className="text-sm text-muted-foreground">{t("incomeV1Owner")}</span>
-            <span className="ml-auto flex items-center gap-1.5" data-testid="income-v1-owner-amount">
-              {selected.ownerProfitCents != null ? (
-                <>
-                  <span className="text-sm tnum font-semibold text-foreground">
-                    {money(selected.ownerProfitCents, selected.currency)}
-                  </span>
-                  <ProvenanceInfo provenance="calculated" />
-                </>
-              ) : (
-                <>
-                  <span className="text-sm text-muted-foreground">{pending}</span>
-                  <ProvenanceInfo provenance="unknown" />
-                </>
-              )}
-            </span>
-          </Row>
-          <p className="pt-3 text-xs leading-relaxed text-muted-foreground">{t("incomeV1OperatorNote")}</p>
+          <FactRow
+            label={t("incomeV1Owner")}
+            value={selected.ownerProfitCents != null ? cur(selected.ownerProfitCents) : pending}
+            valueTestId="income-v1-owner-amount"
+            provenance={selected.ownerProfitCents != null ? "calculated" : "unknown"}
+            valueMuted={selected.ownerProfitCents == null}
+            caption={t("incomeV1OperatorNote")}
+          />
         </Block>
       </section>
 
@@ -301,55 +252,33 @@ export function IncomeV1Story({
           {t("incomeV1PerShare")}
         </h2>
         <Block className="p-4" data-testid="income-v1-pershare">
-          <Row>
-            <span className="text-sm text-muted-foreground">
-              {t("v1ThesisPerShare")} {t("incomeV1PerYear")}
-            </span>
-            <span className="ml-auto flex items-center gap-1.5" data-testid="income-v1-pershare-annual">
-              {perShare.annualCents != null ? (
-                <>
-                  <span className="text-sm tnum font-semibold text-foreground">
-                    {money(perShare.annualCents, perShare.currency)} {t("incomeV1PerYear")}
-                  </span>
-                  <ProvenanceInfo provenance="projected" />
-                </>
-              ) : (
-                <>
-                  <span className="text-sm text-muted-foreground">{pending}</span>
-                  <ProvenanceInfo provenance="unknown" />
-                </>
-              )}
-            </span>
-          </Row>
-          <Row>
-            <span className="text-sm text-muted-foreground">
-              {t("v1ThesisPerShare")} {t("incomeV1PerMonth")}
-            </span>
-            <span className="ml-auto flex items-center gap-1.5" data-testid="income-v1-pershare-monthly">
-              {perShare.monthlyCents != null ? (
-                <>
-                  <span className="text-sm tnum font-semibold text-foreground">
-                    {money(perShare.monthlyCents, perShare.currency)} {t("incomeV1PerMonth")}
-                  </span>
-                  <ProvenanceInfo provenance="projected" />
-                </>
-              ) : (
-                <>
-                  <span className="text-sm text-muted-foreground">{pending}</span>
-                  <ProvenanceInfo provenance="unknown" />
-                </>
-              )}
-            </span>
-          </Row>
-          {perShare.annualCents != null ? (
-            <p className="pt-3 text-xs leading-relaxed text-muted-foreground">
-              {t("incomeV1ProjectionNote")}
-            </p>
-          ) : perShare.unknownReason ? (
-            <p className="pt-3 text-xs leading-relaxed text-muted-foreground" data-testid="income-v1-pershare-unknown">
-              {perShare.unknownReason}
-            </p>
-          ) : null}
+          <FactRow
+            label={`${t("v1ThesisPerShare")} ${t("incomeV1PerYear")}`}
+            value={
+              perShare.annualCents != null
+                ? `${moneySmart(perShare.annualCents, perShare.currency)} ${t("incomeV1PerYear")}`
+                : pending
+            }
+            valueTestId="income-v1-pershare-annual"
+            provenance={perShare.annualCents != null ? "projected" : "unknown"}
+            valueMuted={perShare.annualCents == null}
+            caption={
+              perShare.annualCents != null
+                ? t("incomeV1ProjectionNote")
+                : perShare.unknownReason ?? null
+            }
+          />
+          <FactRow
+            label={`${t("v1ThesisPerShare")} ${t("incomeV1PerMonth")}`}
+            value={
+              perShare.monthlyCents != null
+                ? `${moneySmart(perShare.monthlyCents, perShare.currency)} ${t("incomeV1PerMonth")}`
+                : pending
+            }
+            valueTestId="income-v1-pershare-monthly"
+            provenance={perShare.monthlyCents != null ? "projected" : "unknown"}
+            valueMuted={perShare.monthlyCents == null}
+          />
         </Block>
       </section>
 
@@ -362,14 +291,12 @@ export function IncomeV1Story({
           <Block className="p-4" data-testid="income-v1-excluded">
             <div className="space-y-2">
               {v1.excludedCharges.map((c) => (
-                <p key={c.name} className="text-xs leading-relaxed text-muted-foreground" data-testid="income-v1-excluded-row">
-                  <span className="font-medium text-foreground">{c.name}</span>
-                  {" — "}
-                  {c.detail}
-                </p>
+                <div key={c.name} data-testid="income-v1-excluded-row">
+                  <FactRow label={c.name} value="" muted caption={c.detail} />
+                </div>
               ))}
             </div>
-            <p className="pt-3 text-xs leading-relaxed text-muted-foreground">{t("incomeV1ExcludedNote")}</p>
+            <p className="pt-2 text-xs leading-relaxed text-muted-foreground">{t("incomeV1ExcludedNote")}</p>
           </Block>
         </section>
       ) : null}
@@ -380,26 +307,22 @@ export function IncomeV1Story({
           {t("incomeV1Position")}
         </h2>
         <Block className="p-4" data-testid="income-v1-position">
-          <Row>
-            <span className="text-sm text-muted-foreground">{t("incomeV1Accrued")}</span>
-            <span className="ml-auto text-sm tnum font-semibold text-foreground" data-testid="income-v1-accrued">
-              {usd(accruedUnpaidUsd)}
-            </span>
-          </Row>
+          <FactRow
+            label={t("incomeV1Accrued")}
+            value={usd(accruedUnpaidUsd)}
+            valueTestId="income-v1-accrued"
+          />
           {scalePosition && ownedShares > 0 && perShare.annualCents != null ? (
-            <Row>
-              <span className="text-sm text-muted-foreground">
-                {t("ownershipV1Projected")} ({ownedShares})
-              </span>
-              <span className="ml-auto flex items-center gap-1.5" data-testid="income-v1-position-projected">
-                <span className="text-sm tnum font-semibold text-foreground">
-                  {money(perShare.annualCents * ownedShares, perShare.currency)} {t("incomeV1PerYear")}
-                </span>
-                <ProvenanceInfo provenance="projected" />
-              </span>
-            </Row>
+            <FactRow
+              label={`${t("ownershipV1Projected")} (${ownedShares})`}
+              value={`${moneySmart(perShare.annualCents * ownedShares, perShare.currency)} ${t("incomeV1PerYear")}`}
+              valueTestId="income-v1-position-projected"
+              provenance="projected"
+            />
           ) : null}
-          <p className="pt-3 text-xs leading-relaxed text-muted-foreground">{t("incomeV1PaidNote")}</p>
+          <div className="pt-2">
+            <FactRow label={t("incomeV1PaidNote")} value="" muted />
+          </div>
           {onViewEarnings ? (
             <button
               type="button"

@@ -5,19 +5,17 @@
 // ADR/occupancy/cost/allocation figures; no Growth Potential here (it lives in
 // the investment panel, never duplicated); UNKNOWN stays honest with the
 // engine's stated reason. Detailed chain + disclaimers live on Income.
+// DEC-014 (Layer 2): rows render through FactRow — ⓘ leads the label, the
+// whole row opens the provenance sheet, figures are compact money (M/K) and
+// never wrap, long captions clamp with Show more/less.
 "use client";
 import { useTranslations } from "next-intl";
-import { eur, usd } from "@/lib/format";
+import { moneySmart } from "@/lib/format";
 import { unavailableLabel } from "@/lib/availability";
 import { v1AnrToCents } from "@/lib/economics/financial-model-v1";
 import type { FinancialModelV1PropertyModel } from "@/types/financial-model-v1";
 import { Block } from "@/components/common/Block";
-import { Row } from "@/components/common/Row";
-import { ProvenanceInfo } from "@/components/common/ProvenanceInfo";
-
-function money(cents: number, currency: "USD" | "EUR"): string {
-  return currency === "EUR" ? eur(cents) : usd(cents);
-}
+import { FactRow } from "@/components/common/FactRow";
 
 export function EstateV1Thesis({
   v1,
@@ -25,7 +23,7 @@ export function EstateV1Thesis({
 }: {
   /** V1 model for this estate; null only without a V1 input (never legacy). */
   v1: FinancialModelV1PropertyModel | null;
-  /** Funnel progression: Estate (desire) → Income (conviction). */
+  /** Funnel progression: Overview (desire) → Income (conviction). */
   onShowIncome: () => void;
 }) {
   const t = useTranslations("property");
@@ -40,63 +38,38 @@ export function EstateV1Thesis({
         {t("v1ThesisTitle")}
       </h2>
       <Block className="p-4">
-        <div className="space-y-3">
-          <Row>
-            <span className="text-sm text-muted-foreground">{t("v1ThesisAnr")}</span>
-            <span className="ml-auto flex min-w-0 items-center gap-1.5" data-testid="thesis-anr">
-              <span className="truncate text-sm tnum font-semibold text-foreground">
-                {money(anrCents, v1.currency)}
-              </span>
-              <ProvenanceInfo provenance={anrProvenance} />
-            </span>
-          </Row>
-          {/* Slice 6: the ANR can exceed the card's from-range (it averages every
-              listed rate for projections) — one plain-language line prevents the
-              stall. Methodology stays on Income; nothing technical here. */}
-          <p
-            className="-mt-1 text-[0.6875rem] leading-relaxed text-muted-foreground"
-            data-testid="thesis-anr-note"
-          >
-            {t("v1ThesisAnrNote")}
-          </p>
-          <Row>
-            <span className="shrink-0 text-sm text-muted-foreground">{t("v1ThesisRevenue")}</span>
-            <span className="ml-auto flex min-w-0 items-center justify-end gap-1.5 text-right" data-testid="thesis-revenue">
-              <span className="text-sm tnum font-semibold break-words text-foreground">
-                {money(v1.conservative.grossCents, v1.currency)} –{" "}
-                {money(v1.optimistic.grossCents, v1.currency)}
-              </span>
-              <ProvenanceInfo provenance="calculated" />
-            </span>
-          </Row>
-          <Row>
-            <span className="text-sm text-muted-foreground">{t("v1ThesisPerShare")}</span>
-            <span className="ml-auto flex min-w-0 items-center gap-1.5" data-testid="thesis-pershare">
-              {perShare.annualCents != null ? (
-                <>
-                  <span className="truncate text-sm tnum font-semibold text-foreground">
-                    {money(perShare.annualCents, perShare.currency)} {t("incomeV1PerYear")}
-                  </span>
-                  <ProvenanceInfo provenance="projected" />
-                </>
-              ) : (
-                <>
-                  <span className="text-sm text-muted-foreground">
-                    {unavailableLabel("backend_absent")}
-                  </span>
-                  <ProvenanceInfo provenance="unknown" />
-                </>
-              )}
-            </span>
-          </Row>
+        <div className="space-y-1">
+          <FactRow
+            label={t("v1ThesisAnr")}
+            value={moneySmart(anrCents, v1.currency)}
+            valueTestId="thesis-anr"
+            provenance={anrProvenance}
+            caption={t("v1ThesisAnrNote")}
+            captionTestId="thesis-anr-note"
+          />
+          <FactRow
+            label={t("v1ThesisRevenue")}
+            value={`${moneySmart(v1.conservative.grossCents, v1.currency)} – ${moneySmart(v1.optimistic.grossCents, v1.currency)}`}
+            valueTestId="thesis-revenue"
+            provenance="calculated"
+          />
+          <FactRow
+            label={t("v1ThesisPerShare")}
+            value={
+              perShare.annualCents != null
+                ? `${moneySmart(perShare.annualCents, perShare.currency)} ${t("incomeV1PerYear")}`
+                : unavailableLabel("backend_absent")
+            }
+            valueTestId="thesis-pershare"
+            provenance={perShare.annualCents != null ? "projected" : "unknown"}
+            valueMuted={perShare.annualCents == null}
+            caption={
+              perShare.annualCents == null && perShare.unknownReason
+                ? perShare.unknownReason
+                : t("v1ScenarioNote")
+            }
+          />
         </div>
-        {perShare.annualCents == null && perShare.unknownReason ? (
-          <p className="pt-3 text-xs leading-relaxed text-muted-foreground" data-testid="thesis-unknown-note">
-            {perShare.unknownReason}
-          </p>
-        ) : (
-          <p className="pt-3 text-xs leading-relaxed text-muted-foreground">{t("v1ScenarioNote")}</p>
-        )}
         <button
           type="button"
           onClick={onShowIncome}

@@ -67,3 +67,4 @@ backups/
 # Playwright artifacts (root-level runner output)
 /test-results/
 .mimosa/
+/screenshots/runs/

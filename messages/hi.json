@@ -40,7 +40,9 @@
     "weeks": "सप्ताह",
     "demoMode": "डेमो मोड · नमूना डेटा · लेन-देन सिमुलेटेड",
     "somethingWentWrong": "कुछ गलत हो गया",
-    "acquireOwnership": "स्वामित्व प्राप्त करें"
+    "acquireOwnership": "स्वामित्व प्राप्त करें",
+    "showMore": "Show more",
+    "showLess": "Show less"
   },
   "tabs": {
     "home": "होम",
@@ -478,7 +480,7 @@
     "performanceSectionTitle": "प्रदर्शन",
     "priceMode": "मूल्य",
     "yieldMode": "उपज",
-    "tabEstate": "संपत्ति",
+    "tabEstate": "Overview",
     "tabOwnership": "स्वामित्व",
     "sharePrice": "शेयर मूल्य",
     "askPrice": "Ask price",

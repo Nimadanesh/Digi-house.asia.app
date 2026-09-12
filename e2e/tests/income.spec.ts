@@ -119,7 +119,7 @@ test.describe("Income — /earnings (Phase 9 Slice 5)", () => {
     expect(overflow).toBe(false);
 
     await page.screenshot({
-      path: "screenshots/phase9-slice5/income-primary.png",
+      path: "screenshots/runs/phase9-slice5/income-primary.png",
       fullPage: false,
     });
   });

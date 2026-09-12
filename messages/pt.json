@@ -40,7 +40,9 @@
     "weeks": "semanas",
     "demoMode": "Modo demo · dados de teste · transações simuladas",
     "somethingWentWrong": "Algo deu errado",
-    "acquireOwnership": "Adquira propriedade"
+    "acquireOwnership": "Adquira propriedade",
+    "showMore": "Show more",
+    "showLess": "Show less"
   },
   "tabs": {
     "home": "Início",
@@ -478,7 +480,7 @@
     "performanceSectionTitle": "Desempenho",
     "priceMode": "Preço",
     "yieldMode": "Rendimento",
-    "tabEstate": "Propriedade",
+    "tabEstate": "Overview",
     "tabOwnership": "Propriedade",
     "sharePrice": "Preço por ação",
     "askPrice": "Ask price",

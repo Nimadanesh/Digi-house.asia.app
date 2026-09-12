@@ -28,9 +28,9 @@ test.describe("Prompt 05 — V1 canonical economics QA", () => {
     await expect(page.getByTestId("hero-estate-value")).not.toContainText("10,000,000");
     // V1 thesis: ANR $97,230.25, modeled revenue range, $195.43/yr projected.
     await expect(page.getByTestId("estate-v1-thesis")).toBeVisible();
-    await expect(page.getByTestId("thesis-anr")).toContainText("$97,230.25");
-    await expect(page.getByTestId("thesis-revenue")).toContainText("$21,390,655.00");
-    await expect(page.getByTestId("thesis-revenue")).toContainText("$31,891,522.00");
+    await expect(page.getByTestId("thesis-anr")).toContainText("$97.2K");
+    await expect(page.getByTestId("thesis-revenue")).toContainText("$21.4M");
+    await expect(page.getByTestId("thesis-revenue")).toContainText("$31.9M");
     await expect(page.getByTestId("thesis-pershare")).toContainText("$195.43");
     // V1 investment: 80,000 shares at $100 (never fixture 2,500 / $80).
     await expect(page.getByTestId("estate-investment")).toBeVisible();
@@ -40,30 +40,33 @@ test.describe("Prompt 05 — V1 canonical economics QA", () => {
     await expect(page.getByTestId("estate-economics")).toHaveCount(0);
     await expect(page.getByTestId("estate-costs")).toHaveCount(0);
     await expect(page.getByTestId("estate-allocation")).toHaveCount(0);
-    // Provenance on demand: no visible wording, tap reveals the explanation.
+    // Provenance on demand (DEC-014): the ⓘ leads the label and the WHOLE row
+    // is tappable — tapping the row opens the explanation sheet.
     await expect(page.getByTestId("thesis-pershare")).not.toContainText("Projected figure");
-    await page.getByTestId("thesis-pershare").getByTestId("provenance-info").click();
-    await expect(page.getByTestId("provenance-sheet")).toContainText("Projected figure");
-    await expect(page.getByTestId("provenance-sheet")).toContainText("Not guaranteed income");
-    await page.screenshot({ path: "screenshots/slice-e-qa/provenance-sheet-open.png", fullPage: false });
+    await page.getByTestId("fact-row")
+      .filter({ has: page.getByTestId("thesis-pershare") })
+      .click();
+    await expect(page.getByTestId("fact-row-sheet")).toContainText("Projected figure");
+    await expect(page.getByTestId("fact-row-sheet")).toContainText("Not guaranteed income");
+    await page.screenshot({ path: "screenshots/runs/slice-e-qa/provenance-sheet-open.png", fullPage: false });
     // Sheet dismisses via backdrop/Esc like every app sheet — close before continuing.
     await page.keyboard.press("Escape");
-    await expect(page.getByTestId("provenance-sheet")).toHaveCount(0);
+    await expect(page.getByTestId("fact-row-sheet")).toHaveCount(0);
     await expectNoOverflow(page);
-    await page.screenshot({ path: "screenshots/slice-e-qa/grand-estate-tab.png", fullPage: false });
+    await page.screenshot({ path: "screenshots/runs/slice-e-qa/grand-estate-tab.png", fullPage: false });
 
     // Income tab: V1 chain with base gross $26,543,858.25 + 5%/7.5%/1.5% costs.
     await page.getByTestId("tab-income").click();
     await expect(page.getByTestId("income-v1-story")).toBeVisible();
-    await expect(page.getByTestId("income-v1-gross")).toContainText("$26,543,858.25");
+    await expect(page.getByTestId("income-v1-gross")).toContainText("$26.5M");
     await expect(page.getByTestId("income-v1-cost-agency")).toBeVisible();
     await expect(page.getByTestId("income-v1-owner")).toBeVisible();
     await expect(page.getByTestId("income-v1-pershare-annual")).toContainText("$195.43");
     // Scenario pills switch modeled evaluations (optimistic $31,891,522.00).
     await page.getByTestId("scenario-v1-optimistic").click();
-    await expect(page.getByTestId("income-v1-gross")).toContainText("$31,891,522.00");
+    await expect(page.getByTestId("income-v1-gross")).toContainText("$31.9M");
     await expectNoOverflow(page);
-    await page.screenshot({ path: "screenshots/slice-e-qa/grand-economics-sections.png", fullPage: false });
+    await page.screenshot({ path: "screenshots/runs/slice-e-qa/grand-economics-sections.png", fullPage: false });
 
     // Ownership tab: V1 decision facts, no simulated holders.
     await page.getByTestId("tab-ownership").click();
@@ -93,7 +96,7 @@ test.describe("Prompt 05 — V1 canonical economics QA", () => {
     await expect(page.getByTestId("rental-story-rent")).toContainText("$52,200");
     // V1 thesis renders (Aerial: ANR $64,000, BVI 0% tax → known per-share).
     await expect(page.getByTestId("estate-v1-thesis")).toBeVisible();
-    await expect(page.getByTestId("thesis-anr")).toContainText("$64,000.00");
+    await expect(page.getByTestId("thesis-anr")).toContainText("$64K");
     await expect(page.getByTestId("estate-economics-empty")).toHaveCount(0);
     // V1 investment: 180,000 shares at $100.
     await expect(page.getByTestId("investment-total-shares")).toContainText("180,000");
@@ -107,19 +110,19 @@ test.describe("Prompt 05 — V1 canonical economics QA", () => {
       "https://www.rentalescapes.com/rentals/luxury-villa-rentals-caribbean/british-virgin-islands/buck-island/the-aerial-126855",
     );
     await reserve.scrollIntoViewIfNeeded();
-    await page.screenshot({ path: "screenshots/slice-e-qa/peer-funding-reserve.png", fullPage: false });
+    await page.screenshot({ path: "screenshots/runs/slice-e-qa/peer-funding-reserve.png", fullPage: false });
     await page.getByTestId("estate-v1-thesis").scrollIntoViewIfNeeded();
-    await page.screenshot({ path: "screenshots/slice-e-qa/peer-funding-economics.png", fullPage: false });
+    await page.screenshot({ path: "screenshots/runs/slice-e-qa/peer-funding-economics.png", fullPage: false });
     // Income pills work for peers with known V1 (Aerial base $17,472,000.00).
     await page.getByTestId("tab-income").click();
-    await expect(page.getByTestId("income-v1-gross")).toContainText("$17,472,000.00");
+    await expect(page.getByTestId("income-v1-gross")).toContainText("$17.5M");
     await expectNoOverflow(page);
     // Peer About carries its own approved research copy (no fixture prose).
     await page.getByTestId("tab-details").click();
     await page.getByTestId("about-more").click();
     await expect(page.getByTestId("about-details")).toContainText("2,787 m");
     await expectNoOverflow(page);
-    await page.screenshot({ path: "screenshots/slice-e-qa/peer-funding-estate-tab.png", fullPage: false });
+    await page.screenshot({ path: "screenshots/runs/slice-e-qa/peer-funding-estate-tab.png", fullPage: false });
   });
 
   test("resale peer (DYNAMIC rate): V1 investment at NAV, no legacy market rows", async ({ page }) => {
@@ -135,7 +138,7 @@ test.describe("Prompt 05 — V1 canonical economics QA", () => {
       "https://www.rentalescapes.com/rentals/luxury-villa-rentals-caribbean/turks-and-caicos/providenciales/long-bay/la-dolce-vita--122903",
     );
     await dolceReserve.scrollIntoViewIfNeeded();
-    await page.screenshot({ path: "screenshots/slice-e-qa/peer-resale-reserve.png", fullPage: false });
+    await page.screenshot({ path: "screenshots/runs/slice-e-qa/peer-resale-reserve.png", fullPage: false });
     // La Dolce Vita keeps its DYNAMIC no-rate anchor (never normalized to ADR).
     await expect(page.getByTestId("rental-story-rent")).toContainText("DYNAMIC");
     await expect(page.getByTestId("estate-v1-thesis")).toBeVisible();
@@ -144,8 +147,8 @@ test.describe("Prompt 05 — V1 canonical economics QA", () => {
     await expect(page.getByTestId("investment-primary-price")).toContainText("$100.00");
     await expectNoOverflow(page);
     await page.getByTestId("estate-v1-thesis").scrollIntoViewIfNeeded();
-    await page.screenshot({ path: "screenshots/slice-e-qa/peer-resale-economics.png", fullPage: false });
-    await page.screenshot({ path: "screenshots/slice-e-qa/peer-resale-estate-tab.png", fullPage: false });
+    await page.screenshot({ path: "screenshots/runs/slice-e-qa/peer-resale-economics.png", fullPage: false });
+    await page.screenshot({ path: "screenshots/runs/slice-e-qa/peer-resale-estate-tab.png", fullPage: false });
   });
 
   test("STARTING_FROM peer: nightly semantics preserved, V1 UNKNOWN stays honest", async ({ page }) => {
@@ -159,7 +162,7 @@ test.describe("Prompt 05 — V1 canonical economics QA", () => {
     await expect(page.getByTestId("thesis-pershare")).toContainText("Data pending");
     await expect(page.getByTestId("estate-investment")).toBeVisible();
     await expectNoOverflow(page);
-    await page.screenshot({ path: "screenshots/slice-e-qa/peer-starting-from-estate-tab.png", fullPage: false });
+    await page.screenshot({ path: "screenshots/runs/slice-e-qa/peer-starting-from-estate-tab.png", fullPage: false });
   });
 
   test("high-value peer: $60M estate value with V1 investment facts", async ({ page }) => {
@@ -171,7 +174,7 @@ test.describe("Prompt 05 — V1 canonical economics QA", () => {
     await expect(page.getByTestId("estate-v1-thesis")).toBeVisible();
     await expect(page.getByTestId("estate-investment")).toBeVisible();
     await expectNoOverflow(page);
-    await page.screenshot({ path: "screenshots/slice-e-qa/peer-high-value-estate-tab.png", fullPage: false });
+    await page.screenshot({ path: "screenshots/runs/slice-e-qa/peer-high-value-estate-tab.png", fullPage: false });
   });
 
   test("Grand 2 BDM: reserve CTA opens the official listing externally", async ({ page }) => {

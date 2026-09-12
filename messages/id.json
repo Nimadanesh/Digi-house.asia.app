@@ -40,7 +40,9 @@
     "weeks": "minggu",
     "demoMode": "Mode demo · data contoh · transaksi disimulasikan",
     "somethingWentWrong": "Terjadi kesalahan",
-    "acquireOwnership": "Dapatkan kepemilikan"
+    "acquireOwnership": "Dapatkan kepemilikan",
+    "showMore": "Show more",
+    "showLess": "Show less"
   },
   "tabs": {
     "home": "Beranda",
@@ -478,7 +480,7 @@
     "performanceSectionTitle": "Kinerja",
     "priceMode": "Harga",
     "yieldMode": "Hasil",
-    "tabEstate": "Properti",
+    "tabEstate": "Overview",
     "tabOwnership": "Kepemilikan",
     "sharePrice": "Harga saham",
     "askPrice": "Ask price",

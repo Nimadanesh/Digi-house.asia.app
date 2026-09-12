@@ -52,7 +52,7 @@ test.describe("Estate Detail — Phase 9 4-tab model", () => {
     await expect(page.getByTestId("trust-verification-pending")).toContainText("Verification pending");
     await expect(page.getByTestId("trust-management")).toContainText("not yet published");
     await page.screenshot({
-      path: "screenshots/phase9-slice2/estate-detail-primary.png",
+      path: "screenshots/runs/phase9-slice2/estate-detail-primary.png",
       fullPage: false,
     });
   });
@@ -91,7 +91,7 @@ test.describe("Estate Detail — Phase 9 4-tab model", () => {
     await expect(page.getByText("Price history (simulated)")).toBeVisible();
     await expect(page.getByText("Simulated history for illustration", { exact: false })).toBeVisible();
     await page.screenshot({
-      path: "screenshots/phase9-slice2/estate-detail-resale-block.png",
+      path: "screenshots/runs/phase9-slice2/estate-detail-resale-block.png",
       fullPage: false,
     });
   });
@@ -109,7 +109,7 @@ test.describe("Estate Detail — Phase 9 4-tab model", () => {
     // Yield/lock management + holder analytics live under Ownership.
     await expect(page.getByTestId("yield-lock-section")).toBeVisible();
     await page.screenshot({
-      path: "screenshots/phase9-slice2/estate-detail-ownership-tab.png",
+      path: "screenshots/runs/phase9-slice2/estate-detail-ownership-tab.png",
       fullPage: false,
     });
   });

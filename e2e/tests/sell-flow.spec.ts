@@ -71,7 +71,7 @@ test.describe("Sell flow — quote follows qty and price (LTR)", () => {
     expect(body.toLowerCase()).not.toContain("guaranteed buyer");
     expect(body.toLowerCase()).not.toContain("instant settlement");
     await expectNoOverflow(page);
-    await page.screenshot({ path: "screenshots/slice-h/sell-quote.png", fullPage: false });
+    await page.screenshot({ path: "screenshots/runs/slice-h/sell-quote.png", fullPage: false });
   });
 });
 
@@ -87,7 +87,7 @@ test.describe("Sell flow — review → Active listing → cancel (LTR)", () => 
     await expect(page.getByTestId("sell-sheet")).toContainText("Review your listing");
     await expect(review).toContainText("You receive");
     await expectNoOverflow(page);
-    await page.screenshot({ path: "screenshots/slice-h/sell-review.png", fullPage: false });
+    await page.screenshot({ path: "screenshots/runs/slice-h/sell-review.png", fullPage: false });
 
     await page.getByTestId("custom-sell-confirm").click();
     const listed = page.getByTestId("sell-listed");
@@ -99,13 +99,13 @@ test.describe("Sell flow — review → Active listing → cancel (LTR)", () => 
     expect(await listed.getByText("Sold", { exact: true }).count()).toBe(0);
     await expect(page.getByTestId("sell-liquidity-note")).toBeVisible();
     await expectNoOverflow(page);
-    await page.screenshot({ path: "screenshots/slice-h/sell-listed.png", fullPage: false });
+    await page.screenshot({ path: "screenshots/runs/slice-h/sell-listed.png", fullPage: false });
 
     await page.getByTestId("sell-cancel").click();
     await page.getByTestId("sell-cancel-confirm").click();
     await expect(listed).toContainText("Cancelled");
     await expectNoOverflow(page);
-    await page.screenshot({ path: "screenshots/slice-h/sell-cancelled.png", fullPage: false });
+    await page.screenshot({ path: "screenshots/runs/slice-h/sell-cancelled.png", fullPage: false });
 
     await page.getByTestId("sell-listed-done").click();
     await expect(listed).toHaveCount(0);
@@ -163,6 +163,6 @@ test.describe("Sell flow — wallet gate (RTL)", () => {
       expect(body).not.toContain(key);
     }
     await expectNoOverflow(page);
-    await page.screenshot({ path: "screenshots/slice-h/sell-quote-fa.png", fullPage: false });
+    await page.screenshot({ path: "screenshots/runs/slice-h/sell-quote-fa.png", fullPage: false });
   });
 });

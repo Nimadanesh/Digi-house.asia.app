@@ -40,7 +40,7 @@ test.describe("Prompt 05 RTL", () => {
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     expect(overflow).toBeLessThanOrEqual(1);
     await page.getByTestId("estate-v1-thesis").scrollIntoViewIfNeeded();
-    await page.screenshot({ path: "screenshots/slice-e-qa/rtl-fa-economics.png", fullPage: false });
+    await page.screenshot({ path: "screenshots/runs/slice-e-qa/rtl-fa-economics.png", fullPage: false });
 
     // Income V1 pills + Ownership V1 facts legible in RTL.
     await page.getByTestId("tab-income").click();
@@ -89,6 +89,6 @@ test.describe("Prompt 05 RTL", () => {
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     expect(overflow).toBeLessThanOrEqual(1);
     await page.getByTestId("estate-v1-thesis").scrollIntoViewIfNeeded();
-    await page.screenshot({ path: "screenshots/slice-e-qa/rtl-fa-pending.png", fullPage: false });
+    await page.screenshot({ path: "screenshots/runs/slice-e-qa/rtl-fa-pending.png", fullPage: false });
   });
 });

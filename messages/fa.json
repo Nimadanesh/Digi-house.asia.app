@@ -40,7 +40,9 @@
     "weeks": "هفته",
     "demoMode": "حالت دمو · داده آزمایشی · تراکنش‌ها شبیه‌سازی‌شده",
     "somethingWentWrong": "مشکلی پیش آمد",
-    "acquireOwnership": "مالکیت به دست آورید"
+    "acquireOwnership": "مالکیت به دست آورید",
+    "showMore": "بیشتر",
+    "showLess": "کمتر"
   },
   "tabs": {
     "home": "خانه",
@@ -478,7 +480,7 @@
     "performanceSectionTitle": "عملکرد",
     "priceMode": "قیمت",
     "yieldMode": "بازده",
-    "tabEstate": "املاک",
+    "tabEstate": "نمای کلی",
     "tabOwnership": "مالکیت",
     "sharePrice": "قیمت سهم",
     "askPrice": "Ask price",

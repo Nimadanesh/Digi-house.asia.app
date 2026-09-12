@@ -95,9 +95,9 @@ describe("Slice E wiring (Grand 2 BDM, PROMPT 05 V1)", () => {
     renderDetail(grandListing);
     // V1 thesis: ANR $97,230.25, modeled revenue $21.39M–$31.89M, $195.43/yr.
     expect(screen.getByTestId("estate-v1-thesis")).toBeInTheDocument();
-    expect(screen.getByTestId("thesis-anr")).toHaveTextContent("$97,230.25");
-    expect(screen.getByTestId("thesis-revenue")).toHaveTextContent("$21,390,655.00");
-    expect(screen.getByTestId("thesis-revenue")).toHaveTextContent("$31,891,522.00");
+    expect(screen.getByTestId("thesis-anr")).toHaveTextContent("$97.2K");
+    expect(screen.getByTestId("thesis-revenue")).toHaveTextContent("$21.4M");
+    expect(screen.getByTestId("thesis-revenue")).toHaveTextContent("$31.9M");
     expect(screen.getByTestId("thesis-pershare")).toHaveTextContent("$195.43");
     expect(screen.getByTestId("estate-investment")).toBeInTheDocument();
     // PROMPT 05 (DEC-013 form): the hero value row shows the compact $8M single
@@ -131,13 +131,13 @@ describe("Slice E wiring (Grand 2 BDM, PROMPT 05 V1)", () => {
     renderDetail(grandListing);
     fireEvent.click(screen.getByTestId("tab-income"));
     expect(screen.getByTestId("income-v1-story")).toBeInTheDocument();
-    expect(screen.getByTestId("income-v1-gross")).toHaveTextContent("$26,543,858.25");
+    expect(screen.getByTestId("income-v1-gross")).toHaveTextContent("$26.5M");
     fireEvent.click(screen.getByTestId("scenario-v1-optimistic"));
-    expect(screen.getByTestId("income-v1-gross")).toHaveTextContent("$31,891,522.00");
+    expect(screen.getByTestId("income-v1-gross")).toHaveTextContent("$31.9M");
     fireEvent.click(screen.getByTestId("scenario-v1-conservative"));
-    expect(screen.getByTestId("income-v1-gross")).toHaveTextContent("$21,390,655.00");
+    expect(screen.getByTestId("income-v1-gross")).toHaveTextContent("$21.4M");
     // V1-only cost lines (5% / 7.5% / 1.5%) — no legacy 17%/10%/18%/12.5%.
-    expect(screen.getByTestId("income-v1-cost-agency")).toHaveTextContent("$1,069,532.75");
+    expect(screen.getByTestId("income-v1-cost-agency")).toHaveTextContent("$1.1M");
     expect(screen.getByTestId("income-v1-pershare-annual")).toHaveTextContent("$195.43");
   });
 
@@ -158,7 +158,7 @@ describe("Slice E wiring (non-Grand listing, PROMPT 05 V1)", () => {
     expect(screen.getByTestId("rental-story-rent")).toHaveTextContent("$52,200");
     // V1 thesis renders for every V1 estate (Aerial: ANR $64,000, BVI 0% tax).
     expect(screen.getByTestId("estate-v1-thesis")).toBeInTheDocument();
-    expect(screen.getByTestId("thesis-anr")).toHaveTextContent("$64,000.00");
+    expect(screen.getByTestId("thesis-anr")).toHaveTextContent("$64K");
     expect(screen.queryByTestId("estate-economics-empty")).not.toBeInTheDocument();
     // Legacy Slice A sections never render.
     expect(screen.queryByTestId("estate-economics")).not.toBeInTheDocument();
@@ -183,11 +183,11 @@ describe("Slice E wiring (non-Grand listing, PROMPT 05 V1)", () => {
     renderDetail(plainListing);
     fireEvent.click(screen.getByTestId("tab-income"));
     expect(screen.getByTestId("scenario-v1-base")).toHaveAttribute("aria-pressed", "true");
-    expect(screen.getByTestId("income-v1-gross")).toHaveTextContent("$17,472,000.00");
+    expect(screen.getByTestId("income-v1-gross")).toHaveTextContent("$17.5M");
     fireEvent.click(screen.getByTestId("scenario-v1-conservative"));
     expect(screen.getByTestId("scenario-v1-conservative")).toHaveAttribute("aria-pressed", "true");
     expect(screen.getByTestId("scenario-v1-base")).toHaveAttribute("aria-pressed", "false");
-    expect(screen.getByTestId("income-v1-gross")).toHaveTextContent("$14,080,000.00");
+    expect(screen.getByTestId("income-v1-gross")).toHaveTextContent("$14.1M");
     // Honest zeros only: 0% BVI tax and no-lock accrued may read $0.00, but
     // modeled gross never fabricates a zero.
     expect(screen.getByTestId("income-v1-gross")).not.toHaveTextContent("$0.00");

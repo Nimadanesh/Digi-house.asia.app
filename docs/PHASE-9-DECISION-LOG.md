@@ -289,3 +289,37 @@ An agent may discover and record findings, but may not change the product contra
   intermittent order-lifecycle reload flake (passes in isolation + on retry —
   same family flagged at the Slice-8 checkpoint); 480×840 screenshots
   (`screenshots/redesign-l1/`: dedup + glass + sizing, EN + fa RTL).
+
+### DEC-014 — Tab fact-row system + compact money + anti-revert policy (user-directed, Layer 2 step 1)
+- Date: 2026-09-13
+- Status: APPROVED (user direction in-session) — implemented
+- Finding (user UI review of the Estate/Income/Ownership tabs): labels/values
+  misaligned; long figures wrapped onto a second line; the provenance ⓘ sat
+  beside the value; provenance openable only via the tiny icon; long UNKNOWN
+  paragraphs ran free and broke alignment. Same defects repeated across most
+  sections. User directives: M/K compact money globally; ⓘ BEFORE the label
+  with values right-aligned; tapping the ROW (not the icon) opens the modal
+  everywhere; long text summarized with show more/less; content must never
+  break alignment. Charts are mandatory in the new tabs (next increment).
+  Also: implemented changes occasionally revert (tracked e2e screenshot churn).
+- Decision:
+  1. New design-system component `FactRow` (+ `ClampText`): ⓘ leads the label,
+     value right-aligned `whitespace-nowrap` tabular, whole row is a button
+     opening the provenance sheet, captions clamp to 3 lines with Show
+     more/less. All tab figure rows must render through it.
+  2. Compact money policy in `lib/format`: `moneyCompact` (K/M) and
+     `moneySmart` (full decimals below $10k, K/M above) — per-share decision
+     figures keep cents, big figures never wrap.
+  3. Refactored to FactRow: EstateV1Thesis, EstateInvestmentPanel,
+     IncomeV1Story, OwnershipV1Panel.
+  4. Tab label "Estate" → "Overview" (ids unchanged; 12 locales; fa real).
+  5. Anti-revert: Playwright screenshot outputs move to gitignored
+     `screenshots/runs/` — curated evidence dirs stay committed and stable;
+     regression pins (FactRow.test) lock the new pattern.
+- Verification: FactRow pins (row-tap sheet, icon position, clamp, compact
+  rule incl. a 7+-digit leak guard over EstateV1Thesis render); vitest 128
+  files 1076/1076; typecheck/lint clean; build green; E2E 46 passed/6 skips
+  (estate-economics provenance interaction updated to row-tap); 480×840 QA
+  (Overview/Income/Ownership EN) visually verified.
+- Charts for the Income/Overview tabs (income history bar chart, scenario
+  chart, payout table) are the NEXT increment of this DEC — not yet built.

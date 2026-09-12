@@ -6,14 +6,15 @@
 // share (valuation ÷ V1 shares = NAV). Market/supply state lives in Resale +
 // Ownership (never duplicated here); plans render an honest unconfigured note.
 // No fixture totals/prices drive this panel when V1 exists; UNKNOWN stays honest.
+// DEC-014 (Layer 2): FactRow rows — ⓘ leads the label, the whole row opens the
+// provenance sheet, figures are compact money (M/K) and never wrap.
 import { useTranslations } from "next-intl";
-import { usd } from "@/lib/format";
+import { moneyCompact, moneySmart, usd } from "@/lib/format";
 import { unavailableLabel } from "@/lib/availability";
 import type { EstateShareOverview } from "@/types/estate-share";
 import type { FinancialModelV1PropertyModel } from "@/types/financial-model-v1";
 import { Block } from "@/components/common/Block";
-import { Row } from "@/components/common/Row";
-import { ProvenanceInfo } from "@/components/common/ProvenanceInfo";
+import { FactRow } from "@/components/common/FactRow";
 import type { Provenance } from "@/types/estate";
 import {
   formatGrowthPct,
@@ -73,6 +74,7 @@ export function EstateInvestmentPanel({
     v1 != null ? v1.valuation.valueCents / v1.totalShares : share.structure.referenceAssetValuePerShare?.value ?? null;
   const referenceProvenance =
     v1 != null ? ("calculated" as const) : (share.structure.referenceAssetValuePerShare?.provenance ?? "unknown");
+  const v1Currency = v1?.currency ?? "USD";
 
   return (
     <section className="space-y-2" data-testid="estate-investment">
@@ -81,108 +83,66 @@ export function EstateInvestmentPanel({
       </h2>
       <Block className="overflow-hidden">
         <div className="py-1">
-          <Row>
-            <span className="text-sm text-muted-foreground">{t("estateValue")}</span>
-            <span className="ml-auto flex items-center gap-1.5" data-testid="investment-estate-value">
-              {display != null ? (
-                <>
-                  <span className="text-sm tnum font-semibold text-foreground">
-                    {formatValuationDisplayShort(display)}
-                  </span>
-                  <ProvenanceInfo provenance={display.provenance} />
-                </>
-              ) : (
-                <>
-                  <span className="text-sm text-muted-foreground">
-                    {unavailableLabel("backend_absent")}
-                  </span>
-                  <ProvenanceInfo provenance="unknown" />
-                </>
-              )}
-            </span>
-          </Row>
+          <FactRow
+            label={t("estateValue")}
+            value={
+              display != null
+                ? formatValuationDisplayShort(display)
+                : unavailableLabel("backend_absent")
+            }
+            valueTestId="investment-estate-value"
+            provenance={display?.provenance ?? "unknown"}
+            valueMuted={display == null}
+          />
           {growthPotential != null ? (
-            <Row>
-              <span className="text-sm text-muted-foreground">{t("growthPotentialTitle")}</span>
-              <span
-                className="ml-auto flex min-w-0 items-center gap-1.5"
-                data-testid="investment-growth-potential"
-              >
-                <span className="truncate text-sm tnum font-semibold text-foreground">
-                  {usd(growthPotential.potentialValue)}
-                  {growthPct != null ? ` · ${growthPct}` : null}
-                </span>
-                <ProvenanceInfo provenance={growthPotential.provenance} />
-              </span>
-            </Row>
+            <FactRow
+              label={t("growthPotentialTitle")}
+              value={`${moneyCompact(growthPotential.potentialValue, "USD")}${growthPct != null ? ` · ${growthPct}` : ""}`}
+              valueTestId="investment-growth-potential"
+              provenance={growthPotential.provenance}
+              caption={t("growthPotentialNote")}
+            />
           ) : null}
-          <Row>
-            <span className="text-sm text-muted-foreground">{t("invTotalShares")}</span>
-            <span className="ml-auto flex items-center gap-1.5" data-testid="investment-total-shares">
-              <span className="text-sm tnum font-semibold text-foreground">
-                {totalShares.toLocaleString()}
-              </span>
-              {v1 != null ? <ProvenanceInfo provenance="calculated" /> : null}
-            </span>
-          </Row>
-          <Row>
-            <span className="text-sm text-muted-foreground">{t("invPricePerShare")}</span>
-            <span className="ml-auto flex items-center gap-1.5" data-testid="investment-primary-price">
-              {v1 != null ? (
-                <>
-                  <span className="text-sm tnum font-semibold text-foreground">
-                    {usd(V1_NOMINAL_SHARE_PRICE_CENTS)}
-                  </span>
-                  <ProvenanceInfo provenance="estimated" />
-                </>
-              ) : share.config.primarySharePrice != null ? (
-                <>
-                  <span className="text-sm tnum font-semibold text-foreground">
-                    {usd(share.config.primarySharePrice)}
-                  </span>
-                  <ProvenanceInfo provenance="observed" />
-                </>
-              ) : (
-                <span className="text-sm text-muted-foreground">{t("invPrimaryClosed")}</span>
-              )}
-            </span>
-          </Row>
-          <Row>
-            <span className="text-sm text-muted-foreground">{t("invOwnershipPerShare")}</span>
-            <span className="ml-auto flex items-center gap-1.5" data-testid="investment-ownership-per-share">
-              {/* Exact fraction: pct() would round 1/80000 to a misleading "0.0%". */}
-              <span className="text-sm tnum font-semibold text-foreground">
-                1 / {totalShares.toLocaleString()}
-              </span>
-              <ProvenanceInfo provenance="calculated" />
-            </span>
-          </Row>
-          <Row>
-            <span className="text-sm text-muted-foreground">{t("invReferenceValue")}</span>
-            <span className="ml-auto flex items-center gap-1.5" data-testid="investment-reference-value">
-              {referenceCents != null ? (
-                <>
-                  <span className="text-sm tnum font-semibold text-foreground">
-                    {usd(referenceCents)}
-                  </span>
-                  <ProvenanceInfo provenance={referenceProvenance} />
-                </>
-              ) : (
-                <>
-                  <span className="text-sm text-muted-foreground">
-                    {unavailableLabel("backend_absent")}
-                  </span>
-                  <ProvenanceInfo provenance="unknown" />
-                </>
-              )}
-            </span>
-          </Row>
+          <FactRow
+            label={t("invTotalShares")}
+            value={totalShares.toLocaleString()}
+            valueTestId="investment-total-shares"
+            provenance={v1 != null ? "calculated" : null}
+          />
+          <FactRow
+            label={t("invPricePerShare")}
+            value={
+              v1 != null
+                ? usd(V1_NOMINAL_SHARE_PRICE_CENTS)
+                : share.config.primarySharePrice != null
+                  ? usd(share.config.primarySharePrice)
+                  : t("invPrimaryClosed")
+            }
+            valueTestId="investment-primary-price"
+            provenance={
+              v1 != null ? "estimated" : share.config.primarySharePrice != null ? "observed" : "unknown"
+            }
+            valueMuted={v1 == null && share.config.primarySharePrice == null}
+          />
+          <FactRow
+            label={t("invOwnershipPerShare")}
+            // Exact fraction: pct() would round 1/80000 to a misleading "0.0%".
+            value={`1 / ${totalShares.toLocaleString()}`}
+            valueTestId="investment-ownership-per-share"
+            provenance="calculated"
+          />
+          <FactRow
+            label={t("invReferenceValue")}
+            value={
+              referenceCents != null
+                ? moneySmart(referenceCents, v1Currency)
+                : unavailableLabel("backend_absent")
+            }
+            valueTestId="investment-reference-value"
+            provenance={referenceProvenance}
+            valueMuted={referenceCents == null}
+          />
         </div>
-        {growthPotential != null ? (
-          <p className="px-4 pb-1 text-[0.6875rem] leading-relaxed text-muted-foreground" data-testid="investment-growth-note">
-            {t("growthPotentialNote")}
-          </p>
-        ) : null}
         <p className="border-t border-border px-4 py-3 text-xs leading-relaxed text-muted-foreground" data-testid="investment-plans-note">
           {t("invPlansNote")}
         </p>

@@ -58,7 +58,7 @@ test.describe("Estates — /marketplace (Slice F canonical)", () => {
     expect(overflow).toBe(false);
 
     await page.screenshot({
-      path: "screenshots/phase9-slice4/estates-primary.png",
+      path: "screenshots/runs/phase9-slice4/estates-primary.png",
       fullPage: false,
     });
   });
@@ -74,7 +74,7 @@ test.describe("Estates — /marketplace (Slice F canonical)", () => {
     await expect(page.getByTestId("property-card")).toHaveCount(0);
 
     await page.screenshot({
-      path: "screenshots/phase9-slice4/estates-ownerstay-empty.png",
+      path: "screenshots/runs/phase9-slice4/estates-ownerstay-empty.png",
       fullPage: false,
     });
   });

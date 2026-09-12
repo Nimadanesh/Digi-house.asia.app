@@ -8,16 +8,11 @@
 // holder analytics are never rendered here (honest pending note instead).
 "use client";
 import { useTranslations } from "next-intl";
-import { eur, usd } from "@/lib/format";
+import { moneySmart, usd } from "@/lib/format";
 import { unavailableLabel } from "@/lib/availability";
 import type { FinancialModelV1PropertyModel } from "@/types/financial-model-v1";
 import { Block } from "@/components/common/Block";
-import { Row } from "@/components/common/Row";
-import { ProvenanceInfo } from "@/components/common/ProvenanceInfo";
-
-function money(cents: number, currency: "USD" | "EUR"): string {
-  return currency === "EUR" ? eur(cents) : usd(cents);
-}
+import { FactRow } from "@/components/common/FactRow";
 
 /** Nominal V1 share price in minor units ($100). */
 export const V1_NOMINAL_SHARE_PRICE_CENTS = 10_000;
@@ -58,53 +53,44 @@ export function OwnershipV1Panel({
       </h2>
       <Block className="overflow-hidden" data-testid="ownership-v1-facts">
         <div className="py-1">
-          <Row>
-            <span className="text-sm text-muted-foreground">{t("ownershipV1SharePrice")}</span>
-            <span className="ml-auto flex items-center gap-1.5" data-testid="ownership-v1-price">
-              <span className="text-sm tnum font-semibold text-foreground">
-                {usd(V1_NOMINAL_SHARE_PRICE_CENTS)}
-              </span>
-              <ProvenanceInfo provenance="estimated" />
-            </span>
-          </Row>
-          <Row>
-            <span className="text-sm text-muted-foreground">{t("ownershipV1TotalShares")}</span>
-            <span className="ml-auto text-sm tnum font-semibold text-foreground" data-testid="ownership-v1-total">
-              {v1.totalShares.toLocaleString()}
-            </span>
-          </Row>
-          <Row>
-            <span className="text-sm text-muted-foreground">{t("ownershipV1OneShare")}</span>
-            <span className="ml-auto text-sm tnum font-semibold text-foreground" data-testid="ownership-v1-one-share">
-              1 / {v1.totalShares.toLocaleString()}
-            </span>
-          </Row>
+          <FactRow
+            label={t("ownershipV1SharePrice")}
+            value={usd(V1_NOMINAL_SHARE_PRICE_CENTS)}
+            valueTestId="ownership-v1-price"
+            provenance="estimated"
+          />
+          <FactRow
+            label={t("ownershipV1TotalShares")}
+            value={v1.totalShares.toLocaleString()}
+            valueTestId="ownership-v1-total"
+          />
+          <FactRow
+            label={t("ownershipV1OneShare")}
+            value={`1 / ${v1.totalShares.toLocaleString()}`}
+            valueTestId="ownership-v1-one-share"
+          />
           {showProjected ? (
-            <Row>
-              <span className="text-sm text-muted-foreground">{t("ownershipV1Projected")}</span>
-              <span className="ml-auto flex items-center gap-1.5" data-testid="ownership-v1-projected">
-                <span className="text-sm tnum font-semibold text-foreground">
-                  {money((perShare.annualCents ?? 0) * ownedShares, perShare.currency)} {t("incomeV1PerYear")}
-                </span>
-                <ProvenanceInfo provenance="projected" />
-              </span>
-            </Row>
+            <FactRow
+              label={t("ownershipV1Projected")}
+              value={`${moneySmart((perShare.annualCents ?? 0) * ownedShares, perShare.currency)} ${t("incomeV1PerYear")}`}
+              valueTestId="ownership-v1-projected"
+              provenance="projected"
+            />
           ) : ownedShares > 0 && perShare.annualCents == null ? (
-            <Row>
-              <span className="text-sm text-muted-foreground">{t("ownershipV1Projected")}</span>
-              <span className="ml-auto flex items-center gap-1.5" data-testid="ownership-v1-projected">
-                <span className="text-sm text-muted-foreground">{pending}</span>
-                <ProvenanceInfo provenance="unknown" />
-              </span>
-            </Row>
+            <FactRow
+              label={t("ownershipV1Projected")}
+              value={pending}
+              valueTestId="ownership-v1-projected"
+              provenance="unknown"
+              valueMuted
+            />
           ) : null}
           {showSupply ? (
-            <Row>
-              <span className="text-sm text-muted-foreground">{t("ownershipV1Supply")}</span>
-              <span className="ml-auto text-sm tnum font-semibold text-foreground" data-testid="ownership-v1-supply">
-                {sharesRemaining.toLocaleString()}
-              </span>
-            </Row>
+            <FactRow
+              label={t("ownershipV1Supply")}
+              value={sharesRemaining.toLocaleString()}
+              valueTestId="ownership-v1-supply"
+            />
           ) : null}
         </div>
         <p className="px-4 pb-1 text-[0.6875rem] leading-relaxed text-muted-foreground">

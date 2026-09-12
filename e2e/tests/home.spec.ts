@@ -64,7 +64,7 @@ test.describe("Home — ownership-first (Phase 9 Slice 3)", () => {
     expect(overflow).toBe(false);
 
     await page.screenshot({
-      path: "screenshots/phase9-slice3/home-primary.png",
+      path: "screenshots/runs/phase9-slice3/home-primary.png",
       fullPage: false,
     });
   });
@@ -87,7 +87,7 @@ test.describe("Home — ownership-first (Phase 9 Slice 3)", () => {
     await expect(page.getByTestId("property-tabs")).toBeVisible();
 
     await page.screenshot({
-      path: "screenshots/phase9-slice3/home-featured-navigation.png",
+      path: "screenshots/runs/phase9-slice3/home-featured-navigation.png",
       fullPage: false,
     });
   });

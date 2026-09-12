@@ -40,7 +40,9 @@
     "weeks": "أسابيع",
     "demoMode": "وضع تجريبي · بيانات وهمية · معاملات محاكاة",
     "somethingWentWrong": "حدث خطأ ما",
-    "acquireOwnership": "احصل على الملكية"
+    "acquireOwnership": "احصل على الملكية",
+    "showMore": "Show more",
+    "showLess": "Show less"
   },
   "tabs": {
     "home": "الرئيسية",
@@ -478,7 +480,7 @@
     "performanceSectionTitle": "الأداء",
     "priceMode": "السعر",
     "yieldMode": "العائد",
-    "tabEstate": "العقار",
+    "tabEstate": "Overview",
     "tabOwnership": "الملكية",
     "sharePrice": "سعر السهم",
     "askPrice": "Ask price",

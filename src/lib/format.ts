@@ -35,6 +35,48 @@ export function usdCompact(minor: number): string {
   return `$${trimZero(m.toFixed(m < 100 ? 1 : 0))}M`;
 }
 
+/**
+ * EUR twin of usdCompact (same K/M rule) — V1 modeled economics render in EUR
+ * with no FX invention (never mixed with usd()).
+ */
+export function eurCompact(minor: number): string {
+  const euros = minor / 100;
+  if (euros < 1_000) return `€${Math.round(euros)}`;
+  if (euros < 1_000_000) {
+    const k = euros / 1_000;
+    return `€${trimZero(k.toFixed(k < 100 ? 1 : 0))}K`;
+  }
+  const m = euros / 1_000_000;
+  return `€${trimZero(m.toFixed(m < 100 ? 1 : 0))}M`;
+}
+
+/**
+ * Single compact-money dispatcher for tab fact rows (DEC-014 global rule:
+ * M for millions, K for thousands — long figures must never wrap a row).
+ */
+export function moneyCompact(
+  minor: number,
+  currency: "USD" | "EUR",
+): string {
+  return currency === "EUR" ? eurCompact(minor) : usdCompact(minor);
+}
+
+/**
+ * Smart money for decision figures: full 2-decimals below $10,000 (per-share
+ * values like $195.43 and $16.29 keep their cents), K/M compact at and above
+ * (the wrapping rule). One policy for every tab figure.
+ */
+export function moneySmart(
+  minor: number,
+  currency: "USD" | "EUR",
+): string {
+  return minor < 1_000_000
+    ? currency === "EUR"
+      ? eur(minor)
+      : usd(minor)
+    : moneyCompact(minor, currency);
+}
+
 function trimZero(s: string): string {
   return s.endsWith(".0") ? s.slice(0, -2) : s;
 }

@@ -36,7 +36,7 @@ test.describe("Buy flow — primary entry + wallet gate (LTR)", () => {
     await expect(page.getByText("Connect wallet")).toBeVisible();
     await expect(page.getByText("Connect a TON wallet to buy shares")).toBeVisible();
     await expectNoOverflow(page);
-    await page.screenshot({ path: "screenshots/slice-g/buy-connect.png", fullPage: false });
+    await page.screenshot({ path: "screenshots/runs/slice-g/buy-connect.png", fullPage: false });
 
     await page.keyboard.press("Escape");
     await expect(page.getByTestId("buy-qty-step")).toHaveCount(0);
@@ -85,7 +85,7 @@ test.describe("Buy flow — secondary market order end-to-end (LTR)", () => {
     await expect(page.getByTestId("limit-buy-summary")).toContainText("Market fee");
     await expect(page.getByTestId("limit-buy-summary")).toContainText("escrow");
     await expectNoOverflow(page);
-    await page.screenshot({ path: "screenshots/slice-g/buy-terms.png", fullPage: false });
+    await page.screenshot({ path: "screenshots/runs/slice-g/buy-terms.png", fullPage: false });
 
     await sheet.getByRole("button", { name: "Increase quantity" }).click();
     await page.getByTestId("limit-buy-confirm").click();
@@ -125,6 +125,6 @@ test.describe("Buy flow — wallet gate (RTL)", () => {
       expect(body).not.toContain(key);
     }
     await expectNoOverflow(page);
-    await page.screenshot({ path: "screenshots/slice-g/buy-connect-fa.png", fullPage: false });
+    await page.screenshot({ path: "screenshots/runs/slice-g/buy-connect-fa.png", fullPage: false });
   });
 });

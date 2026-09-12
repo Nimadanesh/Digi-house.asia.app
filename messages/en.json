@@ -40,7 +40,9 @@
     "weeks": "weeks",
     "demoMode": "Demo mode · seed data · transactions simulated",
     "somethingWentWrong": "Something went wrong",
-    "acquireOwnership": "Buy"
+    "acquireOwnership": "Buy",
+    "showMore": "Show more",
+    "showLess": "Show less"
   },
   "tabs": {
     "home": "Home",
@@ -478,7 +480,7 @@
     "performanceSectionTitle": "Performance",
     "priceMode": "Price",
     "yieldMode": "Yield",
-    "tabEstate": "Estate",
+    "tabEstate": "Overview",
     "tabOwnership": "Ownership",
     "sharePrice": "Share price",
     "askPrice": "Ask price",
