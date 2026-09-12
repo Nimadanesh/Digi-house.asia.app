@@ -180,7 +180,8 @@ describe("Property page data consistency — one price everywhere", () => {
     renderPage(secondaryNoBook, bookForBayside);
     const ask = bookForBayside.bestAskUsd!;
     expect(screen.getByTestId("hero-price")).toHaveTextContent(usd(ask));
-    expect(screen.getByTestId("hero-cta")).toHaveTextContent("Acquire Resale Ownership");
+    // Layer-1 redesign: the secondary CTA is priced ("Buy resale · $ask").
+    expect(screen.getByTestId("hero-cta")).toHaveTextContent(`Buy resale · ${usd(ask)}`);
     expectPriceSurfacesShow(ask, "Ask price");
     await expectChartEndShows(ask);
     // Resale summary (still expanded on the Estate tab) shows the source-of-truth value.
@@ -190,7 +191,7 @@ describe("Property page data consistency — one price everywhere", () => {
   it("secondary without a book: everything coherent at the last trade ($251.00)", async () => {
     renderPage(secondaryNoBook);
     expect(screen.getByTestId("hero-price")).toHaveTextContent(usd(25_100));
-    expect(screen.getByTestId("hero-cta")).toHaveTextContent("Acquire Resale Ownership");
+    expect(screen.getByTestId("hero-cta")).toHaveTextContent("Buy resale · $251.00");
     expectPriceSurfacesShow(25_100, "Last price");
     await expectChartEndShows(25_100);
   });

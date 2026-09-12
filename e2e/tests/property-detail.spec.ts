@@ -68,8 +68,9 @@ test.describe("Estate Detail — Phase 9 4-tab model", () => {
     // Resale block collapsed by default — no market content in the default scroll.
     await expect(page.getByTestId("resale-block")).toBeVisible();
     await expect(page.getByTestId("resale-block-content")).toHaveCount(0);
-    // Hero CTA is ownership-state-aware (seed user owns this estate → Manage Ownership).
-    await expect(page.getByTestId("hero-cta")).toContainText(/Manage Ownership|Acquire Resale Ownership/);
+    // Hero CTA is ownership-state-aware (seed user owns this estate → Manage Ownership;
+    // Layer-1 copy: non-owner secondary reads "Buy resale · $ask").
+    await expect(page.getByTestId("hero-cta")).toContainText(/Manage Ownership|Buy resale ·/);
 
     // Expand → ownership-vocabulary summary + acquire CTA. The block sits low
     // on the tab under the fixed sticky CTA + tab bar (test env lifts the bar

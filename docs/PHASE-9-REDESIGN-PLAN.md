@@ -482,3 +482,30 @@ At the end of every slice, append a short entry to this file:
   backlog (~210 keys/locale); P2-2 New badge accepted (coherent demo clock);
   upstream branch reconcile (user decision)
 - Next slice: Slice 9 — final release-readiness audit (NOT STARTED)
+
+### Layer 1 — Property page first-viewport conversion spine (DEC-012, user-directed post-Slice 8)
+
+- Status: `PASS`
+- Commit: (this commit)
+- Scope completed: funding banner retired → demo-ledger scarcity bar inside the
+  price block (bar + "N of M shares left"; honest all-sold line when sold out);
+  gallery status pill (amber funded % / green Resale) + bottom gradient; price +
+  fraction on one baseline; "Base $100 offering" line (primary) and 11px
+  ask/last context (secondary); merged value line "Own a piece of a $8M estate —
+  from $100." (rich text, provenance kept); priced CTAs ("Buy · $100" /
+  "Buy resale · $ask"); fee note under the action; owner line under the CTA;
+  KPI grid = Price | Proj. monthly | Funded % (mini-bar, primary) or Sold
+  (secondary) | Proj. / year; sticky primary CTA scarcity microline.
+  Layers 2–3 (tab restructure, secondary market modules) NOT started.
+- Files: PropertyHero (rewritten), PropertyGallery, PropertyMetricsGrid,
+  PropertyStickyCta, PropertyDetail, property page (sticky prop);
+  PropertyStatusBanner deleted; 10 new i18n keys ×12 locales (fa real, rest
+  EN-mirrored per backlog pattern); test-setup t.rich support; e2e pins updated
+  (property-detail, sell-flow guard scoped to the listing status surface);
+  DEC-012 in the decision log.
+- Tests: vitest 127 files 1072/1072; typecheck clean; lint 0 errors (6
+  pre-existing warnings); build green; Playwright 46 passed / 6 expected skips /
+  0 failed (one flaky re-run disclosed: sell-flow guard, fixed by scoping, 4/4).
+- Design/UI QA: PASS at 480×840 (`screenshots/redesign-l1/`: Grand primary,
+  Syrene resale, fa RTL) — pill/funding-bar/merged-line/priced-CTA render as
+  specified; RTL bidi correct; no raw keys.

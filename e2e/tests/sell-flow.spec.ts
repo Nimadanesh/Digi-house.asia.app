@@ -92,9 +92,11 @@ test.describe("Sell flow — review → Active listing → cancel (LTR)", () => 
     await page.getByTestId("custom-sell-confirm").click();
     const listed = page.getByTestId("sell-listed");
     await expect(listed).toBeVisible({ timeout: 10_000 });
-    // Active or honest pending — but never Sold from a mere listing.
+    // Active or honest pending — but never Sold from a mere listing. Scoped to
+    // the listing status surface: the Layer-1 KPI grid has a legitimate "Sold"
+    // metric label (demo-ledger count), which is not a listing status.
     await expect(listed).toContainText(/Active|Pending|Queued|No buyer/);
-    expect(await page.getByText("Sold", { exact: true }).count()).toBe(0);
+    expect(await listed.getByText("Sold", { exact: true }).count()).toBe(0);
     await expect(page.getByTestId("sell-liquidity-note")).toBeVisible();
     await expectNoOverflow(page);
     await page.screenshot({ path: "screenshots/slice-h/sell-listed.png", fullPage: false });

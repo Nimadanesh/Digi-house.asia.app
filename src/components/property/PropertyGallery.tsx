@@ -6,7 +6,16 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { haptics } from "@/lib/telegram/haptics";
 
-export function PropertyGallery({ images, title }: { images: string[]; title: string }) {
+export function PropertyGallery({
+  images,
+  title,
+  statusPill,
+}: {
+  images: string[];
+  title: string;
+  /** Layer-1 status pill overlay (top-start): amber funded% (primary) / green Resale (secondary). */
+  statusPill?: { label: string; tone: "amber" | "green" } | null;
+}) {
   const t = useTranslations("property");
   const slides = images.length > 0 ? images : ["/images/properties/p1.png"];
   const [index, setIndex] = useState(0);
@@ -51,6 +60,25 @@ export function PropertyGallery({ images, title }: { images: string[]; title: st
           </div>
         ))}
       </div>
+      {/* Layer-1: soft bottom gradient — the photo melts into the content like
+          trading-asset apps; no hard edge between gallery and price block. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-background/85 to-transparent"
+        data-testid="gallery-gradient"
+      />
+      {statusPill ? (
+        <span
+          className={
+            statusPill.tone === "amber"
+              ? "absolute start-3 top-3 rounded-full bg-warning/90 px-2.5 py-1 text-[0.6875rem] font-semibold tabular-nums text-primary-foreground"
+              : "absolute start-3 top-3 rounded-full bg-success/90 px-2.5 py-1 text-[0.6875rem] font-semibold tabular-nums text-primary-foreground"
+          }
+          data-testid="gallery-status-pill"
+        >
+          {statusPill.label}
+        </span>
+      ) : null}
       {slides.length > 1 ? (
         <>
           <button

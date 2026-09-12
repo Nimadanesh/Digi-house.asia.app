@@ -123,7 +123,7 @@
     "basisOfGrossRevenue": "of gross revenue",
     "basisOfNet": "of net profit",
     "basisOfValue": "of property value",
-    "buyAssumptionRate": "Projection uses the estate's projected monthly income per share \u2014 not a promise of future returns.",
+    "buyAssumptionRate": "Projection uses the estate's projected monthly income per share — not a promise of future returns.",
     "buyAssumptionsTitle": "Assumptions",
     "buyOwnership": "Ownership",
     "buyShare": "خرید سهم",
@@ -564,7 +564,16 @@
     "ownershipV1KnowBody": "Projected figures are not guaranteed returns, income, or appreciation. Growth Potential is a valuation estimate, not profit. Resale needs a real buyer — instant liquidity is not promised.",
     "ownershipV1Buy": "Buy shares",
     "ownershipV1Sell": "Sell shares",
-    "ownershipV1HoldersPending": "Holder distribution is not available in this prototype."
+    "ownershipV1HoldersPending": "Holder distribution is not available in this prototype.",
+    "heroBaseOffering": "عرضهٔ اولیه با قیمت پایهٔ {price}",
+    "fundingBarLeft": "{count} از {total} سهم باقی مانده",
+    "offeringAllSold": "هر {total} سهم فروخته شد — بازار ثانویه تنها راه ورود است",
+    "heroValueLine": "سهمی از یک ملک <value>{valueText}</value> داشته باشید — از <price>{priceText}</price>.",
+    "stickyScarcity": "{count} سهم باقی مانده در {price}",
+    "metricFunded": "تأمین‌شده",
+    "metricSold": "فروخته‌شده",
+    "metricAnnual": "پیش‌بینی / سال",
+    "heroFeeNote": "هر زمان بخواهید برداشت کنید — کارمزد ۱٪، پرداخت‌شده در 4 قسط هفتگی"
   },
   "earnings": {
     "compInsight": "{name} generated {pct}% of your received income.",

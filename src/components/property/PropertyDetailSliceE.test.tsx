@@ -106,8 +106,10 @@ describe("Slice E wiring (Grand 2 BDM, PROMPT 05 V1)", () => {
     expect(
       screen.getByTestId("hero-estate-value").querySelector('[aria-label="Estimated value"]'),
     ).toBeInTheDocument();
-    // QA: metrics KPI prefers the same canonical figure; investment shows V1 shares.
-    expect(screen.getByTestId("metrics-grid")).toHaveTextContent("$8M");
+    // QA (Layer-1): the estate value lives in the hero's merged value line; the
+    // KPI grid carries the funded % / per-year cells instead. Investment shows
+    // V1 shares.
+    expect(screen.getByTestId("metrics-grid")).toHaveTextContent("$195.43");
     expect(screen.getByTestId("investment-estate-value")).toHaveTextContent("$8M");
     expect(screen.getByTestId("investment-total-shares")).toHaveTextContent("80,000");
     expect(screen.getByTestId("investment-primary-price")).toHaveTextContent("$100.00");
@@ -228,7 +230,8 @@ describe("Slice E hero CTA follows the ShareModel market state", () => {
       bestAskUsd: 13200,
     });
     const cta = screen.getByTestId("hero-cta");
-    expect(cta).toHaveTextContent("Acquire Resale Ownership");
+    // Layer-1: the secondary CTA is priced at the live ask.
+    expect(cta).toHaveTextContent("Buy resale · $132.00");
     expect(cta).toBeEnabled();
   });
 

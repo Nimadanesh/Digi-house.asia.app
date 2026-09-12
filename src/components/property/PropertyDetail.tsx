@@ -10,6 +10,7 @@
 // - Details tab: trust, about, documents, similar.
 // The primary action (Buy sheet, MainButton) stays page-owned in route page.tsx.
 import { useLayoutEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import type { Listing } from "@/types/property";
 import type { OrderBookState } from "@/types/order";
 import type { DocumentMeta } from "@/types/property-document";
@@ -71,6 +72,8 @@ export function PropertyDetail({
 }) {
   // REDESIGN-SPEC §4.4 — funding = Primary; funded/resale = Secondary.
   const isPrimary = listing.status === "funding";
+  // Layer-1 gallery status pill vocabulary (same property.* namespace).
+  const statusT = useTranslations("property");
   // Buyability drives fixed bottom chrome (MainButton owns the bottom when a
   // purchase is possible, otherwise tab bar + lifted sticky) — the Estate tab
   // tail follows it. Mirrors page.tsx canBuy (same fields, same rule).
@@ -134,8 +137,25 @@ export function PropertyDetail({
   return (
     <div className="space-y-4" data-testid="property-detail">
       {/* ═══ Layer A — Estate header (gallery + hero) ═══ */}
-      {/* PROMPT 03: canonical Estate24 identity drives user-visible name. */}
-      <PropertyGallery images={listing.images} title={estateVm.identity?.name ?? listing.title} />
+      {/* PROMPT 03: canonical Estate24 identity drives user-visible name.
+          Layer-1: the status pill lives on the photo (amber funded % / green
+          Resale); the old standalone banner is gone. */}
+      <PropertyGallery
+        images={listing.images}
+        title={estateVm.identity?.name ?? listing.title}
+        statusPill={
+          isPrimary
+            ? {
+                label: statusT("fundedCaptionShort", {
+                  pct: Math.round(
+                    (heroTotalShares > 0 ? listing.sharesSold / heroTotalShares : 0) * 100,
+                  ),
+                }),
+                tone: "amber" as const,
+              }
+            : { label: statusT("bannerResale"), tone: "green" as const }
+        }
+      />
       <div className="px-0">
         <PropertyHero
           listing={listing}
@@ -160,9 +180,8 @@ export function PropertyDetail({
         listing={listing}
         currentPriceUsd={currentPriceUsd}
         bestAskUsd={orderBook?.bestAskUsd ?? listing.bestAskUsd}
-        totalValueUsdOverride={estateVm.valuation?.value ?? null}
-        totalValueDisplay={estateVm.valuationDisplay}
         v1={estateVm.v1}
+        totalSharesOverride={heroTotalShares}
       />
 
       {/* Tabs — horizontal scroll, immediate switch */}

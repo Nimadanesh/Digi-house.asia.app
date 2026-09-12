@@ -123,7 +123,7 @@
     "basisOfGrossRevenue": "of gross revenue",
     "basisOfNet": "of net profit",
     "basisOfValue": "of property value",
-    "buyAssumptionRate": "Projection uses the estate's projected monthly income per share \u2014 not a promise of future returns.",
+    "buyAssumptionRate": "Projection uses the estate's projected monthly income per share — not a promise of future returns.",
     "buyAssumptionsTitle": "Assumptions",
     "buyOwnership": "Ownership",
     "buyShare": "Comprar participación",
@@ -564,7 +564,16 @@
     "ownershipV1KnowBody": "Projected figures are not guaranteed returns, income, or appreciation. Growth Potential is a valuation estimate, not profit. Resale needs a real buyer — instant liquidity is not promised.",
     "ownershipV1Buy": "Buy shares",
     "ownershipV1Sell": "Sell shares",
-    "ownershipV1HoldersPending": "Holder distribution is not available in this prototype."
+    "ownershipV1HoldersPending": "Holder distribution is not available in this prototype.",
+    "heroBaseOffering": "Base {price} offering",
+    "fundingBarLeft": "{count} of {total} shares left",
+    "offeringAllSold": "All {total} shares sold — resale is now the only way in",
+    "heroValueLine": "Own a piece of a <value>{valueText}</value> estate — from <price>{priceText}</price>.",
+    "stickyScarcity": "{count} shares left at {price}",
+    "metricFunded": "Funded",
+    "metricSold": "Sold",
+    "metricAnnual": "Proj. / year",
+    "heroFeeNote": "Retira en cualquier momento — 1% de comisión, pagado en 4 cuotas semanales"
   },
   "earnings": {
     "compInsight": "{name} generated {pct}% of your received income.",

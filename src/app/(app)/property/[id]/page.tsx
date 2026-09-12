@@ -403,6 +403,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
           priceUsd={currentPriceUsd}
           onBuy={() => openBuyForContext()}
           buyDisabled={listing.status === "funding" && remaining <= 0}
+          scarcityLeft={listing.status === "funding" ? Math.max(0, remaining) : undefined}
           onSell={
             listing.status !== "funding" && freeShares > 0
               ? () => {

@@ -349,32 +349,36 @@ describe("PropertyDetail — Phase 9 Slice 2 (4-tab Estate Detail)", () => {
     expect(await screen.findByTestId("panel-ownership")).toBeInTheDocument();
   });
 
-  it("hero CTA states: resale → Acquire Resale Ownership", () => {
+  it("hero CTA states: resale → Buy resale (priced, Layer-1)", () => {
     const onBuy = vi.fn();
     render(
       <PropertyDetail listing={secondaryListing} orderBook={orderBook} onBuy={onBuy} />,
     );
-    expect(screen.getByTestId("hero-cta")).toHaveTextContent("Acquire Resale Ownership");
+    expect(screen.getByTestId("hero-cta")).toHaveTextContent("Buy resale · $132.00");
     fireEvent.click(screen.getByTestId("hero-cta"));
     expect(onBuy).toHaveBeenCalledOnce();
   });
 
   it("hero CTA states: sold-out primary → View Resale Opportunities opens the resale block", () => {
     renderDetail({ ...listing, sharesRemaining: 0, fundingProgressRatio: 1 });
-    expect(screen.getByTestId("status-banner")).toHaveTextContent(/Open for Funding · 100%/);
+    // Layer-1: the funding bar renders the honest all-sold line (banner retired).
+    expect(screen.getByTestId("funding-bar-sold-out")).toHaveTextContent(/resale is now the only way in/);
     fireEvent.click(screen.getByTestId("hero-cta"));
     // Resale block on the Estate tab is now expanded.
     expect(screen.getByTestId("resale-block-content")).toBeInTheDocument();
   });
 
-  it("metrics grid uses ownership-first labels", () => {
+  it("metrics grid uses ownership-first labels (Layer-1 KPI)", () => {
     renderDetail(listing);
     expect(screen.getByText("Share price")).toBeInTheDocument();
     expect(screen.getByText("Monthly Income")).toBeInTheDocument();
-    expect(screen.getByText("Total property value")).toBeInTheDocument();
-    expect(screen.getByText("Shares sold / total")).toBeInTheDocument();
-    // KPI grid (funding panel retired from Estate — the figure lives in metrics only).
-    expect(screen.getAllByText("920 / 1,000").length).toBeGreaterThanOrEqual(1);
+    // Layer-1: funded % with the mini-bar replaces the total-value + sold cells
+    // (value lives in the hero's merged line; remaining lives in the funding bar).
+    expect(screen.getByText("Funded")).toBeInTheDocument();
+    // Funded % = demo-ledger sold (920) ÷ V1 canonical total (80,000) → 1%.
+    // The ledger is the only honest sold source (PRODUCT-DECISION-LOCK §6).
+    expect(screen.getByTestId("metrics-funded")).toHaveTextContent(/1% funded/);
+    expect(screen.getByText("Proj. / year")).toBeInTheDocument();
   });
 
   it("owner stay card: non-owner sees the privilege explainer; owner sees the disabled calendar CTA", () => {

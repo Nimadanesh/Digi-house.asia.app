@@ -223,3 +223,43 @@ An agent may discover and record findings, but may not change the product contra
 - Implementation slice: (to be assigned by the user)
 - Verification: Mimosa rescan after the credential remediation (3 high clear);
   hook passes on the next commit attempt for these.
+
+### DEC-012 — Property page redesign Layer 1 (user-directed, post-Slice 8)
+- Date: 2026-09-12
+- Status: APPROVED (user direction in-session) — implementation this change
+- Finding: The property page presents all required data but reads as a raw data
+  sheet — no purchase motivation, no asset-page hierarchy (user goal: a minimal,
+  TradingView-grade professional property page built ONLY from existing data;
+  marketing urgency strictly from real numbers).
+- User decision (approved plan, Layer 1 — first-viewport conversion spine):
+  (1) funding banner retired; scarcity becomes a demo-ledger funding bar inside
+  the price block (bar + "N of M shares left") plus a status pill overlaid on
+  the gallery (amber funded % / green Resale) and a soft bottom gradient;
+  (2) price block: price + fraction on one baseline, "Base $100 offering" line
+  on primary, ask/last context demoted to 11px on secondary;
+  (3) merged value line "Own a piece of a $8M estate — from $100." (rich-text,
+  provenance kept) replaces the separate fraction/value rows;
+  (4) priced CTAs everywhere: "Buy · $100" / "Buy resale · $ask"; fee note
+  (established withdrawal-terms vocabulary) under the action; owner line moved
+  under the CTA;
+  (5) KPI grid becomes decision metrics: Price | Proj. monthly | Funded %
+  (primary, 4px mini-bar) or Sold (secondary) | Proj. / year — total value and
+  sold/total cells moved to the hero/funding bar;
+  (6) sticky primary CTA gains an 11px scarcity microline
+  ("N shares left at $100.00").
+- Guardrails (binding): urgency ONLY from demo-ledger facts; no fake pace/
+  countdowns; Projected never Paid; pending stays honest; color = meaning only;
+  state machine of the CTA untouched; no economics/provenance changes.
+- Implementation: `PropertyHero`, `PropertyGallery`, `PropertyMetricsGrid`,
+  `PropertyStickyCta`, `PropertyDetail` wiring, `page.tsx` sticky prop;
+  `PropertyStatusBanner` retired (banner semantics absorbed); new i18n keys
+  (heroBaseOffering, fundingBarLeft, offeringAllSold, heroValueLine rich,
+  stickyScarcity, metricFunded, metricSold, metricAnnual) ×12 locales (fa real,
+  others EN-mirrored per backlog pattern); heroAcquireResale reworded priced.
+- Verification: unit suite + e2e pins updated (funding-bar-sold-out, funded %,
+  priced resale CTA, $/yr cell); full vitest; typecheck/lint/build; E2E +
+  480×840 screenshots (LTR + fa) before commit.
+- Affected slice: property redesign Layer 1 (user-directed; Layers 2–3
+  [tab restructure + secondary market modules] still pending).
+- Product approval: USER (this decision records the user's approved redesign
+  plan and its guardrails).
