@@ -565,15 +565,15 @@
     "ownershipV1Buy": "Buy shares",
     "ownershipV1Sell": "Sell shares",
     "ownershipV1HoldersPending": "Holder distribution is not available in this prototype.",
-    "heroBaseOffering": "عرضهٔ اولیه با قیمت پایهٔ {price}",
     "fundingBarLeft": "{count} از {total} سهم باقی مانده",
     "offeringAllSold": "هر {total} سهم فروخته شد — بازار ثانویه تنها راه ورود است",
-    "heroValueLine": "سهمی از یک ملک <value>{valueText}</value> داشته باشید — از <price>{priceText}</price>.",
     "stickyScarcity": "{count} سهم باقی مانده در {price}",
     "metricFunded": "تأمین‌شده",
     "metricSold": "فروخته‌شده",
     "metricAnnual": "پیش‌بینی / سال",
-    "heroFeeNote": "هر زمان بخواهید برداشت کنید — کارمزد ۱٪، پرداخت‌شده در 4 قسط هفتگی"
+    "heroFeeNote": "هر زمان بخواهید برداشت کنید — کارمزد ۱٪، پرداخت‌شده در 4 قسط هفتگی",
+    "moneyChainTitle": "این ملک چطور درآمد تولید می‌کند",
+    "heroOwnerBadge": "سهم دارید"
   },
   "earnings": {
     "compInsight": "{name} generated {pct}% of your received income.",

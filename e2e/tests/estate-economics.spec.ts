@@ -22,8 +22,9 @@ test.describe("Prompt 05 — V1 canonical economics QA", () => {
     await page.goto("/property/re-128862");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
 
-    // PROMPT 05: hero shows exactly $8M single (V1 canonical — never the band).
-    await expect(page.getByTestId("hero-estate-value")).toContainText("$8,000,000.00");
+    // PROMPT 05 (DEC-013 form): the hero value row shows the compact $8M single
+    // (V1 canonical — never the band, never the full-sentence value line).
+    await expect(page.getByTestId("hero-estate-value")).toContainText("Estate value: $8M");
     await expect(page.getByTestId("hero-estate-value")).not.toContainText("10,000,000");
     // V1 thesis: ANR $97,230.25, modeled revenue range, $195.43/yr projected.
     await expect(page.getByTestId("estate-v1-thesis")).toBeVisible();
@@ -96,7 +97,7 @@ test.describe("Prompt 05 — V1 canonical economics QA", () => {
     await expect(page.getByTestId("estate-economics-empty")).toHaveCount(0);
     // V1 investment: 180,000 shares at $100.
     await expect(page.getByTestId("investment-total-shares")).toContainText("180,000");
-    await expect(page.getByTestId("hero-estate-value")).toContainText("$18,000,000.00");
+    await expect(page.getByTestId("hero-estate-value")).toContainText("Estate value: $18M");
     await expect(page.getByTestId("estate-investment")).toBeVisible();
     // Reserve Villa CTA closes the tab with The Aerial's official listing URL.
     const reserve = page.getByTestId("reserve-villa-cta");
@@ -166,7 +167,7 @@ test.describe("Prompt 05 — V1 canonical economics QA", () => {
     await page.goto("/property/re-130397");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
 
-    await expect(page.getByTestId("hero-estate-value")).toContainText("$60,000,000.00");
+    await expect(page.getByTestId("hero-estate-value")).toContainText("Estate value: $60M");
     await expect(page.getByTestId("estate-v1-thesis")).toBeVisible();
     await expect(page.getByTestId("estate-investment")).toBeVisible();
     await expectNoOverflow(page);

@@ -263,3 +263,29 @@ An agent may discover and record findings, but may not change the product contra
   [tab restructure + secondary market modules] still pending).
 - Product approval: USER (this decision records the user's approved redesign
   plan and its guardrails).
+
+#### DEC-013 addendum — dedup + glass KPI pass (user feedback, 2026-09-12/13)
+- User review of Layer 1 flagged repeated data. Applied (same guardrails):
+  1. "Base $100 offering" line removed (the price IS the base).
+  2. "Own a piece of a $X estate — from $Y." sentence replaced by a compact
+     "Estate value: $18M ⓘ" row; tapping it opens a money-chain modal
+     (moneyChainTitle + heroMoneyChain), so the explainer is on demand.
+  3. heroMoneyChain paragraph removed from the hero (lives in the modal).
+  4. Metrics hints removed (primary-base note; pending-income reason — the
+     reason stays on the Income tab), funded mini-bar removed (value stays).
+  5. Secondary "Ask price · Last price" hero caption removed (basis words stay
+     on the metrics label + resale block); HeroMarketContext deleted.
+  6. Fee note + owner line share one centered post-CTA block.
+  7. Owner badge ("You own a share" + BadgeCheck) beside the estate name when
+     the user holds shares (heroOwnerBadge ×12, fa real).
+  8. KPI card redesigned as quiet glass (translucent surface + hairline ring +
+     soft top-light gradient; 20px semibold values, 10px labels, pending muted).
+  9. Hero price 36→32px, KPI values 22→20px (user sizing pass).
+  10. Funding-bar breathing room under the price row.
+- i18n: moneyChainTitle/heroOwnerBadge added ×12; heroBaseOffering/heroValueLine
+  dead keys removed ×12.
+- Verification: vitest 127 files 1071/1071; typecheck clean; lint 0 errors;
+  build green; Playwright full suite 45 passed/6 expected skips with the known
+  intermittent order-lifecycle reload flake (passes in isolation + on retry —
+  same family flagged at the Slice-8 checkpoint); 480×840 screenshots
+  (`screenshots/redesign-l1/`: dedup + glass + sizing, EN + fa RTL).

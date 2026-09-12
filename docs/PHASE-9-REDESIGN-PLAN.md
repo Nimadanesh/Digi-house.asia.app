@@ -509,3 +509,16 @@ At the end of every slice, append a short entry to this file:
 - Design/UI QA: PASS at 480×840 (`screenshots/redesign-l1/`: Grand primary,
   Syrene resale, fa RTL) — pill/funding-bar/merged-line/priced-CTA render as
   specified; RTL bidi correct; no raw keys.
+
+#### Layer 1 addendum — dedup, glass KPI, sizing (DEC-013 addendum, user feedback)
+
+- Status: `PASS`
+- Commit: (this commit)
+- Scope: see DEC-013 addendum — removed every repeated figure/sentence from the
+  first viewport (base-offering line, value sentence, money-chain paragraph,
+  metrics hints, funded mini-bar, secondary ask/last caption), added the
+  money-chain modal behind the estate-value row, the at-a-glance owner badge,
+  the centered fee/ownership stack, the quiet glass KPI card, and two sizing
+  steps down (hero 32px, KPI values 20px).
+- Tests: vitest 1071/1071; typecheck/lint clean; build green; E2E 45 passed /
+  6 skips (known order-lifecycle reload flake, green in isolation).

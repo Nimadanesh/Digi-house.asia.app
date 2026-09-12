@@ -1,11 +1,13 @@
 // File responsibility: property header (REDESIGN-SPEC §5 / Phase 9 UI Mapping §5.2,
-// Layer-1 redesign) — estate identity first, then the PRICE BLOCK as the visual
-// dominant (price + fraction + funding-scarcity bar + merged value line), then ONE
-// dominant priced CTA. The funding banner is gone: scarcity lives in the bar and
-// the gallery pill. No yield-first hierarchy — the projection stays in metrics/tabs.
-import { MapPin, Check } from "lucide-react";
+// Layer-1 redesign) — estate identity first (with an owner badge when the user
+// holds shares), then the PRICE BLOCK as the visual dominant (price + fraction +
+// funding-scarcity bar + estate-value row with its money-chain modal), then ONE
+// dominant priced CTA. Basis words live on the metrics/resale surfaces — the hero
+// repeats nothing (DEC-013 dedup).
+import { useId, useState } from "react";
+import { MapPin, Check, BadgeCheck } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { pct, usd } from "@/lib/format";
+import { pct, usd, usdCompact } from "@/lib/format";
 import type { Listing } from "@/types/property";
 import type { EstateVerification } from "@/types/verification";
 import { isVerified } from "@/types/verification";
@@ -17,47 +19,8 @@ import {
   type ValuationDisplay,
 } from "@/lib/economics/estates/growth-potential";
 import { ProvenanceInfo } from "@/components/common/ProvenanceInfo";
-
-/**
- * Slice 4 resale market caption: names the ask and/or last trade behind the
- * hero figure, using only observed values — never invents a missing side.
- */
-function HeroMarketContext({
-  listing,
-  bestAskUsd,
-}: {
-  listing: Listing;
-  bestAskUsd?: number;
-}) {
-  const tc = useTranslations("property");
-  const ask = bestAskUsd ?? listing.bestAskUsd ?? null;
-  const last = listing.lastTradeUsd ?? null;
-  if (ask == null && last == null) return null;
-  // Short-form basis vocabulary, shared with the metrics label ("Ask price" /
-  // "Last price") — the MarketSummary below keeps its established Best ask/offer
-  // trio untouched. Each figure is bidi-isolated so ask/last never reorder
-  // in RTL locales (Slice 7). Demoted to 11px under the price block (Layer 1):
-  // context supports the price, never competes with it.
-  const showLast = last != null && last !== ask;
-  return (
-    <p
-      className="text-[0.6875rem] leading-relaxed text-muted-foreground tnum"
-      data-testid="hero-market-context"
-    >
-      {ask != null ? (
-        <>
-          {tc("askPrice")}: <span dir="ltr">{usd(ask)}</span>
-        </>
-      ) : null}
-      {ask != null && showLast ? " · " : null}
-      {showLast ? (
-        <>
-          {tc("lastPrice")}: <span dir="ltr">{usd(last)}</span>
-        </>
-      ) : null}
-    </p>
-  );
-}
+import { Sheet } from "@/components/common/Sheet";
+import { haptics } from "@/lib/telegram/haptics";
 
 export function PropertyHero({
   listing,
@@ -134,6 +97,10 @@ export function PropertyHero({
   const buyPriceUsd = getCurrentSharePrice(listing, { bestAskUsd });
   const verified = isVerified(verification);
   const ownedPct = fractionTotal > 0 ? ownedShares / fractionTotal : 0;
+  // DEC-013: the estate-value row opens the money-chain modal (on-demand
+  // explanation, not a repeated paragraph).
+  const [valueOpen, setValueOpen] = useState(false);
+  const valueTitleId = useId();
 
   const soldOut = isPrimary && listing.sharesRemaining <= 0;
   // Slice E §9: the CTA follows the ShareModel market state when provided; the
@@ -175,16 +142,14 @@ export function PropertyHero({
     onCta = onBuy;
   }
 
-  // Merged value line (Layer 1): "$8M estate, from $100" — the $100-vs-$8M
-  // contrast is the page's strongest purchase anchor, so it sits in ONE line
-  // with provenance. Unknown value → line stays hidden (never a legacy figure).
+  // Estate value row (DEC-013): compact short form — "$8M" / "$8–10M" — one
+  // quiet figure with provenance; the sentence copy is gone (the price block
+  // already carries both numbers). Unknown → row stays hidden.
   const valueText =
     estateValueDisplay != null
-      ? estateValueDisplay.kind === "range"
-        ? formatValuationDisplayShort(estateValueDisplay)
-        : usd(estateValueDisplay.value)
+      ? formatValuationDisplayShort(estateValueDisplay)
       : estateValueUsd != null
-        ? usd(estateValueUsd)
+        ? usdCompact(estateValueUsd)
         : null;
   const valueProvenance =
     estateValueDisplay?.provenance ?? estateValueProvenance ?? null;
@@ -198,8 +163,22 @@ export function PropertyHero({
     <div className="space-y-3" data-testid="property-hero">
       {/* Estate name — restrained single-line treatment (never the visual dominant;
           the share price below carries the hero). Canonical name is authoritative
-          and must never be clipped, so wrapping stays allowed for narrow screens. */}
-      <h1 className="text-[1.0625rem] font-semibold leading-snug tracking-tight text-balance text-foreground">{displayName}</h1>
+          and must never be clipped, so wrapping stays allowed for narrow screens.
+          DEC-013: an at-a-glance ownership badge rides beside the name when the
+          user holds shares of THIS estate. */}
+      <div className="flex items-start gap-2">
+        <h1 className="min-w-0 text-[1.0625rem] font-semibold leading-snug tracking-tight text-balance text-foreground">{displayName}</h1>
+        {ownedShares > 0 ? (
+          <span
+            className="mt-0.5 inline-flex shrink-0 items-center gap-1 rounded-full bg-success/12 px-2 py-0.5 text-xs font-semibold text-success"
+            data-testid="hero-owner-badge"
+            aria-label={t("heroOwnerBadge")}
+          >
+            <BadgeCheck size={13} strokeWidth={2.25} aria-hidden />
+            {t("heroOwnerBadge")}
+          </span>
+        ) : null}
+      </div>
 
       <div className="flex items-center gap-2">
         <p className="flex min-w-0 items-center gap-1 text-sm text-muted-foreground">
@@ -218,29 +197,18 @@ export function PropertyHero({
       </div>
 
       {/* Price block — the heart of the page. Price and fraction share one
-          baseline; context lines beneath are progressively quieter. */}
-      <div className="space-y-1.5">
+          baseline; the scarcity bar breathes below it (extra top gap, DEC-013
+          spacing feedback). No basis caption anywhere: the metrics label names
+          the basis and the hero repeats nothing. */}
+      <div className="space-y-3">
         <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-          <span className="text-[2.25rem] font-bold leading-none tracking-tight text-foreground tnum break-words" data-testid="hero-price">
+          <span className="text-[2rem] font-bold leading-none tracking-tight text-foreground tnum break-words" data-testid="hero-price">
             {usd(buyPriceUsd)}
           </span>
           <span className="text-[0.8125rem] text-muted-foreground" data-testid="hero-fraction">
             {t("heroShareFraction", { total: fractionTotal.toLocaleString() })}
           </span>
         </div>
-
-        {/* Basis line: primary names the $100 base; secondary demotes the
-            ask/last context to 11px — the ask is already the big figure. */}
-        {isPrimary ? (
-          <p
-            className="text-xs leading-relaxed text-muted-foreground tnum"
-            data-testid="hero-base-offering"
-          >
-            {t("heroBaseOffering", { price: usd(getCurrentSharePrice(listing)) })}
-          </p>
-        ) : (
-          <HeroMarketContext listing={listing} bestAskUsd={bestAskUsd} />
-        )}
 
         {/* Funding-scarcity bar (primary only): replaces the old status banner.
             Real demo-ledger facts under the global DEMO disclosure — the bar is
@@ -279,32 +247,36 @@ export function PropertyHero({
         ) : null}
       </div>
 
-      {/* Merged value line — "$8M estate, from $100" in one sentence with
-          provenance. Replaces the old fraction/value rows (Layer 1). */}
+      {/* Estate value row (DEC-013 dedup): a single quiet figure with the
+          provenance ⓘ — no "own a piece / from $X" sentence (the price block
+          already says both). Tapping it opens the money-chain modal: the
+          "how does it earn" explanation lives on demand, not as a third
+          repeated paragraph. */}
       {valueText != null ? (
-        <p className="text-[0.8125rem] leading-relaxed text-muted-foreground tnum" data-testid="hero-estate-value">
-          {t.rich("heroValueLine", {
-            valueText,
-            priceText: usd(buyPriceUsd),
-            value: (chunks) => (
-              <span className="font-semibold text-foreground">{chunks}</span>
-            ),
-            price: (chunks) => (
-              <span className="font-semibold text-foreground" dir="ltr">{chunks}</span>
-            ),
-          })}
-          {valueProvenance ? <ProvenanceInfo provenance={valueProvenance} /> : null}
-        </p>
+        <>
+          <button
+            type="button"
+            onClick={() => {
+              haptics.selection();
+              setValueOpen(true);
+            }}
+            className="flex w-fit items-center gap-1.5 text-sm tnum text-muted-foreground transition-transform duration-[120ms] ease-out active:scale-[0.98]"
+            data-testid="hero-estate-value"
+          >
+            {t("estateValue")}:{" "}
+            <span className="font-semibold text-foreground">{valueText}</span>
+            {valueProvenance ? <ProvenanceInfo provenance={valueProvenance} /> : null}
+          </button>
+          <Sheet open={valueOpen} onClose={() => setValueOpen(false)} labelledBy={valueTitleId}>
+            <div className="space-y-2 pb-2" data-testid="hero-money-chain-sheet">
+              <h2 id={valueTitleId} className="text-[0.9375rem] font-semibold text-foreground">
+                {t("moneyChainTitle")}
+              </h2>
+              <p className="text-sm leading-relaxed text-muted-foreground">{t("heroMoneyChain")}</p>
+            </div>
+          </Sheet>
+        </>
       ) : null}
-
-      {/* Money-chain primer — one quiet 12px line; the full breakdown lives in
-          the Estate tab below. */}
-      <p
-        className="text-xs leading-relaxed text-muted-foreground"
-        data-testid="hero-money-chain"
-      >
-        {t("heroMoneyChain")}
-      </p>
 
       <button
         type="button"
@@ -316,23 +288,25 @@ export function PropertyHero({
         {ctaLabel}
       </button>
 
-      {/* Fee transparency under the action (Layer 1) — no surprises at the last
-          conversion step; reuses the established withdrawal-terms vocabulary. */}
-      <p className="text-center text-[0.6875rem] leading-relaxed text-muted-foreground" data-testid="hero-fee-note">
-        {t("heroFeeNote")}
-      </p>
-
-      {/* Owner position line sits under the CTA — the owner's eye lands on the
-          action first, their position second. */}
-      {ownedShares > 0 ? (
-        <p className="text-sm font-medium text-foreground tnum" data-testid="hero-ownership">
-          {t("heroYouOwn", {
-            count: ownedShares,
-            unit: ownedShares === 1 ? t("shareWord") : t("sharesWord"),
-            pct: pct(ownedPct),
-          })}
+      {/* Post-CTA stack (DEC-013 alignment feedback): fee note and the owner's
+          position line share one centered block — same axis, same rhythm, no
+          left-vs-center fight. */}
+      <div className="space-y-1 text-center" data-testid="hero-post-cta">
+        {/* Fee transparency under the action — no surprises at the last
+            conversion step; reuses the established withdrawal-terms vocabulary. */}
+        <p className="text-[0.6875rem] leading-relaxed text-muted-foreground" data-testid="hero-fee-note">
+          {t("heroFeeNote")}
         </p>
-      ) : null}
+        {ownedShares > 0 ? (
+          <p className="text-xs font-medium leading-relaxed text-foreground tnum" data-testid="hero-ownership">
+            {t("heroYouOwn", {
+              count: ownedShares,
+              unit: ownedShares === 1 ? t("shareWord") : t("sharesWord"),
+              pct: pct(ownedPct),
+            })}
+          </p>
+        ) : null}
+      </div>
     </div>
   );
 }

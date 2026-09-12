@@ -565,15 +565,15 @@
     "ownershipV1Buy": "Buy shares",
     "ownershipV1Sell": "Sell shares",
     "ownershipV1HoldersPending": "Holder distribution is not available in this prototype.",
-    "heroBaseOffering": "Base {price} offering",
     "fundingBarLeft": "{count} of {total} shares left",
     "offeringAllSold": "All {total} shares sold — resale is now the only way in",
-    "heroValueLine": "Own a piece of a <value>{valueText}</value> estate — from <price>{priceText}</price>.",
     "stickyScarcity": "{count} shares left at {price}",
     "metricFunded": "Funded",
     "metricSold": "Sold",
     "metricAnnual": "Proj. / year",
-    "heroFeeNote": "Jederzeit abheben — 1 % Gebühr, ausgezahlt in 4 wöchentlichen Raten"
+    "heroFeeNote": "Jederzeit abheben — 1 % Gebühr, ausgezahlt in 4 wöchentlichen Raten",
+    "moneyChainTitle": "How this estate earns",
+    "heroOwnerBadge": "You own a share"
   },
   "earnings": {
     "compInsight": "{name} generated {pct}% of your received income.",

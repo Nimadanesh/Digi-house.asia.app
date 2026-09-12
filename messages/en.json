@@ -488,10 +488,8 @@
     "heroAcquireOwnership": "Buy · {price}",
     "heroManageOwnership": "Manage Ownership",
     "heroAcquireResale": "Buy resale · {price}",
-    "heroBaseOffering": "Base {price} offering",
     "fundingBarLeft": "{count} of {total} shares left",
     "offeringAllSold": "All {total} shares sold — resale is now the only way in",
-    "heroValueLine": "Own a piece of a <value>{valueText}</value> estate — from <price>{priceText}</price>.",
     "stickyScarcity": "{count} shares left at {price}",
     "metricFunded": "Funded",
     "metricSold": "Sold",
@@ -573,7 +571,9 @@
     "ownershipV1Buy": "Buy shares",
     "ownershipV1Sell": "Sell shares",
     "ownershipV1HoldersPending": "Holder distribution is not available in this prototype.",
-    "heroFeeNote": "Withdraw anytime — 1% fee, paid in 4 weekly installments"
+    "heroFeeNote": "Withdraw anytime — 1% fee, paid in 4 weekly installments",
+    "moneyChainTitle": "How this estate earns",
+    "heroOwnerBadge": "You own a share"
   },
   "earnings": {
     "compInsight": "{name} generated {pct}% of your received income.",

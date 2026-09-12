@@ -100,8 +100,9 @@ describe("Slice E wiring (Grand 2 BDM, PROMPT 05 V1)", () => {
     expect(screen.getByTestId("thesis-revenue")).toHaveTextContent("$31,891,522.00");
     expect(screen.getByTestId("thesis-pershare")).toHaveTextContent("$195.43");
     expect(screen.getByTestId("estate-investment")).toBeInTheDocument();
-    // PROMPT 05: hero shows exactly $8M single (V1 canonical — never the band).
-    expect(screen.getByTestId("hero-estate-value")).toHaveTextContent("$8,000,000.00");
+    // PROMPT 05 (DEC-013 form): the hero value row shows the compact $8M single
+    // (V1 canonical — never the band, never the full "Own a piece" sentence).
+    expect(screen.getByTestId("hero-estate-value")).toHaveTextContent("Estate value: $8M");
     expect(screen.getByTestId("hero-estate-value")).not.toHaveTextContent("10,000,000");
     expect(
       screen.getByTestId("hero-estate-value").querySelector('[aria-label="Estimated value"]'),
@@ -163,8 +164,8 @@ describe("Slice E wiring (non-Grand listing, PROMPT 05 V1)", () => {
     expect(screen.queryByTestId("estate-economics")).not.toBeInTheDocument();
     expect(screen.queryByTestId("estate-costs")).not.toBeInTheDocument();
     expect(screen.queryByTestId("estate-allocation")).not.toBeInTheDocument();
-    // Aerial $18M approved ESTIMATED (research $18–22M band low per PM lowest-value rule).
-    expect(screen.getByTestId("hero-estate-value")).toHaveTextContent("$18,000,000.00");
+    // Aerial $18M approved ESTIMATED (research $18–22M band low per PM lowest-value rule) — compact form.
+    expect(screen.getByTestId("hero-estate-value")).toHaveTextContent("Estate value: $18M");
     expect(
       screen.getByTestId("hero-estate-value").querySelector('[aria-label="Estimated value"]'),
     ).toBeInTheDocument();

@@ -45,25 +45,21 @@ function renderCalc(id: string) {
 }
 
 describe("Slice 3 — metrics grid pending states for all 24 villas", () => {
-  it("unknown villas show pending WITH the human-readable reason; known villas show values", () => {
+  it("unknown villas show a bare honest pending (DEC-013: the reason moved off the KPI grid — it lives on the Income tab); known villas show values", () => {
     for (const l of listings) {
       cleanup();
       renderMetrics(l.id);
-      const reason = presentedIncomeUnknownCaption(
-        getPresentedMonthlyIncome(l.id).unknownKind,
-      );
       if (isUnknown(l.id)) {
         expect(screen.getByTestId("metrics-grid").textContent, l.id).toMatch(
           /Data pending/,
         );
-        expect(screen.getByTestId("metrics-income-reason").textContent, l.id).toBe(
-          reason,
-        );
+        // DEC-013: no reason caption on the KPI grid (dedup) — the figure is
+        // the honest pending word; the explanation stays on the Income tab.
+        expect(screen.queryByTestId("metrics-income-reason"), l.id).not.toBeInTheDocument();
       } else {
         expect(screen.getByTestId("metrics-grid").textContent, l.id).not.toMatch(
           /Data pending/,
         );
-        expect(screen.queryByTestId("metrics-income-reason"), l.id).not.toBeInTheDocument();
       }
     }
   });

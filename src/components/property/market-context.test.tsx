@@ -58,30 +58,17 @@ const secondary: Listing = {
   bestAskUsd: 8160,
 };
 
-describe("Slice 4 — hero market context appears before the CTA", () => {
-  it("secondary with ask + last trade names both figures", () => {
+describe("DEC-013 — hero repeats nothing: no ask/last caption on the hero", () => {
+  it("secondary with ask + last trade: the hero shows no market caption (basis lives on the metrics label + resale block)", () => {
     render(<PropertyHero listing={secondary} bestAskUsd={8160} onBuy={() => {}} />);
-    const ctx = screen.getByTestId("hero-market-context");
-    expect(ctx).toHaveTextContent("Ask price");
-    expect(ctx).toHaveTextContent("$81.60");
-    expect(ctx).toHaveTextContent("Last price");
-    expect(ctx).toHaveTextContent("$80.00");
+    expect(screen.queryByTestId("hero-market-context")).not.toBeInTheDocument();
+    expect(screen.getByTestId("hero-price")).toHaveTextContent("$81.60");
   });
 
-  it("secondary with ask only shows the ask without inventing a last trade", () => {
+  it("secondary with ask only: still no hero caption (no duplication)", () => {
     const askOnly: Listing = { ...secondary, lastTradeUsd: undefined };
     render(<PropertyHero listing={askOnly} bestAskUsd={8160} onBuy={() => {}} />);
-    const ctx = screen.getByTestId("hero-market-context");
-    expect(ctx).toHaveTextContent("$81.60");
-    expect(ctx.textContent).not.toMatch(/Last price/);
-  });
-
-  it("secondary with last trade only shows the last trade without inventing an ask", () => {
-    const lastOnly: Listing = { ...secondary, bestAskUsd: undefined };
-    render(<PropertyHero listing={lastOnly} onBuy={() => {}} />);
-    const ctx = screen.getByTestId("hero-market-context");
-    expect(ctx).toHaveTextContent("$80.00");
-    expect(ctx.textContent).not.toMatch(/asking/i);
+    expect(screen.queryByTestId("hero-market-context")).not.toBeInTheDocument();
   });
 
   it("primary shows no resale market context (the $100 offering is the context)", () => {
@@ -103,10 +90,11 @@ describe("Slice 4 — metrics price label follows the price basis", () => {
     expect(screen.getByText("Last price")).toBeInTheDocument();
   });
 
-  it("primary reads Share price and states the $100 primary base", () => {
+  it("primary reads Share price (DEC-013: the base note is gone — the price IS the base)", () => {
     render(<PropertyMetricsGrid listing={primary} currentPriceUsd={10000} v1={null} />);
     expect(screen.getByText("Share price")).toBeInTheDocument();
-    expect(screen.getByTestId("metrics-primary-note")).toHaveTextContent("$100");
+    expect(screen.getByTestId("metrics-price")).toHaveTextContent("$100.00");
+    expect(screen.queryByTestId("metrics-primary-note")).not.toBeInTheDocument();
   });
 });
 

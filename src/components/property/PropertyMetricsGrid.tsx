@@ -1,58 +1,46 @@
-// File responsibility: compact KPI area — 2×2 decision metrics grid (Layer-1
-// redesign). Only numbers a buyer decides with: price, projected monthly,
-// funded % (primary; with a 4px mini-bar) or sold (secondary), projected per
-// share / year. Total estate value moved to the hero's merged value line;
-// sold/remaining lives in the funding bar. Monthly/annual figures are the V1
-// PROJECTED per-share values (never the legacy yield-rate figure, never
-// presented as paid); UNKNOWN renders the honest pending state.
+// File responsibility: compact KPI area — the four decision metrics (Layer-1
+// redesign, DEC-013 "glass" pass). Only numbers a buyer decides with: price,
+// projected monthly, funded % (primary) or sold (secondary), projected per
+// share / year. Visual language: a quiet glass card — translucent surface,
+// hairline ring, soft top-light gradient — over the flat Telegram base; values
+// get the weight (22px semibold tabular), labels stay whisper-quiet 10px.
+// Pending figures render muted (never loud, never invented); total estate
+// value lives in the hero; sold/remaining lives in the funding bar.
 import { useTranslations } from "next-intl";
 import { eur, usd } from "@/lib/format";
 import { unavailableLabel } from "@/lib/availability";
 import type { Listing } from "@/types/property";
 import type { FinancialModelV1PropertyModel } from "@/types/financial-model-v1";
-import {
-  getPresentedMonthlyIncome,
-  getPresentedPrimaryPrice,
-  presentedIncomeUnknownCaption,
-} from "@/lib/economics/property-presentation";
-import { Block } from "@/components/common/Block";
+import { cn } from "@/lib/utils";
 
 function MetricCell({
   label,
   value,
   className = "",
-  hint,
-  hintTestId,
-  miniBar,
   testId,
+  muted = false,
 }: {
   label: string;
   value: string;
   className?: string;
-  /** Slice 3: short human-readable reason under a pending value (layout-safe caption). */
-  hint?: string;
-  hintTestId?: string;
-  /** Layer-1: 4px scarcity mini-bar under the funded % value (primary only). */
-  miniBar?: number;
   testId?: string;
+  /** Pending/unknown figures sit quieter than hard numbers. */
+  muted?: boolean;
 }) {
   return (
-    <div className={`flex flex-col gap-1 p-3 min-h-[72px] min-w-0 ${className}`}>
-      <span className="text-[0.6875rem] uppercase tracking-wide text-muted-foreground leading-tight">{label}</span>
-      <span className="truncate text-[1.25rem] font-semibold text-foreground tnum leading-tight" data-testid={testId}>{value}</span>
-      {miniBar != null ? (
-        <div className="mt-0.5 h-1 w-full overflow-hidden rounded-full bg-warning/20">
-          <div
-            className="h-full rounded-full bg-warning"
-            style={{ width: `${Math.min(100, Math.max(0, miniBar * 100))}%` }}
-          />
-        </div>
-      ) : null}
-      {hint != null ? (
-        <span className="text-[0.6875rem] leading-tight text-muted-foreground" data-testid={hintTestId}>
-          {hint}
-        </span>
-      ) : null}
+    <div className={cn("flex flex-col gap-1.5 p-4 min-h-[76px] min-w-0", className)}>
+      <span className="text-[0.625rem] font-medium uppercase tracking-[0.08em] text-muted-foreground leading-tight">
+        {label}
+      </span>
+      <span
+        className={cn(
+          "truncate text-[1.25rem] font-semibold leading-none tnum",
+          muted ? "text-muted-foreground" : "text-foreground",
+        )}
+        data-testid={testId}
+      >
+        {value}
+      </span>
     </div>
   );
 }
@@ -78,12 +66,11 @@ export function PropertyMetricsGrid({
   totalSharesOverride?: number | null;
 }) {
   const t = useTranslations("property");
+  // DEC-013 dedup: the KPI cells render the figures only — the primary-base
+  // note and the pending-income reason were removed here (the reason still
+  // lives on the Income tab where the user asks for the breakdown; the $100
+  // base is the price figure itself).
   const monthly = v1?.perShare.monthlyCents ?? null;
-  // Slice 3: a pending monthly figure always carries its human-readable reason
-  // (single presentation layer — same classification as cards/calculator/buy).
-  const incomeReason = presentedIncomeUnknownCaption(
-    getPresentedMonthlyIncome(listing.id).unknownKind,
-  );
   const perShare = v1?.perShare;
   const money = (cents: number) =>
     perShare?.currency === "EUR" ? eur(cents) : usd(cents);
@@ -105,57 +92,52 @@ export function PropertyMetricsGrid({
       : listing.lastTradeUsd != null && pricePerShare === listing.lastTradeUsd
         ? t("lastPrice")
         : t("sharePrice");
-  // Slice 4: primary states the $100 base explicitly, where it applies.
-  const primaryNote = isPrimary
-    ? t("primaryBasePriceNote", { price: usd(getPresentedPrimaryPrice()) })
-    : null;
-  // Layer-1 scarcity cell: primary = funded % (denominator is the V1 canonical
-  // total); secondary = demo-ledger sold count (the funded % is 0 by definition
-  // there and would be dishonest noise).
+  // Funded % (primary): demo-ledger sold ÷ V1 canonical total — the only
+  // honest sold source (PRODUCT-DECISION-LOCK §6).
   const totalForPct = totalSharesOverride ?? listing.totalShares;
   const fundedRatio = totalForPct > 0 ? listing.sharesSold / totalForPct : 0;
 
   return (
-    <Block className="overflow-hidden" data-testid="metrics-grid">
+    <div
+      className="overflow-hidden rounded-[14px] ring-1 ring-white/[0.06] bg-gradient-to-b from-white/[0.05] via-white/[0.02] to-transparent backdrop-blur-sm"
+      data-testid="metrics-grid"
+    >
       <div className="grid grid-cols-2">
         <MetricCell
           label={priceLabel}
           value={usd(pricePerShare)}
-          className="border-b border-r border-border"
-          hint={primaryNote ?? undefined}
-          hintTestId={primaryNote != null ? "metrics-primary-note" : undefined}
+          className="border-b border-r border-white/[0.05]"
           testId="metrics-price"
         />
         <MetricCell
           label={t("metricProjectedIncome")}
           value={monthlyText}
-          className="border-b border-border"
-          hint={incomeReason ?? undefined}
-          hintTestId={incomeReason != null ? "metrics-income-reason" : undefined}
+          muted={monthly == null}
+          className="border-b border-white/[0.05]"
           testId="metrics-monthly"
         />
         {isPrimary ? (
           <MetricCell
             label={t("metricFunded")}
             value={t("fundedCaptionShort", { pct: Math.round(fundedRatio * 100) })}
-            className="border-r border-border"
-            miniBar={fundedRatio}
+            className="border-r border-white/[0.05]"
             testId="metrics-funded"
           />
         ) : (
           <MetricCell
             label={t("metricSold")}
             value={listing.sharesSold.toLocaleString()}
-            className="border-r border-border"
+            className="border-r border-white/[0.05]"
             testId="metrics-sold"
           />
         )}
         <MetricCell
           label={t("metricAnnual")}
           value={annualText}
+          muted={perShare?.annualCents == null}
           testId="metrics-annual"
         />
       </div>
-    </Block>
+    </div>
   );
 }

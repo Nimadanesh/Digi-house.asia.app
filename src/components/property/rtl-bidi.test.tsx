@@ -104,16 +104,14 @@ describe("Slice 7 — numeric figures are bidi-isolated (dir=ltr)", () => {
     expect(node, "about nightly wrapped for bidi").toBeDefined();
   });
 
-  it("hero market caption isolates each figure (ask and last never reorder)", () => {
+  it("DEC-013: the hero market caption is gone (its bidi site with it) — the funding bar's numeric runs stay intact", () => {
     const { container } = render(
       <PropertyHero listing={resale} bestAskUsd={8160} onBuy={() => {}} />,
     );
-    const ctx = screen.getByTestId("hero-market-context");
-    const ltr = Array.from(ctx.querySelectorAll("[dir='ltr']")).map(
-      (el) => el.textContent,
-    );
-    expect(ltr.some((t) => t?.includes("$81.60")), "ask isolated").toBe(true);
-    expect(ltr.some((t) => t?.includes("$80.00")), "last isolated").toBe(true);
-    expect(container.querySelector("[data-testid='hero-market-context']")).not.toBeNull();
+    expect(container.querySelector("[data-testid='hero-market-context']")).toBeNull();
+    // Numeric-only strings ("81.60" etc.) are direction-neutral, but the price
+    // figure keeps a tnum span so digits never reorder in RTL.
+    const price = container.querySelector("[data-testid='hero-price']");
+    expect(price?.textContent).toBe("$81.60");
   });
 });
