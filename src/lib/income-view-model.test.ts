@@ -18,7 +18,7 @@ function entry(overrides: Partial<EarningsEntry>): EarningsEntry {
   return {
     id: "e",
     userId: "u",
-    propertyId: "prop-a",
+    propertyId: "test-a",
     weekOf: "2026-07-13T00:00:00Z",
     amountUsd: 1_000,
     tonAmount: 5_000_000_000,
@@ -31,7 +31,7 @@ function entry(overrides: Partial<EarningsEntry>): EarningsEntry {
 function lock(overrides: Partial<ShareLock>): ShareLock {
   return {
     id: "lock-1",
-    propertyId: "prop-a",
+    propertyId: "test-a",
     shares: 100,
     principalUsd: 1_000_000,
     payoutPeriod: "monthly",
@@ -138,20 +138,20 @@ describe("summarizeDistribution — state separation", () => {
 
 describe("summarizeEstates — per-position states", () => {
   const holdings: Holding[] = [
-    { propertyId: "prop-a", sharesOwned: 160, avgCostUsd: 12_000, currentValueUsd: 1_920_000, pendingWeekEarningsUsd: 2_000, shareRatio: 0.064 },
-    { propertyId: "prop-b", sharesOwned: 50, avgCostUsd: 10_000, currentValueUsd: 500_000, pendingWeekEarningsUsd: 0, shareRatio: 0.05 },
+    { propertyId: "test-a", sharesOwned: 160, avgCostUsd: 12_000, currentValueUsd: 1_920_000, pendingWeekEarningsUsd: 2_000, shareRatio: 0.064 },
+    { propertyId: "test-b", sharesOwned: 50, avgCostUsd: 10_000, currentValueUsd: 500_000, pendingWeekEarningsUsd: 0, shareRatio: 0.05 },
   ];
 
   it("derives each state from its own source", () => {
     const rows = summarizeEstates({
       entries: [
-        entry({ propertyId: "prop-a", status: "paid", amountUsd: 1_500 }),
-        entry({ propertyId: "prop-a", status: "pending", amountUsd: 500 }),
+        entry({ propertyId: "test-a", status: "paid", amountUsd: 1_500 }),
+        entry({ propertyId: "test-a", status: "pending", amountUsd: 500 }),
       ],
-      locks: [lock({ propertyId: "prop-a", accruedUnpaidUsd: 4_200 })],
+      locks: [lock({ propertyId: "test-a", accruedUnpaidUsd: 4_200 })],
       holdings,
     });
-    const a = rows.find((r) => r.propertyId === "prop-a")!;
+    const a = rows.find((r) => r.propertyId === "test-a")!;
     expect(a.paidUsd).toEqual({ state: "known", amountUsd: 1_500 });
     expect(a.projectedUsd).toEqual({ state: "known", amountUsd: 500 });
     expect(a.accruedUsd).toEqual({ state: "known", amountUsd: 4_200 });
@@ -161,28 +161,28 @@ describe("summarizeEstates — per-position states", () => {
 
   it("pending sums never leak into paid", () => {
     const rows = summarizeEstates({
-      entries: [entry({ propertyId: "prop-a", status: "pending", amountUsd: 500 })],
+      entries: [entry({ propertyId: "test-a", status: "pending", amountUsd: 500 })],
       locks: [],
       holdings,
     });
-    const a = rows.find((r) => r.propertyId === "prop-a")!;
+    const a = rows.find((r) => r.propertyId === "test-a")!;
     expect(a.paidUsd).toEqual({ state: "known", amountUsd: 0 });
     expect(a.projectedUsd).toEqual({ state: "known", amountUsd: 500 });
   });
 
   it("estates without locks show no accrued line (none, not Pending, not $0)", () => {
     const rows = summarizeEstates({
-      entries: [entry({ propertyId: "prop-a", status: "paid", amountUsd: 1_500 })],
+      entries: [entry({ propertyId: "test-a", status: "paid", amountUsd: 1_500 })],
       locks: [],
       holdings,
     });
-    const a = rows.find((r) => r.propertyId === "prop-a")!;
+    const a = rows.find((r) => r.propertyId === "test-a")!;
     expect(a.accruedUsd).toEqual({ state: "none" });
   });
 
   it("holdings without any entries still appear (position truth)", () => {
     const rows = summarizeEstates({ entries: [], locks: [], holdings });
-    const b = rows.find((r) => r.propertyId === "prop-b")!;
+    const b = rows.find((r) => r.propertyId === "test-b")!;
     expect(b.sharesOwned).toBe(50);
     expect(b.paidUsd).toEqual({ state: "pending" });
     expect(b.projectedUsd).toEqual({ state: "none" });
@@ -191,10 +191,10 @@ describe("summarizeEstates — per-position states", () => {
   it("matured locks do not accrue", () => {
     const rows = summarizeEstates({
       entries: [],
-      locks: [lock({ propertyId: "prop-a", status: "matured", accruedUnpaidUsd: 9_999 })],
+      locks: [lock({ propertyId: "test-a", status: "matured", accruedUnpaidUsd: 9_999 })],
       holdings,
     });
-    const a = rows.find((r) => r.propertyId === "prop-a")!;
+    const a = rows.find((r) => r.propertyId === "test-a")!;
     expect(a.accruedUsd).toEqual({ state: "none" });
   });
 });
@@ -205,15 +205,15 @@ describe("summarizeEstates — per-position states", () => {
 
 describe("secondaryGains — listed positions, not income", () => {
   const listings = [
-    { id: "prop-a", title: "Villa A", totalShares: 1_000 },
-    { id: "prop-b", title: "Villa B", totalShares: 2_000 },
+    { id: "test-a", title: "Villa A", totalShares: 1_000 },
+    { id: "test-b", title: "Villa B", totalShares: 2_000 },
   ] as Listing[];
   const holdings: Holding[] = [
-    { propertyId: "prop-a", sharesOwned: 160, avgCostUsd: 12_000, currentValueUsd: 1_920_000, pendingWeekEarningsUsd: 0, shareRatio: 0.16 },
+    { propertyId: "test-a", sharesOwned: 160, avgCostUsd: 12_000, currentValueUsd: 1_920_000, pendingWeekEarningsUsd: 0, shareRatio: 0.16 },
   ];
   const order = (overrides: Partial<Order>): Order => ({
     id: "ord-1",
-    propertyId: "prop-a",
+    propertyId: "test-a",
     makerAddress: "EQx",
     side: "sell",
     priceUsd: 12_500,
@@ -266,7 +266,7 @@ describe("secondaryGains — listed positions, not income", () => {
 
   it("unknown basis stays unknown (never guessed)", () => {
     const [g] = secondaryGains({
-      orders: [order({ propertyId: "prop-b" })],
+      orders: [order({ propertyId: "test-b" })],
       holdings: [],
       listings,
     });

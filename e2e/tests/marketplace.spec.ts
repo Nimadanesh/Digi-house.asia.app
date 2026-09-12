@@ -46,7 +46,8 @@ test.describe("Estates — /marketplace (Slice F canonical)", () => {
     await expect(card).toContainText("1 share");
 
     // No APY, no scarcity badges anywhere on the surface.
-    await expect(page.getByText("APY")).toHaveCount(0);
+    // Word-bounded: substring matching would false-positive on e.g. "…Cap**You**r…".
+    await expect(page.getByText(/\bAPY\b/)).toHaveCount(0);
     await expect(page.getByText("Highest Yield")).toHaveCount(0);
     await expect(page.getByText("Almost Sold")).toHaveCount(0);
 

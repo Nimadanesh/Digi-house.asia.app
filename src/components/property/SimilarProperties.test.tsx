@@ -40,13 +40,13 @@ function listing(id: string, location: string): Listing {
   };
 }
 
-const current = listing("prop-current", "Marina, UAE");
+const current = listing("test-current", "Marina, UAE");
 const all = [
   current,
-  listing("prop-a", "Downtown, UAE"), // same country
-  listing("prop-b", "Lisbon, Portugal"), // different country
-  listing("prop-c", "Jumeirah, UAE"), // same country
-  listing("prop-d", "Bali, Indonesia"),
+  listing("test-a", "Downtown, UAE"), // same country
+  listing("test-b", "Lisbon, Portugal"), // different country
+  listing("test-c", "Jumeirah, UAE"), // same country
+  listing("test-d", "Bali, Indonesia"),
 ];
 
 describe("pickSimilar", () => {
@@ -54,7 +54,7 @@ describe("pickSimilar", () => {
     const picked = pickSimilar(current, all);
     // Unmapped test ids carry no canonical valuation — same-country group
     // keeps feed order, then the rest in feed order.
-    expect(picked.map((l) => l.id)).toEqual(["prop-a", "prop-c", "prop-b", "prop-d"]);
+    expect(picked.map((l) => l.id)).toEqual(["test-a", "test-c", "test-b", "test-d"]);
   });
 });
 
@@ -67,19 +67,19 @@ describe("SimilarProperties — redesign Phase 5", () => {
     render(<SimilarProperties listing={current} />);
     const cards = screen.getAllByTestId("similar-card");
     expect(cards).toHaveLength(4);
-    expect(screen.getByText("prop-a")).toBeInTheDocument();
+    expect(screen.getByText("test-a")).toBeInTheDocument();
     // Canonical nightly display for unmapped ids falls back to the listing rate.
     expect(screen.getAllByText("$1,000").length).toBeGreaterThan(0);
     expect(screen.getAllByText(/UAE|Portugal|Indonesia/).length).toBeGreaterThan(0);
     // PROMPT 03: legacy APY must not drive user-visible property facts.
     expect(screen.queryByText(/APY/)).not.toBeInTheDocument();
     // Card links route to the property page
-    expect(cards[0].getAttribute("href")).toContain("prop-a");
+    expect(cards[0].getAttribute("href")).toContain("test-a");
   });
 
   it("renders canonical identity for canonical estates (not fixture shorthand)", () => {
-    const grand = { ...listing("prop-marina-vista-4b", "JOALI Being, Maldives") };
-    const aerial = { ...listing("prop-soho-loft-studio", "Buck Island, BVI") };
+    const grand = { ...listing("re-128862", "JOALI Being, Maldives") };
+    const aerial = { ...listing("re-126855", "Buck Island, BVI") };
     useMarketplace.mockReturnValue({ data: [grand, aerial], isLoading: false, isError: false });
     render(<SimilarProperties listing={grand} />);
     expect(screen.getByText("The Aerial")).toBeInTheDocument();
@@ -91,7 +91,7 @@ describe("SimilarProperties — redesign Phase 5", () => {
     // R2 records "Syrene (Villa Syrene)"; the adopted Estate24 record is
     // "Villa Syrene" — the same name portfolio/detail/home print. The rail
     // must not resurrect the drifted R2 spelling.
-    const syrene = { ...listing("prop-bayside-marina-penthouse", "Marina, UAE") };
+    const syrene = { ...listing("re-108924", "Marina, UAE") };
     useMarketplace.mockReturnValue({ data: [current, syrene], isLoading: false, isError: false });
     render(<SimilarProperties listing={current} />);
     expect(screen.getByText("Villa Syrene")).toBeInTheDocument();
@@ -111,7 +111,7 @@ describe("SimilarProperties — redesign Phase 5", () => {
   });
 
   it("secondary card price uses the current-price hierarchy (last trade over list)", () => {
-    const resale = { ...listing("prop-e", "Marina, UAE"), status: "resale" as const, lastTradeUsd: 9500 };
+    const resale = { ...listing("test-e", "Marina, UAE"), status: "resale" as const, lastTradeUsd: 9500 };
     useMarketplace.mockReturnValue({ data: [current, resale], isLoading: false, isError: false });
     render(<SimilarProperties listing={current} />);
     expect(screen.getByText("$95.00")).toBeInTheDocument();

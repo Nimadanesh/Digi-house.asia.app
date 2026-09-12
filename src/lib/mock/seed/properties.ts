@@ -11,7 +11,7 @@ function history(prefix: string, dates: string[]): RentalPayment[] {
 
 export const PROPERTIES: Listing[] = [
   {
-    id: "prop-marina-vista-4b",
+    id: "re-128862",
     title: "Grand 2 BDM Ocean Pool Villa",
     nightlyRate: "$67,655",
     location: "JOALI Being, Maldives",
@@ -72,7 +72,7 @@ export const PROPERTIES: Listing[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("marina", [
+    rentalHistory: history("joali-being", [
       "2026-07-04",
       "2026-06-06",
       "2026-05-02",
@@ -80,7 +80,7 @@ export const PROPERTIES: Listing[] = [
     ]),
   },
   {
-    id: "prop-soho-loft-studio",
+    id: "re-126855",
     title: "The Aerial",
     nightlyRate: "$52,200",
     location: "Buck Island, British Virgin Islands (BVI)",
@@ -157,10 +157,10 @@ export const PROPERTIES: Listing[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("soho", ["2026-07-11", "2026-06-13", "2026-05-16"]),
+    rentalHistory: history("the-aerial", ["2026-07-11", "2026-06-13", "2026-05-16"]),
   },
   {
-    id: "prop-bayside-marina-penthouse",
+    id: "re-108924",
     title: "Syrene",
     nightlyRate: "€40,000",
     location: "Sorrento, Italy",
@@ -231,7 +231,7 @@ export const PROPERTIES: Listing[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("bayside", [
+    rentalHistory: history("villa-syrene", [
       "2026-07-18",
       "2026-06-20",
       "2026-05-23",
@@ -239,7 +239,7 @@ export const PROPERTIES: Listing[] = [
     ]),
   },
   {
-    id: "prop-alfama-terrace-flat",
+    id: "re-123861",
     title: "Villa du Cap",
     nightlyRate: "€38,575",
     location: "Saint-Jean-Cap-Ferrat, France",
@@ -276,10 +276,10 @@ export const PROPERTIES: Listing[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("alfama", ["2026-07-01", "2026-06-01", "2026-05-01"]),
+    rentalHistory: history("villa-du-cap", ["2026-07-01", "2026-06-01", "2026-05-01"]),
   },
   {
-    id: "prop-tbilisi-riverhouse-loft",
+    id: "re-125643",
     title: "Emerald Cay",
     nightlyRate: "$35,714",
     location: "Silly Creek, Turks & Caicos",
@@ -347,10 +347,10 @@ export const PROPERTIES: Listing[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("tbilisi", ["2026-07-07", "2026-06-07", "2026-05-10", "2026-04-08"]),
+    rentalHistory: history("emerald-cay", ["2026-07-07", "2026-06-07", "2026-05-10", "2026-04-08"]),
   },
   {
-    id: "prop-canggu-surf-villa",
+    id: "re-130393",
     title: "The Branson Beach Estate",
     nightlyRate: "$35,000",
     location: "Moskito Island, British Virgin Islands (BVI)",
@@ -417,7 +417,7 @@ export const PROPERTIES: Listing[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("canggu", [
+    rentalHistory: history("the-branson-beach-estate", [
       "2026-07-12",
       "2026-06-14",
       "2026-05-17",
@@ -425,7 +425,7 @@ export const PROPERTIES: Listing[] = [
     ]),
   },
 {
-    id: "prop-tokyo-shibuya-studio",
+    id: "re-130901",
     title: "Chalet Montana",
     nightlyRate: "€27,571",
     location: "Kitzbuhel, Austria",
@@ -521,7 +521,7 @@ export const PROPERTIES: Listing[] = [
     ]),
   },
 {
-    id: "prop-brooklyn-brownstone-flat",
+    id: "re-131293",
     title: "Villa BDM",
     nightlyRate: "$25,714",
     location: "Saint Jean, St. Barts",
@@ -621,7 +621,7 @@ export const PROPERTIES: Listing[] = [
     ]),
   },
 {
-    id: "prop-berlin-mitte-apartment",
+    id: "re-128529",
     title: "Trajan Villa at Caesars Palace",
     nightlyRate: "$25,000",
     location: "Caesars Palace, Nevada",
@@ -663,7 +663,7 @@ export const PROPERTIES: Listing[] = [
     ]),
   },
 {
-    id: "prop-barcelona-eixample-flat",
+    id: "re-123320",
     title: "La Datcha",
     nightlyRate: "$35,000",
     location: "Pedregal, Los Cabos",
@@ -736,7 +736,7 @@ export const PROPERTIES: Listing[] = [
     ]),
   },
 {
-    id: "prop-london-camden-loft",
+    id: "re-109098",
     title: "Galeazzo",
     nightlyRate: "$18,000",
     location: "Lake Como, Italy",
@@ -787,14 +787,14 @@ export const PROPERTIES: Listing[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("camden", [
+    rentalHistory: history("embrace", [
       "2026-07-13",
       "2026-06-15",
       "2026-05-18",
     ]),
   },
 {
-    id: "prop-sydney-harbour-apartment",
+    id: "re-127825",
     title: "Embrace",
     nightlyRate: "$21,428",
     location: "Gustavia, St. Barts",
@@ -887,7 +887,7 @@ export const PROPERTIES: Listing[] = [
     ]),
   },
 {
-    id: "prop-toronto-condo",
+    id: "re-122422",
     title: "ANI Dominican Republic",
     nightlyRate: "$27,000",
     location: "Cabrera, Dominican Republic",
@@ -969,7 +969,7 @@ export const PROPERTIES: Listing[] = [
     ]),
   },
 {
-    id: "prop-melbourne-loft",
+    id: "re-129548",
     title: "Mita Principe",
     nightlyRate: "$20,000",
     location: "Ranchos Estates, Punta de Mita (Punta Mita)",
@@ -1094,7 +1094,7 @@ export const PROPERTIES: Listing[] = [
     ]),
   },
 {
-    id: "prop-miami-beach-condo",
+    id: "re-122903",
     title: "La Dolce Vita",
     nightlyRate: "$28,000",
     location: "Long Bay, Providenciales, Turks & Caicos",
@@ -1196,7 +1196,7 @@ export const PROPERTIES: Listing[] = [
     ]),
   },
 {
-    id: "prop-istanbul-bosphorus-flat",
+    id: "re-126870",
     title: "Tranquility",
     nightlyRate: "$21,500",
     location: "Leeward, Turks & Caicos",
@@ -1252,7 +1252,7 @@ export const PROPERTIES: Listing[] = [
     ]),
   },
 {
-    id: "prop-mexico-city-penthouse",
+    id: "re-130397",
     title: "Pearls of Long Bay Estate",
     nightlyRate: "$28,100",
     location: "Long Bay Hills, Providenciales, Turks & Caicos",
@@ -1382,7 +1382,7 @@ export const PROPERTIES: Listing[] = [
     ]),
   },
 {
-    id: "prop-kyoto-machiya",
+    id: "re-127483",
     title: "Dream Pavilion",
     nightlyRate: "$18,029",
     location: "Ambergris Cay, Turks & Caicos",
@@ -1447,7 +1447,7 @@ export const PROPERTIES: Listing[] = [
     ]),
   },
 {
-    id: "prop-cape-town-villa",
+    id: "re-108856",
     title: "ANI Thailand",
     nightlyRate: "$22,000",
     location: "Phang Nga Bay, Thailand",
@@ -1509,7 +1509,7 @@ export const PROPERTIES: Listing[] = [
     ]),
   },
 {
-    id: "prop-bangkok-sukhumvit-condo",
+    id: "re-108860",
     title: "ANI Sri Lanka",
     nightlyRate: "$27,000",
     location: "Maliyadda, Sri Lanka",
@@ -1581,7 +1581,7 @@ export const PROPERTIES: Listing[] = [
     ]),
   },
 {
-    id: "prop-amsterdam-canal-house",
+    id: "re-106441",
     title: "Rio Chico Private Estate",
     nightlyRate: "$23,179",
     location: "Ocho Rios, Jamaica",
@@ -1679,7 +1679,7 @@ export const PROPERTIES: Listing[] = [
     ]),
   },
 {
-    id: "prop-buenos-aires-recoleta-flat",
+    id: "re-129549",
     title: "Forza Modern",
     nightlyRate: "$12,000",
     location: "Holmby Hills, California",
@@ -1760,14 +1760,14 @@ export const PROPERTIES: Listing[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("recoleta", [
+    rentalHistory: history("chateau-prestige", [
       "2026-07-10",
       "2026-06-12",
       "2026-05-15",
     ]),
   },
 {
-    id: "prop-seoul-gangnam-studio",
+    id: "re-123919",
     title: "Chateau Prestige",
     nightlyRate: "€11,815",
     location: "Bordeaux, France",
@@ -1830,14 +1830,14 @@ export const PROPERTIES: Listing[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("gangnam", [
+    rentalHistory: history("hawksbill", [
       "2026-07-15",
       "2026-06-17",
       "2026-05-20",
     ]),
   },
 {
-    id: "prop-nyc-chelsea-loft",
+    id: "re-122113",
     title: "Hawksbill",
     nightlyRate: "$16,500",
     location: "Grace Bay, Turks & Caicos",

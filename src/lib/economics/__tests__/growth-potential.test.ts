@@ -78,7 +78,7 @@ describe("PROMPT 05: Grand 2 BDM critical valuation rule ($8M single)", () => {
 describe("PROMPT 03: general Growth Potential rule", () => {
   it("derives potential from the research range upper with an unambiguous percentage", () => {
     // The Aerial: current $18M single (PM lowest-valid-value rule), research $14.4M–$26.4M → +46.7%.
-    const growth = getGrowthPotential("prop-soho-loft-studio")!;
+    const growth = getGrowthPotential("re-126855")!;
     expect(growth.potentialValue).toBe(2_640_000_000);
     expect(growth.potentialPct).toBe(46.7);
     expect(growth.provenance).toBe("estimated");
@@ -97,12 +97,12 @@ describe("PROMPT 03: general Growth Potential rule", () => {
   });
 
   it("returns null for unknown ids (never creates a current value to enable math)", () => {
-    expect(getValuationDisplay("prop-does-not-exist")).toBeNull();
-    expect(getGrowthPotential("prop-does-not-exist")).toBeNull();
+    expect(getValuationDisplay("test-does-not-exist")).toBeNull();
+    expect(getGrowthPotential("test-does-not-exist")).toBeNull();
   });
 
   it("formats single valuations exactly (no rounding, no currency conversion)", () => {
-    const display = getValuationDisplay("prop-soho-loft-studio")!;
+    const display = getValuationDisplay("re-126855")!;
     expect(display).toEqual({ kind: "single", value: 1_800_000_000, provenance: "estimated" });
     expect(formatValuationDisplay(display)).toBe("$18,000,000.00");
     expect(formatValuationDisplayCompact(display)).toBe("$18M");
@@ -114,7 +114,7 @@ describe("PROMPT 03: general Growth Potential rule", () => {
   });
 
   it("formats short singles with the compact value (no invented range)", () => {
-    const display = getValuationDisplay("prop-soho-loft-studio")!;
+    const display = getValuationDisplay("re-126855")!;
     expect(formatValuationDisplayShort(display)).toBe("$18M");
   });
 });
@@ -129,7 +129,7 @@ describe("PROMPT 03 §12: canonical record validation (all 24)", () => {
       expect(record.sourceUrl.startsWith("https://www.rentalescapes.com/")).toBe(true);
       expect(record.sourceUrl.endsWith(`-${record.listingId}`)).toBe(true);
     }
-    // Every runtime prop-* id maps to exactly one canonical record and back.
+    // Every runtime canonical id maps to exactly one canonical record and back.
     expect(Object.keys(ESTATE_24_RUNTIME_MAP)).toHaveLength(24);
     for (const p of PROPERTIES) {
       const listingId = ESTATE_24_RUNTIME_MAP[p.id];

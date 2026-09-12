@@ -16,7 +16,7 @@ function entry(overrides: Partial<EarningsEntry>): EarningsEntry {
   return {
     id: "e",
     userId: "u",
-    propertyId: "prop-a",
+    propertyId: "test-a",
     weekOf: "2026-07-13T00:00:00Z",
     amountUsd: 1_000,
     tonAmount: 0,
@@ -27,10 +27,10 @@ function entry(overrides: Partial<EarningsEntry>): EarningsEntry {
 }
 
 const MIXED: EarningsEntry[] = [
-  entry({ id: "a1", propertyId: "prop-a", weekOf: "2026-07-06T00:00:00Z", amountUsd: 1_000, status: "paid" }),
-  entry({ id: "b1", propertyId: "prop-b", weekOf: "2026-07-06T00:00:00Z", amountUsd: 2_000, status: "paid" }),
-  entry({ id: "a2", propertyId: "prop-a", weekOf: "2026-07-13T00:00:00Z", amountUsd: 1_500, status: "paid" }),
-  entry({ id: "a3", propertyId: "prop-a", weekOf: "2026-07-20T00:00:00Z", amountUsd: 500, status: "pending" }),
+  entry({ id: "a1", propertyId: "test-a", weekOf: "2026-07-06T00:00:00Z", amountUsd: 1_000, status: "paid" }),
+  entry({ id: "b1", propertyId: "test-b", weekOf: "2026-07-06T00:00:00Z", amountUsd: 2_000, status: "paid" }),
+  entry({ id: "a2", propertyId: "test-a", weekOf: "2026-07-13T00:00:00Z", amountUsd: 1_500, status: "paid" }),
+  entry({ id: "a3", propertyId: "test-a", weekOf: "2026-07-20T00:00:00Z", amountUsd: 500, status: "pending" }),
 ];
 
 describe("buildTimelinePoints — typed weekly points", () => {
@@ -42,7 +42,7 @@ describe("buildTimelinePoints — typed weekly points", () => {
     expect(first.paidUsd).toBe(3_000);
     expect(first.projectedUsd).toBeNull();
     expect(first.distributionCount).toBe(2);
-    expect(first.estateIds).toEqual(["prop-a", "prop-b"]);
+    expect(first.estateIds).toEqual(["test-a", "test-b"]);
     const last = points[2];
     expect(last.paidUsd).toBeNull();
     expect(last.projectedUsd).toBe(500);
@@ -117,18 +117,18 @@ describe("estateContribution — paid-only composition", () => {
     const rows = estateContribution(MIXED);
     expect(rows).toHaveLength(2);
     const byId = new Map(rows.map((r) => [r.propertyId, r]));
-    expect(byId.get("prop-a")!.receivedUsd).toBe(2_500);
-    expect(byId.get("prop-b")!.receivedUsd).toBe(2_000);
+    expect(byId.get("test-a")!.receivedUsd).toBe(2_500);
+    expect(byId.get("test-b")!.receivedUsd).toBe(2_000);
     const total = rows.reduce((s, r) => s + r.sharePct, 0);
     expect(total).toBeGreaterThan(99);
     expect(total).toBeLessThanOrEqual(100.01);
     // Ranked: largest first.
-    expect(rows[0].propertyId).toBe("prop-a");
+    expect(rows[0].propertyId).toBe("test-a");
   });
 
   it("ignores pending entries entirely", () => {
     const rows = estateContribution([
-      entry({ propertyId: "prop-a", amountUsd: 500, status: "pending" }),
+      entry({ propertyId: "test-a", amountUsd: 500, status: "pending" }),
     ]);
     expect(rows).toEqual([]);
   });

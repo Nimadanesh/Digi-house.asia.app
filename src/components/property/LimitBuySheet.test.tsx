@@ -28,9 +28,9 @@ const tiers: FeeTier[] = [
 ];
 
 const listing: Listing = {
-  id: "prop-tbilisi-riverhouse-loft",
-  title: "Tbilisi Riverhouse Loft",
-  location: "Tbilisi",
+  id: "re-125643",
+  title: "Emerald Cay",
+  location: "Silly Creek, Providenciales, Turks and Caicos",
   description: "d",
   images: ["/images/properties/p5.png"],
   totalShares: 600,
@@ -133,7 +133,7 @@ describe("LimitBuySheet — PD-06", () => {
 
   it("PROMPT 04: confirms the selected estate with canonical identity (Matrix identity.name primary)", () => {
     renderSheet();
-    // prop-tbilisi-riverhouse-loft maps to the canonical Emerald Cay record —
+    // re-125643 maps to the canonical Emerald Cay record —
     // the fixture shorthand must never render for a known Estate.
     const identity = screen.getByTestId("limit-buy-estate");
     expect(identity).toHaveTextContent("Emerald Cay");

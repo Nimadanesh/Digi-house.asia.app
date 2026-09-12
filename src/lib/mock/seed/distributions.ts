@@ -5,8 +5,8 @@ import { NANO_PER_USD_MINOR, WEEKS } from "./holdings";
 // One RentalDistribution per owned property per seeded week (8 total).
 export const DISTRIBUTIONS: RentalDistribution[] = [
   {
-    id: "dist-bayside-2026-06-29",
-    propertyId: "prop-bayside-marina-penthouse",
+    id: "dist-re-108924-2026-06-29",
+    propertyId: "re-108924",
     weekOf: WEEKS[0],
     rentPoolUsd: 20000,
     rentPoolNanoTon: 20000 * NANO_PER_USD_MINOR,
@@ -16,8 +16,8 @@ export const DISTRIBUTIONS: RentalDistribution[] = [
     createdAt: WEEKS[0],
   },
   {
-    id: "dist-alfama-2026-06-29",
-    propertyId: "prop-alfama-terrace-flat",
+    id: "dist-re-123861-2026-06-29",
+    propertyId: "re-123861",
     weekOf: WEEKS[0],
     rentPoolUsd: 25000,
     rentPoolNanoTon: 25000 * NANO_PER_USD_MINOR,
@@ -27,8 +27,8 @@ export const DISTRIBUTIONS: RentalDistribution[] = [
     createdAt: WEEKS[0],
   },
   {
-    id: "dist-bayside-2026-07-06",
-    propertyId: "prop-bayside-marina-penthouse",
+    id: "dist-re-108924-2026-07-06",
+    propertyId: "re-108924",
     weekOf: WEEKS[1],
     rentPoolUsd: 20000,
     rentPoolNanoTon: 20000 * NANO_PER_USD_MINOR,
@@ -38,8 +38,8 @@ export const DISTRIBUTIONS: RentalDistribution[] = [
     createdAt: WEEKS[1],
   },
   {
-    id: "dist-alfama-2026-07-06",
-    propertyId: "prop-alfama-terrace-flat",
+    id: "dist-re-123861-2026-07-06",
+    propertyId: "re-123861",
     weekOf: WEEKS[1],
     rentPoolUsd: 25000,
     rentPoolNanoTon: 25000 * NANO_PER_USD_MINOR,
@@ -49,8 +49,8 @@ export const DISTRIBUTIONS: RentalDistribution[] = [
     createdAt: WEEKS[1],
   },
   {
-    id: "dist-bayside-2026-07-13",
-    propertyId: "prop-bayside-marina-penthouse",
+    id: "dist-re-108924-2026-07-13",
+    propertyId: "re-108924",
     weekOf: WEEKS[2],
     rentPoolUsd: 20000,
     rentPoolNanoTon: 20000 * NANO_PER_USD_MINOR,
@@ -60,8 +60,8 @@ export const DISTRIBUTIONS: RentalDistribution[] = [
     createdAt: WEEKS[2],
   },
   {
-    id: "dist-alfama-2026-07-13",
-    propertyId: "prop-alfama-terrace-flat",
+    id: "dist-re-123861-2026-07-13",
+    propertyId: "re-123861",
     weekOf: WEEKS[2],
     rentPoolUsd: 25000,
     rentPoolNanoTon: 25000 * NANO_PER_USD_MINOR,
@@ -71,8 +71,8 @@ export const DISTRIBUTIONS: RentalDistribution[] = [
     createdAt: WEEKS[2],
   },
   {
-    id: "dist-bayside-2026-07-20",
-    propertyId: "prop-bayside-marina-penthouse",
+    id: "dist-re-108924-2026-07-20",
+    propertyId: "re-108924",
     weekOf: WEEKS[3],
     rentPoolUsd: 20000,
     rentPoolNanoTon: 20000 * NANO_PER_USD_MINOR,
@@ -82,8 +82,8 @@ export const DISTRIBUTIONS: RentalDistribution[] = [
     createdAt: WEEKS[3],
   },
   {
-    id: "dist-alfama-2026-07-20",
-    propertyId: "prop-alfama-terrace-flat",
+    id: "dist-re-123861-2026-07-20",
+    propertyId: "re-123861",
     weekOf: WEEKS[3],
     rentPoolUsd: 25000,
     rentPoolNanoTon: 25000 * NANO_PER_USD_MINOR,

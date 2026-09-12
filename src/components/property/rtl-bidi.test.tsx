@@ -20,7 +20,7 @@ vi.mock("next/image", () => ({
 }));
 
 const listing: Listing = {
-  id: "prop-marina-vista-4b",
+  id: "re-128862",
   title: "Grand",
   location: "Maldives",
   description: "x",
@@ -50,7 +50,7 @@ const listing: Listing = {
 
 const resale: Listing = {
   ...listing,
-  id: "prop-tbilisi-riverhouse-loft",
+  id: "re-125643",
   status: "resale",
   lastTradeUsd: 8000,
   bestAskUsd: 8160,
@@ -71,7 +71,7 @@ describe("Slice 7 — numeric figures are bidi-isolated (dir=ltr)", () => {
   it("marketplace card growth figures keep LTR order", () => {
     const estate = toMarketplaceEstate({
       ...listing,
-      id: "prop-soho-loft-studio",
+      id: "re-126855",
     });
     const { container } = render(
       <PropertyCard estate={estate} nowMs={Date.UTC(2026, 6, 26)} />,

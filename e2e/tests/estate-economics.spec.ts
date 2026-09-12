@@ -19,7 +19,7 @@ async function expectNoOverflow(page: Page) {
 test.describe("Prompt 05 — V1 canonical economics QA", () => {
   test("Grand 2 BDM: V1 thesis + $8M single value + investment facts", async ({ page }) => {
     await skipOnboarding(page);
-    await page.goto("/property/prop-marina-vista-4b");
+    await page.goto("/property/re-128862");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
 
     // PROMPT 05: hero shows exactly $8M single (V1 canonical — never the band).
@@ -85,7 +85,7 @@ test.describe("Prompt 05 — V1 canonical economics QA", () => {
 
   test("funding peer (RANGE rate): V1 thesis with known per-share, no legacy shell", async ({ page }) => {
     await skipOnboarding(page);
-    await page.goto("/property/prop-soho-loft-studio");
+    await page.goto("/property/re-126855");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
 
     // Rental performance leads with the observed nightly display (range kept).
@@ -123,7 +123,7 @@ test.describe("Prompt 05 — V1 canonical economics QA", () => {
 
   test("resale peer (DYNAMIC rate): V1 investment at NAV, no legacy market rows", async ({ page }) => {
     await skipOnboarding(page);
-    await page.goto("/property/prop-miami-beach-condo");
+    await page.goto("/property/re-122903");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
 
     // Reserve Villa CTA carries La Dolce Vita's exact official listing URL.
@@ -149,7 +149,7 @@ test.describe("Prompt 05 — V1 canonical economics QA", () => {
 
   test("STARTING_FROM peer: nightly semantics preserved, V1 UNKNOWN stays honest", async ({ page }) => {
     await skipOnboarding(page);
-    await page.goto("/property/prop-berlin-mitte-apartment");
+    await page.goto("/property/re-128529");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
 
     await expect(page.getByTestId("rental-story-rent")).toContainText("25,000");
@@ -163,7 +163,7 @@ test.describe("Prompt 05 — V1 canonical economics QA", () => {
 
   test("high-value peer: $60M estate value with V1 investment facts", async ({ page }) => {
     await skipOnboarding(page);
-    await page.goto("/property/prop-mexico-city-penthouse");
+    await page.goto("/property/re-130397");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
 
     await expect(page.getByTestId("hero-estate-value")).toContainText("$60,000,000.00");
@@ -175,7 +175,7 @@ test.describe("Prompt 05 — V1 canonical economics QA", () => {
 
   test("Grand 2 BDM: reserve CTA opens the official listing externally", async ({ page }) => {
     await skipOnboarding(page);
-    await page.goto("/property/prop-marina-vista-4b");
+    await page.goto("/property/re-128862");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
 
     const reserve = page.getByTestId("reserve-villa-cta");
@@ -196,7 +196,7 @@ test.describe("Prompt 05 — V1 canonical economics QA", () => {
 
   test("closing CTA clears fixed chrome at max scroll (funding + resale)", async ({ page }) => {
     await skipOnboarding(page);
-    for (const id of ["prop-marina-vista-4b", "prop-nyc-chelsea-loft"]) {
+    for (const id of ["re-128862", "re-122113"]) {
       await page.goto(`/property/${id}`);
       await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
       await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
@@ -234,30 +234,30 @@ test.describe("Prompt 05 — V1 canonical economics QA", () => {
     test.setTimeout(180_000);
     await skipOnboarding(page);
     const ids = [
-      "prop-marina-vista-4b",
-      "prop-soho-loft-studio",
-      "prop-bayside-marina-penthouse",
-      "prop-alfama-terrace-flat",
-      "prop-tbilisi-riverhouse-loft",
-      "prop-canggu-surf-villa",
-      "prop-tokyo-shibuya-studio",
-      "prop-brooklyn-brownstone-flat",
-      "prop-berlin-mitte-apartment",
-      "prop-barcelona-eixample-flat",
-      "prop-london-camden-loft",
-      "prop-sydney-harbour-apartment",
-      "prop-toronto-condo",
-      "prop-melbourne-loft",
-      "prop-miami-beach-condo",
-      "prop-istanbul-bosphorus-flat",
-      "prop-mexico-city-penthouse",
-      "prop-kyoto-machiya",
-      "prop-cape-town-villa",
-      "prop-bangkok-sukhumvit-condo",
-      "prop-amsterdam-canal-house",
-      "prop-buenos-aires-recoleta-flat",
-      "prop-seoul-gangnam-studio",
-      "prop-nyc-chelsea-loft",
+      "re-128862",
+      "re-126855",
+      "re-108924",
+      "re-123861",
+      "re-125643",
+      "re-130393",
+      "re-130901",
+      "re-131293",
+      "re-128529",
+      "re-123320",
+      "re-109098",
+      "re-127825",
+      "re-122422",
+      "re-129548",
+      "re-122903",
+      "re-126870",
+      "re-130397",
+      "re-127483",
+      "re-108856",
+      "re-108860",
+      "re-106441",
+      "re-129549",
+      "re-123919",
+      "re-122113",
     ];
     expect(ids).toHaveLength(24);
     for (const id of ids) {

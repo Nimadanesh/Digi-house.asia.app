@@ -256,7 +256,7 @@ curl -sS http://localhost:8787/v1/me   # 401
 curl -sS "http://localhost:8787/v1/marketplace" | jq .
 curl -sS "http://localhost:8787/v1/marketplace?status=funding" | jq .
 curl -sS "http://localhost:8787/v1/marketplace?query=dubai" | jq .
-curl -sS "http://localhost:8787/v1/properties/prop-marina-vista-4b" | jq .
+curl -sS "http://localhost:8787/v1/properties/re-128862" | jq .
 curl -sS -w "\n%{http_code}\n" "http://localhost:8787/v1/properties/nope"  # 404
 ```
 
@@ -301,13 +301,13 @@ Response: `EarningsSummary` with `totalEarnedUsd`, `pendingUsd`, `paidUsd`, `ent
 
 ```bash
 # View order book (public)
-curl -sS "http://localhost:8787/v1/properties/prop-marina-vista-4b/order-book" | jq .
+curl -sS "http://localhost:8787/v1/properties/re-128862/order-book" | jq .
 
 # Place order (auth required)
 curl -sS -X POST http://localhost:8787/v1/orders \
   -H "content-type: application/json" \
   -H "Authorization: Bearer <token>" \
-  -d '{"propertyId":"prop-marina-vista-4b","side":"buy","priceUsd":5000,"quantity":5}' | jq .
+  -d '{"propertyId":"re-128862","side":"buy","priceUsd":5000,"quantity":5}' | jq .
 
 # Cancel order
 curl -sS -X DELETE http://localhost:8787/v1/orders/ord_<uuid> \
@@ -329,7 +329,7 @@ IDOR protection: only the order owner can cancel. Sell orders validate share bal
 curl -sS -X POST http://localhost:8787/v1/buys/prepare \
   -H "content-type: application/json" \
   -H "Authorization: Bearer <token>" \
-  -d '{"propertyId":"prop-marina-vista-4b","quantity":3,"priceUsdPerShare":5000}' | jq .
+  -d '{"propertyId":"re-128862","quantity":3,"priceUsdPerShare":5000}' | jq .
 # Returns intentId, totalUsd, tonConnectMessages, expiresAt
 
 # 2) Confirm (boc may be null in hybrid mode)

@@ -56,12 +56,12 @@ function seedLock(
   return { lock, paidThroughDay: paidThrough };
 }
 
-// Demo state: one accruing monthly lock on Bayside + one matured history row.
+// Demo state: one accruing monthly lock on Syrene + one matured history row.
 // New locks are monthly-only (Final PO Decision 4); the "weekly" period survives
 // solely for preserved historical records, never for new creation (see create()).
 const state: LockState[] = [
-  seedLock("lock_demo_bayside", "prop-bayside-marina-penthouse", 100, 10000, "monthly", 9),
-  seedLock("lock_demo_alfama", "prop-alfama-terrace-flat", 40, 10000, "monthly", 64, "matured"),
+  seedLock("lock_demo_re-108924", "re-108924", 100, 10000, "monthly", 9),
+  seedLock("lock_demo_re-123861", "re-123861", 40, 10000, "monthly", 64, "matured"),
 ];
 
 /** Shared read access for the mock me-summary repo. */

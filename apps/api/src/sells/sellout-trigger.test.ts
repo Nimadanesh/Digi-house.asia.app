@@ -10,7 +10,7 @@ import { createMemoryTxStore } from "../buys/tx-store.js";
 import { createMemoryInstantSellStore } from "../sells/instant-sell-store.js";
 import { settleInstantSell } from "../sells/settle-instant-sell.js";
 
-const FUNDING = "prop-marina-vista-4b"; // 2500 total, 2300 sold → 200 remaining
+const FUNDING = "re-128862"; // 2500 total, 2300 sold → 200 remaining
 const USER = "user-a";
 
 function makeDeps() {

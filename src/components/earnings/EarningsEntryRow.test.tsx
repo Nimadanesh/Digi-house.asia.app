@@ -53,7 +53,7 @@ describe("EarningsEntryRow — Fable payments + honesty", () => {
     render(
       <EarningsEntryRow
         entry={paidEntry}
-        propertyName="Bayside Marina Penthouse"
+        propertyName="Syrene"
         weeklyRentPoolUsd={20000}
         sharesOwned={60}
       />,
@@ -66,7 +66,7 @@ describe("EarningsEntryRow — Fable payments + honesty", () => {
     render(
       <EarningsEntryRow
         entry={realTxEntry}
-        propertyName="Bayside"
+        propertyName="Syrene"
         weeklyRentPoolUsd={20000}
       />,
     );
@@ -78,7 +78,7 @@ describe("EarningsEntryRow — Fable payments + honesty", () => {
     render(
       <EarningsEntryRow
         entry={paidEntry}
-        propertyName="Bayside"
+        propertyName="Syrene"
         weeklyRentPoolUsd={20000}
         sharesOwned={60}
       />,
@@ -97,7 +97,7 @@ describe("EarningsEntryRow — Fable payments + honesty", () => {
     render(
       <EarningsEntryRow
         entry={realTxEntry}
-        propertyName="Bayside"
+        propertyName="Syrene"
         weeklyRentPoolUsd={20000}
       />,
     );
@@ -110,7 +110,7 @@ describe("EarningsEntryRow — Fable payments + honesty", () => {
 
   it("pending: Pending pill; expanded has no demo tx disclaimer", () => {
     render(
-      <EarningsEntryRow entry={pendingEntry} propertyName="Alfama Terrace" weeklyRentPoolUsd={25000} />,
+      <EarningsEntryRow entry={pendingEntry} propertyName="Villa du Cap" weeklyRentPoolUsd={25000} />,
     );
     expect(screen.getByText("Pending")).toHaveClass("text-warning");
     fireEvent.click(screen.getByRole("button"));
@@ -118,7 +118,7 @@ describe("EarningsEntryRow — Fable payments + honesty", () => {
   });
 
   it("amount uses tnum", () => {
-    render(<EarningsEntryRow entry={paidEntry} propertyName="Bayside" weeklyRentPoolUsd={20000} />);
+    render(<EarningsEntryRow entry={paidEntry} propertyName="Syrene" weeklyRentPoolUsd={20000} />);
     expect(screen.getByText("$15.00")).toHaveClass("tnum");
   });
 });

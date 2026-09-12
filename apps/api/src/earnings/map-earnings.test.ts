@@ -22,7 +22,7 @@ describe("proportional floor invariant", () => {
       {
         id: "e1",
         userId: "u1",
-        propertyId: "prop-bayside-marina-penthouse",
+        propertyId: "re-108924",
         weekOf: "2026-06-29",
         amountUsd,
         tonAmount: tonFromUsdCents(amountUsd),
@@ -45,7 +45,7 @@ describe("proportional floor invariant", () => {
       {
         id: "dust",
         userId: "u1",
-        propertyId: "prop-a",
+        propertyId: "test-a",
         weekOf: "2026-06-29",
         amountUsd,
         tonAmount: tonFromUsdCents(amountUsd),
@@ -83,7 +83,7 @@ describe("buildEarningsSummary", () => {
     >,
   ): EarningsEntryInput => ({
     userId: "user-a",
-    propertyId: "prop-bayside-marina-penthouse",
+    propertyId: "re-108924",
     tonAmount: tonFromUsdCents(over.amountUsd),
     shareRatio: 0.2,
     txHash: over.status === "paid" ? `simulated:${over.id}` : null,
@@ -106,21 +106,21 @@ describe("buildEarningsSummary", () => {
         weekOf: "2026-06-29",
         status: "paid",
         amountUsd: 4000,
-        propertyId: "prop-z",
+        propertyId: "test-z",
       }),
       base({
         id: "new-b",
         weekOf: "2026-07-20",
         status: "pending",
         amountUsd: 4000,
-        propertyId: "prop-bayside-marina-penthouse",
+        propertyId: "re-108924",
       }),
       base({
         id: "new-a",
         weekOf: "2026-07-20",
         status: "pending",
         amountUsd: 5000,
-        propertyId: "prop-alfama-terrace-flat",
+        propertyId: "re-123861",
       }),
       base({
         id: "mid",
@@ -133,9 +133,10 @@ describe("buildEarningsSummary", () => {
     expect(summary.allTimeUsd).toBe(8000);
     expect(summary.thisWeekProjectedUsd).toBe(9000);
     expect(summary.projectedNextWeekUsd).toBe(9000);
+    // Same-week tiebreak is propertyId locale order — re-108924 < re-123861.
     expect(summary.entries.map((e) => e.id)).toEqual([
-      "new-a",
       "new-b",
+      "new-a",
       "mid",
       "old",
     ]);

@@ -13,7 +13,7 @@ describe("property seed data", () => {
 
   it("uses integer cents and shares; stable text ids", () => {
     for (const p of SEED_PROPERTIES) {
-      expect(p.id.startsWith("prop-")).toBe(true);
+      expect(p.id.startsWith("re-")).toBe(true);
       expect(Number.isInteger(p.sharePriceUsd)).toBe(true);
       expect(Number.isInteger(p.annualRentUsd)).toBe(true);
       expect(Number.isInteger(p.totalShares)).toBe(true);

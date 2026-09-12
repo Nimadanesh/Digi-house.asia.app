@@ -19,8 +19,8 @@ const silentLog = {
 
 const SESSION = { secret: "test-session-secret-at-least-32-chars", ttlSeconds: 3600 };
 
-const FUNDING = "prop-marina-vista-4b";
-const RESALE = "prop-tbilisi-riverhouse-loft"; // sold-out → order book open
+const FUNDING = "re-128862";
+const RESALE = "re-125643"; // sold-out → order book open
 const PRICE = 8_000;
 const WALLET_A = "eqdwalletauser";
 const WALLET_B = "eqdwalletbuser";

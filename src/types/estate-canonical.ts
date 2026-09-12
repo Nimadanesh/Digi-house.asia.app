@@ -1,5 +1,5 @@
 // File responsibility: R2 canonical marketplace estate types — identity reconciliation
-// between the stable runtime `propertyId` (existing `prop-*` fixtures consumed by the
+// between the stable runtime `propertyId` (canonical `re-<listingId>` ids consumed by the
 // web runtime), the explicit Rental Escapes listing reference (Source URL + Listing ID
 // from `docs/product/rebuild/research/24-PROPERTY-RESEARCH-DATASET.md`), research
 // enrichment, and the FractionalLuxe economic layer.

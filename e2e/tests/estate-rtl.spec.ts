@@ -26,7 +26,7 @@ test.describe("Prompt 05 RTL", () => {
   test.use({ locale: "fa-IR" });
   test("fa: rtl document, V1 thesis + investment legible, no overflow", async ({ page }) => {
     await useFaLocale(page);
-    await page.goto("/property/prop-marina-vista-4b");
+    await page.goto("/property/re-128862");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
     const dir = await page.evaluate(() => document.documentElement.dir);
     expect(dir).toBe("rtl");
@@ -59,7 +59,7 @@ test.describe("Prompt 05 RTL", () => {
 
   test("fa: directional icons mirror (Slice 7 rtl variant)", async ({ page }) => {
     await useFaLocale(page);
-    await page.goto("/property/prop-marina-vista-4b");
+    await page.goto("/property/re-128862");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
     expect(await page.evaluate(() => document.documentElement.dir)).toBe("rtl");
     // The back chevron carries rtl:rotate-180 — the compiled variant must flip
@@ -73,7 +73,7 @@ test.describe("Prompt 05 RTL", () => {
 
   test("fa: non-Grand V1 thesis legible RTL, no overflow, no raw keys", async ({ page }) => {
     await useFaLocale(page);
-    await page.goto("/property/prop-soho-loft-studio");
+    await page.goto("/property/re-126855");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
     const dir = await page.evaluate(() => document.documentElement.dir);
     expect(dir).toBe("rtl");

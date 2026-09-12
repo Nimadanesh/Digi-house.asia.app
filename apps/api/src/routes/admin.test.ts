@@ -102,7 +102,7 @@ describe("admin routes", () => {
       };
       expect(body.ok).toBe(true);
       expect(body.property.status).toBe("draft");
-      expect(body.property.id).toMatch(/^prop-new-test-property-/);
+      expect(body.property.id).toMatch(/^admin-new-test-property-/);
     });
 
     it("returns 400 on missing required fields", async () => {
@@ -254,7 +254,7 @@ describe("admin routes", () => {
         createAdminRoutes(makeDeps({ s3Signer: null })),
       );
       const res = await app.request(
-        "/v1/admin/properties/prop-marina-vista-4b/media/sign",
+        "/v1/admin/properties/re-128862/media/sign",
         {
           method: "POST",
           headers: {
@@ -687,7 +687,7 @@ describe("admin routes", () => {
       await deps.locks.create({
         id: over.lockId ?? "lock-yield",
         userId: over.userId ?? "user-a",
-        propertyId: "prop-1",
+        propertyId: "test-1",
         shares: 10,
         principalUsd: 100_000,
         payoutPeriod: "weekly",
@@ -803,7 +803,7 @@ describe("admin routes", () => {
       await deps.locks.create({
         id: over.id ?? "lock-1",
         userId: "user-a",
-        propertyId: "prop-1",
+        propertyId: "test-1",
         shares: 10,
         principalUsd: 100_000,
         payoutPeriod: "weekly",
@@ -986,7 +986,7 @@ describe("admin routes", () => {
   });
 
   describe("POST /v1/admin/properties/:id/house-orders/seed (PE-06)", () => {
-    const RESALE = "prop-tbilisi-riverhouse-loft"; // resale, sharePriceUsd 12_000
+    const RESALE = "re-125643"; // resale, sharePriceUsd 12_000
 
     function makeSeedDeps(over: { feeTiers?: AdminRouteDeps["feeTiers"] } = {}) {
       const base = makeDeps();
@@ -1129,7 +1129,7 @@ describe("admin routes", () => {
     it("409 on a funding (primary) property", async () => {
       const deps = makeSeedDeps();
       const res = await deps.app.request(
-        "/v1/admin/properties/prop-marina-vista-4b/house-orders/seed",
+        "/v1/admin/properties/re-128862/house-orders/seed",
         { method: "POST", headers: adminHeaders },
       );
       expect(res.status).toBe(409);
@@ -1178,7 +1178,7 @@ describe("admin routes", () => {
       const deps = makeDeps();
       // Create a draft property
       await deps.properties.create({
-        id: "prop-draft-test",
+        id: "test-draft",
         title: "Draft Property",
         location: "Hidden",
         description: "Should not appear in marketplace",
@@ -1194,7 +1194,7 @@ describe("admin routes", () => {
       const draftIds = listings
         .filter((l) => l.status === "draft")
         .map((l) => l.id);
-      expect(draftIds).not.toContain("prop-draft-test");
+      expect(draftIds).not.toContain("test-draft");
     });
   });
 
@@ -1227,9 +1227,9 @@ describe("admin routes", () => {
       const deps = makeNftDeps();
       await deps.nfts.insert({
         id: "nft_1",
-        holdingKey: "user-a:prop-a",
+        holdingKey: "user-a:test-a",
         userId: "user-a",
-        propertyId: "prop-a",
+        propertyId: "test-a",
         walletAddress: ADDR,
       });
 
@@ -1254,9 +1254,9 @@ describe("admin routes", () => {
       const deps = makeNftDeps();
       await deps.nfts.insert({
         id: "nft_1",
-        holdingKey: "user-a:prop-a",
+        holdingKey: "user-a:test-a",
         userId: "user-a",
-        propertyId: "prop-a",
+        propertyId: "test-a",
         walletAddress: ADDR,
       });
       await deps.nfts.claimForMint("nft_1");
@@ -1297,9 +1297,9 @@ describe("admin routes", () => {
       const deps = makeNftDeps();
       await deps.nfts.insert({
         id: "nft_stale",
-        holdingKey: "user-a:prop-a",
+        holdingKey: "user-a:test-a",
         userId: "user-a",
-        propertyId: "prop-a",
+        propertyId: "test-a",
         walletAddress: ADDR,
       });
       deps.nfts._rows[0]!.createdAt = new Date(Date.now() - 60 * 60_000);

@@ -534,14 +534,14 @@ describe("legacy bridge", () => {
 
   it("bridges without inventing scenario data (unknowns stay unknown)", () => {
     const estate = estateFromLegacyListing({
-      id: "prop-marina-vista-4b",
+      id: "re-128862",
       title: "Grand 2 BDM Ocean Pool Villa",
       location: "JOALI Being, Maldives",
       images: ["/images/properties/joali-being-01.jpg"],
       totalValueUsd: 82_000_000,
       nightlyRate: "$67,655",
     });
-    expect(estate.id).toBe("prop-marina-vista-4b");
+    expect(estate.id).toBe("re-128862");
     expect(estate.asset.propertyValue).toEqual({ value: 82_000_000, provenance: "unknown" });
     expect(estate.asset.nightlyRateMin).toEqual({ value: 6_765_500, provenance: "observed" });
     expect(estate.baselineScenario.averageOccupiedGuests).toBeNull();

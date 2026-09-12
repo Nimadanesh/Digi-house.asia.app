@@ -27,7 +27,7 @@ async function expectNoOverflow(page: Page) {
 test.describe("Buy flow — primary entry + wallet gate (LTR)", () => {
   test("hero opens the sheet at the wallet gate; Escape cancels cleanly", async ({ page }) => {
     await skipOnboarding(page);
-    await page.goto("/property/prop-marina-vista-4b");
+    await page.goto("/property/re-128862");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
 
     await page.getByTestId("hero-cta").click();
@@ -46,7 +46,7 @@ test.describe("Buy flow — primary entry + wallet gate (LTR)", () => {
   // Ownership V1 buy entry; see PRODUCT-DECISION-LOCK.md §6.)
   test("ownership V1 Buy CTA opens the same sheet (entry diversity)", async ({ page }) => {
     await skipOnboarding(page);
-    await page.goto("/property/prop-marina-vista-4b");
+    await page.goto("/property/re-128862");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
 
     await page.getByTestId("tab-ownership").click();
@@ -58,7 +58,7 @@ test.describe("Buy flow — primary entry + wallet gate (LTR)", () => {
 
   test("no raw i18n keys leak on the buy surfaces", async ({ page }) => {
     await skipOnboarding(page);
-    await page.goto("/property/prop-marina-vista-4b");
+    await page.goto("/property/re-128862");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
 
     await page.getByTestId("hero-cta").click();
@@ -73,7 +73,7 @@ test.describe("Buy flow — primary entry + wallet gate (LTR)", () => {
 test.describe("Buy flow — secondary market order end-to-end (LTR)", () => {
   test("resale estate places a limit buy with fee preview and escrow total", async ({ page }) => {
     await skipOnboarding(page);
-    await page.goto("/property/prop-tbilisi-riverhouse-loft");
+    await page.goto("/property/re-125643");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
 
     await page.getByTestId("hero-cta").click();
@@ -113,7 +113,7 @@ test.describe("Buy flow — wallet gate (RTL)", () => {
         }),
       );
     });
-    await page.goto("/property/prop-marina-vista-4b");
+    await page.goto("/property/re-128862");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
     expect(await page.evaluate(() => document.documentElement.dir)).toBe("rtl");
 

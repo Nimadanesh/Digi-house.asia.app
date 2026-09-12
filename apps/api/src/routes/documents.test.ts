@@ -16,13 +16,13 @@ const s3Signer = new S3Signer({
 
 const SEED: DocumentRecord[] = [
   {
-    id: "doc-1", propertyId: "prop-abc", title: "Test Doc", kind: "offering",
-    storageKey: "documents/prop-abc/test.pdf", fileSize: 1000, contentType: "application/pdf",
+    id: "doc-1", propertyId: "test-abc", title: "Test Doc", kind: "offering",
+    storageKey: "documents/test-abc/test.pdf", fileSize: 1000, contentType: "application/pdf",
     createdAt: new Date("2026-01-01").toISOString(),
   },
   {
-    id: "doc-2", propertyId: "prop-abc", title: "Finance", kind: "financial",
-    storageKey: "documents/prop-abc/fin.pdf", fileSize: 2000, contentType: "application/pdf",
+    id: "doc-2", propertyId: "test-abc", title: "Finance", kind: "financial",
+    storageKey: "documents/test-abc/fin.pdf", fileSize: 2000, contentType: "application/pdf",
     createdAt: new Date("2026-01-02").toISOString(),
   },
 ];
@@ -52,7 +52,7 @@ function makeDeps(over: Partial<DocumentRouteDeps> = {}): DocumentRouteDeps {
       seedUser("user-a", "Alice"),
     ]),
     holdings: createMemoryHoldingStore([
-      { userId: "user-a", propertyId: "prop-abc", sharesOwned: 10, avgCostUsd: 10000, updatedAt: new Date() },
+      { userId: "user-a", propertyId: "test-abc", sharesOwned: 10, avgCostUsd: 10000, updatedAt: new Date() },
     ]),
     ...over,
   };
@@ -62,7 +62,7 @@ describe("document routes", () => {
   describe("GET /v1/properties/:id/documents", () => {
     it("returns document list", async () => {
       const app = new Hono().route("/", createDocumentRoutes(makeDeps()));
-      const res = await app.request("/v1/properties/prop-abc/documents");
+      const res = await app.request("/v1/properties/test-abc/documents");
       expect(res.status).toBe(200);
       const body = (await res.json()) as { documents: Array<{ id: string; title: string; kind: string }> };
       expect(body.documents).toHaveLength(2);
@@ -83,7 +83,7 @@ describe("document routes", () => {
     it("returns signed URL + expiresAt", async () => {
       const app = new Hono().route("/", createDocumentRoutes(makeDeps()));
       const { token } = await signSessionToken("user-a", SESSION);
-      const res = await app.request("/v1/properties/prop-abc/documents/doc-1/url", {
+      const res = await app.request("/v1/properties/test-abc/documents/doc-1/url", {
         headers: { Authorization: `Bearer ${token}` },
       });
       expect(res.status).toBe(200);
@@ -95,14 +95,14 @@ describe("document routes", () => {
 
     it("returns 401 without auth", async () => {
       const app = new Hono().route("/", createDocumentRoutes(makeDeps()));
-      const res = await app.request("/v1/properties/prop-abc/documents/doc-1/url");
+      const res = await app.request("/v1/properties/test-abc/documents/doc-1/url");
       expect(res.status).toBe(401);
     });
 
     it("returns 404 for unknown doc", async () => {
       const app = new Hono().route("/", createDocumentRoutes(makeDeps()));
       const { token } = await signSessionToken("user-a", SESSION);
-      const res = await app.request("/v1/properties/prop-abc/documents/unknown/url", {
+      const res = await app.request("/v1/properties/test-abc/documents/unknown/url", {
         headers: { Authorization: `Bearer ${token}` },
       });
       expect(res.status).toBe(404);
@@ -120,7 +120,7 @@ describe("document routes", () => {
     it("returns 501 when s3Signer is null", async () => {
       const app = new Hono().route("/", createDocumentRoutes(makeDeps({ s3Signer: null })));
       const { token } = await signSessionToken("user-a", SESSION);
-      const res = await app.request("/v1/properties/prop-abc/documents/doc-1/url", {
+      const res = await app.request("/v1/properties/test-abc/documents/doc-1/url", {
         headers: { Authorization: `Bearer ${token}` },
       });
       expect(res.status).toBe(501);
@@ -136,7 +136,7 @@ describe("document routes", () => {
         createDocumentRoutes(makeDeps({ users })),
       );
       const { token } = await signSessionToken("user-b", SESSION);
-      const res = await app.request("/v1/properties/prop-abc/documents/doc-1/url", {
+      const res = await app.request("/v1/properties/test-abc/documents/doc-1/url", {
         headers: { Authorization: `Bearer ${token}` },
       });
       expect(res.status).toBe(403);

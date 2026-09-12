@@ -9,7 +9,7 @@ import { createMemoryOrderStore } from "../orders/order-store.js";
 import { createMemoryHoldingStore } from "../portfolio/holding-store.js";
 import { settleVerifiedBuy } from "./settle-verified-buy.js";
 
-const FUNDING = "prop-marina-vista-4b"; // sharesSold 2300, total 1000
+const FUNDING = "re-128862"; // sharesSold 2300, total 1000
 
 function makeDeps() {
   const properties = createMemoryPropertyStore(SEED_PROPERTIES.map(toPropertyInsert));

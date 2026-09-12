@@ -7,7 +7,7 @@ import { toCanonicalListing } from "@/lib/mock/canonical-listing";
 
 describe("mock boundary canonicalization (Final PO Decisions 1, 2, 6)", () => {
   it("serves canonical V1 supply and the $100 base price for Grand", () => {
-    const fixture = PROPERTIES.find((p) => p.id === "prop-marina-vista-4b")!;
+    const fixture = PROPERTIES.find((p) => p.id === "re-128862")!;
     const listing = toCanonicalListing(fixture);
     expect(listing.totalShares).toBe(80_000);
     expect(listing.sharePriceUsd).toBe(10_000);
@@ -18,16 +18,16 @@ describe("mock boundary canonicalization (Final PO Decisions 1, 2, 6)", () => {
   });
 
   it("serves canonical Tier-1 identity, not fixture shorthand", () => {
-    const fixture = PROPERTIES.find((p) => p.id === "prop-marina-vista-4b")!;
+    const fixture = PROPERTIES.find((p) => p.id === "re-128862")!;
     const listing = toCanonicalListing(fixture);
     expect(listing.title).toBe("Grand 2 BDM Ocean Pool Villa (JOALI Being)");
     expect(listing.meta.propertyType).not.toBe("Apartment");
   });
 
   it("derives sold/remaining/progress from the demo holdings ledger", () => {
-    const fixture = PROPERTIES.find((p) => p.id === "prop-bayside-marina-penthouse")!;
+    const fixture = PROPERTIES.find((p) => p.id === "re-108924")!;
     const listing = toCanonicalListing(fixture);
-    // Seed ledger holds 160 Bayside shares; canonical supply is 120,000.
+    // Seed ledger holds 160 Syrene shares; canonical supply is 120,000.
     expect(listing.totalShares).toBe(120_000);
     expect(listing.sharesSold).toBe(160);
     expect(listing.sharesRemaining).toBe(120_000 - 160);
@@ -35,8 +35,8 @@ describe("mock boundary canonicalization (Final PO Decisions 1, 2, 6)", () => {
   });
 
   it("passes unknown ids through untouched", () => {
-    const unknown = { ...PROPERTIES[0]!, id: "prop-unknown" };
-    expect(toCanonicalListing(unknown).id).toBe("prop-unknown");
+    const unknown = { ...PROPERTIES[0]!, id: "test-unknown" };
+    expect(toCanonicalListing(unknown).id).toBe("test-unknown");
     expect(toCanonicalListing(unknown).totalShares).toBe(PROPERTIES[0]!.totalShares);
   });
 });

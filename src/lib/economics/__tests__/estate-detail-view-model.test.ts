@@ -18,7 +18,7 @@ import { GRAND_2_BDM_OCEAN_POOL_VILLA } from "../estates/grand-2-bdm-ocean-pool-
 
 function makeListing(overrides: Partial<Listing> = {}): Listing {
   return {
-    id: "prop-test-villa",
+    id: "test-villa",
     title: "Test Villa",
     location: "Test Coast",
     description: "A test villa.",
@@ -57,19 +57,19 @@ const GRAND_BASELINE_GROSS_CENTS = 2_012_062_500;
 
 describe("resolveCanonicalEstateForListing", () => {
   it("resolves the Grand 2 BDM canonical estate for its fixture listing", () => {
-    expect(resolveCanonicalEstateForListing("prop-marina-vista-4b")).toBe(
+    expect(resolveCanonicalEstateForListing("re-128862")).toBe(
       GRAND_2_BDM_OCEAN_POOL_VILLA,
     );
   });
 
   it("returns null when no canonical estate is configured (never invents one)", () => {
-    expect(resolveCanonicalEstateForListing("prop-soho-loft-studio")).toBeNull();
+    expect(resolveCanonicalEstateForListing("re-126855")).toBeNull();
     expect(resolveCanonicalEstateForListing("no-such-id")).toBeNull();
   });
 });
 
 describe("economics wiring (Grand 2 BDM)", () => {
-  const grand = makeListing({ id: "prop-marina-vista-4b" });
+  const grand = makeListing({ id: "re-128862" });
 
   it("exposes baseline economics with the exact canonical gross", () => {
     const vm = buildEstateDetailViewModel(grand);
@@ -80,7 +80,7 @@ describe("economics wiring (Grand 2 BDM)", () => {
   });
 
   it("exposes approved descriptive, size and nightly-display fields", () => {
-    const vm = buildEstateDetailViewModel(makeListing({ id: "prop-marina-vista-4b" }));
+    const vm = buildEstateDetailViewModel(makeListing({ id: "re-128862" }));
     expect(vm.aboutText).toContain("Overwater luxury villa");
     expect(vm.sizeText).toContain("382 m² total");
     expect(vm.nightlyDisplayText).toBe("$67,655–$76,458");
@@ -167,7 +167,7 @@ describe("economics wiring (Grand 2 BDM)", () => {
 });
 
 describe("selectScenarioEconomics", () => {
-  const grand = makeListing({ id: "prop-marina-vista-4b" });
+  const grand = makeListing({ id: "re-128862" });
 
   it("selects the configured baseline for base", () => {
     const selected = selectScenarioEconomics(buildEstateDetailViewModel(grand), "base")!;
@@ -208,7 +208,7 @@ describe("economics absence (non-canonical listings)", () => {
 describe("pending cost structure (listings without engine economics)", () => {
   it("exposes all six cost lines as unknown from the shared rate table (never computed)", () => {
     const vm = buildEstateDetailViewModel(
-      makeListing({ id: "prop-soho-loft-studio" }),
+      makeListing({ id: "re-126855" }),
     );
     expect(vm.baseline).toBeNull();
     expect(vm.pendingCosts).not.toBeNull();
@@ -236,7 +236,7 @@ describe("pending cost structure (listings without engine economics)", () => {
   });
 
   it("is null for Grand 2 BDM (engine lines are used instead)", () => {
-    const vm = buildEstateDetailViewModel(makeListing({ id: "prop-marina-vista-4b" }));
+    const vm = buildEstateDetailViewModel(makeListing({ id: "re-128862" }));
     expect(vm.baseline).not.toBeNull();
     expect(vm.pendingCosts).toBeNull();
   });
@@ -298,7 +298,7 @@ describe("share wiring from listing facts (all 24 listings)", () => {
   });
 
   it("reference value per share stays unknown only without a canonical record", () => {
-    // prop-test-villa has no canonical record → no valuation admitted (never
+    // test-villa has no canonical record → no valuation admitted (never
     // research text or legacy mock promoted).
     const vm = buildEstateDetailViewModel(makeListing());
     expect(vm.valuation).toBeNull();
@@ -308,7 +308,7 @@ describe("share wiring from listing facts (all 24 listings)", () => {
 
   it("approved valuations flow into the share config for every canonical estate", () => {
     const vm = buildEstateDetailViewModel(
-      makeListing({ id: "prop-soho-loft-studio", totalShares: 1000 }),
+      makeListing({ id: "re-126855", totalShares: 1000 }),
     );
     expect(vm.valuation).toEqual({ value: 1_800_000_000, provenance: "estimated" });
     expect(vm.share.config.estateValue).toEqual({ value: 1_800_000_000, provenance: "estimated" });
@@ -320,7 +320,7 @@ describe("share wiring from listing facts (all 24 listings)", () => {
   });
 
   it("Grand 2 BDM carries the $8M estimated reference (calculated, never a price)", () => {
-    const vm = buildEstateDetailViewModel(makeListing({ id: "prop-marina-vista-4b" }));
+    const vm = buildEstateDetailViewModel(makeListing({ id: "re-128862" }));
     expect(vm.share.config.estateValue).toEqual({ value: 800_000_000, provenance: "estimated" });
     expect(vm.share.structure.referenceAssetValuePerShare?.provenance).toBe("calculated");
   });
@@ -328,21 +328,21 @@ describe("share wiring from listing facts (all 24 listings)", () => {
 
 describe("rental escapes URL passthrough (Reserve Villa CTA)", () => {
   it("exposes the exact canonical listing URL for Grand 2 BDM", () => {
-    const vm = buildEstateDetailViewModel(makeListing({ id: "prop-marina-vista-4b" }));
+    const vm = buildEstateDetailViewModel(makeListing({ id: "re-128862" }));
     expect(vm.rentalEscapesUrl).toBe(
       "https://www.rentalescapes.com/rentals/luxury-villa-rentals-asia/maldives/bodufushi/joali-being/grand-2-bdm-ocean-pool-villa-128862",
     );
   });
 
   it("exposes exact canonical URLs across rate semantics (RANGE / STARTING_FROM / DYNAMIC)", () => {
-    const aerial = buildEstateDetailViewModel(makeListing({ id: "prop-soho-loft-studio" }));
+    const aerial = buildEstateDetailViewModel(makeListing({ id: "re-126855" }));
     expect(aerial.rentalEscapesUrl).toContain("rentalescapes.com");
     expect(aerial.rentalEscapesUrl).toMatch(/-126855$/);
-    const trajan = buildEstateDetailViewModel(makeListing({ id: "prop-berlin-mitte-apartment" }));
+    const trajan = buildEstateDetailViewModel(makeListing({ id: "re-128529" }));
     expect(trajan.rentalEscapesUrl).toMatch(/-128529$/);
-    const dolce = buildEstateDetailViewModel(makeListing({ id: "prop-miami-beach-condo" }));
+    const dolce = buildEstateDetailViewModel(makeListing({ id: "re-122903" }));
     expect(dolce.rentalEscapesUrl).toMatch(/-122903$/);
-    const pearls = buildEstateDetailViewModel(makeListing({ id: "prop-mexico-city-penthouse" }));
+    const pearls = buildEstateDetailViewModel(makeListing({ id: "re-130397" }));
     expect(pearls.rentalEscapesUrl).toMatch(/-130397$/);
   });
 
@@ -390,7 +390,7 @@ describe("CTA kinds follow ShareModel market states", () => {
 
 describe("PROMPT 03: canonical property facts on the view model", () => {
   it("exposes the Estate24 record with canonical identity for Grand 2 BDM", () => {
-    const vm = buildEstateDetailViewModel(makeListing({ id: "prop-marina-vista-4b" }));
+    const vm = buildEstateDetailViewModel(makeListing({ id: "re-128862" }));
     expect(vm.estate24).not.toBeNull();
     expect(vm.estate24!.listingId).toBe("128862");
     expect(vm.identity).toEqual({
@@ -408,7 +408,7 @@ describe("PROMPT 03: canonical property facts on the view model", () => {
   });
 
   it("shows Current Estimated Value as exactly $8M single with $18M growth (no percentage) for Grand", () => {
-    const vm = buildEstateDetailViewModel(makeListing({ id: "prop-marina-vista-4b" }));
+    const vm = buildEstateDetailViewModel(makeListing({ id: "re-128862" }));
     expect(vm.valuationDisplay).toEqual({
       kind: "single",
       value: 800_000_000,
@@ -423,7 +423,7 @@ describe("PROMPT 03: canonical property facts on the view model", () => {
 
   it("derives growth potential with a percentage for single-value estates", () => {
     const vm = buildEstateDetailViewModel(
-      makeListing({ id: "prop-soho-loft-studio", totalShares: 1000 }),
+      makeListing({ id: "re-126855", totalShares: 1000 }),
     );
     expect(vm.identity?.name).toBe("The Aerial");
     expect(vm.propertyType).toBe("Private Island Estate");

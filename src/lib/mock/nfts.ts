@@ -33,22 +33,22 @@ function sharesFor(propertyId: string): number {
   return HOLDINGS.find((h) => h.propertyId === propertyId)?.sharesOwned ?? 0;
 }
 
-// Demo state: one fully delivered (bayside), one still pending (alfama).
+// Demo state: one fully delivered (Syrene), one still pending (Villa du Cap).
 const state: HoldingNft[] = [
   {
-    id: "nft-demo-bayside",
-    propertyId: "prop-bayside-marina-penthouse",
-    propertyTitle: titleFor("prop-bayside-marina-penthouse"),
-    propertyLocation: locationFor("prop-bayside-marina-penthouse"),
-    sharesOwned: sharesFor("prop-bayside-marina-penthouse"),
+    id: "nft-demo-re-108924",
+    propertyId: "re-108924",
+    propertyTitle: titleFor("re-108924"),
+    propertyLocation: locationFor("re-108924"),
+    sharesOwned: sharesFor("re-108924"),
     status: "delivered",
     walletAddress: USER.walletAddress ?? "",
     collectionAddress: null,
     nftItemId: 100_001,
     nftAddress: null,
     metadataUrl: null,
-    mintTxHash: "simulated:mint:bayside",
-    transferTxHash: "simulated:transfer:bayside",
+    mintTxHash: "simulated:mint:re-108924",
+    transferTxHash: "simulated:transfer:re-108924",
     attempts: 1,
     errorCode: null,
     errorMessage: null,
@@ -56,11 +56,11 @@ const state: HoldingNft[] = [
     updatedAt: new Date(Date.now() - 12 * 86_400_000).toISOString(),
   },
   {
-    id: "nft-demo-alfama",
-    propertyId: "prop-alfama-terrace-flat",
-    propertyTitle: titleFor("prop-alfama-terrace-flat"),
-    propertyLocation: locationFor("prop-alfama-terrace-flat"),
-    sharesOwned: sharesFor("prop-alfama-terrace-flat"),
+    id: "nft-demo-re-123861",
+    propertyId: "re-123861",
+    propertyTitle: titleFor("re-123861"),
+    propertyLocation: locationFor("re-123861"),
+    sharesOwned: sharesFor("re-123861"),
     status: "pending",
     walletAddress: USER.walletAddress ?? "",
     collectionAddress: null,

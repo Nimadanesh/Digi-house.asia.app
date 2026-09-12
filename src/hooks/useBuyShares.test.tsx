@@ -100,7 +100,7 @@ describe("useBuyShares mutation", () => {
     send.mockReset().mockResolvedValue({ ok: true, txHash: "h".repeat(64) });
   });
 
-  const input = { propertyId: "prop-a", quantity: 2, priceUsdPerShare: 8000, currency: "TON" as const };
+  const input = { propertyId: "test-a", quantity: 2, priceUsdPerShare: 8000, currency: "TON" as const };
 
   it("runs prepare → send → confirm → settle and returns the send result", async () => {
     const { result } = renderHook(() => useBuyShares(), { wrapper });
@@ -110,7 +110,7 @@ describe("useBuyShares mutation", () => {
     });
     expect(prepareBuy).toHaveBeenCalledWith(input);
     expect(send).toHaveBeenCalledWith(
-      expect.objectContaining({ toFriendlyAddress: "EQadmin", memo: "buy 2 shares of prop-a" }),
+      expect.objectContaining({ toFriendlyAddress: "EQadmin", memo: "buy 2 shares of test-a" }),
     );
     expect(confirmBuy).toHaveBeenCalledWith({ intentId: "intent_1", txHash: "h".repeat(64) });
     expect(out).toEqual({ ok: true, txHash: "h".repeat(64) });

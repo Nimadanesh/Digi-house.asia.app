@@ -3,9 +3,9 @@ import { buildOrderBookState } from "./build-order-book.js";
 
 describe("buildOrderBookState", () => {
   it("returns empty arrays with no best* when no orders", () => {
-    const book = buildOrderBookState("prop-a", []);
+    const book = buildOrderBookState("test-a", []);
     expect(book).toEqual({
-      propertyId: "prop-a",
+      propertyId: "test-a",
       bids: [],
       asks: [],
     });
@@ -14,7 +14,7 @@ describe("buildOrderBookState", () => {
   });
 
   it("aggregates two buys at same price", () => {
-    const book = buildOrderBookState("prop-a", [
+    const book = buildOrderBookState("test-a", [
       { side: "buy", priceUsd: 10_000, quantity: 5, filledQuantity: 0 },
       { side: "buy", priceUsd: 10_000, quantity: 3, filledQuantity: 0 },
     ]);
@@ -25,7 +25,7 @@ describe("buildOrderBookState", () => {
   });
 
   it("sorts bids DESC and asks ASC with cumulative", () => {
-    const book = buildOrderBookState("prop-a", [
+    const book = buildOrderBookState("test-a", [
       { side: "buy", priceUsd: 9_000, quantity: 2, filledQuantity: 0 },
       { side: "buy", priceUsd: 11_000, quantity: 4, filledQuantity: 0 },
       { side: "sell", priceUsd: 110, quantity: 3, filledQuantity: 0 },
@@ -41,7 +41,7 @@ describe("buildOrderBookState", () => {
   });
 
   it("uses remaining = quantity - filledQuantity", () => {
-    const book = buildOrderBookState("prop-a", [
+    const book = buildOrderBookState("test-a", [
       { side: "buy", priceUsd: 100, quantity: 10, filledQuantity: 4 },
       { side: "sell", priceUsd: 200, quantity: 5, filledQuantity: 5 },
     ]);
@@ -52,7 +52,7 @@ describe("buildOrderBookState", () => {
   });
 
   it("ignores remaining <= 0", () => {
-    const book = buildOrderBookState("prop-a", [
+    const book = buildOrderBookState("test-a", [
       { side: "buy", priceUsd: 50, quantity: 3, filledQuantity: 3 },
       { side: "buy", priceUsd: 50, quantity: 2, filledQuantity: 5 },
     ]);

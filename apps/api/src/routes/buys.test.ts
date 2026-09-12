@@ -35,10 +35,10 @@ const SESSION = {
 };
 
 /** funding, remaining = 1000-2300 = 80 */
-const FUNDING = "prop-marina-vista-4b";
+const FUNDING = "re-128862";
 const PRICE = 8_000;
 /** funded — primary sale closed */
-const FUNDED = "prop-bayside-marina-penthouse";
+const FUNDED = "re-108924";
 
 function testEnv(over: Partial<ApiEnv> = {}): ApiEnv {
   return {
@@ -376,7 +376,7 @@ describe("POST /v1/buys/prepare", () => {
   it("unknown property → 404", async () => {
     const { app } = makeApp();
     const res = await prepare(app, "user-a", {
-      propertyId: "prop-does-not-exist",
+      propertyId: "test-does-not-exist",
       quantity: 1,
       priceUsdPerShare: PRICE,
     });

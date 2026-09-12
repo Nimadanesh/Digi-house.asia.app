@@ -17,7 +17,7 @@ import {
   type MoneyPathHarness,
 } from "./money-path-helper.js";
 
-const FUNDING = "prop-marina-vista-4b"; // $80 share, 200 remaining
+const FUNDING = "re-128862"; // $80 share, 200 remaining
 const MATURATION_MS = 3 * 24 * 3_600_000;
 const DAY = 86_400_000;
 

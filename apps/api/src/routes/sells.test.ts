@@ -15,8 +15,8 @@ import { createOrderRoutes, type OrderRouteDeps } from "./orders.js";
 
 const SESSION = { secret: "test-session-secret-at-least-32-chars", ttlSeconds: 3600 };
 const USER = "user-a";
-const FUNDING = "prop-marina-vista-4b";
-const RESALE = "prop-tbilisi-riverhouse-loft";
+const FUNDING = "re-128862";
+const RESALE = "re-125643";
 
 async function bearerFor(userId: string): Promise<string> {
   const { token } = await signSessionToken(userId, SESSION);
@@ -127,7 +127,7 @@ describe("POST /v1/sells/instant", () => {
     const missing = await app.request("/v1/sells/instant", {
       method: "POST",
       headers,
-      body: JSON.stringify({ propertyId: "prop-none", shares: 1 }),
+      body: JSON.stringify({ propertyId: "test-none", shares: 1 }),
     });
     expect(missing.status).toBe(404);
 

@@ -38,9 +38,9 @@ vi.mock("@/hooks/useTelegram", () => ({
 }));
 
 const listing: Listing = {
-  id: "prop-marina-vista-4b",
-  title: "Marina Vista Apt 4B",
-  location: "Dubai Marina, UAE",
+  id: "re-128862",
+  title: "Grand 2 BDM Ocean Pool Villa (JOALI Being)",
+  location: "Bodufushi, JOALI Being, Raa Atoll, Maldives",
   description: "Waterfront one-bedroom.",
   images: ["/images/properties/p1.png"],
   totalShares: 1000,
@@ -97,7 +97,7 @@ describe("Buy flow steps", () => {
   it("qty step: V1-unknown villa shows pending WITH the reason (never a fixture figure)", () => {
     const trajan: Listing = {
       ...listing,
-      id: "prop-berlin-mitte-apartment",
+      id: "re-128529",
       sharesRemaining: 360,
     };
     render(
@@ -225,7 +225,7 @@ describe("Buy flow steps", () => {
     useFees.mockReturnValue({ data: DEFAULT_FEE_TIERS, isLoading: false, isError: false });
     render(<BuySummaryStep listing={listing} qty={10} currency="TON" />);
     expect(screen.getByText("Order summary")).toBeInTheDocument();
-    expect(screen.getByText("Marina Vista Apt 4B")).toBeInTheDocument();
+    expect(screen.getByText("Grand 2 BDM Ocean Pool Villa (JOALI Being)")).toBeInTheDocument();
     expect(screen.getByText("10")).toBeInTheDocument();
     expect(screen.getByText("Fees")).toBeInTheDocument();
     expect(screen.getByTestId("buy-total")).toBeInTheDocument();
@@ -251,7 +251,7 @@ describe("Buy flow steps", () => {
   it("summary step: location, ownership, and assumptions disclosure", () => {
     useFees.mockReturnValue({ data: DEFAULT_FEE_TIERS, isLoading: false, isError: false });
     render(<BuySummaryStep listing={listing} qty={10} currency="TON" />);
-    expect(screen.getByText("Dubai Marina, UAE")).toBeInTheDocument();
+    expect(screen.getByText("Bodufushi, JOALI Being, Raa Atoll, Maldives")).toBeInTheDocument();
     // 10 / 1000 shares = 1.0% (same pct() formatting as the qty step).
     expect(screen.getByTestId("buy-ownership")).toHaveTextContent("10 shares · 1.0% of the estate");
     // Slice 2: summary monthly matches the qty step (single presentation layer).
@@ -272,7 +272,7 @@ describe("Buy flow steps", () => {
     useFees.mockReturnValue({ data: DEFAULT_FEE_TIERS, isLoading: false, isError: false });
     const trajan: Listing = {
       ...listing,
-      id: "prop-berlin-mitte-apartment",
+      id: "re-128529",
       title: "Trajan Villa",
       location: "Las Vegas, USA",
       sharePriceUsd: 9500,
@@ -324,14 +324,14 @@ describe("Buy flow steps", () => {
     const onClose = vi.fn();
     render(
       <BuySuccessStep
-        propertyTitle="Marina Vista Apt 4B"
+        propertyTitle="Grand 2 BDM Ocean Pool Villa (JOALI Being)"
         qty={10}
         nowMs={Date.UTC(2026, 6, 22, 10, 0, 0)}
         onClose={onClose}
       />,
     );
     expect(screen.getByTestId("buy-success-message")).toHaveTextContent(
-      /You now own 10 shares of Marina Vista Apt 4B/,
+      /You now own 10 shares of Grand 2 BDM Ocean Pool Villa \(JOALI Being\)/,
     );
     expect(screen.getAllByText(DEMO_TX_DISCLAIMER).length).toBe(1);
     fireEvent.click(screen.getByRole("button", { name: /view portfolio/i }));
@@ -342,7 +342,7 @@ describe("Buy flow steps", () => {
 
   it("success step: no raw i18n keys leak into copy", () => {
     const { container } = render(
-      <BuySuccessStep propertyTitle="Marina Vista Apt 4B" qty={10} onClose={() => {}} />,
+      <BuySuccessStep propertyTitle="Grand 2 BDM Ocean Pool Villa (JOALI Being)" qty={10} onClose={() => {}} />,
     );
     const text = container.textContent ?? "";
     for (const key of ["buySuccessTitle", "buySuccessMessage", "buySuccessNextPayout", "buySuccessEverySunday"]) {

@@ -26,7 +26,7 @@ async function openOrderIds(): Promise<string[]> {
 describe("Slice 5 — placed orders surface in portfolio open orders", () => {
   it("a placed limit-buy appears in the portfolio summary", async () => {
     const placed = await orderBook.placeOrder({
-      propertyId: "prop-tbilisi-riverhouse-loft",
+      propertyId: "re-125643",
       side: "buy",
       priceUsd: 8000,
       quantity: 7,
@@ -37,7 +37,7 @@ describe("Slice 5 — placed orders surface in portfolio open orders", () => {
 
   it("a placed custom sell appears in the portfolio summary", async () => {
     const placed = await orderBook.placeOrder({
-      propertyId: "prop-bayside-marina-penthouse",
+      propertyId: "re-108924",
       side: "sell",
       priceUsd: 99_900,
       quantity: 3,
@@ -47,7 +47,7 @@ describe("Slice 5 — placed orders surface in portfolio open orders", () => {
 
   it("a queued sell on a funding property surfaces as queued (never hidden)", async () => {
     const placed = await orderBook.placeOrder({
-      propertyId: "prop-marina-vista-4b",
+      propertyId: "re-128862",
       side: "sell",
       priceUsd: 10_000,
       quantity: 1,
@@ -60,7 +60,7 @@ describe("Slice 5 — placed orders surface in portfolio open orders", () => {
 
   it("cancelling removes the order from the portfolio summary", async () => {
     const placed = await orderBook.placeOrder({
-      propertyId: "prop-kyoto-machiya",
+      propertyId: "re-127483",
       side: "buy",
       priceUsd: 11_200,
       quantity: 2,
@@ -73,7 +73,7 @@ describe("Slice 5 — placed orders surface in portfolio open orders", () => {
 
 describe("Slice 5 — repeated buys accumulate into holdings and the ledger", () => {
   it("two buys add up across holdings, sold shares, and the transaction ledger", async () => {
-    const pid = "prop-soho-loft-studio";
+    const pid = "re-126855";
     const before = demoSoldShares(pid);
     const txBefore = (await tx.listTransactions({ limit: 100 })).transactions.length;
 
@@ -97,7 +97,7 @@ describe("Slice 5 — repeated buys accumulate into holdings and the ledger", ()
   });
 
   it("re-confirming the same intent never double-mints shares", async () => {
-    const pid = "prop-canggu-surf-villa";
+    const pid = "re-130393";
     const before = demoSoldShares(pid);
     const prep = await tx.prepareBuy({
       propertyId: pid,
@@ -112,7 +112,7 @@ describe("Slice 5 — repeated buys accumulate into holdings and the ledger", ()
 });
 
 describe("Slice 5 — instant sell settles every related number", () => {
-  const pid = "prop-marina-vista-4b"; // funding → instant eligible
+  const pid = "re-128862"; // funding → instant eligible
   const seedTxCount = () => seed.transactions.length;
 
   it("reduces holdings, records the ledger tx, and reports exact free shares", async () => {

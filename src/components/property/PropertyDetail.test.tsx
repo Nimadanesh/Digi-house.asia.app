@@ -41,9 +41,9 @@ vi.mock("@/hooks/useSells", () => ({
 }));
 
 const listing: Listing = {
-  id: "prop-marina-vista-4b",
-  title: "Marina Vista Apt 4B",
-  location: "Dubai Marina, UAE",
+  id: "re-128862",
+  title: "Grand 2 BDM Ocean Pool Villa (JOALI Being)",
+  location: "Bodufushi, JOALI Being, Raa Atoll, Maldives",
   description: "Waterfront one-bedroom with marina view and 24h concierge.",
   images: ["/images/properties/p1.png", "/images/properties/p2.png"],
   totalShares: 1000,
@@ -259,7 +259,7 @@ describe("PropertyDetail — Phase 9 Slice 2 (4-tab Estate Detail)", () => {
 
   it("Details tab holds trust (verification + management), about, documents, similar", () => {
     useMarketplace.mockReturnValue({
-      data: [{ ...listing, id: "prop-other-1", title: "Other Villa", location: "Other, UAE" }],
+      data: [{ ...listing, id: "test-other-1", title: "Other Villa", location: "Other, UAE" }],
       isLoading: false,
       isError: false,
     });
@@ -307,7 +307,7 @@ describe("PropertyDetail — Phase 9 Slice 2 (4-tab Estate Detail)", () => {
     expect(screen.getByTestId("similar-properties")).toBeInTheDocument();
     const cards = screen.getAllByTestId("similar-card");
     expect(cards).toHaveLength(1);
-    expect(cards[0].textContent).not.toContain("Marina Vista Apt 4B");
+    expect(cards[0].textContent).not.toContain("Grand 2 BDM Ocean Pool Villa");
   });
 
   it("trust renders a Verified chip only when a real verification date exists", () => {

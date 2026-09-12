@@ -37,9 +37,9 @@ describe("marketplace view model — identity matches the adopted Estate24 recor
 
 describe("marketplace view model — canonical identity", () => {
   it("maps Grand 2 BDM to its canonical Rental Escapes identity (not fixture shorthand)", () => {
-    const vm = toMarketplaceEstate(fixture("prop-marina-vista-4b"));
-    const canonical = getCanonicalEstate("prop-marina-vista-4b")!;
-    expect(vm.id).toBe("prop-marina-vista-4b");
+    const vm = toMarketplaceEstate(fixture("re-128862"));
+    const canonical = getCanonicalEstate("re-128862")!;
+    expect(vm.id).toBe("re-128862");
     expect(vm.name).toBe(canonical.name.value);
     expect(vm.name).toContain("Grand 2 BDM");
     expect(vm.location).toBe(canonical.location.value);
@@ -49,15 +49,15 @@ describe("marketplace view model — canonical identity", () => {
   });
 
   it("preserves nightly rate semantics verbatim from the canonical layer", () => {
-    const grand = toMarketplaceEstate(fixture("prop-marina-vista-4b"));
+    const grand = toMarketplaceEstate(fixture("re-128862"));
     expect(grand.nightlyDisplay).toBe("$67,655–$76,458");
     expect(grand.nightlyRateType).toBe("RANGE");
 
-    const dolce = toMarketplaceEstate(fixture("prop-miami-beach-condo"));
+    const dolce = toMarketplaceEstate(fixture("re-122903"));
     expect(dolce.nightlyRateType).toBe("DYNAMIC");
     expect(dolce.nightlyDisplay).toContain("DYNAMIC");
 
-    const trajan = toMarketplaceEstate(fixture("prop-berlin-mitte-apartment"));
+    const trajan = toMarketplaceEstate(fixture("re-128529"));
     expect(trajan.nightlyRateType).toBe("STARTING_FROM");
   });
 
@@ -70,13 +70,13 @@ describe("marketplace view model — canonical identity", () => {
       expect(vm.estateValue!.value).toBeGreaterThan(0);
       expect(vm.estateValue!.value).not.toBe(LEGACY_82M_CENTS);
     }
-    const grand = vms.find((v) => v.id === "prop-marina-vista-4b")!;
+    const grand = vms.find((v) => v.id === "re-128862")!;
     expect(grand.estateValue!.value).toBe(800_000_000);
   });
 
   it("carries trading params by reference from the listing (no invented funding)", () => {
-    const vm = toMarketplaceEstate(fixture("prop-marina-vista-4b"));
-    const f = fixture("prop-marina-vista-4b");
+    const vm = toMarketplaceEstate(fixture("re-128862"));
+    const f = fixture("re-128862");
     expect(vm.status).toBe(f.status);
     expect(vm.sharePriceUsd).toBe(f.sharePriceUsd);
     expect(vm.totalShares).toBe(f.totalShares);
@@ -86,12 +86,12 @@ describe("marketplace view model — canonical identity", () => {
 
   it("falls back to listing identity for unknown (non-canonical) ids — never crashes routing", () => {
     const fallback = toMarketplaceEstate({
-      ...fixture("prop-marina-vista-4b"),
-      id: "prop-unknown-test",
+      ...fixture("re-128862"),
+      id: "test-unknown-id",
       title: "Fallback Villa",
       location: "Nowhere",
     });
-    expect(fallback.id).toBe("prop-unknown-test");
+    expect(fallback.id).toBe("test-unknown-id");
     expect(fallback.name).toBe("Fallback Villa");
     expect(fallback.location).toBe("Nowhere");
     expect(fallback.rentalEscapesListingId).toBeNull();
@@ -106,12 +106,12 @@ describe("marketplace view model — canonical identity", () => {
     for (const id of ids) {
       expect(canonicalIds.has(id)).toBe(true);
     }
-    expect(isCanonicalMarketplaceId("prop-marina-vista-4b")).toBe(true);
-    expect(isCanonicalMarketplaceId("prop-does-not-exist")).toBe(false);
+    expect(isCanonicalMarketplaceId("re-128862")).toBe(true);
+    expect(isCanonicalMarketplaceId("test-does-not-exist")).toBe(false);
   });
 
   it("PROMPT 05: carries canonical property type, description, valuation display and growth", () => {
-    const grand = toMarketplaceEstate(fixture("prop-marina-vista-4b"));
+    const grand = toMarketplaceEstate(fixture("re-128862"));
     // Source-supported type — never the legacy fixture type.
     expect(grand.propertyType).toBe("Overwater Villa");
     expect(grand.description).toContain("overwater villa");
@@ -125,7 +125,7 @@ describe("marketplace view model — canonical identity", () => {
     expect(grand.growthPotential?.potentialValue).toBe(1_800_000_000);
     expect(grand.growthPotential?.potentialPct).toBeNull();
 
-    const aerial = toMarketplaceEstate(fixture("prop-soho-loft-studio"));
+    const aerial = toMarketplaceEstate(fixture("re-126855"));
     expect(aerial.propertyType).toBe("Private Island Estate");
     expect(aerial.valuationDisplay).toEqual({
       kind: "single",

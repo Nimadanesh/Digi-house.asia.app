@@ -11,9 +11,9 @@ vi.mock("next/image", () => ({
 import type { Listing } from "@/types/property";
 
 const listing: Listing = {
-  id: "prop-marina-vista-4b",
-  title: "Marina Vista Apt 4B",
-  location: "Dubai Marina, UAE",
+  id: "re-128862",
+  title: "Grand 2 BDM Ocean Pool Villa (JOALI Being)",
+  location: "Bodufushi, JOALI Being, Raa Atoll, Maldives",
   description: "Waterfront",
   images: ["/images/properties/p1.png"],
   totalShares: 1000,
@@ -44,10 +44,10 @@ describe("FeaturedPropertyCard — Featured Estate (identity first)", () => {
     render(<FeaturedPropertyCard listing={listing} />);
     expect(screen.getByTestId("featured-section")).toBeInTheDocument();
     expect(screen.getByText("Featured Estate")).toBeInTheDocument();
-    expect(screen.getByText("Marina Vista Apt 4B")).toBeInTheDocument();
+    expect(screen.getByText("Grand 2 BDM Ocean Pool Villa (JOALI Being)")).toBeInTheDocument();
     expect(screen.getByTestId("featured-card")).toHaveAttribute(
       "href",
-      "/property/prop-marina-vista-4b",
+      "/property/re-128862",
     );
     // Entry/share price.
     expect(screen.getByText("$125.00/share")).toBeInTheDocument();
@@ -63,7 +63,7 @@ describe("FeaturedPropertyCard — Featured Estate (identity first)", () => {
 
   it("shows pending (never a fixture figure) when V1 income is unknown", () => {
     render(
-      <FeaturedPropertyCard listing={{ ...listing, id: "prop-berlin-mitte-apartment" }} />,
+      <FeaturedPropertyCard listing={{ ...listing, id: "re-128529" }} />,
     );
     expect(screen.getByTestId("featured-income-pending")).toBeInTheDocument();
     expect(screen.queryByText("$16.29")).not.toBeInTheDocument();

@@ -11,7 +11,7 @@ const summary: PortfolioSummary = {
   dayChangeRatio: 0.023,
   holdings: [
     {
-      propertyId: "prop-a",
+      propertyId: "test-a",
       sharesOwned: 20,
       avgCostUsd: 12500,
       currentValueUsd: 150_000,
@@ -19,7 +19,7 @@ const summary: PortfolioSummary = {
       shareRatio: 0.02,
     },
     {
-      propertyId: "prop-b",
+      propertyId: "test-b",
       sharesOwned: 10,
       avgCostUsd: 12500,
       currentValueUsd: 100_000,

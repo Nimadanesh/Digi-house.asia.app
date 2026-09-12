@@ -71,13 +71,13 @@ test.describe("Income — /earnings (Phase 9 Slice 5)", () => {
     // names, so the spec follows the catalog.
     await expect(page.getByTestId("income-by-estate")).toBeVisible();
     await expect(page.getByText("Income by estate")).toBeVisible();
-    const bayside = page.getByTestId("income-by-estate-row-prop-bayside-marina-penthouse");
+    const bayside = page.getByTestId("income-by-estate-row-re-108924");
     await expect(bayside).toBeVisible();
     await expect(bayside).toContainText("Syrene");
     await expect(bayside).toContainText("$882.72"); // 3 paid weeks × $294.24
-    await expect(bayside).toHaveAttribute("href", "/property/prop-bayside-marina-penthouse");
+    await expect(bayside).toHaveAttribute("href", "/property/re-108924");
     await expect(
-      page.getByTestId("income-by-estate-row-prop-alfama-terrace-flat"),
+      page.getByTestId("income-by-estate-row-re-123861"),
     ).toContainText("$927.69"); // 3 paid weeks × $309.23
     // Slice I: rows carry position states from their own sources.
     await expect(bayside).toContainText("160 shares");
@@ -95,7 +95,7 @@ test.describe("Income — /earnings (Phase 9 Slice 5)", () => {
     await expect(page.getByTestId("other-returns")).toBeVisible();
     await expect(page.getByTestId("other-plan")).toContainText("No investment plans configured");
     await expect(page.getByTestId("other-appreciation")).toContainText("Pending");
-    const resale = page.getByTestId("other-secondary-ord-aria-alfama-sell-1");
+    const resale = page.getByTestId("other-secondary-ord-open-re-123861-sell-1");
     // (Final PO Decision 2: canonical $100 base cost — was +$30.00 at $105 fixture cost.)
     await expect(resale).toContainText("+$80.00");
     await expect(resale).toContainText("Gain");
@@ -106,7 +106,9 @@ test.describe("Income — /earnings (Phase 9 Slice 5)", () => {
     await expect(page.getByTestId("income-origin-content")).toContainText("Net operating profit");
 
     // No APY, no scarcity, no guarantees, no trading-terminal framing.
-    await expect(page.getByText("APY")).toHaveCount(0);
+    // Word-bounded: "Villa du Cap" + "Your income flow" concatenates to a text
+    // containing "apy" (Cap|Your) — a bare substring matcher false-positives.
+    await expect(page.getByText(/\bAPY\b/)).toHaveCount(0);
     await expect(page.getByText("guaranteed", { exact: false })).toHaveCount(0);
     await expect(page.getByText("Almost Sold")).toHaveCount(0);
 
@@ -127,10 +129,10 @@ test.describe("Income — /earnings (Phase 9 Slice 5)", () => {
     await page.goto("/earnings");
     await page.waitForSelector('[data-testid="earnings-page"]', { timeout: 15_000 });
 
-    const bayside = page.getByTestId("income-by-estate-row-prop-bayside-marina-penthouse");
+    const bayside = page.getByTestId("income-by-estate-row-re-108924");
     await bayside.waitFor({ state: "visible", timeout: 15_000 });
     await bayside.click();
-    await page.waitForURL("**/property/prop-bayside-marina-penthouse", { timeout: 15_000 });
+    await page.waitForURL("**/property/re-108924", { timeout: 15_000 });
     await expect(page.getByTestId("property-detail")).toBeVisible({ timeout: 15_000 });
   });
 });

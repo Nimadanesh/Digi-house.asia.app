@@ -18,7 +18,7 @@ describe("MockTxRepo prepareBuy + confirmBuy (mock keeps optimistic settlement)"
   it("prepareBuy returns an intent with destination + a real nanoTON amount", async () => {
     const repo = MockTxRepo();
     const prep = await repo.prepareBuy({
-      propertyId: "prop-soho-loft-studio",
+      propertyId: "re-126855",
       quantity: 5,
       priceUsdPerShare: 15000,
     });
@@ -34,7 +34,7 @@ describe("MockTxRepo prepareBuy + confirmBuy (mock keeps optimistic settlement)"
     const repo = MockTxRepo();
     // $750 principal → $500–$2,000 tier (2.5%) → $18.75 commission → $768.75 payable.
     const prep = await repo.prepareBuy({
-      propertyId: "prop-soho-loft-studio",
+      propertyId: "re-126855",
       quantity: 5,
       priceUsdPerShare: 15000,
     });
@@ -53,7 +53,7 @@ describe("MockTxRepo prepareBuy + confirmBuy (mock keeps optimistic settlement)"
   it("confirmBuy records the commission separately as feeUsd on the ledger row", async () => {
     const repo = MockTxRepo();
     const prep = await repo.prepareBuy({
-      propertyId: "prop-soho-loft-studio",
+      propertyId: "re-126855",
       quantity: 5,
       priceUsdPerShare: 15000,
     });
@@ -67,7 +67,7 @@ describe("MockTxRepo prepareBuy + confirmBuy (mock keeps optimistic settlement)"
   it("prepareBuy supports the USDT rail with a gas-sized message", async () => {
     const repo = MockTxRepo();
     const prep = await repo.prepareBuy({
-      propertyId: "prop-soho-loft-studio",
+      propertyId: "re-126855",
       quantity: 5,
       priceUsdPerShare: 15000,
       currency: "USDT",
@@ -83,7 +83,7 @@ describe("MockTxRepo prepareBuy + confirmBuy (mock keeps optimistic settlement)"
     const repo = MockTxRepo();
     const before = seed.transactions.length;
     const prep = await repo.prepareBuy({
-      propertyId: "prop-soho-loft-studio",
+      propertyId: "re-126855",
       quantity: 5,
       priceUsdPerShare: 15000,
     });
@@ -98,7 +98,7 @@ describe("MockTxRepo prepareBuy + confirmBuy (mock keeps optimistic settlement)"
   it("verifyAndSettle returns settled for a confirmed intent (mock settles in confirmBuy)", async () => {
     const repo = MockTxRepo();
     const prep = await repo.prepareBuy({
-      propertyId: "prop-soho-loft-studio",
+      propertyId: "re-126855",
       quantity: 3,
       priceUsdPerShare: 15000,
     });
@@ -115,7 +115,7 @@ describe("MockTxRepo prepareBuy + confirmBuy (mock keeps optimistic settlement)"
   });
 
   it("increments the user's sharesOwned for the bought property and recomputes proportional fields", async () => {
-    const property = PROPERTIES.find((p) => p.id === "prop-soho-loft-studio")!;
+    const property = PROPERTIES.find((p) => p.id === "re-126855")!;
     const beforeHolding = seed.holdings.find((h) => h.propertyId === property.id);
     const beforeShares = beforeHolding?.sharesOwned ?? 0;
     const repo = MockTxRepo();

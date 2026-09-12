@@ -26,7 +26,7 @@ function v1Monthly(id: string): number | null {
 
 describe("property presentation — single monthly-income path (V1)", () => {
   it("presents the V1 per-share monthly figure for a computable villa (Grand)", () => {
-    expect(getPresentedMonthlyIncome("prop-marina-vista-4b")).toEqual({
+    expect(getPresentedMonthlyIncome("re-128862")).toEqual({
       cents: 1629,
       currency: "USD",
       unknownKind: null,
@@ -51,9 +51,9 @@ describe("property presentation — single monthly-income path (V1)", () => {
   });
 
   it("scales position income as shares × per-share, null when unknown", () => {
-    expect(presentPositionMonthlyIncome("prop-marina-vista-4b", 10)).toBe(16_290);
-    expect(presentPositionMonthlyIncome("prop-marina-vista-4b", 1)).toBe(1629);
-    expect(presentPositionMonthlyIncome("prop-brooklyn-brownstone-flat", 10)).toBeNull();
+    expect(presentPositionMonthlyIncome("re-128862", 10)).toBe(16_290);
+    expect(presentPositionMonthlyIncome("re-128862", 1)).toBe(1629);
+    expect(presentPositionMonthlyIncome("re-131293", 10)).toBeNull();
   });
 });
 

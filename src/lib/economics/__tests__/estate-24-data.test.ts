@@ -48,17 +48,17 @@ describe("PROMPT 02: ESTATE-24-DATA.json adopted verbatim", () => {
     expect(currencies.has("EUR")).toBe(true);
   });
 
-  it("keeps all 24 runtime prop-* ids working with no duplicates", () => {
+  it("keeps all 24 runtime canonical ids working with no duplicates", () => {
     expect(Object.keys(ESTATE_24_RUNTIME_MAP)).toHaveLength(24);
     expect(new Set(Object.keys(ESTATE_24_RUNTIME_MAP)).size).toBe(24);
     expect(new Set(Object.values(ESTATE_24_RUNTIME_MAP)).size).toBe(24);
     // Spot-check ends of the ordered mapping.
-    expect(ESTATE_24_RUNTIME_MAP["prop-marina-vista-4b"]).toBe("128862");
-    expect(ESTATE_24_RUNTIME_MAP["prop-nyc-chelsea-loft"]).toBe("122113");
+    expect(ESTATE_24_RUNTIME_MAP["re-128862"]).toBe("128862");
+    expect(ESTATE_24_RUNTIME_MAP["re-122113"]).toBe("122113");
   });
 
   it("resolves rich record from runtime id for view-model use", () => {
-    const viaRuntime = getEstate24ByRuntimeId("prop-marina-vista-4b");
+    const viaRuntime = getEstate24ByRuntimeId("re-128862");
     const viaListing = getEstate24ByListingId("128862");
     expect(viaRuntime).toEqual(viaListing);
     expect(ESTATE_24_BY_LISTING_ID["126855"].name).toBe("The Aerial");

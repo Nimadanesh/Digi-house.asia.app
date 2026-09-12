@@ -15,7 +15,7 @@ import type { Order } from "@/types/order";
 function order(overrides: Partial<Order> = {}): Order {
   return {
     id: "ord-1",
-    propertyId: "prop-x",
+    propertyId: "test-x",
     makerAddress: "EQtest",
     side: "sell",
     priceUsd: 12_000,

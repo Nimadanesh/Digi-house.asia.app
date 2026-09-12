@@ -43,7 +43,8 @@ test.describe("Home — ownership-first (Phase 9 Slice 3)", () => {
     // 4. Featured Estate — identity first, no APY/metrics hero, honest owner-stay state.
     await expect(page.getByText("Featured Estate")).toBeVisible();
     await expect(page.getByTestId("featured-card")).toBeVisible();
-    await expect(page.getByText("APY")).toHaveCount(0);
+    // Word-bounded: substring matching would false-positive on e.g. "…Cap**You**r…".
+    await expect(page.getByText(/\bAPY\b/)).toHaveCount(0);
     await expect(page.getByTestId("featured-cta")).toHaveText("View Estate");
     await expect(page.getByText("Owner stay")).toBeVisible();
     await expect(page.getByText("Data pending")).toBeVisible();

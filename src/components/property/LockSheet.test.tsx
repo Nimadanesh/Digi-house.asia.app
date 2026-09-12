@@ -21,7 +21,7 @@ vi.mock("@/hooks/useLocks", () => ({
 }));
 
 const listing: Listing = {
-  id: "prop-x",
+  id: "test-x",
   title: "Villa One",
   location: "Y",
   description: "x",
@@ -67,7 +67,7 @@ describe("LockSheet — monthly-only new locks (Final PO Decision 4)", () => {
     renderSheet();
     fireEvent.click(screen.getByTestId("lock-confirm"));
     expect(createMutate).toHaveBeenCalledWith(
-      { propertyId: "prop-x", shares: 1, payoutPeriod: "monthly" },
+      { propertyId: "test-x", shares: 1, payoutPeriod: "monthly" },
       expect.anything(),
     );
   });

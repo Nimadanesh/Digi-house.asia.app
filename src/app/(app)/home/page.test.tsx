@@ -41,9 +41,9 @@ vi.mock("@/hooks/useMarketplace", () => ({ useMarketplace: () => useMarketplace(
 import HomePage from "@/app/(app)/home/page";
 
 const listing: Listing = {
-  id: "prop-marina-vista-4b",
-  title: "Marina Vista Apt 4B",
-  location: "Dubai Marina, UAE",
+  id: "re-128862",
+  title: "Grand 2 BDM Ocean Pool Villa (JOALI Being)",
+  location: "Bodufushi, JOALI Being, Raa Atoll, Maldives",
   description: "Waterfront",
   images: ["/images/properties/p1.png"],
   totalShares: 1000,
@@ -71,7 +71,7 @@ const listing: Listing = {
 
 const fundingTwo: Listing = {
   ...listing,
-  id: "prop-second-primary",
+  id: "test-second-primary",
   title: "Second Primary",
   location: "Bali",
   description: "Oceanfront",
@@ -82,7 +82,7 @@ const fundingTwo: Listing = {
 
 const fundedResale: Listing = {
   ...listing,
-  id: "prop-resale",
+  id: "test-resale",
   title: "Resale Villa",
   location: "Mykonos",
   description: "Villa",
@@ -198,7 +198,7 @@ describe("Home page — ownership-first redesign", () => {
     const fiveProperties = [
       ...Array.from({ length: 5 }).map((_, i) => ({
         ...listing,
-        id: `prop-clone-${i}`,
+        id: `test-clone-${i}`,
         title: `Clone Villa ${i}`,
       })),
     ];

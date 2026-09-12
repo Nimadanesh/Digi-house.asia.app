@@ -9,9 +9,9 @@ vi.mock("@/lib/telegram/haptics", () => ({
 }));
 
 const primaryListing: Listing = {
-  id: "prop-marina-vista-4b",
-  title: "Marina Vista Apt 4B",
-  location: "Dubai Marina, UAE",
+  id: "re-128862",
+  title: "Grand 2 BDM Ocean Pool Villa (JOALI Being)",
+  location: "Bodufushi, JOALI Being, Raa Atoll, Maldives",
   description: "x",
   images: [],
   totalShares: 1000,
@@ -39,8 +39,8 @@ const primaryListing: Listing = {
 
 const secondaryListing: Listing = {
   ...primaryListing,
-  id: "prop-bali-sunset-2a",
-  title: "Bali Sunset Villa 2A",
+  id: "test-bali-sunset-2a",
+  title: "Test Bali Sunset Villa 2A",
   status: "resale",
   sharesSold: 1000,
   sharesRemaining: 0,

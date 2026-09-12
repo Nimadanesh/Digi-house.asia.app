@@ -34,7 +34,7 @@ import { getCanonicalEstate } from "./canonical-24";
 import { getEstate24ByRuntimeId } from "./estate-24-data";
 
 /** Runtime listing id whose current valuation is the approved $8M single value. */
-export const GRAND_2_BDM_RUNTIME_ID = "prop-marina-vista-4b";
+export const GRAND_2_BDM_RUNTIME_ID = "re-128862";
 
 /** Approved Grand 2 BDM Current Estimated Value, minor units (V1 canonical). */
 export const GRAND_CURRENT_CENTS = 800_000_000; // $8M exactly

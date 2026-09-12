@@ -11,7 +11,7 @@ vi.mock("next/image", () => ({
 
 const listings: Listing[] = [
   {
-    id: "prop-a",
+    id: "test-a",
     title: "Alpha Marina",
     location: "Dubai",
     description: "A",
@@ -39,7 +39,7 @@ const listings: Listing[] = [
     rentalHistory: [],
   },
   {
-    id: "prop-b",
+    id: "test-b",
     title: "Beta Loft",
     location: "Lisbon",
     description: "B",

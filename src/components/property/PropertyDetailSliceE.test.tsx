@@ -41,7 +41,7 @@ vi.mock("@/hooks/useSells", () => ({
 }));
 
 const grandListing: Listing = {
-  id: "prop-marina-vista-4b",
+  id: "re-128862",
   title: "Grand 2 BDM Ocean Pool Villa",
   location: "JOALI Being, Maldives",
   description: "Waterfront one-bedroom.",
@@ -72,7 +72,7 @@ const grandListing: Listing = {
 
 const plainListing: Listing = {
   ...grandListing,
-  id: "prop-soho-loft-studio",
+  id: "re-126855",
   title: "The Aerial",
   totalShares: 1000,
   sharesRemaining: 600,

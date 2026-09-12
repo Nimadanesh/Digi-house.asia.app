@@ -12,7 +12,7 @@ describe("canonical offering (Final PO Decisions 1–2)", () => {
   });
 
   it("Grand: $8,000,000 → 80,000 shares at $100", () => {
-    const offering = getCanonicalOffering("prop-marina-vista-4b");
+    const offering = getCanonicalOffering("re-128862");
     expect(offering).not.toBeNull();
     expect(offering!.valuationCents).toBe(800_000_000);
     expect(offering!.totalShares).toBe(80_000);
@@ -22,14 +22,14 @@ describe("canonical offering (Final PO Decisions 1–2)", () => {
 
   it("covers all 24 canonical properties with valuation ÷ $100 supply", () => {
     const ids = [
-      "prop-marina-vista-4b", "prop-soho-loft-studio", "prop-bayside-marina-penthouse",
-      "prop-alfama-terrace-flat", "prop-tbilisi-riverhouse-loft", "prop-canggu-surf-villa",
-      "prop-tokyo-shibuya-studio", "prop-brooklyn-brownstone-flat", "prop-berlin-mitte-apartment",
-      "prop-barcelona-eixample-flat", "prop-london-camden-loft", "prop-sydney-harbour-apartment",
-      "prop-toronto-condo", "prop-melbourne-loft", "prop-miami-beach-condo",
-      "prop-istanbul-bosphorus-flat", "prop-mexico-city-penthouse", "prop-kyoto-machiya",
-      "prop-cape-town-villa", "prop-bangkok-sukhumvit-condo", "prop-amsterdam-canal-house",
-      "prop-buenos-aires-recoleta-flat", "prop-seoul-gangnam-studio", "prop-nyc-chelsea-loft",
+      "re-128862", "re-126855", "re-108924",
+      "re-123861", "re-125643", "re-130393",
+      "re-130901", "re-131293", "re-128529",
+      "re-123320", "re-109098", "re-127825",
+      "re-122422", "re-129548", "re-122903",
+      "re-126870", "re-130397", "re-127483",
+      "re-108856", "re-108860", "re-106441",
+      "re-129549", "re-123919", "re-122113",
     ];
     for (const id of ids) {
       const offering = getCanonicalOffering(id);
@@ -40,6 +40,6 @@ describe("canonical offering (Final PO Decisions 1–2)", () => {
   });
 
   it("returns null for unknown ids (honest fallback, never fixture supply)", () => {
-    expect(getCanonicalOffering("prop-unknown")).toBeNull();
+    expect(getCanonicalOffering("test-unknown")).toBeNull();
   });
 });

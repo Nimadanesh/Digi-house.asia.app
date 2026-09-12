@@ -18,7 +18,7 @@ vi.mock("next/image", () => ({
 }));
 
 const listing: Listing = {
-  id: "prop-marina-vista-4b",
+  id: "re-128862",
   title: "Grand 2 BDM Ocean Pool Villa (JOALI Being)",
   location: "Bodufushi, JOALI Being, Raa Atoll, Maldives",
   description: "Waterfront.",
@@ -57,7 +57,7 @@ describe("Slice 6 — hero states funding once (banner + metrics, not a third ca
 
 describe("Slice 6 — thesis ANR explains itself in plain language", () => {
   it("renders the ANR note (projection input, not a bookable rate)", () => {
-    const v1 = getFinancialModelV1("prop-marina-vista-4b")!;
+    const v1 = getFinancialModelV1("re-128862")!;
     render(<EstateV1Thesis v1={v1} onShowIncome={() => {}} />);
     expect(screen.getByTestId("thesis-anr-note")).toHaveTextContent(
       /revenue model/,

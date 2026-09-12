@@ -374,7 +374,7 @@ describe("missing inputs", () => {
 
   it("bridged legacy estate (zero occupancy, unknown guests) evaluates honestly — nothing invented", () => {
     const bridged = estateFromLegacyListing({
-      id: "prop-x",
+      id: "test-x",
       title: "Legacy Villa",
       location: "Somewhere",
       images: [],

@@ -5,7 +5,7 @@
 // ADDITIVE ONLY: no existing registry, fixture, manifest record, UI component, or
 // settlement path is modified by this file. Both existing ID sets are preserved
 // untouched:
-//   - web runtime + tests: 24 legacy `prop-*` fixture IDs (this layer keys on them);
+//   - web runtime + tests: the 24 canonical `re-<listingId>` ids (this layer keys on them);
 //   - API/DB seed: 24 manifest IDs from `portfolio-manifest.json` (not keyed here,
 //     not renamed, not reordered — see the R2 legacy audit in the test file).
 //
@@ -159,7 +159,7 @@ function buildRow(row: EstateRow): CanonicalMarketplaceEstate {
  */
 const ROWS: readonly EstateRow[] = [
   {
-    propertyId: "prop-marina-vista-4b",
+    propertyId: "re-128862",
     listingId: "128862",
     sourceUrl:
       "https://www.rentalescapes.com/rentals/luxury-villa-rentals-asia/maldives/bodufushi/joali-being/grand-2-bdm-ocean-pool-villa-128862",
@@ -188,7 +188,7 @@ const ROWS: readonly EstateRow[] = [
       "Legacy fixture totalValueUsd $82M retained as LEGACY/CONFLICTED evidence only; must never enter canonical economics.",
   },
   {
-    propertyId: "prop-soho-loft-studio",
+    propertyId: "re-126855",
     listingId: "126855",
     sourceUrl:
       "https://www.rentalescapes.com/rentals/luxury-villa-rentals-caribbean/british-virgin-islands/buck-island/the-aerial-126855",
@@ -214,7 +214,7 @@ const ROWS: readonly EstateRow[] = [
       "pm-decision-2026-09-09 lowest-valid-value rule: research $18-22M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
-    propertyId: "prop-bayside-marina-penthouse",
+    propertyId: "re-108924",
     listingId: "108924",
     sourceUrl:
       "https://www.rentalescapes.com/rentals/luxury-vacation-rentals-europe/italy/amalfi-coast/sorrento/villa-syrene-108924",
@@ -240,7 +240,7 @@ const ROWS: readonly EstateRow[] = [
       "pm-decision-2026-09-09 lowest-valid-value rule: research $12-16M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
-    propertyId: "prop-alfama-terrace-flat",
+    propertyId: "re-123861",
     listingId: "123861",
     sourceUrl:
       "https://www.rentalescapes.com/rentals/luxury-vacation-rentals-europe/france/french-riviera/saint-jean-cap-ferrat/villa-du-cap-123861",
@@ -266,7 +266,7 @@ const ROWS: readonly EstateRow[] = [
       "pm-decision-2026-09-09 lowest-valid-value rule: research $25-35M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
-    propertyId: "prop-tbilisi-riverhouse-loft",
+    propertyId: "re-125643",
     listingId: "125643",
     sourceUrl:
       "https://www.rentalescapes.com/rentals/luxury-villa-rentals-caribbean/turks-and-caicos/providenciales/silly-creek/emerald-cay-125643",
@@ -292,7 +292,7 @@ const ROWS: readonly EstateRow[] = [
       "pm-decision-2026-09-09 lowest-valid-value rule: research $28-35M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
-    propertyId: "prop-canggu-surf-villa",
+    propertyId: "re-130393",
     listingId: "130393",
     sourceUrl:
       "https://www.rentalescapes.com/rentals/luxury-villa-rentals-caribbean/british-virgin-islands/moskito-island/the-branson-beach-estate-130393",
@@ -318,7 +318,7 @@ const ROWS: readonly EstateRow[] = [
       "pm-decision-2026-09-09 lowest-valid-value rule: research $30-40M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
-    propertyId: "prop-tokyo-shibuya-studio",
+    propertyId: "re-130901",
     listingId: "130901",
     sourceUrl:
       "https://www.rentalescapes.com/rentals/luxury-vacation-rentals-europe/austria/tyrol/kitzbuhel/chalet-montana-130901",
@@ -344,7 +344,7 @@ const ROWS: readonly EstateRow[] = [
       "pm-decision-2026-09-09 lowest-valid-value rule: research $12-18M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
-    propertyId: "prop-brooklyn-brownstone-flat",
+    propertyId: "re-131293",
     listingId: "131293",
     sourceUrl:
       "https://www.rentalescapes.com/rentals/luxury-villa-rentals-caribbean/st-barthelemy/saint-jean/villa-bdm-131293",
@@ -370,7 +370,7 @@ const ROWS: readonly EstateRow[] = [
       "pm-decision-2026-09-09 lowest-valid-value rule: research $18-25M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
-    propertyId: "prop-berlin-mitte-apartment",
+    propertyId: "re-128529",
     listingId: "128529",
     sourceUrl:
       "https://www.rentalescapes.com/rentals/luxury-vacation-rentals-usa/nevada/las-vegas/caesars-palace/trajan-128529",
@@ -396,7 +396,7 @@ const ROWS: readonly EstateRow[] = [
       "pm-decision-2026-09-09 lowest-valid-value rule: research $8-12M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
-    propertyId: "prop-barcelona-eixample-flat",
+    propertyId: "re-123320",
     listingId: "123320",
     sourceUrl:
       "https://www.rentalescapes.com/rentals/luxury-vacation-rentals-mexico/los-cabos/cabo/pedregal/villa-la-datcha-123320",
@@ -422,7 +422,7 @@ const ROWS: readonly EstateRow[] = [
       "pm-decision-2026-09-09 lowest-valid-value rule: research $15-20M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
-    propertyId: "prop-london-camden-loft",
+    propertyId: "re-109098",
     listingId: "109098",
     sourceUrl:
       "https://www.rentalescapes.com/rentals/luxury-vacation-rentals-europe/italy/lombardy/lake-como/galeazzo-109098",
@@ -448,7 +448,7 @@ const ROWS: readonly EstateRow[] = [
       "pm-decision-2026-09-09 lowest-valid-value rule: research $12-18M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
-    propertyId: "prop-sydney-harbour-apartment",
+    propertyId: "re-127825",
     listingId: "127825",
     sourceUrl:
       "https://www.rentalescapes.com/rentals/luxury-villa-rentals-caribbean/st-barthelemy/gustavia/embrace-127825",
@@ -474,7 +474,7 @@ const ROWS: readonly EstateRow[] = [
       "pm-decision-2026-09-09 lowest-valid-value rule: research $35-45M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
-    propertyId: "prop-toronto-condo",
+    propertyId: "re-122422",
     listingId: "122422",
     sourceUrl:
       "https://www.rentalescapes.com/rentals/luxury-villa-rentals-caribbean/dominican-republic/cabrera/ani-dominican-republic-122422",
@@ -501,7 +501,7 @@ const ROWS: readonly EstateRow[] = [
       "pm-decision-2026-09-09 lowest-valid-value rule: research $50-70M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
-    propertyId: "prop-melbourne-loft",
+    propertyId: "re-129548",
     listingId: "129548",
     sourceUrl:
       "https://www.rentalescapes.com/rentals/luxury-vacation-rentals-mexico/punta-mita/ranchos-estates/mita-principe-129548",
@@ -527,7 +527,7 @@ const ROWS: readonly EstateRow[] = [
       "pm-decision-2026-09-09 lowest-valid-value rule: research $25-35M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
-    propertyId: "prop-miami-beach-condo",
+    propertyId: "re-122903",
     listingId: "122903",
     sourceUrl:
       "https://www.rentalescapes.com/rentals/luxury-villa-rentals-caribbean/turks-and-caicos/providenciales/long-bay/la-dolce-vita--122903",
@@ -553,7 +553,7 @@ const ROWS: readonly EstateRow[] = [
       "pm-decision-2026-09-09 lowest-valid-value rule: single $32M point adopted ESTIMATED/MODELED (HIGH confidence)",
   },
   {
-    propertyId: "prop-istanbul-bosphorus-flat",
+    propertyId: "re-126870",
     listingId: "126870",
     sourceUrl:
       "https://www.rentalescapes.com/rentals/luxury-villa-rentals-caribbean/turks-and-caicos/providenciales/leeward/tranquility--126870",
@@ -579,7 +579,7 @@ const ROWS: readonly EstateRow[] = [
       "pm-decision-2026-09-09 lowest-valid-value rule: research $35-45M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
-    propertyId: "prop-mexico-city-penthouse",
+    propertyId: "re-130397",
     listingId: "130397",
     sourceUrl:
       "https://www.rentalescapes.com/rentals/luxury-villa-rentals-caribbean/turks-and-caicos/providenciales/long-bay/pearls-of-long-bay-estate-130397",
@@ -605,7 +605,7 @@ const ROWS: readonly EstateRow[] = [
       "pm-decision-2026-09-09 lowest-valid-value rule: research $60-80M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
-    propertyId: "prop-kyoto-machiya",
+    propertyId: "re-127483",
     listingId: "127483",
     sourceUrl:
       "https://www.rentalescapes.com/rentals/luxury-villa-rentals-caribbean/turks-and-caicos/ambergris-cay/dream-pavilion-127483",
@@ -631,7 +631,7 @@ const ROWS: readonly EstateRow[] = [
       "pm-decision-2026-09-09 lowest-valid-value rule: research $20-28M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
-    propertyId: "prop-cape-town-villa",
+    propertyId: "re-108856",
     listingId: "108856",
     sourceUrl:
       "https://www.rentalescapes.com/rentals/luxury-villa-rentals-asia/thailand/koh-yaonoi/phang-ngabay/ani-thailand-108856",
@@ -657,7 +657,7 @@ const ROWS: readonly EstateRow[] = [
       "pm-decision-2026-09-09 lowest-valid-value rule: research $45-60M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
-    propertyId: "prop-bangkok-sukhumvit-condo",
+    propertyId: "re-108860",
     listingId: "108860",
     sourceUrl:
       "https://www.rentalescapes.com/rentals/luxury-villa-rentals-asia/sri-lanka/maliyadda/ani-sri-lanka-108860",
@@ -683,7 +683,7 @@ const ROWS: readonly EstateRow[] = [
       "pm-decision-2026-09-09 lowest-valid-value rule: research $50-65M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
-    propertyId: "prop-amsterdam-canal-house",
+    propertyId: "re-106441",
     listingId: "106441",
     sourceUrl:
       "https://www.rentalescapes.com/rentals/luxury-villa-rentals-caribbean/jamaica/ocho-rios/rio-chico-private-estate-106441",
@@ -709,7 +709,7 @@ const ROWS: readonly EstateRow[] = [
       "pm-decision-2026-09-09 lowest-valid-value rule: research $25-35M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
-    propertyId: "prop-buenos-aires-recoleta-flat",
+    propertyId: "re-129549",
     listingId: "129549",
     sourceUrl:
       "https://www.rentalescapes.com/rentals/luxury-vacation-rentals-usa/california/los-angeles-california/holmby-hills/forza-modern-129549",
@@ -735,7 +735,7 @@ const ROWS: readonly EstateRow[] = [
       "pm-decision-2026-09-09 lowest-valid-value rule: research $18-28M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
-    propertyId: "prop-seoul-gangnam-studio",
+    propertyId: "re-123919",
     listingId: "123919",
     sourceUrl:
       "https://www.rentalescapes.com/rentals/luxury-vacation-rentals-europe/france/southwest-france/bordeaux/chateau-prestige-123919",
@@ -761,7 +761,7 @@ const ROWS: readonly EstateRow[] = [
       "pm-decision-2026-09-09 lowest-valid-value rule: research $15-22M band low ESTIMATED/MODELED (range preserved in research context)",
   },
   {
-    propertyId: "prop-nyc-chelsea-loft",
+    propertyId: "re-122113",
     listingId: "122113",
     sourceUrl:
       "https://www.rentalescapes.com/rentals/luxury-villa-rentals-caribbean/turks-and-caicos/providenciales/grace-bay/hawksbill-122113",

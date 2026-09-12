@@ -27,7 +27,7 @@ import {
 } from "./estates/growth-potential";
 
 export interface MarketplaceEstate {
-  /** Stable technical id (existing runtime `prop-*`, preserved exactly). */
+  /** Stable technical id (canonical `re-<listingId>` scheme, preserved exactly). */
   id: string;
   /** Canonical observed name; fallback listing.title for unmapped ids. */
   name: string;

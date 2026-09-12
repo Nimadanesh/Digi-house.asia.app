@@ -1,6 +1,11 @@
 /**
  * Frozen copy of Mini App mock listings (src/lib/mock/seed/properties.ts).
  * API must not import @/ paths from the Next app.
+ *
+ * Canonical identity (2026-09-12 migration): ids are the 24 canonical
+ * `re-<Rental Escapes listingId>` property ids, keyed by fixture order via
+ * docs/PHASE-9-BASELINE.md §B. Display fields (title/location/images/economics)
+ * are fixture data keyed by reference, not canonical facts.
  */
 import type { PropertyMetaJson, RentalPaymentJson } from "../schema/properties.js";
 
@@ -35,7 +40,7 @@ function history(prefix: string, dates: string[]): RentalPaymentJson[] {
 
 export const SEED_PROPERTIES: SeedProperty[] = [
   {
-    id: "prop-marina-vista-4b",
+    id: "re-128862",
     title: "Grand 2 BDM Ocean Pool Villa",
     nightlyRate: "$67,655",
     location: "JOALI Being, Maldives",
@@ -93,7 +98,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("marina", [
+    rentalHistory: history("re-128862", [
       "2026-07-04",
       "2026-06-06",
       "2026-05-02",
@@ -101,7 +106,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
     ]),
   },
   {
-    id: "prop-soho-loft-studio",
+    id: "re-126855",
     title: "The Aerial",
     nightlyRate: "$52,200",
     location: "Buck Island, British Virgin Islands (BVI)",
@@ -175,10 +180,10 @@ export const SEED_PROPERTIES: SeedProperty[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("soho", ["2026-07-11", "2026-06-13", "2026-05-16"]),
+    rentalHistory: history("re-126855", ["2026-07-11", "2026-06-13", "2026-05-16"]),
   },
   {
-    id: "prop-bayside-marina-penthouse",
+    id: "re-108924",
     title: "Syrene",
     nightlyRate: "€40,000",
     location: "Sorrento, Italy",
@@ -245,7 +250,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("bayside", [
+    rentalHistory: history("re-108924", [
       "2026-07-18",
       "2026-06-20",
       "2026-05-23",
@@ -253,7 +258,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
     ]),
   },
   {
-    id: "prop-alfama-terrace-flat",
+    id: "re-123861",
     title: "Villa du Cap",
     nightlyRate: "€38,575",
     location: "Saint-Jean-Cap-Ferrat, France",
@@ -286,10 +291,10 @@ export const SEED_PROPERTIES: SeedProperty[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("alfama", ["2026-07-01", "2026-06-01", "2026-05-01"]),
+    rentalHistory: history("re-123861", ["2026-07-01", "2026-06-01", "2026-05-01"]),
   },
   {
-    id: "prop-tbilisi-riverhouse-loft",
+    id: "re-125643",
     title: "Emerald Cay",
     nightlyRate: "$35,714",
     location: "Silly Creek, Turks & Caicos",
@@ -353,7 +358,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("tbilisi", [
+    rentalHistory: history("re-125643", [
       "2026-07-07",
       "2026-06-07",
       "2026-05-10",
@@ -361,7 +366,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
     ]),
   },
   {
-    id: "prop-canggu-surf-villa",
+    id: "re-130393",
     title: "The Branson Beach Estate",
     nightlyRate: "$35,000",
     location: "Moskito Island, British Virgin Islands (BVI)",
@@ -424,7 +429,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("canggu", [
+    rentalHistory: history("re-130393", [
       "2026-07-12",
       "2026-06-14",
       "2026-05-17",
@@ -432,7 +437,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
     ]),
   },
 {
-    id: "prop-tokyo-shibuya-studio",
+    id: "re-130901",
     title: "Chalet Montana",
     nightlyRate: "€27,571",
     location: "Kitzbuhel, Austria",
@@ -520,13 +525,13 @@ export const SEED_PROPERTIES: SeedProperty[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("tokyo", [
+    rentalHistory: history("re-130901", [
       "2026-07-10",
       "2026-06-12",
     ]),
   },
 {
-    id: "prop-brooklyn-brownstone-flat",
+    id: "re-131293",
     title: "Villa BDM",
     nightlyRate: "$25,714",
     location: "Saint Jean, St. Barts",
@@ -618,13 +623,13 @@ export const SEED_PROPERTIES: SeedProperty[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("brooklyn", [
+    rentalHistory: history("re-131293", [
       "2026-07-09",
       "2026-06-11",
     ]),
   },
 {
-    id: "prop-berlin-mitte-apartment",
+    id: "re-128529",
     title: "Trajan Villa at Caesars Palace",
     nightlyRate: "$25,000",
     location: "Caesars Palace, Nevada",
@@ -658,13 +663,13 @@ export const SEED_PROPERTIES: SeedProperty[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("berlin", [
+    rentalHistory: history("re-128529", [
       "2026-07-14",
       "2026-06-16",
     ]),
   },
 {
-    id: "prop-barcelona-eixample-flat",
+    id: "re-123320",
     title: "La Datcha",
     nightlyRate: "$35,000",
     location: "Pedregal, Los Cabos",
@@ -729,13 +734,13 @@ export const SEED_PROPERTIES: SeedProperty[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("barcelona", [
+    rentalHistory: history("re-123320", [
       "2026-07-16",
       "2026-06-18",
     ]),
   },
 {
-    id: "prop-london-camden-loft",
+    id: "re-109098",
     title: "Galeazzo",
     nightlyRate: "$18,000",
     location: "Lake Como, Italy",
@@ -783,14 +788,14 @@ export const SEED_PROPERTIES: SeedProperty[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("camden", [
+    rentalHistory: history("re-109098", [
       "2026-07-13",
       "2026-06-15",
       "2026-05-18",
     ]),
   },
 {
-    id: "prop-sydney-harbour-apartment",
+    id: "re-127825",
     title: "Embrace",
     nightlyRate: "$21,428",
     location: "Gustavia, St. Barts",
@@ -873,14 +878,14 @@ export const SEED_PROPERTIES: SeedProperty[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("sydney", [
+    rentalHistory: history("re-127825", [
       "2026-07-15",
       "2026-06-17",
       "2026-05-20",
     ]),
   },
 {
-    id: "prop-toronto-condo",
+    id: "re-122422",
     title: "ANI Dominican Republic",
     nightlyRate: "$27,000",
     location: "Cabrera, Dominican Republic",
@@ -952,14 +957,14 @@ export const SEED_PROPERTIES: SeedProperty[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("toronto", [
+    rentalHistory: history("re-122422", [
       "2026-07-11",
       "2026-06-13",
       "2026-05-16",
     ]),
   },
 {
-    id: "prop-melbourne-loft",
+    id: "re-129548",
     title: "Mita Principe",
     nightlyRate: "$20,000",
     location: "Ranchos Estates, Punta de Mita (Punta Mita)",
@@ -1074,14 +1079,14 @@ export const SEED_PROPERTIES: SeedProperty[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("melbourne", [
+    rentalHistory: history("re-129548", [
       "2026-07-08",
       "2026-06-10",
       "2026-05-13",
     ]),
   },
 {
-    id: "prop-miami-beach-condo",
+    id: "re-122903",
     title: "La Dolce Vita",
     nightlyRate: "$28,000",
     location: "Long Bay, Providenciales, Turks & Caicos",
@@ -1173,14 +1178,14 @@ export const SEED_PROPERTIES: SeedProperty[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("miami", [
+    rentalHistory: history("re-122903", [
       "2026-07-17",
       "2026-06-19",
       "2026-05-22",
     ]),
   },
 {
-    id: "prop-istanbul-bosphorus-flat",
+    id: "re-126870",
     title: "Tranquility",
     nightlyRate: "$21,500",
     location: "Leeward, Turks & Caicos",
@@ -1226,14 +1231,14 @@ export const SEED_PROPERTIES: SeedProperty[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("istanbul", [
+    rentalHistory: history("re-126870", [
       "2026-07-12",
       "2026-06-14",
       "2026-05-17",
     ]),
   },
 {
-    id: "prop-mexico-city-penthouse",
+    id: "re-130397",
     title: "Pearls of Long Bay Estate",
     nightlyRate: "$28,100",
     location: "Long Bay Hills, Providenciales, Turks & Caicos",
@@ -1353,14 +1358,14 @@ export const SEED_PROPERTIES: SeedProperty[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("polanco", [
+    rentalHistory: history("re-130397", [
       "2026-07-14",
       "2026-06-16",
       "2026-05-19",
     ]),
   },
 {
-    id: "prop-kyoto-machiya",
+    id: "re-127483",
     title: "Dream Pavilion",
     nightlyRate: "$18,029",
     location: "Ambergris Cay, Turks & Caicos",
@@ -1415,14 +1420,14 @@ export const SEED_PROPERTIES: SeedProperty[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("kyoto", [
+    rentalHistory: history("re-127483", [
       "2026-07-06",
       "2026-06-08",
       "2026-05-11",
     ]),
   },
 {
-    id: "prop-cape-town-villa",
+    id: "re-108856",
     title: "ANI Thailand",
     nightlyRate: "$22,000",
     location: "Phang Nga Bay, Thailand",
@@ -1474,14 +1479,14 @@ export const SEED_PROPERTIES: SeedProperty[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("capetown", [
+    rentalHistory: history("re-108856", [
       "2026-07-16",
       "2026-06-18",
       "2026-05-21",
     ]),
   },
 {
-    id: "prop-bangkok-sukhumvit-condo",
+    id: "re-108860",
     title: "ANI Sri Lanka",
     nightlyRate: "$27,000",
     location: "Maliyadda, Sri Lanka",
@@ -1543,14 +1548,14 @@ export const SEED_PROPERTIES: SeedProperty[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("bangkok", [
+    rentalHistory: history("re-108860", [
       "2026-07-13",
       "2026-06-15",
       "2026-05-18",
     ]),
   },
 {
-    id: "prop-amsterdam-canal-house",
+    id: "re-106441",
     title: "Rio Chico Private Estate",
     nightlyRate: "$23,179",
     location: "Ocho Rios, Jamaica",
@@ -1638,14 +1643,14 @@ export const SEED_PROPERTIES: SeedProperty[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("amsterdam", [
+    rentalHistory: history("re-106441", [
       "2026-07-09",
       "2026-06-11",
       "2026-05-14",
     ]),
   },
 {
-    id: "prop-buenos-aires-recoleta-flat",
+    id: "re-129549",
     title: "Forza Modern",
     nightlyRate: "$12,000",
     location: "Holmby Hills, California",
@@ -1723,14 +1728,14 @@ export const SEED_PROPERTIES: SeedProperty[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("recoleta", [
+    rentalHistory: history("re-129549", [
       "2026-07-10",
       "2026-06-12",
       "2026-05-15",
     ]),
   },
 {
-    id: "prop-seoul-gangnam-studio",
+    id: "re-123919",
     title: "Chateau Prestige",
     nightlyRate: "€11,815",
     location: "Bordeaux, France",
@@ -1790,14 +1795,14 @@ export const SEED_PROPERTIES: SeedProperty[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("gangnam", [
+    rentalHistory: history("re-123919", [
       "2026-07-15",
       "2026-06-17",
       "2026-05-20",
     ]),
   },
 {
-    id: "prop-nyc-chelsea-loft",
+    id: "re-122113",
     title: "Hawksbill",
     nightlyRate: "$16,500",
     location: "Grace Bay, Turks & Caicos",
@@ -1852,7 +1857,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
       activeTenant: true,
       tokenizationDocUrl: "#tokenization-demo",
     },
-    rentalHistory: history("chelsea", [
+    rentalHistory: history("re-122113", [
       "2026-07-17",
       "2026-06-19",
       "2026-05-22",

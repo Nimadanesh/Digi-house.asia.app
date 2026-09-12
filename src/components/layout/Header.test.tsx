@@ -16,7 +16,7 @@ describe("Header — back chevron mirrors in RTL", () => {
   beforeEach(() => vi.clearAllMocks());
 
   it("nested route back button flips direction in RTL", () => {
-    usePathname.mockReturnValue("/property/prop-x");
+    usePathname.mockReturnValue("/property/test-x");
     const { container } = render(<Header />);
     const icon = container.querySelector('[data-testid="header-back"] svg');
     expect(icon?.getAttribute("class") ?? "").toMatch(/rtl:rotate-180/);

@@ -50,7 +50,7 @@ const loadedSummary: EarningsSummary = {
     {
       id: "e1",
       userId: "u1",
-      propertyId: "prop-bayside-marina-penthouse",
+      propertyId: "re-108924",
       weekOf: "2026-07-13T00:00:00Z",
       amountUsd: 1_500,
       tonAmount: 7_500_000_000,
@@ -61,7 +61,7 @@ const loadedSummary: EarningsSummary = {
     {
       id: "e2",
       userId: "u1",
-      propertyId: "prop-bayside-marina-penthouse",
+      propertyId: "re-108924",
       weekOf: "2026-07-20T00:00:00Z",
       amountUsd: 1_500,
       tonAmount: 7_500_000_000,
@@ -97,16 +97,16 @@ describe("Earnings page — income redesign (slice 5)", () => {
     vi.mocked(useMarketplace).mockReturnValue({
       data: [
         {
-          id: "prop-bayside-marina-penthouse",
-          title: "Bayside Marina Penthouse",
-          location: "Dubai Marina, UAE",
-          images: ["/images/properties/bayside.png"],
+          id: "re-108924",
+          title: "Syrene",
+          location: "Sorrento, Amalfi Coast, Italy",
+          images: ["/images/properties/villa-syrene-01.jpg"],
         },
         {
-          id: "prop-alfama-terrace-flat",
-          title: "Alfama Terrace Flat",
-          location: "Lisbon, Portugal",
-          images: ["/images/properties/alfama.png"],
+          id: "re-123861",
+          title: "Villa du Cap",
+          location: "Saint-Jean-Cap-Ferrat, France",
+          images: ["/images/properties/villa-du-cap-01.jpg"],
         },
       ],
       isLoading: false,
@@ -201,11 +201,11 @@ describe("Earnings page — income redesign (slice 5)", () => {
     // PROMPT 03-C: identity is canonical (ESTATE-24) even though the mocked
     // marketplace contract still carries legacy fixture facts.
     expect(screen.getByTestId("income-by-estate")).toBeInTheDocument();
-    const bayside = screen.getByTestId("income-by-estate-row-prop-bayside-marina-penthouse");
+    const bayside = screen.getByTestId("income-by-estate-row-re-108924");
     expect(bayside).toHaveTextContent("Villa Syrene");
     expect(bayside).toHaveTextContent("Sorrento, Amalfi Coast, Italy");
     expect(bayside).toHaveTextContent("$15.00"); // 1 paid entry × $15
-    expect(bayside).toHaveAttribute("href", "/property/prop-bayside-marina-penthouse");
+    expect(bayside).toHaveAttribute("href", "/property/re-108924");
 
     // Secondary Withdraw entry + withdrawable balance from useMeSummary.
     expect(screen.getByTestId("earnings-withdraw-block")).toBeInTheDocument();
@@ -279,7 +279,7 @@ describe("Earnings page — income redesign (slice 5)", () => {
         {
           id: "e1",
           userId: "u1",
-          propertyId: "prop-bayside-marina-penthouse",
+          propertyId: "re-108924",
           weekOf: "2026-07-13T00:00:00Z",
           amountUsd: 1_500,
           tonAmount: 7_500_000_000,
@@ -289,7 +289,7 @@ describe("Earnings page — income redesign (slice 5)", () => {
         {
           id: "e2",
           userId: "u1",
-          propertyId: "prop-bayside-marina-penthouse",
+          propertyId: "re-108924",
           weekOf: "2026-07-20T00:00:00Z",
           amountUsd: 500,
           tonAmount: 2_500_000_000,
@@ -302,7 +302,7 @@ describe("Earnings page — income redesign (slice 5)", () => {
       data: {
         holdings: [
           {
-            propertyId: "prop-bayside-marina-penthouse",
+            propertyId: "re-108924",
             sharesOwned: 160,
             avgCostUsd: 12_000,
             currentValueUsd: 1_920_000,
@@ -320,7 +320,7 @@ describe("Earnings page — income redesign (slice 5)", () => {
         locks: [
           {
             id: "lock-1",
-            propertyId: "prop-bayside-marina-penthouse",
+            propertyId: "re-108924",
             shares: 100,
             principalUsd: 1_200_000,
             payoutPeriod: "monthly",
@@ -346,7 +346,7 @@ describe("Earnings page — income redesign (slice 5)", () => {
     } as never);
     render(<EarningsPage />);
 
-    const row = screen.getByTestId("income-by-estate-row-prop-bayside-marina-penthouse");
+    const row = screen.getByTestId("income-by-estate-row-re-108924");
     expect(row).toHaveTextContent("160 shares");
     expect(row).toHaveTextContent("$5.00"); // projected (pending ledger only)
     expect(row).toHaveTextContent("$42.00"); // accrued (lock engine only)

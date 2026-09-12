@@ -131,8 +131,8 @@ function makeApp(holdingSeed: HoldingRowInput[] = []) {
   return app;
 }
 
-const BAYSIDE = "prop-bayside-marina-penthouse";
-const ALFAMA = "prop-alfama-terrace-flat";
+const BAYSIDE = "re-108924";
+const ALFAMA = "re-123861";
 
 function holding(
   userId: string,

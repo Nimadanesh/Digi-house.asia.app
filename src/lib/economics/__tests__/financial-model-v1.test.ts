@@ -41,7 +41,7 @@ import { ESTATE_24_DATA } from "../estates/estate-24-data";
 import * as v1EngineModule from "../financial-model-v1";
 import * as v1InputsModule from "../estates/financial-model-v1-inputs";
 
-const GRAND_PROPERTY_ID = "prop-marina-vista-4b";
+const GRAND_PROPERTY_ID = "re-128862";
 const GRAND_VALUE_CENTS = 800_000_000; // $8,000,000 — the SINGLE canonical value.
 const LEGACY_82M_CENTS = 8_200_000_000; // Must never appear as a V1 valuation.
 const LEGACY_GRAND_FIXTURE_SHARES = 2500; // Retired fixture count for Grand.

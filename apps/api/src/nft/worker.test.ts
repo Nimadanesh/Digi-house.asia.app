@@ -26,7 +26,7 @@ const silentLog = {
 } as unknown as Logger;
 
 const USER = "user-a";
-const PROP = "prop-marina-vista-4b";
+const PROP = "re-128862";
 const ADDR = new Address(0, Buffer.alloc(32, 1)).toString();
 
 function makeDeps(over: { minter?: NftMinter | null; nfts?: NftStore } = {}) {
@@ -305,9 +305,9 @@ describe("runNftSweep (recovery)", () => {
     const stuckId = "nft_stuck";
     await nfts.insert({
       id: stuckId,
-      holdingKey: `${USER}:prop-other`,
+      holdingKey: `${USER}:test-other`,
       userId: USER,
-      propertyId: "prop-other",
+      propertyId: "test-other",
       walletAddress: ADDR,
     });
     await nfts.claimForMint(stuckId);

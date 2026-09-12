@@ -159,6 +159,41 @@ An agent may discover and record findings, but may not change the product contra
   (repo boundary); live 480×840 check (card == portfolio == detail names).
   Full diff table: `docs/PHASE-9-SLICE-8.md` §1.
 
+### DEC-011 — Canonical property identity + routing migration (user-directed, post-Slice 8)
+- Date: 2026-09-12
+- Status: APPROVED (user direction in-session) — implementation this change
+- Finding: The legacy technical ids (`prop-*`, e.g. `prop-marina-vista-4b`) remained
+  the primary keys for routing, seeds, deep links, and economics lookups; Slice 8
+  (DEC-007) had unified only the display name. Root cause: identity was still
+  fixture-born.
+- User decision (verbatim intent): define one stable, name-independent canonical
+  id per all 24 properties based on the Rental Escapes Listing ID; connect ALL
+  URLs, links, cards, detail pages, economics, and deep links to it; because the
+  project is a local prototype with no real URL consumers, remove `prop-*`
+  completely and keep only canonical URLs; identity fields (name, location,
+  image, rate) read only from the canonical record; add a global test asserting
+  no legacy name or slug remains in URL/UI for any of the 24.
+- Canonical id format adopted: **`re-<listingId>`** (e.g. `re-128862` for Grand 2
+  BDM Ocean Pool Villa). Derivation: `ESTATE-24-DATA.json` `listingId` — unique
+  across all 24 (verified), stable, and independent of any display name. URLs
+  become `/property/re-128862`.
+- Implementation scope: seed ids (properties/holdings/earnings/transactions/
+  distributions/orderbooks), `CANONICAL_RECONCILIATION` propertyIds, runtime
+  map consumers, deep links, all unit + E2E references, review scripts; test-only
+  unmapped fixture ids renamed `prop-x` → `test-x` (they are not estates);
+  legacy comments cleaned. No economics, valuations, or canonical data changed —
+  ids only.
+- Verification: new `src/lib/__tests__/canonical-id-guard.test.ts` — (a) every
+  served listing id matches `re-<6-digit listingId>` and resolves to its Estate24
+  record (24/24, unique); (b) served identity (name/location/image/nightly) comes
+  from the canonical record for all 24; (c) source scan of `src/` + `e2e/`
+  asserts ZERO legacy `prop-[a-z0-9]…` tokens anywhere (routing, UI, tests,
+  scripts). Full suite + E2E + 480×840 spot-check.
+- Affected slice: post-Slice 8 addendum (user-directed; not Slice 9).
+- Severity: P1 (identity/routing root fix)
+- Product approval: USER (this decision is the user's instruction, recorded here
+  per the change rule).
+
 ### DEC-010 — Slice 8: pre-existing `apps/api` security-scan findings block the commit hook
 - Date: 2026-09-12
 - Status: PARTIALLY RESOLVED in Slice 8; remainder OPEN

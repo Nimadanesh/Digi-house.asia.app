@@ -67,7 +67,7 @@ function pendingCostLines(): EstateCostLine[] {
 }
 
 /** Runtime listing id whose canonical estate is the Grand 2 BDM seed. */
-export const GRAND_2_BDM_LISTING_ID = "prop-marina-vista-4b";
+export const GRAND_2_BDM_LISTING_ID = "re-128862";
 
 /**
  * Canonical estate for a runtime listing, or null when no product-configured

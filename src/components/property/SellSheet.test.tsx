@@ -63,7 +63,7 @@ vi.mock("@/hooks/useFees", () => ({
 }));
 
 const listing: Listing = {
-  id: "prop-x",
+  id: "test-x",
   title: "Villa One",
   location: "Y",
   description: "x",
@@ -91,7 +91,7 @@ const listing: Listing = {
   rentalHistory: [],
 };
 const book: OrderBookState = {
-  propertyId: "prop-x",
+  propertyId: "test-x",
   bids: [{ priceUsd: 11_800, quantity: 5, cumulative: 5 }],
   asks: [{ priceUsd: 12_200, quantity: 4, cumulative: 4 }],
   bestBidUsd: 11_800,
@@ -258,7 +258,7 @@ describe("SellSheet — instant sell review → confirm → success", () => {
     fireEvent.click(screen.getByTestId("instant-sell-review"));
     fireEvent.click(screen.getByTestId("instant-sell-confirm"));
     expect(instantMutate).toHaveBeenCalledWith(
-      { propertyId: "prop-x", shares: 1 },
+      { propertyId: "test-x", shares: 1 },
       expect.any(Object),
     );
   });
@@ -400,7 +400,7 @@ describe("SellSheet — custom price listing (form → review → listed)", () =
     expect(placeOrderMutate).not.toHaveBeenCalled();
     fireEvent.click(screen.getByTestId("custom-sell-confirm"));
     expect(placeOrderMutate).toHaveBeenCalledWith(
-      { propertyId: "prop-x", side: "sell", priceUsd: 12_000, quantity: 1 },
+      { propertyId: "test-x", side: "sell", priceUsd: 12_000, quantity: 1 },
       expect.any(Object),
     );
   });
@@ -410,7 +410,7 @@ describe("SellSheet — custom price listing (form → review → listed)", () =
       (input: { quantity: number; priceUsd: number }, opts?: { onSuccess?: (o: unknown) => void }) => {
         opts?.onSuccess?.({
           id: "ord-1",
-          propertyId: "prop-x",
+          propertyId: "test-x",
           makerAddress: "EQtest",
           side: "sell",
           priceUsd: input.priceUsd,
@@ -457,7 +457,7 @@ describe("SellSheet — custom price listing (form → review → listed)", () =
       (input: { quantity: number; priceUsd: number }, opts?: { onSuccess?: (o: unknown) => void }) => {
         opts?.onSuccess?.({
           id: "ord-q",
-          propertyId: "prop-x",
+          propertyId: "test-x",
           makerAddress: "EQtest",
           side: "sell",
           priceUsd: input.priceUsd,
@@ -481,7 +481,7 @@ describe("SellSheet — custom price listing (form → review → listed)", () =
   });
 
   it("honest no-buyer state when the live book has no bids", () => {
-    renderSheet(vi.fn(), { orderBook: { propertyId: "prop-x", bids: [], asks: [] } });
+    renderSheet(vi.fn(), { orderBook: { propertyId: "test-x", bids: [], asks: [] } });
     openCustom();
     expect(
       screen.getByText(/No buyer has matched this market yet/),

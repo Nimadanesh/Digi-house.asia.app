@@ -15,7 +15,7 @@ function entry(overrides: Partial<EarningsEntry>): EarningsEntry {
   return {
     id: "e",
     userId: "u",
-    propertyId: "prop-a",
+    propertyId: "test-a",
     weekOf: "2026-07-13T00:00:00Z",
     amountUsd: 1_000,
     tonAmount: 0,
@@ -26,14 +26,14 @@ function entry(overrides: Partial<EarningsEntry>): EarningsEntry {
 }
 
 const ENTRIES: EarningsEntry[] = [
-  entry({ id: "a1", propertyId: "prop-a", weekOf: "2026-07-06T00:00:00Z", amountUsd: 3_000, status: "paid" }),
-  entry({ id: "a2", propertyId: "prop-a", weekOf: "2026-07-13T00:00:00Z", amountUsd: 1_500, status: "paid" }),
-  entry({ id: "b2", propertyId: "prop-b", weekOf: "2026-07-13T00:00:00Z", amountUsd: 500, status: "pending" }),
+  entry({ id: "a1", propertyId: "test-a", weekOf: "2026-07-06T00:00:00Z", amountUsd: 3_000, status: "paid" }),
+  entry({ id: "a2", propertyId: "test-a", weekOf: "2026-07-13T00:00:00Z", amountUsd: 1_500, status: "paid" }),
+  entry({ id: "b2", propertyId: "test-b", weekOf: "2026-07-13T00:00:00Z", amountUsd: 500, status: "pending" }),
 ];
 
 const NAMES = new Map([
-  ["prop-a", { name: "Villa A" }],
-  ["prop-b", { name: "Villa B" }],
+  ["test-a", { name: "Villa A" }],
+  ["test-b", { name: "Villa B" }],
 ]) as never;
 
 describe("IncomeJourneyChart — explorable income over time", () => {

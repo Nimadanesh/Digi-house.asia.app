@@ -5,7 +5,7 @@ function seedIntent(over: Partial<BuyIntentRecord> = {}): BuyIntentRecord {
   return {
     id: "intent-1",
     userId: "user-a",
-    propertyId: "prop-1",
+    propertyId: "test-1",
     quantity: 5,
     priceUsdPerShare: 12_500,
     totalUsd: 62_500,
@@ -32,7 +32,7 @@ describe("createMemoryIntentStore", () => {
     const intent = await store.create({
       id: "intent-2",
       userId: "user-a",
-      propertyId: "prop-1",
+      propertyId: "test-1",
       quantity: 3,
       priceUsdPerShare: 12_500,
       totalUsd: 37_500,
@@ -112,7 +112,7 @@ describe("createMemoryIntentStore", () => {
     const intent = await store.create({
       id: "intent-3",
       userId: "user-a",
-      propertyId: "prop-1",
+      propertyId: "test-1",
       quantity: 1,
       priceUsdPerShare: 12_500,
       totalUsd: 12_500,

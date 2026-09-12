@@ -12,9 +12,9 @@ vi.mock("next/image", () => ({
 }));
 
 const listing: Listing = {
-  id: "prop-marina-vista-4b",
-  title: "Marina Vista Apt 4B",
-  location: "Dubai Marina, UAE",
+  id: "re-128862",
+  title: "Grand 2 BDM Ocean Pool Villa (JOALI Being)",
+  location: "Bodufushi, JOALI Being, Raa Atoll, Maldives",
   description: "Waterfront one-bedroom.",
   images: ["/images/properties/p1.png"],
   totalShares: 1000,
@@ -46,7 +46,7 @@ describe("PropertyCard — Slice F canonical estate card", () => {
   it("links to property detail", () => {
     render(<PropertyCard estate={estate} nowMs={Date.UTC(2026, 6, 26)} />);
     const link = screen.getByRole("link");
-    expect(link).toHaveAttribute("href", "/property/prop-marina-vista-4b");
+    expect(link).toHaveAttribute("href", "/property/re-128862");
   });
 
   it("identity first: canonical name, location and property type", () => {
@@ -109,7 +109,7 @@ describe("PropertyCard — Slice F canonical estate card", () => {
     // Slice 2: pending follows the presentation layer (V1 unknown), not fixture fields.
     const noIncome = toMarketplaceEstate({
       ...listing,
-      id: "prop-brooklyn-brownstone-flat",
+      id: "re-131293",
     });
     render(<PropertyCard estate={noIncome} nowMs={Date.UTC(2026, 6, 26)} />);
     expect(screen.getByTestId("card-income-pending")).toBeInTheDocument();
@@ -127,7 +127,7 @@ describe("PropertyCard — Slice F canonical estate card", () => {
   it("resale card labels the price as 'Last price', shows the market price and no availability (PD-07)", () => {
     const resale = toMarketplaceEstate({
       ...listing,
-      id: "prop-tbilisi-riverhouse-loft",
+      id: "re-125643",
       status: "resale",
       sharePriceUsd: 12_000,
       lastTradeUsd: 8_000,
@@ -158,7 +158,7 @@ describe("PropertyCard — Slice F canonical estate card", () => {
   it("PROMPT 03: single-value estates show compact growth potential with a percentage", () => {
     const aerial = toMarketplaceEstate({
       ...listing,
-      id: "prop-soho-loft-studio",
+      id: "re-126855",
       totalShares: 1000,
     });
     render(<PropertyCard estate={aerial} nowMs={Date.UTC(2026, 6, 26)} />);

@@ -25,7 +25,7 @@ async function expectNoOverflow(page: Page) {
 
 /** Bayside is funded with a seeded holding (160 owned, 100 locked → 60 free). */
 async function openCustomSell(page: Page) {
-  await page.goto("/property/prop-bayside-marina-penthouse");
+  await page.goto("/property/re-108924");
   await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
   await page.getByTestId("tab-ownership").click();
   await expect(page.getByTestId("position-card")).toBeVisible({ timeout: 10_000 });
@@ -114,7 +114,7 @@ test.describe("Sell flow — empty position honesty (LTR)", () => {
   test("a property with no holding shows the honest empty state", async ({ page }) => {
     await skipOnboarding(page);
     // Marina Vista is funding with no seeded holding for the demo user.
-    await page.goto("/property/prop-marina-vista-4b");
+    await page.goto("/property/re-128862");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
     // No ownership tab position to sell from — the sticky/hero stays buy-focused.
     const body = await page.evaluate(() => document.body.innerText);
@@ -143,7 +143,7 @@ test.describe("Sell flow — wallet gate (RTL)", () => {
         }),
       );
     });
-    await page.goto("/property/prop-bayside-marina-penthouse");
+    await page.goto("/property/re-108924");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
     expect(await page.evaluate(() => document.documentElement.dir)).toBe("rtl");
 

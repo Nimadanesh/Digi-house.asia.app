@@ -26,7 +26,7 @@ function makeApp() {
   ]);
   const properties = createMemoryPropertyStore(SEED_PROPERTIES.map(toPropertyInsert));
   const holdings = createMemoryHoldingStore([
-    { userId: USER, propertyId: "prop-marina-vista-4b", sharesOwned: 100, avgCostUsd: 12_500, updatedAt: new Date() },
+    { userId: USER, propertyId: "re-128862", sharesOwned: 100, avgCostUsd: 12_500, updatedAt: new Date() },
   ]);
   const nfts = createMemoryNftStore();
   const deps = { session: SESSION, users, nfts, properties, holdings };
@@ -46,9 +46,9 @@ describe("GET /v1/nfts (Phase 8)", () => {
     const { app, nfts } = makeApp();
     await nfts.insert({
       id: "nft_1",
-      holdingKey: `${USER}:prop-marina-vista-4b`,
+      holdingKey: `${USER}:re-128862`,
       userId: USER,
-      propertyId: "prop-marina-vista-4b",
+      propertyId: "re-128862",
       walletAddress: ADDR,
       metadataUrl: "http://localhost:8787/nft-metadata/nft_1.json",
     });
@@ -67,9 +67,9 @@ describe("GET /v1/nfts (Phase 8)", () => {
     const { app, nfts } = makeApp();
     await nfts.insert({
       id: "nft_1",
-      holdingKey: `${USER}:prop-marina-vista-4b`,
+      holdingKey: `${USER}:re-128862`,
       userId: USER,
-      propertyId: "prop-marina-vista-4b",
+      propertyId: "re-128862",
       walletAddress: ADDR,
     });
     const res = await app.request("/v1/nfts", {
@@ -82,9 +82,9 @@ describe("GET /v1/nfts (Phase 8)", () => {
     const { app, nfts } = makeApp();
     await nfts.insert({
       id: "nft_1",
-      holdingKey: `${USER}:prop-marina-vista-4b`,
+      holdingKey: `${USER}:re-128862`,
       userId: USER,
-      propertyId: "prop-marina-vista-4b",
+      propertyId: "re-128862",
       walletAddress: ADDR,
     });
     const owner = await app.request("/v1/nfts/nft_1", {
@@ -109,9 +109,9 @@ describe("GET /nft-metadata/:id.json (public, Phase 4)", () => {
     const { metaApp, nfts } = makeApp();
     await nfts.insert({
       id: "nft_1",
-      holdingKey: `${USER}:prop-marina-vista-4b`,
+      holdingKey: `${USER}:re-128862`,
       userId: USER,
-      propertyId: "prop-marina-vista-4b",
+      propertyId: "re-128862",
       walletAddress: ADDR,
     });
     const res = await metaApp.request("/nft-metadata/nft_1.json");

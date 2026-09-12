@@ -56,7 +56,7 @@ async function gotoPortfolioViaTabs(page: Page) {
 test.describe("Order lifecycle — limit buy reaches Portfolio, cancel clears it (LTR)", () => {
   test("place → portfolio shows it → cancel from portfolio → gone", async ({ page }) => {
     await skipOnboarding(page);
-    await enterDetailViaMarketplace(page, "prop-tbilisi-riverhouse-loft");
+    await enterDetailViaMarketplace(page, "re-125643");
 
     await page.getByTestId("hero-cta").click();
     const sheet = page.getByTestId("limit-buy-sheet");
@@ -89,7 +89,7 @@ test.describe("Order lifecycle — limit buy reaches Portfolio, cancel clears it
 test.describe("Order lifecycle — custom sell reaches Portfolio, cancel clears it (LTR)", () => {
   test("list → portfolio shows it → cancel → gone, holdings untouched", async ({ page }) => {
     await skipOnboarding(page);
-    await enterDetailViaMarketplace(page, "prop-bayside-marina-penthouse");
+    await enterDetailViaMarketplace(page, "re-108924");
 
     await page.getByTestId("tab-ownership").click();
     await expect(page.getByTestId("position-card")).toBeVisible({ timeout: 10_000 });
@@ -128,7 +128,7 @@ test.describe("Order lifecycle — reload resets in-session demo state (LTR)", (
     page,
   }) => {
     await skipOnboarding(page);
-    await page.goto("/property/prop-tbilisi-riverhouse-loft");
+    await page.goto("/property/re-125643");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
 
     await page.getByTestId("hero-cta").click();

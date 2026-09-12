@@ -30,7 +30,7 @@ const baseMeta = {
 };
 
 const primary: Listing = {
-  id: "prop-marina-vista-4b",
+  id: "re-128862",
   title: "Grand",
   location: "Maldives",
   description: "x",
@@ -52,7 +52,7 @@ const primary: Listing = {
 
 const secondary: Listing = {
   ...primary,
-  id: "prop-tbilisi-riverhouse-loft",
+  id: "re-125643",
   status: "resale",
   lastTradeUsd: 8000,
   bestAskUsd: 8160,

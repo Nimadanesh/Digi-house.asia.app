@@ -11,7 +11,7 @@ import {
 
 describe("PROMPT 03-C: canonical display identity", () => {
   it("resolves Grand 2 BDM from ESTATE-24/canonical, not the legacy fixture", () => {
-    const id = "prop-marina-vista-4b";
+    const id = "re-128862";
     const legacy = PROPERTIES.find((p) => p.id === id)!;
     const identity = getEstateDisplayIdentity(id, {
       title: legacy.title,
@@ -52,7 +52,7 @@ describe("PROMPT 03-C: canonical display identity", () => {
 
   it("stays honest for unknown ids (fallback, then id — never invented)", () => {
     expect(
-      getEstateDisplayIdentity("prop-unknown-test", {
+      getEstateDisplayIdentity("test-unknown-id", {
         title: "Fallback Villa",
         location: "Nowhere",
         images: ["/images/fallback.png"],
@@ -62,14 +62,14 @@ describe("PROMPT 03-C: canonical display identity", () => {
       location: "Nowhere",
       image: "/images/fallback.png",
     });
-    expect(getEstateDisplayIdentity("prop-unknown-test")).toEqual({
-      name: "prop-unknown-test",
+    expect(getEstateDisplayIdentity("test-unknown-id")).toEqual({
+      name: "test-unknown-id",
       location: "",
     });
-    expect(getEstateDisplayName("prop-unknown-test")).toBe(
-      "prop-unknown-test",
+    expect(getEstateDisplayName("test-unknown-id")).toBe(
+      "test-unknown-id",
     );
-    expect(getEstateDisplayName("prop-unknown-test", "Fallback Villa")).toBe(
+    expect(getEstateDisplayName("test-unknown-id", "Fallback Villa")).toBe(
       "Fallback Villa",
     );
   });

@@ -8,9 +8,9 @@ const ADDR2 = new Address(0, Buffer.alloc(32, 2)).toString();
 function input(over: Partial<Parameters<ReturnType<typeof createMemoryNftStore>["insert"]>[0]> = {}) {
   return {
     id: over.id ?? "nft_1",
-    holdingKey: over.holdingKey ?? "user-a:prop-a",
+    holdingKey: over.holdingKey ?? "user-a:test-a",
+    propertyId: over.propertyId ?? "test-a",
     userId: over.userId ?? "user-a",
-    propertyId: over.propertyId ?? "prop-a",
     walletAddress: over.walletAddress ?? ADDR,
     metadataUrl: over.metadataUrl ?? null,
   };
@@ -23,7 +23,7 @@ describe("nft store — 1 holding → 1 NFT (Phase 2)", () => {
     expect(created).toBe(true);
     expect(record.status).toBe("pending");
     expect(record.attempts).toBe(0);
-    expect(record.holdingKey).toBe("user-a:prop-a");
+    expect(record.holdingKey).toBe("user-a:test-a");
   });
 
   it("a second insert for the same holding is a no-op (duplicate settlement event)", async () => {
@@ -38,8 +38,8 @@ describe("nft store — 1 holding → 1 NFT (Phase 2)", () => {
 
   it("different holdings get different NFTs", async () => {
     const store = createMemoryNftStore();
-    await store.insert(input({ id: "nft_1", holdingKey: "user-a:prop-a" }));
-    await store.insert(input({ id: "nft_2", holdingKey: "user-a:prop-b", propertyId: "prop-b" }));
+    await store.insert(input({ id: "nft_1", holdingKey: "user-a:test-a" }));
+    await store.insert(input({ id: "nft_2", holdingKey: "user-a:test-b", propertyId: "test-b" }));
     expect(store._rows).toHaveLength(2);
   });
 });
@@ -182,27 +182,27 @@ describe("guarded status transitions (Phase 10 — idempotency)", () => {
 describe("queries", () => {
   it("listByUser / getByHolding / listAll / listStalePending", async () => {
     const store = createMemoryNftStore();
-    await store.insert(input({ id: "nft_1", holdingKey: "user-a:prop-a" }));
+    await store.insert(input({ id: "nft_1", holdingKey: "user-a:test-a" }));
     await store.insert(
       input({
         id: "nft_2",
-        holdingKey: "user-a:prop-b",
-        propertyId: "prop-b",
+        holdingKey: "user-a:test-b",
+        propertyId: "test-b",
         userId: "user-a",
       }),
     );
     await store.insert(
       input({
         id: "nft_3",
-        holdingKey: "user-b:prop-a",
+        holdingKey: "user-b:test-a",
         userId: "user-b",
         walletAddress: ADDR2,
       }),
     );
 
     expect((await store.listByUser("user-a")).map((r) => r.id).sort()).toEqual(["nft_1", "nft_2"]);
-    expect((await store.getByHolding("user-a", "prop-a"))?.id).toBe("nft_1");
-    expect((await store.getByHolding("user-b", "prop-a"))?.id).toBe("nft_3");
+    expect((await store.getByHolding("user-a", "test-a"))?.id).toBe("nft_1");
+    expect((await store.getByHolding("user-b", "test-a"))?.id).toBe("nft_3");
     expect((await store.listAll()).map((r) => r.id).sort()).toEqual(["nft_1", "nft_2", "nft_3"]);
 
     // Only the record older than the cutoff is stale.

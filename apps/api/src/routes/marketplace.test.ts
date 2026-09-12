@@ -142,7 +142,7 @@ describe("GET /v1/marketplace", () => {
 
   it("attaches lastTradeUsd from the trades ledger (PD-07)", async () => {
     const { app, trades } = makeApp();
-    const id = "prop-tbilisi-riverhouse-loft";
+    const id = "re-125643";
     await trades.insert({
       id: "trd-1",
       propertyId: id,
@@ -169,17 +169,17 @@ describe("GET /v1/marketplace", () => {
     expect(body.every((p) => p.lastTradeUsd == null)).toBe(true);
   });
 
-  it("filters ?query=marina case-insensitively", async () => {
+  it("filters ?query= case-insensitively", async () => {
     const { app } = makeApp();
-    const res = await app.request("/v1/marketplace?query=MARINA");
+    const res = await app.request("/v1/marketplace?query=SYRENE");
     expect(res.status).toBe(200);
     const body = (await res.json()) as ListingPublic[];
     expect(body.length).toBeGreaterThanOrEqual(1);
     expect(
       body.every(
         (p) =>
-          p.title.toLowerCase().includes("marina") ||
-          p.location.toLowerCase().includes("marina"),
+          p.title.toLowerCase().includes("syrene") ||
+          p.location.toLowerCase().includes("syrene"),
       ),
     ).toBe(true);
   });
@@ -196,7 +196,7 @@ describe("GET /v1/marketplace", () => {
 describe("GET /v1/properties/:id", () => {
   it("returns 200 + Listing for seeded id", async () => {
     const { app } = makeApp();
-    const id = "prop-marina-vista-4b";
+    const id = "re-128862";
     const res = await app.request(`/v1/properties/${id}`);
     expect(res.status).toBe(200);
     const body = (await res.json()) as ListingPublic;
@@ -209,7 +209,7 @@ describe("GET /v1/properties/:id", () => {
 
   it("matches list mapper for same id", async () => {
     const { app } = makeApp();
-    const id = "prop-marina-vista-4b";
+    const id = "re-128862";
     const detail = (await (
       await app.request(`/v1/properties/${id}`)
     ).json()) as ListingPublic;

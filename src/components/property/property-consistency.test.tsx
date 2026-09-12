@@ -49,7 +49,7 @@ const baseMeta = {
 
 /** Primary listing — $120/share offering price. */
 const primary: Listing = {
-  id: "prop-palma-sky-villa",
+  id: "test-palma-sky-villa",
   title: "Palma Sky Villa",
   location: "Mallorca, Spain",
   description: "x",
@@ -69,11 +69,11 @@ const primary: Listing = {
   rentalHistory: [],
 };
 
-/** The Bayside shape — secondary with lastTrade far above list ($251 vs $120). */
+/** The Syrene shape — secondary with lastTrade far above list ($251 vs $120). */
 const secondaryNoBook: Listing = {
   ...primary,
-  id: "prop-bayside-marina-penthouse",
-  title: "Bayside Marina Penthouse",
+  id: "re-108924",
+  title: "Syrene",
   status: "resale",
   sharesRemaining: 0,
   sharesSold: 1000,

@@ -34,7 +34,7 @@ async function seedLock(deps: YieldEngineDeps, opts?: { period?: "monthly" | "we
   return deps.locks.create({
     id: "lock-1",
     userId: "user-a",
-    propertyId: "prop-1",
+    propertyId: "test-1",
     shares: 10,
     principalUsd: 100_000,
     payoutPeriod: period,

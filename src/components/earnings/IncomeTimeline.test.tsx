@@ -9,7 +9,7 @@ vi.mock("@/hooks/useSharedNowMs", () => ({
 
 const base: Omit<EarningsEntry, "id" | "weekOf" | "amountUsd" | "status"> = {
   userId: "u1",
-  propertyId: "prop-a",
+  propertyId: "test-a",
   tonAmount: 0,
   shareRatio: 0.01,
 };

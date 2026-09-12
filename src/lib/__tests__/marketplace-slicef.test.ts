@@ -11,12 +11,12 @@ const ESTATES = toMarketplaceEstates(PROPERTIES);
 describe("Slice F: marketplace search on canonical identity", () => {
   it("matches the canonical name (JOALI Being) even though the fixture title is shorthand", () => {
     const r = filterEstates(ESTATES, { query: "JOALI Being" });
-    expect(r.map((x) => x.id)).toContain("prop-marina-vista-4b");
+    expect(r.map((x) => x.id)).toContain("re-128862");
   });
 
   it("matches canonical location tokens (Raa Atoll) from the observed location", () => {
     const r = filterEstates(ESTATES, { query: "Raa Atoll" });
-    expect(r.map((x) => x.id)).toContain("prop-marina-vista-4b");
+    expect(r.map((x) => x.id)).toContain("re-128862");
   });
 
   it("matches destination/region (Turks and Caicos) across multiple estates", () => {
@@ -40,7 +40,7 @@ describe("Slice F: Estate Value sort", () => {
       expect(values[i - 1]).toBeGreaterThanOrEqual(values[i]!);
     }
     // Highest approved valuation first (Pearls of Long Bay $70M central).
-    expect(a[0]!.id).toBe("prop-mexico-city-penthouse");
+    expect(a[0]!.id).toBe("re-130397");
   });
 });
 

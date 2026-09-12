@@ -3,7 +3,7 @@ import { holdingPnl, portfolioAllocation } from "@/lib/portfolio-math";
 import type { Holding } from "@/types/position";
 
 const base: Holding = {
-  propertyId: "prop-a",
+  propertyId: "test-a",
   sharesOwned: 60,
   avgCostUsd: 25_000,
   currentValueUsd: 1_560_000,
@@ -42,13 +42,13 @@ describe("portfolioAllocation", () => {
   it("maps holdings to value and ratio of total", () => {
     const other: Holding = {
       ...base,
-      propertyId: "prop-b",
+      propertyId: "test-b",
       currentValueUsd: 440_000,
     };
     const slices = portfolioAllocation([base, other], 2_000_000);
     expect(slices).toEqual([
-      { propertyId: "prop-a", valueUsd: 1_560_000, ratio: 0.78 },
-      { propertyId: "prop-b", valueUsd: 440_000, ratio: 0.22 },
+      { propertyId: "test-a", valueUsd: 1_560_000, ratio: 0.78 },
+      { propertyId: "test-b", valueUsd: 440_000, ratio: 0.22 },
     ]);
   });
 });

@@ -6,7 +6,7 @@ import type { ListingGain } from "@/lib/income-view-model";
 function gain(overrides: Partial<ListingGain>): ListingGain {
   return {
     orderId: "ord-1",
-    propertyId: "prop-a",
+    propertyId: "test-a",
     title: "Villa A",
     quantity: 10,
     priceUsd: 12_500,

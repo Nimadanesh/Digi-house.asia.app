@@ -122,10 +122,10 @@ describe("GET /public/properties (A5)", () => {
       expect(JSON.stringify(p)).not.toContain("ownerWallet");
     }
     // Money is whole dollars (site manifest convention), not cents.
-    const marina = body.find((p) => p.propertyId === "prop-marina-vista-4b")!;
-    expect(marina.pricePerShare).toBe(80);
-    expect(marina.destination).toBe("UAE");
-    expect(marina.area).toBe("Dubai Marina");
+    const syrene = body.find((p) => p.propertyId === "re-108924")!;
+    expect(syrene.pricePerShare).toBe(120);
+    expect(syrene.destination).toBe("Italy");
+    expect(syrene.area).toBe("Sorrento");
   });
 
   it("exposes CORS headers for allowed origins only", async () => {
@@ -148,7 +148,7 @@ describe("GET /public/properties/:id (A5)", () => {
     const { app, trades } = makeApp();
     await trades.insert({
       id: "tr-1",
-      propertyId: "prop-marina-vista-4b",
+      propertyId: "re-128862",
       priceUsd: 8000,
       quantity: 3,
       buyerUserId: "u1",
@@ -159,7 +159,7 @@ describe("GET /public/properties/:id (A5)", () => {
       takerOrderId: "o2",
       fillSeq: 1,
     });
-    const res = await app.request("/public/properties/prop-marina-vista-4b");
+    const res = await app.request("/public/properties/re-128862");
     expect(res.status).toBe(200);
     const body = (await res.json()) as Record<string, unknown>;
     expect(body.fundedPct).toBeCloseTo(92, 1);

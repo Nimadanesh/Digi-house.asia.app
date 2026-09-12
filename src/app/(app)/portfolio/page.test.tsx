@@ -13,10 +13,10 @@ vi.mock("@/hooks/useMarketplace", () => ({
   useMarketplace: vi.fn(() => ({
     data: [
       {
-        id: "prop-bayside-marina-penthouse",
-        title: "Bayside Marina Penthouse",
-        location: "Sao Paulo",
-        images: ["/images/properties/p1.png"],
+        id: "re-108924",
+        title: "Syrene",
+        location: "Sorrento, Amalfi Coast, Italy",
+        images: ["/images/properties/villa-syrene-01.jpg"],
       },
     ],
     isLoading: false,
@@ -66,7 +66,7 @@ import PortfolioPage from "@/app/(app)/portfolio/page";
 import type { PortfolioSummary } from "@/types/position";
 
 const holding = {
-  propertyId: "prop-bayside-marina-penthouse",
+  propertyId: "re-108924",
   sharesOwned: 60,
   avgCostUsd: 25_000,
   currentValueUsd: 1_560_000,
@@ -147,7 +147,7 @@ describe("Portfolio page", () => {
     expect(screen.getByTestId("locked-shares-value")).toHaveTextContent("0");
     expect(screen.getByTestId("free-shares-value")).toHaveTextContent("60");
     const nudge = screen.getByTestId("idle-nudge");
-    expect(nudge).toHaveAttribute("href", "/property/prop-bayside-marina-penthouse");
+    expect(nudge).toHaveAttribute("href", "/property/re-108924");
     expect(nudge).toHaveTextContent("60 shares not earning");
 
     // Allocation is compact by default; legend hidden until expanded.
@@ -157,7 +157,7 @@ describe("Portfolio page", () => {
     expect(screen.getByTestId("allocation-legend")).toBeInTheDocument();
 
     expect(
-      screen.getByTestId("holding-card-prop-bayside-marina-penthouse"),
+      screen.getByTestId("holding-card-re-108924"),
     ).toBeInTheDocument();
     expect(screen.queryByText(/avg cost/i)).not.toBeInTheDocument();
   });
@@ -171,7 +171,7 @@ describe("Portfolio page", () => {
     } as never);
     render(<PortfolioPage />);
 
-    fireEvent.click(screen.getByTestId("holding-card-prop-bayside-marina-penthouse"));
+    fireEvent.click(screen.getByTestId("holding-card-re-108924"));
 
     expect(screen.getByTestId("holding-detail-sheet")).toBeInTheDocument();
     expect(screen.getByText(/avg cost/i)).toBeInTheDocument();
@@ -179,7 +179,7 @@ describe("Portfolio page", () => {
     expect(screen.getByTestId("holding-monthly-yield")).toHaveTextContent("$146.25");
     expect(screen.getByTestId("holding-buy-more")).toHaveAttribute(
       "href",
-      "/property/prop-bayside-marina-penthouse",
+      "/property/re-108924",
     );
     expect(screen.getByTestId("holding-sell")).toBeDisabled();
   });
@@ -205,7 +205,7 @@ describe("Portfolio page", () => {
         openOrders: [
           {
             id: "ord-1",
-            propertyId: "prop-bayside-marina-penthouse",
+            propertyId: "re-108924",
             makerAddress: "EQ",
             side: "sell",
             priceUsd: 26000,
@@ -245,7 +245,7 @@ describe("Portfolio page", () => {
         openOrders: [
           {
             id: "ord-1",
-            propertyId: "prop-bayside-marina-penthouse",
+            propertyId: "re-108924",
             makerAddress: "EQ",
             side: "sell",
             priceUsd: 26000,
@@ -302,7 +302,7 @@ describe("Portfolio page", () => {
         openOrders: [
           {
             id: "ord-1",
-            propertyId: "prop-bayside-marina-penthouse",
+            propertyId: "re-108924",
             makerAddress: "EQ",
             side: "sell",
             priceUsd: 26000,
@@ -326,7 +326,7 @@ describe("Portfolio page", () => {
     vi.mocked(useLocks).mockReturnValue({
       data: {
         locks: [
-          { id: "l1", propertyId: "prop-bayside-marina-penthouse", shares: 60, status: "locked" },
+          { id: "l1", propertyId: "re-108924", shares: 60, status: "locked" },
         ],
       },
       isLoading: false,

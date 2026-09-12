@@ -15,8 +15,8 @@ const OUT = path.join("screenshots", "phase7");
 const VIEWPORT = { width: 480, height: 840 };
 
 const TARGETS = [
-  { key: "primary", id: "prop-marina-vista-4b" },
-  { key: "secondary", id: "prop-bayside-marina-penthouse" },
+  { key: "primary", id: "re-128862" },
+  { key: "secondary", id: "re-108924" },
 ];
 
 async function review(browser, target) {

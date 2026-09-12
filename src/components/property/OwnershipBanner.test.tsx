@@ -8,7 +8,7 @@ vi.mock("@/hooks/useLocks", () => ({
 }));
 
 const listing: Listing = {
-  id: "prop-x",
+  id: "test-x",
   title: "X",
   location: "Y",
   description: "x",

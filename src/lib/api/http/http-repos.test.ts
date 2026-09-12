@@ -46,13 +46,13 @@ describe("createHttpRepos", () => {
 
   it("marketplace.get hits GET /v1/properties/:id", async () => {
     const client = mockClient();
-    (client.get as ReturnType<typeof vi.fn>).mockResolvedValue({ id: "prop_1" });
+    (client.get as ReturnType<typeof vi.fn>).mockResolvedValue({ id: "test-1" });
     const repos = createHttpRepos(client);
 
-    const result = await repos.marketplace.get("prop_1");
+    const result = await repos.marketplace.get("test-1");
 
-    expect(client.get).toHaveBeenCalledWith("/v1/properties/prop_1");
-    expect(result).toEqual({ id: "prop_1" });
+    expect(client.get).toHaveBeenCalledWith("/v1/properties/test-1");
+    expect(result).toEqual({ id: "test-1" });
   });
 
   it("marketplace.get encodes property ID", async () => {
@@ -60,20 +60,20 @@ describe("createHttpRepos", () => {
     (client.get as ReturnType<typeof vi.fn>).mockResolvedValue({});
     const repos = createHttpRepos(client);
 
-    await repos.marketplace.get("prop/1");
+    await repos.marketplace.get("test/1");
 
-    expect(client.get).toHaveBeenCalledWith("/v1/properties/prop%2F1");
+    expect(client.get).toHaveBeenCalledWith("/v1/properties/test%2F1");
   });
 
   it("orderBook.get hits GET /v1/properties/:id/order-book", async () => {
     const client = mockClient();
-    (client.get as ReturnType<typeof vi.fn>).mockResolvedValue({ propertyId: "prop_1", bids: [], asks: [] });
+    (client.get as ReturnType<typeof vi.fn>).mockResolvedValue({ propertyId: "test-1", bids: [], asks: [] });
     const repos = createHttpRepos(client);
 
-    const result = await repos.orderBook.get("prop_1");
+    const result = await repos.orderBook.get("test-1");
 
-    expect(client.get).toHaveBeenCalledWith("/v1/properties/prop_1/order-book");
-    expect(result.propertyId).toBe("prop_1");
+    expect(client.get).toHaveBeenCalledWith("/v1/properties/test-1/order-book");
+    expect(result.propertyId).toBe("test-1");
   });
 
   it("orderBook.placeOrder calls POST /v1/orders", async () => {
@@ -82,14 +82,14 @@ describe("createHttpRepos", () => {
     const repos = createHttpRepos(client);
 
     const result = await repos.orderBook.placeOrder({
-      propertyId: "prop_1",
+      propertyId: "test-1",
       side: "sell",
       priceUsd: 5100,
       quantity: 3,
     });
 
     expect(client.post).toHaveBeenCalledWith("/v1/orders", {
-      propertyId: "prop_1",
+      propertyId: "test-1",
       side: "sell",
       priceUsd: 5100,
       quantity: 3,
@@ -143,7 +143,7 @@ describe("createHttpRepos", () => {
   it("tx.prepareBuy maps tonConnectMessages into the TON message + currency", async () => {
     const prepResponse = {
       intentId: "intent_1",
-      propertyId: "prop_1",
+      propertyId: "test-1",
       quantity: 5,
       priceUsdPerShare: 5000,
       totalUsd: 25000,
@@ -159,21 +159,21 @@ describe("createHttpRepos", () => {
     const repos = createHttpRepos(client);
 
     const result = await repos.tx.prepareBuy({
-      propertyId: "prop_1",
+      propertyId: "test-1",
       quantity: 5,
       priceUsdPerShare: 5000,
       currency: "TON",
     });
 
     expect(client.post).toHaveBeenCalledWith("/v1/buys/prepare", {
-      propertyId: "prop_1",
+      propertyId: "test-1",
       quantity: 5,
       priceUsdPerShare: 5000,
       currency: "TON",
     });
     expect(result).toEqual({
       intentId: "intent_1",
-      propertyId: "prop_1",
+      propertyId: "test-1",
       quantity: 5,
       priceUsdPerShare: 5000,
       totalUsd: 25000,
@@ -186,7 +186,7 @@ describe("createHttpRepos", () => {
   it("tx.prepareBuy defaults the payload-less message to TON when currency is absent", async () => {
     const prepResponse = {
       intentId: "intent_1",
-      propertyId: "prop_1",
+      propertyId: "test-1",
       quantity: 5,
       priceUsdPerShare: 5000,
       totalUsd: 25000,
@@ -199,13 +199,13 @@ describe("createHttpRepos", () => {
     const repos = createHttpRepos(client);
 
     const result = await repos.tx.prepareBuy({
-      propertyId: "prop_1",
+      propertyId: "test-1",
       quantity: 5,
       priceUsdPerShare: 5000,
     });
 
     expect(client.post).toHaveBeenCalledWith("/v1/buys/prepare", {
-      propertyId: "prop_1",
+      propertyId: "test-1",
       quantity: 5,
       priceUsdPerShare: 5000,
       currency: "TON",
@@ -217,7 +217,7 @@ describe("createHttpRepos", () => {
   it("tx.prepareBuy keeps the jetton_transfer payload for USDT", async () => {
     const prepResponse = {
       intentId: "intent_usdt",
-      propertyId: "prop_1",
+      propertyId: "test-1",
       quantity: 5,
       priceUsdPerShare: 5000,
       totalUsd: 25000,
@@ -233,14 +233,14 @@ describe("createHttpRepos", () => {
     const repos = createHttpRepos(client);
 
     const result = await repos.tx.prepareBuy({
-      propertyId: "prop_1",
+      propertyId: "test-1",
       quantity: 5,
       priceUsdPerShare: 5000,
       currency: "USDT",
     });
 
     expect(client.post).toHaveBeenCalledWith("/v1/buys/prepare", {
-      propertyId: "prop_1",
+      propertyId: "test-1",
       quantity: 5,
       priceUsdPerShare: 5000,
       currency: "USDT",
@@ -256,7 +256,7 @@ describe("createHttpRepos", () => {
   it("tx.prepareBuy throws when prepare returns no payment message", async () => {
     const prepResponse = {
       intentId: "intent_1",
-      propertyId: "prop_1",
+      propertyId: "test-1",
       quantity: 5,
       priceUsdPerShare: 5000,
       totalUsd: 25000,
@@ -268,7 +268,7 @@ describe("createHttpRepos", () => {
     const repos = createHttpRepos(client);
 
     await expect(
-      repos.tx.prepareBuy({ propertyId: "prop_1", quantity: 5, priceUsdPerShare: 5000 }),
+      repos.tx.prepareBuy({ propertyId: "test-1", quantity: 5, priceUsdPerShare: 5000 }),
     ).rejects.toThrow(/payment message/i);
   });
 

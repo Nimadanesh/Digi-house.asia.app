@@ -8,7 +8,7 @@ import type { TransactionRecord } from "../buys/tx-store.js";
 import { DEFAULT_FEE_TIERS } from "../fees/fee-tier-store.js";
 import { buyEscrowUsd, settleMatchesForTaker, type SettleMatchesDeps } from "./settle-matches.js";
 
-const PROP = "prop-tbilisi-riverhouse-loft";
+const PROP = "re-125643";
 const SELLER = "user-seller";
 const BUYER = "user-buyer";
 

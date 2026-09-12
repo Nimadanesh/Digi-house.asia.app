@@ -13,7 +13,7 @@
 //   - Grand 2 BDM does not inherit the legacy $82M valuation.
 //
 // R2 legacy audit (output D) is documented here as executable assertions:
-//   - web runtime truth: `src/lib/mock/seed/properties.ts` (24 `prop-*` fixtures);
+//   - web runtime truth: `src/lib/mock/seed/properties.ts` (24 canonical `re-*` ids);
 //   - API/DB truth: `portfolio-manifest.json` → `apps/api/.../manifest-data.ts`
 //     (24 manifest IDs — a SEPARATE set, preserved untouched, not keyed here);
 //   - rebuild econ truth: `src/lib/economics/estates/*` (canonical $8M Grand 2 BDM seed).
@@ -87,11 +87,11 @@ describe("R2: reconciliation propertyId → Listing ID → estate", () => {
   });
 
   it("lookup helpers resolve in both directions", () => {
-    const byProp = getCanonicalEstate("prop-marina-vista-4b");
+    const byProp = getCanonicalEstate("re-128862");
     expect(byProp?.rentalEscapesListingId).toBe("128862");
     const byListing = getCanonicalEstateByListingId("128862");
-    expect(byListing?.propertyId).toBe("prop-marina-vista-4b");
-    expect(getCanonicalEstate("prop-does-not-exist")).toBeUndefined();
+    expect(byListing?.propertyId).toBe("re-128862");
+    expect(getCanonicalEstate("test-does-not-exist")).toBeUndefined();
     expect(getCanonicalEstateByListingId("000000")).toBeUndefined();
   });
 });
@@ -138,14 +138,14 @@ describe("R2: provenance discipline", () => {
   });
 
   it("CONFLICTED stays conflicted: ANI land size + Grand 2 BDM legacy value", () => {
-    const ani = getCanonicalEstate("prop-toronto-condo")!;
+    const ani = getCanonicalEstate("re-122422")!;
     expect(ani.research.sizeText.provenance).toBe("conflicted");
     expect(ani.research.sizeText.value).toContain("CONFLICTED");
-    const grand = getCanonicalEstate("prop-marina-vista-4b")!;
+    const grand = getCanonicalEstate("re-128862")!;
     expect(grand.legacyEvidence?.provenance).toBe("conflicted");
     expect(grand.legacyEvidence?.note).toContain("$82M");
     const othersWithLegacy = CANONICAL_MARKETPLACE_ESTATES.filter(
-      (e) => e.propertyId !== "prop-marina-vista-4b" && e.legacyEvidence !== null,
+      (e) => e.propertyId !== "re-128862" && e.legacyEvidence !== null,
     );
     expect(othersWithLegacy).toHaveLength(0);
   });
@@ -161,30 +161,30 @@ describe("R2: provenance discipline", () => {
 
   it("approved centrals equal the PM lowest-valid-value rule (research-band lows)", () => {
     const expected: Record<string, number> = {
-      "prop-marina-vista-4b": 800_000_000,
-      "prop-soho-loft-studio": 1_800_000_000,
-      "prop-bayside-marina-penthouse": 1_200_000_000,
-      "prop-alfama-terrace-flat": 2_500_000_000,
-      "prop-tbilisi-riverhouse-loft": 2_800_000_000,
-      "prop-canggu-surf-villa": 3_000_000_000,
-      "prop-tokyo-shibuya-studio": 1_200_000_000,
-      "prop-brooklyn-brownstone-flat": 1_800_000_000,
-      "prop-berlin-mitte-apartment": 800_000_000,
-      "prop-barcelona-eixample-flat": 1_500_000_000,
-      "prop-london-camden-loft": 1_200_000_000,
-      "prop-sydney-harbour-apartment": 3_500_000_000,
-      "prop-toronto-condo": 5_000_000_000,
-      "prop-melbourne-loft": 2_500_000_000,
-      "prop-miami-beach-condo": 3_200_000_000,
-      "prop-istanbul-bosphorus-flat": 3_500_000_000,
-      "prop-mexico-city-penthouse": 6_000_000_000,
-      "prop-kyoto-machiya": 2_000_000_000,
-      "prop-cape-town-villa": 4_500_000_000,
-      "prop-bangkok-sukhumvit-condo": 5_000_000_000,
-      "prop-amsterdam-canal-house": 2_500_000_000,
-      "prop-buenos-aires-recoleta-flat": 1_800_000_000,
-      "prop-seoul-gangnam-studio": 1_500_000_000,
-      "prop-nyc-chelsea-loft": 2_200_000_000,
+      "re-128862": 800_000_000,
+      "re-126855": 1_800_000_000,
+      "re-108924": 1_200_000_000,
+      "re-123861": 2_500_000_000,
+      "re-125643": 2_800_000_000,
+      "re-130393": 3_000_000_000,
+      "re-130901": 1_200_000_000,
+      "re-131293": 1_800_000_000,
+      "re-128529": 800_000_000,
+      "re-123320": 1_500_000_000,
+      "re-109098": 1_200_000_000,
+      "re-127825": 3_500_000_000,
+      "re-122422": 5_000_000_000,
+      "re-129548": 2_500_000_000,
+      "re-122903": 3_200_000_000,
+      "re-126870": 3_500_000_000,
+      "re-130397": 6_000_000_000,
+      "re-127483": 2_000_000_000,
+      "re-108856": 4_500_000_000,
+      "re-108860": 5_000_000_000,
+      "re-106441": 2_500_000_000,
+      "re-129549": 1_800_000_000,
+      "re-123919": 1_500_000_000,
+      "re-122113": 2_200_000_000,
     };
     expect(Object.keys(expected)).toHaveLength(24);
     for (const [id, cents] of Object.entries(expected)) {
@@ -210,7 +210,7 @@ describe("R2: rental-rate semantics preserved", () => {
   });
 
   it("La Dolce Vita keeps its DYNAMIC no-rate anchor (never normalized to ADR)", () => {
-    const dolce = getCanonicalEstate("prop-miami-beach-condo")!;
+    const dolce = getCanonicalEstate("re-122903")!;
     expect(dolce.observedRentalRate.rateType).toBe("DYNAMIC");
     expect(dolce.observedRentalRate.display).toContain("DYNAMIC");
   });
@@ -218,13 +218,13 @@ describe("R2: rental-rate semantics preserved", () => {
 
 describe("R2: Grand 2 BDM special case", () => {
   it("is one of the 24 (not an additional estate) with Listing ID 128862", () => {
-    const grand = getCanonicalEstate("prop-marina-vista-4b")!;
+    const grand = getCanonicalEstate("re-128862")!;
     expect(grand.rentalEscapesListingId).toBe("128862");
     expect(grand.name.value).toContain("Grand 2 BDM");
   });
 
   it("valuation stays in the approved ~$8–10M ESTIMATED/MODELED band", () => {
-    const grand = getCanonicalEstate("prop-marina-vista-4b")!;
+    const grand = getCanonicalEstate("re-128862")!;
     expect(grand.fractionalLuxe.valuationUsd.provenance).toBe("estimated");
     const v = grand.fractionalLuxe.valuationUsd.value;
     expect(v).not.toBeNull();
@@ -236,7 +236,7 @@ describe("R2: Grand 2 BDM special case", () => {
     for (const e of CANONICAL_MARKETPLACE_ESTATES) {
       expect(e.fractionalLuxe.valuationUsd.value).not.toBe(LEGACY_82M_CENTS);
     }
-    const grand = getCanonicalEstate("prop-marina-vista-4b")!;
+    const grand = getCanonicalEstate("re-128862")!;
     expect(grand.fractionalLuxe.valuationUsd.value).toBe(800_000_000);
     // Research $12–15M remains research evidence text only.
     expect(grand.research.estimatedValueText).toContain("$12–15M");

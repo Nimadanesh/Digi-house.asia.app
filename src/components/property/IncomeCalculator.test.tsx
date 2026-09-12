@@ -4,9 +4,9 @@ import type { Listing } from "@/types/property";
 import { IncomeCalculator } from "@/components/property/IncomeCalculator";
 
 const listing: Listing = {
-  id: "prop-marina-vista-4b",
-  title: "Marina Vista Apt 4B",
-  location: "Dubai Marina, UAE",
+  id: "re-128862",
+  title: "Grand 2 BDM Ocean Pool Villa (JOALI Being)",
+  location: "Bodufushi, JOALI Being, Raa Atoll, Maldives",
   description: "Waterfront one-bedroom.",
   images: ["/images/properties/p1.png"],
   totalShares: 1000,
@@ -71,7 +71,7 @@ describe("IncomeCalculator — redesign Phase 2", () => {
     const onSharesChange = vi.fn();
     render(
       <IncomeCalculator
-        listing={{ ...listing, id: "prop-berlin-mitte-apartment" }}
+        listing={{ ...listing, id: "re-128529" }}
         shares={10}
         onSharesChange={onSharesChange}
         onBuy={onBuy}

@@ -15,7 +15,7 @@ async function skipOnboarding(page: Page) {
 test.describe("Estate Detail — Phase 9 4-tab model", () => {
   test("primary estate: identity-first hero + 4 tabs; resale market absent while shares remain", async ({ page }) => {
     await skipOnboarding(page);
-    await page.goto("/property/prop-marina-vista-4b");
+    await page.goto("/property/re-128862");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
 
     // Hero: ownership proposition with share price + fraction; no APY hero number.
@@ -59,7 +59,7 @@ test.describe("Estate Detail — Phase 9 4-tab model", () => {
 
   test("secondary estate: resale market demoted behind the collapsed block; price history expander", async ({ page }) => {
     await skipOnboarding(page);
-    await page.goto("/property/prop-bayside-marina-penthouse");
+    await page.goto("/property/re-108924");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
     // Let the 40+ gallery images settle: progressive loads shift layout and can
     // park low-page toggles under the fixed bottom chrome mid-click.
@@ -97,7 +97,7 @@ test.describe("Estate Detail — Phase 9 4-tab model", () => {
 
   test("ownership tab: position card + Owner Stay P0 (honest unavailable) + lock management", async ({ page }) => {
     await skipOnboarding(page);
-    await page.goto("/property/prop-bayside-marina-penthouse");
+    await page.goto("/property/re-108924");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
 
     await page.getByTestId("tab-ownership").click();
@@ -115,7 +115,7 @@ test.describe("Estate Detail — Phase 9 4-tab model", () => {
 
   test("no horizontal overflow at 480×840 on the estate detail surface", async ({ page }) => {
     await skipOnboarding(page);
-    await page.goto("/property/prop-marina-vista-4b");
+    await page.goto("/property/re-128862");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth > document.documentElement.clientWidth,

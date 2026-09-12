@@ -32,7 +32,7 @@ const SESSION = {
   ttlSeconds: 3600,
 };
 
-const PROP = "prop-alfama-terrace-flat";
+const PROP = "re-123861";
 
 function testEnv(): ApiEnv {
   return {
