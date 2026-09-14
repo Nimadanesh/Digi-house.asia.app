@@ -32,7 +32,9 @@ test.describe("Buyer journey — discovery to action explains itself (LTR)", () 
     // 1–2. Card answers price, income, fraction, and the next step.
     const card = page.getByTestId("property-card").first();
     await expect(card).toContainText("$100.00");
-    await expect(card).toContainText("$16.29");
+    // Presented per-share monthly = the Base scenario card (PO decision
+    // 2026-09-13, structure §3/D1): Grand $16.25 (was the average-based $16.29).
+    await expect(card).toContainText("$16.25");
     await expect(card).toContainText("1 share");
     await expect(card).toContainText("View Estate");
     await card.click();
@@ -44,14 +46,15 @@ test.describe("Buyer journey — discovery to action explains itself (LTR)", () 
     await expect(page.getByTestId("hero-cta")).toContainText("Buy");
     await expectNoOverflow(page);
 
-    // 4. Economics: the ANR explains itself in plain language.
-    await expect(page.getByTestId("thesis-anr-note")).toContainText(/revenue model/i);
+    // 4. Economics: the ANR explains itself in plain language (Income tab §5.1).
+    await page.getByTestId("tab-income").click();
+    await expect(page.getByTestId("income-basis")).toContainText(/not ADR/i);
 
     // Income tab carries the chain; Ownership states the risks.
-    await page.getByTestId("tab-income").click();
-    await expect(page.getByTestId("income-v1-basis")).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByTestId("income-basis")).toBeVisible({ timeout: 10_000 });
     await page.getByTestId("tab-ownership").click();
-    await expect(page.getByText(/not guaranteed/)).toBeVisible({ timeout: 10_000 });
+    // Locked risk disclosure #6 ("No guarantee") is visible on the decision tab.
+    await expect(page.getByText("No guarantee")).toBeVisible({ timeout: 10_000 });
     await expectNoOverflow(page);
 
     // 7. The buy entry gates honestly without a wallet in the browser.

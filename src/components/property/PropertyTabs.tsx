@@ -6,17 +6,21 @@
 // "Performance" and "Holders" dissolve: Performance content splits (funding charts →
 // Estate, rental/income → Income, resale charts → demoted resale block); Holders
 // content moves under Ownership. ids: overview→estate, holders→ownership.
+// Revision contract 2026-09-13: Earn joins as the 4th tab (Overview → Income →
+// Ownership → Earn → Details).
 import { useRef } from "react";
 import { useTranslations } from "next-intl";
+import { BorderBeam } from "border-beam";
 import { haptics } from "@/lib/telegram/haptics";
 import { cn } from "@/lib/utils";
 
-export type PropertyTabId = "estate" | "income" | "ownership" | "details";
+export type PropertyTabId = "estate" | "income" | "ownership" | "earn" | "details";
 
 export const PROPERTY_TABS: PropertyTabId[] = [
   "estate",
   "income",
   "ownership",
+  "earn",
   "details",
 ];
 
@@ -67,7 +71,7 @@ export function PropertyTabs({
     >
       {PROPERTY_TABS.map((tab) => {
         const selected = tab === active;
-        return (
+        const button = (
           <button
             key={tab}
             type="button"
@@ -92,6 +96,21 @@ export function PropertyTabs({
           >
             {t(`tab${tab[0].toUpperCase()}${tab.slice(1)}` as const)}
           </button>
+        );
+        // Earn tab carries the libraries.dev beam. The wrapper div is only
+        // the flex item (shrink-0); the pill button stays the beam's first
+        // child so its radius is auto-detected and the label stays crisp.
+        if (tab !== "earn") return button;
+        return (
+          <BorderBeam
+            key={tab}
+            size="md"
+            colorVariant="colorful"
+            strength={0.7}
+            className="shrink-0"
+          >
+            {button}
+          </BorderBeam>
         );
       })}
     </div>

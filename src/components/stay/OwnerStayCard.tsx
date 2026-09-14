@@ -25,13 +25,13 @@ export function OwnerStayCard({
 
   return (
     <section className="space-y-2" data-testid="owner-stay-card">
-      <h2 className="px-0.5 text-[0.9375rem] font-semibold text-foreground">
+      <h2 className="px-0.5 text-[0.9375rem] font-normal text-foreground">
         {t("ownerStayTitle")}
       </h2>
       <Block className="space-y-3 p-4">
         <div className="flex items-start gap-2.5">
           <BedDouble size={18} strokeWidth={1.75} className="mt-0.5 shrink-0 text-muted-foreground" aria-hidden />
-          <p className="text-sm leading-relaxed text-foreground">
+          <p className="line-clamp-2 text-sm leading-relaxed text-foreground">
             {isOwner ? t("ownerStayOwnerIntro") : t("ownerStayNonOwner")}
           </p>
         </div>

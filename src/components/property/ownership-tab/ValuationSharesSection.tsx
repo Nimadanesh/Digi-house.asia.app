@@ -1,0 +1,100 @@
+"use client";
+// File responsibility: Ownership tab §1 — Valuation & Shares (Estate Page
+// Structure §6.1): the four decision facts in a 2×2 grid — estate value (the
+// ONE V1 valuation), reference value per share, total shares, ownership per
+// share. All figures arrive via the V1 model; this section formats only.
+import { useTranslations } from "next-intl";
+import { moneySmart, usd } from "@/lib/format";
+import { unavailableLabel } from "@/lib/availability";
+import type { FinancialModelV1PropertyModel } from "@/types/financial-model-v1";
+import { cn } from "@/lib/utils";
+import { getPresentedPrimaryPrice } from "@/lib/economics/property-presentation";
+
+function FactCell({
+  label,
+  value,
+  caption,
+  testId,
+  muted = false,
+  className = "",
+}: {
+  label: string;
+  value: string;
+  caption?: string | null;
+  testId?: string;
+  muted?: boolean;
+  className?: string;
+}) {
+  return (
+    <div className={cn("flex min-w-0 flex-col gap-1 p-4", className)}>
+      <span className="text-[0.625rem] font-medium uppercase leading-tight tracking-[0.08em] text-muted-foreground">
+        {label}
+      </span>
+      <span
+        className={cn(
+          "truncate text-[1.125rem] font-semibold leading-none tnum",
+          muted ? "text-muted-foreground" : "text-foreground",
+        )}
+        data-testid={testId}
+      >
+        {value}
+      </span>
+      {caption ? (
+        <span className="text-[0.6875rem] leading-none tnum text-muted-foreground">{caption}</span>
+      ) : null}
+    </div>
+  );
+}
+
+export function ValuationSharesSection({ v1 }: { v1: FinancialModelV1PropertyModel | null }) {
+  const t = useTranslations("property");
+  if (v1 == null) {
+    return (
+      <section className="space-y-2" data-testid="ownership-valuation">
+        <h2 className="px-0.5 text-[0.9375rem] font-normal text-foreground">
+          {t("ownershipValuationTitle")}
+        </h2>
+        <div className="bg-card rounded-[12px] p-4">
+          <p className="text-sm text-muted-foreground">{unavailableLabel("backend_absent")}</p>
+        </div>
+      </section>
+    );
+  }
+  return (
+    <section className="space-y-2" data-testid="ownership-valuation">
+      <h2 className="px-0.5 text-[0.9375rem] font-normal text-foreground">
+        {t("ownershipValuationTitle")}
+      </h2>
+      <div className="bg-card grid grid-cols-2 overflow-hidden rounded-[12px]">
+        <FactCell
+          label={t("estateValue")}
+          value={moneySmart(v1.valuation.valueCents, v1.valuation.currency)}
+          className="border-b border-r border-border"
+          testId="ownership-valuation-value"
+        />
+        <FactCell
+          label={t("invReferenceValue")}
+          // The V1 nominal share price — valuation ÷ shares by construction.
+          value={usd(getPresentedPrimaryPrice())}
+          className="border-b border-border"
+          testId="ownership-valuation-reference"
+        />
+        <FactCell
+          label={t("ownershipV1TotalShares")}
+          value={v1.totalShares.toLocaleString()}
+          className="border-r border-border"
+          testId="ownership-valuation-shares"
+        />
+        <FactCell
+          label={t("invOwnershipPerShare")}
+          value={`1 / ${v1.totalShares.toLocaleString()}`}
+          // Exact fraction of the estate one share carries (e.g. 0.00125%).
+          caption={
+            v1.totalShares > 0 ? `${((1 / v1.totalShares) * 100).toString()}%` : null
+          }
+          testId="ownership-valuation-per-share"
+        />
+      </div>
+    </section>
+  );
+}

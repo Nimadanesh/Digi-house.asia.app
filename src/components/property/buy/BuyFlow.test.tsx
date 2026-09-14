@@ -89,20 +89,22 @@ describe("Buy flow steps", () => {
     fireEvent.click(screen.getByRole("button", { name: "Max" }));
     expect(onQty).toHaveBeenCalledWith(360);
     expect(screen.getByText(/Projected income \/ month/i)).toBeInTheDocument();
-    // Slice 2: Grand V1 $16.29/share/mo → 10 shares = $162.90/mo.
-    expect(screen.getByTestId("buy-est-monthly")).toHaveTextContent("$162.90");
+    // Slice 2: Grand V1 $16.25/share/mo → 10 shares = $162.50/mo.
+    expect(screen.getByTestId("buy-est-monthly")).toHaveTextContent("$162.50");
     expect(screen.getByText(/Total/)).toBeInTheDocument();
   });
 
   it("qty step: V1-unknown villa shows pending WITH the reason (never a fixture figure)", () => {
-    const trajan: Listing = {
+    // D11 owner-tax table locked 2026-09-13: the only remaining V1-unknowns are
+    // EUR mixed-currency villas (no-FX rule) — Chalet Montana (re-130901).
+    const unknownVilla: Listing = {
       ...listing,
-      id: "re-128529",
+      id: "re-130901",
       sharesRemaining: 360,
     };
     render(
       <BuyQtyStep
-        listing={trajan}
+        listing={unknownVilla}
         qty={10}
         onQtyChange={() => {}}
         walletConnected
@@ -111,7 +113,7 @@ describe("Buy flow steps", () => {
       />,
     );
     expect(screen.getByTestId("buy-est-monthly")).toHaveTextContent("Data pending");
-    expect(screen.getByTestId("buy-est-monthly")).toHaveTextContent(/tax/i);
+    expect(screen.getByTestId("buy-est-monthly")).toHaveTextContent(/EUR/);
   });
 
   it("qty step: disconnected prompts connect", () => {
@@ -255,7 +257,7 @@ describe("Buy flow steps", () => {
     // 10 / 1000 shares = 1.0% (same pct() formatting as the qty step).
     expect(screen.getByTestId("buy-ownership")).toHaveTextContent("10 shares · 1.0% of the estate");
     // Slice 2: summary monthly matches the qty step (single presentation layer).
-    expect(screen.getByTestId("buy-summary-monthly")).toHaveTextContent("$162.90");
+    expect(screen.getByTestId("buy-summary-monthly")).toHaveTextContent("$162.50");
     fireEvent.click(screen.getByTestId("buy-assumptions-toggle"));
     expect(screen.getByTestId("buy-assumptions-content")).toHaveTextContent(
       "Projection uses the estate's projected monthly income per share",
@@ -270,18 +272,20 @@ describe("Buy flow steps", () => {
 
   it("summary step: values follow the listing, never Grand-specific figures", () => {
     useFees.mockReturnValue({ data: DEFAULT_FEE_TIERS, isLoading: false, isError: false });
-    const trajan: Listing = {
+    // D11 locked 2026-09-13: the pending reason assertion uses Chalet Montana
+    // (re-130901, EUR mixed-currency — the remaining V1-unknown class).
+    const unknownVilla: Listing = {
       ...listing,
-      id: "re-128529",
-      title: "Trajan Villa",
-      location: "Las Vegas, USA",
+      id: "re-130901",
+      title: "Chalet Montana",
+      location: "Kitzbühel, Austria",
       sharePriceUsd: 9500,
       monthlyYieldRate: 7.19,
       totalShares: 1600,
     };
-    render(<BuySummaryStep listing={trajan} qty={8} currency="TON" />);
-    expect(screen.getByText("Trajan Villa")).toBeInTheDocument();
-    expect(screen.getByText("Las Vegas, USA")).toBeInTheDocument();
+    render(<BuySummaryStep listing={unknownVilla} qty={8} currency="TON" />);
+    expect(screen.getByText("Chalet Montana")).toBeInTheDocument();
+    expect(screen.getByText("Kitzbühel, Austria")).toBeInTheDocument();
     // 8 × $95.00 = $760.00 principal; $500–$2k tier (2.5%) → $19.00 fee.
     expect(screen.getByTestId("buy-fees")).toHaveTextContent("$19.00");
     expect(screen.getByTestId("buy-total")).toHaveTextContent("$779.00");
@@ -290,10 +294,10 @@ describe("Buy flow steps", () => {
     expect(screen.getByTestId("buy-assumptions-content")).toHaveTextContent(
       "Projection uses the estate's projected monthly income per share",
     );
-    // Slice 2: Trajan (V1-unknown) shows pending, never a fixture figure.
+    // Chalet Montana (V1-unknown, EUR) shows pending, never a fixture figure.
     expect(screen.getByTestId("buy-summary-monthly")).toHaveTextContent("Data pending");
-    // Slice 3: the pending state carries its human-readable reason.
-    expect(screen.getByTestId("buy-summary-monthly")).toHaveTextContent(/tax/i);
+    // The pending state carries its human-readable reason.
+    expect(screen.getByTestId("buy-summary-monthly")).toHaveTextContent(/EUR/);
   });
 
   it("summary step: no raw i18n keys leak into labels", () => {

@@ -91,7 +91,8 @@ test.describe("Order lifecycle — custom sell reaches Portfolio, cancel clears 
     await skipOnboarding(page);
     await enterDetailViaMarketplace(page, "re-108924");
 
-    await page.getByTestId("tab-ownership").click();
+    // Revision contract: the owner position card lives on the Earn tab.
+    await page.getByTestId("tab-earn").click();
     await expect(page.getByTestId("position-card")).toBeVisible({ timeout: 10_000 });
     await page.getByTestId("position-sell").click();
     await expect(page.getByTestId("sell-sheet")).toBeVisible({ timeout: 10_000 });

@@ -1,19 +1,24 @@
-// File responsibility: compact KPI area — the four decision metrics (Layer-1
-// redesign, DEC-013 "glass" pass). Only numbers a buyer decides with: price,
-// projected monthly, funded % (primary) or sold (secondary), projected per
-// share / year. Visual language: a quiet glass card — translucent surface,
-// hairline ring, soft top-light gradient — over the flat Telegram base; values
-// get the weight (22px semibold tabular), labels stay whisper-quiet 10px.
-// Pending figures render muted (never loud, never invented); total estate
-// value lives in the hero; sold/remaining lives in the funding bar.
+// File responsibility: the fixed 4-stat section (Estate Page Structure §3,
+// Layer-1 glass pass preserved): Monthly Income · Proj. / Year · Avg. Nightly
+// Rate · Est. Growth. Monthly and annual are the presented V1 BASE per-share
+// figures (single presentation path — they equal the Base scenario card by the
+// locked PO rule), ANR comes from the V1 input (never ADR), growth is the
+// locked D10 assumed band (estimated). Pending figures render muted (never
+// invented); price/funding live in the hero (L0) and never duplicated here.
 import { useTranslations } from "next-intl";
-import { eur, usd } from "@/lib/format";
+import { moneySmart } from "@/lib/format";
 import { unavailableLabel } from "@/lib/availability";
 import type { Listing } from "@/types/property";
 import type { FinancialModelV1PropertyModel } from "@/types/financial-model-v1";
+import {
+  getPresentedAnnualIncome,
+  getPresentedMonthlyIncome,
+} from "@/lib/economics/property-presentation";
+import { ESTATE_GROWTH_ASSUMPTION } from "@/lib/economics/estates/estate-page-constants";
+import { v1AnrToCents } from "@/lib/economics/financial-model-v1";
 import { cn } from "@/lib/utils";
 
-function MetricCell({
+function StatCell({
   label,
   value,
   className = "",
@@ -24,12 +29,12 @@ function MetricCell({
   value: string;
   className?: string;
   testId?: string;
-  /** Pending/unknown figures sit quieter than hard numbers. */
+  /** Pending/assumed figures sit quieter than hard numbers. */
   muted?: boolean;
 }) {
   return (
-    <div className={cn("flex flex-col gap-1.5 p-4 min-h-[76px] min-w-0", className)}>
-      <span className="text-[0.625rem] font-medium uppercase tracking-[0.08em] text-muted-foreground leading-tight">
+    <div className={cn("flex min-w-0 flex-col gap-1.5 p-4", className)}>
+      <span className="text-[0.625rem] font-medium uppercase leading-tight tracking-[0.08em] text-muted-foreground">
         {label}
       </span>
       <span
@@ -47,55 +52,25 @@ function MetricCell({
 
 export function PropertyMetricsGrid({
   listing,
-  currentPriceUsd,
-  bestAskUsd,
   v1,
-  totalSharesOverride,
 }: {
   listing: Listing;
-  /** Single source of truth (lib/property-price) — equals sharePriceUsd on primary. */
-  currentPriceUsd?: number;
-  /** Live book ask when known — labels the price basis honestly (Slice 4). */
-  bestAskUsd?: number | null;
   /**
-   * Financial Model V1 evaluation (PROMPT 05 sole authority for the monthly
-   * figure). Absent → honest pending state (never the legacy yield-rate math).
+   * Financial Model V1 evaluation (sole authority). Absent → every economic
+   * cell renders the honest pending state (never the legacy yield-rate math).
    */
   v1?: FinancialModelV1PropertyModel | null;
-  /** V1 canonical total (Layer 1) — the funded % denominator on primary. */
-  totalSharesOverride?: number | null;
 }) {
   const t = useTranslations("property");
-  // DEC-013 dedup: the KPI cells render the figures only — the primary-base
-  // note and the pending-income reason were removed here (the reason still
-  // lives on the Income tab where the user asks for the breakdown; the $100
-  // base is the price figure itself).
-  const monthly = v1?.perShare.monthlyCents ?? null;
-  const perShare = v1?.perShare;
-  const money = (cents: number) =>
-    perShare?.currency === "EUR" ? eur(cents) : usd(cents);
+  const monthly = getPresentedMonthlyIncome(listing.id);
+  const annual = getPresentedAnnualIncome(listing.id);
+  const money = (cents: number) => moneySmart(cents, monthly.currency);
   const monthlyText =
-    monthly != null ? money(monthly) : unavailableLabel("backend_absent");
+    monthly.cents != null ? money(monthly.cents) : unavailableLabel("backend_absent");
   const annualText =
-    perShare?.annualCents != null
-      ? money(perShare.annualCents)
-      : unavailableLabel("backend_absent");
-  const pricePerShare = currentPriceUsd ?? listing.sharePriceUsd;
-  // Slice 4: the price label follows the price basis — the $100 primary offering,
-  // a resale ask, or a last trade are never presented under one shared name.
-  const isPrimary = listing.status === "funding";
-  const askUsd = bestAskUsd ?? listing.bestAskUsd ?? null;
-  const priceLabel = isPrimary
-    ? t("sharePrice")
-    : askUsd != null && pricePerShare === askUsd
-      ? t("askPrice")
-      : listing.lastTradeUsd != null && pricePerShare === listing.lastTradeUsd
-        ? t("lastPrice")
-        : t("sharePrice");
-  // Funded % (primary): demo-ledger sold ÷ V1 canonical total — the only
-  // honest sold source (PRODUCT-DECISION-LOCK §6).
-  const totalForPct = totalSharesOverride ?? listing.totalShares;
-  const fundedRatio = totalForPct > 0 ? listing.sharesSold / totalForPct : 0;
+    annual.cents != null ? money(annual.cents) : unavailableLabel("backend_absent");
+  const anrText =
+    v1 != null ? moneySmart(v1AnrToCents(v1.anr.valueMajor), v1.anr.currency) : unavailableLabel("backend_absent");
 
   return (
     <div
@@ -103,39 +78,33 @@ export function PropertyMetricsGrid({
       data-testid="metrics-grid"
     >
       <div className="grid grid-cols-2">
-        <MetricCell
-          label={priceLabel}
-          value={usd(pricePerShare)}
-          className="border-b border-r border-white/[0.05]"
-          testId="metrics-price"
-        />
-        <MetricCell
-          label={t("metricProjectedIncome")}
+        <StatCell
+          label={t("metricMonthlyIncome")}
           value={monthlyText}
-          muted={monthly == null}
-          className="border-b border-white/[0.05]"
+          muted={monthly.cents == null}
+          className="border-b border-r border-white/[0.05]"
           testId="metrics-monthly"
         />
-        {isPrimary ? (
-          <MetricCell
-            label={t("metricFunded")}
-            value={t("fundedCaptionShort", { pct: Math.round(fundedRatio * 100) })}
-            className="border-r border-white/[0.05]"
-            testId="metrics-funded"
-          />
-        ) : (
-          <MetricCell
-            label={t("metricSold")}
-            value={listing.sharesSold.toLocaleString()}
-            className="border-r border-white/[0.05]"
-            testId="metrics-sold"
-          />
-        )}
-        <MetricCell
+        <StatCell
           label={t("metricAnnual")}
           value={annualText}
-          muted={perShare?.annualCents == null}
+          muted={annual.cents == null}
+          className="border-b border-white/[0.05]"
           testId="metrics-annual"
+        />
+        <StatCell
+          label={t("metricAvgNightlyRate")}
+          value={anrText}
+          muted={v1 == null}
+          className="border-r border-white/[0.05]"
+          testId="metrics-anr"
+        />
+        <StatCell
+          label={t("metricEstGrowth")}
+          // Compact band for the half-width cell (assumed growth, estimated —
+          // the full locked wording + source render on the Ownership tab §6.2).
+          value={`+${ESTATE_GROWTH_ASSUMPTION.minPctPerYear}–${ESTATE_GROWTH_ASSUMPTION.maxPctPerYear}%`}
+          testId="metrics-growth"
         />
       </div>
     </div>

@@ -52,9 +52,9 @@ describe("FeaturedPropertyCard — Featured Estate (identity first)", () => {
     // Entry/share price.
     expect(screen.getByText("$125.00/share")).toBeInTheDocument();
     // Slice 2: projected income from the single presentation layer (Grand V1:
-    // $16.29/mo) — labeled, not presented as actual.
+    // $16.25/mo) — labeled, not presented as actual.
     expect(screen.getByText("Projected income / share")).toBeInTheDocument();
-    expect(screen.getByText("$16.29")).toBeInTheDocument();
+    expect(screen.getByText("$16.25")).toBeInTheDocument();
     // Owner-stay entitlement has no data anywhere → honest "Data pending".
     expect(screen.getByText("Owner stay")).toBeInTheDocument();
     expect(screen.getByText("Data pending")).toBeInTheDocument();
@@ -62,11 +62,12 @@ describe("FeaturedPropertyCard — Featured Estate (identity first)", () => {
   });
 
   it("shows pending (never a fixture figure) when V1 income is unknown", () => {
+    // D11 locked 2026-09-13: remaining V1-unknowns are the EUR villas.
     render(
-      <FeaturedPropertyCard listing={{ ...listing, id: "re-128529" }} />,
+      <FeaturedPropertyCard listing={{ ...listing, id: "re-130901" }} />,
     );
     expect(screen.getByTestId("featured-income-pending")).toBeInTheDocument();
-    expect(screen.queryByText("$16.29")).not.toBeInTheDocument();
+    expect(screen.queryByText("$16.25")).not.toBeInTheDocument();
   });
 
   it("view-estate chevron mirrors in RTL", () => {

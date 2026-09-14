@@ -26,7 +26,6 @@ function renderMetrics(id: string) {
   render(
     <PropertyMetricsGrid
       listing={listing}
-      currentPriceUsd={listing.sharePriceUsd}
       v1={getFinancialModelV1(id) ?? null}
     />,
   );

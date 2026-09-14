@@ -1,0 +1,336 @@
+
+Running 52 tests using 2 workers
+
+  ok  2 [chromium] › e2e\tests\buy-flow.spec.ts:28:7 › Buy flow — primary entry + wallet gate (LTR) › hero opens the sheet at the wallet gate; Escape cancels cleanly (12.2s)
+  ok  1 [chromium] › e2e\tests\buyer-journey.spec.ts:27:7 › Buyer journey — discovery to action explains itself (LTR) › marketplace → detail → tabs → honest buy entry (12.8s)
+  ok  4 [chromium] › e2e\tests\buyer-journey.spec.ts:67:7 › Buyer journey — discovery to action explains itself (LTR) › cancel confirm states the honest outcome (no investing-balance fiction) (11.8s)
+  ok  3 [chromium] › e2e\tests\buy-flow.spec.ts:47:7 › Buy flow — primary entry + wallet gate (LTR) › ownership preview Buy CTA opens the same sheet (entry diversity) (13.0s)
+  ok  5 [chromium] › e2e\tests\earnings-honesty.spec.ts:30:7 › Income honesty (§7.3) › shows the honest alignment line and status words only (12.4s)
+  ok  6 [chromium] › e2e\tests\buy-flow.spec.ts:59:7 › Buy flow — primary entry + wallet gate (LTR) › no raw i18n keys leak on the buy surfaces (12.5s)
+  ok  7 [chromium] › e2e\tests\earnings-honesty.spec.ts:48:7 › Income honesty (§7.3) › does not contain false on-chain or frequency-promise claims (12.5s)
+  ok  8 [chromium] › e2e\tests\buy-flow.spec.ts:74:7 › Buy flow — secondary market order end-to-end (LTR) › resale estate places a limit buy with fee preview and escrow total (13.2s)
+  ok 10 [chromium] › e2e\tests\buy-flow.spec.ts:99:7 › Buy flow — wallet gate (RTL) › fa: localized gate, no overflow, no raw keys (1.3s)
+  ok 11 [chromium] › e2e\tests\estate-rtl.spec.ts:27:7 › Prompt 05 RTL › fa: rtl document, §4 desire sections + §5 V1 chain legible, no overflow (1.4s)
+  ok 12 [chromium] › e2e\tests\estate-rtl.spec.ts:60:7 › Prompt 05 RTL › fa: directional icons mirror (Slice 7 rtl variant) (1.2s)
+  ok 13 [chromium] › e2e\tests\estate-rtl.spec.ts:74:7 › Prompt 05 RTL › fa: non-Grand desire sections legible RTL, no overflow, no raw keys (1.1s)
+  ok  9 [chromium] › e2e\tests\estate-economics.spec.ts:23:7 › Estate Page Structure — V1 canonical economics QA › Grand 2 BDM: §4 desire sections, $8M hero value, §5 V1 chain, §6 decision, §7 truth (13.7s)
+  ok 14 [chromium] › e2e\tests\home.spec.ts:16:7 › Home — ownership-first (Phase 9 Slice 3) › Your Estates hero, Next Distribution (Expected), My Estates, Featured Estate, More Estates (11.6s)
+  ok 15 [chromium] › e2e\tests\estate-economics.spec.ts:108:7 › Estate Page Structure — V1 canonical economics QA › funding peer (RANGE rate): desire sections render; V1 income known (no legacy shell) (12.3s)
+  ok 16 [chromium] › e2e\tests\home.spec.ts:72:7 › Home — ownership-first (Phase 9 Slice 3) › CTA reachability: hero → My Estates (portfolio), Featured → Estate Detail (12.5s)
+  ok 17 [chromium] › e2e\tests\estate-economics.spec.ts:141:7 › Estate Page Structure — V1 canonical economics QA › resale peer (DYNAMIC rate): reserve CTA + honest V1 income at NAV (12.2s)
+  ok 18 [chromium] › e2e\tests\income.spec.ts:15:7 › Income — /earnings (Phase 9 Slice 5) › Income identity, received-in-total hero, Expected status word, accrued block, chart legend, timeline, income by estate (12.1s)
+  ok 19 [chromium] › e2e\tests\estate-economics.spec.ts:165:7 › Estate Page Structure — V1 canonical economics QA › STARTING_FROM peer: nightly semantics preserved; V1 UNKNOWN stays honest on the EUR peer (13.2s)
+  ok 20 [chromium] › e2e\tests\income.spec.ts:127:7 › Income — /earnings (Phase 9 Slice 5) › income-by-estate rows open the estate detail (12.1s)
+  ok 21 [chromium] › e2e\tests\estate-economics.spec.ts:191:7 › Estate Page Structure — V1 canonical economics QA › high-value peer: $60M estate value with the structure's decision facts (12.2s)
+  ok 22 [chromium] › e2e\tests\marketplace.spec.ts:15:7 › Estates — /marketplace (Slice F canonical) › Estates header, search, six filters, Curated default sort and canonical cards (11.8s)
+  ok 23 [chromium] › e2e\tests\estate-economics.spec.ts:204:7 › Estate Page Structure — V1 canonical economics QA › Grand 2 BDM: reserve CTA opens the official listing externally (13.5s)
+  ok 24 [chromium] › e2e\tests\marketplace.spec.ts:66:7 › Estates — /marketplace (Slice F canonical) › Owner Stay filter shows the honest unavailable empty state — no fake matches (12.1s)
+  ok 25 [chromium] › e2e\tests\estate-economics.spec.ts:225:7 › Estate Page Structure — V1 canonical economics QA › closing CTA clears fixed chrome at max scroll (funding + resale) (13.8s)
+  ok 26 [chromium] › e2e\tests\marketplace.spec.ts:82:7 › Estates — /marketplace (Slice F canonical) › Featured filter shows the honest unavailable empty state — no fake matches (12.2s)
+  ok 28 [chromium] › e2e\tests\marketplace.spec.ts:93:7 › Estates — /marketplace (Slice F canonical) › tapping a card opens the estate detail (whole-card navigation, no per-card Buy) (13.1s)
+  -  29 [chromium] › e2e\tests\money-path-1.spec.ts:21:7 › Money path 1 — buy → lock → yield → sell › marketplace offers a buyable funding property
+  -  30 [chromium] › e2e\tests\money-path-1.spec.ts:30:7 › Money path 1 — buy → lock → yield → sell › property detail renders buy + yield + sell entry points
+  -  31 [chromium] › e2e\tests\money-path-1.spec.ts:48:7 › Money path 1 — buy → lock → yield → sell › portfolio reflects holdings after a buy (seeded user)
+  -  32 [chromium] › e2e\tests\money-path-2.spec.ts:20:7 › Money path 2 — queued sell → activation → match → withdrawal › portfolio shows open orders section
+  -  33 [chromium] › e2e\tests\money-path-2.spec.ts:27:7 › Money path 2 — queued sell → activation → match → withdrawal › settings exposes withdrawal address management
+  -  34 [chromium] › e2e\tests\money-path-2.spec.ts:34:7 › Money path 2 — queued sell → activation → match → withdrawal › transactions page renders (ledger for sell/match/withdraw kinds)
+  ok 35 [chromium] › e2e\tests\order-lifecycle.spec.ts:57:7 › Order lifecycle — limit buy reaches Portfolio, cancel clears it (LTR) › place → portfolio shows it → cancel from portfolio → gone (17.0s)
+  ok 27 [chromium] › e2e\tests\estate-economics.spec.ts:261:7 › Estate Page Structure — V1 canonical economics QA › all-24 sweep: structure architecture, honest states, no overflow (40.3s)
+  ok 37 [chromium] › e2e\tests\portfolio.spec.ts:21:7 › Portfolio › renders portfolio page (13.1s)
+  x  36 [chromium] › e2e\tests\order-lifecycle.spec.ts:90:7 › Order lifecycle — custom sell reaches Portfolio, cancel clears it (LTR) › list → portfolio shows it → cancel → gone, holdings untouched (23.7s)
+  ok 38 [chromium] › e2e\tests\portfolio.spec.ts:28:7 › Portfolio › shows holdings or empty state (15.8s)
+  x  39 [chromium] › e2e\tests\order-lifecycle.spec.ts:90:7 › Order lifecycle — custom sell reaches Portfolio, cancel clears it (LTR) › list → portfolio shows it → cancel → gone, holdings untouched (retry #1) (25.6s)
+  ok 40 [chromium] › e2e\tests\portfolio.spec.ts:42:7 › Portfolio › transactions page reachable (15.7s)
+  ok 42 [chromium] › e2e\tests\property-detail.spec.ts:16:7 › Estate Detail — Phase 9 4-tab model › primary estate: identity-first hero + 4 tabs; resale market absent while shares remain (12.9s)
+  ok 43 [chromium] › e2e\tests\property-detail.spec.ts:63:7 › Estate Detail — Phase 9 4-tab model › secondary estate: resale market demoted behind the collapsed block; price history expander (12.6s)
+  ok 41 [chromium] › e2e\tests\order-lifecycle.spec.ts:127:7 › Order lifecycle — reload resets in-session demo state (LTR) › placed orders do not survive a reload (documented demo semantics) (29.0s)
+  ok 44 [chromium] › e2e\tests\property-detail.spec.ts:102:7 › Estate Detail — Phase 9 4-tab model › ownership tab: position card + Owner Stay P0 (honest unavailable) + lock management (12.3s)
+  ok 46 [chromium] › e2e\tests\property-detail.spec.ts:120:7 › Estate Detail — Phase 9 4-tab model › no horizontal overflow at 480×840 on the estate detail surface (12.0s)
+  x  45 [chromium] › e2e\tests\sell-flow.spec.ts:39:7 › Sell flow — quote follows qty and price (LTR) › owned position, gain/loss/break-even, remaining, no raw keys (22.5s)
+  ok 47 [chromium] › e2e\tests\smoke-shell.spec.ts:8:7 › App shell › loads without crash (745ms)
+  ok 48 [chromium] › e2e\tests\smoke-shell.spec.ts:13:7 › App shell › renders bottom tab bar with 4 tabs (829ms)
+  ok 50 [chromium] › e2e\tests\smoke-shell.spec.ts:21:7 › App shell › has Telegram-style dark background (1.1s)
+  ok 51 [chromium] › e2e\tests\smoke-shell.spec.ts:31:7 › App shell › viewport respects 480px max-width (905ms)
+  x  49 [chromium] › e2e\tests\sell-flow.spec.ts:39:7 › Sell flow — quote follows qty and price (LTR) › owned position, gain/loss/break-even, remaining, no raw keys (retry #1) (23.4s)
+  x  52 [chromium] › e2e\tests\sell-flow.spec.ts:79:7 › Sell flow — review → Active listing → cancel (LTR) › listing is Active (never Sold); cancel flips to Cancelled on confirm (21.4s)
+  x  53 [chromium] › e2e\tests\sell-flow.spec.ts:79:7 › Sell flow — review → Active listing → cancel (LTR) › listing is Active (never Sold); cancel flips to Cancelled on confirm (retry #1) (22.7s)
+  ok 54 [chromium] › e2e\tests\sell-flow.spec.ts:116:7 › Sell flow — empty position honesty (LTR) › a property with no holding shows the honest empty state (11.3s)
+  x  55 [chromium] › e2e\tests\sell-flow.spec.ts:131:7 › Sell flow — wallet gate (RTL) › fa: localized sheet, no overflow, no raw keys (11.1s)
+  x  56 [chromium] › e2e\tests\sell-flow.spec.ts:131:7 › Sell flow — wallet gate (RTL) › fa: localized sheet, no overflow, no raw keys (retry #1) (12.0s)
+
+
+  1) [chromium] › e2e\tests\order-lifecycle.spec.ts:90:7 › Order lifecycle — custom sell reaches Portfolio, cancel clears it (LTR) › list → portfolio shows it → cancel → gone, holdings untouched 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('position-card')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for getByTestId('position-card')
+
+
+      93 |
+      94 |     await page.getByTestId("tab-ownership").click();
+    > 95 |     await expect(page.getByTestId("position-card")).toBeVisible({ timeout: 10_000 });
+         |                                                     ^
+      96 |     await page.getByTestId("position-sell").click();
+      97 |     await expect(page.getByTestId("sell-sheet")).toBeVisible({ timeout: 10_000 });
+      98 |     await page.getByRole("button", { name: /sell custom price/i }).click();
+        at C:\Users\parsme\Desktop\sideProjects\app.FL\app\e2e\tests\order-lifecycle.spec.ts:95:53
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\order-lifecycle-Order-life-88223-l-→-gone-holdings-untouched-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\order-lifecycle-Order-life-88223-l-→-gone-holdings-untouched-chromium\error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('position-card')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for getByTestId('position-card')
+
+
+      93 |
+      94 |     await page.getByTestId("tab-ownership").click();
+    > 95 |     await expect(page.getByTestId("position-card")).toBeVisible({ timeout: 10_000 });
+         |                                                     ^
+      96 |     await page.getByTestId("position-sell").click();
+      97 |     await expect(page.getByTestId("sell-sheet")).toBeVisible({ timeout: 10_000 });
+      98 |     await page.getByRole("button", { name: /sell custom price/i }).click();
+        at C:\Users\parsme\Desktop\sideProjects\app.FL\app\e2e\tests\order-lifecycle.spec.ts:95:53
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\order-lifecycle-Order-life-88223-l-→-gone-holdings-untouched-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\order-lifecycle-Order-life-88223-l-→-gone-holdings-untouched-chromium-retry1\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\order-lifecycle-Order-life-88223-l-→-gone-holdings-untouched-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\order-lifecycle-Order-life-88223-l-→-gone-holdings-untouched-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › e2e\tests\sell-flow.spec.ts:39:7 › Sell flow — quote follows qty and price (LTR) › owned position, gain/loss/break-even, remaining, no raw keys 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('position-card')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for getByTestId('position-card')
+
+
+      29 |   await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
+      30 |   await page.getByTestId("tab-ownership").click();
+    > 31 |   await expect(page.getByTestId("position-card")).toBeVisible({ timeout: 10_000 });
+         |                                                   ^
+      32 |   await page.getByTestId("position-sell").click();
+      33 |   await expect(page.getByTestId("sell-sheet")).toBeVisible({ timeout: 10_000 });
+      34 |   await page.getByRole("button", { name: /sell custom price/i }).click();
+        at openCustomSell (C:\Users\parsme\Desktop\sideProjects\app.FL\app\e2e\tests\sell-flow.spec.ts:31:51)
+        at C:\Users\parsme\Desktop\sideProjects\app.FL\app\e2e\tests\sell-flow.spec.ts:41:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\sell-flow-Sell-flow-—-quot-659f0--even-remaining-no-raw-keys-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\sell-flow-Sell-flow-—-quot-659f0--even-remaining-no-raw-keys-chromium\error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('position-card')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for getByTestId('position-card')
+
+
+      29 |   await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
+      30 |   await page.getByTestId("tab-ownership").click();
+    > 31 |   await expect(page.getByTestId("position-card")).toBeVisible({ timeout: 10_000 });
+         |                                                   ^
+      32 |   await page.getByTestId("position-sell").click();
+      33 |   await expect(page.getByTestId("sell-sheet")).toBeVisible({ timeout: 10_000 });
+      34 |   await page.getByRole("button", { name: /sell custom price/i }).click();
+        at openCustomSell (C:\Users\parsme\Desktop\sideProjects\app.FL\app\e2e\tests\sell-flow.spec.ts:31:51)
+        at C:\Users\parsme\Desktop\sideProjects\app.FL\app\e2e\tests\sell-flow.spec.ts:41:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\sell-flow-Sell-flow-—-quot-659f0--even-remaining-no-raw-keys-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\sell-flow-Sell-flow-—-quot-659f0--even-remaining-no-raw-keys-chromium-retry1\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\sell-flow-Sell-flow-—-quot-659f0--even-remaining-no-raw-keys-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\sell-flow-Sell-flow-—-quot-659f0--even-remaining-no-raw-keys-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [chromium] › e2e\tests\sell-flow.spec.ts:79:7 › Sell flow — review → Active listing → cancel (LTR) › listing is Active (never Sold); cancel flips to Cancelled on confirm 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('position-card')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for getByTestId('position-card')
+
+
+      29 |   await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
+      30 |   await page.getByTestId("tab-ownership").click();
+    > 31 |   await expect(page.getByTestId("position-card")).toBeVisible({ timeout: 10_000 });
+         |                                                   ^
+      32 |   await page.getByTestId("position-sell").click();
+      33 |   await expect(page.getByTestId("sell-sheet")).toBeVisible({ timeout: 10_000 });
+      34 |   await page.getByRole("button", { name: /sell custom price/i }).click();
+        at openCustomSell (C:\Users\parsme\Desktop\sideProjects\app.FL\app\e2e\tests\sell-flow.spec.ts:31:51)
+        at C:\Users\parsme\Desktop\sideProjects\app.FL\app\e2e\tests\sell-flow.spec.ts:81:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\sell-flow-Sell-flow-—-revi-ec261-ips-to-Cancelled-on-confirm-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\sell-flow-Sell-flow-—-revi-ec261-ips-to-Cancelled-on-confirm-chromium\error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('position-card')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for getByTestId('position-card')
+
+
+      29 |   await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
+      30 |   await page.getByTestId("tab-ownership").click();
+    > 31 |   await expect(page.getByTestId("position-card")).toBeVisible({ timeout: 10_000 });
+         |                                                   ^
+      32 |   await page.getByTestId("position-sell").click();
+      33 |   await expect(page.getByTestId("sell-sheet")).toBeVisible({ timeout: 10_000 });
+      34 |   await page.getByRole("button", { name: /sell custom price/i }).click();
+        at openCustomSell (C:\Users\parsme\Desktop\sideProjects\app.FL\app\e2e\tests\sell-flow.spec.ts:31:51)
+        at C:\Users\parsme\Desktop\sideProjects\app.FL\app\e2e\tests\sell-flow.spec.ts:81:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\sell-flow-Sell-flow-—-revi-ec261-ips-to-Cancelled-on-confirm-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\sell-flow-Sell-flow-—-revi-ec261-ips-to-Cancelled-on-confirm-chromium-retry1\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\sell-flow-Sell-flow-—-revi-ec261-ips-to-Cancelled-on-confirm-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\sell-flow-Sell-flow-—-revi-ec261-ips-to-Cancelled-on-confirm-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [chromium] › e2e\tests\sell-flow.spec.ts:131:7 › Sell flow — wallet gate (RTL) › fa: localized sheet, no overflow, no raw keys 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('position-card')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for getByTestId('position-card')
+
+
+      151 |
+      152 |     await page.getByTestId("tab-ownership").click();
+    > 153 |     await expect(page.getByTestId("position-card")).toBeVisible({ timeout: 10_000 });
+          |                                                     ^
+      154 |     await page.getByTestId("position-sell").click();
+      155 |     const sheet = page.getByTestId("sell-sheet");
+      156 |     await expect(sheet).toBeVisible({ timeout: 10_000 });
+        at C:\Users\parsme\Desktop\sideProjects\app.FL\app\e2e\tests\sell-flow.spec.ts:153:53
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\sell-flow-Sell-flow-—-wall-44779-eet-no-overflow-no-raw-keys-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\sell-flow-Sell-flow-—-wall-44779-eet-no-overflow-no-raw-keys-chromium\error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('position-card')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for getByTestId('position-card')
+
+
+      151 |
+      152 |     await page.getByTestId("tab-ownership").click();
+    > 153 |     await expect(page.getByTestId("position-card")).toBeVisible({ timeout: 10_000 });
+          |                                                     ^
+      154 |     await page.getByTestId("position-sell").click();
+      155 |     const sheet = page.getByTestId("sell-sheet");
+      156 |     await expect(sheet).toBeVisible({ timeout: 10_000 });
+        at C:\Users\parsme\Desktop\sideProjects\app.FL\app\e2e\tests\sell-flow.spec.ts:153:53
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\sell-flow-Sell-flow-—-wall-44779-eet-no-overflow-no-raw-keys-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\sell-flow-Sell-flow-—-wall-44779-eet-no-overflow-no-raw-keys-chromium-retry1\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\sell-flow-Sell-flow-—-wall-44779-eet-no-overflow-no-raw-keys-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\sell-flow-Sell-flow-—-wall-44779-eet-no-overflow-no-raw-keys-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4 failed
+    [chromium] › e2e\tests\order-lifecycle.spec.ts:90:7 › Order lifecycle — custom sell reaches Portfolio, cancel clears it (LTR) › list → portfolio shows it → cancel → gone, holdings untouched 
+    [chromium] › e2e\tests\sell-flow.spec.ts:39:7 › Sell flow — quote follows qty and price (LTR) › owned position, gain/loss/break-even, remaining, no raw keys 
+    [chromium] › e2e\tests\sell-flow.spec.ts:79:7 › Sell flow — review → Active listing → cancel (LTR) › listing is Active (never Sold); cancel flips to Cancelled on confirm 
+    [chromium] › e2e\tests\sell-flow.spec.ts:131:7 › Sell flow — wallet gate (RTL) › fa: localized sheet, no overflow, no raw keys 
+  6 skipped
+  42 passed (6.4m)

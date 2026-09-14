@@ -1,0 +1,336 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90mC:/Users/parsme/Desktop/sideProjects/app.FL/app[39m
+
+[90mstderr[2m | src/app/(app)/property/[id]/page.test.tsx[2m > [22m[2mProperty detail page — states + buy happy path[2m > [22m[2mPhase 7 sell: owner sees the Sell sheet with free-share context via Yield section
+[22m[39mEach child in a list should have a unique "key" prop.
+
+Check the render method of `PropertyTabs`. See https://react.dev/link/warning-keys for more information.
+
+Not implemented: Window's scrollTo() method
+[90mstderr[2m | src/app/(app)/property/[id]/page.test.tsx[2m > [22m[2mProperty detail page — states + buy happy path[2m > [22m[2mPhase 7 sell: owner sees the Sell sheet with free-share context via Yield section
+[22m[39m[csstree-match] BREAK after 15000 iterations
+
+ [31m❯[39m src/app/(app)/property/[id]/page.test.tsx [2m([22m[2m16 tests[22m[2m | [22m[31m1 failed[39m[2m | [22m[33m15 skipped[39m[2m)[22m[33m 1211[2mms[22m[39m
+     [2m[90m↓[39m[22m loading: shimmer skeleton
+     [2m[90m↓[39m[22m error: Retry
+     [2m[90m↓[39m[22m empty: property not found
+     [2m[90m↓[39m[22m shows Telegram BackButton when property loads
+     [2m[90m↓[39m[22m success: detail sections + MainButton Buy Share
+     [2m[90m↓[39m[22m buy happy path: open sheet → continue → confirm → success
+     [2m[90m↓[39m[22m buy: MainButton confirm label matches the fee-inclusive sheet total
+     [2m[90m↓[39m[22m buy: USDT-unavailable falls back to TON with an inline error
+     [2m[90m↓[39m[22m buy: failed purchase surfaces the error inline
+     [2m[90m↓[39m[22m buy: rejected wallet surfaces the rejection inline
+     [2m[90m↓[39m[22m buy: disconnected wallet offers Connect wallet on the MainButton
+     [2m[90m↓[39m[22m buy: BackButton on the summary step returns to quantity (cancels review)
+     [2m[90m↓[39m[22m Phase 7 secondary: hero Buy-at CTA opens the market (limit) buy sheet
+[31m     [31m×[31m Phase 7 sell: owner sees the Sell sheet with free-share context via Yield section[39m[33m 1210[2mms[22m[39m
+     [2m[90m↓[39m[22m Phase 7 regression: a custom limit sell never changes the displayed current price
+     [2m[90m↓[39m[22m Phase 7 sticky: Sell opens the SellSheet when the user has free shares
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/app/(app)/property/[id]/page.test.tsx[2m > [22mProperty detail page — states + buy happy path[2m > [22mPhase 7 sell: owner sees the Sell sheet with free-share context via Yield section
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find an element by: [data-testid="sell-sheet"]
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mclass[39m=[32m"pointer-events-none fixed inset-x-0 top-0 z-40 mx-auto max-w-[480px] pt-[max(env(safe-area-inset-top),0px)]"[39m
+      [33mdata-testid[39m=[32m"property-compact-topbar"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"compact-topbar flex h-11 items-center gap-1 bg-background/95 px-2 backdrop-blur-sm border-b border-border opacity-0 -translate-y-1 pointer-events-none"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-label[39m=[32m"Back"[39m
+          [33mclass[39m=[32m"flex size-11 shrink-0 items-center justify-center text-foreground active:scale-[0.97] transition-transform duration-[120ms] ease-out"[39m
+          [33mdata-testid[39m=[32m"compact-topbar-back"[39m
+          [33mtabindex[39m=[32m"-1"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33maria-hidden[39m=[32m"true"[39m
+            [33mclass[39m=[32m"lucide lucide-chevron-left rtl:rotate-180"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"22"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"1.75"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"22"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<path[39m
+              [33md[39m=[32m"m15 18-6-6 6-6"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+        [36m</button>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"truncate text-[0.9375rem] font-semibold text-foreground"[39m
+          [33mdata-testid[39m=[32m"compact-topbar-title"[39m
+        [36m>[39m
+          [0mGrand 2 BDM Ocean Pool Villa (JOALI Being)[0m
+        [36m</span>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"pb-24"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"space-y-4"[39m
+        [33mdata-testid[39m=[32m"property-detail"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"relative -mx-4 aspect-[16/10] overflow-hidden bg-surface-2"[39m
+          [33mdata-testid[39m=[32m"property-gallery"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex h-full w-full transition-transform duration-[280ms] ease-[var(--ease-tg-out)]"[39m
+            [33mstyle[39m=[32m"transform: translateX(-0%);"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"relative h-full w-full shrink-0"[39m
+            [36m>[39m
+              [36m<img[39m
+                [33malt[39m=[32m"Grand 2 BDM Ocean Pool Villa (JOALI Being) photo 1"[39m
+                [33msrc[39m=[32m"/images/properties/p1.png"[39m
+              [36m/>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33maria-hidden[39m=[32m"true"[39m
+            [33mclass[39m=[32m"pointer-events-none absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-background/85 to-transparent"[39m
+            [33mdata-testid[39m=[32m"gallery-gradient"[39m
+          [36m/>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"absolute start-3 top-3 rounded-full bg-warning/90 px-2.5 py-1 text-[0.6875rem] font-semibold tabular-nums text-primary-foreground"[39m
+            [33mdata-testid[39m=[32m"gallery-status-pill"[39m
+          [36m>[39m
+            [0m1% funded[0m
+          [36m</span>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"px-0"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-3"[39m
+            [33mdata-testid[39m=[32m"property-hero"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex items-start gap-2"[39m
+            [36m>[39m
+              [36m<h1[39m
+                [33mclass[39m=[32m"min-w-0 text-[1.0625rem] font-semibold leading-snug tracking-tight text-balance text-foreground"[39m
+              [36m>[39m
+                [0mGrand 2 BDM Ocean Pool Villa (JOALI Being)[0m
+              [36m</h1>[39m
+              [36m<span[39m
+                [33maria-label[39m=[32m"You own a share"[39m
+                [33mclass[39m=[32m"mt-0.5 inline-flex shrink-0 items-center gap-1 rounded-full bg-success/12 px-2 py-0.5 text-xs font-semibold text-success"[39m
+                [33mdata-testid[39m=[32m"hero-owner-badge"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"lucide lucide-badge-check"[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"13"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2.25"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"13"[39m
+                  [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"m9 12 2 2 4-4"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+                [0mYou own a share[0m
+              [36m</span>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex items-center gap-2"[39m
+            [36m>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"flex min-w-0 items-center gap-1 text-sm text-muted-foreground"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"lucide lucide-map-pin shrink-0"[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"15"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"15"[39m
+                  [33mxmlns[39m=[32m"ht...
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mclass[39m=[32m"pointer-events-none fixed inset-x-0 top-0 z-40 mx-auto max-w-[480px] pt-[max(env(safe-area-inset-top),0px)]"[39m
+      [33mdata-testid[39m=[32m"property-compact-topbar"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"compact-topbar flex h-11 items-center gap-1 bg-background/95 px-2 backdrop-blur-sm border-b border-border opacity-0 -translate-y-1 pointer-events-none"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-label[39m=[32m"Back"[39m
+          [33mclass[39m=[32m"flex size-11 shrink-0 items-center justify-center text-foreground active:scale-[0.97] transition-transform duration-[120ms] ease-out"[39m
+          [33mdata-testid[39m=[32m"compact-topbar-back"[39m
+          [33mtabindex[39m=[32m"-1"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33maria-hidden[39m=[32m"true"[39m
+            [33mclass[39m=[32m"lucide lucide-chevron-left rtl:rotate-180"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"22"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"1.75"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"22"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<path[39m
+              [33md[39m=[32m"m15 18-6-6 6-6"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+        [36m</button>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"truncate text-[0.9375rem] font-semibold text-foreground"[39m
+          [33mdata-testid[39m=[32m"compact-topbar-title"[39m
+        [36m>[39m
+          [0mGrand 2 BDM Ocean Pool Villa (JOALI Being)[0m
+        [36m</span>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"pb-24"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"space-y-4"[39m
+        [33mdata-testid[39m=[32m"property-detail"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"relative -mx-4 aspect-[16/10] overflow-hidden bg-surface-2"[39m
+          [33mdata-testid[39m=[32m"property-gallery"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex h-full w-full transition-transform duration-[280ms] ease-[var(--ease-tg-out)]"[39m
+            [33mstyle[39m=[32m"transform: translateX(-0%);"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"relative h-full w-full shrink-0"[39m
+            [36m>[39m
+              [36m<img[39m
+                [33malt[39m=[32m"Grand 2 BDM Ocean Pool Villa (JOALI Being) photo 1"[39m
+                [33msrc[39m=[32m"/images/properties/p1.png"[39m
+              [36m/>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33maria-hidden[39m=[32m"true"[39m
+            [33mclass[39m=[32m"pointer-events-none absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-background/85 to-transparent"[39m
+            [33mdata-testid[39m=[32m"gallery-gradient"[39m
+          [36m/>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"absolute start-3 top-3 rounded-full bg-warning/90 px-2.5 py-1 text-[0.6875rem] font-semibold tabular-nums text-primary-foreground"[39m
+            [33mdata-testid[39m=[32m"gallery-status-pill"[39m
+          [36m>[39m
+            [0m1% funded[0m
+          [36m</span>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"px-0"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-3"[39m
+            [33mdata-testid[39m=[32m"property-hero"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex items-start gap-2"[39m
+            [36m>[39m
+              [36m<h1[39m
+                [33mclass[39m=[32m"min-w-0 text-[1.0625rem] font-semibold leading-snug tracking-tight text-balance text-foreground"[39m
+              [36m>[39m
+                [0mGrand 2 BDM Ocean Pool Villa (JOALI Being)[0m
+              [36m</h1>[39m
+              [36m<span[39m
+                [33maria-label[39m=[32m"You own a share"[39m
+                [33mclass[39m=[32m"mt-0.5 inline-flex shrink-0 items-center gap-1 rounded-full bg-success/12 px-2 py-0.5 text-xs font-semibold text-success"[39m
+                [33mdata-testid[39m=[32m"hero-owner-badge"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"lucide lucide-badge-check"[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"13"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2.25"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"13"[39m
+                  [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"m9 12 2 2 4-4"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+                [0mYou own a share[0m
+              [36m</span>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex items-center gap-2"[39m
+            [36m>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"flex min-w-0 items-center gap-1 text-sm text-muted-foreground"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"lucide lucide-map-pin shrink-0"[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"15"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"15"[39m
+                  [33mxmlns[39m=[32m"ht...
+[90m [2m❯[22m waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:[2m163:27[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m86:33[22m[39m
+[36m [2m❯[22m src/app/(app)/property/[id]/page.test.tsx:[2m461:32[22m[39m
+    [90m459|[39m     fireEvent[33m.[39m[34mclick[39m(screen[33m.[39m[34mgetByTestId[39m([32m"tab-earn"[39m))[33m;[39m
+    [90m460|[39m     fireEvent[33m.[39m[34mclick[39m([35mawait[39m screen[33m.[39m[34mfindByTestId[39m([32m"banner-sell"[39m))[33m;[39m
+    [90m461|[39m     [35mconst[39m sheet [33m=[39m [35mawait[39m screen[33m.[39m[34mfindByTestId[39m([32m"sell-sheet"[39m)[33m;[39m
+    [90m   |[39m                                [31m^[39m
+    [90m462|[39m     fireEvent.click(within(sheet).getByRole("button", { name: /sell cu…
+    [90m463|[39m     expect(within(sheet).getByText("Available to sell")).toBeInTheDocu…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[33m15 skipped[39m[90m (16)[39m
+[2m   Start at [22m 22:37:55
+[2m   Duration [22m 4.12s[2m (transform 904ms, setup 256ms, import 1.78s, tests 1.21s, environment 720ms)[22m
+

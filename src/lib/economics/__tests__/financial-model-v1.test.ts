@@ -7,7 +7,9 @@
 // - 5% agency / 7.5% operator / 1.5% reserve / 75-25 allocation / $100 share price
 // - 220 / 273 / 328 scenario nights on the canonical ANR (never ADR)
 // - Grand = $8M exactly = 80,000 shares; no legacy $82M
-// - Guest-paid charges excluded; owner-side tax separated; UNKNOWN stays UNKNOWN
+// - Guest-paid charges excluded; owner-side tax separated (D11 table locked
+//   2026-09-13: every property carries an ASSUMPTION rate; only EUR
+//   mixed-currency stays unknown downstream under the no-FX rule)
 // - EUR calculated in EUR with no silent USD FX (no invented FX rate)
 //
 // The tests prove behavior against the actual modules (not copied copies where
@@ -230,8 +232,8 @@ describe("V1 validation 12: owner-side tax separated from guest-paid taxes", () 
 
   it("zero-rate assumptions (T&C, BVI) yield zero tax with net equal to pre-tax", () => {
     const zeroTaxModels = ALL_MODELS.filter((m) => m.ownerTax.kind === "rate" && m.ownerTax.rate === 0);
-    // 6× Turks & Caicos + 2× BVI.
-    expect(zeroTaxModels).toHaveLength(8);
+    // 6× Turks & Caicos + 2× BVI + 2× St. Barthélemy + 1× Nevada (D11 locked 2026-09-13).
+    expect(zeroTaxModels).toHaveLength(11);
     for (const model of zeroTaxModels) {
       for (const scenario of [model.conservative, model.base, model.optimistic, model.average]) {
         expect(scenario.ownerTaxCents).toBe(0);
@@ -245,34 +247,54 @@ describe("V1 validation 12: owner-side tax separated from guest-paid taxes", () 
   });
 });
 
-describe("V1 validation 13: UNKNOWN remains UNKNOWN", () => {
-  it("unknown-tax properties expose null net/owner/operator with a stated reason", () => {
+describe("V1 validation 13: D11 owner-tax table (locked 2026-09-13)", () => {
+  it("no UNKNOWN-tax property remains — every model carries an ASSUMPTION rate", () => {
     const unknownTaxModels = ALL_MODELS.filter((m) => m.ownerTax.kind === "unknown");
-    expect(unknownTaxModels.length).toBeGreaterThan(0);
-    for (const model of unknownTaxModels) {
-      // USD unknown-tax properties keep known pre-tax; EUR ones are mixed-currency.
-      for (const scenario of [model.conservative, model.base, model.optimistic, model.average]) {
-        expect(scenario.ownerTaxCents).toBeNull();
-        expect(scenario.netCents).toBeNull();
-        expect(scenario.ownerProfitCents).toBeNull();
-        expect(scenario.operatorProfitCents).toBeNull();
-        expect(scenario.unknownReason).toBeTruthy();
-      }
-      expect(model.perShare.annualCents).toBeNull();
-      expect(model.perShare.monthlyCents).toBeNull();
-      expect(model.perShare.unknownReason).toBeTruthy();
+    expect(unknownTaxModels).toHaveLength(0);
+    for (const model of ALL_MODELS) {
+      expect(model.ownerTax.kind).toBe("rate");
+      if (model.ownerTax.kind !== "rate") throw new Error("unreachable");
+      expect(model.ownerTax.status).toBe("ASSUMPTION");
+      expect(model.ownerTax.note).toMatch(/Seek personal tax advice/);
+      expect(model.ownerTax.rate).toBeGreaterThanOrEqual(0);
+      expect(model.ownerTax.rate).toBeLessThanOrEqual(0.55);
     }
   });
 
-  it("St. Barthélemy, Nevada, and California are UNKNOWN (never defaulted to 0%)", () => {
-    const jurisdictions = new Set(
-      ALL_MODELS.filter((m) => m.ownerTax.kind === "unknown").map((m) =>
-        m.ownerTax.kind === "unknown" ? m.ownerTax.jurisdiction : "",
-      ),
-    );
-    expect(jurisdictions.has("Saint Barthélemy")).toBe(true);
-    expect(jurisdictions.has("USA / Nevada")).toBe(true);
-    expect(jurisdictions.has("USA / California")).toBe(true);
+  it("D11 locked rates land exactly (ranges at midpoint; per-jurisdiction)", () => {
+    const ratesOf = (jurisdiction: string): number[] =>
+      ALL_MODELS.flatMap((m) =>
+        m.ownerTax.kind === "rate" && m.ownerTax.jurisdiction === jurisdiction
+          ? [m.ownerTax.rate]
+          : [],
+      );
+    expect(ratesOf("Saint Barthélemy")).toEqual([0, 0]);
+    expect(ratesOf("USA / Nevada")).toEqual([0]);
+    expect(ratesOf("USA / California")).toEqual([0.133]);
+    expect(ratesOf("Sri Lanka")).toEqual([0.12]);
+    expect(ratesOf("Dominican Republic")).toEqual([0.21]);
+    expect(ratesOf("Jamaica")).toEqual([0.25]);
+    expect(ratesOf("Mexico")).toEqual([0.275, 0.275]);
+    expect(ratesOf("Thailand")).toEqual([0.175]);
+    expect(ratesOf("Italy")).toEqual([0.235, 0.235]);
+    expect(ratesOf("France")).toEqual([0.325, 0.325]);
+    expect(ratesOf("Austria")).toEqual([0.275]);
+    // Grand (Maldives ~10%) is unchanged from the PM §7 table.
+    const grandTax = grand().ownerTax;
+    expect(grandTax.kind).toBe("rate");
+    if (grandTax.kind !== "rate") throw new Error("unreachable");
+    expect(grandTax.rate).toBe(0.1);
+  });
+
+  it("result states after D11: 19 full-chain models, 5 EUR gross-side-only", () => {
+    const fullChain = ALL_MODELS.filter((m) => m.perShare.annualCents != null);
+    const grossOnly = ALL_MODELS.filter((m) => m.perShare.annualCents == null);
+    expect(fullChain).toHaveLength(19);
+    expect(grossOnly).toHaveLength(5);
+    expect(grossOnly.every((m) => m.currency === "EUR")).toBe(true);
+    for (const model of grossOnly) {
+      expect(model.perShare.unknownReason).toBeTruthy();
+    }
   });
 
   it("unknown states never leak NaN into any numeric field", () => {

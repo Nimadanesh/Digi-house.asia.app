@@ -11,6 +11,9 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import type { Listing } from "@/types/property";
 import type { OrderBookState } from "@/types/order";
 import { PropertyDetail } from "@/components/property/PropertyDetail";
+import { getFinancialModelV1 } from "@/lib/economics/estates/financial-model-v1-inputs";
+import { v1ScenarioPerShareCents } from "@/lib/economics/property-presentation";
+import { usd } from "@/lib/format";
 
 vi.mock("next/image", () => ({
   default: (props: { alt: string; src: string }) => (
@@ -90,16 +93,14 @@ function renderDetail(listing: Listing, orderBook?: OrderBookState) {
   );
 }
 
-describe("Slice E wiring (Grand 2 BDM, PROMPT 05 V1)", () => {
-  it("shows the V1 thesis, $8M single hero value, and V1 investment facts", () => {
+describe("Structure §4 wiring (Grand 2 BDM, villa 1)", () => {
+  it("Estate tab: desire sections lead; $8M hero value; reserve CTA closes; economics moved off-tab", () => {
     renderDetail(grandListing);
-    // V1 thesis: ANR $97,230.25, modeled revenue $21.39M–$31.89M, $195.43/yr.
-    expect(screen.getByTestId("estate-v1-thesis")).toBeInTheDocument();
-    expect(screen.getByTestId("thesis-anr")).toHaveTextContent("$97.2K");
-    expect(screen.getByTestId("thesis-revenue")).toHaveTextContent("$21.4M");
-    expect(screen.getByTestId("thesis-revenue")).toHaveTextContent("$31.9M");
-    expect(screen.getByTestId("thesis-pershare")).toHaveTextContent("$195.43");
-    expect(screen.getByTestId("estate-investment")).toBeInTheDocument();
+    // Structure §4.1–§4.4: why / specs / amenities / location.
+    expect(screen.getByTestId("estate-why")).toBeInTheDocument();
+    expect(screen.getByTestId("estate-specs")).toBeInTheDocument();
+    expect(screen.getByTestId("estate-amenities")).toBeInTheDocument();
+    expect(screen.getByTestId("estate-location")).toBeInTheDocument();
     // PROMPT 05 (DEC-013 form): the hero value row shows the compact $8M single
     // (V1 canonical — never the band, never the full "Own a piece" sentence).
     expect(screen.getByTestId("hero-estate-value")).toHaveTextContent("Estate value: $8M");
@@ -107,58 +108,62 @@ describe("Slice E wiring (Grand 2 BDM, PROMPT 05 V1)", () => {
     expect(
       screen.getByTestId("hero-estate-value").querySelector('[aria-label="Estimated value"]'),
     ).toBeInTheDocument();
-    // QA (Layer-1): the estate value lives in the hero's merged value line; the
-    // KPI grid carries the funded % / per-year cells instead. Investment shows
-    // V1 shares.
-    expect(screen.getByTestId("metrics-grid")).toHaveTextContent("$195.43");
-    expect(screen.getByTestId("investment-estate-value")).toHaveTextContent("$8M");
-    expect(screen.getByTestId("investment-total-shares")).toHaveTextContent("80,000");
-    expect(screen.getByTestId("investment-primary-price")).toHaveTextContent("$100.00");
+    // Structure §3: the 4-stat grid carries the presented BASE monthly (Grand
+    // $16.25) — thesis/investment no longer render on this tab (moved).
+    expect(screen.getByTestId("metrics-grid")).toHaveTextContent("$16.25");
+    expect(screen.queryByTestId("estate-v1-thesis")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("estate-investment")).not.toBeInTheDocument();
     // Legacy Slice A sections never render on the Estate tab.
     expect(screen.queryByTestId("estate-economics")).not.toBeInTheDocument();
     expect(screen.queryByTestId("estate-costs")).not.toBeInTheDocument();
     expect(screen.queryByTestId("estate-allocation")).not.toBeInTheDocument();
     // Reserve Villa CTA closes the Estate tab with the official listing URL.
-    const panel = screen.getByTestId("panel-estate");
-    expect(panel.lastElementChild).toHaveAttribute("data-testid", "reserve-villa-cta");
+    // Revision contract: the Reserve CTA closes the Location card.
+    expect(screen.getByTestId("estate-location-card").contains(screen.getByTestId("reserve-villa-cta"))).toBe(
+      true,
+    );
     expect(screen.getByTestId("reserve-villa-cta")).toHaveAttribute(
       "href",
       "https://www.rentalescapes.com/rentals/luxury-villa-rentals-asia/maldives/bodufushi/joali-being/grand-2-bdm-ocean-pool-villa-128862",
     );
   });
 
-  it("Income tab carries the V1 chain; scenario pills switch modeled evaluations", () => {
+  it("Income tab: the V1 chain with scenario cards switching modeled evaluations", () => {
     renderDetail(grandListing);
     fireEvent.click(screen.getByTestId("tab-income"));
-    expect(screen.getByTestId("income-v1-story")).toBeInTheDocument();
-    expect(screen.getByTestId("income-v1-gross")).toHaveTextContent("$26.5M");
-    fireEvent.click(screen.getByTestId("scenario-v1-optimistic"));
-    expect(screen.getByTestId("income-v1-gross")).toHaveTextContent("$31.9M");
-    fireEvent.click(screen.getByTestId("scenario-v1-conservative"));
-    expect(screen.getByTestId("income-v1-gross")).toHaveTextContent("$21.4M");
-    // V1-only cost lines (5% / 7.5% / 1.5%) — no legacy 17%/10%/18%/12.5%.
-    expect(screen.getByTestId("income-v1-cost-agency")).toHaveTextContent("$1.1M");
-    expect(screen.getByTestId("income-v1-pershare-annual")).toHaveTextContent("$195.43");
+    expect(screen.getByTestId("panel-income")).toBeInTheDocument();
+    expect(screen.getByTestId("income-basis-anr")).toBeInTheDocument();
+    // Base expanded by default; its gross row shows the modeled base revenue.
+    expect(screen.getByTestId("scenario-cards-base")).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByTestId("scenario-base-gross")).toHaveTextContent("$26.5M");
+    fireEvent.click(screen.getByTestId("scenario-cards-optimistic"));
+    expect(screen.getByTestId("scenario-optimistic-gross")).toHaveTextContent("$31.9M");
+    fireEvent.click(screen.getByTestId("scenario-cards-conservative"));
+    expect(screen.getByTestId("scenario-conservative-gross")).toHaveTextContent("$21.4M");
+    // Per-share rows follow the selected scenario (locked ÷ shares derivation).
+    const grand = getFinancialModelV1("re-128862")!;
+    const conservative = v1ScenarioPerShareCents(grand.conservative, grand.totalShares);
+    expect(screen.getByTestId("scenario-conservative-per-share-annual")).toHaveTextContent(
+      usd(conservative.annualCents!),
+    );
   });
 
-  it("Ownership tab carries V1 decision facts with no simulated holders", () => {
+  it("Ownership tab: V1 decision facts (valuation 2×2) with no simulated holders", () => {
     renderDetail(grandListing);
     fireEvent.click(screen.getByTestId("tab-ownership"));
-    expect(screen.getByTestId("ownership-v1-panel")).toBeInTheDocument();
-    expect(screen.getByTestId("ownership-v1-price")).toHaveTextContent("$100.00");
-    expect(screen.getByTestId("ownership-v1-total")).toHaveTextContent("80,000");
+    expect(screen.getByTestId("panel-ownership")).toBeInTheDocument();
+    expect(screen.getByTestId("ownership-valuation-reference")).toHaveTextContent("$100.00");
+    expect(screen.getByTestId("ownership-valuation-shares")).toHaveTextContent("80,000");
     expect(screen.queryByTestId("holder-analytics")).not.toBeInTheDocument();
   });
 });
 
 describe("Slice E wiring (non-Grand listing, PROMPT 05 V1)", () => {
-  it("V1 thesis + investment with honest architecture (no legacy sections)", () => {
+  it("Structure §4 sections render for every adopted villa (Aerial) — no legacy sections", () => {
     renderDetail(plainListing);
-    // Rental performance leads with the observed nightly display (range kept).
-    expect(screen.getByTestId("rental-story-rent")).toHaveTextContent("$52,200");
-    // V1 thesis renders for every V1 estate (Aerial: ANR $64,000, BVI 0% tax).
-    expect(screen.getByTestId("estate-v1-thesis")).toBeInTheDocument();
-    expect(screen.getByTestId("thesis-anr")).toHaveTextContent("$64K");
+    // Structure §4: canonical facts lead; the rental story retired from the tab.
+    expect(screen.getByTestId("estate-why")).toBeInTheDocument();
+    expect(screen.getByTestId("estate-location")).toBeInTheDocument();
     expect(screen.queryByTestId("estate-economics-empty")).not.toBeInTheDocument();
     // Legacy Slice A sections never render.
     expect(screen.queryByTestId("estate-economics")).not.toBeInTheDocument();
@@ -169,42 +174,44 @@ describe("Slice E wiring (non-Grand listing, PROMPT 05 V1)", () => {
     expect(
       screen.getByTestId("hero-estate-value").querySelector('[aria-label="Estimated value"]'),
     ).toBeInTheDocument();
-    // V1 fractionalization: 180,000 shares at $100 (never fixture 1,000).
-    expect(screen.getByTestId("investment-total-shares")).toHaveTextContent("180,000");
-    expect(screen.getByTestId("investment-reference-value")).toHaveTextContent("$100.00");
-    expect(screen.getByTestId("estate-investment")).toBeVisible();
     // Reserve Villa CTA closes the Estate tab even without engine economics.
-    const panel = screen.getByTestId("panel-estate");
-    expect(panel.lastElementChild).toHaveAttribute("data-testid", "reserve-villa-cta");
+    // Revision contract: the Reserve CTA closes the Location card.
+    expect(screen.getByTestId("estate-location-card").contains(screen.getByTestId("reserve-villa-cta"))).toBe(
+      true,
+    );
     expect(screen.getByTestId("reserve-villa-cta").getAttribute("href")).toMatch(/-126855$/);
   });
 
-  it("Income V1 pills stay selectable and never fabricate (Aerial base gross)", () => {
+  it("Income scenario cards stay selectable and never fabricate (Aerial base gross)", () => {
     renderDetail(plainListing);
     fireEvent.click(screen.getByTestId("tab-income"));
-    expect(screen.getByTestId("scenario-v1-base")).toHaveAttribute("aria-pressed", "true");
-    expect(screen.getByTestId("income-v1-gross")).toHaveTextContent("$17.5M");
-    fireEvent.click(screen.getByTestId("scenario-v1-conservative"));
-    expect(screen.getByTestId("scenario-v1-conservative")).toHaveAttribute("aria-pressed", "true");
-    expect(screen.getByTestId("scenario-v1-base")).toHaveAttribute("aria-pressed", "false");
-    expect(screen.getByTestId("income-v1-gross")).toHaveTextContent("$14.1M");
-    // Honest zeros only: 0% BVI tax and no-lock accrued may read $0.00, but
-    // modeled gross never fabricates a zero.
-    expect(screen.getByTestId("income-v1-gross")).not.toHaveTextContent("$0.00");
+    expect(screen.getByTestId("scenario-cards-base")).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByTestId("scenario-base-gross")).toHaveTextContent("$17.5M");
+    fireEvent.click(screen.getByTestId("scenario-cards-conservative"));
+    expect(screen.getByTestId("scenario-cards-conservative")).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByTestId("scenario-cards-base")).toHaveAttribute("aria-expanded", "false");
+    expect(screen.getByTestId("scenario-conservative-gross")).toHaveTextContent("$14.1M");
+    // Honest zeros only: 0% BVI tax may read $0.00, but modeled gross never
+    // fabricates a zero.
+    expect(screen.getByTestId("scenario-conservative-gross")).not.toHaveTextContent("$0.00");
   });
 
   it("resale (non-funding) listing renders the CTA last with its own URL (no funding guard)", () => {
     renderDetail({ ...plainListing, status: "resale", sharesRemaining: 0 });
-    const panel = screen.getByTestId("panel-estate");
-    expect(panel.lastElementChild).toHaveAttribute("data-testid", "reserve-villa-cta");
+    // Revision contract: the Reserve CTA closes the Location card.
+    expect(screen.getByTestId("estate-location-card").contains(screen.getByTestId("reserve-villa-cta"))).toBe(
+      true,
+    );
     expect(screen.getByTestId("reserve-villa-cta")).toHaveTextContent("View & Reserve");
     expect(screen.getByTestId("reserve-villa-cta").getAttribute("href")).toMatch(/-126855$/);
   });
 
   it("funded (non-funding) listing renders the CTA last with its own URL (no funding guard)", () => {
     renderDetail({ ...grandListing, status: "funded", sharesRemaining: 0 });
-    const panel = screen.getByTestId("panel-estate");
-    expect(panel.lastElementChild).toHaveAttribute("data-testid", "reserve-villa-cta");
+    // Revision contract: the Reserve CTA closes the Location card.
+    expect(screen.getByTestId("estate-location-card").contains(screen.getByTestId("reserve-villa-cta"))).toBe(
+      true,
+    );
     expect(screen.getByTestId("reserve-villa-cta").getAttribute("href")).toMatch(/-128862$/);
   });
 

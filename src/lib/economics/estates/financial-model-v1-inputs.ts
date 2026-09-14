@@ -8,10 +8,19 @@
 //   - `CANONICAL_RECONCILIATION` (runtime propertyId ←→ Rental Escapes Listing ID)
 //
 // The ONLY hand-authored layer is the locked V1 owner-side tax table (PM decision
-// §7: Turks & Caicos 0%, BVI 0%, St. Barthélemy residency-dependent UNKNOWN,
-// USA/Nevada federal UNKNOWN, USA/California UNKNOWN, Maldives ~10% withholding,
-// everything else UNKNOWN). Any dataset drift (missing ANR, missing valuation,
-// unmapped listing, unexpected currency) throws loudly — V1 never guesses.
+// §7: TCI 0%, BVI 0%, Maldives ~10% withholding — EXTENDED by the locked PO
+// decision 2026-09-13 "D11 owner-side tax": St. Barthélemy 0% (local-resident
+// basis; home-country tax not modeled), Nevada 0% state (federal not modeled),
+// California state-top 13.3% (federal not separately modeled — combined often
+// higher), plus jurisdiction midpoint assumptions: Sri Lanka 12% (10–14), DR 21%
+// (15–27; CONOTUR may reduce), Jamaica 25%, Mexico 27.5% (20–35), Thailand 17.5%
+// (0–35), Italy 23.5% (21–26 cedolare), France 32.5% (20–45+), Austria 27.5%
+// (0–55). Every entry is status: ASSUMPTION; ranges are applied at their
+// midpoint; seek-personal-advice language is mandatory. EUR properties stay
+// gross-side-only under the no-FX rule. D9 secondary-market items were removed
+// from this wave (locked) — nothing here touches them. Any dataset drift
+// (missing ANR, missing valuation, unmapped listing, unexpected currency)
+// throws loudly — V1 never guesses.
 //
 // Locked V1 facts re-stated for auditability:
 // - Grand 2 BDM Ocean Pool Villa current estimated value = $8,000,000 (single number).
@@ -41,7 +50,7 @@ const OWNER_TAX_BY_LISTING_ID: Readonly<Record<string, FinancialModelV1OwnerTax>
     basis: "PRE_TAX_PROFIT",
     status: "ASSUMPTION",
     jurisdiction: "Maldives",
-    note: "~10% non-resident withholding assumption applied to pre-tax profit. Product model assumption, not tax/legal advice.",
+    note: "~10% non-resident withholding assumption applied to pre-tax profit. Product model assumption, not tax/legal advice. Seek personal tax advice.",
   },
   // British Virgin Islands — 0% personal/corporate income-tax assumption.
   // Property tax is a separate layer and remains UNKNOWN (not modeled here).
@@ -51,7 +60,7 @@ const OWNER_TAX_BY_LISTING_ID: Readonly<Record<string, FinancialModelV1OwnerTax>
     basis: "PRE_TAX_PROFIT",
     status: "ASSUMPTION",
     jurisdiction: "British Virgin Islands",
-    note: "0% personal/corporate income-tax assumption. Property tax is separate and UNKNOWN. Product model assumption, not tax/legal advice.",
+    note: "0% personal/corporate income-tax assumption. Property tax is separate and UNKNOWN. Product model assumption, not tax/legal advice. Seek personal tax advice.",
   },
   "130393": {
     kind: "rate",
@@ -59,7 +68,7 @@ const OWNER_TAX_BY_LISTING_ID: Readonly<Record<string, FinancialModelV1OwnerTax>
     basis: "PRE_TAX_PROFIT",
     status: "ASSUMPTION",
     jurisdiction: "British Virgin Islands",
-    note: "0% personal/corporate income-tax assumption. Property tax is separate and UNKNOWN. Product model assumption, not tax/legal advice.",
+    note: "0% personal/corporate income-tax assumption. Property tax is separate and UNKNOWN. Product model assumption, not tax/legal advice. Seek personal tax advice.",
   },
   // Turks and Caicos — 0% rental-income-tax assumption.
   "125643": {
@@ -68,7 +77,7 @@ const OWNER_TAX_BY_LISTING_ID: Readonly<Record<string, FinancialModelV1OwnerTax>
     basis: "PRE_TAX_PROFIT",
     status: "ASSUMPTION",
     jurisdiction: "Turks and Caicos",
-    note: "0% rental-income-tax assumption. Product model assumption, not tax/legal advice.",
+    note: "0% rental-income-tax assumption. Product model assumption, not tax/legal advice. Seek personal tax advice.",
   },
   "122903": {
     kind: "rate",
@@ -76,7 +85,7 @@ const OWNER_TAX_BY_LISTING_ID: Readonly<Record<string, FinancialModelV1OwnerTax>
     basis: "PRE_TAX_PROFIT",
     status: "ASSUMPTION",
     jurisdiction: "Turks and Caicos",
-    note: "0% rental-income-tax assumption. Product model assumption, not tax/legal advice.",
+    note: "0% rental-income-tax assumption. Product model assumption, not tax/legal advice. Seek personal tax advice.",
   },
   "126870": {
     kind: "rate",
@@ -84,7 +93,7 @@ const OWNER_TAX_BY_LISTING_ID: Readonly<Record<string, FinancialModelV1OwnerTax>
     basis: "PRE_TAX_PROFIT",
     status: "ASSUMPTION",
     jurisdiction: "Turks and Caicos",
-    note: "0% rental-income-tax assumption. Product model assumption, not tax/legal advice.",
+    note: "0% rental-income-tax assumption. Product model assumption, not tax/legal advice. Seek personal tax advice.",
   },
   "130397": {
     kind: "rate",
@@ -92,7 +101,7 @@ const OWNER_TAX_BY_LISTING_ID: Readonly<Record<string, FinancialModelV1OwnerTax>
     basis: "PRE_TAX_PROFIT",
     status: "ASSUMPTION",
     jurisdiction: "Turks and Caicos",
-    note: "0% rental-income-tax assumption. Product model assumption, not tax/legal advice.",
+    note: "0% rental-income-tax assumption. Product model assumption, not tax/legal advice. Seek personal tax advice.",
   },
   "127483": {
     kind: "rate",
@@ -100,7 +109,7 @@ const OWNER_TAX_BY_LISTING_ID: Readonly<Record<string, FinancialModelV1OwnerTax>
     basis: "PRE_TAX_PROFIT",
     status: "ASSUMPTION",
     jurisdiction: "Turks and Caicos",
-    note: "0% rental-income-tax assumption. Product model assumption, not tax/legal advice.",
+    note: "0% rental-income-tax assumption. Product model assumption, not tax/legal advice. Seek personal tax advice.",
   },
   "122113": {
     kind: "rate",
@@ -108,35 +117,144 @@ const OWNER_TAX_BY_LISTING_ID: Readonly<Record<string, FinancialModelV1OwnerTax>
     basis: "PRE_TAX_PROFIT",
     status: "ASSUMPTION",
     jurisdiction: "Turks and Caicos",
-    note: "0% rental-income-tax assumption. Product model assumption, not tax/legal advice.",
+    note: "0% rental-income-tax assumption. Product model assumption, not tax/legal advice. Seek personal tax advice.",
   },
-  // Saint Barthélemy — 0% local-resident assumption exists, but non-resident
-  // treatment is UNKNOWN and residency cannot be assumed → UNKNOWN.
+  // Saint Barthélemy — D11 locked (2026-09-13): 0% local income-tax assumption
+  // (resident basis). Non-resident owners are taxed in their home country —
+  // home-country tax is NOT modeled here.
   "131293": {
-    kind: "unknown",
+    kind: "rate",
+    rate: 0,
+    basis: "PRE_TAX_PROFIT",
+    status: "ASSUMPTION",
     jurisdiction: "Saint Barthélemy",
-    reason:
-      "A 0% local-resident assumption exists, but non-resident treatment is UNKNOWN and owner residency cannot be assumed. Product model assumption pending, not tax/legal advice.",
+    note: "0% local income-tax assumption (resident basis); non-resident owners are taxed in their home country — home-country tax not modeled. Product model assumption, not tax/legal advice. Seek personal tax advice.",
   },
   "127825": {
-    kind: "unknown",
+    kind: "rate",
+    rate: 0,
+    basis: "PRE_TAX_PROFIT",
+    status: "ASSUMPTION",
     jurisdiction: "Saint Barthélemy",
-    reason:
-      "A 0% local-resident assumption exists, but non-resident treatment is UNKNOWN and owner residency cannot be assumed. Product model assumption pending, not tax/legal advice.",
+    note: "0% local income-tax assumption (resident basis); non-resident owners are taxed in their home country — home-country tax not modeled. Product model assumption, not tax/legal advice. Seek personal tax advice.",
   },
-  // USA / Nevada — 0% state income-tax assumption, but federal is UNKNOWN.
+  // USA / Nevada — D11 locked: 0% state income-tax assumption; federal tax
+  // still applies and is NOT modeled (parallel to the pre-D11 state-layer rule).
   "128529": {
-    kind: "unknown",
+    kind: "rate",
+    rate: 0,
+    basis: "PRE_TAX_PROFIT",
+    status: "ASSUMPTION",
     jurisdiction: "USA / Nevada",
-    reason:
-      "0% state income-tax assumption exists, but federal treatment is UNKNOWN. Product model assumption pending, not tax/legal advice.",
+    note: "0% state income-tax assumption (Nevada); federal tax still applies and is not modeled. Product model assumption, not tax/legal advice. Seek personal tax advice.",
   },
-  // USA / California — state and federal both UNKNOWN.
+  // USA / California — D11 locked: state top marginal up to 13.3% applied;
+  // federal is not separately modeled — combined effective is often higher.
   "129549": {
-    kind: "unknown",
+    kind: "rate",
+    rate: 0.133,
+    basis: "PRE_TAX_PROFIT",
+    status: "ASSUMPTION",
     jurisdiction: "USA / California",
-    reason:
-      "State and federal owner-side tax treatment are both UNKNOWN. Product model assumption pending, not tax/legal advice.",
+    note: "State top marginal rate up to 13.3% applied; federal tax still applies and is not separately modeled — combined effective is often higher. Product model assumption, not tax/legal advice. Seek personal tax advice.",
+  },
+  // ── D11 midpoint assumptions (ranges applied at midpoint, per locked rule) ──
+  // Italy — 21–26% band (cedolare secca regime). EUR currency: reachable only
+  // when pre-tax profit is computable (no-FX rule keeps these gross-side-only).
+  "108924": {
+    kind: "rate",
+    rate: 0.235,
+    basis: "PRE_TAX_PROFIT",
+    status: "ASSUMPTION",
+    jurisdiction: "Italy",
+    note: "21–26% band on net rental income (cedolare secca regime); midpoint applied. EUR rental currency — applies only when pre-tax profit is computable (no-FX rule). Product model assumption, not tax/legal advice. Seek personal tax advice.",
+  },
+  "109098": {
+    kind: "rate",
+    rate: 0.235,
+    basis: "PRE_TAX_PROFIT",
+    status: "ASSUMPTION",
+    jurisdiction: "Italy",
+    note: "21–26% band on net rental income (cedolare secca regime); midpoint applied. EUR rental currency — applies only when pre-tax profit is computable (no-FX rule). Product model assumption, not tax/legal advice. Seek personal tax advice.",
+  },
+  // France — 20–45%+ progressive band (after abatement).
+  "123861": {
+    kind: "rate",
+    rate: 0.325,
+    basis: "PRE_TAX_PROFIT",
+    status: "ASSUMPTION",
+    jurisdiction: "France",
+    note: "20–45%+ progressive band (after abatement); midpoint applied. EUR rental currency — applies only when pre-tax profit is computable (no-FX rule). Product model assumption, not tax/legal advice. Seek personal tax advice.",
+  },
+  "123919": {
+    kind: "rate",
+    rate: 0.325,
+    basis: "PRE_TAX_PROFIT",
+    status: "ASSUMPTION",
+    jurisdiction: "France",
+    note: "20–45%+ progressive band (after abatement); midpoint applied. EUR rental currency — applies only when pre-tax profit is computable (no-FX rule). Product model assumption, not tax/legal advice. Seek personal tax advice.",
+  },
+  // Austria — 0–55% progressive band.
+  "130901": {
+    kind: "rate",
+    rate: 0.275,
+    basis: "PRE_TAX_PROFIT",
+    status: "ASSUMPTION",
+    jurisdiction: "Austria",
+    note: "0–55% progressive band; midpoint applied. EUR rental currency — applies only when pre-tax profit is computable (no-FX rule). Product model assumption, not tax/legal advice. Seek personal tax advice.",
+  },
+  // Dominican Republic — 15–27% band; CONOTUR exemption may reduce to 0%.
+  "122422": {
+    kind: "rate",
+    rate: 0.21,
+    basis: "PRE_TAX_PROFIT",
+    status: "ASSUMPTION",
+    jurisdiction: "Dominican Republic",
+    note: "15–27% band on net rental income; midpoint applied. CONOTUR exemption may reduce the effective rate to 0%. Product model assumption, not tax/legal advice. Seek personal tax advice.",
+  },
+  // Jamaica — ~25% non-resident assumption.
+  "106441": {
+    kind: "rate",
+    rate: 0.25,
+    basis: "PRE_TAX_PROFIT",
+    status: "ASSUMPTION",
+    jurisdiction: "Jamaica",
+    note: "~25% non-resident assumption on net rental income. Product model assumption, not tax/legal advice. Seek personal tax advice.",
+  },
+  // Mexico — 20–35% band (ISR + IVA effects).
+  "123320": {
+    kind: "rate",
+    rate: 0.275,
+    basis: "PRE_TAX_PROFIT",
+    status: "ASSUMPTION",
+    jurisdiction: "Mexico",
+    note: "20–35% band on net rental income (ISR + IVA effects); midpoint applied. Product model assumption, not tax/legal advice. Seek personal tax advice.",
+  },
+  "129548": {
+    kind: "rate",
+    rate: 0.275,
+    basis: "PRE_TAX_PROFIT",
+    status: "ASSUMPTION",
+    jurisdiction: "Mexico",
+    note: "20–35% band on net rental income (ISR + IVA effects); midpoint applied. Product model assumption, not tax/legal advice. Seek personal tax advice.",
+  },
+  // Thailand — 0–35% progressive band (effective usually higher).
+  "108856": {
+    kind: "rate",
+    rate: 0.175,
+    basis: "PRE_TAX_PROFIT",
+    status: "ASSUMPTION",
+    jurisdiction: "Thailand",
+    note: "0–35% progressive band; midpoint applied (effective is usually higher). Product model assumption, not tax/legal advice. Seek personal tax advice.",
+  },
+  // Sri Lanka — 10–14% band.
+  "108860": {
+    kind: "rate",
+    rate: 0.12,
+    basis: "PRE_TAX_PROFIT",
+    status: "ASSUMPTION",
+    jurisdiction: "Sri Lanka",
+    note: "10–14% band on net rental income; midpoint applied. Product model assumption, not tax/legal advice. Seek personal tax advice.",
   },
 };
 

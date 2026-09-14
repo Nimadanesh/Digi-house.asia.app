@@ -27,7 +27,8 @@ async function expectNoOverflow(page: Page) {
 async function openCustomSell(page: Page) {
   await page.goto("/property/re-108924");
   await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
-  await page.getByTestId("tab-ownership").click();
+  // Revision contract: the owner position card (Lock/Sell) lives on the Earn tab.
+  await page.getByTestId("tab-earn").click();
   await expect(page.getByTestId("position-card")).toBeVisible({ timeout: 10_000 });
   await page.getByTestId("position-sell").click();
   await expect(page.getByTestId("sell-sheet")).toBeVisible({ timeout: 10_000 });
@@ -149,7 +150,7 @@ test.describe("Sell flow — wallet gate (RTL)", () => {
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
     expect(await page.evaluate(() => document.documentElement.dir)).toBe("rtl");
 
-    await page.getByTestId("tab-ownership").click();
+    await page.getByTestId("tab-earn").click();
     await expect(page.getByTestId("position-card")).toBeVisible({ timeout: 10_000 });
     await page.getByTestId("position-sell").click();
     const sheet = page.getByTestId("sell-sheet");

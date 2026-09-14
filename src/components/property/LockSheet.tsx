@@ -3,7 +3,7 @@
 // principal/monthly-payout preview, confirm, and a completion state (no silent close).
 // New locks are MONTHLY-only (Final PO Decision 4): the weekly economic option is
 // retired. Stored historical weekly records are preserved and labeled legacy where
-// shown (YieldLockSection); they are never created here. Yield math stays in
+// shown (PositionCard / OwnershipBanner); they are never created here. Yield math stays in
 // lib/yield-math (installmentUsd); creation goes through useCreateLock.
 import { useState } from "react";
 import { useTranslations } from "next-intl";

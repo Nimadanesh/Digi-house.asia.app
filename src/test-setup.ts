@@ -65,3 +65,20 @@ vi.mock("@telegram-apps/sdk-react", async (importOriginal) => {
     useSignal: () => undefined,
   };
 });
+
+// jsdom lacks matchMedia — components guard it, but provide a sane default.
+if (typeof window !== "undefined" && typeof window.matchMedia !== "function") {
+  Object.defineProperty(window, "matchMedia", {
+    writable: true,
+    value: (query: string) => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addListener: () => {},
+      removeListener: () => {},
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      dispatchEvent: () => false,
+    }),
+  });
+}
