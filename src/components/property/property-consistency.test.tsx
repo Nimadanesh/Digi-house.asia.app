@@ -92,11 +92,6 @@ const bookForBayside: OrderBookState = {
   lastTradeUsd: 25_100,
 };
 
-function metricValue(label: string): string {
-  const el = screen.getByText(label);
-  return el.nextElementSibling?.textContent ?? "";
-}
-
 function renderPage(listing: Listing, orderBook?: OrderBookState) {
   return render(
     <PropertyDetail
@@ -108,16 +103,16 @@ function renderPage(listing: Listing, orderBook?: OrderBookState) {
   );
 }
 
-/** Estate-tab price surfaces (hero + metrics KPI) must show exactly this value. */
-function expectPriceSurfacesShow(priceCents: number, priceLabel = "Share price") {
+/** Estate-tab price surfaces: the hero is the ONLY price cell (structure §3 —
+ *  the 4-stat grid carries income/ANR/growth, never a price). The label
+ *  vocabulary (Share/Ask/Last price) is pinned by the PropertyHero suite. */
+function expectPriceSurfacesShow(priceCents: number) {
   const price = usd(priceCents);
   fireEvent.click(screen.getByTestId("tab-estate"));
-  // Single ownership-first KPI label carries the source-of-truth price.
-  // Slice 4: the label follows the basis (Ask price / Last price on secondary).
-  expect(metricValue(priceLabel)).toBe(price);
-  // PROMPT 05: the Income tab carries the V1 conviction story (no calculator).
+  expect(screen.getByTestId("hero-price")).toHaveTextContent(price);
+  expect(screen.queryByTestId("metrics-price")).not.toBeInTheDocument();
   fireEvent.click(screen.getByTestId("tab-income"));
-  expect(screen.getByTestId("income-v1-story")).toBeInTheDocument();
+  expect(screen.getByTestId("panel-income")).toBeInTheDocument();
   expect(screen.queryByTestId("income-calculator")).not.toBeInTheDocument();
 }
 
@@ -165,9 +160,10 @@ describe("Property page data consistency — one price everywhere", () => {
     renderPage(primary);
     expect(screen.getByTestId("hero-price")).toHaveTextContent(usd(primary.sharePriceUsd));
     expect(screen.getByTestId("hero-cta")).toHaveTextContent(`Buy · ${usd(primary.sharePriceUsd)}`);
-    // KPI carries the same single value.
+    // Estate Page Structure §3: the 4-stat section carries income/ANR/growth —
+    // the price cell lives only on the hero.
     fireEvent.click(screen.getByTestId("tab-estate"));
-    expect(metricValue("Share price")).toBe(usd(primary.sharePriceUsd));
+    expect(screen.queryByTestId("metrics-price")).not.toBeInTheDocument();
     // Strict spec rule: primary never renders a price-performance chart.
     expect(screen.queryByTestId("perf-svg")).not.toBeInTheDocument();
     // PROMPT 05: legacy funding panel + simulated funding charts retired from Estate.
@@ -182,7 +178,7 @@ describe("Property page data consistency — one price everywhere", () => {
     expect(screen.getByTestId("hero-price")).toHaveTextContent(usd(ask));
     // Layer-1 redesign: the secondary CTA is priced ("Buy resale · $ask").
     expect(screen.getByTestId("hero-cta")).toHaveTextContent(`Buy resale · ${usd(ask)}`);
-    expectPriceSurfacesShow(ask, "Ask price");
+    expectPriceSurfacesShow(ask);
     await expectChartEndShows(ask);
     // Resale summary (still expanded on the Estate tab) shows the source-of-truth value.
     expect(screen.getByTestId("best-ask").textContent).toBe(usd(ask));
@@ -192,7 +188,7 @@ describe("Property page data consistency — one price everywhere", () => {
     renderPage(secondaryNoBook);
     expect(screen.getByTestId("hero-price")).toHaveTextContent(usd(25_100));
     expect(screen.getByTestId("hero-cta")).toHaveTextContent("Buy resale · $251.00");
-    expectPriceSurfacesShow(25_100, "Last price");
+    expectPriceSurfacesShow(25_100);
     await expectChartEndShows(25_100);
   });
 

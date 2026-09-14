@@ -42,16 +42,16 @@ test.describe("Buy flow — primary entry + wallet gate (LTR)", () => {
     await expect(page.getByTestId("buy-qty-step")).toHaveCount(0);
   });
 
-  // (IncomeCalculator retired by the V1 rebuild — retargeted to the live
-  // Ownership V1 buy entry; see PRODUCT-DECISION-LOCK.md §6.)
-  test("ownership V1 Buy CTA opens the same sheet (entry diversity)", async ({ page }) => {
+  // (IncomeCalculator retired by the V1 rebuild — retargeted to the Earn-tab
+  // position CTA, revision contract 2026-09-13.)
+  test("ownership preview Buy CTA opens the same sheet (entry diversity)", async ({ page }) => {
     await skipOnboarding(page);
     await page.goto("/property/re-128862");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
 
-    await page.getByTestId("tab-ownership").click();
-    await expect(page.getByTestId("ownership-v1-buy")).toBeVisible({ timeout: 10_000 });
-    await page.getByTestId("ownership-v1-buy").click();
+    await page.getByTestId("tab-earn").click();
+    await expect(page.getByTestId("earn-buy")).toBeVisible({ timeout: 10_000 });
+    await page.getByTestId("earn-buy").click();
     await expect(page.getByTestId("buy-qty-step")).toBeVisible({ timeout: 10_000 });
     await expectNoOverflow(page);
   });

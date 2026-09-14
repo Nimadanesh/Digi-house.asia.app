@@ -1,0 +1,174 @@
+// File responsibility: D1 locked operator layer (Estate Page Structure §8, PO
+// decision 2026-09-13) — Rental Escapes company facts + the 12 locked Villa
+// Specialists mirrored verbatim from d1-rental-escapes-specialists.json
+// (photos localized to /public on 2026-09-13; zero CDN URLs remain), with the
+// deterministic specialist↔villa assignment resolved from the locked
+// "villas A-B" strings against the frozen ESTATE-24-DATA id join.
+// ADDITIVE data module only: no UI wiring, no engine involvement.
+import type {
+  EstateOperatorAssignment,
+  EstateOperatorCompany,
+  EstateVillaSpecialist,
+} from "@/types/estate-page-data";
+import { getEstate24ByRuntimeId } from "./estate-24-data";
+
+/** Locked D1 company facts (CONFIRMED — Rental Escapes is the operator). */
+export const RENTAL_ESCAPES_OPERATOR: EstateOperatorCompany = {
+  name: "Rental Escapes",
+  kind: "Full-service luxury villa company",
+  headquarters: "416 Boul. De Maisonneuve O., Montreal, QC H3A 1L2, Canada",
+  phone: "1-800-208-5097",
+  email: "info@rentalescapes.com",
+  portfolioClaim: "5,000+ curated villas across 170 destinations",
+  leadership: [
+    { name: "Brian Schwimmer", role: "CEO & Co-founder" },
+    { name: "Daniel Bakerman", role: "COO & Co-founder" },
+  ],
+  summaryLine:
+    "Operated by Rental Escapes — full-service luxury villa company (Montreal, portfolio 5,000+ villas). Your dedicated Villa Specialist + 24/7 concierge (chefs, transfers, excursions).",
+  source: "https://www.rentalescapes.com/about",
+};
+
+/** The 12 locked specialists, verbatim from the source-of-truth JSON. */
+export const RENTAL_ESCAPES_SPECIALISTS: readonly EstateVillaSpecialist[] = [
+  {
+    id: "D1-01",
+    fullName: "Amanda Singer",
+    title: "Senior Villa Specialist",
+    photoUrl: "/operators/specialists/D1-01-amanda-singer.jpg",
+    bio: "Amanda has spent the last ten years working and living in the Middle East, Europe and Asia, where she developed and managed sales and customer care centres for a variety of companies. Her travels afforded her the opportunity to live in fabulous properties around the world and ignited her passion for travelling. Amanda is always looking for the next occasion to experience a new country and she particularly enjoys helping guests who want to leap out of their comfort zone and plan their first stay in a new destination.",
+    assignTo: "villas 1-2",
+  },
+  {
+    id: "D1-02",
+    fullName: "Keith Diebel",
+    title: "Senior Villa Specialist",
+    photoUrl: "/operators/specialists/D1-02-keith-diebel.jpg",
+    bio: "Keith has worked in the Hospitality and Tourism industry since 2009 and has been an integral part of the Rental Escapes team since 2017. He has visited the majority of the destinations in the Rental Escapes' portfolio and stayed in a wide variety of our luxury villas. With his personal experience, he is able to provide the firsthand knowledge and expertise that his discerning clients rely on him for. Keith knows that these unique and luxurious villa rental experiences, shared with friends and family, create special life-long memories. He takes great pride in finding the villa and destination that perfectly matches guests' needs. When Keith isn't traveling, he indulges in his other passions: tennis, hockey, music, and spending quality time with his wife and two dogs.",
+    assignTo: "villas 3-4",
+  },
+  {
+    id: "D1-03",
+    fullName: "Kristy Taylor",
+    title: "Senior Villa Specialist",
+    photoUrl: "/operators/specialists/D1-03-kristy-taylor.jpg",
+    bio: "Kristy's first passion growing up was dance, but travel was a very close second. Her love for travel began at a very young age when her family went on road trips to cities close to home in Montreal. As she grew up, and began visiting more distant destinations, her passion for travel was strengthened. Her favorite trips are those that blend learning about the history and culture of a region, along with fine dining, exploring local adventures and museums. Kristy started working in the luxury villa rental industry in 2013, and has loved every minute of it. She has had the opportunity to tour and stay in a variety of properties in the Caribbean, Costa Rica, and California. Her passion for meeting new people, listening to and understanding their needs, and her wealth of industry knowledge, allow her to create memorable experiences for her guests. Outside of work, Kristy loves getting to know new people, going for long walks with her dog, and taking in as many concerts as she can!",
+    assignTo: "villas 5-6",
+  },
+  {
+    id: "D1-04",
+    fullName: "Levi Hoffman",
+    title: "Senior Villa Specialist",
+    photoUrl: "/operators/specialists/D1-04-levi-hoffman.jpg",
+    bio: "Levi's adventurous upbringing grew his love of travel. He was born in Brooklyn, New York, where he spent his childhood years. Later on as a teenager, he moved to Los Angeles, California. As a young adult, he spent time in Israel and then he eventually landed in Montreal, Canada. Levi has honed this passion for travel to a very successful career in the villa industry starting in 2004 when renting luxury villas was a fresh concept for most! Levi has consistently ranked in the top-tier among his peers, receiving many awards and accolades over the years. He has also personally visited and experienced many great villas in most Caribbean islands, Mexico, and sought-after areas in the US (particularly Hawaii). At Rental Escapes, Levi is able to apply nearly 20 years of knowledge to guide guests to the perfect luxury vacations of their dreams. From his extensive first-hand experience and deep long term relationships, he fully appreciates the high-exacting standards, service and expectations our guests demand for their stays at our luxury high end villas.",
+    assignTo: "villas 7-8",
+  },
+  {
+    id: "D1-05",
+    fullName: "Randee Zeitz",
+    title: "Senior Villa Specialist",
+    photoUrl: "/operators/specialists/D1-05-randee-zeitz.jpg",
+    bio: "Randee studied Law at Montreal's McGill University before beginning a varied and successful career in the corporate world. She worked as a talent recruiter specializing in the fashion industry and worked for more than 10 years in the Toy & Novelty industry in various management positions. Randee travelled a lot growing up, visiting many Caribbean destinations like Cayman Islands, St. Lucia, St. Barts, St. Martin, St. Kitts, St. Thomas, Puerto Rico, and Aruba; but she truly fell in love with travel when she was lucky enough to travel through Europe before beginning her Law degree. She spent time in numerous cities in the UK, France, Spain, Italy and Greece. In fact, it was in Corfu that Randee almost chose not to return home for Law School at all, but ultimately did. Since making a major career pivot and choosing to join the team at Rental Escapes, Randee has never looked back. She is passionate about helping our guests plan their perfect escapes and these days, when asked what she does for a living, she tells people she makes dreams come true.",
+    assignTo: "villas 9-10",
+  },
+  {
+    id: "D1-06",
+    fullName: "Tania Lee",
+    title: "Senior Villa Specialist",
+    photoUrl: "/operators/specialists/D1-06-tania-lee.jpg",
+    bio: "Before choosing to pursue her career in travel, Tania studied accounting in university and worked as an accountant for 10 years. She held positions in a large accounting and consultancy firm, and Cirque du Soleil before joining the Rental Escapes team. Tania has travelled to more than 30 countries and destinations all over the world. She counts India, Morocco, Turkey, Colombia, and South East Asia among her favorites, but her absolute favorites are Tulum, Mexico and New York City where she lived for 2 years. These days though, Tania prefers to enjoy the sun-and-sand destinations of the Caribbean over some of the more adventurous places she's visited in the past. Tania is also a huge foodie, particularly when it comes to pizza, and can probably name the best place to grab a slice anywhere her guests are going. She also really enjoys indoor spinning and drone photography, particularly in the sea (despite being a really bad swimmer).",
+    assignTo: "villas 11-12",
+  },
+  {
+    id: "D1-07",
+    fullName: "Deane Saunders",
+    title: "Senior Villa Specialist",
+    photoUrl: "/operators/specialists/D1-07-deane-saunders.jpg",
+    bio: "Deane was born in London, England and developed a passion for travel at an early age after his first trip to Barbados. When he was 17 years old, he relocated to Spain where he began a successful ten year career in International Real Estate. His experience selling luxury properties helped him develop his expert instinct for customer service. When working with clients, Deane always strives to go above and beyond to exceed their expectations. These days, there's not much Deane enjoys more than meeting new people and immersing himself in new places and other cultures. Whether it's city life in Paris or small villages in Portugal, Deane loves exploring new locations and of course trying the local cuisine. His first-hand knowledge of overseas destinations allows Deane to plan exotic, luxurious vacation experiences that his clients never forget.",
+    assignTo: "villas 13-14",
+  },
+  {
+    id: "D1-08",
+    fullName: "Steph Paperman",
+    title: "Senior Villa Specialist",
+    photoUrl: "/operators/specialists/D1-08-steph-paperman.jpg",
+    bio: "Steph has always had the travel bug. Growing up, she was lucky enough to travel pretty frequently, visiting some of the most beautiful destinations in the Caribbean, Mexico, Asia, and South America. In her university years, she explored Europe with friends and travelled to countless destinations across the United States. These experiences left her with a real appreciation for experiencing other cultures whether through visiting museums or sampling local restaurants! After graduating from business school with a marketing major, Steph spent more than a decade working in the fashion industry. Her position afforded her the opportunity to travel quite often and was always fascinated by the impact different cultures have on fashion. Eventually, Steph realized her passion wasn't for the clothes but for the places that inspired them. As a Villa Specialist for Rental Escapes, Steph gets to live her passion every day, whether it's by visiting beautiful homes in destinations around the world herself, or experiencing the excitement vicariously through her customers!",
+    assignTo: "villas 15-16",
+  },
+  {
+    id: "D1-09",
+    fullName: "Alex Steinberg",
+    title: "Villa Specialist",
+    photoUrl: "/operators/specialists/D1-09-alex-steinberg.jpg",
+    bio: "Alex has always been a traveller. Her best memories are of the many trips and vacations she would take all over the Caribbean, Central America and Hawaii with her family. While completing her university degree in Communications, she was lucky enough to participate in an exchange program that allowed her to live in the United Kingdom for 4 months and explore country and surrounding regions, visiting a different country or city in Europe almost every weekend. After several years working in Marketing for agencies and businesses, Alex began working in sales in various industries before joining the Rental Escapes team, where she can apply her skills to a product she loves - travel! When Alex isn't working, she loves spending time with her family and friends enjoying a good meal and a glass of fine wine.",
+    assignTo: "villas 17-18",
+  },
+  {
+    id: "D1-10",
+    fullName: "Ali Ellis",
+    title: "Villa Specialist",
+    photoUrl: "/operators/specialists/D1-10-ali-ellis.jpg",
+    bio: "Ali was born and raised in Indiana, where she attended Indiana University and graduated with a bachelor's degree in Tourism, Hospitality and Event Management. Her passion for travel led her to continue her studies in Australia where she spent several months studying and exploring the region. She had the opportunity to travel to New Zealand and Indonesia and has plans to continue exploring the world. After completing her studies Ali worked in customer service and as an event planner, managing and organizing events ranging in size from a handful to thousands of attendees. As a Villa Specialist, Ali applies her love of travel and aptitude for organization to carefully curate experiences for her guests.",
+    assignTo: "villas 19-20",
+  },
+  {
+    id: "D1-11",
+    fullName: "Andrea Ducharme",
+    title: "Villa Specialist",
+    photoUrl: "/operators/specialists/D1-11-andrea-ducharme.jpg",
+    bio: "Andrea brings over 10 years of expertise in the luxury villa rental industry, specializing in transforming dream vacations into unforgettable experiences. With a strong background in high-end hospitality and hands-on experience as an experience host, she spent part of her career in Mexico's Riviera Maya, managing luxury homes while enjoying the vibrant local culture — a job she embraced wholeheartedly. Originally from Montreal, Andrea has always had a passion for travel, hospitality, and uncovering those unique, hidden gems that elevate a trip. At Rental Escapes, Andrea is dedicated to creating meaningful connections through exceptional service. She thrives on matching guests with the perfect villa, ensuring every detail is meticulously curated to exceed expectations. Outside of her work in luxury travel, Andrea enjoys exploring Montreal's restaurant scene, volunteering in peer support, and spending time with her Italian Greyhound, Lenny — whom she fondly refers to as the true VIP.",
+    assignTo: "villas 21-22",
+  },
+  {
+    id: "D1-12",
+    fullName: "Ann Brace",
+    title: "Villa Specialist",
+    photoUrl: "/operators/specialists/D1-12-ann-brace.jpg",
+    bio: "Ann moved to Montreal from Newfoundland to trade fog and fish for sunshine and poutine. She spent 12 years teaching high school and Special Education before joining the team at Rental Escapes. She even had the amazing opportunity to teach kindergarten in South Korea. Ann has travelled to more than 35 countries and has cultivated some amazing experiences, from hiking Machu Picchu, weaving through the exhilarating traffic of Bangkok in a tuk tuk, snorkeling in the crystal clear waters of Isla Mujeres, to paragliding with stunning views of the Swiss Alps. She's always up for an adventure! Besides travelling and working, Ann is a very social person and loves to host friends and family for dinners. She also enjoys hiking, cycling and boxing. She is a huge dog lover and is really excited about having recently become an aunt for the first time!",
+    assignTo: "villas 23-24",
+  },
+];
+
+
+/** Parse the locked "villas A-B" assignment string into estate24 ids. */
+function parseAssignTo(assignTo: string): readonly number[] {
+  const parts = assignTo.match(/^villas (\d+)-(\d+)$/);
+  if (!parts) {
+    throw new Error(`[operator-24] unparsable locked assignment "${assignTo}".`);
+  }
+  const from = Number(parts[1]);
+  const to = Number(parts[2]);
+  const ids: number[] = [];
+  for (let id = from; id <= to; id += 1) ids.push(id);
+  return ids;
+}
+
+/** Estate24 id (1–24) → its locked specialist. Built once, throws on gaps/overlap. */
+const SPECIALIST_BY_ESTATE_ID: ReadonlyMap<number, EstateVillaSpecialist> = (() => {
+  const map = new Map<number, EstateVillaSpecialist>();
+  for (const specialist of RENTAL_ESCAPES_SPECIALISTS) {
+    for (const estateId of parseAssignTo(specialist.assignTo)) {
+      if (map.has(estateId)) {
+        throw new Error(`[operator-24] villa ${estateId} assigned twice (locked 1:2 rule broken).`);
+      }
+      map.set(estateId, specialist);
+    }
+  }
+  return map;
+})();
+
+/** Operator assignment for one villa, by Estate24 record id (1–24). */
+export function getOperatorAssignmentByEstate24Id(
+  estateId: number,
+): EstateOperatorAssignment | null {
+  const specialist = SPECIALIST_BY_ESTATE_ID.get(estateId);
+  return specialist ? { company: RENTAL_ESCAPES_OPERATOR, specialist } : null;
+}
+
+/** Operator assignment for one villa, by runtime propertyId (re-<listingId>). */
+export function getOperatorAssignmentByPropertyId(
+  propertyId: string,
+): EstateOperatorAssignment | null {
+  const record = getEstate24ByRuntimeId(propertyId);
+  return record ? getOperatorAssignmentByEstate24Id(record.id) : null;
+}

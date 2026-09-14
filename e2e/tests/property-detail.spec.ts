@@ -28,7 +28,7 @@ test.describe("Estate Detail — Phase 9 4-tab model", () => {
     const tabs = page.getByTestId("property-tabs");
     await expect(tabs).toBeVisible();
     await expect(page.getByTestId("tab-estate")).toHaveAttribute("aria-selected", "true");
-    for (const tab of ["estate", "income", "ownership", "details"]) {
+    for (const tab of ["estate", "income", "ownership", "earn", "details"]) {
       await expect(page.getByTestId(`tab-${tab}`)).toBeVisible();
     }
     // Dissolved tabs must not exist.
@@ -36,21 +36,24 @@ test.describe("Estate Detail — Phase 9 4-tab model", () => {
       await expect(page.getByTestId(`tab-${tab}`)).toHaveCount(0);
     }
 
-    // Estate tab: V1 investment opportunity + rental-economics narrative with
-    // honest unavailable steps. (FundingPanel retired by the V1 rebuild — the
-    // canonical investment facts live in estate-investment; see
-    // PRODUCT-DECISION-LOCK.md §6. Final PO Decisions 1–2: 80,000 shares @ $100.)
-    await expect(page.getByTestId("estate-investment")).toBeVisible();
-    await expect(page.getByTestId("investment-total-shares")).toContainText("80,000");
-    await expect(page.getByTestId("investment-primary-price")).toContainText("$100.00");
-    await expect(page.getByTestId("rental-story-costs")).toContainText("Not yet reported");
-    await expect(page.getByTestId("rental-story-net")).toContainText("Not yet reported");
+    // Estate tab (structure §4): canonical desire sections — why/specs/
+    // amenities/location; the V1 investment facts moved to the Ownership tab
+    // (§6.1). Legacy FundingPanel stays retired (PRODUCT-DECISION-LOCK §6).
+    await expect(page.getByTestId("estate-why")).toBeVisible();
+    await expect(page.getByTestId("estate-specs")).toBeVisible();
+    await expect(page.getByTestId("estate-amenities")).toBeVisible();
+    await expect(page.getByTestId("estate-location")).toBeVisible();
+    await page.getByTestId("tab-ownership").click();
+    await expect(page.getByTestId("ownership-valuation-shares")).toContainText("80,000");
+    await expect(page.getByTestId("ownership-valuation-reference")).toContainText("$100.00");
     // No resale market on a funding estate with shares remaining.
+    await page.getByTestId("tab-estate").click();
     await expect(page.getByTestId("resale-block")).toHaveCount(0);
-    // Trust moved to Details — verification pending, management not published.
+    // Trust block removed this wave (revision contract §15: pending-only trust
+    // items are not rendered); Details carries the truth sections instead.
     await page.getByTestId("tab-details").click();
-    await expect(page.getByTestId("trust-verification-pending")).toContainText("Verification pending");
-    await expect(page.getByTestId("trust-management")).toContainText("not yet published");
+    await expect(page.getByTestId("details-operator")).toBeVisible();
+    await expect(page.getByTestId("details-legal")).toBeVisible();
     await page.screenshot({
       path: "screenshots/runs/phase9-slice2/estate-detail-primary.png",
       fullPage: false,
@@ -107,7 +110,7 @@ test.describe("Estate Detail — Phase 9 4-tab model", () => {
     await expect(page.getByTestId("owner-stay-calendar-cta")).toBeDisabled();
     await expect(page.getByTestId("owner-stay-availability")).toContainText("Data pending");
     // Yield/lock management + holder analytics live under Ownership.
-    await expect(page.getByTestId("yield-lock-section")).toBeVisible();
+    // Revision contract: the Yield section was removed from the Ownership tab.
     await page.screenshot({
       path: "screenshots/runs/phase9-slice2/estate-detail-ownership-tab.png",
       fullPage: false,

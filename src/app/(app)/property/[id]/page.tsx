@@ -13,7 +13,6 @@ import { useBuyShares, type BuyInput, UsdtUnavailableError } from "@/hooks/useBu
 import { useFees } from "@/hooks/useFees";
 import { previewBuyQuote } from "@/lib/buy-quote";
 import { usePortfolio } from "@/hooks/usePortfolio";
-import { usePropertyDocuments } from "@/hooks/usePropertyDocuments";
 import { useStay } from "@/hooks/useStay";
 import { useLocks, activeLocksForProperty } from "@/hooks/useLocks";
 import { useScrolledPast } from "@/hooks/useScrolledPast";
@@ -46,7 +45,6 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
   const orderBook = useOrderBook(id, { live: true });
   const stayQuery = useStay(id);
   const portfolio = usePortfolio();
-  const { documents, download: docDownload } = usePropertyDocuments(id);
   const locksQuery = useLocks();
   const { backButton, mainButton } = useTelegram();
   const ton = useTonConnect();
@@ -388,10 +386,6 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
           avgCostUsd={avgCostUsd}
           accruedUnpaidUsd={accruedUnpaidUsd}
           stay={stayQuery.data}
-          documents={documents}
-          onDownloadDoc={(docId) => docDownload.mutate(docId)}
-          downloadingDocId={docDownload.isPending ? String(docDownload.variables) : null}
-          documentsError={docDownload.error instanceof Error ? docDownload.error.message : null}
         />
       </div>
       {/* Sticky CTA reveals only once the hero CTA has scrolled out of view.

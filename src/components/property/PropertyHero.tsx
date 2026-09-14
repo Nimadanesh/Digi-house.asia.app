@@ -167,7 +167,7 @@ export function PropertyHero({
           DEC-013: an at-a-glance ownership badge rides beside the name when the
           user holds shares of THIS estate. */}
       <div className="flex items-start gap-2">
-        <h1 className="min-w-0 text-[1.0625rem] font-semibold leading-snug tracking-tight text-balance text-foreground">{displayName}</h1>
+        <h1 className="min-w-0 text-[1.0625rem] font-medium leading-snug tracking-tight text-balance text-foreground">{displayName}</h1>
         {ownedShares > 0 ? (
           <span
             className="mt-0.5 inline-flex shrink-0 items-center gap-1 rounded-full bg-success/12 px-2 py-0.5 text-xs font-semibold text-success"

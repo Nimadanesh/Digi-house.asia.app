@@ -1,1 +1,0 @@
-ALTER TABLE "users" ADD COLUMN "referred_by_user_id" text REFERENCES "users"("id");

@@ -1,0 +1,152 @@
+    Received string:      "چرا این ملک
+    
+    The Aerial
+    
+    All-inclusive private island destination with five residences focused on purpose luxury and wellness.
+    
+    Pool
+    Beachfront
+    Personal service by villa staff including world-class chefs, housekeeping, groundskeeping and wellness director
+    Air Conditioning
+    مشخصات کلیدی
+    نوع
+    Private Island Estate
+    مهمان
+    32
+    اتاق خواب
+    17
+    سرویس بهداشتی
+    17
+    اندازه
+    Main house ~2,787 m²; island ~43–44 ha
+    سال ساخت
+    Data pending
+    وضعیت اجاره
+    Data pending
+    اجاره تا
+    Data pending
+    امکانات
+    Air Conditioning
+    Pool
+    Wifi
+    Staff
+    Garden
+    Kayak
+    Infinity Pool
+    Dining Table
+    Outdoor Shower
+    Lounging Area
+    موقعیت مکانی
+    
+    Buck Island, British Virgin Islands (private island)
+    
+    جزیره / اقامتگاه
+    The Aerial, BVI
+    منطقه
+    BVI – off Tortola
+    ترانسفر
+    estateLocationTransferConfirm
+    
+    EIS (Beef Island/Tortola) + 10-min drive to Hodges Creek + <5-min boat; total ~15 min runway-to-room. Via STT + ferry 45–60min + taxi. Source: aerialbvi.com/getting-here.
+    
+    View & Reserve"
+
+      87 |     // panel legitimately contains EN dataset strings like amenity labels).
+      88 |     const body = await page.getByTestId("panel-estate").innerText();
+    > 89 |     expect(body).not.toMatch(
+         |                      ^
+      90 |       /\b(estateWhy|estateSpecs|estateAmenities|estateLocation|incomeOccupancy|scenarioModeled|scenarioNights|scenarioMean|costBasis|exitLiquidity|exitSell|exitWithdrawal|exitMarket|previewTitle|previewIntro|previewShares|previewValue|previewMonthly|riskDisclosures|operatorTitle|operatorPhone|operatorEmail|legalStructure|legalOwnership|legalJurisdiction|insuranceLabel|insuranceInsurer|insurancePolicy|valuationLabel|valuationDate|valuationMethod|valuationValuer|documentsPending|distributionTitle|distributionAccrual|distributionSchedule|historicalTitle|historicalNote|metricMonthly|metricAvgNightly|metricEstGrowth|transferStatus)[A-Z]\w*/,
+      91 |     );
+      92 |     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+        at C:\Users\parsme\Desktop\sideProjects\app.FL\app\e2e\tests\estate-rtl.spec.ts:89:22
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\estate-rtl-Prompt-05-RTL-f-4f2e0-RTL-no-overflow-no-raw-keys-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\estate-rtl-Prompt-05-RTL-f-4f2e0-RTL-no-overflow-no-raw-keys-chromium\error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(received).not.toMatch(expected)
+
+    Expected pattern: not /\b(estateWhy|estateSpecs|estateAmenities|estateLocation|incomeOccupancy|scenarioModeled|scenarioNights|scenarioMean|costBasis|exitLiquidity|exitSell|exitWithdrawal|exitMarket|previewTitle|previewIntro|previewShares|previewValue|previewMonthly|riskDisclosures|operatorTitle|operatorPhone|operatorEmail|legalStructure|legalOwnership|legalJurisdiction|insuranceLabel|insuranceInsurer|insurancePolicy|valuationLabel|valuationDate|valuationMethod|valuationValuer|documentsPending|distributionTitle|distributionAccrual|distributionSchedule|historicalTitle|historicalNote|metricMonthly|metricAvgNightly|metricEstGrowth|transferStatus)[A-Z]\w*/
+    Received string:      "چرا این ملک
+    
+    The Aerial
+    
+    All-inclusive private island destination with five residences focused on purpose luxury and wellness.
+    
+    Pool
+    Beachfront
+    Personal service by villa staff including world-class chefs, housekeeping, groundskeeping and wellness director
+    Air Conditioning
+    مشخصات کلیدی
+    نوع
+    Private Island Estate
+    مهمان
+    32
+    اتاق خواب
+    17
+    سرویس بهداشتی
+    17
+    اندازه
+    Main house ~2,787 m²; island ~43–44 ha
+    سال ساخت
+    Data pending
+    وضعیت اجاره
+    Data pending
+    اجاره تا
+    Data pending
+    امکانات
+    Air Conditioning
+    Pool
+    Wifi
+    Staff
+    Garden
+    Kayak
+    Infinity Pool
+    Dining Table
+    Outdoor Shower
+    Lounging Area
+    موقعیت مکانی
+    
+    Buck Island, British Virgin Islands (private island)
+    
+    جزیره / اقامتگاه
+    The Aerial, BVI
+    منطقه
+    BVI – off Tortola
+    ترانسفر
+    estateLocationTransferConfirm
+    
+    EIS (Beef Island/Tortola) + 10-min drive to Hodges Creek + <5-min boat; total ~15 min runway-to-room. Via STT + ferry 45–60min + taxi. Source: aerialbvi.com/getting-here.
+    
+    View & Reserve"
+
+      87 |     // panel legitimately contains EN dataset strings like amenity labels).
+      88 |     const body = await page.getByTestId("panel-estate").innerText();
+    > 89 |     expect(body).not.toMatch(
+         |                      ^
+      90 |       /\b(estateWhy|estateSpecs|estateAmenities|estateLocation|incomeOccupancy|scenarioModeled|scenarioNights|scenarioMean|costBasis|exitLiquidity|exitSell|exitWithdrawal|exitMarket|previewTitle|previewIntro|previewShares|previewValue|previewMonthly|riskDisclosures|operatorTitle|operatorPhone|operatorEmail|legalStructure|legalOwnership|legalJurisdiction|insuranceLabel|insuranceInsurer|insurancePolicy|valuationLabel|valuationDate|valuationMethod|valuationValuer|documentsPending|distributionTitle|distributionAccrual|distributionSchedule|historicalTitle|historicalNote|metricMonthly|metricAvgNightly|metricEstGrowth|transferStatus)[A-Z]\w*/,
+      91 |     );
+      92 |     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+        at C:\Users\parsme\Desktop\sideProjects\app.FL\app\e2e\tests\estate-rtl.spec.ts:89:22
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\estate-rtl-Prompt-05-RTL-f-4f2e0-RTL-no-overflow-no-raw-keys-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\estate-rtl-Prompt-05-RTL-f-4f2e0-RTL-no-overflow-no-raw-keys-chromium-retry1\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\estate-rtl-Prompt-05-RTL-f-4f2e0-RTL-no-overflow-no-raw-keys-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\estate-rtl-Prompt-05-RTL-f-4f2e0-RTL-no-overflow-no-raw-keys-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › e2e\tests\estate-rtl.spec.ts:74:7 › Prompt 05 RTL › fa: non-Grand desire sections legible RTL, no overflow, no raw keys 
+  2 passed (7.7s)

@@ -1,0 +1,69 @@
+
+> digihouse@0.1.0 check
+> npm run lint && npm run typecheck && npm run build
+
+
+> digihouse@0.1.0 lint
+> eslint
+
+
+C:\Users\parsme\Desktop\sideProjects\app.FL\app\apps\api\src\e2e\money-path-1.test.ts
+  22:7  warning  'DAY' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\parsme\Desktop\sideProjects\app.FL\app\apps\api\src\e2e\money-path-2.test.ts
+  12:8  warning  'MoneyPathHarness' is defined but never used  @typescript-eslint/no-unused-vars
+  16:7  warning  'DAY' is assigned a value but never used      @typescript-eslint/no-unused-vars
+
+C:\Users\parsme\Desktop\sideProjects\app.FL\app\scripts\phase8-bottom-space-review.mjs
+  64:13  warning  'bottomY' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\parsme\Desktop\sideProjects\app.FL\app\src\lib\mock\stay.ts
+  17:15  warning  '_propertyId' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\parsme\Desktop\sideProjects\app.FL\app\src\types\estate-scenario.ts
+  20:3  warning  'EstateScenario' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 6 problems (0 errors, 6 warnings)
+
+
+> digihouse@0.1.0 typecheck
+> tsc --noEmit
+
+
+> digihouse@0.1.0 build
+> next build
+
+▲ Next.js 16.2.1 (Turbopack)
+- Experiments (use with caution):
+  · optimizePackageImports
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 7.7s
+  Running TypeScript ...
+  Finished TypeScript in 7.4s ...
+  Collecting page data using 11 workers ...
+  Generating static pages using 11 workers (0/13) ...
+  Generating static pages using 11 workers (3/13) 
+  Generating static pages using 11 workers (6/13) 
+  Generating static pages using 11 workers (9/13) 
+✓ Generating static pages using 11 workers (13/13) in 739ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /earnings
+├ ○ /home
+├ ○ /marketplace
+├ ○ /onboarding
+├ ○ /portfolio
+├ ○ /profile-setup
+├ ƒ /property/[id]
+├ ○ /recovery-login
+├ ○ /settings
+└ ○ /transactions
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

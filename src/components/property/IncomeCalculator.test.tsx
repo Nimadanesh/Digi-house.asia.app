@@ -60,9 +60,9 @@ describe("IncomeCalculator — redesign Phase 2", () => {
 
   it("shows monthly + yearly projection from the single presentation layer (V1)", () => {
     renderCalc({ shares: 10 });
-    // Slice 2: Grand V1 $16.29/share/mo → 10 shares = $162.90/mo → $1,954.80/yr.
-    expect(screen.getByTestId("calc-monthly")).toHaveTextContent("$162.90");
-    expect(screen.getByTestId("calc-yearly")).toHaveTextContent("≈ $1,954.80 / year");
+    // Slice 2: Grand V1 $16.25/share/mo → 10 shares = $162.50/mo → $1,950.00/yr.
+    expect(screen.getByTestId("calc-monthly")).toHaveTextContent("$162.50");
+    expect(screen.getByTestId("calc-yearly")).toHaveTextContent("≈ $1,950.00 / year");
     expect(screen.getByText(/After platform fees · Locked shares start earning from day 1/)).toBeInTheDocument();
   });
 
@@ -71,7 +71,8 @@ describe("IncomeCalculator — redesign Phase 2", () => {
     const onSharesChange = vi.fn();
     render(
       <IncomeCalculator
-        listing={{ ...listing, id: "re-128529" }}
+      // D11 locked 2026-09-13: remaining V1-unknowns are the EUR villas.
+        listing={{ ...listing, id: "re-130901" }}
         shares={10}
         onSharesChange={onSharesChange}
         onBuy={onBuy}

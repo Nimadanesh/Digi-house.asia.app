@@ -4,11 +4,12 @@
 // (REDESIGN-SPEC Phase 6). Hidden entirely while ownership is unknown/zero.
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { Lock } from "lucide-react";
+import { Lock, TrendingDown } from "lucide-react";
 import type { Listing } from "@/types/property";
 import { haptics } from "@/lib/telegram/haptics";
 import { Block } from "@/components/common/Block";
 import { LockSheet } from "./LockSheet";
+import { SellSheet } from "./SellSheet";
 
 export function OwnershipBanner({
   listing,
@@ -24,6 +25,9 @@ export function OwnershipBanner({
 }) {
   const t = useTranslations("property");
   const [sheetOpen, setSheetOpen] = useState(false);
+  // Sell entry (protected flow) — relocated here when the Yield section was
+  // removed from the Ownership tab; mirrors the PositionCard button pair.
+  const [sellOpen, setSellOpen] = useState(false);
   const freeShares = Math.max(0, ownedShares - lockedShares);
 
   // State 1 (owns nothing) or still resolving → no banner; page stays buy-focused.
@@ -53,18 +57,32 @@ export function OwnershipBanner({
         </div>
         {!fullyLocked ? (
           <>
-            <button
-              type="button"
-              onClick={() => {
-                haptics.impact("light");
-                setSheetOpen(true);
-              }}
-              className="flex h-[48px] w-full items-center justify-center gap-2 rounded-[12px] bg-primary text-[0.9375rem] font-semibold text-primary-foreground transition-transform duration-[120ms] ease-out active:scale-[0.98]"
-              data-testid="banner-lock"
-            >
-              <Lock size={16} strokeWidth={1.75} />
-              {t("bannerLockCta")}
-            </button>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  haptics.impact("light");
+                  setSheetOpen(true);
+                }}
+                className="flex h-[48px] w-full items-center justify-center gap-2 rounded-[12px] bg-primary text-[0.9375rem] font-semibold text-primary-foreground transition-transform duration-[120ms] ease-out active:scale-[0.98]"
+                data-testid="banner-lock"
+              >
+                <Lock size={16} strokeWidth={1.75} />
+                {t("bannerLockCta")}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  haptics.impact("light");
+                  setSellOpen(true);
+                }}
+                className="flex h-[48px] w-full items-center justify-center gap-2 rounded-[12px] border border-border bg-transparent text-[0.9375rem] font-semibold text-foreground transition-transform duration-[120ms] ease-out active:scale-[0.98] disabled:opacity-40"
+                data-testid="banner-sell"
+              >
+                <TrendingDown size={16} strokeWidth={1.75} />
+                {t("positionSell")}
+              </button>
+            </div>
             <p className="text-xs leading-relaxed text-muted-foreground">
               {t("bannerLockNote")}
             </p>
@@ -80,6 +98,16 @@ export function OwnershipBanner({
           listing={listing}
           freeShares={freeShares}
           avgCostUsd={avgCostUsd ?? listing.sharePriceUsd}
+        />
+      ) : null}
+      {sellOpen ? (
+        <SellSheet
+          open
+          onClose={() => setSellOpen(false)}
+          listing={listing}
+          freeShares={freeShares}
+          avgCostUsd={avgCostUsd ?? listing.sharePriceUsd}
+          ownedShares={ownedShares}
         />
       ) : null}
     </>

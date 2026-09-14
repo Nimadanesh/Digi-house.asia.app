@@ -77,24 +77,17 @@ describe("DEC-013 — hero repeats nothing: no ask/last caption on the hero", ()
   });
 });
 
-describe("Slice 4 — metrics price label follows the price basis", () => {
-  it("secondary ask-basis reads Ask price", () => {
-    render(<PropertyMetricsGrid listing={secondary} currentPriceUsd={8160} v1={null} />);
-    expect(screen.getByText("Ask price")).toBeInTheDocument();
+describe("Estate Page Structure §3 — the fixed 4-stat section carries no price cell", () => {
+  it("the price cell moved to the hero (L0); the grid renders exactly the four stats", () => {
+    // Structure §3: Monthly Income · Proj./Year · Avg. Nightly Rate · Est.
+    // Growth — the price label/basis logic stays on the hero (covered above).
+    render(<PropertyMetricsGrid listing={secondary} v1={null} />);
+    expect(screen.queryByTestId("metrics-price")).not.toBeInTheDocument();
     expect(screen.queryByText("Share price")).not.toBeInTheDocument();
-  });
-
-  it("secondary last-trade basis reads Last price", () => {
-    const lastOnly: Listing = { ...secondary, bestAskUsd: undefined };
-    render(<PropertyMetricsGrid listing={lastOnly} currentPriceUsd={8000} v1={null} />);
-    expect(screen.getByText("Last price")).toBeInTheDocument();
-  });
-
-  it("primary reads Share price (DEC-013: the base note is gone — the price IS the base)", () => {
-    render(<PropertyMetricsGrid listing={primary} currentPriceUsd={10000} v1={null} />);
-    expect(screen.getByText("Share price")).toBeInTheDocument();
-    expect(screen.getByTestId("metrics-price")).toHaveTextContent("$100.00");
-    expect(screen.queryByTestId("metrics-primary-note")).not.toBeInTheDocument();
+    expect(screen.getByTestId("metrics-monthly")).toBeInTheDocument();
+    expect(screen.getByTestId("metrics-annual")).toBeInTheDocument();
+    expect(screen.getByTestId("metrics-anr")).toBeInTheDocument();
+    expect(screen.getByTestId("metrics-growth")).toBeInTheDocument();
   });
 });
 

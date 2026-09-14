@@ -91,11 +91,13 @@ export function FactRow({
   caption,
   muted = false,
   valueMuted = false,
+  wrapValue = false,
   captionTestId,
 }: {
   label: string;
   /** Rendered value — callers pass compact money so it never wraps. */
   value: string;
+  /** Long TEXT values (resort names, statuses) wrap instead of truncating. */
   valueTestId?: string;
   /** Provenance for the ⓘ + row-tap sheet. Absent → plain row (not tappable). */
   provenance?: Provenance | null;
@@ -107,6 +109,8 @@ export function FactRow({
   muted?: boolean;
   /** Pending values render quieter than hard numbers. */
   valueMuted?: boolean;
+  /** Long TEXT values (resort names, statuses) wrap instead of truncating. */
+  wrapValue?: boolean;
 }) {
   const t = useTranslations("common");
   const titleId = useId();
@@ -123,7 +127,9 @@ export function FactRow({
       </span>
       <span
         className={cn(
-          "shrink-0 whitespace-nowrap text-sm tnum font-semibold",
+          wrapValue
+            ? "shrink-0 text-right text-sm leading-snug text-foreground"
+            : "shrink-0 whitespace-nowrap text-sm tnum font-medium",
           valueMuted ? "text-muted-foreground" : "text-foreground",
         )}
         data-testid={valueTestId}
@@ -142,7 +148,7 @@ export function FactRow({
             haptics.selection();
             setOpen(true);
           }}
-          className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-2 py-1 text-start transition-transform duration-[120ms] ease-out active:scale-[0.99]"
+          className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-2 py-1.5 text-start transition-transform duration-[120ms] ease-out active:scale-[0.99]"
           data-testid="fact-row"
           data-provenance={provenance}
         >
@@ -150,7 +156,7 @@ export function FactRow({
         </button>
       ) : (
         <div
-          className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-2 py-1"
+          className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-2 py-1.5"
           data-testid="fact-row"
         >
           {inner}

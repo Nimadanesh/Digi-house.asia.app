@@ -454,8 +454,10 @@ describe("Property detail page — states + buy happy path", () => {
     });
     await renderPage(listing.id);
 
-    fireEvent.click(screen.getByTestId("tab-ownership"));
-    fireEvent.click(await screen.findByTestId("open-sell-sheet"));
+    // Revision contract: the Sell entry moved with the owner position to the
+    // Earn tab (primary owners use the banner Sell button).
+    fireEvent.click(screen.getByTestId("tab-earn"));
+    fireEvent.click(await screen.findByTestId("banner-sell"));
     const sheet = await screen.findByTestId("sell-sheet");
     fireEvent.click(within(sheet).getByRole("button", { name: /sell custom price/i }));
     expect(within(sheet).getByText("Available to sell")).toBeInTheDocument();
@@ -497,12 +499,14 @@ describe("Property detail page — states + buy happy path", () => {
     });
     await renderPage(resale.id);
 
-    // Price before (Slice 4: ask-basis label).
-    expect(metricPrice("Ask price")).toBe("$132.00");
+    // Price before — the hero is the single price surface (structure §3:
+    // the 4-stat grid carries income/ANR/growth, never a price cell).
+    expect(screen.getByTestId("hero-price")).toHaveTextContent("$132.00");
 
     // Owner places an absurd custom sell at $999/share (Yield section on Ownership tab)
-    fireEvent.click(screen.getByTestId("tab-ownership"));
-    fireEvent.click(await screen.findByTestId("open-sell-sheet"));
+    // Revision contract: secondary owners sell via the Earn-tab position card.
+    fireEvent.click(screen.getByTestId("tab-earn"));
+    fireEvent.click(await screen.findByTestId("position-sell"));
     fireEvent.click(await screen.findByLabelText("Sell Custom price"));
     const priceInput = await screen.findByTestId("sell-price-input");
     await act(async () => {
@@ -521,14 +525,8 @@ describe("Property detail page — states + buy happy path", () => {
 
     // The order was placed — but the page-wide price is UNCHANGED.
     // (The owner's hero CTA reads "Manage Ownership" — the price surface is the point.)
-    expect(metricPrice("Ask price")).toBe("$132.00");
     expect(screen.getByTestId("hero-price")).toHaveTextContent("$132.00");
     expect(screen.getByTestId("hero-cta")).toHaveTextContent("Manage Ownership");
-
-    function metricPrice(label: string): string {
-      const grid = screen.getByTestId("metrics-grid");
-      return (within(grid).getByText(label).nextElementSibling?.textContent) ?? "";
-    }
   });
 
   it("Phase 7 sticky: Sell opens the SellSheet when the user has free shares", async () => {
