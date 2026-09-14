@@ -6,7 +6,6 @@
 
 **Provenance rule:** `ESTIMATED` values are research estimates; `UNKNOWN` means not publicly available; observed rental rates must not be treated as annual revenue; conflicts must remain explicit.
 
-
 | # | Property | Location | Source URL | Rental Escapes Listing ID | Rental/night | Rate Type | Est. value (central; 80–120% range) | Occupancy | Size | Beds | Baths | Guests | Research Confidence |
 |---|---|---|---|---|---|---|---|---|---|---:|---:|---:|---|
 | 1 | Grand 2 BDM Ocean Pool Villa (JOALI Being) | Bodufushi, JOALI Being, Raa Atoll, Maldives | https://www.rentalescapes.com/rentals/luxury-villa-rentals-asia/maldives/bodufushi/joali-being/grand-2-bdm-ocean-pool-villa-128862 | 128862 | $67,655–$76,458 | RANGE | **ESTIMATED / FRACTIONALLUXE**<br>$12–15M; $9.6–18M | UNKNOWN | 382 m² total; 159 m² interior; 33 m² pool | 2 | 2 | 5 | MEDIUM |
@@ -62,5 +61,27 @@
 23. **Chateau Prestige:** harvest season and summer busier. 15th-century château, two heated pools, gardens, private helipad, French billiards, library, full staff.
 24. **Hawksbill:** Dec–Apr busier. Large beachfront estate, two pools, tennis, gym, private dock, full staff.
 
+## Important data-quality notes
 
+- Annual occupancy is **UNKNOWN** for essentially all 24 properties in this research set. Do not convert nightly rates into annual revenue without an explicit occupancy assumption.
+- Current private-sale/property values are generally **not publicly available**. The values above are research estimates based on comparable properties, historical sales/listings, scale, location, amenities and rental economics. They are not formal appraisals.
+- **La Dolce Vita:** the supplied research identifies a $32M current/identified sale listing; preserve its provenance and verify the underlying source before treating it as FACT/OBSERVED.
+- **Emerald Cay:** historical sale in 2012 was reported around $19.5–21.3M; earlier asking/listing levels were higher. Current value remains an estimate.
+- **The Aerial:** historical private-island purchase was reported around $25M before 2021; current value remains an estimate.
+- Rental rates can include service charges, taxes, transfers or other bundled items depending on listing/date. Do not treat every displayed rate as pure owner ADR without provenance.
+- The research text contains a land-size conflict for ANI Dominican Republic (~4.2 ha vs 1.7 ha). Preserve as **CONFLICTED** until verified.
 
+## Grand 2 BDM decision gate
+
+**Decision: do NOT force Grand 2 BDM into the canonical 24-property catalog at this stage.**
+
+Reason: the current repository crosswalk previously established that the canonical `portfolio-manifest.json` contains a fixed 24-property Marketplace set and that Grand 2 BDM is not currently one of those manifest identities. The legacy catalog entry `prop-marina-vista-4b` must not be assumed to be the same property. Its legacy valuation also conflicts materially with the supplied research/canonical economics.
+
+Therefore:
+- Grand 2 BDM remains in this research dataset as a **research candidate / explicit comparison record**.
+- Do not map it to a manifest property unless the crosswalk finds an exact or sufficiently evidenced identity match.
+- Do not overwrite the canonical Grand 2 BDM economics ($8M property value, $67k–$80k nightly range, 60–90% occupancy envelope) with this research estimate.
+- Do not resolve the legacy `prop-marina-vista-4b` conflict automatically.
+- If the crosswalk shows Grand 2 BDM has no canonical match, leave it outside the fixed 24 and record the reason explicitly.
+
+This file is the research input. The canonical catalog/economic registry remains a separate product-controlled source of truth.
