@@ -38,9 +38,9 @@ vi.mock("@/hooks/useTelegram", () => ({
 }));
 
 const listing: Listing = {
-  id: "prop-marina-vista-4b",
-  title: "Marina Vista Apt 4B",
-  location: "Dubai Marina, UAE",
+  id: "re-128862",
+  title: "Grand 2 BDM Ocean Pool Villa (JOALI Being)",
+  location: "Bodufushi, JOALI Being, Raa Atoll, Maldives",
   description: "Waterfront one-bedroom.",
   images: ["/images/properties/p1.png"],
   totalShares: 1000,
@@ -71,7 +71,7 @@ describe("Buy flow steps", () => {
     push.mockClear();
   });
 
-  it("qty step: stepper, quick buttons, live total + weekly", () => {
+  it("qty step: stepper, quick buttons, live total + monthly projection", () => {
     const onQty = vi.fn();
     render(
       <BuyQtyStep
@@ -88,8 +88,30 @@ describe("Buy flow steps", () => {
     expect(onQty).toHaveBeenCalledWith(25);
     fireEvent.click(screen.getByRole("button", { name: "Max" }));
     expect(onQty).toHaveBeenCalledWith(360);
-    expect(screen.getByText(/Est\. weekly yield/i)).toBeInTheDocument();
+    expect(screen.getByText(/Projected income \/ month/i)).toBeInTheDocument();
+    // Slice 2: Grand V1 $16.29/share/mo → 10 shares = $162.90/mo.
+    expect(screen.getByTestId("buy-est-monthly")).toHaveTextContent("$162.90");
     expect(screen.getByText(/Total/)).toBeInTheDocument();
+  });
+
+  it("qty step: V1-unknown villa shows pending WITH the reason (never a fixture figure)", () => {
+    const trajan: Listing = {
+      ...listing,
+      id: "re-128529",
+      sharesRemaining: 360,
+    };
+    render(
+      <BuyQtyStep
+        listing={trajan}
+        qty={10}
+        onQtyChange={() => {}}
+        walletConnected
+        currency="TON"
+        onCurrencyChange={() => {}}
+      />,
+    );
+    expect(screen.getByTestId("buy-est-monthly")).toHaveTextContent("Data pending");
+    expect(screen.getByTestId("buy-est-monthly")).toHaveTextContent(/tax/i);
   });
 
   it("qty step: disconnected prompts connect", () => {
@@ -169,11 +191,41 @@ describe("Buy flow steps", () => {
     expect(screen.getByTestId("usdt-unavailable-note")).toBeInTheDocument();
   });
 
+  it("qty step: lock-to-earn footnote names the earning requirement", () => {
+    render(
+      <BuyQtyStep
+        listing={listing}
+        qty={10}
+        onQtyChange={() => {}}
+        walletConnected
+        currency="TON"
+        onCurrencyChange={() => {}}
+      />,
+    );
+    expect(screen.getByTestId("buy-lock-note")).toHaveTextContent(
+      "Buy shares first, then lock them",
+    );
+  });
+
+  it("qty step: out-of-range quantity shows the invalid message", () => {
+    render(
+      <BuyQtyStep
+        listing={listing}
+        qty={999}
+        onQtyChange={() => {}}
+        walletConnected
+        currency="TON"
+        onCurrencyChange={() => {}}
+      />,
+    );
+    expect(screen.getByRole("alert")).toHaveTextContent("between 1 and 360");
+  });
+
   it("summary step: property, qty, total, fees", () => {
     useFees.mockReturnValue({ data: DEFAULT_FEE_TIERS, isLoading: false, isError: false });
     render(<BuySummaryStep listing={listing} qty={10} currency="TON" />);
     expect(screen.getByText("Order summary")).toBeInTheDocument();
-    expect(screen.getByText("Marina Vista Apt 4B")).toBeInTheDocument();
+    expect(screen.getByText("Grand 2 BDM Ocean Pool Villa (JOALI Being)")).toBeInTheDocument();
     expect(screen.getByText("10")).toBeInTheDocument();
     expect(screen.getByText("Fees")).toBeInTheDocument();
     expect(screen.getByTestId("buy-total")).toBeInTheDocument();
@@ -196,6 +248,63 @@ describe("Buy flow steps", () => {
     expect(screen.getByTestId("buy-total")).toHaveTextContent("$1,250.00 USDT");
   });
 
+  it("summary step: location, ownership, and assumptions disclosure", () => {
+    useFees.mockReturnValue({ data: DEFAULT_FEE_TIERS, isLoading: false, isError: false });
+    render(<BuySummaryStep listing={listing} qty={10} currency="TON" />);
+    expect(screen.getByText("Bodufushi, JOALI Being, Raa Atoll, Maldives")).toBeInTheDocument();
+    // 10 / 1000 shares = 1.0% (same pct() formatting as the qty step).
+    expect(screen.getByTestId("buy-ownership")).toHaveTextContent("10 shares · 1.0% of the estate");
+    // Slice 2: summary monthly matches the qty step (single presentation layer).
+    expect(screen.getByTestId("buy-summary-monthly")).toHaveTextContent("$162.90");
+    fireEvent.click(screen.getByTestId("buy-assumptions-toggle"));
+    expect(screen.getByTestId("buy-assumptions-content")).toHaveTextContent(
+      "Projection uses the estate's projected monthly income per share",
+    );
+    expect(screen.getByTestId("buy-assumptions-content")).toHaveTextContent(
+      "Buy shares first, then lock them",
+    );
+    expect(screen.getByTestId("buy-assumptions-content")).toHaveTextContent(
+      "Investment plans are not configured",
+    );
+  });
+
+  it("summary step: values follow the listing, never Grand-specific figures", () => {
+    useFees.mockReturnValue({ data: DEFAULT_FEE_TIERS, isLoading: false, isError: false });
+    const trajan: Listing = {
+      ...listing,
+      id: "re-128529",
+      title: "Trajan Villa",
+      location: "Las Vegas, USA",
+      sharePriceUsd: 9500,
+      monthlyYieldRate: 7.19,
+      totalShares: 1600,
+    };
+    render(<BuySummaryStep listing={trajan} qty={8} currency="TON" />);
+    expect(screen.getByText("Trajan Villa")).toBeInTheDocument();
+    expect(screen.getByText("Las Vegas, USA")).toBeInTheDocument();
+    // 8 × $95.00 = $760.00 principal; $500–$2k tier (2.5%) → $19.00 fee.
+    expect(screen.getByTestId("buy-fees")).toHaveTextContent("$19.00");
+    expect(screen.getByTestId("buy-total")).toHaveTextContent("$779.00");
+    expect(screen.getByTestId("buy-ownership")).toHaveTextContent("8 shares · 0.5% of the estate");
+    fireEvent.click(screen.getByTestId("buy-assumptions-toggle"));
+    expect(screen.getByTestId("buy-assumptions-content")).toHaveTextContent(
+      "Projection uses the estate's projected monthly income per share",
+    );
+    // Slice 2: Trajan (V1-unknown) shows pending, never a fixture figure.
+    expect(screen.getByTestId("buy-summary-monthly")).toHaveTextContent("Data pending");
+    // Slice 3: the pending state carries its human-readable reason.
+    expect(screen.getByTestId("buy-summary-monthly")).toHaveTextContent(/tax/i);
+  });
+
+  it("summary step: no raw i18n keys leak into labels", () => {
+    useFees.mockReturnValue({ data: DEFAULT_FEE_TIERS, isLoading: false, isError: false });
+    const { container } = render(<BuySummaryStep listing={listing} qty={10} currency="TON" />);
+    const text = container.textContent ?? "";
+    for (const key of ["buySummaryTitle", "buySummaryProperty", "buyOwnership", "buyAssumptionsTitle", "totalLabel"]) {
+      expect(text).not.toContain(key);
+    }
+  });
+
   it("summary step shows sticky error and pending copy", () => {
     const { rerender } = render(
       <BuySummaryStep listing={listing} qty={10} currency="TON" error="transaction rejected" />,
@@ -215,20 +324,31 @@ describe("Buy flow steps", () => {
     const onClose = vi.fn();
     render(
       <BuySuccessStep
-        propertyTitle="Marina Vista Apt 4B"
+        propertyTitle="Grand 2 BDM Ocean Pool Villa (JOALI Being)"
         qty={10}
         nowMs={Date.UTC(2026, 6, 22, 10, 0, 0)}
         onClose={onClose}
       />,
     );
     expect(screen.getByTestId("buy-success-message")).toHaveTextContent(
-      /You now own 10 shares of Marina Vista Apt 4B/,
+      /You now own 10 shares of Grand 2 BDM Ocean Pool Villa \(JOALI Being\)/,
     );
     expect(screen.getAllByText(DEMO_TX_DISCLAIMER).length).toBe(1);
     fireEvent.click(screen.getByRole("button", { name: /view portfolio/i }));
     expect(onClose).toHaveBeenCalled();
     expect(push).toHaveBeenCalledWith("/portfolio");
     expect(screen.getByRole("button", { name: /share/i })).toBeInTheDocument();
+  });
+
+  it("success step: no raw i18n keys leak into copy", () => {
+    const { container } = render(
+      <BuySuccessStep propertyTitle="Grand 2 BDM Ocean Pool Villa (JOALI Being)" qty={10} onClose={() => {}} />,
+    );
+    const text = container.textContent ?? "";
+    for (const key of ["buySuccessTitle", "buySuccessMessage", "buySuccessNextPayout", "buySuccessEverySunday"]) {
+      expect(text).not.toContain(key);
+    }
+    expect(screen.getByText(/Every Sunday/)).toBeInTheDocument();
   });
 
   it("BuySheet hosts the active step inside a dialog when open", () => {

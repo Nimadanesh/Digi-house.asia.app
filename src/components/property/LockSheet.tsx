@@ -1,13 +1,14 @@
 "use client";
-// File responsibility: Lock confirmation bottom sheet — payout period selector, shares
-// stepper, principal/payout preview, confirm, and a completion state (no silent close).
-// Yield math stays in lib/yield-math (installmentUsd); creation goes through
-// useCreateLock (PRODUCT-PLAN §0.4).
+// File responsibility: Lock confirmation bottom sheet — shares stepper,
+// principal/monthly-payout preview, confirm, and a completion state (no silent close).
+// New locks are MONTHLY-only (Final PO Decision 4): the weekly economic option is
+// retired. Stored historical weekly records are preserved and labeled legacy where
+// shown (YieldLockSection); they are never created here. Yield math stays in
+// lib/yield-math (installmentUsd); creation goes through useCreateLock.
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Check, Minus, Plus } from "lucide-react";
 import type { Listing } from "@/types/property";
-import type { PayoutPeriod } from "@/types/lock";
 import { usd } from "@/lib/format";
 import { haptics } from "@/lib/telegram/haptics";
 import { useCreateLock } from "@/hooks/useLocks";
@@ -15,11 +16,6 @@ import { installmentUsd } from "@/lib/yield-math";
 import { Block } from "@/components/common/Block";
 import { Row } from "@/components/common/Row";
 import { Sheet } from "@/components/common/Sheet";
-
-const PERIODS: Array<{ value: PayoutPeriod; labelKey: string; hintKey: string }> = [
-  { value: "monthly", labelKey: "payoutPeriodMonthly", hintKey: "payoutPeriodMonthlyHint" },
-  { value: "weekly", labelKey: "payoutPeriodWeekly", hintKey: "payoutPeriodWeeklyHint" },
-];
 
 export function LockSheet({
   open,
@@ -36,27 +32,24 @@ export function LockSheet({
 }) {
   const t = useTranslations("property");
   const [shares, setShares] = useState(1);
-  const [period, setPeriod] = useState<PayoutPeriod>("monthly");
   /** Completion state — the sheet shows the new earning state instead of closing silently. */
-  const [locked, setLocked] = useState<{ shares: number; period: PayoutPeriod; installmentUsdCents: number } | null>(null);
+  const [locked, setLocked] = useState<{ shares: number; installmentUsdCents: number } | null>(null);
   const create = useCreateLock();
 
   const max = Math.max(1, freeShares);
   const principal = shares * avgCostUsd;
   const monthly = installmentUsd(principal, listing.monthlyYieldRate, "monthly");
-  const weekly = installmentUsd(principal, listing.monthlyYieldRate, "weekly");
   const invalid = shares < 1 || shares > freeShares;
 
   function submit() {
     if (invalid || create.isPending) return;
     create.mutate(
-      { propertyId: listing.id, shares, payoutPeriod: period },
+      { propertyId: listing.id, shares, payoutPeriod: "monthly" },
       {
         onSuccess: () =>
           setLocked({
             shares,
-            period,
-            installmentUsdCents: period === "weekly" ? weekly : monthly,
+            installmentUsdCents: monthly,
           }),
       },
     );
@@ -83,7 +76,7 @@ export function LockSheet({
               })}
             </p>
             <p className="text-sm leading-relaxed text-muted-foreground tnum">
-              {usd(locked.installmentUsdCents)} {locked.period === "weekly" ? t("perWeekWord") : t("perMonthWord")}
+              {usd(locked.installmentUsdCents)} {t("perMonthWord")}
             </p>
           </div>
           <button
@@ -100,35 +93,7 @@ export function LockSheet({
           {t("lockSheetTitle")}
         </h2>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          {t("lockSheetIntro")}
-        </p>
-
-        <div className="grid grid-cols-2 gap-2" role="group" aria-label={t("payoutPeriodLabel")}>
-          {PERIODS.map((opt) => {
-            const selected = period === opt.value;
-            return (
-              <button
-                key={opt.value}
-                type="button"
-                aria-pressed={selected}
-                aria-label={t("payoutPeriodAria", { period: t(opt.labelKey) })}
-                onClick={() => {
-                  haptics.selection();
-                  setPeriod(opt.value);
-                }}
-                className={`min-h-[44px] rounded-[12px] text-sm font-semibold transition-colors duration-[120ms] ease-out ${
-                  selected
-                    ? "bg-primary/15 text-primary"
-                    : "bg-surface-2 text-muted-foreground"
-                }`}
-              >
-                {t(opt.labelKey)}
-              </button>
-            );
-          })}
-        </div>
-        <p className="text-[0.6875rem] leading-relaxed text-muted-foreground">
-          {t(PERIODS.find((p) => p.value === period)!.hintKey)}
+          {t("lockSheetIntroMonthly")}
         </p>
 
         <Block>
@@ -202,12 +167,6 @@ export function LockSheet({
             <span className="text-muted-foreground">{t("monthlyPayout")}</span>
             <span className="tnum font-medium text-success" data-testid="lock-monthly">
               {usd(monthly)} {t("perMonthWord")}
-            </span>
-          </div>
-          <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">{t("weeklyPayout")}</span>
-            <span className="tnum font-medium text-success" data-testid="lock-weekly">
-              {usd(weekly)} {t("timesFourMonth")}
             </span>
           </div>
         </div>

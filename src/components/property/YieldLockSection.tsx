@@ -11,6 +11,7 @@ import type { Listing } from "@/types/property";
 import type { ShareLock } from "@/types/lock";
 import { usd } from "@/lib/format";
 import { haptics } from "@/lib/telegram/haptics";
+import { getEstateDisplayName } from "@/lib/economics/estates/estate-display-identity";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { useLocks, useRequestUnlock, activeLocksForProperty } from "@/hooks/useLocks";
 import { Block } from "@/components/common/Block";
@@ -27,6 +28,9 @@ function LockRow({ lock, onUnlock, unlockPending }: {
 }) {
   const t = useTranslations("property");
   const matures = lock.maturesAt ? lock.maturesAt.slice(0, 10) : null;
+  // Preserved historical weekly records are labeled legacy (Final PO Decision 4);
+  // new locks are monthly-only and carry no such marking.
+  const legacyWeekly = lock.payoutPeriod === "weekly";
   return (
     <Block className="p-4 space-y-3" data-testid={`lock-row-${lock.status}`}>
       <div className="flex items-center justify-between gap-2">
@@ -37,7 +41,14 @@ function LockRow({ lock, onUnlock, unlockPending }: {
           </span>
         </div>
         {lock.status === "locked" ? (
-          <StatusPill label={lock.payoutPeriod === "weekly" ? t("accruingWeekly") : t("accruingMonthly")} variant="success" />
+          <StatusPill
+            label={
+              legacyWeekly
+                ? `${t("accruingWeekly")} · ${t("legacyTag")}`
+                : t("accruingMonthly")
+            }
+            variant="success"
+          />
         ) : (
           <StatusPill label={t("unlocksOn", { date: matures ?? t("unlockingInDays") })} variant="warning" />
         )}
@@ -47,10 +58,11 @@ function LockRow({ lock, onUnlock, unlockPending }: {
           <div className="mb-1 text-[0.6875rem] leading-snug text-muted-foreground">{t("accruedUnpaidLabel")}</div>
           <div className="text-sm font-semibold tnum text-success">{usd(lock.accruedUnpaidUsd)}</div>
         </div>
-        <div>
-          <div className="mb-1 text-[0.6875rem] leading-snug text-muted-foreground">
-            {lock.payoutPeriod === "weekly" ? t("perWeek") : t("perMonth")}
-          </div>
+      <div>
+            <div className="mb-1 text-[0.6875rem] leading-snug text-muted-foreground">
+              {lock.payoutPeriod === "weekly" ? t("perWeek") : t("perMonth")}
+              {legacyWeekly ? ` · ${t("legacyTag")}` : null}
+            </div>
           <div className="text-sm font-semibold tnum text-foreground">{usd(lock.installmentUsd)}</div>
         </div>
       </div>
@@ -102,7 +114,7 @@ export function YieldLockSection({ listing }: { listing: Listing }) {
           <div>
             <div className="text-sm font-medium text-foreground">{t("monthlyYield")}</div>
             <div className="mt-0.5 text-[0.6875rem] text-muted-foreground">
-              {t("onLockedSharesNote")}
+              {t("payoutPeriodMonthlyHint")}
             </div>
           </div>
           <span className="rounded-full bg-success px-2.5 py-1 text-xs font-semibold text-white tnum">
@@ -126,7 +138,7 @@ export function YieldLockSection({ listing }: { listing: Listing }) {
             {t("buyFirstNote")}
           </p>
         ) : (
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-2 pt-2">
             <button
               type="button"
               disabled={free === 0}
@@ -175,7 +187,15 @@ export function YieldLockSection({ listing }: { listing: Listing }) {
         title={t("unlockConfirmTitle")}
         description={t("unlockConfirmBody")}
         details={[
-          { label: t("propertyLabel"), value: unlockTarget?.propertyTitle ?? listing.title },
+          // PROMPT 03-C: canonical ESTATE-24 name wins for the 24; lock/listing
+          // titles remain the honest fallback for unknown/unmapped ids only.
+          {
+            label: t("propertyLabel"),
+            value: getEstateDisplayName(
+              unlockTarget?.propertyId ?? listing.id,
+              unlockTarget?.propertyTitle ?? listing.title,
+            ),
+          },
           { label: t("sharesLabel"), value: unlockTarget?.shares ?? 0 },
           {
             label: t("payoutPeriodLabel"),
@@ -223,6 +243,7 @@ export function YieldLockSection({ listing }: { listing: Listing }) {
           listing={listing}
           freeShares={free}
           avgCostUsd={holding?.avgCostUsd ?? listing.sharePriceUsd}
+          ownedShares={owned}
         />
       ) : null}
     </section>

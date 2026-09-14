@@ -3,10 +3,9 @@
 // ownership as a slice-and-dice treemap of anonymized holder buckets, with
 // in-rect labels and a tap tooltip. Consumes ONLY the Phase 4 shared holder
 // dataset; mobile-first full-width, no PII.
-import { useState } from "react";
 import { useTranslations } from "next-intl";
 import type { HolderBucket } from "@/lib/property-analytics";
-import { HOLDER_COLORS } from "./shared";
+import { HOLDER_COLORS, useChartSelection } from "./shared";
 
 const W = 440;
 const H = 220;
@@ -69,7 +68,11 @@ export function OwnershipTreemap({
   totalShares: number;
 }) {
   const t = useTranslations("property");
-  const [sel, setSel] = useState<string | null>(null);
+  // Split interaction: transient mouse hover + persistent touch-tap selection.
+  // Rects tile the whole svg, so every tap lands on a bucket; re-tapping a
+  // rect toggles its selection off.
+  const selection = useChartSelection<string>();
+  const sel = selection.active;
 
   const buckets = holders.map((h, i) => ({
     key: h.label,
@@ -96,8 +99,8 @@ export function OwnershipTreemap({
           return (
             <g
               key={r.key}
-              onPointerEnter={() => setSel(r.key)}
-              onPointerDown={() => setSel(r.key)}
+              {...selection.hoverHandlers(r.key)}
+              {...selection.tapHandlers(r.key)}
               data-testid={`treemap-cell-${r.key.replace("holder.", "")}`}
             >
               <rect
@@ -141,6 +144,7 @@ export function OwnershipTreemap({
       <div
         className="min-h-[3.25rem] rounded-[10px] bg-surface-2 px-3 py-2 text-center text-xs leading-relaxed text-foreground"
         data-testid="treemap-tooltip"
+        aria-live="polite"
       >
         {selRect ? (
           <>

@@ -1,17 +1,16 @@
 "use client";
-// File responsibility: Home "More opportunities" — 1–2 additional Primary (funding) listings.
+// File responsibility: Home "More Estates" — up to 3 additional Primary (funding) listings.
 // Calm editorial list, no flame/hot/scarcity badges. Price figures come straight from the listing.
 import Link from "next/link";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { usd } from "@/lib/format";
-import { shareWeeklyYieldUsd } from "@/lib/property-yield";
 import { ROUTES } from "@/lib/constants";
 import type { Listing } from "@/types/property";
 import { Block } from "@/components/common/Block";
 
-/** Cap the "More opportunities" rail to a short, calm set. */
-export const MORE_OPPORTUNITIES_LIMIT = 2;
+/** Cap the "More Estates" rail to a short, calm set (UI Mapping §3.1 — max 3 cards). */
+export const MORE_OPPORTUNITIES_LIMIT = 3;
 
 /** Pick 1–2 Primary (funding) listings to surface under Featured, excluding the featured one. */
 export function pickMoreOpportunities(
@@ -39,11 +38,10 @@ export function MoreOpportunitiesSection({
   return (
     <section className="space-y-2" data-testid="more-opportunities-section">
       <h2 className="px-0.5 text-[0.9375rem] font-semibold text-foreground">
-        {t("moreOpportunities")}
+        {t("moreEstates")}
       </h2>
       <div className="space-y-2">
         {listings.map((listing) => {
-          const monthly = (shareWeeklyYieldUsd(listing) * 52) / 12;
           return (
             <Link
               key={listing.id}
@@ -75,7 +73,6 @@ export function MoreOpportunitiesSection({
                       <span className="font-semibold text-foreground">
                         {usd(listing.sharePriceUsd)}/{tCommon("share")}
                       </span>
-                      <span className="text-success"> · ≈ {usd(monthly)}/mo</span>
                     </p>
                   </div>
                 </div>

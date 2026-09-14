@@ -1,0 +1,146 @@
+// Slice F: Marketplace view model — Canonical Estate Data → View Model → UI.
+// The marketplace must consume the canonical layer, never hardcode property
+// info in components, never duplicate the dataset, never leak legacy values.
+import { describe, expect, it } from "vitest";
+
+import { PROPERTIES } from "@/lib/mock/seed/properties";
+import { toCanonicalListing } from "@/lib/mock/canonical-listing";
+import { getEstate24ByRuntimeId } from "@/lib/economics/estates/estate-24-data";
+import {
+  CANONICAL_MARKETPLACE_ESTATES,
+  getCanonicalEstate,
+} from "@/lib/economics/estates/canonical-24";
+import {
+  isCanonicalMarketplaceId,
+  toMarketplaceEstate,
+  toMarketplaceEstates,
+} from "@/lib/economics/marketplace-view-model";
+
+const LEGACY_82M_CENTS = 8_200_000_000;
+
+function fixture(id: string) {
+  const f = PROPERTIES.find((p) => p.id === id);
+  if (!f) throw new Error(`missing fixture ${id}`);
+  return f;
+}
+
+describe("marketplace view model — identity matches the adopted Estate24 record (DEC-007)", () => {
+  it("name and location agree with portfolio/detail/home for all 24 villas", () => {
+    for (const f of PROPERTIES) {
+      const vm = toMarketplaceEstate(toCanonicalListing(f));
+      const e24 = getEstate24ByRuntimeId(f.id)!;
+      expect(vm.name, `${f.id} name`).toBe(e24.name);
+      expect(vm.location, `${f.id} location`).toBe(e24.location.full);
+    }
+  });
+});
+
+describe("marketplace view model — canonical identity", () => {
+  it("maps Grand 2 BDM to its canonical Rental Escapes identity (not fixture shorthand)", () => {
+    const vm = toMarketplaceEstate(fixture("re-128862"));
+    const canonical = getCanonicalEstate("re-128862")!;
+    expect(vm.id).toBe("re-128862");
+    expect(vm.name).toBe(canonical.name.value);
+    expect(vm.name).toContain("Grand 2 BDM");
+    expect(vm.location).toBe(canonical.location.value);
+    expect(vm.images).toEqual(canonical.images.urls);
+    expect(vm.rentalEscapesListingId).toBe("128862");
+    expect(vm.rentalEscapesSourceUrl).toContain("128862");
+  });
+
+  it("preserves nightly rate semantics verbatim from the canonical layer", () => {
+    const grand = toMarketplaceEstate(fixture("re-128862"));
+    expect(grand.nightlyDisplay).toBe("$67,655–$76,458");
+    expect(grand.nightlyRateType).toBe("RANGE");
+
+    const dolce = toMarketplaceEstate(fixture("re-122903"));
+    expect(dolce.nightlyRateType).toBe("DYNAMIC");
+    expect(dolce.nightlyDisplay).toContain("DYNAMIC");
+
+    const trajan = toMarketplaceEstate(fixture("re-128529"));
+    expect(trajan.nightlyRateType).toBe("STARTING_FROM");
+  });
+
+  it("exposes the approved ESTIMATED Estate Value for all 24 (never legacy)", () => {
+    const vms = toMarketplaceEstates(PROPERTIES);
+    expect(vms).toHaveLength(24);
+    for (const vm of vms) {
+      expect(vm.estateValue).not.toBeNull();
+      expect(vm.estateValue!.provenance).toBe("estimated");
+      expect(vm.estateValue!.value).toBeGreaterThan(0);
+      expect(vm.estateValue!.value).not.toBe(LEGACY_82M_CENTS);
+    }
+    const grand = vms.find((v) => v.id === "re-128862")!;
+    expect(grand.estateValue!.value).toBe(800_000_000);
+  });
+
+  it("carries trading params by reference from the listing (no invented funding)", () => {
+    const vm = toMarketplaceEstate(fixture("re-128862"));
+    const f = fixture("re-128862");
+    expect(vm.status).toBe(f.status);
+    expect(vm.sharePriceUsd).toBe(f.sharePriceUsd);
+    expect(vm.totalShares).toBe(f.totalShares);
+    expect(vm.sharesRemaining).toBe(f.sharesRemaining);
+    expect(vm.fundingProgressRatio).toBe(f.fundingProgressRatio);
+  });
+
+  it("falls back to listing identity for unknown (non-canonical) ids — never crashes routing", () => {
+    const fallback = toMarketplaceEstate({
+      ...fixture("re-128862"),
+      id: "test-unknown-id",
+      title: "Fallback Villa",
+      location: "Nowhere",
+    });
+    expect(fallback.id).toBe("test-unknown-id");
+    expect(fallback.name).toBe("Fallback Villa");
+    expect(fallback.location).toBe("Nowhere");
+    expect(fallback.rentalEscapesListingId).toBeNull();
+    expect(fallback.estateValue).toBeNull();
+  });
+
+  it("covers exactly the 24 canonical ids with no duplicates", () => {
+    const vms = toMarketplaceEstates(PROPERTIES);
+    const ids = vms.map((v) => v.id);
+    expect(new Set(ids).size).toBe(24);
+    const canonicalIds = new Set(CANONICAL_MARKETPLACE_ESTATES.map((e) => e.propertyId));
+    for (const id of ids) {
+      expect(canonicalIds.has(id)).toBe(true);
+    }
+    expect(isCanonicalMarketplaceId("re-128862")).toBe(true);
+    expect(isCanonicalMarketplaceId("test-does-not-exist")).toBe(false);
+  });
+
+  it("PROMPT 05: carries canonical property type, description, valuation display and growth", () => {
+    const grand = toMarketplaceEstate(fixture("re-128862"));
+    // Source-supported type — never the legacy fixture type.
+    expect(grand.propertyType).toBe("Overwater Villa");
+    expect(grand.description).toContain("overwater villa");
+    // PROMPT 05: Grand active valuation is exactly $8M single (V1 canonical —
+    // never the retired $8M–$10M band, $9.6M–$18M range, $13.5M or $82M).
+    expect(grand.valuationDisplay).toEqual({
+      kind: "single",
+      value: 800_000_000,
+      provenance: "estimated",
+    });
+    expect(grand.growthPotential?.potentialValue).toBe(1_800_000_000);
+    expect(grand.growthPotential?.potentialPct).toBeNull();
+
+    const aerial = toMarketplaceEstate(fixture("re-126855"));
+    expect(aerial.propertyType).toBe("Private Island Estate");
+    expect(aerial.valuationDisplay).toEqual({
+      kind: "single",
+      value: 1_800_000_000,
+      provenance: "estimated",
+    });
+    expect(aerial.growthPotential?.potentialPct).toBe(46.7);
+
+    // All 24 resolve canonical facts (legacy "Apartment"/"Studio" nowhere).
+    for (const vm of toMarketplaceEstates(PROPERTIES)) {
+      expect(vm.propertyType, `${vm.id} type`).not.toBeNull();
+      expect(["Apartment", "Studio", "Flat", "Loft", "Condo", "Penthouse"]).not.toContain(
+        vm.propertyType,
+      );
+      expect(vm.growthPotential, `${vm.id} growth`).not.toBeNull();
+    }
+  });
+});

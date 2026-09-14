@@ -4,9 +4,9 @@ import type { Listing } from "@/types/property";
 import { IncomeCalculator } from "@/components/property/IncomeCalculator";
 
 const listing: Listing = {
-  id: "prop-marina-vista-4b",
-  title: "Marina Vista Apt 4B",
-  location: "Dubai Marina, UAE",
+  id: "re-128862",
+  title: "Grand 2 BDM Ocean Pool Villa (JOALI Being)",
+  location: "Bodufushi, JOALI Being, Raa Atoll, Maldives",
   description: "Waterfront one-bedroom.",
   images: ["/images/properties/p1.png"],
   totalShares: 1000,
@@ -58,12 +58,27 @@ describe("IncomeCalculator — redesign Phase 2", () => {
     expect(screen.getByTestId("scenario-optimistic")).toBeInTheDocument();
   });
 
-  it("shows monthly + yearly projection from existing yield math", () => {
+  it("shows monthly + yearly projection from the single presentation layer (V1)", () => {
     renderCalc({ shares: 10 });
-    // positionYieldUsd: invested 10 × $80 → monthly = invested × 6% = $48.00
-    expect(screen.getByTestId("calc-monthly")).toHaveTextContent("$48.00");
-    expect(screen.getByTestId("calc-yearly")).toHaveTextContent("≈ $576.00 / year");
+    // Slice 2: Grand V1 $16.29/share/mo → 10 shares = $162.90/mo → $1,954.80/yr.
+    expect(screen.getByTestId("calc-monthly")).toHaveTextContent("$162.90");
+    expect(screen.getByTestId("calc-yearly")).toHaveTextContent("≈ $1,954.80 / year");
     expect(screen.getByText(/After platform fees · Locked shares start earning from day 1/)).toBeInTheDocument();
+  });
+
+  it("shows pending (never a fixture figure) when V1 income is unknown", () => {
+    const onBuy = vi.fn();
+    const onSharesChange = vi.fn();
+    render(
+      <IncomeCalculator
+        listing={{ ...listing, id: "re-128529" }}
+        shares={10}
+        onSharesChange={onSharesChange}
+        onBuy={onBuy}
+      />,
+    );
+    expect(screen.getByTestId("calc-pending")).toHaveTextContent("Data pending");
+    expect(screen.queryByTestId("calc-monthly")).not.toBeInTheDocument();
   });
 
   it("Buy CTA calls onBuy with current share count and total cost", () => {

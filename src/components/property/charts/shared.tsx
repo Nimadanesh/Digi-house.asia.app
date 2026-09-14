@@ -3,7 +3,7 @@
 // (REDESIGN-SPEC Phase 5). All series come from lib/property-analytics (Phase 4
 // shared deterministic datasets) — no chart-local random series. Mobile-first:
 // full-width viewBox scaling, touch-friendly tap targets, token-only colors.
-import { useMemo } from "react";
+import { useMemo, useRef, useState, type PointerEvent } from "react";
 import { cn } from "@/lib/utils";
 
 // viewBox space — scales to container width (≤480px), fixed aspect.
@@ -105,6 +105,13 @@ export function DateLabels({ firstAt, lastAt }: { firstAt: string; lastAt: strin
  * Touch-friendly chart surface: invisible vertical hit zones over the plot area.
  * Reports the hovered index so charts can render their own tooltip. Mobile-first
  * — every zone is a full-height tap target, no hover dependency (spec §22).
+ *
+ * Touch-selection contract (opt-in via onSelect):
+ * - mouse enter/leave drives the transient hover state (onIndex) — desktop kept.
+ * - a tap (down+up without drag) drives the persistent selection (onSelect),
+ *   which pointer-leave never clears — the detail survives finger lift.
+ * - without onSelect the legacy hover-only behavior is byte-identical
+ *   (IncomeAnalytics relies on it).
  */
 export function useHitZones(count: number) {
   return useMemo(() => {
@@ -113,14 +120,77 @@ export function useHitZones(count: number) {
   }, [count]);
 }
 
+/** Maximum finger travel (CSS px) between down and up that still counts as a tap. */
+export const TAP_SLOP_PX = 12;
+
+/**
+ * Split interaction state for holder charts — one transient hover state for
+ * desktop mice plus one persistent selection state for touch taps.
+ *
+ * - `hovered`: mouse enter/leave only (pointerType === "mouse"). Touch pointer
+ *   traffic never writes here, so a finger lift cannot clear anything.
+ * - `selected`: tap (down+up within TAP_SLOP_PX, any pointer type) toggles the
+ *   key persistently; pointer-leave never touches it.
+ * - `active`: the key the detail panel renders — `selected ?? hovered`, so a
+ *   touch selection wins and desktop hover keeps working when nothing is
+ *   touch-selected. No chart math lives here — keys only.
+ */
+export function useChartSelection<K>() {
+  const [hovered, setHovered] = useState<K | null>(null);
+  const [selected, setSelected] = useState<K | null>(null);
+  const downPos = useRef<{ x: number; y: number } | null>(null);
+
+  const toggle = (key: K) => setSelected((s) => (s === key ? null : key));
+
+  return {
+    hovered,
+    selected,
+    /** Detail panels render this key (touch selection wins over hover). */
+    active: selected ?? hovered,
+    /** Hover-state writer for shared primitives (HitZones onIndex). */
+    setHover: (key: K | null) => setHovered(key),
+    /** Persistent-selection toggle for shared primitives (HitZones onSelect). */
+    toggle,
+    clearSelected: () => setSelected(null),
+    /** Mouse-only transient hover for a target key. */
+    hoverHandlers: (key: K) => ({
+      onPointerEnter: (e: PointerEvent<SVGElement>) => {
+        if (e.pointerType !== "mouse") return;
+        setHovered(key);
+      },
+      onPointerLeave: (e: PointerEvent<SVGElement>) => {
+        if (e.pointerType !== "mouse") return;
+        setHovered((h) => (h === key ? null : h));
+      },
+    }),
+    /** Tap-to-toggle persistent selection for a target key (all pointers). */
+    tapHandlers: (key: K) => ({
+      onPointerDown: (e: PointerEvent<SVGElement>) => {
+        downPos.current = { x: e.clientX, y: e.clientY };
+      },
+      onPointerUp: (e: PointerEvent<SVGElement>) => {
+        if (downPos.current == null) return;
+        const dx = e.clientX - downPos.current.x;
+        const dy = e.clientY - downPos.current.y;
+        downPos.current = null;
+        if (Math.hypot(dx, dy) <= TAP_SLOP_PX) toggle(key);
+      },
+    }),
+  };
+}
+
 export function HitZones({
   xs,
   onIndex,
+  onSelect,
 }: {
   xs: number[];
   onIndex: (i: number | null) => void;
+  /** Persistent touch selection; absent → legacy hover-only behavior. */
+  onSelect?: (i: number) => void;
 }) {
   const half = xs.length > 1 ? (xs[1] - xs[0]) / 2 : CHART_W / 2;
+  const downPos = useRef<{ x: number; y: number } | null>(null);
   return (
     <>
       {xs.map((cx, i) => (
@@ -131,9 +201,28 @@ export function HitZones({
           width={half * 2}
           height={CHART_H}
           fill="transparent"
-          onPointerEnter={() => onIndex(i)}
-          onPointerDown={() => onIndex(i)}
-          onPointerLeave={() => onIndex(null)}
+          onPointerEnter={(e) => {
+            if (onSelect && e.pointerType !== "mouse") return;
+            onIndex(i);
+          }}
+          onPointerDown={(e) => {
+            if (onSelect) {
+              downPos.current = { x: e.clientX, y: e.clientY };
+              return;
+            }
+            onIndex(i);
+          }}
+          onPointerUp={(e) => {
+            if (!onSelect || downPos.current == null) return;
+            const dx = e.clientX - downPos.current.x;
+            const dy = e.clientY - downPos.current.y;
+            downPos.current = null;
+            if (Math.hypot(dx, dy) <= TAP_SLOP_PX) onSelect(i);
+          }}
+          onPointerLeave={(e) => {
+            if (onSelect && e.pointerType !== "mouse") return;
+            onIndex(null);
+          }}
           data-testid={`chart-hit-${i}`}
         />
       ))}

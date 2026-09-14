@@ -3,8 +3,13 @@
 // qty steppers + live total (shown in the selected rail).
 import { useTranslations } from "next-intl";
 import { Minus, Plus } from "lucide-react";
-import { usd, ton, estimateNanoTon } from "@/lib/format";
-import { positionYieldUsd } from "@/lib/property-yield";
+import { usd, ton, estimateNanoTon, pct } from "@/lib/format";
+import {
+  presentPositionMonthlyIncome,
+  getPresentedMonthlyIncome,
+  presentedIncomeUnknownCaption,
+} from "@/lib/economics/property-presentation";
+import { unavailableLabel } from "@/lib/availability";
 import { TON_PRICE_USD_CENTS } from "@/lib/constants";
 import type { Listing } from "@/types/property";
 import type { BuyCurrency } from "@/types/buy";
@@ -47,8 +52,16 @@ export function BuyQtyStep({
   const max = remaining;
   const unitPrice = unitPriceUsd ?? listing.sharePriceUsd;
   const totalUsd = qty * unitPrice;
-  const weekly = positionYieldUsd(listing, qty).weeklyUsd;
+  // Slice 2: projected income from the single presentation layer (V1, or
+  // pending) — never the fixture yield shortcut.
+  const monthly = presentPositionMonthlyIncome(listing.id, qty);
+  // Slice 3: a pending projection carries its human-readable reason.
+  const incomeReason = presentedIncomeUnknownCaption(
+    getPresentedMonthlyIncome(listing.id).unknownKind,
+  );
   const invalid = qty < 1 || qty > remaining;
+  // Ownership-first framing (redesign §8): the share count is expressed as a stake.
+  const sharePct = listing.totalShares > 0 ? pct(qty / listing.totalShares) : pct(0);
 
   function setQty(next: number) {
     haptics.selection();
@@ -89,6 +102,15 @@ export function BuyQtyStep({
       <h2 id="buy-sheet-title" className="text-[1.0625rem] font-semibold text-foreground">
         {t("buySheetTitle")}
       </h2>
+
+      <div className="rounded-[12px] bg-surface-2 p-3 space-y-1.5">
+        <div className="flex justify-between text-sm">
+          <span className="text-muted-foreground">{t("buyYourShare")}</span>
+          <span className="tnum font-semibold text-foreground" data-testid="buy-share-of-estate">
+            {t("buyShareOfEstate", { qty, pct: sharePct })}
+          </span>
+        </div>
+      </div>
 
       <div className="grid grid-cols-2 gap-2" role="group" aria-label={t("paymentCurrency")}>
         {PAY_CURRENCIES.map((opt) => {
@@ -187,19 +209,30 @@ export function BuyQtyStep({
         </p>
       ) : null}
       <div className="rounded-[12px] bg-surface-2 p-3 space-y-1.5">
-        <div className="flex justify-between text-sm">
+        <div className="flex justify-between gap-2 text-sm">
           <span className="text-muted-foreground">{t("totalLabel")}</span>
-          <span className="tnum font-semibold text-foreground" data-testid="buy-qty-total">
+          <span className="tnum font-bold tracking-tight text-foreground text-end" data-testid="buy-qty-total">
             {currency === "USDT" ? `${usd(totalUsd)} USDT` : `${usd(totalUsd)} · ${ton(estimateNanoTon(totalUsd, TON_PRICE_USD_CENTS))}`}
           </span>
         </div>
-        <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">{t("estWeeklyYield")}</span>
-          <span className="tnum font-medium text-success">{usd(weekly)}</span>
+        <div className="flex justify-between gap-2 text-sm">
+          <span className="text-muted-foreground">{t("estMonthlyYield")}</span>
+          {/* Projected — foreground, never Paid-green. */}
+          <span className="tnum font-semibold text-foreground" data-testid="buy-est-monthly">
+            {monthly != null
+              ? usd(monthly)
+              : `${unavailableLabel("backend_absent")}${incomeReason != null ? ` — ${incomeReason}` : ""}`}
+          </span>
         </div>
       </div>
       <p className="text-[0.6875rem] text-center text-muted-foreground">
         {t("paidInNote", { currency })}
+      </p>
+      <p
+        className="text-[0.6875rem] text-center leading-relaxed text-muted-foreground"
+        data-testid="buy-lock-note"
+      >
+        {t("buyFirstNote")}
       </p>
     </div>
   );

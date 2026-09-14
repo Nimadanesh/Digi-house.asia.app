@@ -1,32 +1,31 @@
 "use client";
-// File responsibility: horizontal filter chips for marketplace (Fable §Header chips).
+// File responsibility: estate filter chips (All/Featured/New/Income/Owner Stay/Resale).
+// Renders the left scroll half of the single marketplace control row: same ids, order
+// and behavior as before, new 32px capsule visuals. Labels via `estates.chips.*`.
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
-import {
-  MARKETPLACE_CHIP_IDS,
-  type MarketplaceChip,
-} from "@/lib/marketplace-filter";
+import { ESTATE_FILTER_IDS, type EstateFilter } from "@/lib/marketplace-filter";
 
 export function MarketplaceFilterChips({
   value,
   onChange,
   onSelectHaptic,
 }: {
-  value: MarketplaceChip;
-  onChange: (chip: MarketplaceChip) => void;
+  value: EstateFilter;
+  onChange: (filter: EstateFilter) => void;
   onSelectHaptic?: () => void;
 }) {
-  const t = useTranslations("marketplace");
+  const t = useTranslations("estates");
 
   return (
     <div
-      className="flex gap-2 overflow-x-auto pb-0.5 -mx-4 px-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+      className="no-scrollbar flex min-w-0 flex-1 items-center gap-2 overflow-x-auto overflow-y-hidden pe-3"
       style={{ WebkitOverflowScrolling: "touch" }}
       role="tablist"
       aria-label={t("filtersAria")}
-      data-testid="marketplace-filters"
+      data-testid="estates-filters"
     >
-      {MARKETPLACE_CHIP_IDS.map((id) => {
+      {ESTATE_FILTER_IDS.map((id) => {
         const active = id === value;
         return (
           <button
@@ -39,10 +38,10 @@ export function MarketplaceFilterChips({
               onChange(id);
             }}
             className={cn(
-              "shrink-0 min-h-[36px] rounded-full px-3.5 text-sm font-medium transition-colors duration-200 ease-out active:scale-[0.97]",
+              "h-8 shrink-0 whitespace-nowrap rounded-full border px-3 text-xs font-medium transition-colors duration-200 ease-out active:scale-[0.97]",
               active
-                ? "bg-primary text-primary-foreground"
-                : "bg-surface-2 text-foreground",
+                ? "border-transparent bg-primary text-primary-foreground"
+                : "border-[rgba(255,255,255,0.12)] bg-[rgba(255,255,255,0.06)] text-[rgba(255,255,255,0.70)]",
             )}
           >
             {t(`chips.${id}`)}

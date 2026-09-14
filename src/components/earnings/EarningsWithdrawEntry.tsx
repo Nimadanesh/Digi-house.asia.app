@@ -42,7 +42,7 @@ export function EarningsWithdrawEntry() {
             <span className="text-sm font-semibold tnum text-foreground" data-testid="withdrawable-balance">
               {usd(withdrawable)}
             </span>
-            <ChevronRight size={20} strokeWidth={1.75} className="text-muted-foreground" aria-hidden />
+            <ChevronRight size={20} strokeWidth={1.75} className="text-muted-foreground rtl:rotate-180" aria-hidden />
           </div>
         </Row>
       </Block>

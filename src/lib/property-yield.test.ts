@@ -1,10 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
-  annualReturnRatio,
   offeredValueUsd,
   positionYieldUsd,
-  shareAnnualYieldUsd,
-  shareMonthlyYieldUsd,
   shareWeeklyYieldUsd,
   totalValueUsd,
 } from "./property-yield";
@@ -17,20 +14,18 @@ const listing = {
   totalValueUsd: 80_000_000, // $800,000
 } as Listing;
 
-describe("property-yield — user spec example ($80 share @ 6%)", () => {
-  it("per-share figures", () => {
-    expect(shareMonthlyYieldUsd(listing)).toBe(480); // $4.80
+// Slice 2: the fixture monthly/annual display shortcuts are removed — user-facing
+// income comes from the single presentation layer (V1). What remains here is the
+// legacy weekly lock math + whole-value helpers (settlement paths, untouched).
+describe("property-yield — legacy weekly lock math ($80 share @ 6%)", () => {
+  it("legacy weekly per-share figure (rate − 1pp)", () => {
     expect(shareWeeklyYieldUsd(listing)).toBe(100); // $1.00 (5% / 4)
-    expect(shareAnnualYieldUsd(listing)).toBe(5_760); // $57.60
-    expect(annualReturnRatio(listing)).toBeCloseTo(0.72);
   });
 
-  it("10 shares → $800 invested → $48/mo → $576/yr", () => {
+  it("10 shares → $800 invested → weekly figure preserved", () => {
     const p = positionYieldUsd(listing, 10);
     expect(p.investedUsd).toBe(80_000);
-    expect(p.monthlyUsd).toBe(4_800);
     expect(p.weeklyUsd).toBe(1_000); // $10/wk = $40 (5% of $800)
-    expect(p.annualUsd).toBe(57_600);
   });
 
   it("offered value = shares × price; total value passthrough", () => {

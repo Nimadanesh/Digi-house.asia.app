@@ -25,8 +25,8 @@ describe("getRepo", () => {
     expect(Array.isArray(listings)).toBe(true);
     expect(listings.length).toBeGreaterThan(0);
 
-    const book = await repos.orderBook.get("prop_dubai_marina_01");
-    expect(book.propertyId).toBe("prop_dubai_marina_01");
+    const book = await repos.orderBook.get("test-dubai-marina-01");
+    expect(book.propertyId).toBe("test-dubai-marina-01");
   });
 
   it("throws when dataSource=api and no baseUrl", async () => {

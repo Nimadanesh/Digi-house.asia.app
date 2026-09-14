@@ -5,7 +5,7 @@ import type { Order } from "@/types/order";
 
 const openOrder: Order = {
   id: "ord-open",
-  propertyId: "prop-bayside-marina-penthouse",
+  propertyId: "re-108924",
   makerAddress: "EQ",
   side: "sell",
   priceUsd: 26_000,
@@ -27,7 +27,7 @@ const filledOrder: Order = {
   status: "filled",
 };
 
-const names = { "prop-bayside-marina-penthouse": "Bayside Marina Penthouse" };
+const names = { "re-108924": "Syrene" };
 
 describe("OpenOrdersBlock — PD-08", () => {
   it("renders open and queued orders with a cancel button each", () => {
@@ -38,7 +38,7 @@ describe("OpenOrdersBlock — PD-08", () => {
         onCancel={vi.fn()}
       />,
     );
-    expect(screen.getAllByText("Bayside Marina Penthouse").length).toBe(2);
+    expect(screen.getAllByText("Syrene").length).toBe(2);
     expect(screen.getByTestId("cancel-order-ord-open")).toBeInTheDocument();
     expect(screen.getByTestId("cancel-order-ord-queued")).toBeInTheDocument();
   });

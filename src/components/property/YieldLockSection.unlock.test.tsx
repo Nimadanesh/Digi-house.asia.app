@@ -22,7 +22,7 @@ vi.mock("@/hooks/usePortfolio", () => ({
   usePortfolio: vi.fn(() => ({
     data: {
       holdings: [
-        { propertyId: "prop-x", sharesOwned: 10, avgCostUsd: 12_000, currentValueUsd: 120_000, pendingWeekEarningsUsd: 0, shareRatio: 0.01 },
+        { propertyId: "test-x", sharesOwned: 10, avgCostUsd: 12_000, currentValueUsd: 120_000, pendingWeekEarningsUsd: 0, shareRatio: 0.01 },
       ],
     },
   })),
@@ -43,7 +43,7 @@ vi.mock("@/hooks/useSells", () => ({
 }));
 
 const listing: Listing = {
-  id: "prop-x",
+  id: "test-x",
   title: "Villa One",
   location: "Y",
   description: "x",
@@ -73,7 +73,7 @@ const listing: Listing = {
 
 const lock: ShareLock = {
   id: "lock-1",
-  propertyId: "prop-x",
+  propertyId: "test-x",
   propertyTitle: "Villa One",
   shares: 5,
   principalUsd: 60_000,

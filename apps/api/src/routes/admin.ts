@@ -422,7 +422,10 @@ export function createAdminRoutes(deps: AdminRouteDeps) {
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-+|-+$/g, "");
     const shortId = crypto.randomUUID().slice(0, 8);
-    const propertyId = `prop-${slug}-${shortId}`;
+    // Canonical identity (2026-09-12): `re-*` is reserved for the 24 canonical
+    // listing ids; admin-created properties are new non-canonical records and get
+    // an explicit `admin-` prefix (fixture/synthetic ids use `test-*`).
+    const propertyId = `admin-${slug}-${shortId}`;
 
     const created = await deps.properties.create({
       id: propertyId,

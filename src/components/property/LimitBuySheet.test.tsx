@@ -28,9 +28,9 @@ const tiers: FeeTier[] = [
 ];
 
 const listing: Listing = {
-  id: "prop-tbilisi-riverhouse-loft",
-  title: "Tbilisi Riverhouse Loft",
-  location: "Tbilisi",
+  id: "re-125643",
+  title: "Emerald Cay",
+  location: "Silly Creek, Providenciales, Turks and Caicos",
   description: "d",
   images: ["/images/properties/p5.png"],
   totalShares: 600,
@@ -122,5 +122,22 @@ describe("LimitBuySheet — PD-06", () => {
     });
     renderSheet();
     expect(screen.getByText("Insufficient funds")).toBeInTheDocument();
+  });
+
+  it("falls back to the list price when the book is unknown (never blocks entry)", () => {
+    render(<LimitBuySheet open onClose={() => {}} listing={listing} orderBook={undefined} />);
+    // $120.00 list price anchors the input; totals still preview.
+    expect(screen.getByTestId("limit-buy-price-input")).toHaveValue(120);
+    expect(screen.getByTestId("limit-buy-summary")).toBeInTheDocument();
+  });
+
+  it("PROMPT 04: confirms the selected estate with canonical identity (Matrix identity.name primary)", () => {
+    renderSheet();
+    // re-125643 maps to the canonical Emerald Cay record —
+    // the fixture shorthand must never render for a known Estate.
+    const identity = screen.getByTestId("limit-buy-estate");
+    expect(identity).toHaveTextContent("Emerald Cay");
+    expect(identity).toHaveTextContent("Silly Creek, Providenciales, Turks and Caicos");
+    expect(identity.textContent).not.toContain("Tbilisi Riverhouse Loft");
   });
 });

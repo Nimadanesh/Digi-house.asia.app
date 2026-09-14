@@ -131,8 +131,8 @@ const WEEKS = [
   "2026-07-20T00:00:00Z",
 ] as const;
 
-const BAYSIDE = "prop-bayside-marina-penthouse";
-const ALFAMA = "prop-alfama-terrace-flat";
+const BAYSIDE = "re-108924";
+const ALFAMA = "re-123861";
 
 /** rent pools from mock distributions — floor(pool * ratio) must hold. */
 const RENT_POOL: Record<string, number> = {

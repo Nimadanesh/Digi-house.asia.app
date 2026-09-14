@@ -1,7 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import type { Listing } from "@/types/property";
-import { PrimaryPerformanceCharts } from "@/components/property/PrimaryPerformanceCharts";
 import { SecondaryPerformanceCharts } from "@/components/property/SecondaryPerformanceCharts";
 import { getPropertyAnalytics } from "@/lib/property-analytics";
 
@@ -10,9 +9,9 @@ vi.mock("@/lib/telegram/haptics", () => ({
 }));
 
 const primaryListing: Listing = {
-  id: "prop-marina-vista-4b",
-  title: "Marina Vista Apt 4B",
-  location: "Dubai Marina, UAE",
+  id: "re-128862",
+  title: "Grand 2 BDM Ocean Pool Villa (JOALI Being)",
+  location: "Bodufushi, JOALI Being, Raa Atoll, Maldives",
   description: "x",
   images: [],
   totalShares: 1000,
@@ -40,55 +39,14 @@ const primaryListing: Listing = {
 
 const secondaryListing: Listing = {
   ...primaryListing,
-  id: "prop-bali-sunset-2a",
-  title: "Bali Sunset Villa 2A",
+  id: "test-bali-sunset-2a",
+  title: "Test Bali Sunset Villa 2A",
   status: "resale",
   sharesSold: 1000,
   sharesRemaining: 0,
   fundingProgressRatio: 1,
   lastTradeUsd: 8400,
 };
-
-describe("PrimaryPerformanceCharts — redesign Phase 5", () => {
-  it("renders funding progress and cumulative shares charts from the shared dataset", () => {
-    render(<PrimaryPerformanceCharts listing={primaryListing} />);
-    expect(screen.getByTestId("funding-progress-chart")).toBeInTheDocument();
-    expect(screen.getByTestId("funding-progress-line")).toBeInTheDocument();
-    expect(screen.getByTestId("cumulative-shares-chart")).toBeInTheDocument();
-    expect(screen.getByTestId("cumulative-shares-line")).toBeInTheDocument();
-    expect(screen.getByTestId("yield-projection")).toBeInTheDocument();
-    // End state must match the current funding state exactly — as quiet captions
-    expect(screen.getByTestId("funding-progress-end")).toHaveTextContent("640 / 1,000");
-    expect(screen.getByTestId("cumulative-shares-end")).toHaveTextContent("640 / 1,000");
-    expect(screen.getByText("64% funded")).toBeInTheDocument();
-  });
-
-  it("NEVER renders a price chart or price series for Primary (strict spec §10)", () => {
-    const analytics = getPropertyAnalytics(primaryListing);
-    expect(analytics.priceHistory).toBeNull();
-    expect(analytics.ohlc).toBeNull();
-    expect(analytics.fundingHistory).not.toBeNull();
-    render(<PrimaryPerformanceCharts listing={primaryListing} />);
-    expect(screen.queryByTestId("price-chart")).not.toBeInTheDocument();
-    expect(screen.queryByTestId("price-svg")).not.toBeInTheDocument();
-  });
-
-  it("switches timeframes and the charts re-slice from the same dataset", () => {
-    render(<PrimaryPerformanceCharts listing={primaryListing} />);
-    fireEvent.click(screen.getByTestId("primary-range-1M"));
-    expect(screen.getByTestId("primary-range-1M")).toHaveAttribute("aria-pressed", "true");
-    fireEvent.click(screen.getByTestId("primary-range-ALL"));
-    expect(screen.getByTestId("primary-range-ALL")).toHaveAttribute("aria-pressed", "true");
-  });
-
-  it("yield projection shows only existing data (annual rent + gross yield), no invented math", () => {
-    render(<PrimaryPerformanceCharts listing={primaryListing} />);
-    // annualRentUsd 520000 cents = $5,200.00
-    expect(screen.getByText("$5,200.00")).toBeInTheDocument();
-    // gross yield = 520000 / 8000000 = 6.5%
-    expect(screen.getByText("6.5%")).toBeInTheDocument();
-  });
-});
 
 describe("SecondaryPerformanceCharts — redesign Phase 5", () => {
   it("renders the main chart with price line, OHLC candles and volume underlay", () => {

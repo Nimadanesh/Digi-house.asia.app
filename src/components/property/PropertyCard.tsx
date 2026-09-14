@@ -1,26 +1,36 @@
 "use client";
-// File responsibility: Marketplace listing card — Fable vertical card (image badges, 3 metrics, scarcity bar).
-// Whole-card tap → Property detail. Press scale 0.98. Flat block (no drop shadow).
-// Yield figures are rate-based (§0.4) via lib/property-yield — consistent with detail + buy sheet.
+// File responsibility: Estates listing card (marketplace villa card) — one photo,
+// title, two loud numbers (price + projected income), quiet meta whispers.
+// Phase is an icon-only badge (Plus = primary offering, ArrowLeftRight = secondary
+// market); no stage words anywhere visible. Whole card opens the estate detail.
+// Data via MarketplaceEstate view model only; price via its currentPriceUsd
+// (funding → offer, secondary → bestAsk ?? lastTrade ?? offer).
 import { memo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin, Flame } from "lucide-react";
+import { ArrowLeftRight, Info, MapPin, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
-import { usd, pct } from "@/lib/format";
+import { usd, usdCompact } from "@/lib/format";
+import { formatValuationDisplayCompact } from "@/lib/economics/estates/growth-potential";
 import {
-  annualReturnRatio,
-  shareWeeklyYieldUsd,
-} from "@/lib/property-yield";
+  projectedMonthlyIncomeUsd,
+  hasIncomeData,
+  listingStatusBadge,
+  MARKETPLACE_DEMO_CLOCK_MS,
+} from "@/lib/marketplace-filter";
 import { ROUTES } from "@/lib/constants";
-import { listingStatusBadge } from "@/lib/marketplace-filter";
-import type { Listing } from "@/types/property";
+import type { MarketplaceEstate } from "@/lib/economics/marketplace-view-model";
 import { FundingBar } from "./FundingBar";
-import { FeeInfoButton } from "@/components/common/FeeInfoButton";
+
+/** Display-only single place token: first segment before comma/·/en-dash. */
+function localityOf(location: string): string {
+  const [first] = location.split(/[,·–]/);
+  return (first ?? location).trim();
+}
 
 function PropertyCardInner({
-  listing,
+  estate,
   variant = "list",
   holding,
   className,
@@ -28,24 +38,24 @@ function PropertyCardInner({
   onNavigateHaptic,
   priority = false,
 }: {
-  listing: Listing;
+  estate: MarketplaceEstate;
   variant?: "list" | "mini";
   holding?: { sharesOwned: number; currentValueUsd: number; pendingWeekEarningsUsd: number };
   className?: string;
-  /** Epoch ms for status badge age (inject in tests; 0 → skip "New" age window). */
+  /** Epoch ms for status badge age (inject in tests; 0 → shared demo-tape clock). */
   nowMs?: number;
   onNavigateHaptic?: () => void;
   /** LCP hint for the first marketplace card. */
   priority?: boolean;
 }) {
-  const t = useTranslations("marketplace");
+  const t = useTranslations("estates");
   const tHome = useTranslations("home");
   const tCommon = useTranslations("common");
 
   if (variant === "mini") {
     return (
       <Link
-        href={ROUTES.property(listing.id)}
+        href={ROUTES.property(estate.id)}
         onClick={() => onNavigateHaptic?.()}
         className={cn(
           "block bg-card rounded-[12px] active:scale-[0.98] transition-transform duration-[120ms] ease-out",
@@ -54,9 +64,9 @@ function PropertyCardInner({
       >
         <div className="flex items-center gap-3 p-4">
           <div className="relative size-12 rounded-[10px] bg-surface-2 shrink-0 overflow-hidden">
-            {listing.images[0] ? (
+            {estate.images[0] ? (
               <Image
-                src={listing.images[0]}
+                src={estate.images[0]}
                 alt=""
                 fill
                 className="object-cover"
@@ -65,18 +75,18 @@ function PropertyCardInner({
             ) : null}
           </div>
           <div className="flex-1 min-w-0">
-            <h2 className="text-[0.9375rem] font-semibold text-foreground truncate">{listing.title}</h2>
+            <h2 className="text-[0.9375rem] font-semibold text-foreground truncate">{estate.name}</h2>
             {holding ? (
               <>
                 <p className="text-xs text-muted-foreground truncate tnum">
-                  {holding.sharesOwned} / {listing.totalShares} {tCommon("shares")} · {usd(holding.currentValueUsd)}
+                  {holding.sharesOwned} / {estate.totalShares} {tCommon("shares")} · {usd(holding.currentValueUsd)}
                 </p>
                 <p className="text-xs text-warning tnum mt-0.5">
                   {tHome("pendingThisWeek", { amount: usd(holding.pendingWeekEarningsUsd) })}
                 </p>
               </>
             ) : (
-              <p className="text-xs text-muted-foreground truncate">{listing.location}</p>
+              <p className="text-xs text-muted-foreground truncate">{estate.location}</p>
             )}
           </div>
         </div>
@@ -84,125 +94,156 @@ function PropertyCardInner({
     );
   }
 
-  const cover = listing.images[0] ?? "/images/properties/p1.png";
-  const apy = annualReturnRatio(listing);
-  const monthlyPerShare = (shareWeeklyYieldUsd(listing) * 52) / 12;
-  const funded = listing.fundingProgressRatio >= 1;
-  // PD-07: on the secondary market the price is the latest executed trade, not the
-  // historical offering price. Fall back to the offering price before the first fill.
-  const secondary =
-    listing.status === "resale" || listing.status === "funded";
-  const displayPrice = secondary
-    ? (listing.lastTradeUsd ?? listing.sharePriceUsd)
-    : listing.sharePriceUsd;
-  const clock = nowMs > 0 ? nowMs : Date.UTC(2026, 6, 26);
-  const badge = listingStatusBadge(listing, clock);
-
-  const badgeLabel =
-    badge.kind === "new"
-      ? tCommon("new")
-      : badge.kind === "hot"
-        ? tCommon("hot")
-        : tCommon("soldPct", { pct: badge.soldPct ?? 0 });
+  const cover = estate.images[0] ?? "/images/properties/p1.png";
+  // Slice 2: income comes from the single presentation layer (V1, or pending).
+  const incomeAvailable = hasIncomeData(estate);
+  // Phase split mirrors the price helper exactly (funding → offer price;
+  // funded/resale → bestAsk ?? lastTrade ?? offer), so icon and price agree.
+  const secondary = estate.status === "resale" || estate.status === "funded";
+  // Shared demo-tape clock: keeps the "New" badge and the "New" filter in agreement.
+  const clock = nowMs > 0 ? nowMs : MARKETPLACE_DEMO_CLOCK_MS;
+  const badge = listingStatusBadge(estate, clock);
+  const showNewBadge = badge.kind === "new";
+  const estateValueText = estate.valuationDisplay
+    ? formatValuationDisplayCompact(estate.valuationDisplay)
+    : estate.estateValue
+      ? usdCompact(estate.estateValue.value)
+      : null;
 
   return (
     <Link
-      href={ROUTES.property(listing.id)}
+      href={ROUTES.property(estate.id)}
       onClick={() => onNavigateHaptic?.()}
       className={cn(
-        "block bg-card rounded-[12px] overflow-hidden active:scale-[0.98] transition-transform duration-[120ms] ease-out",
+        "block bg-card rounded-[16px] overflow-hidden active:scale-[0.98] transition-transform duration-[120ms] ease-out",
         className,
       )}
       data-testid="property-card"
+      data-phase={secondary ? "secondary" : "primary"}
     >
       <div className="relative aspect-[16/10] bg-surface-2">
         <Image
           src={cover}
-          alt={listing.title}
+          alt={estate.name}
           fill
           priority={priority}
           className="object-cover"
           sizes="(max-width: 480px) 100vw, 480px"
         />
         <span
+          data-testid="card-phase"
+          aria-label={secondary ? "Secondary market" : "Primary offering"}
           className={cn(
-            "absolute top-2.5 start-2.5 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[0.6875rem] font-semibold",
-            badge.kind === "hot"
-              ? "bg-danger/90 text-white"
-              : "bg-black/55 text-white",
+            "absolute left-2 top-2 flex size-6 items-center justify-center rounded-full",
+            secondary ? "bg-[rgba(255,255,255,0.16)]" : "bg-[#229ED9]",
           )}
-          data-testid="card-status-badge"
         >
-          {badge.kind === "hot" ? <Flame size={12} strokeWidth={2.25} aria-hidden /> : null}
-          {badgeLabel}
+          {secondary ? (
+            <ArrowLeftRight size={14} strokeWidth={2} aria-hidden className="text-white" />
+          ) : (
+            <Plus size={14} strokeWidth={2} aria-hidden className="text-white" />
+          )}
         </span>
-        <span
-          className="absolute top-2.5 end-2.5 rounded-full bg-success px-2.5 py-1 text-xs font-semibold text-white tnum shadow-sm"
-          data-testid="card-apy-badge"
-        >
-          {pct(apy)} {tCommon("apy")}
-        </span>
-        <span className="absolute bottom-2.5 end-2.5">
-          <FeeInfoButton variant="icon" />
-        </span>
+        {showNewBadge ? (
+          <span
+            className="absolute right-2 top-2 inline-flex items-center rounded-full bg-black/55 px-2.5 py-0.5 text-[0.6875rem] font-semibold text-white"
+            data-testid="card-status-badge"
+          >
+            {tCommon("new")}
+          </span>
+        ) : null}
       </div>
 
-      <div className="p-4 space-y-3">
-        <div>
-          <h2 className="text-[0.9375rem] font-semibold leading-snug text-foreground">{listing.title}</h2>
-          <p className="mt-1.5 flex items-center gap-1 text-sm leading-relaxed text-muted-foreground">
-            <MapPin size={14} strokeWidth={1.75} className="shrink-0" aria-hidden />
-            <span className="truncate">{listing.location}</span>
-          </p>
-        </div>
-
-        <div className="grid grid-cols-3 gap-2" data-testid="card-metrics">
-          <Metric
-            label={secondary ? t("lastPrice") : t("pricePerShare")}
-            value={usd(displayPrice)}
-          />
-          <Metric label={t("monthlyPerShare")} value={usd(monthlyPerShare)} accent />
-          <Metric label={t("nightFrom")} value={usd(displayPrice)} />
-        </div>
-
-        <div className="space-y-1.5">
-          <FundingBar progress={listing.fundingProgressRatio} funded={funded} />
+      <div className="px-3.5 pb-3.5 pt-3">
+        <div className="min-w-0 space-y-2">
+          <h2 className="truncate text-[15px] font-semibold leading-snug text-white">{estate.name}</h2>
           <p
-            className="text-xs leading-relaxed text-muted-foreground tnum pt-0.5"
-            data-testid="card-sold-label"
+            className="flex items-center gap-1 text-xs leading-relaxed text-[rgba(255,255,255,0.50)]"
+            data-testid="card-location"
           >
-            {t("sharesSold", { sold: listing.sharesSold, total: listing.totalShares })}
+            <MapPin size={12} strokeWidth={1.75} className="shrink-0" aria-hidden />
+            <span className="truncate">
+              {localityOf(estate.location)}
+              {estate.propertyType ? <span> · {estate.propertyType}</span> : null}
+            </span>
           </p>
         </div>
+
+        <div className="mt-2.5 grid grid-cols-2 gap-3">
+          <div className="min-w-0">
+            <div className="text-[10px] font-medium uppercase tracking-[0.08em] leading-tight text-[rgba(255,255,255,0.40)]">
+              {secondary ? t("lastPrice") : t("pricePerShare")}
+            </div>
+            <div
+              dir="ltr"
+              className="mt-0.5 truncate text-[18px] font-semibold tnum text-white"
+              data-testid="card-price"
+            >
+              {usd(estate.currentPriceUsd)}
+            </div>
+          </div>
+          <div className="min-w-0">
+            <div className="text-[10px] font-medium uppercase tracking-[0.08em] leading-tight text-[rgba(255,255,255,0.40)]">
+              {t("projectedIncome")}
+            </div>
+            {incomeAvailable ? (
+              <div
+                dir="ltr"
+                className="mt-0.5 truncate text-[18px] font-semibold tnum text-white"
+                data-testid="card-income"
+              >
+                {usd(projectedMonthlyIncomeUsd(estate))}
+              </div>
+            ) : (
+              <span
+                className="mt-1 inline-flex items-center gap-1 rounded-full bg-surface-2 px-2 py-0.5 text-[0.6875rem] font-medium text-muted-foreground"
+                data-testid="card-income-pending"
+              >
+                <Info size={12} strokeWidth={1.75} aria-hidden />
+                {t("incomePending")}
+              </span>
+            )}
+          </div>
+        </div>
+
+        <p
+          className="mt-2 truncate text-[0.8125rem] leading-relaxed text-[rgba(255,255,255,0.45)] tnum"
+          data-testid="card-meta"
+        >
+          {/* Nightly range keeps LTR order in RTL locales (bidi isolation). */}
+          <span dir="ltr">{estate.nightlyDisplay ?? t("incomePending")}</span>
+          {" · "}
+          {estateValueText ?? t("incomePending")}
+        </p>
+
+        <p
+          className="mt-2 truncate text-[11px] leading-relaxed text-[rgba(255,255,255,0.35)] tnum"
+          data-testid="card-fraction"
+        >
+          {t("shareFraction", { total: estate.totalShares.toLocaleString() })}
+        </p>
+
+        {estate.status === "funding" ? (
+          <div className="mt-2">
+            <FundingBar
+              progress={estate.fundingProgressRatio}
+              funded={estate.fundingProgressRatio >= 1}
+              className="h-[3px]"
+            />
+            <p
+              className="mt-1 text-[11px] leading-relaxed text-[rgba(255,255,255,0.45)] tnum"
+              data-testid="card-availability"
+            >
+              {t("fundedCaption", {
+                pct: Math.round(estate.fundingProgressRatio * 100),
+                remaining: estate.sharesRemaining.toLocaleString(),
+              })}
+            </p>
+          </div>
+        ) : null}
       </div>
     </Link>
   );
 }
 
 export const PropertyCard = memo(PropertyCardInner);
-
-function Metric({
-  label,
-  value,
-  accent = false,
-}: {
-  label: string;
-  value: string;
-  accent?: boolean;
-}) {
-  return (
-    <div className="min-w-0">
-      <div className="mb-1 text-[0.625rem] uppercase tracking-wide leading-tight text-muted-foreground">
-        {label}
-      </div>
-      <div
-        className={cn(
-          "truncate text-[0.8125rem] font-semibold tnum",
-          accent ? "text-success" : "text-foreground",
-        )}
-      >
-        {value}
-      </div>
-    </div>
-  );
-}

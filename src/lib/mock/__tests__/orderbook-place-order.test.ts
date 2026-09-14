@@ -4,8 +4,8 @@ import { getCurrentSharePrice } from "@/lib/property-price";
 import type { Listing } from "@/types/property";
 import { PROPERTIES } from "@/lib/mock/seed/properties";
 
-// Bayside seed ladder mid = lastTradeUsd 25100 → bestAsk = round(25100 × 1.02).
-const PID = "prop-bayside-marina-penthouse";
+// Syrene seed ladder mid = lastTradeUsd 25100 → bestAsk = round(25100 × 1.02).
+const PID = "re-108924";
 const STANDING_BEST_ASK = Math.round(25_100 * 1.02);
 
 describe("MockOrderBookRepo — user orders must not move the current price", () => {

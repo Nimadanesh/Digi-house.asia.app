@@ -51,7 +51,7 @@ export function PropertyCompactTopBar({
           data-testid="compact-topbar-back"
           className="flex size-11 shrink-0 items-center justify-center text-foreground active:scale-[0.97] transition-transform duration-[120ms] ease-out"
         >
-          <ChevronLeft size={22} strokeWidth={1.75} />
+          <ChevronLeft size={22} strokeWidth={1.75} className="rtl:rotate-180" />
         </button>
         <span className="truncate text-[0.9375rem] font-semibold text-foreground" data-testid="compact-topbar-title">
           {title}

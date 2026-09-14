@@ -14,8 +14,8 @@ import {
   type SettleInstantSellDeps,
 } from "./settle-instant-sell.js";
 
-const FUNDING = "prop-marina-vista-4b"; // funding, 2500 total, 2300 sold → 200 remaining
-const RESALE = "prop-tbilisi-riverhouse-loft";
+const FUNDING = "re-128862"; // funding, 2500 total, 2300 sold → 200 remaining
+const RESALE = "re-125643";
 const USER = "user-a";
 
 function makeDeps() {

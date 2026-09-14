@@ -18,7 +18,7 @@ import {
 } from "./tick-payout.js";
 
 const DIST_ID = "dist-bayside-2026-07-20";
-const PROP = "prop-bayside-marina-penthouse";
+const PROP = "re-108924";
 const WEEK = "2026-07-20";
 
 function makeDist(

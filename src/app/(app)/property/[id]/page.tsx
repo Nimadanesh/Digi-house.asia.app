@@ -10,14 +10,18 @@ import { useOrderBook } from "@/hooks/useOrderBook";
 import { useTelegram } from "@/hooks/useTelegram";
 import { useTonConnect } from "@/hooks/useTonConnect";
 import { useBuyShares, type BuyInput, UsdtUnavailableError } from "@/hooks/useBuyShares";
+import { useFees } from "@/hooks/useFees";
+import { previewBuyQuote } from "@/lib/buy-quote";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { usePropertyDocuments } from "@/hooks/usePropertyDocuments";
+import { useStay } from "@/hooks/useStay";
 import { useLocks, activeLocksForProperty } from "@/hooks/useLocks";
 import { useScrolledPast } from "@/hooks/useScrolledPast";
 import { useUiStore } from "@/stores/ui.store";
 import { haptics } from "@/lib/telegram/haptics";
 import { usd } from "@/lib/format";
 import { getCurrentSharePrice } from "@/lib/property-price";
+import { getEstate24ByRuntimeId } from "@/lib/economics/estates/estate-24-data";
 import type { BuyCurrency } from "@/types/buy";
 import { PropertyDetail } from "@/components/property/PropertyDetail";
 import { PropertyDetailSkeleton } from "@/components/property/PropertyDetailSkeleton";
@@ -36,8 +40,11 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
   const { id } = use(params);
   const tCommon = useTranslations("common");
   const tOnboarding = useTranslations("onboarding");
+  const tProperty = useTranslations("property");
+  const feesQuery = useFees();
   const property = useProperty(id);
   const orderBook = useOrderBook(id, { live: true });
+  const stayQuery = useStay(id);
   const portfolio = usePortfolio();
   const { documents, download: docDownload } = usePropertyDocuments(id);
   const locksQuery = useLocks();
@@ -49,8 +56,6 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
   const settingsOpen = useUiStore((s) => s.settingsOpen);
   const pushToast = useUiStore((s) => s.pushToast);
 
-  /** null = untouched — derives from owned shares once the portfolio loads (Phase 2 prefill). */
-  const [previewShares, setPreviewShares] = useState<number | null>(null);
   const [qty, setQty] = useState(10);
   const [currency, setCurrency] = useState<BuyCurrency>("TON");
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -81,7 +86,6 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
   // Phase 3 — display-only accrued unpaid yield across this property's active locks.
   const accruedUnpaidUsd = activeLocks.reduce((sum, lock) => sum + lock.accruedUnpaidUsd, 0);
   const avgCostUsd = portfolio.data?.holdings.find((h) => h.propertyId === id)?.avgCostUsd;
-  const effectivePreviewShares = previewShares ?? Math.max(1, ownedShares);
   const freeShares = Math.max(0, ownedShares - lockedShares);
   const mainButtonActive = useUiStore((s) => s.mainButtonActive);
   const setStickyCtaVisible = useUiStore((s) => s.setStickyCtaVisible);
@@ -107,7 +111,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
     ? getCurrentSharePrice(listing, { bestAskUsd: orderBook.data?.bestAskUsd })
     : 0;
 
-  // Single buy entry — hero CTA, sticky CTA, calculator and MainButton all route here.
+  // Single buy entry — hero CTA, sticky CTA, Ownership panel and MainButton route here.
   // Primary offering opens the TON/USDT BuySheet; a secondary listing opens the
   // market (limit) buy sheet anchored to the best ask (Phase 7).
   const openBuyForContext = useCallback((n?: number) => {
@@ -115,7 +119,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
     if (listing.status === "funding") {
       if (remaining <= 0) return;
       haptics.impact("light");
-      setQty(Math.min(remaining, Math.max(1, n ?? effectivePreviewShares)));
+      setQty(Math.min(remaining, Math.max(1, n ?? Math.max(1, ownedShares))));
       setCurrency("TON");
       setStep("qty");
       setSheetOpen(true);
@@ -123,7 +127,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
     }
     haptics.impact("light");
     setLimitBuyOpen(true);
-  }, [listing, remaining, effectivePreviewShares]);
+  }, [listing, remaining, ownedShares]);
 
   // BackButton — safe chrome never throws (even if TG unavailable).
   useEffect(() => {
@@ -237,7 +241,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
       }
       setMainButtonActive(true);
       mainButton.setParams({
-        text: tCommon("buyShare"),
+        text: tCommon("acquireOwnership"),
         isEnabled: true,
         color: "#229ED9",
         textColor: "#ffffff",
@@ -289,10 +293,13 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
 
     if (step === "summary") {
       const valid = qty >= 1 && qty <= remaining;
-      const totalUsd = qty * listing.sharePriceUsd;
+      // Same payable total the sheet shows (principal + primary commission).
+      const { totalPayableUsd } = previewBuyQuote(qty, listing.sharePriceUsd, feesQuery.data ?? []);
       const pending = buy.isPending;
       mainButton.setParams({
-        text: pending ? "Confirming…" : `Confirm & Pay — ${usd(totalUsd)}`,
+        text: pending
+          ? tProperty("confirmingPending")
+          : tProperty("confirmPayTotal", { total: usd(totalPayableUsd) }),
         isEnabled: valid && !pending,
         color: "#229ED9",
         textColor: "#ffffff",
@@ -315,11 +322,13 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
     qty,
     remaining,
     ton.connected,
-    effectivePreviewShares,
+    ownedShares,
     buy.isPending,
     confirmBuy,
+    feesQuery.data,
     tCommon,
     tOnboarding,
+    tProperty,
     mainButton,
   ]);
 
@@ -361,7 +370,11 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
   return (
     <>
       {/* Compact top bar (#07b) — back + property name on scroll-up past the hero. */}
-      <PropertyCompactTopBar title={listing.title} visible={compactBarVisible} />
+      {/* PROMPT 03: canonical Estate24 name (legacy fixture title is not a fact). */}
+      <PropertyCompactTopBar
+        title={getEstate24ByRuntimeId(listing.id)?.name ?? listing.title}
+        visible={compactBarVisible}
+      />
       {/* Tight CTA clearance (#08): 96px = 52px sticky bar + scrim + breathing room.
           The AppShell's own bottom inset (88px + safe area) remains as the
           Telegram-chrome clearance — no excess blank block. */}
@@ -370,13 +383,11 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
           listing={listing}
           orderBook={orderBook.data}
           onBuy={() => openBuyForContext()}
-          previewShares={effectivePreviewShares}
-          onSharesChange={setPreviewShares}
           ownedShares={ownedShares}
           lockedShares={lockedShares}
           avgCostUsd={avgCostUsd}
           accruedUnpaidUsd={accruedUnpaidUsd}
-          onBuyShares={(n) => openBuyForContext(n)}
+          stay={stayQuery.data}
           documents={documents}
           onDownloadDoc={(docId) => docDownload.mutate(docId)}
           downloadingDocId={docDownload.isPending ? String(docDownload.variables) : null}
@@ -392,6 +403,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
           priceUsd={currentPriceUsd}
           onBuy={() => openBuyForContext()}
           buyDisabled={listing.status === "funding" && remaining <= 0}
+          scarcityLeft={listing.status === "funding" ? Math.max(0, remaining) : undefined}
           onSell={
             listing.status !== "funding" && freeShares > 0
               ? () => {
@@ -440,6 +452,8 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
           listing={listing}
           freeShares={freeShares}
           avgCostUsd={avgCostUsd ?? listing.sharePriceUsd}
+          ownedShares={ownedShares}
+          orderBook={orderBook.data}
         />
       ) : null}
     </>

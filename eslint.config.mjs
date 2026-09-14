@@ -12,6 +12,14 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Explicit ignores disable ESLint's automatic `.gitignore` handling,
+    // so keep gitignored generated dirs in sync with .gitignore here.
+    "e2e/reports/**",
+    "e2e/test-results/**",
+    "node_modules/**",
+    "temp/**",
+    ".superpowers/**",
+    "backups/**",
   ]),
 ]);
 

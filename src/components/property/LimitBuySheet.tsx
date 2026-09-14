@@ -13,6 +13,7 @@ import { haptics } from "@/lib/telegram/haptics";
 import { useFees } from "@/hooks/useFees";
 import { usePlaceOrder } from "@/hooks/useSells";
 import { useUiStore } from "@/stores/ui.store";
+import { getEstate24ByRuntimeId } from "@/lib/economics/estates/estate-24-data";
 import { Sheet } from "@/components/common/Sheet";
 import { Block } from "@/components/common/Block";
 import { Row } from "@/components/common/Row";
@@ -77,6 +78,18 @@ export function LimitBuySheet({
         <h2 id="limit-buy-title" className="text-[1.0625rem] font-semibold text-foreground">
           {t("buyOnMarket")}
         </h2>
+
+        {/* PROMPT 04 Matrix identity.name primary / location secondary: confirm the
+            selected Estate on the secondary Buy surface (canonical wins, fixture
+            fallback for unmapped ids only). */}
+        <p className="space-y-0.5" data-testid="limit-buy-estate">
+          <span className="block truncate text-sm font-semibold text-foreground">
+            {getEstate24ByRuntimeId(listing.id)?.name ?? listing.title}
+          </span>
+          <span className="block truncate text-xs text-muted-foreground">
+            {getEstate24ByRuntimeId(listing.id)?.location.full ?? listing.location}
+          </span>
+        </p>
 
         <Block>
           <Row className="!min-h-[48px]">

@@ -74,7 +74,7 @@ if (env.DATABASE_URL) {
     // Seed demo documents if table is empty
     if (env.NODE_ENV !== "production") {
       (async () => {
-        const existing = await documents!.listByProperty("prop-marina-vista-4b");
+        const existing = await documents!.listByProperty("re-128862");
         if (existing.length === 0) {
           for (const doc of SEED_DOCUMENTS) {
             await db.insert(propertyDocuments).values(doc);

@@ -6,9 +6,9 @@ import { USER } from "./user";
 export const TRANSACTIONS: Transaction[] = [
   // --- Buys ---
   {
-    id: "tx-bayside-buy-success",
+    id: "tx-re-108924-buy-success",
     kind: "buy",
-    propertyId: "prop-bayside-marina-penthouse",
+    propertyId: "re-108924",
     userId: USER.id,
     shares: 60,
     amountUsd: 60 * 25000,
@@ -17,9 +17,9 @@ export const TRANSACTIONS: Transaction[] = [
     createdAt: "2026-03-05T09:42:00Z",
   },
   {
-    id: "tx-alfama-buy-success",
+    id: "tx-re-123861-buy-success",
     kind: "buy",
-    propertyId: "prop-alfama-terrace-flat",
+    propertyId: "re-123861",
     userId: USER.id,
     shares: 75,
     amountUsd: 75 * 10000,
@@ -28,9 +28,9 @@ export const TRANSACTIONS: Transaction[] = [
     createdAt: "2026-04-19T12:10:00Z",
   },
   {
-    id: "tx-marina-buy-pending",
+    id: "tx-re-128862-buy-pending",
     kind: "buy",
-    propertyId: "prop-marina-vista-4b",
+    propertyId: "re-128862",
     userId: USER.id,
     shares: 10,
     amountUsd: 10 * 12500,
@@ -39,9 +39,9 @@ export const TRANSACTIONS: Transaction[] = [
     createdAt: "2026-07-22T18:05:00Z",
   },
   {
-    id: "tx-tbilisi-buy-failed",
+    id: "tx-re-125643-buy-failed",
     kind: "buy",
-    propertyId: "prop-tbilisi-riverhouse-loft",
+    propertyId: "re-125643",
     userId: USER.id,
     shares: 4,
     amountUsd: 4 * 8000,
@@ -51,9 +51,9 @@ export const TRANSACTIONS: Transaction[] = [
   },
   // --- Instant sell (primary buy-back, −7% flat) ---
   {
-    id: "tx-alfama-instant-sell",
+    id: "tx-re-123861-instant-sell",
     kind: "instant_sell",
-    propertyId: "prop-alfama-terrace-flat",
+    propertyId: "re-123861",
     userId: USER.id,
     shares: 25,
     amountUsd: 279_000, // net = $3,000 gross − 7%
@@ -64,9 +64,9 @@ export const TRANSACTIONS: Transaction[] = [
   },
   // --- Secondary trades ---
   {
-    id: "tx-alfama-trade-buy",
+    id: "tx-re-123861-trade-buy",
     kind: "trade_buy",
-    propertyId: "prop-alfama-terrace-flat",
+    propertyId: "re-123861",
     userId: USER.id,
     shares: 30,
     amountUsd: 360_000, // $3,600 notional
@@ -76,9 +76,9 @@ export const TRANSACTIONS: Transaction[] = [
     createdAt: "2026-06-15T11:00:00Z",
   },
   {
-    id: "tx-tbilisi-trade-sell",
+    id: "tx-re-125643-trade-sell",
     kind: "trade_sell",
-    propertyId: "prop-tbilisi-riverhouse-loft",
+    propertyId: "re-125643",
     userId: USER.id,
     shares: 20,
     amountUsd: 198_600, // net = $2,000 gross − 0.7%

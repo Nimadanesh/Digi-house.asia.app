@@ -17,7 +17,7 @@ const DAY = 86_400_000;
 
 /** A small funding property so a single buyer can sell it out. */
 const SMALL = {
-  id: "prop-e2e-small-funding",
+  id: "test-e2e-small-funding",
   totalShares: 10,
   sharesSold: 0,
   sharePriceUsd: 8_000, // $80

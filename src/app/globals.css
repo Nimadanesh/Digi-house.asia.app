@@ -282,7 +282,12 @@
   }
 }
 .page-enter {
-  animation: dh-page-in 180ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  /* backwards (not both): holding the final keyframe with fill-forwards keeps a
+     computed transform on the wrapper forever, which silently becomes the
+     containing block for every position:fixed descendant (sticky CTA, compact
+     top bar) and un-floats them onto the document end. backwards replays the
+     identical enter frames while leaving post-animation styles natural. */
+  animation: dh-page-in 180ms cubic-bezier(0.23, 1, 0.32, 1) backwards;
 }
 
 /* Braille Flipwave loader — ellipsis dots pulsing in sync. */
@@ -478,4 +483,45 @@
 }
 .no-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+/* Home balance "thinking" sheen — applied to the amount node itself: white glyphs
+   with a slow light pass, then a hold. CSS animation only, no JS interval. */
+.balance-shimmer {
+  display: inline-block;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  background-image: linear-gradient(
+    100deg,
+    #ffffff 0%,
+    #ffffff 38%,
+    rgba(255, 255, 255, 0.35) 50%,
+    #ffffff 62%,
+    #ffffff 100%
+  );
+  background-size: 220% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: balance-sheen 4.5s ease-in-out infinite;
+}
+@keyframes balance-sheen {
+  0% {
+    background-position: 120% 0;
+  }
+  32% {
+    background-position: -20% 0;
+  }
+  100% {
+    background-position: -20% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .balance-shimmer {
+    animation: none;
+    color: #fff;
+    -webkit-text-fill-color: #fff;
+    background-image: none;
+  }
 }

@@ -59,8 +59,8 @@ export const ORDER_BOOKS: OrderBookState[] = PROPERTIES.map((p) => {
 // >=1 open order on a held property (demo order book).
 export const OPEN_ORDERS: Order[] = [
   {
-    id: "ord-aria-alfama-sell-1",
-    propertyId: "prop-alfama-terrace-flat",
+    id: "ord-open-re-123861-sell-1",
+    propertyId: "re-123861",
     makerAddress: USER.walletAddress ?? "",
     side: "sell",
     priceUsd: 10800,

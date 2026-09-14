@@ -1,18 +1,22 @@
 // File responsibility: property tab strip (REDESIGN-SPEC §7). Horizontal-scroll on
 // mobile, roving tabindex keyboard support, Telegram chip styling (flat, no shadow).
 // Safe interaction per spec §21 — tab selection is immediate, haptic 'selection'.
+//
+// Phase 9 (UI Mapping §5.1): 5 → 4 tabs — Estate / Income / Ownership / Details.
+// "Performance" and "Holders" dissolve: Performance content splits (funding charts →
+// Estate, rental/income → Income, resale charts → demoted resale block); Holders
+// content moves under Ownership. ids: overview→estate, holders→ownership.
 import { useRef } from "react";
 import { useTranslations } from "next-intl";
 import { haptics } from "@/lib/telegram/haptics";
 import { cn } from "@/lib/utils";
 
-export type PropertyTabId = "overview" | "performance" | "holders" | "income" | "details";
+export type PropertyTabId = "estate" | "income" | "ownership" | "details";
 
 export const PROPERTY_TABS: PropertyTabId[] = [
-  "overview",
-  "performance",
-  "holders",
+  "estate",
   "income",
+  "ownership",
   "details",
 ];
 
@@ -33,9 +37,15 @@ export function PropertyTabs({
 
   function handleKeyDown(e: React.KeyboardEvent) {
     const idx = PROPERTY_TABS.indexOf(active);
+    // Slice 7: arrow direction follows document direction (WAI-APG) — in RTL,
+    // ArrowLeft advances visually-left (next), ArrowRight goes back.
+    const rtl =
+      typeof document !== "undefined" && document.documentElement.dir === "rtl";
+    const forward = rtl ? "ArrowLeft" : "ArrowRight";
+    const backward = rtl ? "ArrowRight" : "ArrowLeft";
     let next: number | null = null;
-    if (e.key === "ArrowRight") next = (idx + 1) % PROPERTY_TABS.length;
-    else if (e.key === "ArrowLeft") next = (idx - 1 + PROPERTY_TABS.length) % PROPERTY_TABS.length;
+    if (e.key === forward) next = (idx + 1) % PROPERTY_TABS.length;
+    else if (e.key === backward) next = (idx - 1 + PROPERTY_TABS.length) % PROPERTY_TABS.length;
     else if (e.key === "Home") next = 0;
     else if (e.key === "End") next = PROPERTY_TABS.length - 1;
     if (next === null) return;

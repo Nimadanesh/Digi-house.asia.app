@@ -17,7 +17,7 @@ function seedUser(id: string, displayName: string) {
 
 const BASE_TXS: TransactionRecord[] = [
   {
-    id: "tx-1", userId: "user-a", kind: "buy", propertyId: "prop-1",
+    id: "tx-1", userId: "user-a", kind: "buy", propertyId: "test-1",
     shares: 10, amountUsd: 100000, tonAmount: null, status: "success",
     txHash: "simulated:tx-1", error: null, buyIntentId: null, createdAt: new Date("2026-07-01"),
   },
@@ -27,12 +27,12 @@ const BASE_TXS: TransactionRecord[] = [
     txHash: "simulated:tx-2", error: null, buyIntentId: null, createdAt: new Date("2026-07-02"),
   },
   {
-    id: "tx-3", userId: "user-b", kind: "buy", propertyId: "prop-2",
+    id: "tx-3", userId: "user-b", kind: "buy", propertyId: "test-2",
     shares: 5, amountUsd: 50000, tonAmount: null, status: "success",
     txHash: "simulated:tx-3", error: null, buyIntentId: null, createdAt: new Date("2026-07-03"),
   },
   {
-    id: "tx-4", userId: "user-a", kind: "sell", propertyId: "prop-1",
+    id: "tx-4", userId: "user-a", kind: "sell", propertyId: "test-1",
     shares: -5, amountUsd: -50000, tonAmount: null, status: "success",
     txHash: "simulated:tx-4", error: null, buyIntentId: null, createdAt: new Date("2026-07-04"),
   },
@@ -132,19 +132,19 @@ describe("transaction routes", () => {
       const store = createMemoryTxStore([
         ...BASE_TXS,
         {
-          id: "tx-isell", userId: "user-a", kind: "instant_sell", propertyId: "prop-1",
+          id: "tx-isell", userId: "user-a", kind: "instant_sell", propertyId: "test-1",
           shares: 2, amountUsd: 14_880, tonAmount: null, status: "success",
           txHash: "simulated:isell", error: null, buyIntentId: null, feeUsd: 1_120,
           createdAt: new Date("2026-07-05"),
         },
         {
-          id: "tx-tbuy", userId: "user-a", kind: "trade_buy", propertyId: "prop-2",
+          id: "tx-tbuy", userId: "user-a", kind: "trade_buy", propertyId: "test-2",
           shares: 3, amountUsd: 30_000, tonAmount: null, status: "success",
           txHash: "simulated:tbuy", error: null, buyIntentId: null, feeUsd: 210,
           createdAt: new Date("2026-07-06"),
         },
         {
-          id: "tx-tsell", userId: "user-a", kind: "trade_sell", propertyId: "prop-2",
+          id: "tx-tsell", userId: "user-a", kind: "trade_sell", propertyId: "test-2",
           shares: 3, amountUsd: 29_790, tonAmount: null, status: "success",
           txHash: "simulated:tsell", error: null, buyIntentId: null, feeUsd: 210,
           createdAt: new Date("2026-07-07"),

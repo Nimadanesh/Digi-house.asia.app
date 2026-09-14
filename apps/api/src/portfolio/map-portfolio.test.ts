@@ -32,18 +32,18 @@ describe("buildPortfolioSummary", () => {
 
   it("derives holding fields and aggregates", () => {
     const props = new Map<string, PropertyMark>([
-      ["prop-bayside-marina-penthouse", bayside],
-      ["prop-alfama-terrace-flat", alfama],
+      ["re-108924", bayside],
+      ["re-123861", alfama],
     ]);
     const s = buildPortfolioSummary(
       [
         {
-          propertyId: "prop-bayside-marina-penthouse",
+          propertyId: "re-108924",
           sharesOwned: 160,
           avgCostUsd: 25_000,
         },
         {
-          propertyId: "prop-alfama-terrace-flat",
+          propertyId: "re-123861",
           sharesOwned: 200,
           avgCostUsd: 10_000,
         },
@@ -78,13 +78,13 @@ describe("buildPortfolioSummary", () => {
 
   it("skips missing properties and zero shares", () => {
     const props = new Map<string, PropertyMark>([
-      ["prop-a", { totalShares: 100, sharePriceUsd: 1000, annualRentUsd: 5200 }],
+      ["test-a", { totalShares: 100, sharePriceUsd: 1000, annualRentUsd: 5200 }],
     ]);
     const s = buildPortfolioSummary(
       [
         { propertyId: "missing", sharesOwned: 10, avgCostUsd: 100 },
-        { propertyId: "prop-a", sharesOwned: 0, avgCostUsd: 100 },
-        { propertyId: "prop-a", sharesOwned: 5, avgCostUsd: 100 },
+        { propertyId: "test-a", sharesOwned: 0, avgCostUsd: 100 },
+        { propertyId: "test-a", sharesOwned: 5, avgCostUsd: 100 },
       ],
       props,
     );

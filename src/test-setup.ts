@@ -28,14 +28,31 @@ function format(template: string, values?: Record<string, string | number | Date
   });
 }
 
+// Test-side translator: plain interpolation + a `rich` twin that strips the
+// ICU rich-text tags (e.g. "<value>{valueText}</value>" → the interpolated
+// text) so components using t.rich render honest strings in tests.
+function makeTranslator(namespace?: string) {
+  const resolve = (key: string) => {
+    const path = namespace ? `${namespace}.${key}` : key;
+    return lookup(en as Messages, path) ?? key;
+  };
+  const translate = (key: string, values?: Record<string, string | number | Date>) =>
+    format(resolve(key), values);
+  translate.rich = (
+    key: string,
+    values?: Record<string, string | number | Date | ((chunks: string) => unknown)>,
+  ): string => {
+    const raw = resolve(key);
+    const plain = Object.fromEntries(
+      Object.entries(values ?? {}).filter(([, v]) => typeof v !== "function"),
+    ) as Record<string, string | number | Date>;
+    return format(raw, plain).replace(/<\/?[a-zA-Z]+>/g, "");
+  };
+  return translate;
+}
+
 vi.mock("next-intl", () => ({
-  useTranslations: (namespace?: string) => {
-    return (key: string, values?: Record<string, string | number | Date>) => {
-      const path = namespace ? `${namespace}.${key}` : key;
-      const raw = lookup(en as Messages, path) ?? key;
-      return format(raw, values);
-    };
-  },
+  useTranslations: (namespace?: string) => makeTranslator(namespace),
   useLocale: () => "en",
   NextIntlClientProvider: ({ children }: { children: unknown }) => children,
 }));

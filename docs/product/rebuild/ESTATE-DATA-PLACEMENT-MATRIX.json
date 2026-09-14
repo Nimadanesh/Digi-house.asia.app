@@ -1,0 +1,1782 @@
+{
+  "schemaVersion": "1.0",
+  "document": "ESTATE-DATA-PLACEMENT-MATRIX",
+  "purpose": "Define where canonical Estate data is presented across the FractionalLuxe product, why it is presented there, how it should be framed, and where it must not be used.",
+  "authority": {
+    "precedence": [
+      "BUSINESS-RULES.md",
+      "ESTATE-ECONOMICS-DESIGN-CONTRACT.md",
+      "ESTATE-MARKETING-FUNNEL.md",
+      "ESTATE-DATA-CONTRACT.md",
+      "ESTATE-24-DATA.json",
+      "ESTATE-DATA-PLACEMENT-MATRIX.json"
+    ],
+    "rule": "This matrix governs presentation and placement. It does not redefine data meaning, economic formulas, valuation rules, ownership rules, or settlement behavior."
+  },
+
+  "contract_relationship": {
+    "principle": "The Data Contract remains authoritative for semantic ownership, data meaning, availability, and economic truth. The Matrix may define a narrower contextual presentation rule for a specific surface. Such a rule is a presentation constraint, not a semantic override: it can withhold or demote a field on a surface whose job does not need it, but it can never authorize a value the contracts forbid, invent availability the contracts deny, or change what a field means.",
+    "accounted_differences": [
+      {
+        "field": "property.amenities on Estate",
+        "contract": "Data Contract §7 says Amenities: Estate No.",
+        "matrix": "Selected secondary supporting quality on Estate; complete set Detail-only.",
+        "standing": "Intentional Product decision preserved: Funnel Estate needs visual/experiential appeal and Funnel §7 allows purposeful selection on conversion surfaces. Presentation constraint (curated subset, never fabricated), not a semantic override."
+      },
+      {
+        "field": "property.services on Estate",
+        "contract": "Data Contract §7 says Services: Estate No.",
+        "matrix": "Selected tertiary hospitality quality on Estate; complete list Detail-only.",
+        "standing": "Intentional Product decision preserved under the same selection rationale as amenities. Must never be framed as financial performance."
+      },
+      {
+        "field": "identity.propertyType on Income",
+        "contract": "Data Contract §7 says Property type: Income No.",
+        "matrix": "Conditional tertiary context for identifying the income source.",
+        "standing": "Narrow contextual allowance preserved: type may appear only as source-identification context, never as an income input. If it ever competes with economic content, the contract's No governs."
+      },
+      {
+        "field": "economics.occupancy on Estate",
+        "contract": "Data Contract §7 says Occupancy: Estate No.",
+        "matrix": "when_available secondary rental-performance signal.",
+        "standing": "No practical difference while occupancy remains UNKNOWN (nothing may display). If an approved occupancy source ever exists, Estate display requires a fresh Product decision; the contract's No is the default."
+      },
+      {
+        "field": "pricing.nightlyRate on Estate",
+        "contract": "Data Contract §7 says Nightly rate: Estate Yes.",
+        "matrix": "Conditional secondary revenue signal.",
+        "standing": "Intentional narrowing preserved: Estate shows the rate only when it serves the investment thesis without overloading the tab (Funnel §3 overload rule); Detail always shows the source pricing fact. Presentation constraint, not availability change."
+      },
+      {
+        "field": "identity.descriptionShort on Estate",
+        "contract": "Data Contract §7 has no description row; Funnel §3 reserves the full source description for Detail.",
+        "matrix": "Secondary investment/property context on Estate; full description Detail-only with progressive disclosure allowed on Estate.",
+        "standing": "Intentional Product decision preserved: concise copy may support context on persuasive surfaces but must never become an unsupported investment claim; the full description's authoritative surface remains Detail."
+      }
+    ]
+  },
+
+  "product_funnel": {
+    "Estate": {
+      "job": "Desire",
+      "mode": "DESIRE + THESIS",
+      "user_question": "Why should I care about this Estate?",
+      "primary_outcome": "Create a clear, credible investment thesis without manipulation.",
+      "thesis": "The user should leave understanding: I want this asset, and I understand why it is an investable asset. The thesis explains the investment rationale through clarity, quality, ownership framing and truthful economic context.",
+      "must_not": "The thesis must NOT imply guaranteed return, expected appreciation, or speculative upside."
+    },
+    "Income": {
+      "job": "Conviction",
+      "mode": "CONVICTION + EVIDENCE + EXPLORATION",
+      "user_question": "How does this asset generate income?",
+      "primary_outcome": "Help the user understand and monitor the economic performance of the asset.",
+      "behavior": "Income is not merely an accounting ledger. It communicates actual income movement, accrued state, projected state, historical pattern where real data exists, estate contribution, rental-performance context, and interactive exploration where justified.",
+      "must_not": "Actual vs projected must remain strictly separated; secondary-market gains must remain separate from rental/operating income."
+    },
+    "Ownership": {
+      "job": "Decision",
+      "mode": "DECISION + POSITION + CONSEQUENCE",
+      "user_question": "What exactly would I own and what is my position?",
+      "primary_outcome": "Make ownership, position, and decision consequences understandable.",
+      "behavior": "Center what the user owns, what one share represents, free vs locked states, the consequences of each state, and available actions. Ownership distribution may appear only when it serves transparency rather than FOMO, popularity, ranking, or scarcity pressure.",
+      "must_not": "Avoid social-pressure mechanics of any kind."
+    },
+    "Detail": {
+      "job": "Truth",
+      "mode": "TRUTH + VERIFICATION",
+      "user_question": "What exactly is this property and what do I need to know?",
+      "primary_outcome": "Provide complete factual property information without persuasive distortion.",
+      "behavior": "Complete, neutral reference layer. Progressive disclosure is preferred over an undifferentiated data dump."
+    }
+  },
+
+  "surface_rules": {
+    "Estate": {
+      "priorityOrder": [
+        "property_identity",
+        "investment_thesis",
+        "ownership",
+        "economic_signal",
+        "property_experience",
+        "supporting_facts"
+      ],
+      "rule": "The Estate tab may persuade through clarity, quality, ownership framing and truthful economic context, but must never fabricate urgency, scarcity, activity, returns or certainty."
+    },
+    "Income": {
+      "priorityOrder": [
+        "actual_income",
+        "income_state",
+        "income_history",
+        "estate_contribution",
+        "economic_origin",
+        "investment_return_context"
+      ],
+      "rule": "Income is an economic monitoring surface. Paid, accrued, projected, eligible, requested, scheduled and other return types must remain semantically separate."
+    },
+    "Ownership": {
+      "priorityOrder": [
+        "ownership_position",
+        "share_position",
+        "available_vs_locked",
+        "ownership_state",
+        "decision_context"
+      ],
+      "rule": "Ownership should reduce uncertainty about the user's position. It must not imply liquidity, demand or appreciation that does not exist."
+    },
+    "Detail": {
+      "priorityOrder": [
+        "identity",
+        "location",
+        "property_facts",
+        "accommodation",
+        "amenities",
+        "services",
+        "pricing_facts",
+        "taxes_and_fees",
+        "valuation_evidence",
+        "source_and_provenance"
+      ],
+      "rule": "Detail is the factual reference surface. Completeness is preferred over persuasion."
+    }
+  },
+
+  "data_placement": [
+
+    {
+      "id": "identity.name",
+      "data": "Estate name / canonical property name",
+      "source": "ESTATE-24-DATA.json",
+      "surfaces": {
+        "Estate": {
+          "display": true,
+          "priority": "primary",
+          "role": "Identity"
+        },
+        "Income": {
+          "display": true,
+          "priority": "secondary",
+          "role": "Identify the Estate contributing income"
+        },
+        "Ownership": {
+          "display": true,
+          "priority": "secondary",
+          "role": "Identify the owned Estate where necessary"
+        },
+        "Detail": {
+          "display": true,
+          "priority": "primary",
+          "role": "Reference identity"
+        },
+        "Buy": {
+          "display": true,
+          "priority": "primary",
+          "role": "Confirm selected Estate"
+        },
+        "Sell": {
+          "display": true,
+          "priority": "primary",
+          "role": "Confirm selected Estate"
+        },
+        "Marketplace": {
+          "display": true,
+          "priority": "primary",
+          "role": "Discovery identity"
+        }
+      },
+      "rules": [
+        "Canonical Estate identity wins for all known 24 Estates.",
+        "Do not substitute legacy fixture names.",
+        "Unknown IDs may use honest fallback behavior."
+      ]
+    },
+
+    {
+      "id": "identity.location",
+      "data": "Canonical Estate location",
+      "source": "ESTATE-24-DATA.json",
+      "surfaces": {
+        "Estate": {
+          "display": true,
+          "priority": "secondary",
+          "role": "Place and context"
+        },
+        "Income": {
+          "display": true,
+          "priority": "secondary",
+          "role": "Identify income source"
+        },
+        "Ownership": {
+          "display": "conditional",
+          "priority": "secondary",
+          "role": "Context where useful"
+        },
+        "Detail": {
+          "display": true,
+          "priority": "primary",
+          "role": "Reference fact"
+        },
+        "Buy": {
+          "display": true,
+          "priority": "secondary",
+          "role": "Confirmation"
+        },
+        "Sell": {
+          "display": "conditional",
+          "priority": "secondary",
+          "role": "Confirmation"
+        },
+        "Marketplace": {
+          "display": true,
+          "priority": "secondary",
+          "role": "Discovery context"
+        }
+      },
+      "rules": [
+        "Use canonical location semantics.",
+        "Do not shorten or rewrite the location in a way that changes factual meaning."
+      ]
+    },
+
+    {
+      "id": "identity.propertyType",
+      "data": "Canonical property type",
+      "source": "ESTATE-24-DATA.json",
+      "surfaces": {
+        "Estate": {
+          "display": true,
+          "priority": "secondary",
+          "role": "Identity"
+        },
+        "Income": {
+          "display": "conditional",
+          "priority": "tertiary",
+          "role": "Context"
+        },
+        "Ownership": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Detail": {
+          "display": true,
+          "priority": "primary",
+          "role": "Property fact"
+        },
+        "Buy": {
+          "display": "conditional",
+          "priority": "tertiary",
+          "role": "Confirmation"
+        },
+        "Sell": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Marketplace": {
+          "display": true,
+          "priority": "secondary",
+          "role": "Discovery context"
+        }
+      },
+      "rules": [
+        "Use source-supported Estate24 property type.",
+        "Never use legacy Apartment/Studio/Flat classifications when canonical data says otherwise."
+      ]
+    },
+
+    {
+      "id": "identity.descriptionShort",
+      "data": "Canonical short description",
+      "source": "ESTATE-24-DATA.json",
+      "surfaces": {
+        "Estate": {
+          "display": true,
+          "priority": "secondary",
+          "role": "Investment/property context"
+        },
+        "Income": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Ownership": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Detail": {
+          "display": true,
+          "priority": "primary",
+          "role": "Property description"
+        },
+        "Buy": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Sell": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Marketplace": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        }
+      },
+      "rules": [
+        "Use concise version on persuasive surfaces.",
+        "Do not turn descriptive copy into unsupported investment claims."
+      ]
+    },
+
+    {
+      "id": "identity.descriptionFull",
+      "data": "Canonical full description",
+      "source": "ESTATE-24-DATA.json",
+      "surfaces": {
+        "Estate": {
+          "display": "conditional",
+          "priority": "tertiary",
+          "role": "Progressive disclosure"
+        },
+        "Income": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Ownership": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Detail": {
+          "display": true,
+          "priority": "primary",
+          "role": "Complete property information"
+        },
+        "Buy": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Sell": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Marketplace": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        }
+      },
+      "rules": [
+        "Prefer progressive disclosure on Estate.",
+        "Detail is the authoritative presentation surface."
+      ]
+    },
+
+    {
+      "id": "media.images",
+      "data": "Canonical Estate gallery/images",
+      "source": "Canonical-24 property/reconciliation layer (observed gallery mapped to the ESTATE-24-DATA.json record identity; ESTATE-24-DATA.json itself carries no image field)",
+      "surfaces": {
+        "Estate": {
+          "display": true,
+          "priority": "primary",
+          "role": "Desire and property identity"
+        },
+        "Income": {
+          "display": "conditional",
+          "priority": "secondary",
+          "role": "Estate identification"
+        },
+        "Ownership": {
+          "display": "conditional",
+          "priority": "tertiary",
+          "role": "Estate identification"
+        },
+        "Detail": {
+          "display": true,
+          "priority": "primary",
+          "role": "Property reference"
+        },
+        "Marketplace": {
+          "display": true,
+          "priority": "primary",
+          "role": "Discovery"
+        },
+        "Buy": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Sell": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        }
+      },
+      "rules": [
+        "Known 24 Estates use canonical images.",
+        "Do not introduce a second image source merely for presentation."
+      ]
+    },
+
+    {
+      "id": "pricing.nightlyRate",
+      "data": "Source nightly rental rate",
+      "source": "ESTATE-24-DATA.json",
+      "surfaces": {
+        "Estate": {
+          "display": "conditional",
+          "priority": "secondary",
+          "role": "Revenue signal"
+        },
+        "Income": {
+          "display": true,
+          "priority": "primary",
+          "role": "Rental economics context"
+        },
+        "Ownership": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Detail": {
+          "display": true,
+          "priority": "primary",
+          "role": "Source pricing fact"
+        },
+        "Buy": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Sell": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Marketplace": {
+          "display": true,
+          "priority": "secondary",
+          "role": "Night / From discovery signal"
+        }
+      },
+      "rules": [
+        "Preserve source rate semantics.",
+        "Do not relabel a range, approximate rate, starting-from rate or dynamic rate as a precise ADR.",
+        "Do not infer occupancy or annual revenue from nightly rate alone."
+      ]
+    },
+
+    {
+      "id": "economics.occupancy",
+      "data": "Occupancy",
+      "source": "Approved economic source only (ESTATE-24-DATA.json estimates.occupancy is null for all 24 records and must never be displayed as a value)",
+      "surfaces": {
+        "Estate": {
+          "display": "when_available",
+          "priority": "secondary",
+          "role": "Rental performance signal"
+        },
+        "Income": {
+          "display": "when_available",
+          "priority": "primary",
+          "role": "Operating performance"
+        },
+        "Ownership": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Detail": {
+          "display": "when_available",
+          "priority": "secondary",
+          "role": "Economic fact"
+        },
+        "Buy": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Sell": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Marketplace": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        }
+      },
+      "rules": [
+        "UNKNOWN remains Pending/Unknown.",
+        "Never convert missing occupancy to 0%.",
+        "Never estimate occupancy unless explicitly provided by an approved economic source."
+      ]
+    },
+
+    {
+      "id": "economics.adr",
+      "data": "ADR / average daily rate",
+      "source": "Approved economic engine/source only",
+      "surfaces": {
+        "Estate": {
+          "display": "when_available",
+          "priority": "secondary",
+          "role": "Rental performance signal"
+        },
+        "Income": {
+          "display": "when_available",
+          "priority": "primary",
+          "role": "Operating economics"
+        },
+        "Ownership": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Detail": {
+          "display": "when_available",
+          "priority": "secondary",
+          "role": "Economic reference"
+        },
+        "Buy": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Sell": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Marketplace": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        }
+      },
+      "rules": [
+        "Do not derive ADR from source nightly-rate ranges without an approved rule.",
+        "Preserve source-rate semantics separately from derived ADR."
+      ]
+    },
+
+    {
+      "id": "economics.annualRentalIncome",
+      "data": "Annual rental income",
+      "source": "Approved economic engine/source only",
+      "surfaces": {
+        "Estate": {
+          "display": "when_available",
+          "priority": "primary",
+          "role": "Revenue-chain signal"
+        },
+        "Income": {
+          "display": "when_available",
+          "priority": "primary",
+          "role": "Operating income"
+        },
+        "Ownership": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Detail": {
+          "display": "when_available",
+          "priority": "secondary",
+          "role": "Economic reference"
+        },
+        "Buy": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Sell": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Marketplace": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        }
+      },
+      "rules": [
+        "Do not invent annual income.",
+        "Do not confuse property-level rental income with investor income."
+      ]
+    },
+
+    {
+      "id": "valuation.currentEstimatedValue",
+      "data": "Current Estimated Value",
+      "source": "Approved FractionalLuxe valuation",
+      "surfaces": {
+        "Estate": {
+          "display": true,
+          "priority": "primary",
+          "role": "Investment anchor"
+        },
+        "Income": {
+          "display": "conditional",
+          "priority": "secondary",
+          "role": "Investment context"
+        },
+        "Ownership": {
+          "display": "conditional",
+          "priority": "secondary",
+          "role": "Ownership context"
+        },
+        "Detail": {
+          "display": true,
+          "priority": "primary",
+          "role": "Transparent valuation fact"
+        },
+        "Buy": {
+          "display": "conditional",
+          "priority": "secondary",
+          "role": "Investment context"
+        },
+        "Sell": {
+          "display": "conditional",
+          "priority": "tertiary",
+          "role": "Context only"
+        },
+        "Marketplace": {
+          "display": true,
+          "priority": "primary",
+          "role": "Economic discovery signal"
+        }
+      },
+      "rules": [
+        "Use the approved FractionalLuxe current valuation.",
+        "Grand current value remains $8M–$10M.",
+        "Never use the legacy $82M valuation.",
+        "A valuation range remains a range.",
+        "Do not convert an estimated valuation into a guaranteed market price."
+      ]
+    },
+
+    {
+      "id": "valuation.growthPotential",
+      "data": "Growth Potential",
+      "source": "Upper bound of approved research valuation range",
+      "surfaces": {
+        "Estate": {
+          "display": true,
+          "priority": "primary",
+          "role": "Upside thesis"
+        },
+        "Income": {
+          "display": "conditional",
+          "priority": "secondary",
+          "role": "Investment-return context"
+        },
+        "Ownership": {
+          "display": "conditional",
+          "priority": "secondary",
+          "role": "Decision context"
+        },
+        "Detail": {
+          "display": true,
+          "priority": "secondary",
+          "role": "Transparent research-derived valuation context"
+        },
+        "Buy": {
+          "display": "conditional",
+          "priority": "secondary",
+          "role": "Investment context"
+        },
+        "Sell": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Marketplace": {
+          "display": true,
+          "priority": "secondary",
+          "role": "Upside signal"
+        }
+      },
+      "rules": [
+        "Always label as Growth Potential or Estimated Growth Potential.",
+        "Never label as ROI, profit, return, guaranteed appreciation, expected return, forecast, or target.",
+        "Growth Potential is estimated, not guaranteed.",
+        "Grand Growth Potential = $18M.",
+        "Grand research evidence remains $9.6M–$18M.",
+        "Grand must not display a percentage because current value is a range.",
+        "For a single-value current valuation, percentage may be calculated only by the approved growth-potential rule.",
+        "Never mix Growth Potential numerically with rental income, paid income, accrued income or secondary-market gains.",
+        "Do not render Growth Potential as an upward arrow or trajectory starting from current value.",
+        "Do not fabricate an upside percentage where the basis is a range or unavailable.",
+        "Use explicit disclosure language where appropriate: Research-based upper valuation estimate. Not a projection or guarantee.",
+        "Full research evidence belongs in Detail alongside the Growth Potential figure.",
+        "Growth Potential may appear at most twice across user-facing surfaces unless a future product decision explicitly changes this.",
+        "The placements above are the current product decision governing where Growth Potential may appear; the at-most-twice cap applies to simultaneous prominent display and any extension beyond these placements needs an explicit decision."
+      ]
+    },
+
+    {
+      "id": "ownership.fractionalization",
+      "data": "Share count / fractionalization structure",
+      "source": "Canonical ownership/economic model",
+      "surfaces": {
+        "Estate": {
+          "display": true,
+          "priority": "secondary",
+          "role": "Ownership framing"
+        },
+        "Income": {
+          "display": "conditional",
+          "priority": "tertiary",
+          "role": "Position context"
+        },
+        "Ownership": {
+          "display": true,
+          "priority": "primary",
+          "role": "Ownership decision"
+        },
+        "Detail": {
+          "display": true,
+          "priority": "secondary",
+          "role": "Ownership structure"
+        },
+        "Buy": {
+          "display": true,
+          "priority": "primary",
+          "role": "What the purchase buys"
+        },
+        "Sell": {
+          "display": true,
+          "priority": "primary",
+          "role": "What is being sold"
+        },
+        "Marketplace": {
+          "display": true,
+          "priority": "secondary",
+          "role": "Ownership framing"
+        }
+      },
+      "rules": [
+        "Explain ownership in concrete share terms.",
+        "Do not imply physical possession of the whole property.",
+        "Do not imply guaranteed liquidity."
+      ]
+    },
+
+    {
+      "id": "ownership.sharePrice",
+      "data": "Current share price",
+      "source": "Canonical ownership/economic model",
+      "surfaces": {
+        "Estate": {
+          "display": true,
+          "priority": "primary",
+          "role": "Entry-price anchor"
+        },
+        "Income": {
+          "display": "conditional",
+          "priority": "tertiary",
+          "role": "Position context"
+        },
+        "Ownership": {
+          "display": true,
+          "priority": "primary",
+          "role": "Position value"
+        },
+        "Detail": {
+          "display": "conditional",
+          "priority": "secondary",
+          "role": "Ownership reference"
+        },
+        "Buy": {
+          "display": true,
+          "priority": "primary",
+          "role": "Purchase price"
+        },
+        "Sell": {
+          "display": true,
+          "priority": "primary",
+          "role": "Sale price"
+        },
+        "Marketplace": {
+          "display": true,
+          "priority": "primary",
+          "role": "Entry-price anchor"
+        }
+      },
+      "rules": [
+        "Use canonical share-price source.",
+        "Do not derive or overwrite it from property valuation unless the existing business rule explicitly does so.",
+        "Sell UI must distinguish entered price from market reference."
+      ]
+    },
+
+    {
+      "id": "ownership.sharesRemaining",
+      "data": "Shares remaining / genuine supply",
+      "source": "Canonical funding state",
+      "surfaces": {
+        "Estate": {
+          "display": "when_real_and_available",
+          "priority": "secondary",
+          "role": "Genuine supply context"
+        },
+        "Income": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Ownership": {
+          "display": "when_relevant",
+          "priority": "secondary",
+          "role": "Position/supply context"
+        },
+        "Detail": {
+          "display": "conditional",
+          "priority": "tertiary",
+          "role": "Reference"
+        },
+        "Buy": {
+          "display": "when_real_and_available",
+          "priority": "secondary",
+          "role": "Purchase context"
+        },
+        "Marketplace": {
+          "display": "when_real_and_available",
+          "priority": "secondary",
+          "role": "Genuine supply context"
+        },
+        "Sell": {
+          "display": "conditional",
+          "priority": "secondary",
+          "role": "Remaining position context"
+        }
+      },
+      "rules": [
+        "Only show genuine supply constraints.",
+        "Never fabricate scarcity.",
+        "Never show fake buyer counts, reservations, timers or activity."
+      ]
+    },
+
+    {
+      "id": "income.projected",
+      "data": "Projected income",
+      "source": "Approved income/economic engine",
+      "surfaces": {
+        "Estate": {
+          "display": "when_available",
+          "priority": "secondary",
+          "role": "Investment thesis"
+        },
+        "Income": {
+          "display": true,
+          "priority": "primary",
+          "role": "Future expected income"
+        },
+        "Ownership": {
+          "display": "when_position_specific",
+          "priority": "secondary",
+          "role": "Position context"
+        },
+        "Detail": {
+          "display": "when_available",
+          "priority": "tertiary",
+          "role": "Economic reference"
+        },
+        "Buy": {
+          "display": "when_plan_data_exists",
+          "priority": "primary",
+          "role": "Projected investment context"
+        },
+        "Marketplace": {
+          "display": "conditional",
+          "priority": "secondary",
+          "role": "Projected income signal with honest pending state when unavailable"
+        },
+        "Sell": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        }
+      },
+      "rules": [
+        "Always label as Projected/Expected where applicable.",
+        "Never present projected income as Paid income.",
+        "Never use projected income as proof of realized performance."
+      ]
+    },
+
+    {
+      "id": "income.accrued",
+      "data": "Accrued income",
+      "source": "Accrual engine",
+      "surfaces": {
+        "Estate": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Income": {
+          "display": true,
+          "priority": "primary",
+          "role": "Current earned but unpaid income"
+        },
+        "Ownership": {
+          "display": "when_position_specific",
+          "priority": "secondary",
+          "role": "Position state"
+        },
+        "Detail": {
+          "display": "conditional",
+          "priority": "tertiary",
+          "role": "Economic reference"
+        },
+        "Buy": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Sell": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Marketplace": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        }
+      },
+      "rules": [
+        "Accrued is not Paid.",
+        "Do not include accrued amounts in cumulative received totals."
+      ]
+    },
+
+    {
+      "id": "income.paid",
+      "data": "Paid income",
+      "source": "Paid ledger / verified payment state",
+      "surfaces": {
+        "Estate": {
+          "display": "when_material",
+          "priority": "secondary",
+          "role": "Credibility signal"
+        },
+        "Income": {
+          "display": true,
+          "priority": "primary",
+          "role": "Realized income"
+        },
+        "Ownership": {
+          "display": "when_position_specific",
+          "priority": "secondary",
+          "role": "Realized position income"
+        },
+        "Detail": {
+          "display": "conditional",
+          "priority": "tertiary",
+          "role": "Economic reference"
+        },
+        "Buy": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Sell": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Marketplace": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        }
+      },
+      "rules": [
+        "Paid means actually paid/verified according to the existing ledger state.",
+        "Never mix Paid with Projected or Accrued.",
+        "Paid is the strongest realized-income visual state."
+      ]
+    },
+
+    {
+      "id": "income.payoutLifecycle",
+      "data": "Payout lifecycle: projected/accrued/eligible/requested/scheduled/paid",
+      "source": "Existing income and payout state model",
+      "surfaces": {
+        "Estate": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Income": {
+          "display": true,
+          "priority": "primary",
+          "role": "Income journey"
+        },
+        "Ownership": {
+          "display": "conditional",
+          "priority": "secondary",
+          "role": "Position state"
+        },
+        "Detail": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Buy": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Sell": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Marketplace": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        }
+      },
+      "rules": [
+        "States must remain distinct.",
+        "Do not collapse different states into one earnings number.",
+        "Unknown balances remain Pending/Unknown, not $0."
+      ]
+    },
+
+    {
+      "id": "income.secondaryGainLoss",
+      "data": "Secondary-market gain/loss",
+      "source": "Sell/order economics",
+      "surfaces": {
+        "Estate": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Income": {
+          "display": true,
+          "priority": "secondary",
+          "role": "Other investment return"
+        },
+        "Ownership": {
+          "display": "conditional",
+          "priority": "secondary",
+          "role": "Position context"
+        },
+        "Detail": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Sell": {
+          "display": true,
+          "priority": "primary",
+          "role": "Proposed sale outcome"
+        },
+        "Buy": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Marketplace": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        }
+      },
+      "rules": [
+        "Keep separate from rental/operating income.",
+        "Proposed gain is not realized income.",
+        "Do not imply instant liquidity.",
+        "Use existing secondary-market math."
+      ]
+    },
+
+    {
+      "id": "property.amenities",
+      "data": "Amenities",
+      "source": "ESTATE-24-DATA.json",
+      "surfaces": {
+        "Estate": {
+          "display": "selected",
+          "priority": "secondary",
+          "role": "Desire/supporting quality"
+        },
+        "Income": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Ownership": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Detail": {
+          "display": true,
+          "priority": "primary",
+          "role": "Property fact"
+        },
+        "Buy": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Sell": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Marketplace": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        }
+      },
+      "rules": [
+        "Use only canonical amenities.",
+        "Selectively surface on Estate; show complete information in Detail."
+      ]
+    },
+
+    {
+      "id": "property.services",
+      "data": "Services",
+      "source": "ESTATE-24-DATA.json",
+      "surfaces": {
+        "Estate": {
+          "display": "selected",
+          "priority": "tertiary",
+          "role": "Hospitality quality"
+        },
+        "Income": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Ownership": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Detail": {
+          "display": true,
+          "priority": "primary",
+          "role": "Property/service fact"
+        },
+        "Buy": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Sell": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Marketplace": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        }
+      },
+      "rules": [
+        "Do not frame services as financial performance."
+      ]
+    },
+
+    {
+      "id": "property.specifications",
+      "data": "Bedrooms, bathrooms, area, land size and other property specifications",
+      "source": "ESTATE-24-DATA.json",
+      "surfaces": {
+        "Estate": {
+          "display": "selected",
+          "priority": "secondary",
+          "role": "Property quality/context"
+        },
+        "Income": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Ownership": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Detail": {
+          "display": true,
+          "priority": "primary",
+          "role": "Property facts"
+        },
+        "Buy": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Sell": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Marketplace": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        }
+      },
+      "rules": [
+        "Preserve null/unknown values.",
+        "Do not substitute values from legacy fixtures.",
+        "Conflicted fields remain transparently conflicted where required by the data contract."
+      ]
+    },
+
+    {
+      "id": "property.taxes",
+      "data": "Property-specific taxes",
+      "source": "ESTATE-24-DATA.json",
+      "surfaces": {
+        "Estate": {
+          "display": "progressive_disclosure",
+          "priority": "tertiary",
+          "role": "Cost transparency"
+        },
+        "Income": {
+          "display": "conditional",
+          "priority": "secondary",
+          "role": "Economic context"
+        },
+        "Ownership": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Detail": {
+          "display": true,
+          "priority": "primary",
+          "role": "Cost fact"
+        },
+        "Buy": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Sell": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Marketplace": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        }
+      },
+      "rules": [
+        "Do not replace property-specific values with global defaults.",
+        "Unknown remains unknown."
+      ]
+    },
+
+    {
+      "id": "property.fees",
+      "data": "Property/service/transaction fee facts",
+      "source": "Canonical data + approved business rules",
+      "surfaces": {
+        "Estate": {
+          "display": "progressive_disclosure",
+          "priority": "tertiary",
+          "role": "Cost transparency"
+        },
+        "Income": {
+          "display": "conditional",
+          "priority": "secondary",
+          "role": "Economic context"
+        },
+        "Ownership": {
+          "display": "conditional",
+          "priority": "tertiary",
+          "role": "Decision transparency"
+        },
+        "Detail": {
+          "display": true,
+          "priority": "primary",
+          "role": "Cost reference"
+        },
+        "Buy": {
+          "display": true,
+          "priority": "secondary",
+          "role": "Purchase cost transparency"
+        },
+        "Sell": {
+          "display": true,
+          "priority": "secondary",
+          "role": "Sale cost transparency"
+        },
+        "Marketplace": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        }
+      },
+      "rules": [
+        "Use canonical business-rule fee sources.",
+        "Do not duplicate or reimplement fee formulas in presentation components.",
+        "Display fee rate and timing when required for informed decision-making."
+      ]
+    },
+
+    {
+      "id": "source.rentalEscapes",
+      "data": "Rental Escapes source listing",
+      "source": "Canonical sourceUrl",
+      "surfaces": {
+        "Estate": {
+          "display": true,
+          "priority": "secondary",
+          "role": "View and reserve / source verification"
+        },
+        "Income": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Ownership": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Detail": {
+          "display": true,
+          "priority": "secondary",
+          "role": "Source verification"
+        },
+        "Buy": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Sell": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        },
+        "Marketplace": {
+          "display": "not_displayed",
+          "priority": "none",
+          "role": null
+        }
+      },
+      "rules": [
+        "Use exact canonical source URL.",
+        "Label the action clearly as View & Reserve where appropriate.",
+        "Do not imply FractionalLuxe operates the external reservation system unless true."
+      ]
+    },
+
+    {
+      "id": "identity.recordId",
+      "data": "Dataset row number (ESTATE-24-DATA.json id)",
+      "source": "ESTATE-24-DATA.json",
+      "surfaces": {
+        "Estate": { "display": "internal_only", "priority": "none", "role": null },
+        "Income": { "display": "internal_only", "priority": "none", "role": null },
+        "Ownership": { "display": "internal_only", "priority": "none", "role": null },
+        "Detail": { "display": "internal_only", "priority": "none", "role": null },
+        "Buy": { "display": "internal_only", "priority": "none", "role": null },
+        "Sell": { "display": "internal_only", "priority": "none", "role": null },
+        "Marketplace": { "display": "internal_only", "priority": "none", "role": null }
+      },
+      "rules": [
+        "Row numbers are authoring keys, not property facts. Never display."
+      ]
+    },
+
+    {
+      "id": "identity.slug",
+      "data": "URL slug derived from the canonical name",
+      "source": "ESTATE-24-DATA.json",
+      "surfaces": {
+        "Estate": { "display": "internal_only", "priority": "none", "role": null },
+        "Income": { "display": "internal_only", "priority": "none", "role": null },
+        "Ownership": { "display": "internal_only", "priority": "none", "role": null },
+        "Detail": { "display": "internal_only", "priority": "none", "role": null },
+        "Buy": { "display": "internal_only", "priority": "none", "role": null },
+        "Sell": { "display": "internal_only", "priority": "none", "role": null },
+        "Marketplace": { "display": "internal_only", "priority": "none", "role": null }
+      },
+      "rules": [
+        "Slugs are routing/lookup keys. The user-facing identity is identity.name, never the slug."
+      ]
+    },
+
+    {
+      "id": "source.listingId",
+      "data": "Rental Escapes listing ID, distinct from the listing URL",
+      "source": "ESTATE-24-DATA.json listingId",
+      "surfaces": {
+        "Estate": { "display": "not_displayed", "priority": "none", "role": null },
+        "Income": { "display": "not_displayed", "priority": "none", "role": null },
+        "Ownership": { "display": "not_displayed", "priority": "none", "role": null },
+        "Detail": {
+          "display": true,
+          "priority": "secondary",
+          "role": "Source verification"
+        },
+        "Buy": { "display": "not_displayed", "priority": "none", "role": null },
+        "Sell": { "display": "not_displayed", "priority": "none", "role": null },
+        "Marketplace": { "display": "not_displayed", "priority": "none", "role": null }
+      },
+      "rules": [
+        "The listing ID is a verification fact for Detail; verification elsewhere travels via the Reserve link.",
+        "Never invent or reformat the ID; reproduce it verbatim."
+      ]
+    },
+
+    {
+      "id": "description.seasonality",
+      "data": "Canonical seasonality / qualitative positioning notes",
+      "source": "ESTATE-24-DATA.json description.seasonality",
+      "surfaces": {
+        "Estate": {
+          "display": "conditional",
+          "priority": "tertiary",
+          "role": "Narrative context only"
+        },
+        "Income": { "display": "not_displayed", "priority": "none", "role": null },
+        "Ownership": { "display": "not_displayed", "priority": "none", "role": null },
+        "Detail": {
+          "display": true,
+          "priority": "secondary",
+          "role": "Property narrative fact"
+        },
+        "Buy": { "display": "not_displayed", "priority": "none", "role": null },
+        "Sell": { "display": "not_displayed", "priority": "none", "role": null },
+        "Marketplace": { "display": "not_displayed", "priority": "none", "role": null }
+      },
+      "rules": [
+        "Reproduce approved research copy verbatim; never rewrite it into demand or return claims.",
+        "Seasonality explains timing context, not investment performance."
+      ]
+    },
+
+    {
+      "id": "pricing.rateContext",
+      "data": "Rate currency, observed period and rate notes travelling with the nightly display",
+      "source": "ESTATE-24-DATA.json rates.currency, rates.observedPeriod, rates.notes",
+      "surfaces": {
+        "Estate": {
+          "display": "conditional",
+          "priority": "tertiary",
+          "role": "Embedded in the nightly display string; no standalone placement"
+        },
+        "Income": {
+          "display": "conditional",
+          "priority": "tertiary",
+          "role": "Embedded in the nightly display string; no standalone placement"
+        },
+        "Ownership": { "display": "not_displayed", "priority": "none", "role": null },
+        "Detail": {
+          "display": true,
+          "priority": "secondary",
+          "role": "Rate semantics fact"
+        },
+        "Buy": { "display": "not_displayed", "priority": "none", "role": null },
+        "Sell": { "display": "not_displayed", "priority": "none", "role": null },
+        "Marketplace": {
+          "display": "conditional",
+          "priority": "tertiary",
+          "role": "Embedded in the nightly display string; no standalone placement"
+        }
+      },
+      "rules": [
+        "Currency, period and notes are never shown detached from the nightly figure they qualify.",
+        "Detail is the only surface that states each subfield explicitly."
+      ]
+    },
+
+    {
+      "id": "economics.costDefaults",
+      "data": "Per-estate cost-model defaults (tourism/service/agency/operator percentages, green-tax rate, repair-and-insurance rate, including record-specific variants)",
+      "source": "ESTATE-24-DATA.json costStructureDefaults.*",
+      "surfaces": {
+        "Estate": { "display": "internal_only", "priority": "none", "role": null },
+        "Income": { "display": "internal_only", "priority": "none", "role": null },
+        "Ownership": { "display": "internal_only", "priority": "none", "role": null },
+        "Detail": { "display": "internal_only", "priority": "none", "role": null },
+        "Buy": { "display": "internal_only", "priority": "none", "role": null },
+        "Sell": { "display": "internal_only", "priority": "none", "role": null },
+        "Marketplace": { "display": "internal_only", "priority": "none", "role": null }
+      },
+      "rules": [
+        "Raw defaults are engine inputs, not presentation facts. Users see computed cost lines through the approved cost breakdown, never these raw percentages."
+      ]
+    },
+
+    {
+      "id": "research.provenance",
+      "data": "Research confidence, last-updated date, source list and estimate provenance label",
+      "source": "ESTATE-24-DATA.json research.confidence, research.lastUpdated, research.sources, estimates.provenance",
+      "surfaces": {
+        "Estate": { "display": "not_displayed", "priority": "none", "role": null },
+        "Income": { "display": "not_displayed", "priority": "none", "role": null },
+        "Ownership": { "display": "not_displayed", "priority": "none", "role": null },
+        "Detail": {
+          "display": "conditional",
+          "priority": "secondary",
+          "role": "Source verification and confidence"
+        },
+        "Buy": { "display": "not_displayed", "priority": "none", "role": null },
+        "Sell": { "display": "not_displayed", "priority": "none", "role": null },
+        "Marketplace": { "display": "not_displayed", "priority": "none", "role": null }
+      },
+      "rules": [
+        "Research metadata verifies facts on Detail; it is not a conversion asset and must not decorate persuasive surfaces.",
+        "Reproduce confidence and dates verbatim; never upgrade MEDIUM to HIGH."
+      ]
+    },
+
+    {
+      "id": "valuation.researchRange",
+      "data": "Underlying research valuation range (evidence behind Growth Potential)",
+      "source": "ESTATE-24-DATA.json estimates.valueRange",
+      "surfaces": {
+        "Estate": { "display": "not_displayed", "priority": "none", "role": null },
+        "Income": { "display": "not_displayed", "priority": "none", "role": null },
+        "Ownership": { "display": "not_displayed", "priority": "none", "role": null },
+        "Detail": {
+          "display": "conditional",
+          "priority": "secondary",
+          "role": "Research evidence with provenance"
+        },
+        "Buy": { "display": "not_displayed", "priority": "none", "role": null },
+        "Sell": { "display": "not_displayed", "priority": "none", "role": null },
+        "Marketplace": { "display": "not_displayed", "priority": "none", "role": null }
+      },
+      "rules": [
+        "The range is evidence, never a price, offer, or promise.",
+        "Grand research range remains $9.6M–$18M and lives on Detail only.",
+        "Never present the lower bound as a discount or the upper bound as a target."
+      ]
+    },
+
+    {
+      "id": "valuation.researchCentral",
+      "data": "Research central value (evidence only where applicable)",
+      "source": "ESTATE-24-DATA.json estimates.valueCentral",
+      "surfaces": {
+        "Estate": { "display": "not_displayed", "priority": "none", "role": null },
+        "Income": { "display": "not_displayed", "priority": "none", "role": null },
+        "Ownership": { "display": "not_displayed", "priority": "none", "role": null },
+        "Detail": {
+          "display": "conditional",
+          "priority": "tertiary",
+          "role": "Research evidence with provenance"
+        },
+        "Buy": { "display": "not_displayed", "priority": "none", "role": null },
+        "Sell": { "display": "not_displayed", "priority": "none", "role": null },
+        "Marketplace": { "display": "not_displayed", "priority": "none", "role": null }
+      },
+      "rules": [
+        "The central value is research evidence, never the current product valuation.",
+        "Grand $13.5M must never be presented as current value.",
+        "Never average the central with bounds to invent a new figure."
+      ]
+    },
+
+    {
+      "id": "valuation.legacyConflict",
+      "data": "Legacy conflicting valuation evidence (e.g. Grand $82M fixture figure)",
+      "source": "Canonical-24 legacy/conflict evidence (not a value, not in ESTATE-24-DATA.json)",
+      "surfaces": {
+        "Estate": { "display": "internal_only", "priority": "none", "role": null },
+        "Income": { "display": "internal_only", "priority": "none", "role": null },
+        "Ownership": { "display": "internal_only", "priority": "none", "role": null },
+        "Detail": { "display": "internal_only", "priority": "none", "role": null },
+        "Buy": { "display": "internal_only", "priority": "none", "role": null },
+        "Sell": { "display": "internal_only", "priority": "none", "role": null },
+        "Marketplace": { "display": "internal_only", "priority": "none", "role": null }
+      },
+      "rules": [
+        "Conflict evidence is preserved for reconciliation, never displayed. Grand $82M must never appear on any user-facing surface."
+      ]
+    }
+  ],
+
+  "cross_surface_invariants": [
+    {
+      "id": "identity-consistency",
+      "rule": "The same known Estate must have the same canonical name, location, property type and identity across Marketplace, Estate, Income, Ownership, Detail, Buy, Sell, Similar and Reserve."
+    },
+    {
+      "id": "valuation-consistency",
+      "rule": "Current Estimated Value must have one canonical semantic value across surfaces. Presentation may differ, but the underlying value must not."
+    },
+    {
+      "id": "growth-potential-separation",
+      "rule": "Growth Potential is valuation upside context and must never be merged with rental income, paid income, accrued income, projected income or secondary-market gain."
+    },
+    {
+      "id": "projected-vs-paid",
+      "rule": "Projected and Paid are visually and semantically distinct everywhere."
+    },
+    {
+      "id": "accrued-vs-paid",
+      "rule": "Accrued income is not cumulative received income."
+    },
+    {
+      "id": "property-income-vs-investor-income",
+      "rule": "Property-level rental revenue must not be presented as the user's personal income."
+    },
+    {
+      "id": "unknown-is-not-zero",
+      "rule": "UNKNOWN or unavailable economic data must remain Pending/Unknown and must never silently become zero."
+    },
+    {
+      "id": "provenance-preservation",
+      "rule": "Observed, Estimated, Derived, Conflicted and Unknown semantics must remain intact even when presentation is simplified."
+    },
+    {
+      "id": "no-legacy-identity",
+      "rule": "For all 24 canonical Estates, user-visible property identity must not originate from legacy fixtures."
+    },
+    {
+      "id": "no-fabricated-urgency",
+      "rule": "No fake timers, buyer counts, volume, scarcity, earnings, activity or liquidity signals."
+    },
+    {
+      "id": "source-rate-semantics",
+      "rule": "A source nightly rate must not be silently relabeled as ADR or used to derive occupancy/revenue without an approved rule."
+    },
+    {
+      "id": "buy-confirmation-truth",
+      "rule": "Buy confirmation must clearly distinguish Estate identity, amount, price/share, ownership, plan, projected outcomes and assumptions."
+    },
+    {
+      "id": "sell-confirmation-truth",
+      "rule": "Sell must distinguish entered listing price, market reference, gross proceeds, fees, proposed net proceeds and gain/loss. No instant-liquidity promise."
+    },
+    {
+      "id": "availability-vs-permission",
+      "rule": "The existence of a canonical field does not imply that it should be displayed on every surface. Display requires both canonical availability/authority and a valid Product placement for the surface. Unknown data must remain unknown; no UI should manufacture a value merely because the Matrix contains a placement."
+    },
+    {
+      "id": "repetition-rule",
+      "rule": "A field may repeat across surfaces only when repetition serves orientation (helps the user remain oriented to the Estate), decision (supports an active ownership/investment decision), or verification (allows the user to verify or understand the truth of the asset). If none apply, do not repeat the field. Canonical field existence never equals an everywhere-display mandate."
+    }
+  ],
+
+  "display_priority_definitions": {
+    "true": "Displayed on that surface at the stated priority, unconditionally (boolean form; retained for existing entries, with a real semantic distinction from every conditional value).",
+    "primary": "Visually prominent and immediately understandable on that surface; part of the surface's first-scan hierarchy.",
+    "secondary": "Important supporting information, visible without requiring deep exploration, subordinate to primary content.",
+    "tertiary": "Useful contextual information that must not compete with the main decision or story.",
+    "progressive_disclosure": "Available through an expandable/detail interaction rather than occupying primary hierarchy.",
+    "conditional": "Shown only when it materially improves understanding on that surface and the required data is available.",
+    "when_available": "Shown only when the canonical or approved source currently holds a valid value; otherwise the honest pending state applies.",
+    "when_position_specific": "Shown only when the viewing user holds a position (or position-relevant state) the value describes.",
+    "when_plan_data_exists": "Shown only when investment-plan data actually exists; never as an empty upsell.",
+    "when_material": "Shown only when the value is large or relevant enough to affect perception of the surface's job.",
+    "when_relevant": "Shown only when it directly helps the user's current decision or context.",
+    "when_real_and_available": "Shown only for genuine, currently-true supply facts; never for manufactured scarcity.",
+    "selected": "A curated subset chosen for the surface's job; the complete set lives on Detail.",
+    "not_displayed": "Explicit decision: do not show this field on this surface even though the data exists.",
+    "internal_only": "Explicit decision: never user-facing on any surface; keys, model inputs, or reconciliation evidence only."
+  },
+
+  "priority_definitions": {
+    "primary": "First-scan hierarchy on that surface.",
+    "secondary": "Supporting hierarchy on that surface.",
+    "tertiary": "Trailing contextual hierarchy on that surface.",
+    "none": "No hierarchy because the field is not_displayed or internal_only on that surface."
+  },
+
+  "absent_key_rule": "An omitted surface key means no placement decision has been declared and is therefore invalid for a canonical field that requires coverage. Once the Matrix is finalized, every canonical field must carry an explicit placement or an explicit not_displayed/internal_only status for every product surface. Consumers must never infer omitted-equals-false.",
+
+  "provenance_display_rules": {
+    "OBSERVED": "May be displayed as factual source-backed information. Use the standard compact provenance affordance where required.",
+    "ESTIMATED": "Must retain estimated framing. Never present as guaranteed fact.",
+    "DERIVED": "Must retain its derived semantic meaning and must use the approved calculation source.",
+    "CONFLICTED": "Must not be silently resolved by UI code. Follow the canonical reconciliation decision.",
+    "UNKNOWN": "Show honest Pending/Unknown state where the information is relevant."
+  },
+
+  "anti_patterns": [
+    "Do not repeat the same economic number merely to create visual weight.",
+    "Do not place projected income in the same visual category as realized paid income.",
+    "Do not use Growth Potential as a synonym for ROI.",
+    "Do not use property valuation as a guaranteed resale price.",
+    "Do not turn rental revenue into investor yield without the approved economic model.",
+    "Do not expose legacy property identity for any of the 24 canonical Estates.",
+    "Do not create investment claims from amenities, location or nightly rate alone.",
+    "Do not manufacture missing occupancy, ADR, revenue, market price, buyers or transaction volume.",
+    "Do not add urgency solely to increase conversion.",
+    "Do not move Detail toward persuasive marketing hierarchy; Detail remains the truth/reference surface."
+  ],
+
+  "audience_modes": {
+    "note": "Product architecture principle for future surface behavior. NOT a request to change navigation now. Do not force all users through a single linear funnel.",
+    "explorer": {
+      "mental_question": "Should I want this?",
+      "natural_path": "Estate → Income → Ownership → Detail"
+    },
+    "owner": {
+      "mental_question": "How is my asset doing, and what do I own?",
+      "natural_path": "Income → Ownership → Estate"
+    }
+  },
+
+  "presentation_philosophy": {
+    "luxury": ["calm", "premium", "spacious", "experiential", "high-craft", "restrained"],
+    "investment": ["precise", "transparent", "analytical", "evidence-led", "understandable"],
+    "avoid": ["casino aesthetics", "crypto speculation", "generic SaaS dashboards", "aggressive wealth-management UI", "fake urgency", "flashing metrics", "popularity pressure"],
+    "charts": {
+      "allowed": ["time as a dimension", "multiple lenses", "comparison", "progressive disclosure", "interaction revealing detail"],
+      "forbidden": "Income charts MUST NOT visually imitate a trading terminal."
+    },
+    "hierarchy_rule": "Primary job determines hierarchy; it does not necessarily prohibit secondary supporting evidence. Do not interpret premium financial intelligence as hiding useful information. The goal is high information value with low cognitive noise: a surface may contain secondary evidence when it strengthens the surface's primary job."
+  },
+
+  "implementation_principle": {
+    "rule": "Canonical data is resolved first, then transformed into the appropriate surface ViewModel, then presented by UI.",
+    "forbidden": [
+      "UI components independently deriving economics",
+      "UI components choosing between competing valuation sources",
+      "UI components importing legacy property facts for known 24 Estates",
+      "duplicating economic formulas in presentation components"
+    ]
+  },
+
+  "acceptance_criteria": [
+    "Every canonical field intentionally has a defined placement or an explicit decision not to display.",
+    "All 24 Estates follow the same placement rules unless a source-data availability state requires an honest difference.",
+    "No UI surface invents missing values to satisfy the matrix.",
+    "Cross-surface identity remains canonical and consistent.",
+    "Economic semantics remain unchanged.",
+    "Growth Potential remains estimated and separate from income/return accounting.",
+    "Detail remains comprehensive and factual rather than persuasive.",
+    "Estate remains the primary desire/conversion surface.",
+    "Income remains the conviction/monitoring surface.",
+    "Ownership remains the decision/position surface.",
+    "Buy and Sell remain state-aware transaction surfaces.",
+    "No fake scarcity, urgency, social proof or liquidity claims are introduced."
+  ]
+}

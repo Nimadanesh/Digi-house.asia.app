@@ -3,6 +3,7 @@
 // honesty disclaimer once, muted.
 import { useEffect, useState } from "react";
 import { Check } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { DEMO_TX_DISCLAIMER, ROUTES } from "@/lib/constants";
 import { env } from "@/lib/env";
 import { payoutCountdown } from "@/lib/format";
@@ -26,6 +27,7 @@ export function BuySuccessStep({
   onClose: () => void;
 }) {
   const router = useRouter();
+  const t = useTranslations("property");
   const [burst, setBurst] = useState(() => !prefersReducedMotion());
 
   useEffect(() => {
@@ -34,7 +36,7 @@ export function BuySuccessStep({
     return () => clearTimeout(t);
   }, [burst]);
 
-  const nextPay = nowMs != null ? payoutCountdown(nowMs) : "Every Sunday";
+  const nextPay = nowMs != null ? payoutCountdown(nowMs) : t("buySuccessEverySunday");
 
   async function share() {
     const text = `I just bought ${qty} shares of ${propertyTitle} on FractionalLuxe`;
@@ -76,17 +78,20 @@ export function BuySuccessStep({
       </div>
       <div className="space-y-2.5">
         <h2 id="buy-sheet-title" className="text-[1.0625rem] font-semibold leading-snug text-foreground">
-          Congratulations!
+          {t("buySuccessTitle")}
         </h2>
         <p className="text-sm leading-relaxed text-foreground" data-testid="buy-success-message">
-          You now own <span className="font-semibold tnum">{qty}</span>{" "}
-          {qty === 1 ? "share" : "shares"} of {propertyTitle}
+          {t("buySuccessMessage", {
+            qty,
+            unit: t(qty === 1 ? "shareWord" : "sharesWord"),
+            title: propertyTitle,
+          })}
         </p>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          Next payout <span className="tnum">{nextPay}</span>
+          {t("buySuccessNextPayout", { date: nextPay })}
         </p>
         <p className="text-sm leading-relaxed text-warning">
-          Lock your new shares in the Yield section to start earning.
+          {t("buySuccessLockNudge")}
         </p>
         <p className="pt-1 text-[0.6875rem] leading-relaxed text-muted-foreground pb-0.5">
           {DEMO_TX_DISCLAIMER}
@@ -101,14 +106,14 @@ export function BuySuccessStep({
           }}
           className="inline-flex h-[48px] w-full items-center justify-center rounded-[10px] bg-primary text-[0.9375rem] font-semibold text-primary-foreground active:scale-[0.97] transition-transform duration-[120ms] ease-out"
         >
-          View Portfolio
+          {t("buySuccessViewPortfolio")}
         </button>
         <button
           type="button"
           onClick={() => void share()}
           className="inline-flex h-[48px] w-full items-center justify-center rounded-[10px] bg-surface-2 text-[0.9375rem] font-semibold text-foreground active:scale-[0.97] transition-transform duration-[120ms] ease-out"
         >
-          Share
+          {t("buySuccessShare")}
         </button>
       </div>
     </div>

@@ -25,7 +25,7 @@ describe("GET /v1/me/summary", () => {
     const holdings = createMemoryHoldingStore();
     await holdings.upsert({
       userId: USER,
-      propertyId: "prop-1",
+      propertyId: "test-1",
       sharesOwned: 10,
       avgCostUsd: 10_000,
     });
@@ -33,7 +33,7 @@ describe("GET /v1/me/summary", () => {
     await locks.create({
       id: "lock-1",
       userId: USER,
-      propertyId: "prop-1",
+      propertyId: "test-1",
       shares: 6,
       principalUsd: 60_000,
       payoutPeriod: "monthly",
@@ -184,7 +184,7 @@ describe("GET /v1/earnings (v2 yield block)", () => {
     await locks.create({
       id: "lock-1",
       userId: USER,
-      propertyId: "prop-1",
+      propertyId: "test-1",
       shares: 10,
       principalUsd: 100_000,
       payoutPeriod: "weekly",

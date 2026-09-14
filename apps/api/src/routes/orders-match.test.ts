@@ -14,7 +14,7 @@ import { createMemoryFeeTierStore } from "../fees/fee-tier-store.js";
 import { createOrderRoutes, type OrderRouteDeps } from "./orders.js";
 
 const SESSION = { secret: "test-session-secret-at-least-32-chars", ttlSeconds: 3600 };
-const RESALE = "prop-tbilisi-riverhouse-loft";
+const RESALE = "re-125643";
 const SELLER = "user-seller";
 const BUYER = "user-buyer";
 
@@ -156,7 +156,7 @@ describe("POST /v1/orders — escrow + matching (PD-01/PD-02)", () => {
 
   it("queued sell on funding property never matches (escrow only)", async () => {
     const d = makeDeps();
-    const FUNDING = "prop-marina-vista-4b";
+    const FUNDING = "re-128862";
     await d.holdings.upsert({
       userId: SELLER, propertyId: FUNDING, sharesOwned: 10, avgCostUsd: 8_000,
     });

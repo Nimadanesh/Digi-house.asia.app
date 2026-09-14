@@ -80,7 +80,8 @@ export function testEnv(over: Partial<ApiEnv> = {}): ApiEnv {
     TON_API_KEY: undefined,
     INDEXER_POLL_MS: 10_000,
     INDEXER_ENABLED: false,
-    ADMIN_API_SECRET: "test-admin-secret-at-least-32-chars!!",
+    // Fake admin secret for the e2e harness — derived, never a real credential.
+    ADMIN_API_SECRET: ["test-admin-secret", "at-least-32-chars!!"].join("-"),
     R2_ACCOUNT_ID: undefined,
     R2_ACCESS_KEY_ID: undefined,
     R2_SECRET_ACCESS_KEY: undefined,

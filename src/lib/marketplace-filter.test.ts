@@ -1,123 +1,160 @@
 import { describe, it, expect } from "vitest";
 import {
-  filterMarketplaceListings,
+  filterEstates,
   listingStatusBadge,
-  type MarketplaceChip,
+  projectedMonthlyIncomeUsd,
+  hasIncomeData,
+  MARKETPLACE_DEMO_CLOCK_MS,
+  type EstateFilter,
+  type EstateSort,
+  type FilterableEstate,
 } from "@/lib/marketplace-filter";
-import type { Listing } from "@/types/property";
 
-function base(over: Partial<Listing> & Pick<Listing, "id" | "title">): Listing {
+// Slice 2: filter/sort income basis is the single presentation layer (V1 monthly
+// cents, null = unknown) — never fixture rent/rate fields.
+function base(
+  over: Partial<FilterableEstate> & Pick<FilterableEstate, "id" | "title">,
+): FilterableEstate {
   return {
     location: "City",
     description: "Desc",
-    images: ["/images/properties/p1.png"],
-    totalShares: 1000,
     sharePriceUsd: 10_000,
     status: "funding",
-    ownerWalletAddress: "EQA",
-    annualRentUsd: 520_000,
+    presentedMonthlyIncomeCents: 625,
     createdAt: "2026-01-01T00:00:00Z",
-    sharesSold: 100,
     sharesRemaining: 900,
     fundingProgressRatio: 0.1,
-    monthlyYieldRate: 6.25,
-    totalValueUsd: 8_000_000,
-    meta: {
-      sizeSqm: 50,
-      yearBuilt: 2020,
-      propertyType: "Apt",
-      rentalStatus: "rented",
-      leaseUntil: "2026-12-31",
-      activeTenant: true,
-      tokenizationDocUrl: "#",
-    },
-    rentalHistory: [],
     ...over,
   };
 }
 
-const list: Listing[] = [
+// nowMs for the "New" window: Jul 26 2026 (shared demo-tape clock).
+const NOW = MARKETPLACE_DEMO_CLOCK_MS;
+
+const list: FilterableEstate[] = [
   base({
     id: "a",
-    title: "Alpha High Yield",
+    title: "Alpha Marina",
     sharePriceUsd: 20_000,
-    annualRentUsd: 1_000_000,
+    presentedMonthlyIncomeCents: 2000,
     createdAt: "2026-01-01T00:00:00Z",
     fundingProgressRatio: 0.9,
-    monthlyYieldRate: 6.25,
-    totalValueUsd: 8_000_000,
-    sharesSold: 900,
     sharesRemaining: 100,
     status: "funding",
   }),
   base({
     id: "b",
-    title: "Beta Low Price",
+    title: "Beta Loft",
     location: "Lisbon",
     sharePriceUsd: 5_000,
-    annualRentUsd: 100_000,
+    presentedMonthlyIncomeCents: 500,
     createdAt: "2026-07-20T00:00:00Z",
     fundingProgressRatio: 0.3,
-    monthlyYieldRate: 6.25,
-    totalValueUsd: 8_000_000,
-    sharesSold: 300,
     sharesRemaining: 700,
   }),
   base({
     id: "c",
     title: "Gamma Mid",
     sharePriceUsd: 12_000,
-    annualRentUsd: 400_000,
+    presentedMonthlyIncomeCents: 1200,
     createdAt: "2026-06-01T00:00:00Z",
     fundingProgressRatio: 0.6,
-    monthlyYieldRate: 6.25,
-    totalValueUsd: 8_000_000,
-    sharesSold: 600,
     sharesRemaining: 400,
     status: "funding",
   }),
 ];
 
-describe("filterMarketplaceListings", () => {
-  it("filters by query on title/location", () => {
-    const r = filterMarketplaceListings(list, { query: "lisbon" });
+describe("filterEstates — query", () => {
+  it("filters by query on title/location/description", () => {
+    const r = filterEstates(list, { query: "lisbon" });
     expect(r.map((x) => x.id)).toEqual(["b"]);
   });
+});
 
-  it("highest_yield sorts by APY desc", () => {
-    const r = filterMarketplaceListings(list, { chip: "highest_yield" as MarketplaceChip });
-    expect(r[0]?.id).toBe("a");
+describe("filterEstates — curated default sort", () => {
+  it("keeps the stable feed (manifest) order by default", () => {
+    const r = filterEstates(list);
+    expect(r.map((x) => x.id)).toEqual(["a", "b", "c"]);
   });
 
-  it("new sorts by createdAt desc", () => {
-    const r = filterMarketplaceListings(list, { chip: "new" });
-    expect(r[0]?.id).toBe("b");
+  it("curated is an explicit no-op sort too", () => {
+    const r = filterEstates(list, { sort: "curated" });
+    expect(r.map((x) => x.id)).toEqual(["a", "b", "c"]);
+  });
+});
+
+describe("filterEstates — filters (redesign §6 set)", () => {
+  it("all keeps every listing", () => {
+    const r = filterEstates(list, { filter: "all" });
+    expect(r).toHaveLength(3);
   });
 
-  it("almost_sold keeps high-progress funding only", () => {
-    const r = filterMarketplaceListings(list, { chip: "almost_sold" });
-    expect(r.every((x) => x.fundingProgressRatio >= 0.5)).toBe(true);
-    expect(r[0]?.id).toBe("a");
+  it("new keeps only estates created within the 30-day window of the shared clock", () => {
+    const r = filterEstates(list, { filter: "new", nowMs: NOW });
+    expect(r.map((x) => x.id)).toEqual(["b"]);
+    expect(r.every((x) => NOW - new Date(x.createdAt).getTime() <= 30 * 24 * 60 * 60 * 1000)).toBe(true);
   });
 
-  it("low_price sorts by share price asc", () => {
-    const r = filterMarketplaceListings(list, { chip: "low_price" });
-    expect(r.map((x) => x.id)).toEqual(["b", "c", "a"]);
+  it("income matches estates whose presented income is known (unknown excluded, never fabricated)", () => {
+    const missing = base({ id: "d", title: "Delta", presentedMonthlyIncomeCents: null });
+    const r = filterEstates([...list, missing], { filter: "income" });
+    expect(r.map((x) => x.id)).toEqual(["a", "b", "c"]);
   });
 
-  it("primary keeps only funding listings", () => {
-    const r = filterMarketplaceListings(list, { chip: "primary" });
-    expect(r.every((x) => x.status === "funding")).toBe(true);
-  });
-
-  it("secondary keeps only resale/funded listings", () => {
+  it("resale keeps resale + funded (existing secondary semantics preserved)", () => {
     const secondaryList = [
       base({ id: "s1", title: "S1", status: "resale" }),
       base({ id: "s2", title: "S2", status: "funded" }),
       base({ id: "s3", title: "S3", status: "funding" }),
     ];
-    const r = filterMarketplaceListings(secondaryList, { chip: "secondary" });
+    const r = filterEstates(secondaryList, { filter: "resale" as EstateFilter });
     expect(r.map((x) => x.id)).toEqual(["s1", "s2"]);
+  });
+
+  it("featured matches nothing — no editorial flag exists in the model", () => {
+    const r = filterEstates(list, { filter: "featured" as EstateFilter });
+    expect(r).toEqual([]);
+  });
+
+  it("owner_stay matches nothing — entitlement data does not exist yet", () => {
+    const r = filterEstates(list, { filter: "owner_stay" as EstateFilter });
+    expect(r).toEqual([]);
+  });
+});
+
+describe("filterEstates — sorting (never highest yield by default)", () => {
+  it("price sorts by entry price ascending", () => {
+    const r = filterEstates(list, { sort: "price" as EstateSort });
+    expect(r.map((x) => x.id)).toEqual(["b", "c", "a"]);
+  });
+
+  it("newest sorts by createdAt descending", () => {
+    const r = filterEstates(list, { sort: "newest" as EstateSort });
+    expect(r.map((x) => x.id)).toEqual(["b", "c", "a"]);
+  });
+
+  it("income sorts by presented per-share income descending, unknown estates last", () => {
+    const noData = base({ id: "d", title: "Delta", presentedMonthlyIncomeCents: null });
+    const r = filterEstates([...list, noData], { sort: "income" as EstateSort });
+    expect(r.map((x) => x.id)).toEqual(["a", "c", "b", "d"]);
+    const scores = r.map((x) => projectedMonthlyIncomeUsd(x));
+    expect(scores[0]).toBeGreaterThanOrEqual(scores[1]);
+    expect(scores[1]).toBeGreaterThanOrEqual(scores[2]);
+    expect(scores[3]).toBe(0); // unknown → last, never fabricated
+  });
+});
+
+describe("projectedMonthlyIncomeUsd / hasIncomeData (Slice 2 presentation basis)", () => {
+  it("returns 0 and false when presented income is unknown", () => {
+    const missing = base({ id: "d", title: "Delta", presentedMonthlyIncomeCents: null });
+    expect(hasIncomeData(missing)).toBe(false);
+    expect(projectedMonthlyIncomeUsd(missing)).toBe(0);
+  });
+
+  it("passes the presented V1 figure through unchanged", () => {
+    const l = list[0]!;
+    expect(hasIncomeData(l)).toBe(true);
+    expect(projectedMonthlyIncomeUsd(l)).toBe(2000);
   });
 });
 
@@ -140,8 +177,6 @@ describe("listingStatusBadge", () => {
         title: "S",
         createdAt: "2025-01-01T00:00:00Z",
         fundingProgressRatio: 0.85,
-    monthlyYieldRate: 6.25,
-    totalValueUsd: 8_000_000,
         sharesRemaining: 150,
         status: "funding",
       }),
@@ -157,8 +192,6 @@ describe("listingStatusBadge", () => {
         title: "H",
         createdAt: "2025-01-01T00:00:00Z",
         fundingProgressRatio: 0.55,
-    monthlyYieldRate: 6.25,
-    totalValueUsd: 8_000_000,
         sharesRemaining: 400,
         status: "funding",
       }),

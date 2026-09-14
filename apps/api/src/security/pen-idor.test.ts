@@ -21,9 +21,9 @@ const silentLog = {
 
 const SESSION = { secret: "test-session-secret-at-least-32-chars", ttlSeconds: 3600 };
 
-const BAYSIDE = "prop-bayside-marina-penthouse";
-const ALFAMA = "prop-alfama-terrace-flat";
-const MARINA = "prop-marina-vista-4b";
+const BAYSIDE = "re-108924";
+const ALFAMA = "re-123861";
+const MARINA = "re-128862";
 
 function testEnv(): ApiEnv {
   return {

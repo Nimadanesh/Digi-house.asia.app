@@ -14,7 +14,7 @@ import { SEED_PROPERTIES } from "../db/seed/properties-data.js";
 import { placeHouseOrder, type AdminRouteDeps } from "./admin.js";
 
 // Funded (legacy sold-out) property → secondary book, open to house orders.
-const PROP = "prop-alfama-terrace-flat";
+const PROP = "re-123861";
 
 function makeDeps(
   over: { feeTiers?: AdminRouteDeps["feeTiers"] } = {},

@@ -3,14 +3,21 @@
 import type { PayoutPeriod } from "@/types/lock";
 
 export const ACCRUAL_DAYS_PER_MONTH = 30;
-export const WEEKLY_RATE_PENALTY_PP = 1;
+/**
+ * LEGACY lock display-rate adjustment (−1pp, Final PO Decision 5): applies ONLY
+ * to preserved historical "weekly" lock records and their settlement math. It is
+ * NOT the withdrawal 1% fee (see mock/withdrawals.ts WITHDRAWAL_FEE_BPS) — the
+ * two concepts share a number and nothing else. Never reuse this field for
+ * withdrawal logic, and never use the withdrawal fee for lock display math.
+ */
+export const LEGACY_WEEKLY_RATE_PENALTY_PP = 1;
 
 export function effectiveMonthlyRatePct(
   monthlyRatePct: number,
   period: PayoutPeriod,
 ): number {
   return period === "weekly"
-    ? monthlyRatePct - WEEKLY_RATE_PENALTY_PP
+    ? monthlyRatePct - LEGACY_WEEKLY_RATE_PENALTY_PP
     : monthlyRatePct;
 }
 

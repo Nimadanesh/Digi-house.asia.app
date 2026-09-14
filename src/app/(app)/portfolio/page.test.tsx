@@ -13,10 +13,10 @@ vi.mock("@/hooks/useMarketplace", () => ({
   useMarketplace: vi.fn(() => ({
     data: [
       {
-        id: "prop-bayside-marina-penthouse",
-        title: "Bayside Marina Penthouse",
-        location: "Sao Paulo",
-        images: ["/images/properties/p1.png"],
+        id: "re-108924",
+        title: "Syrene",
+        location: "Sorrento, Amalfi Coast, Italy",
+        images: ["/images/properties/villa-syrene-01.jpg"],
       },
     ],
     isLoading: false,
@@ -58,12 +58,15 @@ vi.mock("@/hooks/useSells", () => ({
 }));
 
 import { usePortfolio } from "@/hooks/usePortfolio";
+import { useCancelOrder } from "@/hooks/useSells";
 import { useLocks } from "@/hooks/useLocks";
+import enMessages from "../../../../messages/en.json";
+import faMessages from "../../../../messages/fa.json";
 import PortfolioPage from "@/app/(app)/portfolio/page";
 import type { PortfolioSummary } from "@/types/position";
 
 const holding = {
-  propertyId: "prop-bayside-marina-penthouse",
+  propertyId: "re-108924",
   sharesOwned: 60,
   avgCostUsd: 25_000,
   currentValueUsd: 1_560_000,
@@ -144,7 +147,7 @@ describe("Portfolio page", () => {
     expect(screen.getByTestId("locked-shares-value")).toHaveTextContent("0");
     expect(screen.getByTestId("free-shares-value")).toHaveTextContent("60");
     const nudge = screen.getByTestId("idle-nudge");
-    expect(nudge).toHaveAttribute("href", "/property/prop-bayside-marina-penthouse");
+    expect(nudge).toHaveAttribute("href", "/property/re-108924");
     expect(nudge).toHaveTextContent("60 shares not earning");
 
     // Allocation is compact by default; legend hidden until expanded.
@@ -154,7 +157,7 @@ describe("Portfolio page", () => {
     expect(screen.getByTestId("allocation-legend")).toBeInTheDocument();
 
     expect(
-      screen.getByTestId("holding-card-prop-bayside-marina-penthouse"),
+      screen.getByTestId("holding-card-re-108924"),
     ).toBeInTheDocument();
     expect(screen.queryByText(/avg cost/i)).not.toBeInTheDocument();
   });
@@ -168,7 +171,7 @@ describe("Portfolio page", () => {
     } as never);
     render(<PortfolioPage />);
 
-    fireEvent.click(screen.getByTestId("holding-card-prop-bayside-marina-penthouse"));
+    fireEvent.click(screen.getByTestId("holding-card-re-108924"));
 
     expect(screen.getByTestId("holding-detail-sheet")).toBeInTheDocument();
     expect(screen.getByText(/avg cost/i)).toBeInTheDocument();
@@ -176,7 +179,7 @@ describe("Portfolio page", () => {
     expect(screen.getByTestId("holding-monthly-yield")).toHaveTextContent("$146.25");
     expect(screen.getByTestId("holding-buy-more")).toHaveAttribute(
       "href",
-      "/property/prop-bayside-marina-penthouse",
+      "/property/re-108924",
     );
     expect(screen.getByTestId("holding-sell")).toBeDisabled();
   });
@@ -194,6 +197,104 @@ describe("Portfolio page", () => {
     ).not.toBeInTheDocument();
   });
 
+  it("cancel sheet states the honest outcome, never an investing-balance fiction", () => {
+    vi.mocked(usePortfolio).mockReturnValue({
+      data: {
+        ...loadedSummary,
+        holdings: [holding],
+        openOrders: [
+          {
+            id: "ord-1",
+            propertyId: "re-108924",
+            makerAddress: "EQ",
+            side: "sell",
+            priceUsd: 26000,
+            quantity: 5,
+            filledQuantity: 0,
+            status: "open",
+            createdAt: "2026-07-18T00:00:00Z",
+          },
+        ],
+      },
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    } as never);
+    render(<PortfolioPage />);
+    fireEvent.click(screen.getByTestId("cancel-order-ord-1"));
+    expect(screen.getByTestId("cancel-order-confirm")).toHaveTextContent(
+      /nothing will be bought or sold/i,
+    );
+    expect(
+      screen.getByTestId("cancel-order-confirm").textContent?.toLowerCase(),
+    ).not.toContain("investing balance");
+  });
+
+  it("cancel success states the honest outcome, never an investing-balance fiction", () => {
+    vi.mocked(useCancelOrder).mockReturnValue({
+      mutate: ((id: string, opts?: { onSuccess?: () => void }) => opts?.onSuccess?.()) as never,
+      isPending: false,
+      isError: false,
+      error: null,
+      variables: null,
+    } as never);
+    vi.mocked(usePortfolio).mockReturnValue({
+      data: {
+        ...loadedSummary,
+        holdings: [holding],
+        openOrders: [
+          {
+            id: "ord-1",
+            propertyId: "re-108924",
+            makerAddress: "EQ",
+            side: "sell",
+            priceUsd: 26000,
+            quantity: 5,
+            filledQuantity: 0,
+            status: "open",
+            createdAt: "2026-07-18T00:00:00Z",
+          },
+        ],
+      },
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    } as never);
+    render(<PortfolioPage />);
+    fireEvent.click(screen.getByTestId("cancel-order-ord-1"));
+    fireEvent.click(screen.getByTestId("cancel-order-confirm-confirm"));
+    expect(screen.getByTestId("cancel-order-confirm-success")).toHaveTextContent(
+      /nothing was bought or sold/i,
+    );
+    expect(
+      screen.getByTestId("cancel-order-confirm-success").textContent?.toLowerCase(),
+    ).not.toContain("investing balance");
+  });
+
+  it("cancel sheet copy lives in locale catalogs (DEC-008, en + fa)", () => {
+    const keys = [
+      "cancelOrderTitle",
+      "cancelOrderDesc",
+      "cancelOrderProperty",
+      "cancelOrderOrder",
+      "cancelOrderBuy",
+      "cancelOrderSell",
+      "cancelOrderPrice",
+      "cancelOrderValue",
+      "cancelOrderConfirm",
+      "cancelOrderKeep",
+      "cancelOrderCancelling",
+      "cancelOrderCancelled",
+      "cancelOrderDoneMsg",
+    ] as const;
+    const en = enMessages.portfolio as Record<string, string | undefined>;
+    const fa = faMessages.portfolio as Record<string, string | undefined>;
+    for (const key of keys) {
+      expect(en[key]?.length, `en ${key}`).toBeGreaterThan(0);
+      expect(fa[key]?.length, `fa ${key}`).toBeGreaterThan(0);
+    }
+  });
+
   it("loaded: shows open orders when present", () => {
     vi.mocked(usePortfolio).mockReturnValue({
       data: {
@@ -201,7 +302,7 @@ describe("Portfolio page", () => {
         openOrders: [
           {
             id: "ord-1",
-            propertyId: "prop-bayside-marina-penthouse",
+            propertyId: "re-108924",
             makerAddress: "EQ",
             side: "sell",
             priceUsd: 26000,
@@ -225,7 +326,7 @@ describe("Portfolio page", () => {
     vi.mocked(useLocks).mockReturnValue({
       data: {
         locks: [
-          { id: "l1", propertyId: "prop-bayside-marina-penthouse", shares: 60, status: "locked" },
+          { id: "l1", propertyId: "re-108924", shares: 60, status: "locked" },
         ],
       },
       isLoading: false,

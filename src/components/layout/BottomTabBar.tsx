@@ -19,6 +19,9 @@ const TAB_DEFS = [
 function BottomTabBarInner() {
   const pathname = usePathname();
   const t = useTranslations("tabs");
+  const activeIndex = TAB_DEFS.findIndex(
+    ({ href }) => pathname === href || pathname.startsWith(`${href}/`),
+  );
 
   return (
     <nav
@@ -28,14 +31,27 @@ function BottomTabBarInner() {
     >
       <div
         className={cn(
-          "grid h-[60px] grid-cols-4 items-center px-1.5",
+          "relative grid h-[60px] grid-cols-4 items-stretch overflow-hidden p-1",
           "rounded-[28px] border border-border/70",
           "bg-card",
           "shadow-[0_8px_28px_rgba(0,0,0,0.32)]",
         )}
       >
-        {TAB_DEFS.map(({ href, labelKey, icon: Icon }) => {
-          const active = pathname === href || pathname.startsWith(`${href}/`);
+        {/* ONE shared active indicator: a quarter of the inner bar, same stadium
+            shape on every tab — only its X position changes with the active index. */}
+        {activeIndex >= 0 ? (
+          <span
+            aria-hidden
+            data-testid="tab-active-pill"
+            className="pointer-events-none absolute bottom-1 left-1 top-1 rounded-full bg-primary/12 transition-transform duration-[220ms] ease-[cubic-bezier(0.23,1,0.32,1)]"
+            style={{
+              width: "calc((100% - 8px) / 4)",
+              transform: `translateX(calc(100% * ${activeIndex}))`,
+            }}
+          />
+        ) : null}
+        {TAB_DEFS.map(({ href, labelKey, icon: Icon }, i) => {
+          const active = i === activeIndex;
           return (
             <Link
               key={href}
@@ -43,27 +59,14 @@ function BottomTabBarInner() {
               prefetch
               onClick={() => haptics.selection()}
               className={cn(
-                "relative flex h-[50px] items-center justify-center rounded-[22px] transition-colors duration-150 ease-out active:scale-[0.97]",
+                "relative flex h-full flex-col items-center justify-center gap-0.5 bg-transparent transition-colors duration-150 ease-out active:scale-[0.97]",
                 active ? "text-primary" : "text-muted-foreground",
               )}
               aria-current={active ? "page" : undefined}
             >
-              {/* Content wrapper: centers icon + label and gives the active pill a
-                  consistent, tight padding — an even 2px vertical margin to the tab
-                  item (46px pill inside the 50px tab) and an equal text-to-pill gap
-                  on every tab (fixes the longer "Marketplace" label touching it). */}
-              <span className="relative flex flex-col items-center gap-1 px-2.5 py-[5px]">
-                {active ? (
-                  <span
-                    className="absolute inset-0 rounded-[16px] bg-primary/12"
-                    aria-hidden
-                    data-testid="tab-active-pill"
-                  />
-                ) : null}
-                <Icon size={22} strokeWidth={active ? 2.25 : 1.75} className="relative z-[1]" />
-                <span className="relative z-[1] text-[10px] font-medium leading-none tracking-wide">
-                  {t(labelKey)}
-                </span>
+              <Icon size={22} strokeWidth={active ? 2.25 : 1.75} aria-hidden />
+              <span className="whitespace-nowrap text-[11px] font-medium leading-none tracking-wide">
+                {t(labelKey)}
               </span>
             </Link>
           );

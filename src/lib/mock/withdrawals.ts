@@ -11,6 +11,15 @@ import { sleep, jitter } from "./sleep";
 
 const ADDRESS = USER.withdrawalAddress ?? "";
 
+/**
+ * WITHDRAWAL fee (Final PO Decision 5): 1% of the requested amount, charged at
+ * request time. This is a WITHDRAWAL fee with neutral wording — its exact
+ * legal/accounting classification is reserved for legal/accounting review
+ * (see PRODUCT-DECISION-LOCK.md). It is NOT the legacy lock display-rate
+ * adjustment (see yield-math.ts LEGACY_WEEKLY_RATE_PENALTY_PP) — the two
+ * concepts share a number and nothing else. Never reuse this field for lock
+ * display math, and never use the lock adjustment for withdrawal logic.
+ */
 const WITHDRAWAL_FEE_BPS = 100; // 1%
 const INSTALLMENT_COUNT = 4;
 const INSTALLMENT_DAYS_MS = 7 * 86_400_000;

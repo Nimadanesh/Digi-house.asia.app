@@ -21,9 +21,10 @@ describe("TransactionRow", () => {
     expect(screen.getByText("Instant sell")).toBeInTheDocument();
   });
 
-  it("renders the weekly-yield label", () => {
-    render(<TransactionRow transaction={tx({ kind: "yield_weekly" })} />);
-    expect(screen.getByText("Weekly yield")).toBeInTheDocument();
+  it("renders weekly-schedule payouts as Yield, never Weekly yield (Slice 4)", () => {
+    const { container } = render(<TransactionRow transaction={tx({ kind: "yield_weekly" })} />);
+    expect(screen.getByText("Yield")).toBeInTheDocument();
+    expect(container.textContent).not.toMatch(/Weekly yield/);
   });
 
   it("shows the fee line only when expanded", () => {

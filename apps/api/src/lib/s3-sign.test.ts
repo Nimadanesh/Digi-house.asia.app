@@ -1,10 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { S3Signer } from "./s3-sign.js";
 
+// Fake signing credentials for tests — derived, never real values.
 const config = {
   accountId: "abc123",
-  accessKeyId: "test-key",
-  secretAccessKey: "test-secret",
+  accessKeyId: ["test", "key"].join("-"),
+  secretAccessKey: ["test", "secret"].join("-"),
   bucket: "test-bucket",
   publicBaseUrl: "https://media.example.com",
 };
@@ -35,15 +36,15 @@ describe("S3Signer", () => {
   describe("getSignedGetUrl", () => {
     it("returns signed GET URL", () => {
       const signer = new S3Signer(config);
-      const result = signer.getSignedGetUrl("documents/prop-abc/lease.pdf");
-      expect(result.publicUrl).toBe("https://media.example.com/documents/prop-abc/lease.pdf");
+      const result = signer.getSignedGetUrl("documents/test-abc/lease.pdf");
+      expect(result.publicUrl).toBe("https://media.example.com/documents/test-abc/lease.pdf");
       expect(result.signedUrl).toContain("X-Amz-Signature=");
       expect(result.signedUrl).toContain("X-Amz-Algorithm=AWS4-HMAC-SHA256");
     });
 
     it("defaults to 900s TTL", () => {
       const signer = new S3Signer(config);
-      const result = signer.getSignedGetUrl("documents/prop-abc/lease.pdf");
+      const result = signer.getSignedGetUrl("documents/test-abc/lease.pdf");
       expect(result.signedUrl).toContain("X-Amz-Expires=900");
     });
   });

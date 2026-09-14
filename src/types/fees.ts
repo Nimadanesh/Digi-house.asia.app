@@ -20,6 +20,19 @@ export function bpsToPct(bps: number): string {
 }
 
 /**
+ * Canonical tier lookup: the single rule mapping a transaction amount to its
+ * fee tier (inclusive bounds). Both the fee preview and the rate display share
+ * it — never re-implement the bounds check elsewhere.
+ */
+export function findFeeTier(tiers: FeeTier[], amountUsd: number): FeeTier | null {
+  return tiers.find(
+    (t) =>
+      amountUsd >= t.minAmountUsd &&
+      (t.maxAmountUsd == null || amountUsd <= t.maxAmountUsd),
+  ) ?? null;
+}
+
+/**
  * Mirror of the API fee resolver for UI previews. Returns fee cents or null (no tier).
  * The property Commission Card is authoritative when it exists; until cards are provided
  * the amount-based tier table is the fallback (mirrored here for display parity — the
@@ -30,11 +43,7 @@ export function previewFeeUsd(
   amountUsd: number,
   op: "buy_primary" | "buy_secondary" | "sell_secondary",
 ): number | null {
-  const tier = tiers.find(
-    (t) =>
-      amountUsd >= t.minAmountUsd &&
-      (t.maxAmountUsd == null || amountUsd <= t.maxAmountUsd),
-  );
+  const tier = findFeeTier(tiers, amountUsd);
   if (!tier) return null;
   const bps =
     op === "buy_primary"

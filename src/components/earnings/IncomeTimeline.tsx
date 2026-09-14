@@ -1,7 +1,10 @@
 "use client";
-// File responsibility: Earnings money-flow timeline (redesign) — Paid → Accruing → Next estimated.
-// Pure display: aggregates existing fields via payout-display helpers, never new financial math.
-// The next payout date reuses the exact Sunday display rule (payout-display::nextPayoutDate).
+// File responsibility: Income money-flow timeline (Phase 9 Slice 5 — UI Mapping §7.1/§7.3).
+// Rows carry status words only — Paid / Accrued / Expected — never a frequency promise
+// (§7.3 rule 1). Paid shows the actual paid amount + its actual week (rule 3); Accrued
+// sources the lock accrued-unpaid figure from the repo contract (hidden when no lock data
+// exists — never a fake zero); Expected uses the pending-only figure + the Sunday display
+// rule date (payout-display::nextPayoutDate). Pure display; no new financial math.
 import { useTranslations } from "next-intl";
 import { usd, weekLabel } from "@/lib/format";
 import {
@@ -17,50 +20,64 @@ import type { EarningsEntry } from "@/types/earnings";
 export function IncomeTimeline({
   entries,
   projectedNextUsd,
+  accruedUsd,
 }: {
   entries: EarningsEntry[];
-  /** Estimated next payout, integer minor units (repo contract). */
+  /** Expected next distribution, integer minor units (repo contract, pending entries only). */
   projectedNextUsd: number;
+  /** Accrued-unpaid figure from the repo yield block; row hidden when no lock data exists. */
+  accruedUsd?: number;
 }) {
   const t = useTranslations("earnings");
 
   const pool = weeklyEarningsPool(entries);
   const lastPaidWeek = lastPaidWeekOf(entries);
-  // Accruing = all pending (projected current) entries summed.
-  const accruingUsd = entries.reduce((s, e) => (e.status === "pending" ? s + e.amountUsd : s), 0);
   const nowMs = useSharedNowMs();
   const paidUsd = lastPaidWeek ? pool.get(lastPaidWeek)?.totalUsd ?? 0 : 0;
   const paidLabel = lastPaidWeek ? weekLabel(lastPaidWeek) : "—";
   const nextDate = nextPayoutDate(nowMs);
   const nextWhen = formatPayoutDate(nextDate);
 
-  const rows = [
+  const rows: {
+    key: string;
+    label: string;
+    sub: string;
+    amount: number;
+    variant: "success" | "warning" | "default";
+    testId: string;
+  }[] = [
     {
       key: "paid",
       label: t("timelinePaid"),
       sub: paidLabel,
       amount: paidUsd,
-      variant: "success" as const,
+      variant: "success",
       testId: "timeline-paid",
     },
-    {
-      key: "accruing",
-      label: t("timelineAccruing"),
-      sub: t("timelineAccruingSub"),
-      amount: accruingUsd,
-      variant: "warning" as const,
-      testId: "timeline-accruing",
-    },
-    {
+  ];
+
+  if (accruedUsd !== undefined) {
+    rows.push({
+      key: "accrued",
+      label: t("timelineAccrued"),
+      sub: t("timelineAccruedSub"),
+      amount: accruedUsd,
+      variant: "warning",
+      testId: "timeline-accrued",
+    });
+  }
+
+  // Hide when no pending entries exist — never a fake "$0 Expected" (UI Mapping §7.1).
+  if (projectedNextUsd > 0) {
+    rows.push({
       key: "next",
       label: t("timelineNext"),
       sub: nextWhen,
       amount: projectedNextUsd,
-      variant: "default" as const,
+      variant: "default",
       testId: "timeline-next",
-    },
-  ] as const;
-
+    });
+  }
   return (
     <section className="space-y-2" data-testid="income-timeline">
       <h2 className="px-0.5 text-[0.9375rem] font-semibold text-foreground">{t("timelineTitle")}</h2>
@@ -103,9 +120,6 @@ export function IncomeTimeline({
           ))}
         </div>
       </Block>
-      <p className="px-0.5 text-[0.6875rem] leading-relaxed text-muted-foreground">
-        {t("timelineCaption")}
-      </p>
     </section>
   );
 }

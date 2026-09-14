@@ -12,6 +12,7 @@ import type { FeeTier } from "@/types/fees";
 import type { InstantSellResult } from "@/types/sell";
 import type { Withdrawal } from "@/types/withdrawal";
 import type { HoldingNft } from "@/types/nft";
+import type { EstateStayInfo } from "@/types/stay";
 
 export interface MarketplaceRepo {
   list(filter?: { status?: PropertyStatus; query?: string }): Promise<Listing[]>;
@@ -102,6 +103,16 @@ export interface NftsRepo {
   list(): Promise<HoldingNft[]>;
 }
 
+/**
+ * Owner Stay — P0 read-only contract (PHASE-9-IMPLEMENTATION-CONTRACT Slice 1).
+ * Presentation-only: returns the honest availability snapshot per estate. NO booking,
+ * NO mutations, NO availability engine — those require a real backend (later slices).
+ * The mock always resolves `unavailable` until a real source exists.
+ */
+export interface StayRepo {
+  get(propertyId: string): Promise<EstateStayInfo>;
+}
+
 export interface Repos {
   marketplace: MarketplaceRepo;
   orderBook: OrderBookRepo;
@@ -115,4 +126,5 @@ export interface Repos {
   sells: SellsRepo;
   withdrawals: WithdrawalsRepo;
   nfts: NftsRepo;
+  stay: StayRepo;
 }

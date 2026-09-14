@@ -34,6 +34,7 @@ import type { Order } from "@/types/order";
 
 export default function PortfolioPage() {
   const t = useTranslations("portfolio");
+  const tCommon = useTranslations("common");
   const portfolio = usePortfolio();
   const marketplace = useMarketplace();
   const locksQuery = useLocks();
@@ -228,38 +229,38 @@ export default function PortfolioPage() {
       <ConfirmActionSheet
         open={cancelTarget != null}
         onClose={closeCancelSheet}
-        title="Cancel order"
-        description="The funds held in escrow for this order return to your investing balance."
+        title={t("cancelOrderTitle")}
+        description={t("cancelOrderDesc")}
         details={[
           {
-            label: "Property",
+            label: t("cancelOrderProperty"),
             value: cancelTarget ? nameById[cancelTarget.propertyId] ?? cancelTarget.propertyId : "",
           },
           {
-            label: "Order",
+            label: t("cancelOrderOrder"),
             value: cancelTarget
-              ? `${cancelTarget.side === "buy" ? "Buy" : "Sell"} · ${cancelTarget.quantity} shares`
+              ? `${cancelTarget.side === "buy" ? t("cancelOrderBuy") : t("cancelOrderSell")} · ${cancelTarget.quantity} ${tCommon("shares")}`
               : "",
           },
           {
-            label: "Price per share",
+            label: t("cancelOrderPrice"),
             value: cancelTarget ? usd(cancelTarget.priceUsd) : "",
           },
           {
-            label: "Order value",
+            label: t("cancelOrderValue"),
             value: cancelTarget ? usd(cancelTarget.priceUsd * cancelTarget.quantity) : "",
           },
         ]}
-        confirmLabel="Cancel order"
-        cancelLabel="Keep order"
-        pendingLabel="Cancelling…"
+        confirmLabel={t("cancelOrderConfirm")}
+        cancelLabel={t("cancelOrderKeep")}
+        pendingLabel={t("cancelOrderCancelling")}
         pending={cancelOrder.isPending}
         error={cancelOrder.isError && cancelOrder.error ? (cancelOrder.error as Error).message : null}
         success={
           cancelDone
             ? {
-                title: "Order cancelled",
-                message: "The escrowed funds are back in your investing balance.",
+                title: t("cancelOrderCancelled"),
+                message: t("cancelOrderDoneMsg"),
               }
             : null
         }

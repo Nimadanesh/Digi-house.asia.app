@@ -36,6 +36,9 @@ export interface Property {
   rentalHistory: RentalPayment[];
   /** Whole-property value, minor units (offered = totalShares × sharePriceUsd). */
   totalValueUsd: number;
+  /** Nightly rate display string (mixed currencies, e.g. "$52,200" / "€38,575");
+   *  present on marketplace cards fed from villa source rates. */
+  nightlyRate?: string;
 }
 
 export interface Listing extends Property {
@@ -46,4 +49,11 @@ export interface Listing extends Property {
   monthlyYieldRate: number;
   /** Latest secondary-market executed price, minor units (PD-04/PD-07); absent before the first fill. */
   lastTradeUsd?: number;
+  /**
+   * Seeded order-book best ask snapshot, minor units (Slice 2 presentation layer).
+   * Attached at the mock boundary from the same seed the live order book serves, so
+   * book-less surfaces (marketplace cards) agree with book-fed surfaces (detail).
+   * Absent on funding listings (no book) and unknown ids.
+   */
+  bestAskUsd?: number | null;
 }

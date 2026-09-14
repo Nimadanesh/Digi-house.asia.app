@@ -2,13 +2,19 @@
 // File responsibility: "How much can I earn?" investment calculator — shares slider +
 // numeric input, Conservative/Base/Optimistic segment, prominent result card with an
 // in-card Buy CTA (REDESIGN-SPEC Phase 2).
-// Yield math stays in lib/property-yield (positionYieldUsd) — no formulas here.
+// Slice 2: income math comes from the single presentation layer (V1, or pending) —
+// no local formulas, no fixture yield shortcut.
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Minus, Plus } from "lucide-react";
 import { usd } from "@/lib/format";
 import type { Listing } from "@/types/property";
-import { positionYieldUsd } from "@/lib/property-yield";
+import {
+  presentPositionMonthlyIncome,
+  getPresentedMonthlyIncome,
+  presentedIncomeUnknownCaption,
+} from "@/lib/economics/property-presentation";
+import { unavailableLabel } from "@/lib/availability";
 import { Block } from "@/components/common/Block";
 import { haptics } from "@/lib/telegram/haptics";
 
@@ -51,7 +57,12 @@ export function IncomeCalculator({
   const capRaw = listing.sharesRemaining > 0 ? listing.sharesRemaining : listing.totalShares;
   const max = Math.max(min, capRaw);
   const clamped = Math.min(max, Math.max(min, shares));
-  const { monthlyUsd, annualUsd } = positionYieldUsd(listing, clamped);
+  const monthlyUsd = presentPositionMonthlyIncome(listing.id, clamped);
+  const annualUsd = monthlyUsd == null ? null : monthlyUsd * 12;
+  // Slice 3: a pending projection carries its human-readable reason.
+  const incomeReason = presentedIncomeUnknownCaption(
+    getPresentedMonthlyIncome(listing.id).unknownKind,
+  );
   // Cost basis uses the same single source of truth as Hero/Metrics/Sticky/Chart.
   const unitPriceUsd = currentPriceUsd ?? listing.sharePriceUsd;
   const totalCostUsd = clamped * unitPriceUsd;
@@ -151,15 +162,24 @@ export function IncomeCalculator({
       {/* Result card */}
       <div className="space-y-2 rounded-[12px] bg-surface-2 p-4" data-testid="calc-result">
         <p className="text-xs uppercase tracking-wide text-muted-foreground">{t("calcProjected")}</p>
-        <div className="flex items-baseline gap-1.5">
-          <span className="text-[1.75rem] font-bold leading-none tracking-tight text-success tnum" data-testid="calc-monthly">
-            {usd(monthlyUsd)}
-          </span>
-          <span className="text-sm text-muted-foreground">{t("perMonthWord")}</span>
-        </div>
-        <p className="text-sm text-muted-foreground tnum" data-testid="calc-yearly">
-          ≈ {usd(annualUsd)} {t("perYearWord")}
-        </p>
+        {monthlyUsd != null && annualUsd != null ? (
+          <>
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-[1.75rem] font-bold leading-none tracking-tight text-success tnum" data-testid="calc-monthly">
+                {usd(monthlyUsd)}
+              </span>
+              <span className="text-sm text-muted-foreground">{t("perMonthWord")}</span>
+            </div>
+            <p className="text-sm text-muted-foreground tnum" data-testid="calc-yearly">
+              ≈ {usd(annualUsd)} {t("perYearWord")}
+            </p>
+          </>
+        ) : (
+          <p className="text-sm text-muted-foreground" data-testid="calc-pending">
+            {unavailableLabel("backend_absent")}
+            {incomeReason != null ? ` — ${incomeReason}` : ""}
+          </p>
+        )}
         <p className="pt-1 text-xs leading-relaxed text-muted-foreground">
           {t("calcFeesNote")}
         </p>

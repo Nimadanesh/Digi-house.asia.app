@@ -5,7 +5,7 @@ import type { Holding } from "@/types/position";
 import type { HoldingNft } from "@/types/nft";
 
 const holding: Holding = {
-  propertyId: "prop-a",
+  propertyId: "test-a",
   sharesOwned: 100,
   avgCostUsd: 12_500,
   currentValueUsd: 1_250_000,
@@ -15,7 +15,7 @@ const holding: Holding = {
 
 const baseNft: HoldingNft = {
   id: "nft_1",
-  propertyId: "prop-a",
+  propertyId: "test-a",
   propertyTitle: "Villa A",
   propertyLocation: "Bali",
   sharesOwned: 100,

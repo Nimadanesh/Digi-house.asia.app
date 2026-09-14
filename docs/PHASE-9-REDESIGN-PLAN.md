@@ -1,0 +1,524 @@
+# FractionalLuxe — Phase 9 Redesign Execution Plan
+
+## Purpose
+
+This document is the single execution plan for Phase 9. The coding agent must execute it sequentially, one small slice at a time. The user should not need to provide new prompts between slices.
+
+The goal is a coherent, trustworthy, production-ready prototype for a first-time buyer—not a collection of partially applied redesigns.
+
+## Operating rules
+
+1. Read this document completely before starting.
+2. Work only on the current slice. Do not implement future slices early.
+3. Every slice must be independently stoppable and leave the repository buildable.
+4. Before changing code, inspect the existing implementation and identify the smallest safe change.
+5. Do not replace canonical data with fixtures, invented values, or new parallel models.
+6. Rental Escapes is authoritative only for property identity: name, location, listing ID, nightly rate, and images.
+7. `ESTATE-24-DATA.json` is the canonical FractionalLuxe economic input. The research dataset and legacy `prop-*` fixtures are evidence only.
+8. Preserve provenance: `OBSERVED`, `ESTIMATED`, `DERIVED`, `CONFLICTED`, `UNKNOWN`.
+9. Never imply real users, real transactions, real payouts, legal title, or a Rental Escapes partnership.
+10. A slice is not complete until logic/scope QA and full Design/UI QA pass at 480×840, including layout, spacing, hierarchy, consistency, i18n, raw keys, RTL, responsive behavior, and polish.
+11. Do not report PASS when a known issue is merely documented rather than fixed or explicitly blocked.
+12. After each slice, update this document's status section and create a commit with a clear slice-specific message.
+
+## Definition of a successful final outcome
+
+A first-time visitor can understand, without prior explanation:
+
+- what FractionalLuxe is;
+- which villas are available;
+- whether they are viewing primary offering or secondary market;
+- what one share costs and what the displayed income means;
+- which numbers are observed, estimated, derived, conflicted, or unknown;
+- what happens when they tap Buy, Invest, or Sell;
+- which actions are demo-only;
+- how ownership, funding, and order-book numbers relate;
+- that the product is a prototype and not a legal ownership or guaranteed-yield product.
+
+## Execution sequence
+
+### Slice 0 — Baseline and recovery checkpoint
+
+**Goal:** establish a safe baseline before redesign work.
+
+Tasks:
+- inspect current branch, status, recent commits, and existing Phase 9 work;
+- run the existing test, typecheck, lint, build, and available E2E commands;
+- record failures without broad refactoring;
+- identify the actual app entry points and current data sources;
+- confirm the 24 canonical properties are present and traceable;
+- create a short baseline report in `docs/PHASE-9-BASELINE.md`.
+
+Deliverable: reproducible baseline and list of blockers.
+
+### Slice 1 — Complete marketplace truth audit
+
+**Goal:** produce a complete map before fixing anything.
+
+Audit all 24 villas across marketplace cards, property detail, primary offering, secondary market, buy flow, ownership/portfolio, and order book.
+
+For every villa record:
+- canonical identity source;
+- card price source;
+- detail price source;
+- primary price and secondary price;
+- monthly income source and formula;
+- valuation source;
+- total, sold, remaining, and funded shares;
+- progress percentage;
+- status and availability;
+- every `Data pending` occurrence and exact reason;
+- CTA behavior;
+- fixture/demo/derived/canonical classification;
+- contradictions between surfaces.
+
+Do not change product behavior in this slice. Deliver an auditable table and prioritized defect list.
+
+### Slice 2 — One canonical financial presentation layer
+
+**Goal:** remove financial-source divergence.
+
+Tasks:
+- identify the single approved calculation path for primary share price, monthly income per share, valuation, supply, and progress;
+- make cards and detail pages consume the same presentation layer;
+- remove old shortcut calculations such as fixture yield multiplied by share price;
+- preserve legitimate `UNKNOWN` values instead of inventing numbers;
+- expose provenance and estimation status in the UI where required;
+- add tests proving card/detail parity for all 24 villas.
+
+Deliverable: one source of truth for displayed economics.
+
+### Slice 3 — Resolve `Data pending` villa by villa
+
+**Goal:** make every pending state intentional and understandable.
+
+For each villa:
+- determine whether the missing value is genuinely unavailable, not mapped, or incorrectly blocked;
+- wire available canonical/derived inputs;
+- keep unavailable values pending only when justified;
+- show a concise human-readable explanation and provenance;
+- ensure pending states do not break layout or CTA hierarchy;
+- test all 24 properties individually.
+
+Deliverable: no unexplained pending state.
+
+### Slice 4 — Clarify primary offering versus secondary market
+
+**Goal:** eliminate conceptual confusion.
+
+Tasks:
+- clearly separate primary offering, secondary market, and portfolio ownership;
+- explain that `$100` is the primary base share price where applicable;
+- show secondary prices as demand/order-book values, not as the primary price;
+- distinguish asking price, last trade, and indicative value;
+- remove misleading labels such as weekly profit/yield;
+- make the current market context visible before any Buy/Sell CTA.
+
+Deliverable: a first-time user can explain the difference after one screen.
+
+### Slice 5 — Make Buy and Sell behavior honest and coherent
+
+**Goal:** connect actions to visible state or clearly label simulation.
+
+Tasks:
+- trace the full Buy/order flow;
+- decide and document whether the flow is simulated or stateful demo behavior;
+- if stateful, update the appropriate order, holdings, sold/remaining, funding, and progress values consistently;
+- if not stateful, prevent misleading impressions and show a clear demo disclosure;
+- ensure repeated actions, cancellation, and refresh behave consistently;
+- add E2E tests for the complete user journey.
+
+Deliverable: no action appears to succeed while unrelated numbers silently remain contradictory.
+
+### Slice 6 — Rebuild the first-time buyer journey
+
+**Goal:** make the product understandable without project history.
+
+Review and improve, in order:
+1. marketplace landing;
+2. property card;
+3. property detail hero;
+4. economics explanation;
+5. ownership/risks/trust;
+6. primary or secondary decision;
+7. Buy/Sell action;
+8. confirmation and next state.
+
+Use progressive disclosure. Remove duplicated, competing, or overly technical explanations from the first viewport. Keep important truth visible.
+
+Deliverable: one coherent journey from discovery to action.
+
+### Slice 7 — Design/UI and responsive polish pass
+
+**Goal:** production-ready visual consistency.
+
+At minimum test 480×840 and desktop widths. Check:
+- overflow and clipping;
+- spacing rhythm;
+- typography and numeric alignment;
+- hierarchy and scanability;
+- buttons and tap targets;
+- loading, empty, error, pending, and success states;
+- dark/light or theme consistency;
+- RTL and all supported locales;
+- raw translation keys and truncation;
+- cards, charts, badges, sheets, and dialogs;
+- accessibility basics and keyboard/focus behavior where applicable.
+
+Fix issues found; do not merely list them.
+
+### Slice 8 — Cross-surface consistency and regression hardening
+
+**Goal:** ensure every villa behaves consistently.
+
+Tasks:
+- run a 24-villa matrix against all important screens;
+- verify identity, image, location, price, economics, status, CTA, and provenance;
+- test representative primary, secondary, pending, conflicted, and unavailable cases;
+- remove dead legacy paths only when proven unused;
+- add regression tests for every defect fixed in Phase 9.
+
+Deliverable: complete matrix with no unexplained contradictions.
+
+### Slice 9 — Final release-readiness audit
+
+**Goal:** decide whether Phase 9 is genuinely complete.
+
+Run:
+- tests;
+- typecheck;
+- lint;
+- build;
+- E2E at 480×840;
+- visual/UI QA;
+- i18n/RTL QA;
+- data/provenance audit;
+- demo-honesty audit;
+- Git diff and documentation review.
+
+Create `docs/PHASE-9-FINAL-REPORT.md` containing:
+- completed slices and commits;
+- remaining blockers;
+- known limitations;
+- exact demo disclosures;
+- final test results;
+- explicit PASS, CONDITIONAL PASS, or BLOCKED decision.
+
+## Slice completion template
+
+At the end of every slice, append a short entry to this file:
+
+- Status: `NOT STARTED` / `IN PROGRESS` / `PASS` / `BLOCKED`
+- Commit:
+- Scope completed:
+- Files changed:
+- Tests run and results:
+- Design/UI QA result:
+- Remaining issues:
+- Next slice:
+
+## Current status
+
+- Slice 0: `PASS` (baseline `docs/PHASE-9-BASELINE.md`, HEAD `7ba236e`)
+- Slices 1–9: see per-slice entries below; all other slices `NOT STARTED`
+
+### Slice 0 — Baseline and recovery checkpoint
+
+- Status: `PASS`
+- Commit: (uncommitted at audit time; batched with the Slice 1 docs commit — see Slice 1 entry)
+- Scope completed: branch/state/divergence recorded; typecheck/lint/tests/build/E2E run;
+  24-property data flow + architecture map; 480×840 UI probe (marketplace, primary/secondary
+  detail, buy sheet); `docs/PHASE-9-BASELINE.md` §§A–F; DEC-003/DEC-004 opened
+- Files changed: `docs/PHASE-9-BASELINE.md` (new), `docs/PHASE-9-DECISION-LOG.md` (DEC-003/004)
+- Tests run and results: typecheck clean; lint 0 errors/7 warnings; vitest 123 files
+  1096/1096; build green (13 routes); Playwright 40 passed/6 expected skips (money-path
+  needs live API stack; config has no webServer — dev server started manually)
+- Design/UI QA result: PASS (no overflow; no raw keys on buy surfaces; screenshots read)
+- Remaining issues: diverged branch + uncommitted V1 body (DEC-003, process);
+  card/detail income divergence (DEC-004 → Slice 2)
+- Next slice: Slice 1
+
+### Slice 1 — Complete marketplace truth audit
+
+- Status: `PASS`
+- Commit: (this commit — docs-only: baseline + Slice 1 report + plan status + decision log)
+- Scope completed: code-level 24-villa matrix via temp vitest probe through the real view
+  models (removed after run); live 24-villa matrix via Playwright at 480×840 (24 cards +
+  24 details + portfolio + earnings); pending-state inventory with reasons; order-book /
+  buy / sell / portfolio / income traces; `docs/PHASE-9-SLICE-1.md`
+- Files changed: `docs/PHASE-9-SLICE-1.md` (new), `docs/PHASE-9-REDESIGN-PLAN.md`
+  (this status section), `docs/PHASE-9-DECISION-LOG.md` (DEC-005/006/007 OPEN)
+- Tests run and results: temp probe 1/1 (removed); live probe 24/24 pages no-overflow;
+  no product-code change since Slice 0 baseline (suite: 1096/1096 + E2E 40/6)
+- Design/UI QA result: PASS (24/24 no overflow; pending states honest; no raw keys)
+- Remaining issues: P0-1/P0-2 → Slice 2; P1-1/P1-2/P1-3 → Slice 4 (P1-3 via Slice 2);
+  P2-1/P3-2 → Slice 8; P2-2/P2-3/P3-1 → Slice 7/6/3; P2-4 → Slice 5 (see report §5)
+- Next slice: Slice 2 — one canonical financial presentation layer
+
+### Slice 2 — One canonical financial presentation layer
+
+- Status: `PASS`
+- Commit: (this commit — code + tests + docs)
+- Scope completed: new `src/lib/economics/property-presentation.ts` (single approved
+  paths: $100 primary price, V1 monthly income-or-pending, book-consistent current
+  price, canonical valuation/supply/ledger progress); cards, featured card, income
+  calculator, and buy qty/summary previews rewired to it; seeded bestAsk snapshot
+  attached at the mock boundary (`toCanonicalListing`) so cards agree with the live
+  book; fixture monthly/annual display shortcuts deleted from `property-yield.ts`
+  (legacy weekly settlement math untouched); `buyAssumptionRate` copy rewritten ×12
+  locales; Income filter/sort now use presented income (9 known match)
+- Files changed: presentation module (new) + its 24-villa parity tests (new);
+  `types/property.ts` (optional `bestAskUsd`); mock boundary (`canonical-listing.ts`
+  newly tracked — pre-existing untracked V1-era content plus the Slice 2 bestAsk delta);
+  marketplace view model + filter; 5 components; `property-yield` cleanup; 8 updated
+  test files; 12 locale files; plan status; decision log (DEC-004/DEC-005 RESOLVED)
+- Tests run and results: new parity tests 8/8 (RED-verified before implementation);
+  full vitest 124 files 1107/1107; typecheck clean; lint 0 errors (7 pre-existing
+  warnings); build green (13 routes); Playwright 40 passed/6 expected skips
+- Design/UI QA result: PASS at 480×840 (live parity Grand $16.29 / Emerald $2.27 /
+  Syrene $256.02 / Trajan pending; no overflow; screenshots read); fa RTL via E2E
+  estate-rtl + buy/sell RTL gates (green, no new layout primitives)
+- Remaining issues: P1-2 (ask/last-trade labeling) + P1-1/P1-3 → Slice 4; P2-4 → Slice 5;
+  P2-1/P3-2 → Slice 8; P2-2/P2-3 → Slice 7/6; P3-1 → Slice 3; Income filter now 9-match
+  (honest) — Slice 6 may revisit empty-state guidance; lock/chart/seed-contract
+  fixture-rate paths intentionally preserved (settlement, out of scope)
+- Next slice: Slice 3 — resolve `Data pending` villa by villa
+
+### Slice 3 — Resolve `Data pending` villa by villa
+
+- Status: `PASS`
+- Commit: (this commit — code + tests + docs)
+- Scope completed: every pending adjudicated villa by villa against
+  `ESTATE-24-DATA.json` (sizes: 8× genuinely absent in source specs; owner tax: 10×
+  `revenueTreatment UNKNOWN` in listing taxes — both keep pending, no invention; EUR 5×
+  keep pending — no approved FX; legacy Slice-A baseline stays Grand-only by contract —
+  no second engine). Presentation layer now classifies the unknown cause
+  (`eur_mixed_currency` ×5 / `unknown_owner_tax` ×10) with short human-readable
+  captions; metrics grid, income calculator, and buy qty/summary previews render the
+  reason with every pending (provenance already on V1-story/ownership rows).
+  Card/featured pending chips stay bare by design (space; whole-card nav leads to the
+  explained detail — progressive disclosure). About-sheet size/year/lease/status rows
+  stay pending (self-evident backlog labels, values never invented).
+- Files changed: `property-presentation.ts` (unknownKind + captions);
+  `PropertyMetricsGrid` (reason caption), `IncomeCalculator`, `BuyQtyStep`,
+  `BuySummaryStep` (reason with pending); `pending-states.test.tsx` (new — 24-villa
+  matrix); extended presentation + buy-flow tests; plan status
+- Tests run and results: new/updated tests RED-verified before implementation; full
+  vitest 125 files 1113/1113; typecheck clean; lint 0 errors (7 pre-existing warnings);
+  build green; Playwright 40 passed/6 expected skips
+- Design/UI QA result: PASS at 480×840 — live 24/24 probe (15 pending each with the
+  correct reason, 9 valued, CTA hierarchy intact, zero overflow; screenshots read);
+  fa RTL via E2E estate-rtl + buy/sell gates (green; captions reuse existing primitives)
+- Remaining issues: none new. DEC-006 (`funded` vs ledger) and DEC-007 (naming) stay
+  OPEN for Slices 4–5/8. Card-chip bare pending is intentional (see above).
+- Next slice: Slice 4 — clarify primary offering versus secondary market
+
+### Slice 4 — Clarify primary offering versus secondary market
+
+- Status: `PASS`
+- Commit: (this commit — code + tests + docs)
+- Scope completed: secondary hero carries the market context before the CTA
+  (`Ask price: $X · Last price: $Y`, observed values only, never invented);
+  metrics price label follows the basis (Share price / Ask price / Last price);
+  primary states the $100 base explicitly (metrics note); secondary sticky buy names
+  the ask (`Buy · Ask $X`); `Weekly yield` transaction label removed (`Yield`;
+  `Monthly yield` kept — kind enum and ledger untouched; legacy weekly-lock copy is
+  accurately gated and preserved). No feed restructure, no status/economics changes.
+  DEC-006 Slice-4 half discharged (funded banner/CTA already honest resale handling —
+  numbers decision stays with Slice 5; DEC-006 remains OPEN).
+- Files changed: `PropertyHero` (market caption), `PropertyMetricsGrid` (basis label +
+  primary note), `PropertyDetail` (ask passthrough), `PropertyStickyCta` (ask basis),
+  `TransactionRow` (label); `market-context.test.tsx` (new, 11 tests);
+  consistency/page/transaction test updates; 3 new i18n keys ×12 locales; plan status
+- Tests run and results: new tests RED-verified (8 fail) before implementation; full
+  vitest 126 files 1124/1124; typecheck clean; lint 0 errors (7 pre-existing warnings);
+  build green; Playwright 40 passed/6 expected skips (one E2E strict-mode collision
+  from the duplicated ask string resolved by sharing the short `askPrice` vocabulary —
+  no E2E edit needed)
+- Design/UI QA result: PASS at 480×840 (primary/secondary/funded heroes + metrics +
+  sticky read as designed; screenshots read; zero overflow); fa RTL via E2E gates
+  (green; captions reuse existing primitives)
+- Remaining issues: P1-1 numbers half (DEC-006 → Slice 5); P2-1 naming (DEC-007 →
+  Slice 8); sell-side context stays with the sheet review flow (Slice 5 owns sell honesty)
+- Next slice: Slice 5 — make Buy and Sell behavior honest and coherent
+
+### Slice 5 — Make Buy and Sell behavior honest and coherent
+
+- Status: `PASS`
+- Commit: (this commit — code + tests + docs)
+- Scope completed: full Buy/order flow traced (prepare → TonConnect send → record →
+  poll verify-and-settle; mock settles optimistically in confirmBuy per ADR-005).
+  DECISION (documented in DEC-006): stateful in-session demo ledger. Fixes: placed
+  limit-buy/custom-sell/queued orders now surface in Portfolio open orders
+  (`liveOpenOrders` merge — previously invisible); instant sell records an
+  `instant_sell` ledger tx (buys already did); `freeSharesAfter` double-subtract
+  fixed (exact remainder); `confirmBuy` idempotent per intent (no double-mint on
+  replay). No economics/settlement-rule changes (7% instant fee, tiered buy fees,
+  best-ask immutability all preserved and pinned by existing tests).
+- Files changed: `mock/orderbook.ts` (`liveOpenOrders`), `mock/portfolio.ts` (merge),
+  `mock/transaction.ts` (idempotent confirm), `mock/sells.ts` (ledger tx + remainder
+  fix); `demo-ledger.test.ts` (new, 7 tests); `order-lifecycle.spec.ts` (new, 3
+  journey tests); plan status; decision log (DEC-006 RESOLVED)
+- Tests run and results: new unit tests RED-verified (5 fail) before implementation;
+  full vitest 127 files 1131/1131; typecheck clean; lint 0 errors
+  (7 pre-existing warnings); build green; Playwright 49 tests: 43 passed
+  (incl. 3 new order-lifecycle journeys), 6 expected skips, 0 failed
+- Design/UI QA result: PASS at 480×840 (journeys use only existing surfaces;
+  screenshots in existing slice-g/h folders unchanged; new spec takes no screenshots
+  beyond its flow; zero overflow asserted in every new test; fa RTL via existing gates)
+- Remaining issues: none new. Instant-sell E2E unreachable in-browser (no funding
+  holdings + wallet gate) — covered by unit tests. Primary-buy E2E stops at the
+  honest wallet gate (existing). P2-1 naming (DEC-007 → Slice 8).
+- Next slice: Slice 6 — rebuild the first-time buyer journey
+
+### Slice 6 — Rebuild the first-time buyer journey
+
+- Status: `PASS`
+- Commit: (this commit — code + tests + docs)
+- Scope completed: reviewed all 8 journey steps live at 480×840. Three minimal
+  improvements: (1) removed the under-CTA funding caption duplicating the status
+  banner + metrics sold/total (no test referenced it); (2) thesis ANR carries the
+  plain-language note resolving the range-vs-average stall (new `v1ThesisAnrNote`
+  key ×12 locales); (3) cancel-confirm/success copy no longer implies an
+  investing-balance account (reworded in place; sheet i18n conversion logged as
+  DEC-008 for Slice 7). Verified keep-as-is with evidence: marketplace/cards, hero
+  price/fraction/CTA, money-chain primer, rental-story + trust explainers, V1
+  methodology on Income (kept — the popover carries only generic provenance, so the
+  inline method is the audit trail, already fine-print, off the first viewport),
+  primary/secondary CTA routing, buy/sell review flows, success next-states.
+- Files changed: `PropertyHero` (dedup), `EstateV1Thesis` (ANR note), portfolio
+  `page.tsx` (cancel copy); `buyer-journey.test.tsx` (new), portfolio `page.test`
+  (cancel copy tests); `buyer-journey.spec.ts` (new journey spine E2E);
+  `v1ThesisAnrNote` ×12 locales; plan status; decision log (DEC-008 OPEN)
+- Tests run and results: new/updated tests RED-verified (4 unit fail) before
+  implementation (one failure was a test-tense bug, fixed in the test);
+  full vitest 128 files 1135/1135; typecheck clean; lint 0 errors
+  (7 pre-existing warnings); build green; Playwright 51 tests: 45 passed
+  (incl. 2 new journey tests), 6 expected skips, 0 failed
+- Design/UI QA result: PASS at 480×840 (trimmed hero + thesis note screenshots read;
+  zero overflow asserted in every new test; fa RTL via existing gates — new strings
+  reuse existing primitives)
+- Remaining issues: DEC-007 naming → Slice 8; DEC-008 cancel-sheet i18n → Slice 7.
+- Next slice: Slice 7 — design/UI and responsive polish pass
+
+### Slice 7 — Design/UI and responsive polish pass
+
+- Status: `PASS`
+- Commit: (this commit — code + tests + docs)
+- Scope completed: automated sweep (8 routes × 360×740/480×840/1280×800 × en/fa =
+  48 combos: zero overflow, zero wide nodes, zero raw keys, zero page errors).
+  Fixed with evidence: (1) RTL bidi isolation — fa reversed $-ranges
+  ($76,458–$67,655) now render LTR-correct (card nightly/growth, rental story,
+  about sheet, hero caption per-figure spans; verified live in fa); (2) directional
+  chevron mirroring — back chevrons (Header, compact top bar) + 10 forward chevrons
+  (Featured, YourEstates, IncomeByEstate, EarningsWithdrawEntry, SettingsSheet×5 —
+  4 already flipped, LanguageSelector already flipped, LockedFreeCard, DocumentsList);
+  (3) tab-strip arrow keys follow document direction (WAI-APG); (4) DEC-008 —
+  cancel sheet fully keyed (`cancelOrder*` ×13 ×12 locales, EN output identical).
+  Investigated, no change: hydration console warnings (3/48 loads, 0/4 repro runs,
+  no user-visible symptom — timing-flake hypothesis, timers use fixed SSR epoch);
+  sort-strip clipping (scrollable by design); floating pill/tab-bar overlap (standard
+  overlay, all content reachable, clearance by construction); desktop margins
+  (intended 480px Telegram canvas); fa digit localization (consistent native fa UX).
+  States audit: loading/empty/error present on home/marketplace/portfolio/earnings/
+  transactions (list-level empty included); keyboard focus visible via themed
+  outline-color + UA default; icon buttons labelled; reduced-motion honored.
+  Translator backlog measured: 0 missing keys in all locales, ~206–219 EN-mirrored
+  keys/locale (no code change — translators follow up).
+- Files changed: 4 bidi sites + hero caption; `PropertyTabs` RTL keys; 12 chevron
+  flips; portfolio page (DEC-008);   `rtl-bidi.test.tsx` + `PropertyTabs.test.tsx` +
+  `Header.test.tsx` (new); Featured/portfolio test additions; `estate-rtl.spec`
+  (variant test); 13 cancel keys ×12 locales; plan status; decision log
+  (DEC-008 RESOLVED, DEC-009 OPEN)
+- Tests run and results: new tests RED-verified (9 unit + 1 E2E fail) before
+  implementation (one misdiagnosis corrected by experiment: the `rtl:` variant IS
+  built into Tailwind v4 — verified `rotate=180deg` with and without a custom
+  definition, so no globals.css change shipped); full vitest 131 files 1146/1146;
+  typecheck clean; lint 0 errors (7 pre-existing warnings); build green;
+  Playwright 52 tests: 46 passed (incl. RTL variant test), 6 expected skips, 0 failed
+- Design/UI QA result: PASS — fa marketplace/detail re-screenshots read (range order
+  correct, chevrons mirrored, no overflow); en/desktop screenshots read; no raw keys
+  in 12 locales (automated); icons have labels; sheets focus-safe (existing patterns)
+- Remaining issues: DEC-007 naming → Slice 8; DEC-009 tap-target acceptance (product
+  decision, no code); translator backlog (~210 keys/locale, no code); hydration
+  flake note (P3, revisit only with user-visible repro)
+- Next slice: Slice 8 — cross-surface consistency and regression hardening
+
+### Slice 8 — Cross-surface consistency and regression hardening
+
+- Status: `PASS`
+- Commit: (this commit — code + tests + docs; includes the long-standing
+  uncommitted body the slice is built on, see report §8)
+- Scope completed: DEC-007 naming unified on the adopted Estate24 record for all
+  24 villas (3 R2 spelling drifts retired: `Syrene (Villa Syrene)`→`Villa Syrene`,
+  La Datcha, Galeazzo; last `.name.value` render site in SimilarProperties fixed;
+  new DEC-007 identity-parity tests for cards + rail). Consolidated 24-villa
+  cross-surface matrix through the real view models (identity, $100 primary,
+  V1 supply ÷ $100, demo-ledger sold/remaining, card==book price, status→CTA);
+  15 pending incomes all classified (5× EUR mixed-currency, 10× unknown owner
+  tax) as genuine canonical UNKNOWNs — not defects. P2-3 numeric-format residue
+  fixed (card fraction, funding banner, availability caption now grouped like
+  the hero/metrics). Dead legacy paths removed after proving zero imports
+  (Slice-A panels, FundingPanel, HolderAnalytics, IncomeAnalytics,
+  PerformanceChart(s), PrimaryPerformanceCharts, estate-plan-engine, full
+  MarketSection composition; `estate-economics.spec` pins they never render;
+  P3-2 ownership-touch deletion confirmed intentional). Coverage-gap pass: every
+  fixed Phase 9 defect mapped to its regression test (report §4); new tests for
+  DEC-007 + P2-3. Full report: `docs/PHASE-9-SLICE-8.md`.
+- Files changed: `marketplace-view-model.ts`, `SimilarProperties.tsx` (+ test),
+  `PropertyCard.tsx` (+ test), `PropertyStatusBanner.tsx`; dead-path deletions
+  (11 components/lib files + 6 test files); `docs/PHASE-9-SLICE-8.md` (new),
+  plan status, decision log (DEC-007 RESOLVED); plus the pre-existing uncommitted
+  body (V1 engine, PROMPT 05, decision-lock + PO-decision sessions — see report §8)
+- Tests run and results: full vitest 126 files 1057/1057 (new/updated tests
+  RED-verified before implementation); typecheck clean; lint 0 errors
+  (6 pre-existing warnings, one in a removed file); build green (13 routes);
+  Playwright 480×840: 46 passed / 6 expected skips / 0 failed
+- Design/UI QA result: PASS at 480×840 — screenshots read (`screenshots/slice8-qa/`):
+  card==detail identity/price/fraction/income on primary, resale, and pending
+  villas; grouped counts everywhere; fa RTL correct (bidi holding, no overflow,
+  no raw keys; EN-mirrored backlog unchanged)
+- Remaining issues: DEC-009 tap-target acceptance (product decision); translator
+  backlog (~210 keys/locale); P2-2 New badge accepted (coherent demo clock);
+  upstream branch reconcile (user decision)
+- Next slice: Slice 9 — final release-readiness audit (NOT STARTED)
+
+### Layer 1 — Property page first-viewport conversion spine (DEC-012, user-directed post-Slice 8)
+
+- Status: `PASS`
+- Commit: (this commit)
+- Scope completed: funding banner retired → demo-ledger scarcity bar inside the
+  price block (bar + "N of M shares left"; honest all-sold line when sold out);
+  gallery status pill (amber funded % / green Resale) + bottom gradient; price +
+  fraction on one baseline; "Base $100 offering" line (primary) and 11px
+  ask/last context (secondary); merged value line "Own a piece of a $8M estate —
+  from $100." (rich text, provenance kept); priced CTAs ("Buy · $100" /
+  "Buy resale · $ask"); fee note under the action; owner line under the CTA;
+  KPI grid = Price | Proj. monthly | Funded % (mini-bar, primary) or Sold
+  (secondary) | Proj. / year; sticky primary CTA scarcity microline.
+  Layers 2–3 (tab restructure, secondary market modules) NOT started.
+- Files: PropertyHero (rewritten), PropertyGallery, PropertyMetricsGrid,
+  PropertyStickyCta, PropertyDetail, property page (sticky prop);
+  PropertyStatusBanner deleted; 10 new i18n keys ×12 locales (fa real, rest
+  EN-mirrored per backlog pattern); test-setup t.rich support; e2e pins updated
+  (property-detail, sell-flow guard scoped to the listing status surface);
+  DEC-012 in the decision log.
+- Tests: vitest 127 files 1072/1072; typecheck clean; lint 0 errors (6
+  pre-existing warnings); build green; Playwright 46 passed / 6 expected skips /
+  0 failed (one flaky re-run disclosed: sell-flow guard, fixed by scoping, 4/4).
+- Design/UI QA: PASS at 480×840 (`screenshots/redesign-l1/`: Grand primary,
+  Syrene resale, fa RTL) — pill/funding-bar/merged-line/priced-CTA render as
+  specified; RTL bidi correct; no raw keys.
+
+#### Layer 1 addendum — dedup, glass KPI, sizing (DEC-013 addendum, user feedback)
+
+- Status: `PASS`
+- Commit: (this commit)
+- Scope: see DEC-013 addendum — removed every repeated figure/sentence from the
+  first viewport (base-offering line, value sentence, money-chain paragraph,
+  metrics hints, funded mini-bar, secondary ask/last caption), added the
+  money-chain modal behind the estate-value row, the at-a-glance owner badge,
+  the centered fee/ownership stack, the quiet glass KPI card, and two sizing
+  steps down (hero 32px, KPI values 20px).
+- Tests: vitest 1071/1071; typecheck/lint clean; build green; E2E 45 passed /
+  6 skips (known order-lifecycle reload flake, green in isolation).
