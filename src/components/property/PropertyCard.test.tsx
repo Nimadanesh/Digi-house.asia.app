@@ -138,8 +138,8 @@ describe("PropertyCard — marketplace villa card with phase variant", () => {
     expect(meta).toHaveTextContent("$8M");
     expect(meta.querySelector("svg")).toBeNull();
     expect(meta.className).toContain("text-[0.8125rem]");
-    // A-tree presentation value for Grand (phase-9 view model; no B-econ tweaks).
-    expect(screen.getByText("$16.29")).toBeInTheDocument();
+    // Merged-tree presentation value for Grand (estate-page econ inputs).
+    expect(screen.getByText("$16.25")).toBeInTheDocument();
     expect(screen.queryByTestId("card-income-pending")).not.toBeInTheDocument();
     // 8px below the meta line before the fraction.
     expect(screen.getByTestId("card-fraction").className).toContain("mt-2");
