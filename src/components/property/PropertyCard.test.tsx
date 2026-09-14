@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { PropertyCard } from "@/components/property/PropertyCard";
 import { toMarketplaceEstate } from "@/lib/economics/marketplace-view-model";
 import type { Listing } from "@/types/property";
@@ -30,7 +30,7 @@ const listing: Listing = {
   totalValueUsd: 8_000_000,
   meta: {
     sizeSqm: 72,
-    yearBuilt: 2019,
+    yearBuilt: 2020,
     propertyType: "Apartment",
     rentalStatus: "rented",
     leaseUntil: "2026-12-31",
@@ -42,59 +42,110 @@ const listing: Listing = {
 
 const estate = toMarketplaceEstate(listing);
 
-describe("PropertyCard — Slice F canonical estate card", () => {
-  it("links to property detail", () => {
-    render(<PropertyCard estate={estate} nowMs={Date.UTC(2026, 6, 26)} />);
+describe("PropertyCard — marketplace villa card with phase variant", () => {
+  it("primary: data-phase, Plus icon, offer price, funding line; no growth, no View Estate", () => {
+    const { container } = render(<PropertyCard estate={estate} nowMs={Date.UTC(2026, 6, 26)} />);
+    expect(screen.getByTestId("property-card")).toHaveAttribute("data-phase", "primary");
+    const phase = screen.getByTestId("card-phase");
+    expect(phase).toHaveAttribute("aria-label", "Primary offering");
+    expect(container.querySelector(".lucide-plus")).not.toBeNull();
+    expect(container.querySelector(".lucide-arrow-left-right")).toBeNull();
+    // Offer/share field — never lastTrade on primary.
+    expect(screen.getByText("Price / share")).toBeInTheDocument();
+    expect(screen.getByTestId("card-price")).toHaveTextContent("$125.00");
+    expect(screen.getByTestId("card-availability")).toHaveTextContent("92% funded · 80 shares remaining");
+    expect(screen.queryByTestId("card-growth-potential")).not.toBeInTheDocument();
+    expect(screen.queryByText("Estimated growth potential")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("card-view")).not.toBeInTheDocument();
+    expect(screen.queryByText("View Estate")).not.toBeInTheDocument();
+  });
+
+  it("secondary: data-phase, ArrowLeftRight icon, last-trade price, no funding line", () => {
+    const resale = toMarketplaceEstate({
+      ...listing,
+      id: "re-125643",
+      status: "resale",
+      sharePriceUsd: 12_000,
+      lastTradeUsd: 25_602,
+      sharesSold: 600,
+      sharesRemaining: 0,
+      fundingProgressRatio: 1,
+    });
+    const { container } = render(<PropertyCard estate={resale} nowMs={Date.UTC(2026, 6, 26)} />);
+    expect(screen.getByTestId("property-card")).toHaveAttribute("data-phase", "secondary");
+    const phase = screen.getByTestId("card-phase");
+    expect(phase).toHaveAttribute("aria-label", "Secondary market");
+    expect(container.querySelector(".lucide-arrow-left-right")).not.toBeNull();
+    expect(container.querySelector(".lucide-plus")).toBeNull();
+    // Last-price path — never the offer on secondary.
+    expect(screen.getByText("Last price")).toBeInTheDocument();
+    expect(screen.getByTestId("card-price")).toHaveTextContent("$256.02");
+    expect(screen.queryByText("$120.00")).not.toBeInTheDocument();
+    expect(screen.queryByText("Price / share")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("card-availability")).not.toBeInTheDocument();
+  });
+
+  it("income unknown: Data pending chip, never a fabricated figure", () => {
+    // Pending follows the presentation layer (V1 unknown), not fixture fields.
+    // D11 locked 2026-09-13: remaining V1-unknowns are the EUR villas.
+    const noIncome = toMarketplaceEstate({
+      ...listing,
+      id: "re-130901",
+    });
+    render(<PropertyCard estate={noIncome} nowMs={Date.UTC(2026, 6, 26)} />);
+    expect(screen.getByTestId("card-income-pending")).toBeInTheDocument();
+    expect(screen.getByText("Data pending")).toBeInTheDocument();
+    expect(screen.queryByText("$0.00")).not.toBeInTheDocument();
+  });
+
+  it("whole card routes to the existing property href", () => {
+    const onNavigateHaptic = vi.fn();
+    render(
+      <PropertyCard estate={estate} nowMs={Date.UTC(2026, 6, 26)} onNavigateHaptic={onNavigateHaptic} />,
+    );
     const link = screen.getByRole("link");
     expect(link).toHaveAttribute("href", "/property/re-128862");
+    fireEvent.click(link);
+    expect(onNavigateHaptic).toHaveBeenCalledTimes(1);
   });
 
-  it("identity first: canonical name, location and property type", () => {
+  it("no visible market-stage words (aria-labels excluded)", () => {
+    const resale = toMarketplaceEstate({ ...listing, id: "re-125643", status: "resale" });
+    const { container } = render(<PropertyCard estate={resale} nowMs={Date.UTC(2026, 6, 26)} />);
+    const text = container.querySelector('[data-testid="property-card"]')?.textContent ?? "";
+    expect(text).not.toMatch(/primary|secondary|ipo|resale/i);
+  });
+
+  it("identity first: canonical name, single place token, property type", () => {
     render(<PropertyCard estate={estate} nowMs={Date.UTC(2026, 6, 26)} />);
     expect(screen.getByText("Grand 2 BDM Ocean Pool Villa (JOALI Being)")).toBeInTheDocument();
-    expect(screen.getByText(/Bodufushi, JOALI Being/)).toBeInTheDocument();
-    // PROMPT 03: canonical source-supported type — never the legacy fixture
-    // type ("Apartment" for an overwater villa).
+    const loc = screen.getByTestId("card-location");
+    expect(loc).toHaveTextContent("Bodufushi");
+    expect(loc.textContent).not.toContain("Raa Atoll");
+    expect(loc.textContent).not.toContain("Maldives");
     expect(screen.getByText(/· Overwater Villa/)).toBeInTheDocument();
-  });
-
-  it("shows share price + canonical nightly + Estate Value + projected income, fraction and availability", () => {
-    render(<PropertyCard estate={estate} nowMs={Date.UTC(2026, 6, 26)} />);
-    expect(screen.getByText("Price / share")).toBeInTheDocument();
-    expect(screen.getByText("$125.00")).toBeInTheDocument();
-    expect(screen.getByText("Night / From")).toBeInTheDocument();
-    expect(screen.getByText("$67,655–$76,458")).toBeInTheDocument();
-    expect(screen.getByText("Estate value")).toBeInTheDocument();
-    expect(screen.getByTestId("card-estate-value")).toHaveTextContent("$8M");
-    expect(screen.getByText("Projected income / share")).toBeInTheDocument();
-    // Slice 8 (P2-3): grouped digits — matches the detail hero fraction format.
+    // Title→location stack uses the spacing token, not a one-off margin.
+    expect(loc.parentElement?.className).toContain("space-y-2");
     expect(screen.getByTestId("card-fraction")).toHaveTextContent("1 share ≈ 1/1,000 of the estate");
-    expect(screen.getByTestId("card-availability")).toHaveTextContent("92% funded · 80 shares remaining");
   });
 
-  it("Estate Value carries compact ⓘ provenance (estimated) — never a visible debug label", () => {
+  it("stats row says Income / share; meta whisper is icon-free and one type step up", () => {
     render(<PropertyCard estate={estate} nowMs={Date.UTC(2026, 6, 26)} />);
-    // PROMPT 04: estate value + growth potential each carry compact provenance.
-    const infos = screen.getAllByTestId("provenance-info");
-    expect(infos.length).toBeGreaterThanOrEqual(2);
-    for (const info of infos) {
-      expect(info).toHaveAttribute("data-provenance", "estimated");
-    }
-    expect(screen.queryByText("Estimated")).not.toBeInTheDocument();
-    expect(screen.queryByText("Observed")).not.toBeInTheDocument();
-    expect(screen.queryByText("Calculated")).not.toBeInTheDocument();
+    expect(screen.getByText("Income / share")).toBeInTheDocument();
+    expect(screen.queryByText("Projected income / share")).not.toBeInTheDocument();
+    const meta = screen.getByTestId("card-meta");
+    expect(meta).toHaveTextContent("$67,655–$76,458");
+    expect(meta).toHaveTextContent("$8M");
+    expect(meta.querySelector("svg")).toBeNull();
+    expect(meta.className).toContain("text-[0.8125rem]");
+    // A-tree presentation value for Grand (phase-9 view model; no B-econ tweaks).
+    expect(screen.getByText("$16.29")).toBeInTheDocument();
+    expect(screen.queryByTestId("card-income-pending")).not.toBeInTheDocument();
+    // 8px below the meta line before the fraction.
+    expect(screen.getByTestId("card-fraction").className).toContain("mt-2");
   });
 
-  it("has no APY, no scarcity badges, no Property Value wording", () => {
-    render(<PropertyCard estate={estate} nowMs={Date.UTC(2026, 6, 26)} />);
-    expect(screen.queryByTestId("card-apy-badge")).not.toBeInTheDocument();
-    expect(screen.queryByText("APY")).not.toBeInTheDocument();
-    expect(screen.queryByText("Property Value")).not.toBeInTheDocument();
-    // The listing is not within the "New" age window — no badge either.
-    expect(screen.queryByTestId("card-status-badge")).not.toBeInTheDocument();
-  });
-
-  it("shows the quiet New badge only within the age window", () => {
+  it("shows the quiet New badge only within the age window, top-right", () => {
     const fresh = toMarketplaceEstate({
       ...listing,
       createdAt: "2026-07-10T00:00:00Z",
@@ -102,68 +153,15 @@ describe("PropertyCard — Slice F canonical estate card", () => {
       sharesRemaining: 80,
     });
     render(<PropertyCard estate={fresh} nowMs={Date.UTC(2026, 6, 26)} />);
-    expect(screen.getByTestId("card-status-badge")).toHaveTextContent("New");
+    const badge = screen.getByTestId("card-status-badge");
+    expect(badge).toHaveTextContent("New");
+    expect(badge.className).toContain("right-2");
   });
 
-  it("renders 'Data pending' instead of a fabricated income figure when V1 income is unknown", () => {
-    // Slice 2: pending follows the presentation layer (V1 unknown), not fixture fields.
-    const noIncome = toMarketplaceEstate({
-      ...listing,
-      id: "re-131293",
-    });
-    render(<PropertyCard estate={noIncome} nowMs={Date.UTC(2026, 6, 26)} />);
-    expect(screen.getByTestId("card-income-pending")).toBeInTheDocument();
-    expect(screen.getByText("Data pending")).toBeInTheDocument();
-    // Never a zero dollar figure.
-    expect(screen.queryByText("$0.00")).not.toBeInTheDocument();
-  });
-
-  it("shows the presented V1 monthly income for a computable villa (Grand: $16.29)", () => {
+  it("has no APY and no growth/provenance extras on the card", () => {
     render(<PropertyCard estate={estate} nowMs={Date.UTC(2026, 6, 26)} />);
-    expect(screen.queryByTestId("card-income-pending")).not.toBeInTheDocument();
-    expect(screen.getByText("$16.29")).toBeInTheDocument();
-  });
-
-  it("resale card labels the price as 'Last price', shows the market price and no availability (PD-07)", () => {
-    const resale = toMarketplaceEstate({
-      ...listing,
-      id: "re-125643",
-      status: "resale",
-      sharePriceUsd: 12_000,
-      lastTradeUsd: 8_000,
-      sharesSold: 600,
-      sharesRemaining: 0,
-      fundingProgressRatio: 1,
-    });
-    render(<PropertyCard estate={resale} nowMs={Date.UTC(2026, 6, 26)} />);
-    expect(screen.getByText("Last price")).toBeInTheDocument();
-    expect(screen.getByText("$80.00")).toBeInTheDocument();
-    expect(screen.queryByText("$120.00")).not.toBeInTheDocument();
-    expect(screen.queryByText("Price / share")).not.toBeInTheDocument();
-    // Availability block is primary-only.
-    expect(screen.queryByTestId("card-availability")).not.toBeInTheDocument();
-  });
-
-  it("PROMPT 05: Grand shows exactly $8M with $18M growth potential (no percentage)", () => {
-    render(<PropertyCard estate={estate} nowMs={Date.UTC(2026, 6, 26)} />);
-    expect(screen.getByTestId("card-estate-value")).toHaveTextContent("$8M");
-    expect(screen.getByTestId("card-estate-value")).not.toHaveTextContent("$10M");
-    expect(screen.getByTestId("card-growth-potential")).toHaveTextContent(
-      "Estimated Growth Potential",
-    );
-    expect(screen.getByTestId("card-growth-potential")).toHaveTextContent("$18M");
-    expect(screen.getByTestId("card-growth-potential").textContent).not.toContain("%");
-  });
-
-  it("PROMPT 03: single-value estates show compact growth potential with a percentage", () => {
-    const aerial = toMarketplaceEstate({
-      ...listing,
-      id: "re-126855",
-      totalShares: 1000,
-    });
-    render(<PropertyCard estate={aerial} nowMs={Date.UTC(2026, 6, 26)} />);
-    expect(screen.getByTestId("card-estate-value")).toHaveTextContent("$18M");
-    expect(screen.getByTestId("card-growth-potential")).toHaveTextContent("$26.4M");
-    expect(screen.getByTestId("card-growth-potential")).toHaveTextContent("+46.7%");
+    expect(screen.queryByTestId("card-apy-badge")).not.toBeInTheDocument();
+    expect(screen.queryByText("APY")).not.toBeInTheDocument();
+    expect(screen.queryByText("Property Value")).not.toBeInTheDocument();
   });
 });

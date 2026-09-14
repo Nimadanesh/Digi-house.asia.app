@@ -74,7 +74,7 @@
   },
   "home": {
     "loadError": "होम लोड नहीं हो सका।",
-    "nextPayout": "Next Payout",
+    "nextPayout": "Next payout",
     "totalInvested": "कुल निवेश",
     "totalEarningsReceived": "कुल प्राप्त कमाई",
     "monthlyPerShare": "मासिक / हिस्सा",
@@ -101,7 +101,24 @@
     "viewEstate": "संपत्ति देखें",
     "moreEstates": "अधिक संपत्तियाँ",
     "ownShareOfEstate": "संपत्ति का {pct}",
-    "currentValue": "वर्तमान मूल्य"
+    "currentValue": "वर्तमान मूल्य",
+    "searchEstates": "Search estates",
+    "fromShare": "From $80 a share",
+    "invest": "Invest",
+    "invite": "Invite",
+    "details": "Details",
+    "activity": "Activity",
+    "forYou": "For you",
+    "searchPlaceholder": "Search",
+    "yourBalance": "Your balance",
+    "fromEighty": "From $80 a share",
+    "viewAll": "View all",
+    "expected": "Expected",
+    "payoutDate": "Date",
+    "payoutAmount": "Amount",
+    "payoutStatus": "Status",
+    "rentalYtd": "rental income YTD",
+    "estatesSheetTitle": "Your estates"
   },
   "marketplace": {
     "feesTitle": "कमीशन",
@@ -842,12 +859,13 @@
     "featuredEmptyTitle": "चयनित",
     "pricePerShare": "कीमत / हिस्सा",
     "lastPrice": "अंतिम मूल्य",
-    "projectedIncome": "अनुमानित आय / शेयर",
+    "projectedIncome": "Income / share",
     "incomePending": "डेटा लंबित",
     "shareFraction": "1 शेयर ≈ संपत्ति का 1/{total}",
     "fundedCaption": "{pct}% फंडेड · {remaining} हिस्से शेष",
     "nightFrom": "रात / से",
     "perNight": "प्रति रात",
-    "viewEstate": "View Estate"
+    "viewEstate": "View Estate",
+    "resultsCount": "{count} estates"
   }
 }

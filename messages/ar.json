@@ -74,7 +74,7 @@
   },
   "home": {
     "loadError": "تعذّر تحميل الصفحة الرئيسية.",
-    "nextPayout": "Next Payout",
+    "nextPayout": "Next payout",
     "totalInvested": "إجمالي الاستثمار",
     "totalEarningsReceived": "إجمالي الأرباح المستلمة",
     "monthlyPerShare": "شهري / حصة",
@@ -101,7 +101,24 @@
     "viewEstate": "عرض العقار",
     "moreEstates": "مزيد من العقارات",
     "ownShareOfEstate": "{pct} من العقار",
-    "currentValue": "القيمة الحالية"
+    "currentValue": "القيمة الحالية",
+    "searchEstates": "Search estates",
+    "fromShare": "From $80 a share",
+    "invest": "Invest",
+    "invite": "Invite",
+    "details": "Details",
+    "activity": "Activity",
+    "forYou": "For you",
+    "searchPlaceholder": "Search",
+    "yourBalance": "Your balance",
+    "fromEighty": "From $80 a share",
+    "viewAll": "View all",
+    "expected": "Expected",
+    "payoutDate": "Date",
+    "payoutAmount": "Amount",
+    "payoutStatus": "Status",
+    "rentalYtd": "rental income YTD",
+    "estatesSheetTitle": "Your estates"
   },
   "marketplace": {
     "feesTitle": "العمولة",
@@ -842,12 +859,13 @@
     "featuredEmptyTitle": "مميز",
     "pricePerShare": "السعر / حصة",
     "lastPrice": "آخر سعر",
-    "projectedIncome": "الدخل المتوقع / السهم",
+    "projectedIncome": "Income / share",
     "incomePending": "البيانات معلقة",
     "shareFraction": "سهم واحد ≈ 1/{total} من العقار",
     "fundedCaption": "تم تمويل {pct}% · تبقى {remaining} حصة",
     "nightFrom": "ليلة / يبدأ من",
     "perNight": "في الليلة",
-    "viewEstate": "View Estate"
+    "viewEstate": "View Estate",
+    "resultsCount": "{count} estates"
   }
 }

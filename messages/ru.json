@@ -74,7 +74,7 @@
   },
   "home": {
     "loadError": "Не удалось загрузить главную.",
-    "nextPayout": "Next Payout",
+    "nextPayout": "Next payout",
     "totalInvested": "Всего вложено",
     "totalEarningsReceived": "Всего получено",
     "monthlyPerShare": "В месяц / доля",
@@ -101,7 +101,24 @@
     "viewEstate": "Смотреть объект",
     "moreEstates": "Другие объекты",
     "ownShareOfEstate": "{pct} объекта",
-    "currentValue": "Текущая стоимость"
+    "currentValue": "Текущая стоимость",
+    "searchEstates": "Search estates",
+    "fromShare": "From $80 a share",
+    "invest": "Invest",
+    "invite": "Invite",
+    "details": "Details",
+    "activity": "Activity",
+    "forYou": "For you",
+    "searchPlaceholder": "Search",
+    "yourBalance": "Your balance",
+    "fromEighty": "From $80 a share",
+    "viewAll": "View all",
+    "expected": "Expected",
+    "payoutDate": "Date",
+    "payoutAmount": "Amount",
+    "payoutStatus": "Status",
+    "rentalYtd": "rental income YTD",
+    "estatesSheetTitle": "Your estates"
   },
   "marketplace": {
     "feesTitle": "Комиссия",
@@ -842,12 +859,13 @@
     "featuredEmptyTitle": "Избранное",
     "pricePerShare": "Цена / доля",
     "lastPrice": "Последняя цена",
-    "projectedIncome": "Прогнозируемый доход / доля",
+    "projectedIncome": "Income / share",
     "incomePending": "Данные ожидаются",
     "shareFraction": "1 доля ≈ 1/{total} объекта",
     "fundedCaption": "{pct}% собрано · {remaining} долей осталось",
     "nightFrom": "Ночь / от",
     "perNight": "за ночь",
-    "viewEstate": "View Estate"
+    "viewEstate": "View Estate",
+    "resultsCount": "{count} estates"
   }
 }

@@ -9,6 +9,12 @@ vi.mock("next/image", () => ({
   ),
 }));
 
+vi.mock("next/navigation", () => ({
+  useSearchParams: () => new URLSearchParams(),
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
+  usePathname: () => "/marketplace",
+}));
+
 const listings: Listing[] = [
   {
     id: "test-a",
@@ -111,17 +117,21 @@ describe("Estates (marketplace) page", () => {
     expect(screen.getByText("No estates yet")).toBeInTheDocument();
   });
 
-  it("loaded: Estates header, search, the six Phase 9 filters, sort and cards", () => {
+  it("loaded: no title block, one control row (filters + sort capsule), count and cards", () => {
     useMarketplaceEstates.mockReturnValue({ estates: mockEstates(), isLoading: false, isError: false, refetch: vi.fn() });
     render(<MarketplacePage />);
-    expect(screen.getByRole("heading", { name: "Estates" })).toBeInTheDocument();
-    expect(screen.getByText("Own a share of exceptional properties.")).toBeInTheDocument();
+    // Title block deleted — tab + header search already name the page.
+    expect(screen.queryByRole("heading", { name: "Estates" })).not.toBeInTheDocument();
+    expect(screen.queryByText("Own a share of exceptional properties.")).not.toBeInTheDocument();
     expect(screen.getByTestId("estates-search")).toBeInTheDocument();
     expect(screen.getByTestId("estates-filters")).toBeInTheDocument();
     for (const label of ["All", "Featured", "New", "Income", "Owner Stay", "Resale"]) {
       expect(screen.getByRole("tab", { name: label })).toBeInTheDocument();
     }
-    expect(screen.getByTestId("estates-sort")).toBeInTheDocument();
+    // Exactly one sort capsule showing the current sort — no second chip row.
+    expect(screen.getByTestId("estates-sort")).toHaveTextContent("Curated");
+    expect(screen.queryByRole("button", { name: "Entry price" })).not.toBeInTheDocument();
+    expect(screen.getByTestId("estates-count")).toHaveTextContent("2 estates");
     expect(screen.getByText("Alpha Marina")).toBeInTheDocument();
     expect(screen.getByText("Beta Loft")).toBeInTheDocument();
     // Funding estate shows availability; resale shows Last price.
@@ -129,7 +139,27 @@ describe("Estates (marketplace) page", () => {
     expect(screen.getByText("Last price")).toBeInTheDocument();
     // Ownership fraction and projected income on cards.
     expect(screen.getByText("1 share ≈ 1/400 of the estate")).toBeInTheDocument();
-    expect(screen.getAllByText("Projected income / share").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Income / share").length).toBeGreaterThan(0);
+  });
+
+  it("sort capsule opens a sheet with the existing sort enum; picking one applies and closes", async () => {
+    useMarketplaceEstates.mockReturnValue({ estates: mockEstates(), isLoading: false, isError: false, refetch: vi.fn() });
+    render(<MarketplacePage />);
+    fireEvent.click(screen.getByTestId("estates-sort"));
+    expect(screen.getByTestId("sort-sheet")).toBeInTheDocument();
+    expect(screen.getByText("Sort")).toBeInTheDocument();
+    for (const label of ["Curated", "Rental income", "Entry price", "Newest", "Estate value"]) {
+      expect(screen.getByRole("radio", { name: label })).toBeInTheDocument();
+    }
+    expect(screen.getByRole("radio", { name: "Curated" })).toHaveAttribute("aria-checked", "true");
+    fireEvent.click(screen.getByRole("radio", { name: "Entry price" }));
+    await waitFor(() => {
+      expect(screen.queryByTestId("sort-sheet")).not.toBeInTheDocument();
+    });
+    expect(screen.getByTestId("estates-sort")).toHaveTextContent("Entry price");
+    const cards = screen.getAllByTestId("property-card");
+    expect(cards[0]).toHaveTextContent("Beta Loft");
+    expect(cards[1]).toHaveTextContent("Alpha Marina");
   });
 
   it("search filters the list client-side", async () => {
@@ -150,13 +180,17 @@ describe("Estates (marketplace) page", () => {
     const cards = screen.getAllByTestId("property-card");
     expect(cards[0]).toHaveTextContent("Alpha Marina");
     expect(cards[1]).toHaveTextContent("Beta Loft");
-    expect(screen.getByRole("button", { name: /curated/i })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByTestId("estates-sort")).toHaveTextContent("Curated");
   });
 
-  it("Entry price sort reorders by share price", () => {
+  it("Entry price sort reorders by share price", async () => {
     useMarketplaceEstates.mockReturnValue({ estates: mockEstates(), isLoading: false, isError: false, refetch: vi.fn() });
     render(<MarketplacePage />);
-    fireEvent.click(screen.getByRole("button", { name: "Entry price" }));
+    fireEvent.click(screen.getByTestId("estates-sort"));
+    fireEvent.click(screen.getByRole("radio", { name: "Entry price" }));
+    await waitFor(() => {
+      expect(screen.queryByTestId("sort-sheet")).not.toBeInTheDocument();
+    });
     const cards = screen.getAllByTestId("property-card");
     expect(cards[0]).toHaveTextContent("Beta Loft");
     expect(cards[1]).toHaveTextContent("Alpha Marina");
@@ -207,7 +241,8 @@ describe("Estates (marketplace) page", () => {
     const { toMarketplaceEstates: toVM } = await import("@/lib/economics/marketplace-view-model");
     useMarketplaceEstates.mockReturnValue({ estates: toVM(PROPERTIES), isLoading: false, isError: false, refetch: vi.fn() });
     render(<MarketplacePage />);
-    const valueSort = screen.getByRole("button", { name: "Estate value" });
+    fireEvent.click(screen.getByTestId("estates-sort"));
+    const valueSort = screen.getByRole("radio", { name: "Estate value" });
     expect(valueSort).toBeInTheDocument();
     fireEvent.click(valueSort);
     const cards = screen.getAllByTestId("property-card");

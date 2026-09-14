@@ -74,7 +74,7 @@
   },
   "home": {
     "loadError": "Tidak dapat memuat beranda.",
-    "nextPayout": "Next Payout",
+    "nextPayout": "Next payout",
     "totalInvested": "Total investasi",
     "totalEarningsReceived": "Total pendapatan diterima",
     "monthlyPerShare": "Bulanan / saham",
@@ -101,7 +101,24 @@
     "viewEstate": "Lihat properti",
     "moreEstates": "Properti lainnya",
     "ownShareOfEstate": "{pct} dari properti",
-    "currentValue": "Nilai saat ini"
+    "currentValue": "Nilai saat ini",
+    "searchEstates": "Search estates",
+    "fromShare": "From $80 a share",
+    "invest": "Invest",
+    "invite": "Invite",
+    "details": "Details",
+    "activity": "Activity",
+    "forYou": "For you",
+    "searchPlaceholder": "Search",
+    "yourBalance": "Your balance",
+    "fromEighty": "From $80 a share",
+    "viewAll": "View all",
+    "expected": "Expected",
+    "payoutDate": "Date",
+    "payoutAmount": "Amount",
+    "payoutStatus": "Status",
+    "rentalYtd": "rental income YTD",
+    "estatesSheetTitle": "Your estates"
   },
   "marketplace": {
     "feesTitle": "Komisi",
@@ -842,12 +859,13 @@
     "featuredEmptyTitle": "Pilihan",
     "pricePerShare": "Harga / saham",
     "lastPrice": "Harga terakhir",
-    "projectedIncome": "Pendapatan proyeksi / saham",
+    "projectedIncome": "Income / share",
     "incomePending": "Data tertunda",
     "shareFraction": "1 saham ≈ 1/{total} dari properti",
     "fundedCaption": "{pct}% terdanai · {remaining} saham tersisa",
     "nightFrom": "Malam / mulai",
     "perNight": "per malam",
-    "viewEstate": "View Estate"
+    "viewEstate": "View Estate",
+    "resultsCount": "{count} estates"
   }
 }

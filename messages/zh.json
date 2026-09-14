@@ -74,7 +74,7 @@
   },
   "home": {
     "loadError": "无法加载首页。",
-    "nextPayout": "Next Payout",
+    "nextPayout": "Next payout",
     "totalInvested": "总投入",
     "totalEarningsReceived": "累计已收收益",
     "monthlyPerShare": "每月 / 份",
@@ -101,7 +101,24 @@
     "viewEstate": "查看房产",
     "moreEstates": "更多房产",
     "ownShareOfEstate": "房产的 {pct}",
-    "currentValue": "当前价值"
+    "currentValue": "当前价值",
+    "searchEstates": "Search estates",
+    "fromShare": "From $80 a share",
+    "invest": "Invest",
+    "invite": "Invite",
+    "details": "Details",
+    "activity": "Activity",
+    "forYou": "For you",
+    "searchPlaceholder": "Search",
+    "yourBalance": "Your balance",
+    "fromEighty": "From $80 a share",
+    "viewAll": "View all",
+    "expected": "Expected",
+    "payoutDate": "Date",
+    "payoutAmount": "Amount",
+    "payoutStatus": "Status",
+    "rentalYtd": "rental income YTD",
+    "estatesSheetTitle": "Your estates"
   },
   "marketplace": {
     "feesTitle": "佣金",
@@ -842,12 +859,13 @@
     "featuredEmptyTitle": "精选",
     "pricePerShare": "单价 / 份",
     "lastPrice": "最新价格",
-    "projectedIncome": "预计收入 / 股",
+    "projectedIncome": "Income / share",
     "incomePending": "数据待定",
     "shareFraction": "1股 ≈ 房产的1/{total}",
     "fundedCaption": "已募集 {pct}% · 剩余 {remaining} 份",
     "nightFrom": "每晚 / 起",
     "perNight": "每晚",
-    "viewEstate": "View Estate"
+    "viewEstate": "View Estate",
+    "resultsCount": "{count} estates"
   }
 }

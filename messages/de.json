@@ -74,7 +74,7 @@
   },
   "home": {
     "loadError": "Startseite konnte nicht geladen werden.",
-    "nextPayout": "Next Payout",
+    "nextPayout": "Next payout",
     "totalInvested": "Gesamt investiert",
     "totalEarningsReceived": "Erhaltene Erträge gesamt",
     "monthlyPerShare": "Monatlich / Anteil",
@@ -101,7 +101,24 @@
     "viewEstate": "Immobilie ansehen",
     "moreEstates": "Weitere Immobilien",
     "ownShareOfEstate": "{pct} der Immobilie",
-    "currentValue": "Aktueller Wert"
+    "currentValue": "Aktueller Wert",
+    "searchEstates": "Search estates",
+    "fromShare": "From $80 a share",
+    "invest": "Invest",
+    "invite": "Invite",
+    "details": "Details",
+    "activity": "Activity",
+    "forYou": "For you",
+    "searchPlaceholder": "Search",
+    "yourBalance": "Your balance",
+    "fromEighty": "From $80 a share",
+    "viewAll": "View all",
+    "expected": "Expected",
+    "payoutDate": "Date",
+    "payoutAmount": "Amount",
+    "payoutStatus": "Status",
+    "rentalYtd": "rental income YTD",
+    "estatesSheetTitle": "Your estates"
   },
   "marketplace": {
     "feesTitle": "Provision",
@@ -842,12 +859,13 @@
     "featuredEmptyTitle": "Empfohlen",
     "pricePerShare": "Preis / Anteil",
     "lastPrice": "Letzter Preis",
-    "projectedIncome": "Voraussichtliches Einkommen / Anteil",
+    "projectedIncome": "Income / share",
     "incomePending": "Daten ausstehend",
     "shareFraction": "1 Anteil ≈ 1/{total} der Immobilie",
     "fundedCaption": "{pct}% finanziert · {remaining} Anteile verbleiben",
     "nightFrom": "Nacht / ab",
     "perNight": "pro Nacht",
-    "viewEstate": "View Estate"
+    "viewEstate": "View Estate",
+    "resultsCount": "{count} estates"
   }
 }

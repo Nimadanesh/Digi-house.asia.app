@@ -1,22 +1,22 @@
 "use client";
-// File responsibility: Home screen composition (Phase 9 Slice 3 — ownership-first, UI Mapping §3.1).
-// Your Estates ownership hero (or an estates empty state) → Next Distribution (Expected, hidden when
-// nothing is scheduled) → My Estates preview (max 3) → Featured Estate → More Estates (max 3) →
-// quiet trust footer. One dominant CTA: "View My Estates" on the hero.
-import { useCallback, useMemo } from "react";
+// File responsibility: Home screen composition — centered balance hero, default action
+// row, one-row Activity payout preview (same gate as before), single For-you slot.
+// The tab header is shell-owned (AppHeader, transparent bar); the blue canvas gradient
+// lives on the shell canvas so it paints behind the header too.
+import { useCallback, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { useEarnings } from "@/hooks/useEarnings";
 import { useMarketplace } from "@/hooks/useMarketplace";
 import { haptics } from "@/lib/telegram/haptics";
 import { pickFeaturedListing } from "@/lib/home-featured";
-import { YourEstatesCard } from "@/components/home/YourEstatesCard";
-import { NextPayoutSummary } from "@/components/money/NextPayoutSummary";
-import { MyPropertiesSection } from "@/components/home/MyPropertiesSection";
+import { HomeHero } from "@/components/home/HomeHero";
+import { HomeActions } from "@/components/home/HomeActions";
+import { HomeDetailsSheet } from "@/components/home/HomeDetailsSheet";
+import { HomeEstatesSheet } from "@/components/home/HomeEstatesSheet";
 import { HomeEmptyState } from "@/components/home/HomeEmptyState";
-import { FeaturedPropertyCard } from "@/components/home/FeaturedPropertyCard";
-import { MoreOpportunitiesSection, pickMoreOpportunities } from "@/components/home/MoreOpportunitiesSection";
-import { HomeTrustFooter } from "@/components/home/HomeTrustFooter";
+import { HomeActivity } from "@/components/home/HomeActivity";
+import { HomeForYou } from "@/components/home/HomeForYou";
 import { HomeSkeleton } from "@/components/home/HomeSkeleton";
 import { ErrorState } from "@/components/common/ErrorState";
 import type { PortfolioSummary } from "@/types/position";
@@ -37,21 +37,15 @@ export default function HomePage() {
   const earnings = useEarnings();
   const marketplace = useMarketplace();
 
-  const listingById = useMemo(() => {
-    const map = new Map((marketplace.data ?? []).map((p) => [p.id, p]));
-    return map;
-  }, [marketplace.data]);
-
   const featured = useMemo(
     () => pickFeaturedListing(marketplace.data ?? []),
     [marketplace.data],
   );
 
-  // A short calm rail of additional Primary (funding) listings, not the Featured one.
-  const moreOpportunities = useMemo(
-    () => pickMoreOpportunities(marketplace.data ?? [], featured?.id),
-    [marketplace.data, featured?.id],
-  );
+  // For-you precedence: featured picker first, else the first available listing.
+  // (The picker already falls back past an empty Featured set, so this only bites
+  // when the feed itself is empty — then there is honestly nothing buyable.)
+  const forYouListing = featured ?? marketplace.data?.[0] ?? null;
 
   const holdings = portfolio.data?.holdings ?? EMPTY_SUMMARY.holdings;
   const hasOwnership = holdings.length > 0;
@@ -68,6 +62,12 @@ export default function HomePage() {
     : 0;
 
   const tap = useCallback(() => haptics.selection(), []);
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const openDetails = useCallback(() => setDetailsOpen(true), []);
+  const closeDetails = useCallback(() => setDetailsOpen(false), []);
+  const [estatesOpen, setEstatesOpen] = useState(false);
+  const openEstates = useCallback(() => setEstatesOpen(true), []);
+  const closeEstates = useCallback(() => setEstatesOpen(false), []);
 
   if (portfolio.isLoading && !portfolio.data) {
     return <HomeSkeleton />;
@@ -90,28 +90,27 @@ export default function HomePage() {
   const summary = portfolio.data ?? EMPTY_SUMMARY;
 
   return (
-    <div className="mt-1 space-y-3 pb-2" data-testid="home-page">
-      {hasOwnership ? <YourEstatesCard summary={summary} onNavigateHaptic={tap} /> : <HomeEmptyState onNavigateHaptic={tap} />}
-      {hasNextDistribution ? (
-        <NextPayoutSummary projectedUsd={projectedNext} onNavigateHaptic={tap} />
-      ) : null}
-      {hasOwnership ? (
-        <MyPropertiesSection
-          holdings={holdings}
-          listingById={listingById}
-          onNavigateHaptic={tap}
-        />
-      ) : null}
-      {featured ? (
-        <FeaturedPropertyCard listing={featured} onNavigateHaptic={tap} />
-      ) : null}
-      {moreOpportunities.length > 0 ? (
-        <MoreOpportunitiesSection
-          listings={moreOpportunities}
-          onNavigateHaptic={tap}
-        />
-      ) : null}
-      <HomeTrustFooter />
+    <div className="-mx-4 space-y-5 px-4 pb-6 pt-2" data-testid="home-page">
+      <HomeHero summary={summary} onPill={openEstates} />
+      <HomeActions onDetails={openDetails} />
+      <HomeDetailsSheet
+        open={detailsOpen}
+        onClose={closeDetails}
+        summary={summary}
+        hasNextDistribution={hasNextDistribution}
+        projectedNextUsd={projectedNext}
+      />
+      <HomeEstatesSheet
+        open={estatesOpen}
+        onClose={closeEstates}
+        holdings={holdings}
+        listings={marketplace.data ?? []}
+      />
+      {hasOwnership ? null : <HomeEmptyState onNavigateHaptic={tap} />}
+      {/* Unlocked-shares row hidden: free/unlocked is not exposed on PortfolioSummary
+          (locks live behind useLocks on Portfolio), so the field is absent on Home. */}
+      <HomeActivity projectedUsd={projectedNext} hasPayout={hasNextDistribution} />
+      <HomeForYou listing={forYouListing} showInvite={!hasOwnership} />
     </div>
   );
 }

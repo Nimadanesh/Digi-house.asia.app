@@ -68,7 +68,7 @@ describe("Slice 7 — numeric figures are bidi-isolated (dir=ltr)", () => {
     expect(node, "nightly range wrapped for bidi").toBeDefined();
   });
 
-  it("marketplace card growth figures keep LTR order", () => {
+  it("marketplace card carries no growth figures (deleted from the card — detail only)", () => {
     const estate = toMarketplaceEstate({
       ...listing,
       id: "re-126855",
@@ -76,10 +76,9 @@ describe("Slice 7 — numeric figures are bidi-isolated (dir=ltr)", () => {
     const { container } = render(
       <PropertyCard estate={estate} nowMs={Date.UTC(2026, 6, 26)} />,
     );
-    const node = Array.from(container.querySelectorAll("[dir='ltr']")).find((el) =>
-      el.textContent?.includes("$26.4M"),
-    );
-    expect(node, "growth figures wrapped for bidi").toBeDefined();
+    const text = container.querySelector('[data-testid="property-card"]')?.textContent ?? "";
+    expect(text).not.toContain("$26.4M");
+    expect(text).not.toMatch(/growth/i);
   });
 
   it("rental story nightly range keeps LTR order", () => {

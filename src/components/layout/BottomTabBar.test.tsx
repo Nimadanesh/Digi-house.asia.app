@@ -10,44 +10,54 @@ vi.mock("@/lib/telegram/haptics", () => ({
   haptics: { selection: vi.fn(), impact: vi.fn(), notification: vi.fn() },
 }));
 
-describe("BottomTabBar — active pill padding/margin", () => {
+describe("BottomTabBar — one shared equal-slot indicator", () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it("renders exactly one active pill, inside the matching tab", () => {
+  it("renders exactly one shared pill, not one per tab", () => {
     usePathname.mockReturnValue("/marketplace");
     render(<BottomTabBar />);
     const pills = screen.getAllByTestId("tab-active-pill");
     expect(pills).toHaveLength(1);
+    // Sibling of the links, inside the outer capsule — never painted by a button.
     const marketplaceLink = screen.getByRole("link", { name: /marketplace/i });
-    expect(marketplaceLink.contains(pills[0]!)).toBe(true);
+    expect(marketplaceLink.contains(pills[0]!)).toBe(false);
   });
 
-  it("pill hugs the content wrapper which carries uniform tight padding (PD fix)", () => {
+  it("pill is a quarter of the inner bar with 4px insets and a stadium shape", () => {
     usePathname.mockReturnValue("/home");
     render(<BottomTabBar />);
     const pill = screen.getByTestId("tab-active-pill");
-    // The pill fills the content wrapper (inset-0) — it is no longer full-tab-width.
-    expect(pill).toHaveClass("inset-0");
-    // The wrapper gives the text the same gap from the pill on every tab.
-    const wrapper = pill.parentElement;
-    expect(wrapper?.className).toContain("px-2.5");
-    expect(wrapper?.className).toContain("py-[5px]");
+    expect(pill).toHaveClass("top-1");
+    expect(pill).toHaveClass("bottom-1");
+    expect(pill).toHaveClass("left-1");
+    expect(pill).toHaveClass("rounded-full");
+    // jsdom serializes division as multiplication — same quarter of the inner bar.
+    expect(pill.style.width).toBe("calc(0.25 * (100% - 8px))");
   });
 
-  it("keeps the tab item sized and rounded as before (h-[50px], rounded-[22px])", () => {
-    usePathname.mockReturnValue("/home");
-    render(<BottomTabBar />);
-    const homeLink = screen.getByRole("link", { name: /home/i });
-    expect(homeLink).toHaveClass("h-[50px]");
-    expect(homeLink).toHaveClass("rounded-[22px]");
-  });
-
-  it("moves the pill when a different tab is active", () => {
+  it("pill moves by slot index: marketplace = 1, earnings = 2", () => {
+    usePathname.mockReturnValue("/marketplace");
+    const { unmount } = render(<BottomTabBar />);
+    expect(screen.getByTestId("tab-active-pill").style.transform).toBe(
+      "translateX(calc(100% * 1))",
+    );
+    unmount();
     usePathname.mockReturnValue("/earnings");
     render(<BottomTabBar />);
-    const pills = screen.getAllByTestId("tab-active-pill");
-    expect(pills).toHaveLength(1);
-    const earningsLink = screen.getByRole("link", { name: /earnings/i });
-    expect(earningsLink.contains(pills[0]!)).toBe(true);
+    expect(screen.getByTestId("tab-active-pill").style.transform).toBe(
+      "translateX(calc(100% * 2))",
+    );
+  });
+
+  it("buttons stay transparent with equal slots and one-line labels", () => {
+    usePathname.mockReturnValue("/home");
+    render(<BottomTabBar />);
+    for (const name of [/^home$/i, /marketplace/i, /earnings/i, /portfolio/i]) {
+      const link = screen.getByRole("link", { name });
+      expect(link.className).toContain("bg-transparent");
+    }
+    const label = screen.getByText("Marketplace");
+    expect(label).toHaveClass("whitespace-nowrap");
+    expect(label).toHaveClass("text-[11px]");
   });
 });

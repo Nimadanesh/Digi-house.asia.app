@@ -74,7 +74,7 @@
   },
   "home": {
     "loadError": "Ana sayfa yüklenemedi.",
-    "nextPayout": "Next Payout",
+    "nextPayout": "Next payout",
     "totalInvested": "Toplam yatırım",
     "totalEarningsReceived": "Alınan toplam kazanç",
     "monthlyPerShare": "Aylık / pay",
@@ -101,7 +101,24 @@
     "viewEstate": "Emlağı görüntüle",
     "moreEstates": "Diğer emlaklar",
     "ownShareOfEstate": "emlağın {pct}",
-    "currentValue": "Güncel değer"
+    "currentValue": "Güncel değer",
+    "searchEstates": "Search estates",
+    "fromShare": "From $80 a share",
+    "invest": "Invest",
+    "invite": "Invite",
+    "details": "Details",
+    "activity": "Activity",
+    "forYou": "For you",
+    "searchPlaceholder": "Search",
+    "yourBalance": "Your balance",
+    "fromEighty": "From $80 a share",
+    "viewAll": "View all",
+    "expected": "Expected",
+    "payoutDate": "Date",
+    "payoutAmount": "Amount",
+    "payoutStatus": "Status",
+    "rentalYtd": "rental income YTD",
+    "estatesSheetTitle": "Your estates"
   },
   "marketplace": {
     "feesTitle": "Komisyon",
@@ -842,12 +859,13 @@
     "featuredEmptyTitle": "Öne çıkan",
     "pricePerShare": "Fiyat / pay",
     "lastPrice": "Son fiyat",
-    "projectedIncome": "Öngörülen gelir / hisse",
+    "projectedIncome": "Income / share",
     "incomePending": "Veri bekleniyor",
     "shareFraction": "1 hisse ≈ emlağın 1/{total}",
     "fundedCaption": "%{pct} tamamlandı · {remaining} pay kaldı",
     "nightFrom": "Gece / itibaren",
     "perNight": "gece başına",
-    "viewEstate": "View Estate"
+    "viewEstate": "View Estate",
+    "resultsCount": "{count} estates"
   }
 }

@@ -74,7 +74,7 @@
   },
   "home": {
     "loadError": "بارگذاری خانه ممکن نشد.",
-    "nextPayout": "Next Payout",
+    "nextPayout": "Next payout",
     "totalInvested": "کل سرمایه‌گذاری",
     "totalEarningsReceived": "کل درآمد دریافتی",
     "monthlyPerShare": "ماهانه / سهم",
@@ -101,7 +101,24 @@
     "viewEstate": "مشاهده ملک",
     "moreEstates": "املاک بیشتر",
     "ownShareOfEstate": "{pct} از ملک",
-    "currentValue": "ارزش فعلی"
+    "currentValue": "ارزش فعلی",
+    "searchEstates": "Search estates",
+    "fromShare": "From $80 a share",
+    "invest": "Invest",
+    "invite": "Invite",
+    "details": "Details",
+    "activity": "Activity",
+    "forYou": "For you",
+    "searchPlaceholder": "Search",
+    "yourBalance": "Your balance",
+    "fromEighty": "From $80 a share",
+    "viewAll": "View all",
+    "expected": "Expected",
+    "payoutDate": "Date",
+    "payoutAmount": "Amount",
+    "payoutStatus": "Status",
+    "rentalYtd": "rental income YTD",
+    "estatesSheetTitle": "Your estates"
   },
   "marketplace": {
     "feesTitle": "کارمزد",
@@ -842,12 +859,13 @@
     "featuredEmptyTitle": "ویژه",
     "pricePerShare": "قیمت / سهم",
     "lastPrice": "آخرین قیمت",
-    "projectedIncome": "درآمد پیش‌بینی‌شده / سهم",
+    "projectedIncome": "Income / share",
     "incomePending": "داده در انتظار",
     "shareFraction": "1 سهم ≈ 1/{total} از ملک",
     "fundedCaption": "{pct}% تأمین شد · {remaining} سهم باقی‌مانده",
     "nightFrom": "شب / از",
     "perNight": "هر شب",
-    "viewEstate": "View Estate"
+    "viewEstate": "View Estate",
+    "resultsCount": "{count} estates"
   }
 }

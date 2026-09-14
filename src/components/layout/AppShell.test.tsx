@@ -5,6 +5,8 @@ const pathRef = vi.hoisted(() => ({ value: "/home" }));
 
 vi.mock("next/navigation", () => ({
   usePathname: () => pathRef.value,
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
+  useSearchParams: () => new URLSearchParams(),
 }));
 vi.mock("@/hooks/useTheme", () => ({ useTheme: () => {} }));
 vi.mock("@/components/onboarding/OnboardingGate", () => ({
@@ -17,7 +19,7 @@ vi.mock("@/components/settings/SettingsSheet", () => ({ SettingsSheet: () => nul
 vi.mock("@/components/common/DemoModeBadge", () => ({ DemoModeBadge: () => null }));
 vi.mock("@/components/common/ToastHost", () => ({ ToastHost: () => null }));
 vi.mock("@/components/layout/Header", () => ({ Header: () => null }));
-vi.mock("@/components/layout/GlobalHeader", () => ({ GlobalHeader: () => null }));
+vi.mock("@/components/layout/AppHeader", () => ({ AppHeader: () => null }));
 vi.mock("@/components/layout/BottomTabBar", () => ({ BottomTabBar: () => null }));
 
 import { AppShell } from "@/components/layout/AppShell";
