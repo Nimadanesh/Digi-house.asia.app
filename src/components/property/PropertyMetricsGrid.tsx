@@ -33,13 +33,18 @@ function StatCell({
   muted?: boolean;
 }) {
   return (
-    <div className={cn("flex min-w-0 flex-col gap-1.5 p-4", className)}>
+    <div
+      className={cn(
+        "flex min-w-0 flex-col justify-center gap-1.5 bg-card p-4 transition-colors duration-150 ease-out hover:bg-surface-2/50",
+        className,
+      )}
+    >
       <span className="text-[0.625rem] font-medium uppercase leading-tight tracking-[0.08em] text-muted-foreground">
         {label}
       </span>
       <span
         className={cn(
-          "truncate text-[1.25rem] font-semibold leading-none tnum",
+          "truncate text-[1.375rem] font-bold leading-none tracking-[-0.01em] tnum",
           muted ? "text-muted-foreground" : "text-foreground",
         )}
         data-testid={testId}
@@ -74,7 +79,7 @@ export function PropertyMetricsGrid({
 
   return (
     <div
-      className="overflow-hidden rounded-[14px] ring-1 ring-white/[0.06] bg-gradient-to-b from-white/[0.05] via-white/[0.02] to-transparent backdrop-blur-sm"
+      className="overflow-hidden rounded-[14px] bg-card shadow-sm ring-1 ring-border/50"
       data-testid="metrics-grid"
     >
       <div className="grid grid-cols-2">
@@ -82,21 +87,21 @@ export function PropertyMetricsGrid({
           label={t("metricMonthlyIncome")}
           value={monthlyText}
           muted={monthly.cents == null}
-          className="border-b border-r border-white/[0.05]"
+          className="border-b border-r border-border/50"
           testId="metrics-monthly"
         />
         <StatCell
           label={t("metricAnnual")}
           value={annualText}
           muted={annual.cents == null}
-          className="border-b border-white/[0.05]"
+          className="border-b border-border/50"
           testId="metrics-annual"
         />
         <StatCell
           label={t("metricAvgNightlyRate")}
           value={anrText}
           muted={v1 == null}
-          className="border-r border-white/[0.05]"
+          className="border-r border-border/50"
           testId="metrics-anr"
         />
         <StatCell

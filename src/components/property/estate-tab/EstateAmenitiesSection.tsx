@@ -10,7 +10,6 @@ import { useId, useState } from "react";
 import { useTranslations } from "next-intl";
 import type { Estate24Record } from "@/types/estate-24-data";
 import { Block } from "@/components/common/Block";
-import { IconPointsGrid } from "@/components/property/IconPointsGrid";
 
 const VISIBLE_CAP = 10;
 
@@ -43,21 +42,34 @@ export function EstateAmenitiesSection({ record }: { record: Estate24Record | nu
       <h2 className="px-0.5 text-[0.9375rem] font-normal text-foreground">
         {t("estateAmenitiesTitle")}
       </h2>
-      <Block className="p-4">
-        <IconPointsGrid
-          points={visible.map((label) => {
+      <Block className="p-4 shadow-sm ring-1 ring-border/50 sm:p-5">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-3 sm:grid-cols-3" data-testid="icon-points-grid">
+          {visible.map((label) => {
             const Icon = amenityIcon(label);
-            return { id: `${capId}-${label}`, label, icon: <Icon size={16} strokeWidth={1.75} /> };
+            return (
+              <div
+                key={`${capId}-${label}`}
+                className="flex min-w-0 items-center gap-2.5"
+                data-testid="icon-points-grid-point"
+              >
+                <span
+                  className="flex size-8 shrink-0 items-center justify-center rounded-full bg-surface-2/60 text-muted-foreground [&>svg]:block"
+                  aria-hidden
+                >
+                  <Icon size={15} strokeWidth={1.75} />
+                </span>
+                <span className="min-w-0 text-[0.8125rem] font-medium leading-snug text-foreground/90">
+                  {label}
+                </span>
+              </div>
+            );
           })}
-          columns={2}
-          smColumns={3}
-          truncateLabels={false}
-        />
+        </div>
         {labels.length > VISIBLE_CAP ? (
           <button
             type="button"
             onClick={() => setShowAll((v) => !v)}
-            className="mt-3 inline-flex min-h-[44px] items-center text-sm font-medium text-primary"
+            className="mt-4 inline-flex min-h-[44px] items-center text-sm font-medium text-primary transition-all duration-150 ease-out hover:text-primary/80 active:scale-[0.98]"
             data-testid="estate-amenities-toggle"
           >
             {showAll

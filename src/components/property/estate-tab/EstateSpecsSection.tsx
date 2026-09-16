@@ -27,22 +27,24 @@ export function EstateSpecsSection({
       <h2 className="px-0.5 text-[0.9375rem] font-normal text-foreground">
         {t("estateSpecsTitle")}
       </h2>
-      <Block className="p-4">
-        {propertyType != null ? <FactRow label={t("typeLabel")} value={propertyType} /> : null}
-        {s.sizeTotalM2 != null ? (
-          <FactRow
-            label={t("sizeLabel")}
-            value={`${s.sizeTotalM2} m² total`}
-            caption={
-              s.sizeInteriorM2 != null
-                ? `${s.sizeInteriorM2} m² interior${s.poolM2 != null && s.poolM2 > 0 ? ` · ${s.poolM2} m² pool` : ""}`
-                : null
-            }
-          />
-        ) : null}
-        <FactRow label={t("specBedrooms")} value={String(s.bedrooms)} />
-        <FactRow label={t("specBathrooms")} value={String(s.bathrooms)} />
-        <FactRow label={t("specGuests")} value={String(s.guests)} />
+      <Block className="overflow-hidden shadow-sm ring-1 ring-border/50">
+        <div className="divide-y divide-border/50 px-4 py-1 sm:px-5">
+          {propertyType != null ? <FactRow label={t("typeLabel")} value={propertyType} /> : null}
+          {s.sizeTotalM2 != null ? (
+            <FactRow
+              label={t("sizeLabel")}
+              value={`${s.sizeTotalM2} m² total`}
+              caption={
+                s.sizeInteriorM2 != null
+                  ? `${s.sizeInteriorM2} m² interior${s.poolM2 != null && s.poolM2 > 0 ? ` · ${s.poolM2} m² pool` : ""}`
+                  : null
+              }
+            />
+          ) : null}
+          <FactRow label={t("specBedrooms")} value={String(s.bedrooms)} />
+          <FactRow label={t("specBathrooms")} value={String(s.bathrooms)} />
+          <FactRow label={t("specGuests")} value={String(s.guests)} />
+        </div>
       </Block>
     </section>
   );

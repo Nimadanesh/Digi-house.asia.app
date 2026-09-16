@@ -37,26 +37,33 @@ export function EstateWhySection({
       <Block
         className={
           editorialHeadline != null
-            ? "bg-surface-2 p-4"
-            : "p-4"
+            ? "bg-surface-2 p-4 shadow-sm ring-1 ring-border/50 sm:p-5"
+            : "p-4 shadow-sm ring-1 ring-border/50 sm:p-5"
         }
         data-testid="estate-why-card"
       >
         {editorialHeadline != null ? (
-          <p className="text-[0.9375rem] font-medium leading-snug text-foreground">
+          <p className="text-[0.9375rem] font-semibold leading-snug tracking-[-0.01em] text-foreground">
             {editorialHeadline}
           </p>
         ) : null}
-        <p className="pt-1 text-sm leading-relaxed text-muted-foreground">
+        <p className="pt-1.5 text-sm leading-relaxed text-muted-foreground">
           {editorialBody ?? descriptionShort}
         </p>
         {highlights.length > 0 ? (
-          <div className="pt-3">
+          <div className="mt-4 border-t border-border/50 pt-4">
             <IconPointsGrid
               points={highlights.map((h) => ({
                 id: h.id,
                 label: h.label,
-                icon: <Check size={16} strokeWidth={2.25} className="text-success" />,
+                icon: (
+                  <span
+                    className="flex size-8 items-center justify-center rounded-full bg-surface-2/60 [&>svg]:block"
+                    aria-hidden
+                  >
+                    <Check size={15} strokeWidth={2.25} className="text-success" />
+                  </span>
+                ),
               }))}
               columns={2}
               truncateLabels={false}
