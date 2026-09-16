@@ -50,7 +50,7 @@ export function YourPositionSection({
   const metricLabel =
     "text-[0.625rem] font-medium uppercase leading-tight tracking-[0.08em] text-muted-foreground";
   const metricValue =
-    "truncate whitespace-nowrap pt-1.5 text-[1.25rem] font-semibold leading-none tnum text-foreground";
+    "truncate whitespace-nowrap pt-1.5 text-[1.25rem] font-bold leading-none tracking-tight tnum text-foreground";
 
   return (
     <section className="space-y-2" data-testid="earn-position">
@@ -58,8 +58,8 @@ export function YourPositionSection({
         {t("earnTitle")}
       </h2>
       <BorderBeam size="md" colorVariant="colorful" strength={0.7}>
-        <Block className="rounded-[12px] p-5" data-testid="earn-card">
-          <p className="text-[0.9375rem] font-medium text-foreground">{t("earnHeadline")}</p>
+        <Block className="rounded-[12px] p-5 shadow-sm ring-1 ring-border/50" data-testid="earn-card">
+          <p className="text-[0.9375rem] font-semibold tracking-[-0.01em] text-foreground">{t("earnHeadline")}</p>
           <p className="pt-0.5 text-xs leading-relaxed text-muted-foreground/80">
             {t("earnSubtitle")}
           </p>
@@ -72,7 +72,7 @@ export function YourPositionSection({
                 type="button"
                 onClick={() => step(-1)}
                 aria-label={t("calcDecreaseShares")}
-                className="flex h-11 w-11 items-center justify-center rounded-[10px] bg-surface-2 text-foreground transition-transform duration-[120ms] ease-out active:scale-[0.96]"
+                className="flex h-11 w-11 items-center justify-center rounded-[10px] bg-surface-2 text-foreground ring-1 ring-border/50 transition-all duration-150 ease-out hover:bg-surface-2/70 active:scale-[0.96]"
                 data-testid="earn-decrease"
               >
                 <Minus size={16} strokeWidth={2} aria-hidden />
@@ -87,7 +87,7 @@ export function YourPositionSection({
                 type="button"
                 onClick={() => step(1)}
                 aria-label={t("calcIncreaseShares")}
-                className="flex h-11 w-11 items-center justify-center rounded-[10px] bg-surface-2 text-foreground transition-transform duration-[120ms] ease-out active:scale-[0.96]"
+                className="flex h-11 w-11 items-center justify-center rounded-[10px] bg-surface-2 text-foreground ring-1 ring-border/50 transition-all duration-150 ease-out hover:bg-surface-2/70 active:scale-[0.96]"
                 data-testid="earn-increase"
               >
                 <Plus size={16} strokeWidth={2} aria-hidden />
@@ -107,7 +107,7 @@ export function YourPositionSection({
           </div>
 
           {/* Two equal metrics — one caption line each, no walls of text */}
-          <div className="grid grid-cols-2 gap-4 border-t border-border pt-4">
+          <div className="grid grid-cols-2 gap-4 border-t border-border/50 pt-4">
             <div className="min-w-0">
               <p className={metricLabel}>{t("earnMonthlyLabel")}</p>
               <p className={metricValue} data-testid="earn-monthly">
@@ -125,7 +125,7 @@ export function YourPositionSection({
           </div>
 
           {/* Compact inset 12-month snapshot — visually secondary to the metrics */}
-          <div className="rounded-[10px] bg-surface-2 p-3" data-testid="earn-snapshot">
+          <div className="rounded-[10px] bg-surface-2/60 p-3 ring-1 ring-border/50" data-testid="earn-snapshot">
             <p className={metricLabel}>{t("earnSnapshotTitle")}</p>
             <div className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-2 py-1">
               <span className="min-w-0 truncate text-sm text-muted-foreground">
@@ -160,7 +160,7 @@ export function YourPositionSection({
           <button
             type="button"
             onClick={onBuy}
-            className="mt-3 flex h-[44px] w-full items-center justify-center rounded-[10px] bg-primary text-sm font-semibold text-primary-foreground transition-transform duration-[120ms] ease-out active:scale-[0.98]"
+            className="mt-3 flex h-[44px] w-full items-center justify-center rounded-[10px] bg-primary text-sm font-semibold text-primary-foreground transition-transform duration-150 ease-out active:scale-[0.98]"
             data-testid="earn-buy"
           >
             {t("ownershipV1Buy")}

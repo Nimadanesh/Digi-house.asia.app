@@ -35,7 +35,7 @@ export function NetEconomicsSection({
       <h2 className="px-0.5 text-[0.9375rem] font-normal text-foreground">
         {t("incomeNetTitle")}
       </h2>
-      <Block className="overflow-hidden bg-surface-2 p-4" data-testid="income-net-card">
+      <Block className="overflow-hidden bg-surface-2 p-4 shadow-sm ring-1 ring-border/50 sm:p-5" data-testid="income-net-card">
         <div className="space-y-1">
           <FactRow
             label={t("incomeNetDistributable")}
@@ -46,7 +46,7 @@ export function NetEconomicsSection({
           />
           <FactRow label={t("incomeOwnerShare")} value="75%" valueTestId="income-net-owner-share" />
         </div>
-        <div className="my-3 border-t border-border" />
+        <div className="my-3 border-t border-border/50" />
         <div className="space-y-2">
           <div className="flex min-w-0 items-baseline justify-between gap-2">
             <span className="min-w-0 truncate text-sm text-muted-foreground">
@@ -54,7 +54,7 @@ export function NetEconomicsSection({
             </span>
             <span
               className={cn(
-                "shrink-0 whitespace-nowrap text-[1.25rem] font-semibold leading-none tnum",
+                "shrink-0 whitespace-nowrap text-[1.25rem] font-bold leading-none tracking-tight tnum",
                 perShare.annualCents != null ? "text-foreground" : "text-muted-foreground",
               )}
               data-testid="income-net-per-share-annual"
@@ -68,7 +68,7 @@ export function NetEconomicsSection({
             </span>
             <span
               className={cn(
-                "shrink-0 whitespace-nowrap text-[1.375rem] font-semibold leading-none tnum text-primary",
+                "shrink-0 whitespace-nowrap text-[1.375rem] font-bold leading-none tracking-tight tnum text-primary",
                 perShare.monthlyCents == null && "text-muted-foreground",
               )}
               data-testid="income-net-per-share-monthly"

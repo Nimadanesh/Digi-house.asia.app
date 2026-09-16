@@ -22,22 +22,22 @@ export function ExcludedChargesSection({
       <h2 className="px-0.5 text-[0.9375rem] font-normal text-foreground">
         {t("incomeNotDeductedTitle")}
       </h2>
-      <Block className="p-4">
-        <div className="space-y-2.5">
+      <Block className="p-4 shadow-sm ring-1 ring-border/50 sm:p-5">
+        <div className="space-y-3">
           {v1.excludedCharges.map((charge) => (
             <div
               key={charge.name}
-              className="flex min-w-0 items-start gap-2"
+              className="flex min-w-0 items-center gap-2.5"
               data-testid="income-excluded-row"
             >
-              <Check
-                size={16}
-                strokeWidth={2.25}
+              <span
+                className="flex size-8 shrink-0 items-center justify-center rounded-full bg-success/12 [&>svg]:block"
                 aria-hidden
-                className="mt-0.5 shrink-0 text-success"
-              />
+              >
+                <Check size={15} strokeWidth={2.25} className="text-success" />
+              </span>
               <div className="min-w-0">
-                <p className="text-sm leading-snug text-foreground">{charge.name}</p>
+                <p className="text-sm font-medium leading-snug tracking-[-0.01em] text-foreground">{charge.name}</p>
                 <p className="line-clamp-2 text-xs leading-relaxed text-muted-foreground">
                   {charge.detail}
                 </p>
@@ -45,7 +45,7 @@ export function ExcludedChargesSection({
             </div>
           ))}
         </div>
-        <p className="pt-3 text-xs leading-relaxed text-muted-foreground/80">
+        <p className="mt-4 border-t border-border/50 pt-3 text-xs leading-relaxed text-muted-foreground/80">
           {t("incomeNotDeductedNote")}
         </p>
       </Block>

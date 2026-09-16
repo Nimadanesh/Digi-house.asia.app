@@ -31,7 +31,7 @@ function MetricCell({
         {label}
       </p>
       <p
-        className="truncate whitespace-nowrap pt-1 text-[1.375rem] font-semibold leading-none tnum text-foreground"
+        className="truncate whitespace-nowrap pt-1 text-[1.375rem] font-bold leading-none tracking-tight tnum text-foreground"
         data-testid={testId}
       >
         {value}
@@ -52,7 +52,7 @@ export function RentalBasisSection({ v1 }: { v1: FinancialModelV1PropertyModel |
       <h2 className="px-0.5 text-[0.9375rem] font-normal text-foreground">
         {t("incomeV1Basis")}
       </h2>
-      <Block className="p-4">
+      <Block className="p-4 shadow-sm ring-1 ring-border/50 sm:p-5">
         <div className="flex gap-4">
           <MetricCell
             label={t("v1ThesisAnr")}
@@ -74,7 +74,7 @@ export function RentalBasisSection({ v1 }: { v1: FinancialModelV1PropertyModel |
           onClick={() => setHistoryOpen((v) => !v)}
           aria-expanded={historyOpen}
           aria-controls="income-basis-history"
-          className="mt-2 flex min-h-[44px] w-full items-center justify-between gap-2 border-t border-border text-start transition-transform duration-[120ms] ease-out active:scale-[0.99]"
+          className="mt-2 flex min-h-[44px] w-full items-center justify-between gap-2 border-t border-border/50 text-start transition-transform duration-150 ease-out active:scale-[0.99]"
           data-testid="income-basis-history-toggle"
         >
           <span className="min-w-0 truncate text-sm text-muted-foreground">
@@ -88,15 +88,15 @@ export function RentalBasisSection({ v1 }: { v1: FinancialModelV1PropertyModel |
               size={16}
               strokeWidth={1.75}
               aria-hidden
-              className={cn(
-                "text-muted-foreground transition-transform duration-200 ease-out",
-                historyOpen ? "rotate-180" : "",
-              )}
+                className={cn(
+                  "text-muted-foreground transition-transform duration-150 ease-out",
+                  historyOpen ? "rotate-180" : "",
+                )}
             />
           </span>
         </button>
         {historyOpen ? (
-          <div id="income-basis-history" className="pb-1" data-testid="income-basis-history">
+          <div id="income-basis-history" className="rounded-[10px] bg-surface-2/50 px-3 py-2" data-testid="income-basis-history">
             <p className="text-xs leading-relaxed text-muted-foreground">
               {t("incomeOccupancyHistoricalNoteLine1")}
             </p>

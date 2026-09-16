@@ -43,7 +43,7 @@ export function PositionIncomeSection({
       <h2 className="px-0.5 text-[0.9375rem] font-normal text-foreground">
         {t("incomeV1Position")}
       </h2>
-      <Block className="p-4" data-testid="income-position-card">
+      <Block className="p-4 shadow-sm ring-1 ring-border/50 sm:p-5" data-testid="income-position-card">
         <FactRow
           label={t("incomeV1Accrued")}
           value={usd(accruedUnpaidUsd)}
@@ -62,7 +62,7 @@ export function PositionIncomeSection({
           <button
             type="button"
             onClick={onViewEarnings}
-            className="mt-1 inline-flex min-h-[44px] items-center text-sm font-medium text-primary"
+            className="mt-1 inline-flex min-h-[44px] items-center text-sm font-medium text-primary transition-colors duration-150 ease-out hover:text-primary/80"
             data-testid="income-position-view-earnings"
           >
             {t("incomeV1ViewEarnings")}

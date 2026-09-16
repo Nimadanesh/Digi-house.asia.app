@@ -51,8 +51,8 @@ export function EstateLocationSection({
       <h2 className="px-0.5 text-[0.9375rem] font-normal text-foreground">
         {t("estateLocationTitle")}
       </h2>
-      <Block className="overflow-hidden p-4" data-testid="estate-location-card">
-        <p className="text-[0.9375rem] font-medium leading-snug text-foreground">{titleText}</p>
+      <Block className="overflow-hidden p-4 shadow-sm ring-1 ring-border/50 sm:p-5" data-testid="estate-location-card">
+        <p className="text-[0.9375rem] font-semibold leading-snug tracking-[-0.01em] text-foreground">{titleText}</p>
         <div className="pt-1">
           <FactRow label={t("estateLocationResort")} value={resortRow} wrapValue />
           <FactRow label={t("estateLocationRegion")} value={detail.region} />
@@ -61,7 +61,7 @@ export function EstateLocationSection({
             onClick={() => setTransferOpen((v) => !v)}
             aria-expanded={transferOpen}
             aria-controls="estate-location-transfer-detail"
-            className="flex min-h-[44px] w-full items-center justify-between gap-2 py-1 text-start transition-transform duration-[120ms] ease-out active:scale-[0.99]"
+            className="flex min-h-[44px] w-full items-center justify-between gap-2 py-1 text-start transition-transform duration-150 ease-out active:scale-[0.99]"
             data-testid="estate-location-transfer-toggle"
           >
             <span className="min-w-0 truncate text-sm text-muted-foreground">
@@ -82,7 +82,7 @@ export function EstateLocationSection({
                 strokeWidth={1.75}
                 aria-hidden
                 className={cn(
-                  "text-muted-foreground transition-transform duration-200 ease-out",
+                  "text-muted-foreground transition-transform duration-150 ease-out",
                   transferOpen ? "rotate-180" : "",
                 )}
               />
@@ -91,7 +91,7 @@ export function EstateLocationSection({
           {transferOpen ? (
             <div
               id="estate-location-transfer-detail"
-              className="pb-2"
+              className="rounded-[10px] bg-surface-2/50 px-3 py-2"
               data-testid="estate-location-transfer"
             >
               <p className="text-xs leading-relaxed text-muted-foreground">{detail.transfer.text}</p>
@@ -106,7 +106,7 @@ export function EstateLocationSection({
             </div>
           ) : null}
         </div>
-        <div className="border-t border-border pt-3">
+        <div className="border-t border-border/50 pt-3">
           <ReserveVillaCta url={reserveUrl} />
         </div>
       </Block>
