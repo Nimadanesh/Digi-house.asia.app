@@ -64,7 +64,9 @@ export function LegalStructureSection({ propertyId }: { propertyId: string }) {
       <h2 className="px-0.5 text-[0.9375rem] font-normal text-foreground">
         {t("legalStructureTitle")}
       </h2>
-      <ExpandableCostRows rows={rows} testId="details-legal-rows" />
+      <div className="overflow-hidden rounded-[12px] shadow-sm ring-1 ring-border/50">
+        <ExpandableCostRows rows={rows} testId="details-legal-rows" />
+      </div>
     </section>
   );
 }

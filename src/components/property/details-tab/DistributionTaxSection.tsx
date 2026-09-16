@@ -31,9 +31,9 @@ export function DistributionTaxSection({ propertyId }: { propertyId: string }) {
       <h2 className="px-0.5 text-[0.9375rem] font-normal text-foreground">
         {t("distributionTitle")}
       </h2>
-      <div className="bg-card rounded-[12px] p-4" data-testid="details-distribution-card">
-        <div className="space-y-1">
-          <div className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-2 py-1">
+      <div className="bg-card overflow-hidden rounded-[12px] shadow-sm ring-1 ring-border/50" data-testid="details-distribution-card">
+        <div className="divide-y divide-border/50 px-4 py-1 sm:px-5">
+          <div className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-2 py-2">
             <span className="min-w-0 truncate text-sm text-muted-foreground">
               {t("distributionAccrualLabel")}
             </span>
@@ -44,7 +44,7 @@ export function DistributionTaxSection({ propertyId }: { propertyId: string }) {
               {t("distributionAccrualValue")}
             </span>
           </div>
-          <div className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-2 py-1">
+          <div className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-2 py-2">
             <span className="min-w-0 truncate text-sm text-muted-foreground">
               {t("distributionScheduleLabel")}
             </span>
@@ -56,7 +56,7 @@ export function DistributionTaxSection({ propertyId }: { propertyId: string }) {
             </span>
           </div>
         </div>
-        <div className="pt-1">
+        <div className="border-t border-border/50 px-4 py-3 sm:px-5">
           <ExpandableCostRows rows={rows} testId="details-distribution-rows" />
         </div>
       </div>

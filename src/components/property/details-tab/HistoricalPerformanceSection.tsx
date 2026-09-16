@@ -14,9 +14,11 @@ export function HistoricalPerformanceSection() {
       <h2 className="px-0.5 text-[0.9375rem] font-normal text-foreground">
         {t("historicalTitle")}
       </h2>
-      <Block className="p-4" data-testid="details-historical-card">
-        <p className="text-sm text-foreground">{ESTATE_HISTORICAL_PERFORMANCE.unavailableLine}</p>
-        <p className="pt-1 text-xs leading-relaxed text-muted-foreground">
+      <Block className="p-4 shadow-sm ring-1 ring-border/50 sm:p-5" data-testid="details-historical-card">
+        <p className="text-sm font-medium leading-snug tracking-[-0.01em] text-foreground">
+          {ESTATE_HISTORICAL_PERFORMANCE.unavailableLine}
+        </p>
+        <p className="pt-1.5 text-xs leading-relaxed text-muted-foreground">
           {ESTATE_HISTORICAL_PERFORMANCE.pendingLine}
         </p>
         <p className="pt-2 text-xs leading-relaxed text-muted-foreground/80">
