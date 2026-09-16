@@ -1,5 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
+import { useSettingsStore } from "@/stores/settings.store";
+import { useUiStore } from "@/stores/ui.store";
 
 const pathRef = vi.hoisted(() => ({ value: "/home" }));
 
@@ -16,7 +18,6 @@ vi.mock("@/components/profile/ProfileGate", () => ({
   ProfileGate: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 vi.mock("@/components/settings/SettingsSheet", () => ({ SettingsSheet: () => null }));
-vi.mock("@/components/common/DemoModeBadge", () => ({ DemoModeBadge: () => null }));
 vi.mock("@/components/common/ToastHost", () => ({ ToastHost: () => null }));
 vi.mock("@/components/layout/Header", () => ({ Header: () => null }));
 vi.mock("@/components/layout/AppHeader", () => ({ AppHeader: () => null }));
@@ -62,5 +63,18 @@ describe("AppShell — shared page transition", () => {
     );
     expect(screen.getByTestId("page-enter")).toBeInTheDocument();
     expect(screen.getByTestId("page-stub")).toBeInTheDocument();
+  });
+
+  it("does not mount the demo-mode badge on tab pages (prod strip)", () => {
+    pathRef.value = "/home";
+    useSettingsStore.setState({ showDemoBadge: true });
+    useUiStore.setState({ mainButtonActive: false, stickyCtaVisible: false });
+    render(
+      <AppShell>
+        <div data-testid="page-stub">home</div>
+      </AppShell>,
+    );
+    expect(screen.queryByTestId("demo-mode-badge")).not.toBeInTheDocument();
+    expect(screen.queryByText(/demo mode/i)).not.toBeInTheDocument();
   });
 });

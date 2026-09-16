@@ -1,8 +1,9 @@
 "use client";
 // File responsibility: Home Details sheet — display-only rows bound to fields Home's
-// hooks already expose (estate value, total invested, pending distribution, wallet).
+// hooks already expose (estate value, total invested, wallet).
 // No math, no lock/sell/withdraw calls. Locked/free is not on PortfolioSummary and
 // free/unlocked is unknown on Home, so those rows (incl. "Lock to earn") stay hidden.
+// Next-distribution row removed (prod strip).
 import { useTranslations } from "next-intl";
 import { usd } from "@/lib/format";
 import { useTonConnect } from "@/hooks/useTonConnect";
@@ -14,14 +15,10 @@ export function HomeDetailsSheet({
   open,
   onClose,
   summary,
-  hasNextDistribution,
-  projectedNextUsd,
 }: {
   open: boolean;
   onClose: () => void;
   summary: PortfolioSummary;
-  hasNextDistribution: boolean;
-  projectedNextUsd: number;
 }) {
   const t = useTranslations("home");
   const tSettings = useTranslations("settings");
@@ -50,14 +47,6 @@ export function HomeDetailsSheet({
               {usd(summary.totalInvestedUsd)}
             </span>
           </div>
-          {hasNextDistribution ? (
-            <div className="flex min-h-[52px] items-center justify-between gap-3 border-t border-border py-2.5">
-              <span className="text-sm text-muted-foreground">{t("nextDistribution")}</span>
-              <span className="text-sm font-semibold tnum text-foreground" data-testid="details-next">
-                {usd(projectedNextUsd)} · {t("statusExpected")}
-              </span>
-            </div>
-          ) : null}
           <div className="flex min-h-[52px] items-center justify-between gap-3 border-t border-border py-2.5">
             <span className="text-sm text-muted-foreground">{tSettings("wallet")}</span>
             <span className="text-sm font-medium text-foreground" data-testid="details-wallet">

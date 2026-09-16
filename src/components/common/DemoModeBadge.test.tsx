@@ -1,22 +1,53 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { DemoModeBadge } from "@/components/common/DemoModeBadge";
+import { useSettingsStore } from "@/stores/settings.store";
 import { useUiStore } from "@/stores/ui.store";
 
-function renderBadge() {
-  return render(<DemoModeBadge />);
-}
+const pathRef = vi.hoisted(() => ({ value: "/home" }));
 
-describe("DemoModeBadge — yields to the in-page sticky CTA", () => {
-  it("renders when no sticky CTA is visible", () => {
+vi.mock("next/navigation", () => ({
+  usePathname: () => pathRef.value,
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
+  useSearchParams: () => new URLSearchParams(),
+}));
+vi.mock("@/hooks/useTheme", () => ({ useTheme: () => {} }));
+vi.mock("@/components/onboarding/OnboardingGate", () => ({
+  OnboardingGate: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
+vi.mock("@/components/profile/ProfileGate", () => ({
+  ProfileGate: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
+vi.mock("@/components/settings/SettingsSheet", () => ({ SettingsSheet: () => null }));
+vi.mock("@/components/common/ToastHost", () => ({ ToastHost: () => null }));
+vi.mock("@/components/layout/Header", () => ({ Header: () => null }));
+vi.mock("@/components/layout/AppHeader", () => ({ AppHeader: () => null }));
+vi.mock("@/components/layout/BottomTabBar", () => ({ BottomTabBar: () => null }));
+
+import { AppShell } from "@/components/layout/AppShell";
+
+describe("DemoModeBadge — prod strip (zero mounts)", () => {
+  it("is absent on tab pages even when the demo preference is on", () => {
+    pathRef.value = "/home";
+    useSettingsStore.setState({ showDemoBadge: true });
     useUiStore.setState({ mainButtonActive: false, stickyCtaVisible: false });
-    renderBadge();
-    expect(screen.getByTestId("demo-mode-badge")).toBeInTheDocument();
+    render(
+      <AppShell>
+        <div>home</div>
+      </AppShell>,
+    );
+    expect(screen.queryByTestId("demo-mode-badge")).not.toBeInTheDocument();
+    expect(screen.queryByText(/demo mode/i)).not.toBeInTheDocument();
   });
 
-  it("is hidden while the property sticky CTA occupies the zone (Sell tap fix)", () => {
+  it("is absent while the property sticky CTA occupies the zone", () => {
+    pathRef.value = "/home";
+    useSettingsStore.setState({ showDemoBadge: true });
     useUiStore.setState({ mainButtonActive: false, stickyCtaVisible: true });
-    renderBadge();
+    render(
+      <AppShell>
+        <div>home</div>
+      </AppShell>,
+    );
     expect(screen.queryByTestId("demo-mode-badge")).not.toBeInTheDocument();
   });
 });

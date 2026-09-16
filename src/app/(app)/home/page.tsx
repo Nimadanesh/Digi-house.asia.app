@@ -1,12 +1,11 @@
 "use client";
 // File responsibility: Home screen composition — centered balance hero, default action
-// row, one-row Activity payout preview (same gate as before), single For-you slot.
+// row, Activity capsule (no payout row), single For-you slot.
 // The tab header is shell-owned (AppHeader, transparent bar); the blue canvas gradient
 // lives on the shell canvas so it paints behind the header too.
 import { useCallback, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { usePortfolio } from "@/hooks/usePortfolio";
-import { useEarnings } from "@/hooks/useEarnings";
 import { useMarketplace } from "@/hooks/useMarketplace";
 import { haptics } from "@/lib/telegram/haptics";
 import { pickFeaturedListing } from "@/lib/home-featured";
@@ -34,7 +33,6 @@ const EMPTY_SUMMARY: PortfolioSummary = {
 export default function HomePage() {
   const t = useTranslations("home");
   const portfolio = usePortfolio();
-  const earnings = useEarnings();
   const marketplace = useMarketplace();
 
   const featured = useMemo(
@@ -49,17 +47,6 @@ export default function HomePage() {
 
   const holdings = portfolio.data?.holdings ?? EMPTY_SUMMARY.holdings;
   const hasOwnership = holdings.length > 0;
-
-  // Next distribution is only shown when a real scheduled/paid entry exists — never a fake "0"
-  // (UI Mapping §3.1). The scheduled amount comes from the earnings repo contract.
-  const hasNextDistribution =
-    hasOwnership &&
-    ((earnings.data?.entries ?? []).some((e) => e.status === "pending") ||
-      (earnings.data?.thisWeekProjectedUsd ?? 0) > 0);
-
-  const projectedNext = hasNextDistribution
-    ? (earnings.data?.thisWeekProjectedUsd ?? 0)
-    : 0;
 
   const tap = useCallback(() => haptics.selection(), []);
   const [detailsOpen, setDetailsOpen] = useState(false);
@@ -93,13 +80,7 @@ export default function HomePage() {
     <div className="-mx-4 space-y-5 px-4 pb-6 pt-2" data-testid="home-page">
       <HomeHero summary={summary} onPill={openEstates} />
       <HomeActions onDetails={openDetails} />
-      <HomeDetailsSheet
-        open={detailsOpen}
-        onClose={closeDetails}
-        summary={summary}
-        hasNextDistribution={hasNextDistribution}
-        projectedNextUsd={projectedNext}
-      />
+      <HomeDetailsSheet open={detailsOpen} onClose={closeDetails} summary={summary} />
       <HomeEstatesSheet
         open={estatesOpen}
         onClose={closeEstates}
@@ -109,7 +90,7 @@ export default function HomePage() {
       {hasOwnership ? null : <HomeEmptyState onNavigateHaptic={tap} />}
       {/* Unlocked-shares row hidden: free/unlocked is not exposed on PortfolioSummary
           (locks live behind useLocks on Portfolio), so the field is absent on Home. */}
-      <HomeActivity projectedUsd={projectedNext} hasPayout={hasNextDistribution} />
+      <HomeActivity />
       <HomeForYou listing={forYouListing} showInvite={!hasOwnership} />
     </div>
   );
