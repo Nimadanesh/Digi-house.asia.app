@@ -112,10 +112,10 @@ export function ScenarioRevenueSection({
             <Block
               key={item.key}
               className={cn(
-                "overflow-hidden transition-all duration-150 ease-out",
+                "overflow-hidden transition-all duration-200 ease-out",
                 selected
-                  ? "shadow-sm ring-1 ring-border/50"
-                  : "ring-1 ring-transparent hover:bg-surface-2/50",
+                  ? "shadow-[0_2px_12px_rgba(0,0,0,0.06)] ring-1 ring-border"
+                  : "ring-1 ring-border/40 hover:bg-surface-2/40",
               )}
             >
               <button
@@ -123,23 +123,23 @@ export function ScenarioRevenueSection({
                 onClick={() => onSelect(item.key as ScenarioKey)}
                 aria-expanded={selected}
                 aria-controls={`scenario-cards-${item.key}-detail`}
-                className="flex min-h-[44px] w-full items-center justify-between gap-3 px-4 py-3 text-start transition-transform duration-150 ease-out active:scale-[0.99]"
+                className="flex min-h-[44px] w-full items-center justify-between gap-3 px-4 py-3 text-start transition-transform duration-200 ease-out active:scale-[0.99]"
                 data-testid={`scenario-cards-${item.key}`}
               >
                 <span className="min-w-0">
-                  <span className="block truncate text-sm font-semibold tracking-[-0.01em] text-foreground">
+                  <span className="block truncate text-sm font-semibold leading-tight tracking-[-0.01em] text-foreground">
                     {item.label}
                   </span>
                   {item.headlineNote ? (
-                    <span className="mt-0.5 block truncate text-xs text-muted-foreground">
+                    <span className="mt-[2px] block truncate text-xs leading-tight text-muted-foreground">
                       {item.headlineNote}
                     </span>
                   ) : null}
                 </span>
-                <span className="flex shrink-0 items-center gap-1.5">
+                <span className="flex shrink-0 items-center gap-2">
                   <span
                     className={cn(
-                      "whitespace-nowrap text-[0.9375rem] font-bold tracking-tight tnum",
+                      "whitespace-nowrap text-[0.9375rem] font-bold tracking-[-0.02em] tnum",
                       selected ? "text-foreground" : "text-muted-foreground",
                     )}
                   >
@@ -150,7 +150,7 @@ export function ScenarioRevenueSection({
                     strokeWidth={1.75}
                     aria-hidden
                     className={cn(
-                      "text-muted-foreground transition-transform duration-150 ease-out",
+                      "text-muted-foreground/80 transition-transform duration-200 ease-out",
                       selected ? "rotate-180" : "",
                     )}
                   />
@@ -159,21 +159,21 @@ export function ScenarioRevenueSection({
               {selected ? (
                 <div
                   id={`scenario-cards-${item.key}-detail`}
-                  className="border-t border-border/50 px-4 py-2"
+                  className="mx-3 mb-3 rounded-[10px] bg-surface-2/60 px-3 py-1 ring-1 ring-border/40"
                   data-testid={`scenario-cards-${item.key}-detail`}
                 >
                   {item.rows.map((row) => (
                     <div
                       key={row.label}
-                      className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-2 py-1.5"
+                      className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-3 py-[7px]"
                       data-testid={row.testId}
                     >
-                      <span className="min-w-0 truncate text-sm text-muted-foreground">
+                      <span className="min-w-0 truncate text-[0.8125rem] leading-snug text-muted-foreground">
                         {row.label}
                       </span>
                       <span
                         className={cn(
-                          "shrink-0 whitespace-nowrap text-sm tnum font-semibold",
+                          "shrink-0 whitespace-nowrap text-sm tnum font-semibold tracking-tight",
                           row.emphasized && "text-primary",
                           row.valueMuted
                             ? "text-muted-foreground"

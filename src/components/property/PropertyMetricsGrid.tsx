@@ -35,16 +35,16 @@ function StatCell({
   return (
     <div
       className={cn(
-        "flex min-w-0 flex-col justify-center gap-1.5 bg-card p-4 transition-colors duration-150 ease-out hover:bg-surface-2/50",
+        "flex min-h-[84px] min-w-0 flex-col justify-center gap-1 bg-card p-4 transition-colors duration-200 ease-out hover:bg-surface-2/50",
         className,
       )}
     >
-      <span className="text-[0.625rem] font-medium uppercase leading-tight tracking-[0.08em] text-muted-foreground">
+      <span className="text-[0.625rem] font-medium uppercase leading-tight tracking-[0.07em] text-muted-foreground">
         {label}
       </span>
       <span
         className={cn(
-          "truncate text-[1.375rem] font-bold leading-none tracking-[-0.01em] tnum",
+          "truncate text-[1.375rem] font-bold leading-none tracking-[-0.02em] tnum",
           muted ? "text-muted-foreground" : "text-foreground",
         )}
         data-testid={testId}
@@ -79,7 +79,7 @@ export function PropertyMetricsGrid({
 
   return (
     <div
-      className="overflow-hidden rounded-[14px] bg-card shadow-sm ring-1 ring-border/50"
+      className="overflow-hidden rounded-[12px] bg-card shadow-sm ring-1 ring-border/50"
       data-testid="metrics-grid"
     >
       <div className="grid grid-cols-2">

@@ -15,8 +15,8 @@ function RiskRow({ id, title, text }: { id: number; title: string; text: string 
   return (
     <div
       className={cn(
-        "transition-colors duration-150 ease-out",
-        open ? "bg-surface-2/50" : "bg-transparent hover:bg-surface-2/50",
+        "transition-colors duration-200 ease-out",
+        open ? "bg-surface-2/60" : "bg-transparent hover:bg-surface-2/40",
       )}
     >
       <button
@@ -24,21 +24,23 @@ function RiskRow({ id, title, text }: { id: number; title: string; text: string 
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-controls={`risk-content-${id}`}
-        className="flex min-h-[44px] w-full items-center justify-between gap-3 px-4 py-3 text-start transition-transform duration-150 ease-out active:scale-[0.99]"
+        className="flex min-h-[44px] w-full items-center justify-between gap-3 px-4 py-3 text-start transition-transform duration-200 ease-out active:scale-[0.99]"
         data-testid={`risk-toggle-${id}`}
       >
-        <span className="min-w-0 truncate text-sm font-medium tracking-[-0.01em] text-foreground">{title}</span>
-        <ChevronDown
-          size={16}
-          strokeWidth={1.75}
-          aria-hidden
-          className={cn("shrink-0 text-muted-foreground transition-transform duration-150 ease-out", open ? "rotate-180" : "")}
-        />
+        <span className={cn("min-w-0 truncate text-[0.84375rem] leading-snug tracking-[-0.01em] text-foreground", open ? "font-semibold" : "font-medium")}>{title}</span>
+        <span className={cn("flex h-6 w-6 shrink-0 items-center justify-center rounded-full ring-1 ring-border/40 transition-colors duration-200 ease-out", open ? "bg-card" : "bg-surface-2/60")}>
+          <ChevronDown
+            size={14}
+            strokeWidth={1.75}
+            aria-hidden
+            className={cn("text-muted-foreground transition-transform duration-200 ease-out", open ? "rotate-180" : "")}
+          />
+        </span>
       </button>
       {open ? (
         <p
           id={`risk-content-${id}`}
-          className="px-4 pb-3 text-sm leading-relaxed text-muted-foreground"
+          className="mx-4 mb-3 rounded-[8px] bg-surface-2/70 px-3 py-2.5 text-[0.8125rem] leading-relaxed text-muted-foreground ring-1 ring-border/30"
           data-testid={`risk-content-${id}`}
         >
           {text}

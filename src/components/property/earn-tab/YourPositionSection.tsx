@@ -48,9 +48,9 @@ export function YourPositionSection({
     setShares((s) => Math.min(MAX_SHARES, Math.max(MIN_SHARES, s + delta)));
 
   const metricLabel =
-    "text-[0.625rem] font-medium uppercase leading-tight tracking-[0.08em] text-muted-foreground";
+    "text-[0.625rem] font-medium uppercase leading-tight tracking-[0.07em] text-muted-foreground";
   const metricValue =
-    "truncate whitespace-nowrap pt-1.5 text-[1.25rem] font-bold leading-none tracking-tight tnum text-foreground";
+    "truncate whitespace-nowrap pt-1 text-[1.375rem] font-bold leading-none tracking-[-0.02em] tnum text-foreground";
 
   return (
     <section className="space-y-2" data-testid="earn-position">
@@ -58,9 +58,9 @@ export function YourPositionSection({
         {t("earnTitle")}
       </h2>
       <BorderBeam size="md" colorVariant="colorful" strength={0.7}>
-        <Block className="rounded-[12px] p-5 shadow-sm ring-1 ring-border/50" data-testid="earn-card">
-          <p className="text-[0.9375rem] font-semibold tracking-[-0.01em] text-foreground">{t("earnHeadline")}</p>
-          <p className="pt-0.5 text-xs leading-relaxed text-muted-foreground/80">
+        <Block className="rounded-[12px] p-5 shadow-sm ring-1 ring-border/60" data-testid="earn-card">
+          <p className="text-[0.9375rem] font-semibold tracking-[-0.02em] text-foreground">{t("earnHeadline")}</p>
+          <p className="pt-1 text-xs leading-relaxed text-muted-foreground/80">
             {t("earnSubtitle")}
           </p>
 
@@ -72,13 +72,13 @@ export function YourPositionSection({
                 type="button"
                 onClick={() => step(-1)}
                 aria-label={t("calcDecreaseShares")}
-                className="flex h-11 w-11 items-center justify-center rounded-[10px] bg-surface-2 text-foreground ring-1 ring-border/50 transition-all duration-150 ease-out hover:bg-surface-2/70 active:scale-[0.96]"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-surface-2 text-foreground shadow-sm ring-1 ring-border/60 transition-all duration-200 ease-out hover:bg-surface-2/70 active:scale-[0.96]"
                 data-testid="earn-decrease"
               >
                 <Minus size={16} strokeWidth={2} aria-hidden />
               </button>
               <span
-                className="min-w-[2ch] text-center text-[1.0625rem] font-semibold tnum text-foreground"
+                className="min-w-[2.5ch] text-center text-[1.125rem] font-bold tracking-tight tnum text-foreground"
                 data-testid="earn-shares"
               >
                 {shares}
@@ -87,19 +87,19 @@ export function YourPositionSection({
                 type="button"
                 onClick={() => step(1)}
                 aria-label={t("calcIncreaseShares")}
-                className="flex h-11 w-11 items-center justify-center rounded-[10px] bg-surface-2 text-foreground ring-1 ring-border/50 transition-all duration-150 ease-out hover:bg-surface-2/70 active:scale-[0.96]"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-surface-2 text-foreground shadow-sm ring-1 ring-border/60 transition-all duration-200 ease-out hover:bg-surface-2/70 active:scale-[0.96]"
                 data-testid="earn-increase"
               >
                 <Plus size={16} strokeWidth={2} aria-hidden />
               </button>
             </div>
           </div>
-          <div className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-2 py-1.5">
-            <span className="min-w-0 truncate text-sm text-muted-foreground">
+          <div className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-3 py-2">
+            <span className="min-w-0 truncate text-[0.8125rem] text-muted-foreground">
               {t("earnInvestmentLabel")}
             </span>
             <span
-              className="shrink-0 whitespace-nowrap text-sm tnum font-medium text-foreground"
+              className="shrink-0 whitespace-nowrap text-sm tnum font-semibold tracking-tight text-foreground"
               data-testid="earn-investment"
             >
               {v1 != null ? cur(investmentCents) : unavailableLabel("backend_absent")}
@@ -107,32 +107,32 @@ export function YourPositionSection({
           </div>
 
           {/* Two equal metrics — one caption line each, no walls of text */}
-          <div className="grid grid-cols-2 gap-4 border-t border-border/50 pt-4">
+          <div className="mt-3 grid grid-cols-2 gap-4 border-t border-border/50 pt-4">
             <div className="min-w-0">
               <p className={metricLabel}>{t("earnMonthlyLabel")}</p>
               <p className={metricValue} data-testid="earn-monthly">
                 {monthlyCents != null ? cur(monthlyCents) : unavailableLabel("backend_absent")}
               </p>
-              <p className="pt-1.5 text-xs text-muted-foreground/80">{t("earnMonthlyCaption")}</p>
+              <p className="pt-1 text-[0.6875rem] leading-snug text-muted-foreground/70">{t("earnMonthlyCaption")}</p>
             </div>
             <div className="min-w-0">
               <p className={metricLabel}>{t("earnGrowthLabel")}</p>
               <p className={metricValue} data-testid="earn-growth">
                 +{cur(growthLowCents)} – {cur(growthHighCents)}
               </p>
-              <p className="pt-1.5 text-xs text-muted-foreground/80">{t("earnGrowthCaption")}</p>
+              <p className="pt-1 text-[0.6875rem] leading-snug text-muted-foreground/70">{t("earnGrowthCaption")}</p>
             </div>
           </div>
 
           {/* Compact inset 12-month snapshot — visually secondary to the metrics */}
-          <div className="rounded-[10px] bg-surface-2/60 p-3 ring-1 ring-border/50" data-testid="earn-snapshot">
+          <div className="mt-4 rounded-[10px] bg-surface-2/70 p-3.5 ring-1 ring-border/40" data-testid="earn-snapshot">
             <p className={metricLabel}>{t("earnSnapshotTitle")}</p>
-            <div className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-2 py-1">
-              <span className="min-w-0 truncate text-sm text-muted-foreground">
+            <div className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-3 py-1">
+              <span className="min-w-0 truncate text-[0.8125rem] text-muted-foreground">
                 {t("earnSnapshotIncomeLabel")}
               </span>
               <span
-                className="shrink-0 whitespace-nowrap text-sm tnum font-medium text-foreground"
+                className="shrink-0 whitespace-nowrap text-sm tnum font-semibold tracking-tight text-foreground"
                 data-testid="earn-snapshot-income"
               >
                 {receivedCents != null
@@ -140,12 +140,12 @@ export function YourPositionSection({
                   : unavailableLabel("backend_absent")}
               </span>
             </div>
-            <div className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-2 py-1">
-              <span className="min-w-0 truncate text-sm text-muted-foreground">
+            <div className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-3 py-1">
+              <span className="min-w-0 truncate text-[0.8125rem] text-muted-foreground">
                 {t("earnSnapshotValueLabel")}
               </span>
               <span
-                className="shrink-0 whitespace-nowrap text-sm tnum font-medium text-foreground"
+                className="shrink-0 whitespace-nowrap text-sm tnum font-semibold tracking-tight text-foreground"
                 data-testid="earn-snapshot-value"
               >
                 {`${cur(investmentCents + growthLowCents)} – ${cur(investmentCents + growthHighCents)}`}
@@ -160,7 +160,7 @@ export function YourPositionSection({
           <button
             type="button"
             onClick={onBuy}
-            className="mt-3 flex h-[44px] w-full items-center justify-center rounded-[10px] bg-primary text-sm font-semibold text-primary-foreground transition-transform duration-150 ease-out active:scale-[0.98]"
+            className="mt-4 flex h-[44px] w-full items-center justify-center rounded-[12px] bg-primary text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-200 ease-out hover:bg-primary/90 active:scale-[0.98]"
             data-testid="earn-buy"
           >
             {t("ownershipV1Buy")}

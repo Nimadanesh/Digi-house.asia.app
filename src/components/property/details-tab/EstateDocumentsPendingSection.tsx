@@ -29,32 +29,35 @@ export function EstateDocumentsPendingSection({ villaName }: { villaName: string
           {visible.map((doc) => (
             <div
               key={doc.id}
-              className="flex min-w-0 items-center gap-3 px-4 py-3 transition-colors duration-150 ease-out hover:bg-surface-2/50"
+              className="flex min-w-0 items-center gap-3 px-4 py-3 transition-colors duration-200 ease-out hover:bg-surface-2/40"
               data-testid="details-documents-row"
             >
-              <FileText
-                size={16}
-                strokeWidth={1.75}
-                aria-hidden
-                className="shrink-0 text-muted-foreground"
-              />
-              <p className="min-w-0 flex-1 text-sm leading-snug text-foreground">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] bg-surface-2/70 ring-1 ring-border/40">
+                <FileText
+                  size={15}
+                  strokeWidth={1.75}
+                  aria-hidden
+                  className="text-muted-foreground"
+                />
+              </span>
+              <p className="min-w-0 flex-1 text-[0.84375rem] leading-snug tracking-[-0.005em] text-foreground">
                 {doc.title.replace("[Villa Name]", villaName ?? "")}
               </p>
               {!ESTATE_DOCUMENTS_AVAILABLE ? (
-                <span className="shrink-0 rounded-full bg-warning/12 px-2 py-0.5 text-[0.6875rem] font-semibold leading-tight text-warning">
+                <span className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full bg-warning/12 px-2.5 py-[4px] text-[0.6875rem] font-semibold leading-none tracking-wide text-warning ring-1 ring-warning/25">
+                  <span className="h-1 w-1 rounded-full bg-warning" aria-hidden />
                   {t("documentsPendingRow")}
                 </span>
               ) : null}
             </div>
           ))}
         </div>
-        <div className="border-t border-border/50 px-4 pb-4 pt-1">
+        <div className="border-t border-border/40 bg-surface-2/30 px-4 pb-4 pt-1">
           {ESTATE_DOCUMENT_TITLES.length > VISIBLE_COUNT ? (
             <button
               type="button"
               onClick={() => setShowAll((v) => !v)}
-              className="inline-flex min-h-[44px] items-center text-sm font-medium text-primary transition-all duration-150 ease-out hover:text-primary/80 active:scale-[0.98]"
+              className="inline-flex min-h-[44px] items-center text-sm font-medium tracking-[-0.01em] text-primary transition-colors duration-200 ease-out hover:text-primary/80 active:scale-[0.98]"
               data-testid="details-documents-toggle"
             >
               {showAll
@@ -64,7 +67,7 @@ export function EstateDocumentsPendingSection({ villaName }: { villaName: string
           ) : null}
           {!ESTATE_DOCUMENTS_AVAILABLE ? (
             <p
-              className="pt-1 text-xs leading-relaxed text-muted-foreground"
+              className="pt-1 text-[0.6875rem] leading-relaxed text-muted-foreground/80"
               data-testid="details-documents-pending"
             >
               {t("documentsPendingNote")}

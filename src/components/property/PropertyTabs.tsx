@@ -66,7 +66,7 @@ export function PropertyTabs({
       role="tablist"
       aria-label={t("tabsLabel")}
       onKeyDown={handleKeyDown}
-      className="no-scrollbar -mx-4 flex gap-1.5 overflow-x-auto px-4 py-1"
+      className="no-scrollbar -mx-4 flex gap-1 overflow-x-auto px-4 py-1.5"
       data-testid="property-tabs"
     >
       {PROPERTY_TABS.map((tab) => {
@@ -87,10 +87,10 @@ export function PropertyTabs({
               onChange(tab);
             }}
             className={cn(
-              "h-9 shrink-0 rounded-full px-4 text-[0.8125rem] font-medium tracking-[-0.01em] transition-all duration-150 ease-out active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40",
+              "h-9 shrink-0 rounded-full px-3.5 text-[0.8125rem] font-medium leading-none tracking-[-0.01em] transition-[background-color,color,box-shadow,transform] duration-200 ease-out active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40",
               selected
-                ? "bg-card font-semibold text-foreground shadow-sm ring-1 ring-border/50"
-                : "bg-transparent text-muted-foreground ring-1 ring-transparent hover:bg-surface-2 hover:text-foreground",
+                ? "bg-card font-semibold text-foreground shadow-[0_1px_2px_rgba(0,0,0,0.08)] ring-1 ring-border/60"
+                : "bg-transparent text-muted-foreground ring-1 ring-transparent hover:bg-card/70 hover:text-foreground",
             )}
             data-testid={`tab-${tab}`}
           >
