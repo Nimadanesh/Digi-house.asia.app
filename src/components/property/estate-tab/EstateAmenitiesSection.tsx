@@ -42,7 +42,7 @@ export function EstateAmenitiesSection({ record }: { record: Estate24Record | nu
       <h2 className="px-0.5 text-[0.9375rem] font-normal text-foreground">
         {t("estateAmenitiesTitle")}
       </h2>
-      <Block className="p-4 shadow-sm ring-1 ring-border/50 sm:p-5">
+      <Block className="rounded-[12px] p-5 shadow-sm ring-1 ring-border/50">
         <div className="grid grid-cols-2 gap-x-4 gap-y-3 sm:grid-cols-3" data-testid="icon-points-grid">
           {visible.map((label) => {
             const Icon = amenityIcon(label);
@@ -53,7 +53,7 @@ export function EstateAmenitiesSection({ record }: { record: Estate24Record | nu
                 data-testid="icon-points-grid-point"
               >
                 <span
-                  className="flex size-8 shrink-0 items-center justify-center rounded-full bg-surface-2/60 text-muted-foreground [&>svg]:block"
+                  className="flex size-8 shrink-0 items-center justify-center rounded-full bg-surface-2/60 text-muted-foreground ring-1 ring-border/40 [&>svg]:block"
                   aria-hidden
                 >
                   <Icon size={15} strokeWidth={1.75} />
@@ -69,7 +69,7 @@ export function EstateAmenitiesSection({ record }: { record: Estate24Record | nu
           <button
             type="button"
             onClick={() => setShowAll((v) => !v)}
-            className="mt-4 inline-flex min-h-[44px] items-center text-sm font-medium text-primary transition-all duration-150 ease-out hover:text-primary/80 active:scale-[0.98]"
+            className="mt-4 inline-flex min-h-[44px] items-center text-sm font-medium tracking-[-0.01em] text-primary transition-colors duration-200 ease-out hover:text-primary/80 active:scale-[0.98]"
             data-testid="estate-amenities-toggle"
           >
             {showAll

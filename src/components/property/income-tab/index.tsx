@@ -43,7 +43,7 @@ export function IncomeTabPanel({
         className="space-y-5"
         data-testid="panel-income"
       >
-        <div className="rounded-[12px] bg-card p-4" data-testid="income-unavailable">
+        <div className="rounded-[12px] bg-card p-4 shadow-sm ring-1 ring-border/50" data-testid="income-unavailable">
           <p className="text-sm text-muted-foreground">{unavailableLabel("backend_absent")}</p>
         </div>
       </div>

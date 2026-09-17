@@ -27,16 +27,16 @@ function MetricCell({
 }) {
   return (
     <div className="min-w-0 flex-1">
-      <p className="text-[0.625rem] font-medium uppercase leading-tight tracking-[0.08em] text-muted-foreground">
+      <p className="text-[0.625rem] font-medium uppercase leading-tight tracking-[0.07em] text-muted-foreground">
         {label}
       </p>
       <p
-        className="truncate whitespace-nowrap pt-1 text-[1.375rem] font-bold leading-none tracking-tight tnum text-foreground"
+        className="truncate whitespace-nowrap pt-1 text-[1.375rem] font-bold leading-none tracking-[-0.02em] tnum text-foreground"
         data-testid={testId}
       >
         {value}
       </p>
-      <p className="pt-1.5 text-xs leading-relaxed text-muted-foreground">{caption}</p>
+      <p className="pt-1 text-[0.6875rem] leading-snug text-muted-foreground/70">{caption}</p>
     </div>
   );
 }
@@ -52,7 +52,7 @@ export function RentalBasisSection({ v1 }: { v1: FinancialModelV1PropertyModel |
       <h2 className="px-0.5 text-[0.9375rem] font-normal text-foreground">
         {t("incomeV1Basis")}
       </h2>
-      <Block className="p-4 shadow-sm ring-1 ring-border/50 sm:p-5">
+      <Block className="rounded-[12px] p-5 shadow-sm ring-1 ring-border/60">
         <div className="flex gap-4">
           <MetricCell
             label={t("v1ThesisAnr")}
@@ -74,14 +74,14 @@ export function RentalBasisSection({ v1 }: { v1: FinancialModelV1PropertyModel |
           onClick={() => setHistoryOpen((v) => !v)}
           aria-expanded={historyOpen}
           aria-controls="income-basis-history"
-          className="mt-2 flex min-h-[44px] w-full items-center justify-between gap-2 border-t border-border/50 text-start transition-transform duration-150 ease-out active:scale-[0.99]"
+          className="mt-3 flex min-h-[44px] w-full items-center justify-between gap-3 border-t border-border/60 text-start transition-transform duration-200 ease-out active:scale-[0.99]"
           data-testid="income-basis-history-toggle"
         >
-          <span className="min-w-0 truncate text-sm text-muted-foreground">
+          <span className="min-w-0 truncate text-[0.8125rem] text-muted-foreground">
             {t("incomeOccupancyHistorical")}
           </span>
           <span className="flex shrink-0 items-center gap-1.5">
-            <span className="whitespace-nowrap text-sm tnum font-semibold text-muted-foreground">
+            <span className="whitespace-nowrap text-sm tnum font-semibold tracking-tight text-muted-foreground">
               {t("incomeOccupancyHistoricalValue")}
             </span>
             <ChevronDown
@@ -89,14 +89,14 @@ export function RentalBasisSection({ v1 }: { v1: FinancialModelV1PropertyModel |
               strokeWidth={1.75}
               aria-hidden
                 className={cn(
-                  "text-muted-foreground transition-transform duration-150 ease-out",
+                  "text-muted-foreground/80 transition-transform duration-200 ease-out",
                   historyOpen ? "rotate-180" : "",
                 )}
             />
           </span>
         </button>
         {historyOpen ? (
-          <div id="income-basis-history" className="rounded-[10px] bg-surface-2/50 px-3 py-2" data-testid="income-basis-history">
+          <div id="income-basis-history" className="mt-1 rounded-[10px] bg-surface-2/70 p-3 ring-1 ring-border/40" data-testid="income-basis-history">
             <p className="text-xs leading-relaxed text-muted-foreground">
               {t("incomeOccupancyHistoricalNoteLine1")}
             </p>

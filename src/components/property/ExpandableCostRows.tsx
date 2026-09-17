@@ -57,7 +57,7 @@ export function ExpandableCostRows({
 
   return (
     <Block className="overflow-hidden" data-testid={testId}>
-      <div className="divide-y divide-border">
+      <div className="divide-y divide-border/50">
         {rows.map((row) => {
           const open = openIds.has(row.id);
           return (
@@ -67,15 +67,15 @@ export function ExpandableCostRows({
                 onClick={() => toggle(row.id)}
                 aria-expanded={open}
                 aria-controls={`${testId}-${row.id}-detail`}
-                className="flex min-h-[44px] w-full items-center justify-between gap-2 px-4 py-2 text-start transition-transform duration-[120ms] ease-out active:scale-[0.99]"
+                className="flex min-h-[44px] w-full items-center justify-between gap-3 px-4 py-2.5 text-start transition-transform duration-200 ease-out active:scale-[0.99]"
                 data-testid={`${testId}-${row.id}`}
               >
                 <span className="min-w-0">
-                  <span className="block truncate text-sm text-muted-foreground">
+                  <span className="block truncate text-[0.84375rem] leading-snug text-muted-foreground">
                     {row.label}
                   </span>
                   {row.basis ? (
-                    <span className="mt-0.5 block truncate text-xs text-muted-foreground/80">
+                    <span className="mt-[2px] block truncate text-xs leading-tight text-muted-foreground/80">
                       {row.basis}
                     </span>
                   ) : null}
@@ -83,7 +83,7 @@ export function ExpandableCostRows({
                 <span className="flex shrink-0 items-center gap-1.5">
                   <span
                     className={cn(
-                      "whitespace-nowrap text-sm tnum font-semibold",
+                      "whitespace-nowrap text-sm tnum font-semibold tracking-tight",
                       row.valueMuted ? "text-muted-foreground" : "text-foreground",
                     )}
                   >
@@ -94,7 +94,7 @@ export function ExpandableCostRows({
                     strokeWidth={1.75}
                     aria-hidden
                     className={cn(
-                      "text-muted-foreground transition-transform duration-200 ease-out",
+                      "text-muted-foreground/80 transition-transform duration-200 ease-out",
                       open ? "rotate-180" : "",
                     )}
                   />
@@ -103,7 +103,7 @@ export function ExpandableCostRows({
               {open ? (
                 <div
                   id={`${testId}-${row.id}-detail`}
-                  className="px-4 pb-3"
+                  className="mx-4 mb-3 rounded-[8px] bg-surface-2/70 px-3 py-2.5 ring-1 ring-border/30"
                   data-testid={`${testId}-${row.id}-detail`}
                 >
                   {row.detail ? (
@@ -131,12 +131,12 @@ export function ExpandableCostRows({
                       {row.meta.map((m) => (
                         <div
                           key={m.label}
-                          className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-2"
+                          className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-3"
                         >
                           <span className="min-w-0 truncate text-xs text-muted-foreground">
                             {m.label}
                           </span>
-                          <span className="shrink-0 whitespace-nowrap text-xs tnum font-medium text-foreground">
+                          <span className="shrink-0 whitespace-nowrap text-xs tnum font-semibold tracking-tight text-foreground">
                             {m.value}
                           </span>
                         </div>

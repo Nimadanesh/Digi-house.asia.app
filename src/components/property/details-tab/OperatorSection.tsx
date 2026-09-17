@@ -30,7 +30,7 @@ export function OperatorSection({ propertyId }: { propertyId: string }) {
       <h2 className="px-0.5 text-[0.9375rem] font-normal text-foreground">
         {t("operatorTitle")}
       </h2>
-      <Block className="p-4 shadow-sm ring-1 ring-border/50 sm:p-5" data-testid="details-operator-card">
+      <Block className="rounded-[12px] p-5 shadow-sm ring-1 ring-border/50" data-testid="details-operator-card">
         <div className="flex min-w-0 items-center gap-3">
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-surface-2 text-[0.9375rem] font-semibold text-foreground ring-1 ring-border/50">
             {company.name
@@ -93,7 +93,7 @@ export function OperatorSection({ propertyId }: { propertyId: string }) {
                 haptics.selection();
                 setBioOpen((v) => !v);
               }}
-              className="mt-0.5 text-xs font-medium text-primary transition-colors duration-150 ease-out hover:text-primary/80"
+              className="mt-0.5 text-xs font-medium text-primary transition-colors duration-200 ease-out hover:text-primary/80"
               data-testid="details-operator-bio-toggle"
             >
               {bioOpen ? t("documentsShowLess") : t("bioShowMore")}

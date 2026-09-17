@@ -37,17 +37,17 @@ export function EstateWhySection({
       <Block
         className={
           editorialHeadline != null
-            ? "bg-surface-2 p-4 shadow-sm ring-1 ring-border/50 sm:p-5"
-            : "p-4 shadow-sm ring-1 ring-border/50 sm:p-5"
+            ? "rounded-[12px] bg-surface-2 p-5 shadow-sm ring-1 ring-border/60"
+            : "rounded-[12px] p-5 shadow-sm ring-1 ring-border/50"
         }
         data-testid="estate-why-card"
       >
         {editorialHeadline != null ? (
-          <p className="text-[0.9375rem] font-semibold leading-snug tracking-[-0.01em] text-foreground">
+          <p className="text-[0.9375rem] font-semibold leading-snug tracking-[-0.02em] text-foreground">
             {editorialHeadline}
           </p>
         ) : null}
-        <p className="pt-1.5 text-sm leading-relaxed text-muted-foreground">
+        <p className="pt-1 text-sm leading-relaxed text-muted-foreground">
           {editorialBody ?? descriptionShort}
         </p>
         {highlights.length > 0 ? (
@@ -58,7 +58,7 @@ export function EstateWhySection({
                 label: h.label,
                 icon: (
                   <span
-                    className="flex size-8 items-center justify-center rounded-full bg-surface-2/60 [&>svg]:block"
+                    className="flex size-8 items-center justify-center rounded-full bg-surface-2/60 ring-1 ring-border/40 [&>svg]:block"
                     aria-hidden
                   >
                     <Check size={15} strokeWidth={2.25} className="text-success" />
