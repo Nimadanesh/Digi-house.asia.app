@@ -107,6 +107,7 @@
     "invest": "Invest",
     "invite": "Invite",
     "details": "Details",
+    "card": "Card",
     "activity": "Activity",
     "forYou": "For you",
     "searchPlaceholder": "Search",
@@ -119,6 +120,19 @@
     "payoutStatus": "Status",
     "rentalYtd": "rental income YTD",
     "estatesSheetTitle": "Your estates"
+  },
+  "card": {
+    "badge": "New class Asset",
+    "close": "Close",
+    "premiumLabel": "Premium card",
+    "brand": "F.Luxe",
+    "headline": "Own your credit card",
+    "benefit1": "Track your balance in one place",
+    "benefit2": "Access your fractional portfolio",
+    "benefit3": "Unlock premium card benefits",
+    "cta": "Get Your F.Luxe Card",
+    "support": "Secure payment. Cancel anytime.",
+    "loadError": "Couldn't load your card."
   },
   "marketplace": {
     "feesTitle": "Comisión",
