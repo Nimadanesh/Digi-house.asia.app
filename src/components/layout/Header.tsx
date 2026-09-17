@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 
 const TITLES: Record<string, string> = {
   "/home": "FractionalLuxe",
+  "/card": "Card",
   "/marketplace": "Marketplace",
   "/earnings": "Earnings",
   "/portfolio": "Portfolio",

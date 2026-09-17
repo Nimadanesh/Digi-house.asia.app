@@ -3,6 +3,7 @@ import { Home, Store, Wallet, PieChart } from "lucide-react";
 
 export const ROUTES = {
   home: "/home",
+  card: "/card",
   marketplace: "/marketplace",
   property: (id: string) => `/property/${id}`,
   earnings: "/earnings",
