@@ -11,7 +11,6 @@ import { haptics } from "@/lib/telegram/haptics";
 import { pickFeaturedListing } from "@/lib/home-featured";
 import { HomeHero } from "@/components/home/HomeHero";
 import { HomeActions } from "@/components/home/HomeActions";
-import { HomeDetailsSheet } from "@/components/home/HomeDetailsSheet";
 import { HomeEstatesSheet } from "@/components/home/HomeEstatesSheet";
 import { HomeEmptyState } from "@/components/home/HomeEmptyState";
 import { HomeActivity } from "@/components/home/HomeActivity";
@@ -49,9 +48,6 @@ export default function HomePage() {
   const hasOwnership = holdings.length > 0;
 
   const tap = useCallback(() => haptics.selection(), []);
-  const [detailsOpen, setDetailsOpen] = useState(false);
-  const openDetails = useCallback(() => setDetailsOpen(true), []);
-  const closeDetails = useCallback(() => setDetailsOpen(false), []);
   const [estatesOpen, setEstatesOpen] = useState(false);
   const openEstates = useCallback(() => setEstatesOpen(true), []);
   const closeEstates = useCallback(() => setEstatesOpen(false), []);
@@ -79,8 +75,7 @@ export default function HomePage() {
   return (
     <div className="-mx-4 space-y-5 px-4 pb-6 pt-2" data-testid="home-page">
       <HomeHero summary={summary} onPill={openEstates} />
-      <HomeActions onDetails={openDetails} />
-      <HomeDetailsSheet open={detailsOpen} onClose={closeDetails} summary={summary} />
+      <HomeActions />
       <HomeEstatesSheet
         open={estatesOpen}
         onClose={closeEstates}

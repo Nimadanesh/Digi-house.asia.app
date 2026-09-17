@@ -115,6 +115,10 @@ describe("Home page — prod strip (no next payout)", () => {
     expect(screen.getByTestId("home-hero")).toBeInTheDocument();
     expect(screen.getByTestId("home-actions")).toBeInTheDocument();
 
+    // Details action is replaced by the Card action → /card route.
+    expect(screen.getByTestId("action-card")).toHaveAttribute("href", "/card");
+    expect(screen.queryByTestId("action-details")).not.toBeInTheDocument();
+
     // Activity capsule stays, payout row is gone.
     expect(screen.getByTestId("home-activity")).toBeInTheDocument();
     expect(screen.getByTestId("activity-see-all")).toBeInTheDocument();
