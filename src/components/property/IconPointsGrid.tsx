@@ -33,7 +33,7 @@ export function IconPointsGrid({
   return (
     <div
       className={cn(
-        "grid gap-x-4 gap-y-3",
+        "grid w-full min-w-0 gap-x-4 gap-y-3",
         columns === 2 ? "grid-cols-2" : "grid-cols-3",
         smColumns === 3 && "sm:grid-cols-3",
       )}
@@ -42,7 +42,7 @@ export function IconPointsGrid({
       {points.map((point) => (
         <div
           key={point.id}
-          className="flex min-w-0 items-start gap-2"
+          className="flex min-w-0 items-start gap-2 overflow-hidden"
           data-testid={`${testId}-point`}
         >
           {point.icon ? (
@@ -52,9 +52,9 @@ export function IconPointsGrid({
           ) : null}
           <span
             className={cn(
-              "min-w-0 text-sm text-foreground",
+              "min-w-0 break-words text-sm text-foreground",
               truncateLabels && "truncate",
-              !truncateLabels && "leading-snug",
+              !truncateLabels && "leading-snug [overflow-wrap:anywhere]",
             )}
           >
             {point.label}

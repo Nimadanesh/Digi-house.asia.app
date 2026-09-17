@@ -28,16 +28,16 @@ function FactCell({
   return (
     <div
       className={cn(
-        "flex min-h-[84px] min-w-0 flex-col justify-center gap-1 bg-card p-4 transition-colors duration-200 ease-out hover:bg-surface-2/50",
+        "flex min-h-[96px] w-full min-w-0 flex-col justify-center gap-1.5 overflow-hidden bg-card p-4 transition-colors duration-200 ease-out hover:bg-surface-2/50",
         className,
       )}
     >
-      <span className="text-[0.625rem] font-medium uppercase leading-tight tracking-[0.07em] text-muted-foreground">
+      <span className="w-full truncate whitespace-nowrap text-[0.625rem] font-medium uppercase leading-tight tracking-[0.07em] text-muted-foreground">
         {label}
       </span>
       <span
         className={cn(
-          "truncate text-[1.375rem] font-bold leading-none tracking-[-0.02em] tnum",
+          "block w-full max-w-full truncate whitespace-nowrap text-[1.375rem] font-bold leading-none tracking-[-0.02em] tnum",
           muted ? "text-muted-foreground" : "text-foreground",
         )}
         data-testid={testId}
@@ -45,7 +45,7 @@ function FactCell({
         {value}
       </span>
       {caption ? (
-        <span className="pt-0.5 text-[0.6875rem] leading-none tnum text-muted-foreground/90">{caption}</span>
+        <span className="block w-full break-all text-[0.6875rem] leading-snug tnum text-muted-foreground/90">{caption}</span>
       ) : null}
     </div>
   );
@@ -66,11 +66,11 @@ export function ValuationSharesSection({ v1 }: { v1: FinancialModelV1PropertyMod
     );
   }
   return (
-    <section className="space-y-2" data-testid="ownership-valuation">
+    <section className="min-w-0 space-y-2" data-testid="ownership-valuation">
       <h2 className="px-0.5 text-[0.9375rem] font-normal text-foreground">
         {t("ownershipValuationTitle")}
       </h2>
-      <div className="bg-card grid grid-cols-2 overflow-hidden rounded-[12px] shadow-sm ring-1 ring-border/50">
+      <div className="bg-card grid w-full min-w-0 grid-cols-2 overflow-hidden rounded-[12px] shadow-sm ring-1 ring-border/50">
         <FactCell
           label={t("estateValue")}
           value={moneySmart(v1.valuation.valueCents, v1.valuation.currency)}

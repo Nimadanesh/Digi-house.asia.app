@@ -30,28 +30,28 @@ export function EstateWhySection({
   const t = useTranslations("property");
   if (editorialHeadline == null && descriptionShort == null) return null;
   return (
-    <section className="space-y-2" data-testid="estate-why">
+    <section className="min-w-0 space-y-2" data-testid="estate-why">
       <h2 className="px-0.5 text-[0.9375rem] font-normal text-foreground">
         {t("estateWhyTitle")}
       </h2>
       <Block
         className={
           editorialHeadline != null
-            ? "rounded-[12px] bg-surface-2 p-5 shadow-sm ring-1 ring-border/60"
-            : "rounded-[12px] p-5 shadow-sm ring-1 ring-border/50"
+            ? "min-w-0 overflow-hidden rounded-[12px] bg-surface-2 p-5 shadow-sm ring-1 ring-border/60"
+            : "min-w-0 overflow-hidden rounded-[12px] p-5 shadow-sm ring-1 ring-border/50"
         }
         data-testid="estate-why-card"
       >
         {editorialHeadline != null ? (
-          <p className="text-[0.9375rem] font-semibold leading-snug tracking-[-0.02em] text-foreground">
+          <p className="break-words text-[0.9375rem] font-semibold leading-snug tracking-[-0.02em] text-foreground">
             {editorialHeadline}
           </p>
         ) : null}
-        <p className="pt-1 text-sm leading-relaxed text-muted-foreground">
+        <p className="break-words pt-1 text-sm leading-relaxed text-muted-foreground">
           {editorialBody ?? descriptionShort}
         </p>
         {highlights.length > 0 ? (
-          <div className="mt-4 border-t border-border/50 pt-4">
+          <div className="mt-4 min-w-0 border-t border-border/50 pt-4">
             <IconPointsGrid
               points={highlights.map((h) => ({
                 id: h.id,

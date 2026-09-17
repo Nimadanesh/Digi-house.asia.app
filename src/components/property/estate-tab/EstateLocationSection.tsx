@@ -47,13 +47,13 @@ export function EstateLocationSection({
     ? detail.locationText.slice(resortName.length + 1).trim()
     : detail.locationText;
   return (
-    <section className="space-y-2" data-testid="estate-location">
+    <section className="min-w-0 space-y-2" data-testid="estate-location">
       <h2 className="px-0.5 text-[0.9375rem] font-normal text-foreground">
         {t("estateLocationTitle")}
       </h2>
-      <Block className="overflow-hidden rounded-[12px] p-5 shadow-sm ring-1 ring-border/50" data-testid="estate-location-card">
-        <p className="text-[0.9375rem] font-semibold leading-snug tracking-[-0.02em] text-foreground">{titleText}</p>
-        <div className="pt-1">
+      <Block className="min-w-0 overflow-hidden rounded-[12px] p-5 shadow-sm ring-1 ring-border/50" data-testid="estate-location-card">
+        <p className="break-words text-[1.0625rem] font-bold leading-tight tracking-[-0.02em] text-foreground">{titleText}</p>
+        <div className="mt-3 divide-y divide-border/50 border-y border-border/50">
           <FactRow label={t("estateLocationResort")} value={resortRow} wrapValue />
           <FactRow label={t("estateLocationRegion")} value={detail.region} />
           <button
@@ -61,7 +61,7 @@ export function EstateLocationSection({
             onClick={() => setTransferOpen((v) => !v)}
             aria-expanded={transferOpen}
             aria-controls="estate-location-transfer-detail"
-            className="flex min-h-[44px] w-full items-center justify-between gap-3 py-1 text-start transition-transform duration-200 ease-out active:scale-[0.99]"
+            className="flex min-h-[44px] w-full items-center justify-between gap-3 py-2 text-start transition-transform duration-200 ease-out active:scale-[0.99]"
             data-testid="estate-location-transfer-toggle"
           >
             <span className="min-w-0 truncate text-[0.8125rem] text-muted-foreground">
@@ -88,24 +88,24 @@ export function EstateLocationSection({
               />
             </span>
           </button>
-          {transferOpen ? (
-            <div
-              id="estate-location-transfer-detail"
-              className="mt-1 rounded-[10px] bg-surface-2/70 p-3 ring-1 ring-border/40"
-              data-testid="estate-location-transfer"
-            >
-              <p className="text-xs leading-relaxed text-muted-foreground">{detail.transfer.text}</p>
-              {detail.highlight ? (
-                <p className="pt-1 text-xs leading-relaxed text-muted-foreground">
-                  {detail.highlight}
-                </p>
-              ) : null}
-              {detail.note ? (
-                <p className="pt-1 text-xs leading-relaxed text-muted-foreground">{detail.note}</p>
-              ) : null}
-            </div>
-          ) : null}
         </div>
+        {transferOpen ? (
+          <div
+            id="estate-location-transfer-detail"
+            className="mt-3 rounded-[10px] bg-surface-2/70 p-3 ring-1 ring-border/40"
+            data-testid="estate-location-transfer"
+          >
+            <p className="break-words text-xs leading-relaxed text-muted-foreground">{detail.transfer.text}</p>
+            {detail.highlight ? (
+              <p className="break-words pt-1 text-xs leading-relaxed text-muted-foreground">
+                {detail.highlight}
+              </p>
+            ) : null}
+            {detail.note ? (
+              <p className="break-words pt-1 text-xs leading-relaxed text-muted-foreground">{detail.note}</p>
+            ) : null}
+          </div>
+        ) : null}
         <div className="mt-3 border-t border-border/50 pt-3">
           <ReserveVillaCta url={reserveUrl} />
         </div>
