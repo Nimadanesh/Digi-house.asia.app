@@ -71,8 +71,8 @@ export function PropertyGallery({
         <span
           className={
             statusPill.tone === "amber"
-              ? "absolute start-3 top-3 rounded-full bg-warning/90 px-2.5 py-1 text-[0.6875rem] font-semibold tabular-nums text-primary-foreground"
-              : "absolute start-3 top-3 rounded-full bg-success/90 px-2.5 py-1 text-[0.6875rem] font-semibold tabular-nums text-primary-foreground"
+              ? "absolute start-3 top-3 rounded-full bg-warning/90 px-2.5 py-1 text-[0.6875rem] font-semibold tabular-nums text-primary-foreground shadow-sm backdrop-blur-sm"
+              : "absolute start-3 top-3 rounded-full bg-success/90 px-2.5 py-1 text-[0.6875rem] font-semibold tabular-nums text-primary-foreground shadow-sm backdrop-blur-sm"
           }
           data-testid="gallery-status-pill"
         >
@@ -87,7 +87,7 @@ export function PropertyGallery({
             onClick={() => go(index - 1)}
             onTouchStart={(e) => e.stopPropagation()}
             onTouchEnd={(e) => e.stopPropagation()}
-            className="absolute start-2 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/55 text-white transition-transform duration-[120ms] ease-out active:scale-[0.97]"
+            className="absolute start-2 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/55 text-white ring-1 ring-white/20 backdrop-blur-sm transition-transform duration-150 ease-out active:scale-[0.97]"
           >
             <ChevronLeft size={22} strokeWidth={1.75} className="rtl:rotate-180" aria-hidden />
           </button>
@@ -97,7 +97,7 @@ export function PropertyGallery({
             onClick={() => go(index + 1)}
             onTouchStart={(e) => e.stopPropagation()}
             onTouchEnd={(e) => e.stopPropagation()}
-            className="absolute end-2 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/55 text-white transition-transform duration-[120ms] ease-out active:scale-[0.97]"
+            className="absolute end-2 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/55 text-white ring-1 ring-white/20 backdrop-blur-sm transition-transform duration-150 ease-out active:scale-[0.97]"
           >
             <ChevronRight size={22} strokeWidth={1.75} className="rtl:rotate-180" aria-hidden />
           </button>
@@ -105,7 +105,7 @@ export function PropertyGallery({
             className="absolute bottom-3 inset-x-0 flex justify-center"
             aria-label={t("galleryPages")}
           >
-            <span className="rounded-full bg-black/55 px-2.5 py-1 text-[0.6875rem] font-semibold tabular-nums text-white">
+            <span className="rounded-full bg-black/55 px-2.5 py-1 text-[0.6875rem] font-semibold tabular-nums text-white ring-1 ring-white/20 backdrop-blur-sm">
               {index + 1}
               <span className="opacity-70">/{slides.length}</span>
             </span>

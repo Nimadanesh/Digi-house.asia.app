@@ -167,7 +167,7 @@ export function PropertyHero({
           DEC-013: an at-a-glance ownership badge rides beside the name when the
           user holds shares of THIS estate. */}
       <div className="flex items-start gap-2">
-        <h1 className="min-w-0 text-[1.0625rem] font-medium leading-snug tracking-tight text-balance text-foreground">{displayName}</h1>
+        <h1 className="min-w-0 text-[1.0625rem] font-semibold leading-snug tracking-tight text-balance text-foreground">{displayName}</h1>
         {ownedShares > 0 ? (
           <span
             className="mt-0.5 inline-flex shrink-0 items-center gap-1 rounded-full bg-success/12 px-2 py-0.5 text-xs font-semibold text-success"
@@ -215,7 +215,7 @@ export function PropertyHero({
             the pre-attentive scarcity signal, the count is the readable one. */}
         {isPrimary && !soldOut ? (
           <div
-            className="rounded-[10px] bg-warning/12 px-3 py-2.5"
+            className="rounded-[10px] bg-warning/12 px-3 py-2.5 shadow-sm ring-1 ring-border/50"
             data-testid="funding-bar"
           >
             <div className="flex items-baseline justify-between gap-2">
@@ -260,7 +260,7 @@ export function PropertyHero({
               haptics.selection();
               setValueOpen(true);
             }}
-            className="flex w-fit items-center gap-1.5 text-sm tnum text-muted-foreground transition-transform duration-[120ms] ease-out active:scale-[0.98]"
+            className="flex w-fit items-center gap-1.5 text-sm tnum text-muted-foreground transition-transform duration-150 ease-out active:scale-[0.98]"
             data-testid="hero-estate-value"
           >
             {t("estateValue")}:{" "}
@@ -282,7 +282,7 @@ export function PropertyHero({
         type="button"
         onClick={onCta}
         disabled={ctaDisabled}
-        className="flex h-[50px] w-full items-center justify-center rounded-[12px] bg-primary text-[0.9375rem] font-semibold text-primary-foreground transition-transform duration-[120ms] ease-out active:scale-[0.98] disabled:opacity-50"
+        className="flex h-[50px] w-full items-center justify-center rounded-[12px] bg-primary text-[0.9375rem] font-semibold text-primary-foreground shadow-sm transition-transform duration-150 ease-out active:scale-[0.98] disabled:opacity-50"
         data-testid="hero-cta"
       >
         {ctaLabel}

@@ -56,7 +56,7 @@ export function PropertyStickyCta({
             type="button"
             disabled={buyDisabled}
             onClick={onBuy}
-            className="pointer-events-auto flex h-[52px] w-full items-center justify-center gap-1 rounded-[12px] bg-primary text-[0.9375rem] font-semibold text-primary-foreground transition-transform duration-[120ms] ease-out active:scale-[0.98] disabled:opacity-50"
+            className="pointer-events-auto flex h-[52px] w-full items-center justify-center gap-1 rounded-[12px] bg-primary text-[0.9375rem] font-semibold text-primary-foreground shadow-sm transition-transform duration-150 ease-out active:scale-[0.98] disabled:opacity-50"
             data-testid="sticky-buy"
           >
             {t("stickyBuy", { price: usdCompact(priceUsd) })}
@@ -68,7 +68,7 @@ export function PropertyStickyCta({
             type="button"
             disabled={buyDisabled}
             onClick={onBuy}
-            className="flex h-[52px] items-center justify-center gap-1 rounded-[12px] bg-primary text-[0.9375rem] font-semibold text-primary-foreground transition-transform duration-[120ms] ease-out active:scale-[0.98] disabled:opacity-50"
+            className="flex h-[52px] items-center justify-center gap-1 rounded-[12px] bg-primary text-[0.9375rem] font-semibold text-primary-foreground shadow-sm transition-transform duration-150 ease-out active:scale-[0.98] disabled:opacity-50"
             data-testid="sticky-buy"
           >
             {/* Slice 4: the sticky buy repeats off-hero, so it names the ask basis. */}
@@ -78,7 +78,7 @@ export function PropertyStickyCta({
             type="button"
             disabled={!onSell}
             onClick={onSell}
-            className="flex h-[52px] items-center justify-center rounded-[12px] border border-border bg-card text-[0.9375rem] font-semibold text-foreground transition-transform duration-[120ms] ease-out active:scale-[0.98] disabled:opacity-50"
+            className="flex h-[52px] items-center justify-center rounded-[12px] border border-border/50 bg-card text-[0.9375rem] font-semibold text-foreground shadow-sm transition-transform duration-150 ease-out active:scale-[0.98] disabled:opacity-50"
             data-testid="sticky-sell"
           >
             {t("sell")}
