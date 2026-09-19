@@ -95,11 +95,11 @@ describe("Buy flow steps", () => {
   });
 
   it("qty step: V1-unknown villa shows pending WITH the reason (never a fixture figure)", () => {
-    // D11 owner-tax table locked 2026-09-13: the only remaining V1-unknowns are
-    // EUR mixed-currency villas (no-FX rule) — Chalet Montana (re-130901).
+    // Option 1 FX (2026-09-18): all 24 canonical villas compute — pending is
+    // exercised via a synthetic unknown id (no V1 input → generic pending).
     const unknownVilla: Listing = {
       ...listing,
-      id: "re-130901",
+      id: "test-unknown-villa",
       sharesRemaining: 360,
     };
     render(
@@ -113,7 +113,6 @@ describe("Buy flow steps", () => {
       />,
     );
     expect(screen.getByTestId("buy-est-monthly")).toHaveTextContent("Data pending");
-    expect(screen.getByTestId("buy-est-monthly")).toHaveTextContent(/EUR/);
   });
 
   it("qty step: disconnected prompts connect", () => {
@@ -272,11 +271,11 @@ describe("Buy flow steps", () => {
 
   it("summary step: values follow the listing, never Grand-specific figures", () => {
     useFees.mockReturnValue({ data: DEFAULT_FEE_TIERS, isLoading: false, isError: false });
-    // D11 locked 2026-09-13: the pending reason assertion uses Chalet Montana
-    // (re-130901, EUR mixed-currency — the remaining V1-unknown class).
+    // Option 1 FX (2026-09-18): all 24 canonical villas compute — pending is
+    // exercised via a synthetic unknown id (no V1 input → generic pending).
     const unknownVilla: Listing = {
       ...listing,
-      id: "re-130901",
+      id: "test-unknown-villa",
       title: "Chalet Montana",
       location: "Kitzbühel, Austria",
       sharePriceUsd: 9500,
@@ -294,10 +293,8 @@ describe("Buy flow steps", () => {
     expect(screen.getByTestId("buy-assumptions-content")).toHaveTextContent(
       "Projection uses the estate's projected monthly income per share",
     );
-    // Chalet Montana (V1-unknown, EUR) shows pending, never a fixture figure.
+    // Synthetic unknown id shows generic pending, never a fixture figure.
     expect(screen.getByTestId("buy-summary-monthly")).toHaveTextContent("Data pending");
-    // The pending state carries its human-readable reason.
-    expect(screen.getByTestId("buy-summary-monthly")).toHaveTextContent(/EUR/);
   });
 
   it("summary step: no raw i18n keys leak into labels", () => {

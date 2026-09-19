@@ -3,7 +3,8 @@
 // Rate · Est. Growth. Monthly and annual are the presented V1 BASE per-share
 // figures (single presentation path — they equal the Base scenario card by the
 // locked PO rule), ANR comes from the V1 input (never ADR), growth is the
-// locked D10 assumed band (estimated). Pending figures render muted (never
+// per-villa derived estimate ((research upper − current) / current, 1 decimal —
+// never the retired fixed band). Pending figures render muted (never
 // invented); price/funding live in the hero (L0) and never duplicated here.
 import { useTranslations } from "next-intl";
 import { moneySmart } from "@/lib/format";
@@ -14,7 +15,10 @@ import {
   getPresentedAnnualIncome,
   getPresentedMonthlyIncome,
 } from "@/lib/economics/property-presentation";
-import { ESTATE_GROWTH_ASSUMPTION } from "@/lib/economics/estates/estate-page-constants";
+import {
+  formatGrowthPct,
+  getGrowthPotential,
+} from "@/lib/economics/estates/growth-potential";
 import { v1AnrToCents } from "@/lib/economics/financial-model-v1";
 import { cn } from "@/lib/utils";
 
@@ -76,6 +80,9 @@ export function PropertyMetricsGrid({
     annual.cents != null ? money(annual.cents) : unavailableLabel("backend_absent");
   const anrText =
     v1 != null ? moneySmart(v1AnrToCents(v1.anr.valueMajor), v1.anr.currency) : unavailableLabel("backend_absent");
+  // Per-villa derived growth estimate (research upper vs current, 1 decimal).
+  const growthPct = getGrowthPotential(listing.id)?.potentialPct ?? null;
+  const growthText = formatGrowthPct(growthPct) ?? unavailableLabel("backend_absent");
 
   return (
     <div
@@ -106,9 +113,10 @@ export function PropertyMetricsGrid({
         />
         <StatCell
           label={t("metricEstGrowth")}
-          // Compact band for the half-width cell (assumed growth, estimated —
-          // the full locked wording + source render on the Ownership tab §6.2).
-          value={`+${ESTATE_GROWTH_ASSUMPTION.minPctPerYear}–${ESTATE_GROWTH_ASSUMPTION.maxPctPerYear}%`}
+          // Per-villa derived estimate (the full locked wording + source render
+          // on the Ownership tab §6.2). Unknown ids stay honest-pending.
+          value={growthText}
+          muted={growthPct == null}
           testId="metrics-growth"
         />
       </div>

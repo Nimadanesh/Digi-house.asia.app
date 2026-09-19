@@ -38,58 +38,51 @@ describe("property presentation — single monthly-income path (V1)", () => {
     });
   });
 
-  it("returns null — never 0, never invented — for every V1-unknown villa", () => {
+  it("returns no pending villa — Option 1 FX converts all 5 EUR villas to USD (0 unknown)", () => {
     const unknown = listings.filter((l) => v1Monthly(l.id) == null);
-    // 5 EUR mixed-currency villas (D11 owner-tax table locked 2026-09-13 —
-    // the 10 unknown-owner-tax villas are now full-chain).
-    expect(unknown).toHaveLength(5);
-    for (const l of unknown) {
-      expect(getPresentedMonthlyIncome(l.id).cents, l.id).toBeNull();
-    }
+    // Option 1 product decision (APPROVED_EUR_USD_RATE = 1.20): the former 5 EUR
+    // mixed-currency villas now evaluate the full chain in USD. Zero pending.
+    expect(unknown).toHaveLength(0);
   });
 
-  it("presents income for exactly the 19 V1-computable villas, matching V1", () => {
+  it("presents income for all 24 V1-computable villas, matching V1", () => {
     const known = listings.filter((l) => v1Monthly(l.id) != null);
-    expect(known).toHaveLength(19);
+    expect(known).toHaveLength(24);
     for (const l of known) {
       expect(getPresentedMonthlyIncome(l.id).cents, l.id).toBe(v1Monthly(l.id));
     }
   });
 
-  it("scales position income as shares × per-share, null when unknown", () => {
+  it("scales position income as shares × per-share (EUR villas now compute in USD)", () => {
     expect(presentPositionMonthlyIncome("re-128862", 10)).toBe(16_250);
     expect(presentPositionMonthlyIncome("re-128862", 1)).toBe(1625);
-    // Villa du Cap (EUR mixed-currency) stays unknown under the no-FX rule.
-    expect(presentPositionMonthlyIncome("re-123861", 10)).toBeNull();
+    // Villa du Cap (former EUR mixed-currency) now converts via the approved
+    // 1.20 rate — no longer unknown.
+    expect(presentPositionMonthlyIncome("re-123861", 10)).not.toBeNull();
+    expect(presentPositionMonthlyIncome("re-123861", 10)).toBe(
+      (getPresentedMonthlyIncome("re-123861").cents ?? 0) * 10,
+    );
   });
 });
 
-describe("property presentation — unknown reasons (Slice 3)", () => {
-  it("classifies the 5 remaining unknown villas: all EUR mixed-currency (D11 owner-tax table locked 2026-09-13 — no unknown-owner-tax villa remains)", () => {
+describe("property presentation — unknown reasons (Slice 3, Option 1 FX)", () => {
+  it("no villa is unknown: all 24 present USD income with null unknownKind", () => {
     const kinds = new Map(
       listings
         .filter((l) => v1Monthly(l.id) == null)
         .map((l) => [l.id, getPresentedMonthlyIncome(l.id).unknownKind]),
     );
-    expect(kinds.size).toBe(5);
-    expect(
-      listings
-        .filter((l) => getFinancialModelV1(l.id)?.currency === "EUR")
-        .map((l) => kinds.get(l.id)),
-    ).toEqual(["eur_mixed_currency", "eur_mixed_currency", "eur_mixed_currency", "eur_mixed_currency", "eur_mixed_currency"]);
+    expect(kinds.size).toBe(0);
     for (const l of listings) {
-      if (v1Monthly(l.id) == null) {
-        expect(kinds.get(l.id), l.id).toBe("eur_mixed_currency");
-        expect(getFinancialModelV1(l.id)?.currency, l.id).toBe("EUR");
-      } else {
-        expect(getPresentedMonthlyIncome(l.id).unknownKind, l.id).toBeNull();
-      }
+      expect(v1Monthly(l.id), l.id).not.toBeNull();
+      expect(getPresentedMonthlyIncome(l.id).unknownKind, l.id).toBeNull();
+      expect(getPresentedMonthlyIncome(l.id).currency, l.id).toBe("USD");
     }
   });
 
-  it("every unknown villa carries the engine's stated reason (surfaced on the Income tab)", () => {
-    for (const l of listings.filter((x) => v1Monthly(x.id) == null)) {
-      expect(getFinancialModelV1(l.id)?.perShare.unknownReason, l.id).toBeTruthy();
+  it("every villa carries a known per-share figure (no unknownReason)", () => {
+    for (const l of listings) {
+      expect(getFinancialModelV1(l.id)?.perShare.unknownReason, l.id).toBeNull();
     }
   });
 

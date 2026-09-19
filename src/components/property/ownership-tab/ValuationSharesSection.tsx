@@ -93,10 +93,8 @@ export function ValuationSharesSection({ v1 }: { v1: FinancialModelV1PropertyMod
         <FactCell
           label={t("invOwnershipPerShare")}
           value={`1 / ${v1.totalShares.toLocaleString()}`}
-          // Exact fraction of the estate one share carries (e.g. 0.00125%).
-          caption={
-            v1.totalShares > 0 ? `${((1 / v1.totalShares) * 100).toString()}%` : null
-          }
+          // No percentage caption here — it lives on the hero share-price row
+          // (shared ownershipPct formatter), so this section never duplicates it.
           testId="ownership-valuation-per-share"
         />
       </div>

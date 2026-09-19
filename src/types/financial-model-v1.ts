@@ -11,13 +11,15 @@
 // - Profit allocation: owner 75% / operator 25%.
 // - Scenarios: 220 / 273 / 328 nights on the canonical ANR (never ADR).
 // - Share price: $100 nominal → total shares = valuation ÷ 100.
-// - No silent EUR→USD conversion. No invented FX, occupancy, ADR, or tax rates.
+// - EUR ANR converts to USD once via the approved fixed rate
+//   (APPROVED_EUR_USD_RATE, 1 EUR = 1.20 USD — Option 1 product decision).
+//   No other FX, occupancy, ADR, or tax rates are invented.
 // - UNKNOWN stays UNKNOWN. Guest-paid charges never reduce modeled profit.
 // - Per-share figures are PROJECTED (never guaranteed return / ROI / yield).
 //
 // Money convention: integer minor units (cents) internally, per repository convention.
 
-/** Rental-currency of a V1 property model. EUR properties are calculated in EUR. */
+/** Rental-currency of a V1 property model. Outputs are USD (EUR inputs convert via the approved fixed rate). */
 export type FinancialModelV1Currency = "USD" | "EUR";
 
 /** Canonical ANR scope, preserved verbatim from the approved dataset. */
@@ -113,9 +115,11 @@ export type FinancialModelV1ScenarioKey = "conservative" | "base" | "optimistic"
 /**
  * One evaluated V1 scenario. Amounts are integer minor units in `currency`, EXCEPT
  * `reserveCents` which is denominated in `reserveCurrency` (the valuation currency).
- * When the reserve currency differs from the rental currency, no approved FX exists,
- * so `subtractable` is false and every downstream figure is UNKNOWN (null) with
- * `unknownReason` set — rather than silently converting currencies.
+ * The canonical path converts EUR ANR to USD upstream via the approved fixed rate,
+ * so `currency` arrives as USD and the reserve stays subtractable. The
+ * non-subtractable branch is retained as a guard for direct non-USD callers —
+ * downstream figures stay UNKNOWN (null) with `unknownReason` set rather than
+ * converting silently at this layer.
  */
 export interface FinancialModelV1ScenarioResult {
   key: FinancialModelV1ScenarioKey | "average";
@@ -131,7 +135,7 @@ export interface FinancialModelV1ScenarioResult {
   /** 1.5% of property value, in `reserveCurrency` (F — reserve, modeled allocation). */
   reserveCents: number;
   reserveCurrency: "USD";
-  /** False when reserveCurrency !== currency (no approved FX → cannot subtract). */
+  /** False when reserveCurrency !== currency (guard for direct non-USD callers → cannot subtract). */
   reserveSubtractable: boolean;
   /** Gross − agency − operator − reserve. Null when reserve is not subtractable. */
   preTaxCents: number | null;

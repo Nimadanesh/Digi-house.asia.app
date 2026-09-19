@@ -75,8 +75,9 @@ export interface GrowthPotential {
   potentialValue: number;
   /**
    * Estimated growth percentage ((potential − current) / current × 100),
-   * rounded to one decimal. Null when the basis is a range (Grand) or when
-   * either value is unavailable — never derived from an invented current.
+   * rounded to one decimal, derived per villa for all 24 (Grand included).
+   * Null only when the basis is unavailable — never derived from an invented
+   * current.
    */
   potentialPct: number | null;
   /** Always "estimated": growth potential is estimated/research-derived. */
@@ -109,14 +110,19 @@ export function getValuationDisplay(propertyId: string): ValuationDisplay | null
 /**
  * Growth Potential for a runtime estate, or null when it cannot be honestly
  * derived (no canonical current, no research range, or legacy conflict).
- * Grand 2 BDM: $18M potential, no percentage (preserved PROMPT 03 presentation —
- * never labeled ROI/return/profit, never mixed with rental income).
+ * The percentage is per-villa derived for all 24 — ((research upper −
+ * current) / current) × 100, 1 decimal — including Grand 2 BDM ($18M vs $8M
+ * → +125%; supersedes the earlier no-percentage presentation). Estimated/
+ * research-derived only: never ROI/return/profit, never mixed with income.
  */
 export function getGrowthPotential(propertyId: string): GrowthPotential | null {
   if (propertyId === GRAND_2_BDM_RUNTIME_ID) {
+    // Same derived rule as every villa: research upper vs approved current.
+    const potentialPct =
+      Math.round(((GRAND_POTENTIAL_CENTS - GRAND_CURRENT_CENTS) / GRAND_CURRENT_CENTS) * 1000) / 10;
     return {
       potentialValue: GRAND_POTENTIAL_CENTS,
-      potentialPct: null,
+      potentialPct,
       provenance: "estimated",
       researchRange: { min: GRAND_RESEARCH_MIN_CENTS, max: GRAND_RESEARCH_MAX_CENTS },
     };

@@ -1,18 +1,20 @@
 "use client";
 // File responsibility: Ownership tab §2 — Growth Potential (structure §6.2 +
-// revision contract): the locked D10 assumed band as the primary large metric
-// (+3% to +5% per year, estimated/illustrative) with its source caption, and
-// the research-derived upper valuation estimate as a collapsed expandable row
-// (TaskRows pattern). Two distinct valuation concepts, clearly labeled, never
-// mixed with rental income. Facts come from the locked constants + canonical
-// layer; this section formats only.
+// revision contract): the per-villa derived estimate ((research upper −
+// current) / current, 1 decimal) as the primary large metric with its source
+// caption, and the research-derived upper valuation estimate as a collapsed
+// expandable row (TaskRows pattern). Two distinct valuation concepts, clearly
+// labeled, never mixed with rental income. Facts come from the canonical
+// GrowthPotential layer; this section formats only.
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { usd } from "@/lib/format";
-import { ESTATE_GROWTH_ASSUMPTION } from "@/lib/economics/estates/estate-page-constants";
+import { unavailableLabel } from "@/lib/availability";
+import { formatGrowthPct } from "@/lib/economics/estates/growth-potential";
 import type { GrowthPotential } from "@/lib/economics/estates/growth-potential";
 import { Block } from "@/components/common/Block";
+import { cn } from "@/lib/utils";
 
 export function GrowthPotentialSection({
   growthPotential,
@@ -21,7 +23,8 @@ export function GrowthPotentialSection({
 }) {
   const t = useTranslations("property");
   const [researchOpen, setResearchOpen] = useState(false);
-  const a = ESTATE_GROWTH_ASSUMPTION;
+  // Per-villa derived estimate; unknown ids stay honest-pending (never a band).
+  const pctText = formatGrowthPct(growthPotential?.potentialPct ?? null);
   return (
     <section className="space-y-2" data-testid="ownership-growth">
       <h2 className="px-0.5 text-[0.9375rem] font-normal text-foreground">
@@ -29,10 +32,13 @@ export function GrowthPotentialSection({
       </h2>
       <Block className="rounded-[12px] p-5 shadow-sm ring-1 ring-border/60">
         <p
-          className="whitespace-nowrap text-[1.375rem] font-bold leading-none tracking-[-0.02em] tnum text-foreground"
+          className={cn(
+            "whitespace-nowrap text-[1.375rem] font-bold leading-none tracking-[-0.02em] tnum",
+            pctText == null ? "text-muted-foreground" : "text-foreground",
+          )}
           data-testid="ownership-growth-assumed"
         >
-          {a.displayLabel}
+          {pctText ?? unavailableLabel("backend_absent")}
         </p>
         {/* Single short caption — the long locked paragraph was duplicated copy. */}
         <p className="pt-1.5 text-xs leading-relaxed text-muted-foreground">

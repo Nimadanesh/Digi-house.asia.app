@@ -111,7 +111,8 @@ export function PropertyDetail({
   // Single source of truth for "current share price" — computed ONCE here and
   // fed to every price display (lib/property-price). No section re-derives it.
   const currentPriceUsd = getCurrentSharePrice(listing, { bestAskUsd: orderBook?.bestAskUsd });
-  // V1 canonical fractionalization for the hero fraction (1/N of the estate).
+  // V1 canonical fractionalization for the hero share line (Ownership-tab
+  // percentage for 1 share, e.g. 0.0013% for Grand).
   // Falls back to the listing supply only without a V1 input (never the 24).
   const v1ForHero = getFinancialModelV1(listing.id);
   const heroTotalShares = v1ForHero?.totalShares ?? listing.totalShares;
@@ -154,6 +155,7 @@ export function PropertyDetail({
           estateValueDisplay={estateVm.valuationDisplay}
           canonicalName={estateVm.identity?.name}
           canonicalLocation={estateVm.identity?.location}
+          canonicalCountry={estateVm.estate24?.location.country ?? null}
           totalSharesOverride={heroTotalShares}
         />
       </div>

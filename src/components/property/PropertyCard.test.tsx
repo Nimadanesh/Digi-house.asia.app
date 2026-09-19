@@ -87,14 +87,15 @@ describe("PropertyCard — marketplace villa card with phase variant", () => {
 
   it("income unknown: Data pending chip, never a fabricated figure", () => {
     // Pending follows the presentation layer (V1 unknown), not fixture fields.
-    // D11 locked 2026-09-13: remaining V1-unknowns are the EUR villas.
+    // Option 1 FX (2026-09-18): all 24 canonical villas compute, so pending is
+    // exercised via a synthetic unknown id (no V1 input → null, never 0).
     const noIncome = toMarketplaceEstate({
       ...listing,
-      id: "re-130901",
+      id: "test-unknown-villa",
     });
     render(<PropertyCard estate={noIncome} nowMs={Date.UTC(2026, 6, 26)} />);
     expect(screen.getByTestId("card-income-pending")).toBeInTheDocument();
-    expect(screen.getByText("Data pending")).toBeInTheDocument();
+    expect(screen.getAllByText("Data pending").length).toBeGreaterThanOrEqual(1);
     expect(screen.queryByText("$0.00")).not.toBeInTheDocument();
   });
 

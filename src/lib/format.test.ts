@@ -1,6 +1,6 @@
 import { describe, expect, it, vi, afterEach } from "vitest";
 import {
-  usd, usdCompact, ton, shortAddr, pct, weekLabel, weeklyRent, projectedYield,
+  usd, usdCompact, ton, shortAddr, pct, ownershipPct, weekLabel, weeklyRent, projectedYield,
   annualYieldRatio, annualFromWeekly, payoutCountdown, payoutCountdownLong, payoutCountdownDhms,
   timeAgo,
 } from "@/lib/format";
@@ -37,6 +37,15 @@ describe("format", () => {
     expect(pct(0.005)).toBe("0.5%");
     expect(pct(0.5)).toBe("50%");
     expect(pct(1)).toBe("100%");
+  });
+
+  it("ownershipPct renders (1/total)*100 with max 4 decimals, zeros stripped", () => {
+    expect(ownershipPct(80000)).toBe("0.0013%");
+    expect(ownershipPct(120000)).toBe("0.0008%");
+    expect(ownershipPct(250000)).toBe("0.0004%");
+    expect(ownershipPct(1000)).toBe("0.1%");
+    expect(ownershipPct(0)).toBeNull();
+    expect(ownershipPct(-5)).toBeNull();
   });
 
   it("weekLabel renders 'Mon D' from an ISO Monday", () => {

@@ -13,7 +13,7 @@ import { haptics } from "@/lib/telegram/haptics";
 import { cn } from "@/lib/utils";
 import { Block } from "@/components/common/Block";
 import { FactRow } from "@/components/common/FactRow";
-import { ImageLightbox } from "./ImageLightbox";
+import { ImageLightbox } from "../ImageLightbox";
 
 /** Bios render 3 lines by default; longer bios get the expand toggle. */
 const BIO_CLAMP_CHARS = 220;

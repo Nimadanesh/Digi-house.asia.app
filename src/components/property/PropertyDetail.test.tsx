@@ -318,7 +318,10 @@ describe("PropertyDetail — Phase 9 Slice 2 (4-tab Estate Detail)", () => {
     // No yield-first hero number.
     expect(screen.queryByTestId("hero-apy")).not.toBeInTheDocument();
     expect(screen.getByTestId("hero-price")).toHaveTextContent("$125.00");
-    expect(screen.getByTestId("hero-fraction")).toHaveTextContent(/1 share ≈ 1\/[\d,]+ of the estate/);
+    // Hero share line mirrors the Ownership-tab percentage (Grand V1: 80,000
+    // shares → shared ownershipPct format → "0.0013").
+    expect(screen.getByTestId("hero-fraction")).toHaveTextContent("1 share ≈ 0.0013%");
+    expect(screen.queryByText(/of the estate/)).not.toBeInTheDocument();
     // No verification chip without real data.
     expect(screen.queryByTestId("hero-verified")).not.toBeInTheDocument();
   });

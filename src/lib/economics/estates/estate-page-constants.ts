@@ -72,7 +72,10 @@ export const ESTATE_HISTORICAL_PERFORMANCE: EstateHistoricalPerformanceDisclosur
   pendingLine: "Data will be available after first 12 months of operation.",
 };
 
-/** D10 — locked growth assumption (illustrative, never a forecast). */
+/** D10 — locked growth assumption (illustrative, never a forecast).
+ * Retained as the locked source/evidence disclosure. Display surfaces no
+ * longer use min/max for figures — they render the per-villa derived
+ * GrowthPotential estimate ((research upper − current) / current). */
 export const ESTATE_GROWTH_ASSUMPTION: EstateGrowthAssumption = {
   minPctPerYear: 3,
   maxPctPerYear: 5,

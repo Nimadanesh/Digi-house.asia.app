@@ -39,8 +39,10 @@ import { getCurrentSharePrice } from "@/lib/property-price";
 /**
  * Why presented monthly income is UNKNOWN (Slice 3). Classified from the V1
  * input — never string-matched, never invented:
- * - eur_mixed_currency: rental income is non-USD while the reserve is USD
- *   denominated and no approved FX rate exists;
+ * - eur_mixed_currency: retained kind for direct non-USD callers / legacy
+ *   classification. The canonical path converts EUR ANR via the approved fixed
+ *   rate (APPROVED_EUR_USD_RATE, 1 EUR = 1.20 USD), so no canonical villa
+ *   currently returns this kind;
  * - unknown_owner_tax: the V1 input records explicitly unknown owner-side tax
  *   (listing taxes carry revenueTreatment UNKNOWN).
  */

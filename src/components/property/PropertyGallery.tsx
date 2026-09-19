@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { haptics } from "@/lib/telegram/haptics";
+import { ImageLightbox } from "./ImageLightbox";
 
 export function PropertyGallery({
   images,
@@ -19,7 +20,13 @@ export function PropertyGallery({
   const t = useTranslations("property");
   const slides = images.length > 0 ? images : ["/images/properties/p1.png"];
   const [index, setIndex] = useState(0);
+  // Fullscreen viewer: the tapped slide index, or null while closed. The
+  // lightbox mounts fresh per open, so it always starts on the tapped photo.
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const startX = useRef<number | null>(null);
+  // A swipe ends with a click on the slide — suppress that click so a swipe
+  // never opens the viewer (reset on the next touch start; mouse taps unaffected).
+  const suppressTap = useRef(false);
 
   const go = useCallback((next: number) => {
     const n = slides.length;
@@ -28,9 +35,11 @@ export function PropertyGallery({
   }, [slides.length]);
 
   return (
+    <>
     <div
       className="relative -mx-4 aspect-[16/10] overflow-hidden bg-surface-2"
       onTouchStart={(e) => {
+        suppressTap.current = false;
         startX.current = e.touches[0]?.clientX ?? null;
       }}
       onTouchEnd={(e) => {
@@ -39,6 +48,7 @@ export function PropertyGallery({
         const dx = end - startX.current;
         startX.current = null;
         if (Math.abs(dx) < 40) return;
+        suppressTap.current = true;
         go(dx < 0 ? index + 1 : index - 1);
       }}
       data-testid="property-gallery"
@@ -48,7 +58,18 @@ export function PropertyGallery({
         style={{ transform: `translateX(-${index * 100}%)` }}
       >
         {slides.map((src, i) => (
-          <div key={`${src}-${i}`} className="relative h-full w-full shrink-0">
+          <button
+            key={`${src}-${i}`}
+            type="button"
+            aria-label={t("showImage", { n: i + 1 })}
+            data-testid={`gallery-slide-${i + 1}`}
+            onClick={() => {
+              if (suppressTap.current) return;
+              haptics.selection();
+              setLightboxIndex(i);
+            }}
+            className="relative h-full w-full shrink-0 cursor-zoom-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/70"
+          >
             <Image
               src={src}
               alt={`${title} photo ${i + 1}`}
@@ -57,7 +78,7 @@ export function PropertyGallery({
               sizes="(max-width: 480px) 100vw, 480px"
               priority={i === 0}
             />
-          </div>
+          </button>
         ))}
       </div>
       {/* Layer-1: soft bottom gradient — the photo melts into the content like
@@ -113,5 +134,17 @@ export function PropertyGallery({
         </>
       ) : null}
     </div>
+    {/* Fullscreen viewer — sibling of the gallery root so its touches never
+        reach the inline swipe handlers; mounts fresh per open. */}
+    {lightboxIndex != null ? (
+      <ImageLightbox
+        images={slides}
+        imageAlts={slides.map((_, i) => `${title} photo ${i + 1}`)}
+        initialIndex={lightboxIndex}
+        alt={title}
+        onClose={() => setLightboxIndex(null)}
+      />
+    ) : null}
+    </>
   );
 }
