@@ -123,7 +123,7 @@ describe("marketplace view model — canonical identity", () => {
       provenance: "estimated",
     });
     expect(grand.growthPotential?.potentialValue).toBe(1_800_000_000);
-    expect(grand.growthPotential?.potentialPct).toBeNull();
+    expect(grand.growthPotential?.potentialPct).toBe(125);
 
     const aerial = toMarketplaceEstate(fixture("re-126855"));
     expect(aerial.propertyType).toBe("Private Island Estate");

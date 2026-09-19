@@ -28,10 +28,15 @@ export function OwnerStayCard({
       <h2 className="px-0.5 text-[0.9375rem] font-normal text-foreground">
         {t("ownerStayTitle")}
       </h2>
-      <Block className="space-y-3 p-4">
-        <div className="flex items-start gap-2.5">
-          <BedDouble size={18} strokeWidth={1.75} className="mt-0.5 shrink-0 text-muted-foreground" aria-hidden />
-          <p className="line-clamp-2 text-sm leading-relaxed text-foreground">
+      <Block className="space-y-3 rounded-[12px] p-5 shadow-sm ring-1 ring-border/50">
+        <div className="flex items-center gap-2.5">
+          <span
+            className="flex size-8 shrink-0 items-center justify-center rounded-full bg-surface-2/60 text-muted-foreground ring-1 ring-border/40 [&>svg]:block"
+            aria-hidden
+          >
+            <BedDouble size={15} strokeWidth={1.75} />
+          </span>
+          <p className="line-clamp-2 min-w-0 text-[0.84375rem] font-medium leading-snug tracking-[-0.01em] text-foreground">
             {isOwner ? t("ownerStayOwnerIntro") : t("ownerStayNonOwner")}
           </p>
         </div>
@@ -40,7 +45,7 @@ export function OwnerStayCard({
           <div className="space-y-3">
             {/* Availability is UNAVAILABLE (Slice 1 semantics) — honest chip, no number. */}
             <span
-              className="inline-flex rounded-full bg-surface-2 px-2.5 py-1 text-xs text-muted-foreground"
+              className="inline-flex items-center whitespace-nowrap rounded-full bg-surface-2/60 px-2.5 py-[5px] text-[0.6875rem] font-semibold leading-none tracking-wide text-muted-foreground ring-1 ring-border/50"
               data-testid="owner-stay-availability"
             >
               {unavailableLabel(stay?.unavailableReason ?? "backend_absent")}
@@ -51,7 +56,7 @@ export function OwnerStayCard({
             <button
               type="button"
               disabled
-              className="flex h-[46px] w-full items-center justify-center rounded-[12px] bg-surface-2 text-sm font-semibold text-muted-foreground"
+              className="flex h-[44px] w-full items-center justify-center rounded-[12px] bg-surface-2 text-sm font-semibold text-muted-foreground ring-1 ring-border/50"
               data-testid="owner-stay-calendar-cta"
             >
               {t("ownerStayCalendarCta")}

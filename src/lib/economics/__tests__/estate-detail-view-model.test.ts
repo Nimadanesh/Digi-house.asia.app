@@ -407,7 +407,7 @@ describe("PROMPT 03: canonical property facts on the view model", () => {
     expect(vm.descriptionFull).toContain("ocean villa");
   });
 
-  it("shows Current Estimated Value as exactly $8M single with $18M growth (no percentage) for Grand", () => {
+  it("shows Current Estimated Value as exactly $8M single with derived +125% growth for Grand", () => {
     const vm = buildEstateDetailViewModel(makeListing({ id: "re-128862" }));
     expect(vm.valuationDisplay).toEqual({
       kind: "single",
@@ -415,7 +415,7 @@ describe("PROMPT 03: canonical property facts on the view model", () => {
       provenance: "estimated",
     });
     expect(vm.growthPotential?.potentialValue).toBe(1_800_000_000);
-    expect(vm.growthPotential?.potentialPct).toBeNull();
+    expect(vm.growthPotential?.potentialPct).toBe(125);
     expect(vm.growthPotential?.provenance).toBe("estimated");
     // Share math keeps the approved $8M seed (never the $13.5M research central).
     expect(vm.valuation).toEqual({ value: 800_000_000, provenance: "estimated" });

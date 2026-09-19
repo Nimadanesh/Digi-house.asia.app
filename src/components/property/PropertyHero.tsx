@@ -7,7 +7,7 @@
 import { useId, useState } from "react";
 import { MapPin, Check, BadgeCheck } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { pct, usd, usdCompact } from "@/lib/format";
+import { ownershipPct, pct, usd, usdCompact } from "@/lib/format";
 import type { Listing } from "@/types/property";
 import type { EstateVerification } from "@/types/verification";
 import { isVerified } from "@/types/verification";
@@ -36,6 +36,7 @@ export function PropertyHero({
   market,
   canonicalName,
   canonicalLocation,
+  canonicalCountry,
   totalSharesOverride,
 }: {
   listing: Listing;
@@ -78,6 +79,12 @@ export function PropertyHero({
   canonicalName?: string | null;
   canonicalLocation?: string | null;
   /**
+   * Canonical Estate24 country word (PROMPT 02 location hierarchy) — the hero
+   * location line shows ONLY this (the full address lives on Overview).
+   * Absent → full location string (unknown ids only; never for the 24).
+   */
+  canonicalCountry?: string | null;
+  /**
    * V1 canonical total shares (PROMPT 05: valuation ÷ $100, e.g. 80,000 for
    * Grand). Preferred over the listing supply count for the ownership
    * fraction; absent → listing total (unknown ids only).
@@ -90,9 +97,16 @@ export function PropertyHero({
   // user-visible name/location; the fixture fallback serves unknown ids only.
   const displayName = canonicalName ?? listing.title;
   const displayLocation = canonicalLocation ?? listing.location;
+  // Hero location line shows ONLY the country word (full address lives on the
+  // Overview tab); unknown ids without a country keep the full string.
+  const displayRegion = canonicalCountry ?? displayLocation;
   // PROMPT 05 fractionalization — the V1 canonical total (80,000 for Grand)
   // drives the ownership fraction; the trading supply count never does.
   const fractionTotal = totalSharesOverride ?? listing.totalShares;
+  // Hero share line reuses the Ownership-tab Valuation & Shares percentage
+  // verbatim — the shared ownershipPct formatter (max 4 decimals, display
+  // only; share math untouched).
+  const fractionPctText = ownershipPct(fractionTotal);
   // Single source of truth — same value as Metrics / Calculator / Chart / Sticky CTA.
   const buyPriceUsd = getCurrentSharePrice(listing, { bestAskUsd });
   const verified = isVerified(verification);
@@ -167,7 +181,7 @@ export function PropertyHero({
           DEC-013: an at-a-glance ownership badge rides beside the name when the
           user holds shares of THIS estate. */}
       <div className="flex items-start gap-2">
-        <h1 className="min-w-0 text-[1.0625rem] font-medium leading-snug tracking-tight text-balance text-foreground">{displayName}</h1>
+        <h1 className="min-w-0 text-[1.0625rem] font-semibold leading-snug tracking-tight text-balance text-foreground">{displayName}</h1>
         {ownedShares > 0 ? (
           <span
             className="mt-0.5 inline-flex shrink-0 items-center gap-1 rounded-full bg-success/12 px-2 py-0.5 text-xs font-semibold text-success"
@@ -183,7 +197,7 @@ export function PropertyHero({
       <div className="flex items-center gap-2">
         <p className="flex min-w-0 items-center gap-1 text-sm text-muted-foreground">
           <MapPin size={15} className="shrink-0" aria-hidden />
-          <span className="truncate">{displayLocation}</span>
+          <span className="truncate" data-testid="hero-location">{displayRegion}</span>
         </p>
         {verified ? (
           <span
@@ -206,7 +220,9 @@ export function PropertyHero({
             {usd(buyPriceUsd)}
           </span>
           <span className="text-[0.8125rem] text-muted-foreground" data-testid="hero-fraction">
-            {t("heroShareFraction", { total: fractionTotal.toLocaleString() })}
+            {fractionPctText != null
+              ? t("heroShareOwnership", { pct: fractionPctText })
+              : t("heroShareFraction", { total: fractionTotal.toLocaleString() })}
           </span>
         </div>
 
@@ -215,7 +231,7 @@ export function PropertyHero({
             the pre-attentive scarcity signal, the count is the readable one. */}
         {isPrimary && !soldOut ? (
           <div
-            className="rounded-[10px] bg-warning/12 px-3 py-2.5"
+            className="rounded-[10px] bg-warning/12 px-3 py-2.5 shadow-sm ring-1 ring-border/50"
             data-testid="funding-bar"
           >
             <div className="flex items-baseline justify-between gap-2">
@@ -260,7 +276,7 @@ export function PropertyHero({
               haptics.selection();
               setValueOpen(true);
             }}
-            className="flex w-fit items-center gap-1.5 text-sm tnum text-muted-foreground transition-transform duration-[120ms] ease-out active:scale-[0.98]"
+            className="flex w-fit items-center gap-1.5 text-sm tnum text-muted-foreground transition-transform duration-150 ease-out active:scale-[0.98]"
             data-testid="hero-estate-value"
           >
             {t("estateValue")}:{" "}
@@ -282,7 +298,7 @@ export function PropertyHero({
         type="button"
         onClick={onCta}
         disabled={ctaDisabled}
-        className="flex h-[50px] w-full items-center justify-center rounded-[12px] bg-primary text-[0.9375rem] font-semibold text-primary-foreground transition-transform duration-[120ms] ease-out active:scale-[0.98] disabled:opacity-50"
+        className="flex h-[50px] w-full items-center justify-center rounded-[12px] bg-primary text-[0.9375rem] font-semibold text-primary-foreground shadow-sm transition-transform duration-150 ease-out active:scale-[0.98] disabled:opacity-50"
         data-testid="hero-cta"
       >
         {ctaLabel}

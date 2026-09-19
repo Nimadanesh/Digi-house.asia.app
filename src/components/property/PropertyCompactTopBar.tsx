@@ -35,8 +35,8 @@ export function PropertyCompactTopBar({
     >
       <div
         className={cn(
-          "compact-topbar pointer-events-auto flex h-11 items-center gap-1 bg-background/95 px-2 backdrop-blur-sm",
-          "border-b border-border",
+          "compact-topbar pointer-events-auto flex h-11 items-center gap-1 bg-background/95 px-2 shadow-sm backdrop-blur-sm transition-all duration-150 ease-out",
+          "border-b border-border/50",
           shown ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1 pointer-events-none",
         )}
       >
@@ -49,11 +49,11 @@ export function PropertyCompactTopBar({
           }}
           aria-label="Back"
           data-testid="compact-topbar-back"
-          className="flex size-11 shrink-0 items-center justify-center text-foreground active:scale-[0.97] transition-transform duration-[120ms] ease-out"
+          className="flex size-11 shrink-0 items-center justify-center text-foreground active:scale-[0.97] transition-transform duration-150 ease-out"
         >
           <ChevronLeft size={22} strokeWidth={1.75} className="rtl:rotate-180" />
         </button>
-        <span className="truncate text-[0.9375rem] font-semibold text-foreground" data-testid="compact-topbar-title">
+        <span className="truncate text-[0.9375rem] font-semibold tracking-[-0.01em] text-foreground" data-testid="compact-topbar-title">
           {title}
         </span>
       </div>

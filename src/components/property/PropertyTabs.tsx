@@ -1,5 +1,5 @@
 // File responsibility: property tab strip (REDESIGN-SPEC §7). Horizontal-scroll on
-// mobile, roving tabindex keyboard support, Telegram chip styling (flat, no shadow).
+// mobile, roving tabindex keyboard support, premium filter-chip styling.
 // Safe interaction per spec §21 — tab selection is immediate, haptic 'selection'.
 //
 // Phase 9 (UI Mapping §5.1): 5 → 4 tabs — Estate / Income / Ownership / Details.
@@ -66,7 +66,7 @@ export function PropertyTabs({
       role="tablist"
       aria-label={t("tabsLabel")}
       onKeyDown={handleKeyDown}
-      className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 py-1"
+      className="no-scrollbar -mx-4 flex gap-1 overflow-x-auto px-4 py-1.5"
       data-testid="property-tabs"
     >
       {PROPERTY_TABS.map((tab) => {
@@ -87,10 +87,10 @@ export function PropertyTabs({
               onChange(tab);
             }}
             className={cn(
-              "h-9 shrink-0 rounded-full px-4 text-[0.8125rem] font-medium transition-colors duration-200 ease-out active:scale-[0.97]",
+              "h-9 shrink-0 rounded-full px-3.5 text-[0.8125rem] font-medium leading-none tracking-[-0.01em] transition-[background-color,color,box-shadow,transform] duration-200 ease-out active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40",
               selected
-                ? "bg-primary text-primary-foreground font-semibold"
-                : "bg-surface-2 text-muted-foreground",
+                ? "bg-card font-semibold text-foreground shadow-[0_1px_2px_rgba(0,0,0,0.08)] ring-1 ring-border/60"
+                : "bg-transparent text-muted-foreground ring-1 ring-transparent hover:bg-card/70 hover:text-foreground",
             )}
             data-testid={`tab-${tab}`}
           >

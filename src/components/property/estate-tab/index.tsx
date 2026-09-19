@@ -1,6 +1,6 @@
 // File responsibility: compose the Estate tab (Estate Page Structure §4 —
 // desire): Why this estate → Key Specs → Amenities → Location (with the
-// protected Reserve CTA closing the card). The collapsed resale block
+// protected Reserve CTA closing the card) → Map (anchor villas only). The collapsed resale block
 // (protected secondary-market surface, hero "View Resale" entry target) is
 // preserved for secondary/sold-out listings — for villa 1 it does not render.
 // Thesis/investment panels moved to Income/Ownership per the locked structure.
@@ -16,6 +16,7 @@ import { EstateWhySection } from "@/components/property/estate-tab/EstateWhySect
 import { EstateSpecsSection } from "@/components/property/estate-tab/EstateSpecsSection";
 import { EstateAmenitiesSection } from "@/components/property/estate-tab/EstateAmenitiesSection";
 import { EstateLocationSection } from "@/components/property/estate-tab/EstateLocationSection";
+import { EstateMapSection } from "@/components/property/estate-tab/EstateMapSection";
 
 export function EstateTabPanel({
   listing,
@@ -73,6 +74,7 @@ export function EstateTabPanel({
       <EstateSpecsSection record={record} propertyType={estateVm.propertyType} />
       <EstateAmenitiesSection record={record} />
       <EstateLocationSection detail={locationDetail} reserveUrl={estateVm.rentalEscapesUrl} />
+      <EstateMapSection propertyId={listing.id} />
 
       {/* Protected: secondary/sold-out resale market surface (hero CTA target). */}
       {hasResaleSurface ? (

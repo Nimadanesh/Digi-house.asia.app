@@ -16,8 +16,9 @@
 // (15–27; CONOTUR may reduce), Jamaica 25%, Mexico 27.5% (20–35), Thailand 17.5%
 // (0–35), Italy 23.5% (21–26 cedolare), France 32.5% (20–45+), Austria 27.5%
 // (0–55). Every entry is status: ASSUMPTION; ranges are applied at their
-// midpoint; seek-personal-advice language is mandatory. EUR properties stay
-// gross-side-only under the no-FX rule. D9 secondary-market items were removed
+// midpoint; seek-personal-advice language is mandatory. EUR ANR converts to USD
+// via the approved fixed rate (APPROVED_EUR_USD_RATE, 1 EUR = 1.20 USD —
+// Option 1 product decision) at the engine boundary. D9 secondary-market items were removed
 // from this wave (locked) — nothing here touches them. Any dataset drift
 // (missing ANR, missing valuation, unmapped listing, unexpected currency)
 // throws loudly — V1 never guesses.
@@ -25,7 +26,7 @@
 // Locked V1 facts re-stated for auditability:
 // - Grand 2 BDM Ocean Pool Villa current estimated value = $8,000,000 (single number).
 // - Reserve is a modeled allocation, not a realized expense. Valuations are
-//   USD-denominated; EUR properties are calculated in EUR with no FX invention.
+//   USD-denominated; EUR ANR inputs convert to USD via the approved fixed rate.
 
 import type {
   FinancialModelV1Anr,
@@ -159,15 +160,15 @@ const OWNER_TAX_BY_LISTING_ID: Readonly<Record<string, FinancialModelV1OwnerTax>
     note: "State top marginal rate up to 13.3% applied; federal tax still applies and is not separately modeled — combined effective is often higher. Product model assumption, not tax/legal advice. Seek personal tax advice.",
   },
   // ── D11 midpoint assumptions (ranges applied at midpoint, per locked rule) ──
-  // Italy — 21–26% band (cedolare secca regime). EUR currency: reachable only
-  // when pre-tax profit is computable (no-FX rule keeps these gross-side-only).
+  // Italy — 21–26% band (cedolare secca regime). EUR ANR converts via the
+  // approved fixed rate (1 EUR = 1.20 USD — Option 1 product decision).
   "108924": {
     kind: "rate",
     rate: 0.235,
     basis: "PRE_TAX_PROFIT",
     status: "ASSUMPTION",
     jurisdiction: "Italy",
-    note: "21–26% band on net rental income (cedolare secca regime); midpoint applied. EUR rental currency — applies only when pre-tax profit is computable (no-FX rule). Product model assumption, not tax/legal advice. Seek personal tax advice.",
+    note: "21–26% band on net rental income (cedolare secca regime); midpoint applied. EUR ANR converts via the approved fixed rate (1 EUR = 1.20 USD). Product model assumption, not tax/legal advice. Seek personal tax advice.",
   },
   "109098": {
     kind: "rate",
@@ -175,7 +176,7 @@ const OWNER_TAX_BY_LISTING_ID: Readonly<Record<string, FinancialModelV1OwnerTax>
     basis: "PRE_TAX_PROFIT",
     status: "ASSUMPTION",
     jurisdiction: "Italy",
-    note: "21–26% band on net rental income (cedolare secca regime); midpoint applied. EUR rental currency — applies only when pre-tax profit is computable (no-FX rule). Product model assumption, not tax/legal advice. Seek personal tax advice.",
+    note: "21–26% band on net rental income (cedolare secca regime); midpoint applied. EUR ANR converts via the approved fixed rate (1 EUR = 1.20 USD). Product model assumption, not tax/legal advice. Seek personal tax advice.",
   },
   // France — 20–45%+ progressive band (after abatement).
   "123861": {
@@ -184,7 +185,7 @@ const OWNER_TAX_BY_LISTING_ID: Readonly<Record<string, FinancialModelV1OwnerTax>
     basis: "PRE_TAX_PROFIT",
     status: "ASSUMPTION",
     jurisdiction: "France",
-    note: "20–45%+ progressive band (after abatement); midpoint applied. EUR rental currency — applies only when pre-tax profit is computable (no-FX rule). Product model assumption, not tax/legal advice. Seek personal tax advice.",
+    note: "20–45%+ progressive band (after abatement); midpoint applied. EUR ANR converts via the approved fixed rate (1 EUR = 1.20 USD). Product model assumption, not tax/legal advice. Seek personal tax advice.",
   },
   "123919": {
     kind: "rate",
@@ -192,7 +193,7 @@ const OWNER_TAX_BY_LISTING_ID: Readonly<Record<string, FinancialModelV1OwnerTax>
     basis: "PRE_TAX_PROFIT",
     status: "ASSUMPTION",
     jurisdiction: "France",
-    note: "20–45%+ progressive band (after abatement); midpoint applied. EUR rental currency — applies only when pre-tax profit is computable (no-FX rule). Product model assumption, not tax/legal advice. Seek personal tax advice.",
+    note: "20–45%+ progressive band (after abatement); midpoint applied. EUR ANR converts via the approved fixed rate (1 EUR = 1.20 USD). Product model assumption, not tax/legal advice. Seek personal tax advice.",
   },
   // Austria — 0–55% progressive band.
   "130901": {
@@ -201,7 +202,7 @@ const OWNER_TAX_BY_LISTING_ID: Readonly<Record<string, FinancialModelV1OwnerTax>
     basis: "PRE_TAX_PROFIT",
     status: "ASSUMPTION",
     jurisdiction: "Austria",
-    note: "0–55% progressive band; midpoint applied. EUR rental currency — applies only when pre-tax profit is computable (no-FX rule). Product model assumption, not tax/legal advice. Seek personal tax advice.",
+    note: "0–55% progressive band; midpoint applied. EUR ANR converts via the approved fixed rate (1 EUR = 1.20 USD). Product model assumption, not tax/legal advice. Seek personal tax advice.",
   },
   // Dominican Republic — 15–27% band; CONOTUR exemption may reduce to 0%.
   "122422": {

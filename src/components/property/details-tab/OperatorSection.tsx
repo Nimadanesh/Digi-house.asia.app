@@ -13,7 +13,7 @@ import { haptics } from "@/lib/telegram/haptics";
 import { cn } from "@/lib/utils";
 import { Block } from "@/components/common/Block";
 import { FactRow } from "@/components/common/FactRow";
-import { ImageLightbox } from "./ImageLightbox";
+import { ImageLightbox } from "../ImageLightbox";
 
 /** Bios render 3 lines by default; longer bios get the expand toggle. */
 const BIO_CLAMP_CHARS = 220;
@@ -30,9 +30,9 @@ export function OperatorSection({ propertyId }: { propertyId: string }) {
       <h2 className="px-0.5 text-[0.9375rem] font-normal text-foreground">
         {t("operatorTitle")}
       </h2>
-      <Block className="p-4" data-testid="details-operator-card">
+      <Block className="rounded-[12px] p-5 shadow-sm ring-1 ring-border/50" data-testid="details-operator-card">
         <div className="flex min-w-0 items-center gap-3">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-surface-2 text-[0.9375rem] font-semibold text-foreground">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-surface-2 text-[0.9375rem] font-semibold text-foreground ring-1 ring-border/50">
             {company.name
               .split(" ")
               .map((word) => word[0])
@@ -40,8 +40,8 @@ export function OperatorSection({ propertyId }: { propertyId: string }) {
               .join("")}
           </div>
           <div className="min-w-0">
-            <p className="truncate text-sm font-semibold text-foreground">{company.name}</p>
-            <p className="truncate text-xs text-muted-foreground">
+            <p className="truncate text-sm font-semibold tracking-[-0.01em] text-foreground">{company.name}</p>
+            <p className="truncate pt-0.5 text-xs text-muted-foreground">
               {company.kind} · {company.portfolioClaim}
             </p>
           </div>
@@ -54,7 +54,7 @@ export function OperatorSection({ propertyId }: { propertyId: string }) {
               setPhotoOpen(true);
             }}
             aria-label={t("operatorPhotoAria", { name: specialist.fullName })}
-            className="shrink-0 rounded-full transition-transform duration-[120ms] ease-out active:scale-[0.96]"
+            className="shrink-0 rounded-full transition-transform duration-150 ease-out active:scale-[0.96]"
             data-testid="details-operator-photo-trigger"
           >
             <Image
@@ -62,18 +62,18 @@ export function OperatorSection({ propertyId }: { propertyId: string }) {
               alt={specialist.fullName}
               width={48}
               height={48}
-              className="h-12 w-12 rounded-full object-cover"
+              className="h-12 w-12 rounded-full object-cover ring-1 ring-border/50"
               data-testid="details-operator-photo"
             />
           </button>
           <div className="min-w-0">
             <p
-              className="truncate text-sm font-semibold text-foreground"
+              className="truncate text-sm font-semibold tracking-[-0.01em] text-foreground"
               data-testid="details-operator-name"
             >
               {specialist.fullName}
             </p>
-            <p className="truncate text-xs text-muted-foreground">{specialist.title}</p>
+            <p className="truncate pt-0.5 text-xs text-muted-foreground">{specialist.title}</p>
           </div>
         </div>
         <div className="pt-2" data-testid="details-operator-bio">
@@ -93,14 +93,14 @@ export function OperatorSection({ propertyId }: { propertyId: string }) {
                 haptics.selection();
                 setBioOpen((v) => !v);
               }}
-              className="mt-0.5 text-xs font-medium text-primary"
+              className="mt-0.5 text-xs font-medium text-primary transition-colors duration-200 ease-out hover:text-primary/80"
               data-testid="details-operator-bio-toggle"
             >
               {bioOpen ? t("documentsShowLess") : t("bioShowMore")}
             </button>
           ) : null}
         </div>
-        <div className="pt-2">
+        <div className="mt-3 border-t border-border/50 pt-1">
           <FactRow label={t("operatorPhone")} value={company.phone} />
           <FactRow label={t("operatorEmail")} value={company.email} />
         </div>

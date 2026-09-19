@@ -3,7 +3,8 @@
 // Covers the Critical Valuation Rule (Grand 2 BDM), the General Growth
 // Potential Rule, and the §12 validation bullets that are data-assertable:
 // no invented ADR/occupancy/revenue, no legacy $82M, Grand band + $18M
-// potential, $13.5M as research evidence only, no Grand percentage.
+// potential, $13.5M as research evidence only, per-villa derived percentages
+// for all 24 (Grand included).
 import { describe, expect, it } from "vitest";
 
 import { PROPERTIES } from "@/lib/mock/seed/properties";
@@ -47,9 +48,9 @@ describe("PROMPT 05: Grand 2 BDM critical valuation rule ($8M single)", () => {
     expect(growth.researchRange).toEqual({ min: 960_000_000, max: 1_800_000_000 });
   });
 
-  it("calculates NO Growth Potential percentage for Grand (preserved presentation)", () => {
-    expect(getGrowthPotential(GRAND_2_BDM_RUNTIME_ID)!.potentialPct).toBeNull();
-    expect(formatGrowthPct(getGrowthPotential(GRAND_2_BDM_RUNTIME_ID)!.potentialPct)).toBeNull();
+  it("derives the Growth Potential percentage for Grand too: $18M vs $8M → +125%", () => {
+    expect(getGrowthPotential(GRAND_2_BDM_RUNTIME_ID)!.potentialPct).toBe(125);
+    expect(formatGrowthPct(getGrowthPotential(GRAND_2_BDM_RUNTIME_ID)!.potentialPct)).toBe("+125%");
   });
 
   it("keeps $13.5M as research evidence, never as the current product value", () => {

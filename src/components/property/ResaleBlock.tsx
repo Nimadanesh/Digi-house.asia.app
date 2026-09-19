@@ -59,17 +59,17 @@ export function ResaleBlock({
         type="button"
         aria-expanded={open}
         onClick={() => onOpenChange(!open)}
-        className="flex w-full items-center justify-between rounded-[12px] bg-surface-2 px-4 py-3 text-left"
+        className="flex w-full items-center justify-between rounded-[12px] bg-surface-2 px-4 py-3 text-left shadow-sm ring-1 ring-border/50 transition-all duration-150 ease-out hover:bg-surface-2/70 active:scale-[0.99]"
         data-testid="resale-toggle"
       >
-        <span className="text-[0.9375rem] font-semibold text-foreground">{t("resaleMarketTitle")}</span>
+        <span className="text-[0.9375rem] font-semibold tracking-[-0.01em] text-foreground">{t("resaleMarketTitle")}</span>
         <span className="flex items-center gap-2">
-          <span className="text-sm tnum text-muted-foreground">{usd(anchorUsd)}</span>
+          <span className="text-sm tnum font-semibold text-foreground">{usd(anchorUsd)}</span>
           <ChevronDown
             size={18}
             strokeWidth={1.75}
             aria-hidden
-            className={cn("transition-transform duration-200 ease-out", open ? "rotate-180" : "")}
+            className={cn("text-muted-foreground transition-transform duration-150 ease-out", open ? "rotate-180" : "")}
           />
         </span>
       </button>
@@ -82,7 +82,7 @@ export function ResaleBlock({
             type="button"
             onClick={onBuy}
             disabled={orderBook?.bestAskUsd == null}
-            className="flex h-[48px] w-full items-center justify-center rounded-[12px] bg-primary text-[0.9375rem] font-semibold text-primary-foreground transition-transform duration-[120ms] ease-out active:scale-[0.98] disabled:opacity-50"
+            className="flex h-[48px] w-full items-center justify-center rounded-[12px] bg-primary text-[0.9375rem] font-semibold text-primary-foreground shadow-sm transition-transform duration-150 ease-out active:scale-[0.98] disabled:opacity-50"
             data-testid="resale-acquire-cta"
           >
             {t("resaleAcquireCta")}
@@ -95,7 +95,7 @@ export function ResaleBlock({
             onOpenChange={setHistoryOpen}
             toggleTestId="resale-price-history-toggle"
             contentTestId="resale-price-history-content"
-            contentClassName="space-y-4 border-t border-border p-4"
+            contentClassName="space-y-4 border-t border-border/50 p-4"
           >
             <SecondaryPerformanceCharts listing={listing} anchorUsd={anchorUsd} />
             {orderBook ? <OrderBook state={orderBook} maxLevels={4} /> : null}

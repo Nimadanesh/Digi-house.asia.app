@@ -53,6 +53,16 @@ export const V1_SCENARIO_NIGHTS: Record<FinancialModelV1ScenarioKey, number> = {
 } as const;
 
 /**
+ * Approved fixed EUR→USD conversion (Option 1 product decision).
+ * 1 EUR = 1.20 USD — deliberately conservative/high vs recent market ~1.15.
+ * Hardcoded named constant, never dynamic. Applied once at the ANR→cents
+ * boundary so the entire V1 chain (gross → costs → tax → owner profit)
+ * evaluates in USD and the USD-denominated reserve stays subtractable.
+ * USD inputs bypass conversion untouched.
+ */
+export const APPROVED_EUR_USD_RATE = 1.2;
+
+/**
  * Product-model-assumption disclaimer. Every V1 tax figure is a product modeling
  * input — never tax or legal advice, never a statement of realized cost.
  */
@@ -83,6 +93,15 @@ export function v1AnrToCents(valueMajor: number): number {
   return roundCents(valueMajor * 100);
 }
 
+/**
+ * ANR → USD cents via the approved fixed rate. EUR inputs are converted once
+ * (half-up); USD inputs pass through untouched (byte-identical path).
+ */
+function v1AnrToUsdCents(valueMajor: number, currency: FinancialModelV1Currency): number {
+  const cents = v1AnrToCents(valueMajor);
+  return currency === "EUR" ? roundCents(cents * APPROVED_EUR_USD_RATE) : cents;
+}
+
 /** Total shares = property value ÷ $100 (valuation is integer cents). */
 export function v1TotalShares(valuationCents: number): number {
   return valuationCents / (V1_SHARE_PRICE_DIVISOR * 100);
@@ -109,8 +128,10 @@ function v1ProfitChain(
   const agencyCents = roundCents(grossCents * V1_RATES.agency);
   const operatorCents = roundCents(grossCents * V1_RATES.operator);
   const reserveCents = roundCents(valuationCents * V1_RATES.reserve);
-  // No approved FX exists: a USD-denominated reserve can never be subtracted from
-  // a non-USD gross. The downstream chain stays UNKNOWN rather than converting.
+  // Guard retained for direct callers: the canonical path always converts EUR→USD
+  // upstream (APPROVED_EUR_USD_RATE) so currency arrives as USD and the reserve
+  // stays subtractable. A non-USD gross reaching here directly keeps downstream
+  // UNKNOWN rather than converting silently.
   const reserveSubtractable = currency === "USD";
 
   if (!reserveSubtractable) {
@@ -186,18 +207,19 @@ function v1ProfitChain(
 
 /**
  * Evaluate one V1 scenario: Gross = ANR × scenario nights, then the profit chain.
- * These are MODEL SCENARIOS, not observed occupancy.
+ * These are MODEL SCENARIOS, not observed occupancy. EUR ANR is converted to USD
+ * once via APPROVED_EUR_USD_RATE so every scenario evaluates in USD.
  */
 export function computeV1Scenario(
   input: FinancialModelV1PropertyInput,
   key: FinancialModelV1ScenarioKey,
 ): FinancialModelV1ScenarioResult {
-  const anrCents = v1AnrToCents(input.anr.valueMajor);
+  const anrCentsUsd = v1AnrToUsdCents(input.anr.valueMajor, input.anr.currency);
   const nights = V1_SCENARIO_NIGHTS[key];
-  const grossCents = anrCents * nights;
+  const grossCents = anrCentsUsd * nights;
   return v1ProfitChain(key, nights, {
     grossCents,
-    currency: input.anr.currency,
+    currency: "USD",
     valuationCents: input.valuation.valueCents,
     ownerTax: input.ownerTax,
   });
@@ -205,7 +227,8 @@ export function computeV1Scenario(
 
 /**
  * Evaluate the V1 average model: mean of the three scenario grosses (rounded once,
- * half-up), then the identical profit chain at that averaged gross.
+ * half-up), then the identical profit chain at that averaged gross. Scenario
+ * grosses are already USD (EUR converted upstream), so the average is USD.
  */
 export function computeV1Average(
   input: FinancialModelV1PropertyInput,
@@ -216,7 +239,7 @@ export function computeV1Average(
   );
   return v1ProfitChain("average", null, {
     grossCents,
-    currency: input.anr.currency,
+    currency: "USD",
     valuationCents: input.valuation.valueCents,
     ownerTax: input.ownerTax,
   });
@@ -242,7 +265,7 @@ export function computeFinancialModelV1(input: FinancialModelV1PropertyInput): F
   const perShare =
     average.ownerProfitCents == null || annualCents == null
       ? {
-          currency: input.anr.currency,
+          currency: "USD" as const,
           annualCents: null,
           monthlyCents: null,
           unknownReason:
@@ -251,7 +274,7 @@ export function computeFinancialModelV1(input: FinancialModelV1PropertyInput): F
           projectionLabel: "Projected" as const,
         }
       : {
-          currency: input.anr.currency,
+          currency: "USD" as const,
           annualCents,
           // Smoothed annualized presentation: Annual ÷ 12 (rounded once, half-up).
           monthlyCents: roundCents(annualCents / 12),
@@ -263,7 +286,7 @@ export function computeFinancialModelV1(input: FinancialModelV1PropertyInput): F
     propertyId: input.propertyId,
     rentalEscapesListingId: input.rentalEscapesListingId,
     name: input.name,
-    currency: input.anr.currency,
+    currency: "USD" as const,
     anr: input.anr,
     valuation: input.valuation,
     ownerTax: input.ownerTax,

@@ -62,9 +62,10 @@ describe("FeaturedPropertyCard — Featured Estate (identity first)", () => {
   });
 
   it("shows pending (never a fixture figure) when V1 income is unknown", () => {
-    // D11 locked 2026-09-13: remaining V1-unknowns are the EUR villas.
+    // Option 1 FX (2026-09-18): all 24 canonical villas compute — pending is
+    // exercised via a synthetic unknown id (no V1 input → null, never 0).
     render(
-      <FeaturedPropertyCard listing={{ ...listing, id: "re-130901" }} />,
+      <FeaturedPropertyCard listing={{ ...listing, id: "test-unknown-villa" }} />,
     );
     expect(screen.getByTestId("featured-income-pending")).toBeInTheDocument();
     expect(screen.queryByText("$16.25")).not.toBeInTheDocument();

@@ -26,13 +26,18 @@ function FactCell({
   className?: string;
 }) {
   return (
-    <div className={cn("flex min-w-0 flex-col gap-1 p-4", className)}>
-      <span className="text-[0.625rem] font-medium uppercase leading-tight tracking-[0.08em] text-muted-foreground">
+    <div
+      className={cn(
+        "flex min-h-[96px] w-full min-w-0 flex-col justify-center gap-1.5 overflow-hidden bg-card p-4 transition-colors duration-200 ease-out hover:bg-surface-2/50",
+        className,
+      )}
+    >
+      <span className="w-full truncate whitespace-nowrap text-[0.625rem] font-medium uppercase leading-tight tracking-[0.07em] text-muted-foreground">
         {label}
       </span>
       <span
         className={cn(
-          "truncate text-[1.125rem] font-semibold leading-none tnum",
+          "block w-full max-w-full truncate whitespace-nowrap text-[1.375rem] font-bold leading-none tracking-[-0.02em] tnum",
           muted ? "text-muted-foreground" : "text-foreground",
         )}
         data-testid={testId}
@@ -40,7 +45,7 @@ function FactCell({
         {value}
       </span>
       {caption ? (
-        <span className="text-[0.6875rem] leading-none tnum text-muted-foreground">{caption}</span>
+        <span className="block w-full break-all text-[0.6875rem] leading-snug tnum text-muted-foreground/90">{caption}</span>
       ) : null}
     </div>
   );
@@ -54,44 +59,42 @@ export function ValuationSharesSection({ v1 }: { v1: FinancialModelV1PropertyMod
         <h2 className="px-0.5 text-[0.9375rem] font-normal text-foreground">
           {t("ownershipValuationTitle")}
         </h2>
-        <div className="bg-card rounded-[12px] p-4">
+        <div className="bg-card rounded-[12px] p-4 shadow-sm ring-1 ring-border/50">
           <p className="text-sm text-muted-foreground">{unavailableLabel("backend_absent")}</p>
         </div>
       </section>
     );
   }
   return (
-    <section className="space-y-2" data-testid="ownership-valuation">
+    <section className="min-w-0 space-y-2" data-testid="ownership-valuation">
       <h2 className="px-0.5 text-[0.9375rem] font-normal text-foreground">
         {t("ownershipValuationTitle")}
       </h2>
-      <div className="bg-card grid grid-cols-2 overflow-hidden rounded-[12px]">
+      <div className="bg-card grid w-full min-w-0 grid-cols-2 overflow-hidden rounded-[12px] shadow-sm ring-1 ring-border/50">
         <FactCell
           label={t("estateValue")}
           value={moneySmart(v1.valuation.valueCents, v1.valuation.currency)}
-          className="border-b border-r border-border"
+          className="border-b border-r border-border/50"
           testId="ownership-valuation-value"
         />
         <FactCell
           label={t("invReferenceValue")}
           // The V1 nominal share price — valuation ÷ shares by construction.
           value={usd(getPresentedPrimaryPrice())}
-          className="border-b border-border"
+          className="border-b border-border/50"
           testId="ownership-valuation-reference"
         />
         <FactCell
           label={t("ownershipV1TotalShares")}
           value={v1.totalShares.toLocaleString()}
-          className="border-r border-border"
+          className="border-r border-border/50"
           testId="ownership-valuation-shares"
         />
         <FactCell
           label={t("invOwnershipPerShare")}
           value={`1 / ${v1.totalShares.toLocaleString()}`}
-          // Exact fraction of the estate one share carries (e.g. 0.00125%).
-          caption={
-            v1.totalShares > 0 ? `${((1 / v1.totalShares) * 100).toString()}%` : null
-          }
+          // No percentage caption here — it lives on the hero share-price row
+          // (shared ownershipPct formatter), so this section never duplicates it.
           testId="ownership-valuation-per-share"
         />
       </div>

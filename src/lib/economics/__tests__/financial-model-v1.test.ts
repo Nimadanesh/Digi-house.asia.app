@@ -8,9 +8,10 @@
 // - 220 / 273 / 328 scenario nights on the canonical ANR (never ADR)
 // - Grand = $8M exactly = 80,000 shares; no legacy $82M
 // - Guest-paid charges excluded; owner-side tax separated (D11 table locked
-//   2026-09-13: every property carries an ASSUMPTION rate; only EUR
-//   mixed-currency stays unknown downstream under the no-FX rule)
-// - EUR calculated in EUR with no silent USD FX (no invented FX rate)
+//   2026-09-13: every property carries an ASSUMPTION rate)
+// - EUR ANR converts to USD once via the approved fixed rate
+//   (APPROVED_EUR_USD_RATE, 1 EUR = 1.20 USD — Option 1 product decision);
+//   all 24 models evaluate the full chain in USD (no pending income)
 //
 // The tests prove behavior against the actual modules (not copied copies where
 // linkage matters): inputs come from the frozen dataset join, math is recomputed
@@ -22,6 +23,7 @@ import { describe, expect, it } from "vitest";
 
 import type { FinancialModelV1PropertyModel } from "@/types/financial-model-v1";
 import {
+  APPROVED_EUR_USD_RATE,
   V1_ALLOCATION,
   V1_PROJECTION_DISCLAIMER,
   V1_RATES,
@@ -286,14 +288,14 @@ describe("V1 validation 13: D11 owner-tax table (locked 2026-09-13)", () => {
     expect(grandTax.rate).toBe(0.1);
   });
 
-  it("result states after D11: 19 full-chain models, 5 EUR gross-side-only", () => {
+  it("result states after Option 1 FX: all 24 full-chain models, 0 pending", () => {
     const fullChain = ALL_MODELS.filter((m) => m.perShare.annualCents != null);
     const grossOnly = ALL_MODELS.filter((m) => m.perShare.annualCents == null);
-    expect(fullChain).toHaveLength(19);
-    expect(grossOnly).toHaveLength(5);
-    expect(grossOnly.every((m) => m.currency === "EUR")).toBe(true);
-    for (const model of grossOnly) {
-      expect(model.perShare.unknownReason).toBeTruthy();
+    expect(fullChain).toHaveLength(24);
+    expect(grossOnly).toHaveLength(0);
+    expect(ALL_MODELS.every((m) => m.currency === "USD")).toBe(true);
+    for (const model of fullChain) {
+      expect(model.perShare.unknownReason).toBeNull();
     }
   });
 
@@ -313,32 +315,37 @@ describe("V1 validation 13: D11 owner-tax table (locked 2026-09-13)", () => {
   });
 });
 
-describe("V1 validation 14: EUR calculations never silently use USD FX", () => {
-  const eurModels = () => ALL_MODELS.filter((m) => m.currency === "EUR");
+describe("V1 validation 14: EUR converts via the approved fixed rate (Option 1)", () => {
+  const eurInputModels = () => ALL_MODELS.filter((m) => m.anr.currency === "EUR");
 
-  it("EUR properties calculate in EUR with a non-subtractable USD reserve", () => {
+  it("approved rate is exactly 1.20 and EUR inputs evaluate the full chain in USD", () => {
     // Syrene, Villa du Cap, Chalet Montana, Galeazzo, Chateau Prestige.
-    expect(eurModels()).toHaveLength(5);
-    for (const model of eurModels()) {
+    expect(APPROVED_EUR_USD_RATE).toBe(1.2);
+    expect(eurInputModels()).toHaveLength(5);
+    for (const model of eurInputModels()) {
       expect(model.anr.currency).toBe("EUR");
+      expect(model.currency).toBe("USD");
       for (const scenario of [model.conservative, model.base, model.optimistic, model.average]) {
-        expect(scenario.currency).toBe("EUR");
+        expect(scenario.currency).toBe("USD");
         expect(scenario.reserveCurrency).toBe("USD");
-        expect(scenario.reserveSubtractable).toBe(false);
-        // No mixed-currency subtraction: downstream stays UNKNOWN.
-        expect(scenario.preTaxCents).toBeNull();
-        expect(scenario.netCents).toBeNull();
-        expect(scenario.unknownReason).toMatch(/no approved FX/i);
-        // EUR-side lines are pure EUR math (ANR cents × nights, 5%, 7.5%).
-        const anrCents = v1AnrToCents(model.anr.valueMajor);
+        expect(scenario.reserveSubtractable).toBe(true);
+        // Full chain known in USD: no mixed-currency UNKNOWN remains.
+        expect(scenario.preTaxCents).not.toBeNull();
+        expect(scenario.netCents).not.toBeNull();
+        expect(scenario.ownerProfitCents).not.toBeNull();
+        expect(scenario.unknownReason).toBeNull();
+        // Converted gross: round(ANR cents × 1.20) × nights, 5%/7.5% of that gross.
+        const anrCentsUsd = Math.round(v1AnrToCents(model.anr.valueMajor) * APPROVED_EUR_USD_RATE);
         const nights = scenario.nights ?? 0;
         if (scenario.key !== "average") {
-          expect(scenario.grossCents).toBe(anrCents * nights);
+          expect(scenario.grossCents).toBe(anrCentsUsd * nights);
         }
         expect(scenario.agencyCents).toBe(Math.round(scenario.grossCents * 0.05));
         expect(scenario.operatorCents).toBe(Math.round(scenario.grossCents * 0.075));
       }
-      expect(model.perShare.annualCents).toBeNull();
+      expect(model.perShare.annualCents).not.toBeNull();
+      expect(model.perShare.monthlyCents).not.toBeNull();
+      expect(model.perShare.currency).toBe("USD");
     }
   });
 
@@ -355,16 +362,19 @@ describe("V1 validation 14: EUR calculations never silently use USD FX", () => {
 });
 
 describe("V1 validation 15: 220/273/328 scenario nights", () => {
-  it("locked night counts and gross = ANR × nights for every property and scenario", () => {
+  it("locked night counts and gross = ANR × nights for every property and scenario (EUR via approved 1.20)", () => {
     expect(V1_SCENARIO_NIGHTS).toEqual({ conservative: 220, base: 273, optimistic: 328 });
     for (const model of ALL_MODELS) {
-      const anrCents = v1AnrToCents(model.anr.valueMajor);
+      const anrCentsUsd =
+        model.anr.currency === "EUR"
+          ? Math.round(v1AnrToCents(model.anr.valueMajor) * APPROVED_EUR_USD_RATE)
+          : v1AnrToCents(model.anr.valueMajor);
       expect(model.conservative.nights).toBe(220);
       expect(model.base.nights).toBe(273);
       expect(model.optimistic.nights).toBe(328);
-      expect(model.conservative.grossCents).toBe(anrCents * 220);
-      expect(model.base.grossCents).toBe(anrCents * 273);
-      expect(model.optimistic.grossCents).toBe(anrCents * 328);
+      expect(model.conservative.grossCents).toBe(anrCentsUsd * 220);
+      expect(model.base.grossCents).toBe(anrCentsUsd * 273);
+      expect(model.optimistic.grossCents).toBe(anrCentsUsd * 328);
       // Average uses mean gross, not a night count.
       expect(model.average.nights).toBeNull();
       expect(model.average.grossCents).toBe(

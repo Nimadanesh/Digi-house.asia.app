@@ -102,6 +102,17 @@ export function pct(ratio: number): string {
   return `${(ratio * 100).toFixed(ratio < 0.1 ? 1 : 0)}%`;
 }
 
+/**
+ * Ownership-per-share percentage from a total share count: (1 / totalShares)
+ * × 100, rounded to max 4 decimals with trailing zeros stripped (display
+ * only — the underlying share math is untouched). Null when totalShares is
+ * invalid (≤ 0). E.g. 80,000 → "0.0013%", 120,000 → "0.0008%".
+ */
+export function ownershipPct(totalShares: number): string | null {
+  if (!Number.isFinite(totalShares) || totalShares <= 0) return null;
+  return `${Number((((1 / totalShares) * 100).toFixed(4)))}%`;
+}
+
 export function weekLabel(isoMonday: string): string {
   return new Date(isoMonday).toLocaleDateString(undefined, { month: "short", day: "numeric" });
 }

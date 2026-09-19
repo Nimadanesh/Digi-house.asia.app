@@ -162,7 +162,7 @@ test.describe("Estate Page Structure — V1 canonical economics QA", () => {
     await page.screenshot({ path: "screenshots/runs/slice-e-qa/peer-resale-estate-tab.png", fullPage: false });
   });
 
-  test("STARTING_FROM peer: nightly semantics preserved; V1 UNKNOWN stays honest on the EUR peer", async ({
+  test("STARTING_FROM peer: nightly semantics preserved; Option 1 FX keeps EUR peer honest in USD", async ({
     page,
   }) => {
     await skipOnboarding(page);
@@ -179,12 +179,13 @@ test.describe("Estate Page Structure — V1 canonical economics QA", () => {
     await page
       .screenshot({ path: "screenshots/runs/slice-e-qa/peer-starting-from-estate-tab.png", fullPage: false });
 
-    // The honest-UNKNOWN class survives on the EUR mixed-currency villas
-    // (no-FX rule) — Chalet Montana keeps per-share at "Data pending".
+    // Option 1 FX (2026-09-18, 1 EUR = 1.20 USD): Chalet Montana (EUR input)
+    // now evaluates the full chain in USD — per-share renders a PROJECTED
+    // figure (never "Data pending").
     await page.goto("/property/re-130901");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
     await page.getByTestId("tab-income").click();
-    await expect(page.getByTestId("income-net-per-share-annual")).toContainText("Data pending");
+    await expect(page.getByTestId("income-net-per-share-annual")).not.toContainText("Data pending");
     await expectNoOverflow(page);
   });
 

@@ -17,17 +17,19 @@ export function ExitLiquiditySection() {
       <h2 className="px-0.5 text-[0.9375rem] font-normal text-foreground">
         {t("exitLiquidityTitle")}
       </h2>
-      <Block className="p-4" data-testid="ownership-exit-card">
-        <FactRow
-          label={t("exitSellAnytimeLabel")}
-          value={t("exitSellAnytimeValue")}
-          valueTestId="ownership-exit-sell-anytime"
-        />
-        <FactRow
-          label={t("exitWithdrawalFeeLabel")}
-          value={t("exitWithdrawalFeeValue")}
-          valueTestId="ownership-exit-withdrawal"
-        />
+      <Block className="overflow-hidden shadow-sm ring-1 ring-border/50" data-testid="ownership-exit-card">
+        <div className="divide-y divide-border/50 px-4 py-1 sm:px-5">
+          <FactRow
+            label={t("exitSellAnytimeLabel")}
+            value={t("exitSellAnytimeValue")}
+            valueTestId="ownership-exit-sell-anytime"
+          />
+          <FactRow
+            label={t("exitWithdrawalFeeLabel")}
+            value={t("exitWithdrawalFeeValue")}
+            valueTestId="ownership-exit-withdrawal"
+          />
+        </div>
       </Block>
     </section>
   );

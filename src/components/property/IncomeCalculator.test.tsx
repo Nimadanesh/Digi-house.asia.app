@@ -71,8 +71,9 @@ describe("IncomeCalculator — redesign Phase 2", () => {
     const onSharesChange = vi.fn();
     render(
       <IncomeCalculator
-      // D11 locked 2026-09-13: remaining V1-unknowns are the EUR villas.
-        listing={{ ...listing, id: "re-130901" }}
+      // Option 1 FX (2026-09-18): all 24 canonical villas compute — pending is
+      // exercised via a synthetic unknown id (no V1 input → null, never 0).
+        listing={{ ...listing, id: "test-unknown-villa" }}
         shares={10}
         onSharesChange={onSharesChange}
         onBuy={onBuy}
