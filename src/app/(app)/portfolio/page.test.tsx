@@ -146,14 +146,13 @@ describe("Portfolio page", () => {
     expect(screen.getByTestId("locked-free-card")).toBeInTheDocument();
     expect(screen.getByTestId("locked-shares-value")).toHaveTextContent("0");
     expect(screen.getByTestId("free-shares-value")).toHaveTextContent("60");
+    expect(screen.getByTestId("idle-banner")).toHaveTextContent("60 shares not earning");
     const nudge = screen.getByTestId("idle-nudge");
     expect(nudge).toHaveAttribute("href", "/property/re-108924");
-    expect(nudge).toHaveTextContent("60 shares not earning");
+    expect(nudge).toHaveTextContent("Lock them");
 
-    // Allocation is compact by default; legend hidden until expanded.
+    // Allocation is always visible (premium hierarchy — scannable in under 3s).
     expect(screen.getByTestId("portfolio-allocation")).toBeInTheDocument();
-    expect(screen.queryByTestId("allocation-legend")).not.toBeInTheDocument();
-    fireEvent.click(screen.getByTestId("allocation-toggle"));
     expect(screen.getByTestId("allocation-legend")).toBeInTheDocument();
 
     expect(
@@ -162,7 +161,7 @@ describe("Portfolio page", () => {
     expect(screen.queryByText(/avg cost/i)).not.toBeInTheDocument();
   });
 
-  it("click holding opens detail sheet with Avg cost, buy more, sell disabled", () => {
+  it("holding card shows shares breakdown, gift entry, and estate link", () => {
     vi.mocked(usePortfolio).mockReturnValue({
       data: loadedSummary,
       isLoading: false,
@@ -171,7 +170,24 @@ describe("Portfolio page", () => {
     } as never);
     render(<PortfolioPage />);
 
-    fireEvent.click(screen.getByTestId("holding-card-re-108924"));
+    expect(screen.getByTestId("holding-shares-breakdown")).toHaveTextContent(/60 shares/);
+    expect(screen.getByTestId("gift-shares-re-108924")).toHaveAttribute(
+      "href",
+      "/property/re-108924",
+    );
+    expect(screen.getByTestId("portfolio-view-history")).toHaveAttribute("href", "/earnings");
+  });
+
+  it("click holding details opens detail sheet with Avg cost, buy more, sell disabled", () => {
+    vi.mocked(usePortfolio).mockReturnValue({
+      data: loadedSummary,
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    } as never);
+    render(<PortfolioPage />);
+
+    fireEvent.click(screen.getByTestId("holding-details-re-108924"));
 
     expect(screen.getByTestId("holding-detail-sheet")).toBeInTheDocument();
     expect(screen.getByText(/avg cost/i)).toBeInTheDocument();

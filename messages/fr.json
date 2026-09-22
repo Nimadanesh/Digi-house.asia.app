@@ -811,7 +811,16 @@
     "chartLegendPaid": "Payé",
     "chartLegendProjected": "Prévisionnel",
     "byEstateTitle": "Revenus par bien",
-    "byEstateReceived": "Reçu"
+    "byEstateReceived": "Reçu",
+    "giftShares": "Gift shares",
+    "txHistoryTitle": "Transaction history",
+    "txHistoryViewAll": "View all",
+    "withdrawEligible": "Available to withdraw",
+    "lockedShares": "Locked shares",
+    "lockedSharesSub": "Earning monthly yield",
+    "lockedSharesValue": "{count} shares",
+    "withdrawButton": "Withdraw",
+    "withdrawAvailable": "available: {amount}"
   },
   "portfolio": {
     "loadError": "Impossible de charger votre portefeuille.",
@@ -875,7 +884,10 @@
     "nftStatusTransferring": "Transfert en cours",
     "nftStatusDelivered": "Livré",
     "nftStatusFailed": "Échec",
-    "orderQueued": "En attente"
+    "orderQueued": "En attente",
+    "giftShares": "Gift shares",
+    "sharesBreakdown": "{total} {shares} · {earning} earning · {idle} idle",
+    "viewHistory": "View full transaction history"
   },
   "settings": {
     "title": "Paramètres",

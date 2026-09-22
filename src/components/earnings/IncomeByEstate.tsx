@@ -7,7 +7,7 @@
 import { useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Gift } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Block } from "@/components/common/Block";
 import { usd, pct } from "@/lib/format";
@@ -20,7 +20,7 @@ import type { EarningsEntry } from "@/types/earnings";
 import type { Holding } from "@/types/position";
 import type { ShareLock } from "@/types/lock";
 
-const THUMB = "size-10 shrink-0 rounded-[10px] overflow-hidden bg-surface-2 relative";
+const THUMB = "size-12 shrink-0 rounded-[10px] overflow-hidden bg-surface-2 relative";
 
 export function IncomeByEstate({
   entries,
@@ -79,7 +79,7 @@ export function IncomeByEstate({
   const topName = top ? (propertyById.get(top.propertyId)?.name ?? top.propertyId) : null;
 
   return (
-    <section className="space-y-2" data-testid="income-by-estate">
+    <section className="space-y-3" data-testid="income-by-estate">
       <h2 className="px-0.5 text-[0.9375rem] font-semibold text-foreground">
         {t("byEstateTitle")}
       </h2>
@@ -174,35 +174,37 @@ function IncomeRow({
   const t = useTranslations("earnings");
   const tCommon = useTranslations("common");
   const rankPct = maxReceived > 0 ? Math.min(100, (row.receivedUsd / maxReceived) * 100) : 0;
+  const estateHref = `/property/${row.propertyId}`;
   return (
-    <Link
-      href={`/property/${row.propertyId}`}
-      onClick={() => haptics.selection()}
-      className="block px-4 py-3 transition-colors active:bg-surface-2"
-      data-testid={`income-by-estate-row-${row.propertyId}`}
-    >
-      <div className="flex min-h-[60px] items-center gap-3">
+    <article className="p-5" data-testid={`income-by-estate-card-${row.propertyId}`}>
+      <Link
+        href={estateHref}
+        onClick={() => haptics.selection()}
+        className="flex min-h-[60px] items-center gap-3.5 text-left active:opacity-80 transition-opacity duration-[120ms] ease-out"
+        aria-label={row.name}
+        data-testid={`income-by-estate-row-${row.propertyId}`}
+      >
         <div className={THUMB} aria-hidden>
           {row.image ? (
-            <Image src={row.image} alt="" fill className="object-cover" sizes="40px" />
+            <Image src={row.image} alt="" fill className="object-cover" sizes="48px" />
           ) : null}
         </div>
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-[0.9375rem] font-medium leading-tight text-foreground">
+        <div className="min-w-0 flex-1 space-y-1">
+          <p className="truncate text-[0.9375rem] font-semibold leading-snug text-foreground">
             {row.name}
           </p>
-          <p className="mt-0.5 truncate text-xs leading-snug text-muted-foreground">
+          <p className="truncate text-[0.8125rem] leading-relaxed text-muted-foreground">
             {row.location}
           </p>
           {extended?.sharesOwned != null ? (
-            <p className="mt-0.5 truncate text-xs leading-snug text-muted-foreground tnum">
+            <p className="truncate text-[0.8125rem] leading-relaxed text-muted-foreground tnum">
               {extended.sharesOwned.toLocaleString()}{" "}
               {extended.sharesOwned === 1 ? tCommon("share") : tCommon("shares")}
               {extended.shareRatio != null ? ` · ${pct(extended.shareRatio)}` : ""}
             </p>
           ) : null}
         </div>
-        <div className="shrink-0 text-right space-y-0.5">
+        <div className="ms-2 shrink-0 text-right space-y-1">
           {extended ? (
             <>
               <StateLine
@@ -215,10 +217,10 @@ function IncomeRow({
             </>
           ) : (
             <>
-              <p className="tnum text-[0.9375rem] font-semibold leading-tight text-foreground">
+              <p className="tnum text-[0.9375rem] font-semibold leading-snug text-foreground">
                 {usd(row.receivedUsd)}
               </p>
-              <p className="text-[0.6875rem] leading-snug text-muted-foreground">
+              <p className="text-[0.8125rem] leading-relaxed text-muted-foreground">
                 {t("byEstateReceived")}
               </p>
             </>
@@ -230,15 +232,27 @@ function IncomeRow({
           className="shrink-0 text-muted-foreground rtl:rotate-180"
           aria-hidden
         />
-      </div>
-      <div className="mt-2 h-1 overflow-hidden rounded-full bg-surface-2" aria-hidden>
+      </Link>
+      <div className="mt-3.5 h-1 overflow-hidden rounded-full bg-surface-2" aria-hidden>
         <div
           data-testid={`estate-rank-${row.propertyId}`}
           className="h-full rounded-full bg-primary/70"
           style={{ width: `${rankPct}%` }}
         />
       </div>
-    </Link>
+      <div className="mt-4">
+        <Link
+          href={estateHref}
+          onClick={() => haptics.selection()}
+          className="inline-flex min-h-[48px] items-center gap-2 rounded-[10px] bg-surface-2 px-4 text-[0.875rem] font-semibold text-primary active:scale-[0.97] transition-transform duration-[120ms] ease-out"
+          data-testid={`gift-shares-${row.propertyId}`}
+          aria-label={t("giftShares")}
+        >
+          <Gift size={16} strokeWidth={1.75} aria-hidden className="shrink-0" />
+          {t("giftShares")}
+        </Link>
+      </div>
+    </article>
   );
 }
 
@@ -257,8 +271,8 @@ function StateLine({
     <p
       className={
         strong
-          ? "tnum text-[0.9375rem] font-semibold leading-tight text-foreground"
-          : "text-[0.6875rem] leading-snug text-muted-foreground tnum"
+          ? "tnum text-[0.9375rem] font-semibold leading-snug text-foreground"
+          : "text-[0.8125rem] leading-relaxed text-muted-foreground tnum"
       }
     >
       {label}{" "}

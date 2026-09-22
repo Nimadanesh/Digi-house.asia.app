@@ -811,7 +811,16 @@
     "chartLegendPaid": "已支付",
     "chartLegendProjected": "预计",
     "byEstateTitle": "按房产分列的收入",
-    "byEstateReceived": "已收到"
+    "byEstateReceived": "已收到",
+    "giftShares": "Gift shares",
+    "txHistoryTitle": "Transaction history",
+    "txHistoryViewAll": "View all",
+    "withdrawEligible": "Available to withdraw",
+    "lockedShares": "Locked shares",
+    "lockedSharesSub": "Earning monthly yield",
+    "lockedSharesValue": "{count} shares",
+    "withdrawButton": "Withdraw",
+    "withdrawAvailable": "available: {amount}"
   },
   "portfolio": {
     "loadError": "无法加载持仓。",
@@ -875,7 +884,10 @@
     "nftStatusTransferring": "转移中",
     "nftStatusDelivered": "已交付",
     "nftStatusFailed": "失败",
-    "orderQueued": "排队中"
+    "orderQueued": "排队中",
+    "giftShares": "Gift shares",
+    "sharesBreakdown": "{total} {shares} · {earning} earning · {idle} idle",
+    "viewHistory": "View full transaction history"
   },
   "settings": {
     "title": "设置",

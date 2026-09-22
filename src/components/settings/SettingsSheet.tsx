@@ -331,26 +331,6 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
                 aria-hidden
               />
             </button>
-            <button
-              type="button"
-              onClick={() => {
-                haptics.selection();
-                closeAll();
-                router.push(ROUTES.transactions);
-              }}
-              className={`flex w-full min-h-[56px] items-center gap-2 border-t border-border px-4 py-3.5 text-start ${NAV_ROW}`}
-              data-testid="settings-transaction-history"
-            >
-              <span className="flex-1 text-sm font-medium leading-snug text-foreground">
-                {t("transactionHistory")}
-              </span>
-              <ChevronRight
-                size={20}
-                strokeWidth={1.75}
-                className="shrink-0 text-muted-foreground rtl:rotate-180"
-                aria-hidden
-              />
-            </button>
           </Block>
         </section>
 

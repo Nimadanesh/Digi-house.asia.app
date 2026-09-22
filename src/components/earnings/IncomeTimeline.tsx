@@ -79,7 +79,7 @@ export function IncomeTimeline({
     });
   }
   return (
-    <section className="space-y-2" data-testid="income-timeline">
+    <section className="space-y-3" data-testid="income-timeline">
       <h2 className="px-0.5 text-[0.9375rem] font-semibold text-foreground">{t("timelineTitle")}</h2>
       <Block data-testid="income-timeline-block">
         <div className="p-4 space-y-3">

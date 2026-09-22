@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, expect, it, vi, beforeEach } from "vitest";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { OtherReturns } from "@/components/earnings/OtherReturns";
 import type { ListingGain } from "@/lib/income-view-model";
 
@@ -34,6 +34,8 @@ describe("OtherReturns — non-rental returns stay separate", () => {
   it("shows plan, appreciation and secondary sections without inventing numbers", () => {
     render(<OtherReturns gains={[]} />);
     expect(screen.getByTestId("other-returns")).toBeInTheDocument();
+    expect(screen.queryByTestId("other-plan")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByTestId("other-accordion-toggle"));
     expect(screen.getByTestId("other-plan")).toHaveTextContent("No investment plans configured");
     expect(screen.getByTestId("other-appreciation")).toHaveTextContent("Pending");
     expect(screen.getByTestId("other-secondary")).toHaveTextContent("No open listings");
@@ -41,6 +43,7 @@ describe("OtherReturns — non-rental returns stay separate", () => {
 
   it("lists open sell positions with proposed gain — never as income", () => {
     render(<OtherReturns gains={[gain({})]} />);
+    fireEvent.click(screen.getByTestId("other-accordion-toggle"));
     const row = screen.getByTestId("other-secondary-ord-1");
     expect(row).toHaveTextContent("Villa A");
     expect(row).toHaveTextContent("+$50.00");
@@ -59,6 +62,7 @@ describe("OtherReturns — non-rental returns stay separate", () => {
         ]}
       />,
     );
+    fireEvent.click(screen.getByTestId("other-accordion-toggle"));
     expect(screen.getByTestId("other-secondary-l")).toHaveTextContent("Loss");
     expect(screen.getByTestId("other-secondary-u")).toHaveTextContent("—");
   });

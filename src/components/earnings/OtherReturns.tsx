@@ -5,8 +5,10 @@
 // history exists, so those rows stay non-numeric by product rule; live sell
 // listings show their Slice H proposed gain (listed, never sold, never income).
 // Presentational: gains arrive resolved via secondaryGains.
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Block } from "@/components/common/Block";
+import { Disclosure } from "@/components/common/Disclosure";
 import { Row } from "@/components/common/Row";
 import { Skeleton } from "@/components/common/Skeleton";
 import { usd } from "@/lib/format";
@@ -39,6 +41,7 @@ export function OtherReturns({ gains }: { gains: ListingGain[] | undefined }) {
   const tCommon = useTranslations("common");
   const tProperty = useTranslations("property");
   const tPortfolio = useTranslations("portfolio");
+  const [open, setOpen] = useState(false);
   if (gains === undefined) {
     return (
       <section className="space-y-2" data-testid="other-loading">
@@ -51,57 +54,65 @@ export function OtherReturns({ gains }: { gains: ListingGain[] | undefined }) {
     );
   }
   return (
-    <section className="space-y-2" data-testid="other-returns">
-      <h2 className="px-0.5 text-[0.9375rem] font-semibold text-foreground">
-        {t("otherTitle")}
-      </h2>
-      <Block>
-        <Row data-testid="other-plan">
-          <div className="min-w-0 flex-1">
-            <p className="text-sm font-medium text-foreground">{t("otherPlan")}</p>
-            <p className="mt-0.5 text-[0.6875rem] leading-snug text-muted-foreground">
-              {t("otherPlanNone")}
-            </p>
-          </div>
-        </Row>
-        <Row data-testid="other-appreciation">
-          <div className="min-w-0 flex-1">
-            <p className="text-sm font-medium text-foreground">{t("otherAppreciation")}</p>
-            <p className="mt-0.5 text-[0.6875rem] leading-snug text-muted-foreground">
-              {t("otherAppreciationSub")}
-            </p>
-          </div>
-          <span className="ml-auto shrink-0 text-sm tnum font-semibold text-muted-foreground">
-            {tCommon("pending")}
-          </span>
-        </Row>
-      </Block>
-      <Block data-testid="other-secondary">
-        <Row>
-          <p className="text-sm font-medium text-foreground">{t("otherSecondary")}</p>
-        </Row>
-        {gains.length === 0 ? (
-          <Row>
-            <span className="text-sm text-muted-foreground">{t("otherSecondaryEmpty")}</span>
+    <section className="space-y-3" data-testid="other-returns">
+      <Disclosure
+        title={
+          <span className="text-[0.9375rem] font-semibold text-foreground">{t("otherTitle")}</span>
+        }
+        open={open}
+        onOpenChange={setOpen}
+        toggleTestId="other-accordion-toggle"
+        contentTestId="other-accordion-content"
+        contentClassName="space-y-3 border-t border-border p-4"
+      >
+        <div className="rounded-[10px] bg-surface-2/60">
+          <Row data-testid="other-plan">
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-medium text-foreground">{t("otherPlan")}</p>
+              <p className="mt-0.5 text-[0.6875rem] leading-snug text-muted-foreground">
+                {t("otherPlanNone")}
+              </p>
+            </div>
           </Row>
-        ) : (
-          gains.map((g) => (
-            <Row key={g.orderId} data-testid={`other-secondary-${g.orderId}`}>
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium text-foreground">{g.title}</p>
-                <p className="mt-0.5 text-[0.6875rem] leading-snug text-muted-foreground tnum">
-                  {g.status === "queued" ? tPortfolio("orderQueued") : tPortfolio("orderOpen")}
-                  {" · "}
-                  {tProperty("nShares", { count: g.quantity })}
-                </p>
-              </div>
-              <span className="ml-auto shrink-0 text-sm">
-                <GainValue gain={g} />
-              </span>
+          <Row data-testid="other-appreciation">
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-medium text-foreground">{t("otherAppreciation")}</p>
+              <p className="mt-0.5 text-[0.6875rem] leading-snug text-muted-foreground">
+                {t("otherAppreciationSub")}
+              </p>
+            </div>
+            <span className="ml-auto shrink-0 text-sm tnum font-semibold text-muted-foreground">
+              {tCommon("pending")}
+            </span>
+          </Row>
+        </div>
+        <div className="rounded-[10px] bg-surface-2/60" data-testid="other-secondary">
+          <Row>
+            <p className="text-sm font-medium text-foreground">{t("otherSecondary")}</p>
+          </Row>
+          {gains.length === 0 ? (
+            <Row>
+              <span className="text-sm text-muted-foreground">{t("otherSecondaryEmpty")}</span>
             </Row>
-          ))
-        )}
-      </Block>
+          ) : (
+            gains.map((g) => (
+              <Row key={g.orderId} data-testid={`other-secondary-${g.orderId}`}>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium text-foreground">{g.title}</p>
+                  <p className="mt-0.5 text-[0.6875rem] leading-snug text-muted-foreground tnum">
+                    {g.status === "queued" ? tPortfolio("orderQueued") : tPortfolio("orderOpen")}
+                    {" · "}
+                    {tProperty("nShares", { count: g.quantity })}
+                  </p>
+                </div>
+                <span className="ml-auto shrink-0 text-sm">
+                  <GainValue gain={g} />
+                </span>
+              </Row>
+            ))
+          )}
+        </div>
+      </Disclosure>
     </section>
   );
 }

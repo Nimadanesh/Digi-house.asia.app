@@ -1,9 +1,8 @@
-// File responsibility: EarningsRepo mock impl + honest tickPayout (synthetic txHash only).
+// File responsibility: EarningsRepo mock impl (frozen demo ledger — deterministic).
 import type { EarningsRepo } from "@/lib/api/repos";
 import type { EarningsSummary } from "@/types/earnings";
 import { seed } from "./seed";
 import { sleep, jitter } from "./sleep";
-import { makeSyntheticTxHash } from "@/lib/ton/synthetic-tx";
 import { installmentUsd } from "@/lib/yield-math";
 import { mockLocksState } from "./locks";
 
@@ -41,7 +40,7 @@ function mockYieldSummary(): EarningsSummary["yield"] {
 }
 
 export function MockEarningsRepo(): EarningsRepo {
-  let entries = [...seed.earnings];
+  const entries = [...seed.earnings];
   return {
     async summary(): Promise<EarningsSummary> {
       await sleep(jitter());
@@ -55,17 +54,11 @@ export function MockEarningsRepo(): EarningsRepo {
         yield: mockYieldSummary(),
       };
     },
+    // Frozen demo ledger (frontend phase): no automatic pending→paid flips.
+    // Live distribution is a post-MVP worker concern, never a client timer.
     async tickPayout(): Promise<{ distributionId: string; paidEntries: number }> {
       await sleep(jitter());
-      let paid = 0;
-      entries = entries.map((e) => {
-        if (e.status === "pending") {
-          paid++;
-          return { ...e, status: "paid" as const, txHash: makeSyntheticTxHash() };
-        }
-        return e;
-      });
-      return { distributionId: `dist-${Date.now()}`, paidEntries: paid };
+      return { distributionId: `dist-${Date.now()}`, paidEntries: 0 };
     },
   };
 }

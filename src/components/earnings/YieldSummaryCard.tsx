@@ -1,8 +1,9 @@
 "use client";
-// File responsibility: Locked-share yield card on Earnings (PRODUCT-PLAN §0.4 / PB-10) —
-// monthly projection, accrued-unpaid figure, withdrawal terms, and the yield payment list.
+// File responsibility: Locked-share yield snapshot on Earnings (PRODUCT-PLAN §0.4 / PB-10) —
+// quick-snapshot rows in the TaskRows grammar (one Block, hairline-separated rows,
+// label + basis left, tabular value right — never truncated values). Accrued-unpaid,
+// projected monthly, and locked-share count preserved. Pure display; no new financial logic.
 import { useTranslations } from "next-intl";
-import { Lock } from "lucide-react";
 import type { YieldSummary } from "@/types/lock";
 import { usd } from "@/lib/format";
 import { Block } from "@/components/common/Block";
@@ -13,51 +14,70 @@ export function YieldSummaryCard({ summary }: { summary: YieldSummary }) {
   const hasPayments = summary.payments.length > 0;
 
   return (
-    <section className="space-y-2" data-testid="yield-summary-card">
+    <section className="space-y-3" data-testid="yield-summary-card">
       <h2 className="px-0.5 text-[0.9375rem] font-semibold text-foreground">
         {t("yieldTitle")}
       </h2>
-      <Block className="p-4 space-y-4">
-        {summary.activeLocks === 0 ? (
+      {summary.activeLocks === 0 ? (
+        <Block className="p-5">
           <p className="text-[0.8125rem] leading-relaxed text-muted-foreground">
             {t("yieldNoLocks")}
           </p>
-        ) : (
-          <>
-            <div data-testid="yield-accrued-block">
-              <p className="text-[0.6875rem] leading-snug text-muted-foreground">{t("yieldAccrued")}</p>
-              <p
-                className="mt-1 text-[1.375rem] font-bold leading-none tracking-[-0.02em] tnum text-success"
-                data-testid="yield-accrued-unpaid"
-              >
-                {usd(summary.accruedUnpaidUsd)}
-              </p>
-              <p className="mt-1.5 text-[0.6875rem] leading-snug text-muted-foreground">
-                {t("yieldAccruedSub")}
-              </p>
-            </div>
-            <div className="flex items-center gap-2 min-w-0 border-t border-border pt-3">
-              <Lock size={16} strokeWidth={1.75} className="shrink-0 text-muted-foreground" />
-              <span className="text-sm font-medium text-foreground tnum">
-                {summary.lockedShares} shares
-              </span>
-            </div>
-            <div className="space-y-3">
-              <div>
-                <p className="mb-1 text-[0.6875rem] leading-snug text-muted-foreground">
-                  {t("yieldMonthly")}
-                </p>
-                <p className="text-sm font-semibold tnum text-foreground" data-testid="yield-monthly">
-                  {usd(summary.projectedMonthlyUsd)}
-                </p>
+        </Block>
+      ) : (
+        <Block className="overflow-hidden" data-testid="yield-accrued-block">
+          <div className="divide-y divide-border/50">
+              <div className="flex min-h-[52px] w-full items-center justify-between gap-3 px-4 py-3">
+                <span className="min-w-0">
+                  <span className="block text-[0.84375rem] leading-snug text-muted-foreground">
+                    {t("yieldAccrued")}
+                  </span>
+                  <span className="mt-[2px] block text-xs leading-tight text-muted-foreground/80">
+                    {t("yieldAccruedSub")}
+                  </span>
+                </span>
+                <span
+                  className="shrink-0 whitespace-nowrap text-sm tnum font-semibold tracking-tight text-success"
+                  data-testid="yield-accrued-unpaid"
+                >
+                  {usd(summary.accruedUnpaidUsd)}
+                </span>
               </div>
-              <p className="text-[0.6875rem] leading-snug text-muted-foreground">
-                {t("withdrawalTerms")}
-              </p>
+              <div className="flex min-h-[52px] w-full items-center justify-between gap-3 px-4 py-3">
+                <span className="min-w-0">
+                  <span className="block text-[0.84375rem] leading-snug text-muted-foreground">
+                    {t("yieldMonthly")}
+                  </span>
+                  <span className="mt-[2px] block text-xs leading-tight text-muted-foreground/80">
+                    {t("withdrawalTerms")}
+                  </span>
+                </span>
+                <span
+                  className="shrink-0 whitespace-nowrap text-sm tnum font-semibold tracking-tight text-foreground"
+                  data-testid="yield-monthly"
+                >
+                  {usd(summary.projectedMonthlyUsd)}
+                </span>
+              </div>
+              <div className="flex min-h-[52px] w-full items-center justify-between gap-3 px-4 py-3">
+                <span className="min-w-0">
+                  <span className="block text-[0.84375rem] leading-snug text-muted-foreground">
+                    {t("lockedShares")}
+                  </span>
+                  <span className="mt-[2px] block text-xs leading-tight text-muted-foreground/80">
+                    {t("lockedSharesSub")}
+                  </span>
+                </span>
+                <span
+                  className="shrink-0 whitespace-nowrap text-sm tnum font-semibold tracking-tight text-foreground"
+                  data-testid="yield-locked-shares"
+                >
+                  {t("lockedSharesValue", { count: summary.lockedShares })}
+                </span>
+              </div>
             </div>
-          </>
-        )}
-      </Block>
+          </Block>
+      )}
 
       {hasPayments ? (
         <Block data-testid="yield-payments">

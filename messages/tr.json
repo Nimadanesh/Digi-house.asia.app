@@ -811,7 +811,16 @@
     "chartLegendPaid": "Ödendi",
     "chartLegendProjected": "Öngörülen",
     "byEstateTitle": "Emlak bazlı gelir",
-    "byEstateReceived": "Alınan"
+    "byEstateReceived": "Alınan",
+    "giftShares": "Gift shares",
+    "txHistoryTitle": "Transaction history",
+    "txHistoryViewAll": "View all",
+    "withdrawEligible": "Available to withdraw",
+    "lockedShares": "Locked shares",
+    "lockedSharesSub": "Earning monthly yield",
+    "lockedSharesValue": "{count} shares",
+    "withdrawButton": "Withdraw",
+    "withdrawAvailable": "available: {amount}"
   },
   "portfolio": {
     "loadError": "Portföyün yüklenemedi.",
@@ -875,7 +884,10 @@
     "nftStatusTransferring": "Aktarılıyor",
     "nftStatusDelivered": "Teslim edildi",
     "nftStatusFailed": "Başarısız",
-    "orderQueued": "Sırada"
+    "orderQueued": "Sırada",
+    "giftShares": "Gift shares",
+    "sharesBreakdown": "{total} {shares} · {earning} earning · {idle} idle",
+    "viewHistory": "View full transaction history"
   },
   "settings": {
     "title": "Ayarlar",

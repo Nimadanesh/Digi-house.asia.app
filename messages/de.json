@@ -811,7 +811,16 @@
     "chartLegendPaid": "Bezahlt",
     "chartLegendProjected": "Projiziert",
     "byEstateTitle": "Einkünfte nach Objekt",
-    "byEstateReceived": "Erhalten"
+    "byEstateReceived": "Erhalten",
+    "giftShares": "Gift shares",
+    "txHistoryTitle": "Transaction history",
+    "txHistoryViewAll": "View all",
+    "withdrawEligible": "Available to withdraw",
+    "lockedShares": "Locked shares",
+    "lockedSharesSub": "Earning monthly yield",
+    "lockedSharesValue": "{count} shares",
+    "withdrawButton": "Withdraw",
+    "withdrawAvailable": "available: {amount}"
   },
   "portfolio": {
     "loadError": "Portfolio konnte nicht geladen werden.",
@@ -875,7 +884,10 @@
     "nftStatusTransferring": "Wird übertragen",
     "nftStatusDelivered": "Zugestellt",
     "nftStatusFailed": "Fehlgeschlagen",
-    "orderQueued": "Warteschlange"
+    "orderQueued": "Warteschlange",
+    "giftShares": "Gift shares",
+    "sharesBreakdown": "{total} {shares} · {earning} earning · {idle} idle",
+    "viewHistory": "View full transaction history"
   },
   "settings": {
     "title": "Einstellungen",

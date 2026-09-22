@@ -33,6 +33,17 @@ vi.mock("@/hooks/useWithdrawals", () => ({
     variables: undefined,
   })),
 }));
+vi.mock("@/hooks/useTransactions", () => ({
+  useTransactions: vi.fn(() => ({
+    transactions: [],
+    isLoading: false,
+    isError: false,
+    error: null,
+    hasMore: false,
+    loadMore: vi.fn(),
+    refetch: vi.fn(),
+  })),
+}));
 
 import { useEarnings } from "@/hooks/useEarnings";
 import { useMarketplace } from "@/hooks/useMarketplace";
@@ -209,7 +220,7 @@ describe("Earnings page — income redesign (slice 5)", () => {
 
     // Secondary Withdraw entry + withdrawable balance from useMeSummary.
     expect(screen.getByTestId("earnings-withdraw-block")).toBeInTheDocument();
-    expect(screen.getByTestId("withdrawable-balance")).toHaveTextContent("$15.00");
+    expect(screen.getByTestId("withdrawable-balance")).toHaveTextContent("available: $15.00");
     fireEvent.click(screen.getByTestId("earnings-withdraw-row"));
     expect(screen.getByTestId("withdrawal-request-sheet")).toBeInTheDocument();
 
@@ -250,6 +261,7 @@ describe("Earnings page — income redesign (slice 5)", () => {
     render(<EarningsPage />);
 
     expect(screen.getByTestId("dist-status")).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId("dist-accordion-toggle"));
     expect(screen.getByTestId("dist-eligible")).toHaveTextContent("$30.00");
     expect(screen.getByTestId("dist-requested")).toHaveTextContent("$100.00");
     expect(screen.getByTestId("dist-scheduled")).toHaveTextContent("$74.25");
@@ -265,6 +277,7 @@ describe("Earnings page — income redesign (slice 5)", () => {
     render(<EarningsPage />);
 
     expect(screen.getByTestId("dist-status")).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId("dist-accordion-toggle"));
     expect(screen.getByTestId("dist-eligible")).toHaveTextContent("Pending");
     expect(screen.getByText("No payout requested")).toBeInTheDocument();
     expect(
@@ -367,6 +380,7 @@ describe("Earnings page — income redesign (slice 5)", () => {
     render(<EarningsPage />);
 
     expect(screen.getByTestId("other-returns")).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId("other-accordion-toggle"));
     expect(screen.getByTestId("other-plan")).toHaveTextContent("No investment plans configured");
     expect(screen.getByTestId("other-appreciation")).toHaveTextContent("Pending");
     expect(screen.getByText("No open listings")).toBeInTheDocument();

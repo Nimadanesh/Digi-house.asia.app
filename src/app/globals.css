@@ -476,6 +476,20 @@
   }
 }
 
+/* Next-distribution clock — one slow minute-hand sweep (60s/rev, transform-only).
+   Calm by design: a single hand, primary color, no bounce. Reduced-motion
+   collapses it via the global rule below. */
+@keyframes dh-clock-sweep {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.dh-clock-hand {
+  transform-box: view-box;
+  transform-origin: 8px 8px;
+  animation: dh-clock-sweep 60s linear infinite;
+}
+
 /* Property tabs (REDESIGN-SPEC §7) — horizontal scroll strip without a visible scrollbar. */
 .no-scrollbar {
   scrollbar-width: none;

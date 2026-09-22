@@ -1,7 +1,8 @@
 "use client";
-// File responsibility: Portfolio screen (Fable redesign). Summary, allocation, holdings + detail sheet.
+// File responsibility: Portfolio screen (premium hierarchy). Header summary, allocation, holdings + detail sheet.
 // Cancel-order goes through a confirmation sheet (escrow refund is consequential) — no direct mutation.
 import { useMemo, useState, useCallback, useEffect } from "react";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { useMarketplace } from "@/hooks/useMarketplace";
@@ -11,13 +12,14 @@ import { useTelegram } from "@/hooks/useTelegram";
 import { haptics } from "@/lib/telegram/haptics";
 import { portfolioAllocation } from "@/lib/portfolio-math";
 import { usd } from "@/lib/format";
+import { ROUTES } from "@/lib/constants";
 import { closeTopSheet } from "@/components/common/Sheet";
 import { EmptyState } from "@/components/common/EmptyState";
 import { ErrorState } from "@/components/common/ErrorState";
 import { BrowseMarketplaceCta } from "@/components/common/BrowseMarketplaceCta";
 import { ConfirmActionSheet } from "@/components/common/ConfirmActionSheet";
-import { PortfolioSummaryCard } from "@/components/portfolio/PortfolioSummaryCard";
-import { LockedFreeCard } from "@/components/portfolio/LockedFreeCard";
+import { PortfolioHeaderCard } from "@/components/portfolio/PortfolioHeaderCard";
+import { IdleSharesBanner } from "@/components/portfolio/IdleSharesBanner";
 import { AllocationBar } from "@/components/portfolio/AllocationBar";
 import { HoldingCard } from "@/components/portfolio/HoldingCard";
 import { HoldingDetailSheet } from "@/components/portfolio/HoldingDetailSheet";
@@ -150,20 +152,16 @@ export default function PortfolioPage() {
     .sort((a, b) => b.free - a.free)[0]?.id;
 
   return (
-    <div className="mt-3 space-y-4 pb-2" data-testid="portfolio-page">
-      <PortfolioSummaryCard summary={data} />
-      <LockedFreeCard
-        lockedShares={totalLocked}
-        freeShares={totalFree}
-        nudgePropertyId={nudgePropertyId}
-      />
+    <div className="mt-3 space-y-6 pb-2" data-testid="portfolio-page">
+      <PortfolioHeaderCard summary={data} lockedShares={totalLocked} freeShares={totalFree} />
+      <IdleSharesBanner freeShares={totalFree} nudgePropertyId={nudgePropertyId} />
       <AllocationBar slices={slices} nameById={nameById} />
 
-      <section className="space-y-2" data-testid="portfolio-holdings">
+      <section className="space-y-3" data-testid="portfolio-holdings">
         <h2 className="px-0.5 text-[0.9375rem] font-semibold text-foreground">
           {t("myPropertiesCount", { count: data.holdings.length })}
         </h2>
-        <div className="space-y-2.5">
+        <div className="space-y-4">
           {data.holdings.map((h) => {
             const listing = listingById.get(h.propertyId);
             return (
@@ -175,7 +173,7 @@ export default function PortfolioPage() {
                 image={listing?.images[0]}
                 lockedShares={lockedByProperty.get(h.propertyId) ?? 0}
                 nftStatus={nftByProperty.get(h.propertyId)?.status ?? null}
-                onOpen={() => {
+                onDetails={() => {
                   haptics.selection();
                   setSelected(h);
                 }}
@@ -198,7 +196,7 @@ export default function PortfolioPage() {
         cancellingId={cancelOrder.isPending ? String(cancelOrder.variables) : null}
       />
 
-      <section className="space-y-2">
+      <section className="space-y-2.5">
         <Block>
           <button
             type="button"
@@ -213,6 +211,14 @@ export default function PortfolioPage() {
             </span>
           </button>
         </Block>
+        <Link
+          href={ROUTES.earnings}
+          onClick={() => haptics.selection()}
+          className="flex min-h-[44px] items-center justify-center text-[0.8125rem] text-muted-foreground active:opacity-70 transition-opacity"
+          data-testid="portfolio-view-history"
+        >
+          {t("viewHistory")}
+        </Link>
       </section>
 
       <HoldingDetailSheet

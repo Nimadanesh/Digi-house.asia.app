@@ -19,6 +19,8 @@ export function DemoModeBadge() {
     pathname === ROUTES.onboarding ||
     pathname === ROUTES.profileSetup ||
     pathname === ROUTES.recoveryLogin ||
+    pathname === ROUTES.earnings ||
+    pathname === ROUTES.transactions ||
     mainButtonActive ||
     // The in-page sticky CTA occupies this zone — never intercept its taps.
     stickyCtaVisible

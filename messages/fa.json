@@ -811,7 +811,16 @@
     "chartLegendPaid": "پرداخت‌شده",
     "chartLegendProjected": "پیش‌بینی‌شده",
     "byEstateTitle": "درآمد به تفکیک املاک",
-    "byEstateReceived": "دریافت‌شده"
+    "byEstateReceived": "دریافت‌شده",
+    "giftShares": "Gift shares",
+    "txHistoryTitle": "Transaction history",
+    "txHistoryViewAll": "View all",
+    "withdrawEligible": "Available to withdraw",
+    "lockedShares": "Locked shares",
+    "lockedSharesSub": "Earning monthly yield",
+    "lockedSharesValue": "{count} shares",
+    "withdrawButton": "Withdraw",
+    "withdrawAvailable": "available: {amount}"
   },
   "portfolio": {
     "loadError": "بارگذاری سبد ممکن نشد.",
@@ -875,7 +884,10 @@
     "nftStatusTransferring": "در حال انتقال",
     "nftStatusDelivered": "تحویل‌شده",
     "nftStatusFailed": "ناموفق",
-    "orderQueued": "در صف"
+    "orderQueued": "در صف",
+    "giftShares": "Gift shares",
+    "sharesBreakdown": "{total} {shares} · {earning} earning · {idle} idle",
+    "viewHistory": "View full transaction history"
   },
   "settings": {
     "title": "تنظیمات",

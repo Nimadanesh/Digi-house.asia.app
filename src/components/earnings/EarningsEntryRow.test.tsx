@@ -49,7 +49,7 @@ describe("EarningsEntryRow — Fable payments + honesty", () => {
     vi.clearAllMocks();
   });
 
-  it("paid collapsed with simulated hash: shows Paid pill WITH simulated capsule", () => {
+  it("paid collapsed with simulated hash: shows Paid pill with no capsule", () => {
     render(
       <EarningsEntryRow
         entry={paidEntry}
@@ -59,7 +59,7 @@ describe("EarningsEntryRow — Fable payments + honesty", () => {
       />,
     );
     expect(screen.getByText("Paid")).toHaveClass("text-success");
-    expect(screen.getByText("simulated")).toHaveClass("text-muted-foreground");
+    expect(screen.queryByText("simulated")).not.toBeInTheDocument();
   });
 
   it("paid collapsed with real hash: shows Paid pill WITHOUT simulated capsule", () => {

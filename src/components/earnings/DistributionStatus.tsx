@@ -5,8 +5,10 @@
 // summarizeDistribution; reached stages fill, the rest stay hollow. Empty stages
 // render honest empty lines, unknown balances render Pending. Presentational:
 // no new financial logic.
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Block } from "@/components/common/Block";
+import { Disclosure } from "@/components/common/Disclosure";
 import { Skeleton } from "@/components/common/Skeleton";
 import { usd } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -36,6 +38,7 @@ export function DistributionStatus({
 }) {
   const t = useTranslations("earnings");
   const tCommon = useTranslations("common");
+  const [open, setOpen] = useState(false);
 
   if (withdrawals === undefined || withdrawableUsd === undefined) {
     return (
@@ -105,25 +108,36 @@ export function DistributionStatus({
   );
 
   return (
-    <section className="space-y-2" data-testid="dist-status">
-      <h2 className="px-0.5 text-[0.9375rem] font-semibold text-foreground">
-        {t("distTitle")}
-      </h2>
-      <Block className="p-4" data-testid="dist-next">
-        {scheduled && d.nextDueAt != null && d.nextDueUsd != null ? (
-          <div className="space-y-1">
-            <p className="text-[0.6875rem] leading-snug text-muted-foreground">
-              {t("distNextDue", { date: new Date(d.nextDueAt).toLocaleDateString() })}
-            </p>
-            <p className="text-[1.375rem] font-bold leading-none tracking-[-0.02em] tnum text-foreground">
-              {usd(d.nextDueUsd)}
-            </p>
-          </div>
-        ) : (
-          <p className="text-sm text-muted-foreground">{t("distScheduledEmpty")}</p>
-        )}
-      </Block>
-      <Block className="p-4">
+    <section className="space-y-3" data-testid="dist-status">
+      <Disclosure
+        title={
+          <span className="text-[0.9375rem] font-semibold text-foreground">{t("distTitle")}</span>
+        }
+        trailing={
+          scheduled && d.nextDueUsd != null ? (
+            <span className="tnum text-sm font-semibold text-foreground">{usd(d.nextDueUsd)}</span>
+          ) : undefined
+        }
+        open={open}
+        onOpenChange={setOpen}
+        toggleTestId="dist-accordion-toggle"
+        contentTestId="dist-accordion-content"
+        contentClassName="space-y-4 border-t border-border p-4"
+      >
+        <div data-testid="dist-next">
+          {scheduled && d.nextDueAt != null && d.nextDueUsd != null ? (
+            <div className="space-y-1">
+              <p className="text-[0.6875rem] leading-snug text-muted-foreground">
+                {t("distNextDue", { date: new Date(d.nextDueAt).toLocaleDateString() })}
+              </p>
+              <p className="text-[1.375rem] font-bold leading-none tracking-[-0.02em] tnum text-foreground">
+                {usd(d.nextDueUsd)}
+              </p>
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">{t("distScheduledEmpty")}</p>
+          )}
+        </div>
         <ol className="relative space-y-4 border-s border-border ps-5">
           {nodes.map((n) => (
             <li key={n.id} className="relative" data-testid={n.id}>
@@ -155,7 +169,7 @@ export function DistributionStatus({
             </li>
           ))}
         </ol>
-      </Block>
+      </Disclosure>
     </section>
   );
 }

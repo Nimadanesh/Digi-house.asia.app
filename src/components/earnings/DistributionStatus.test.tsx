@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, within } from "@testing-library/react";
+import { render, screen, within, fireEvent } from "@testing-library/react";
 import { DistributionStatus } from "@/components/earnings/DistributionStatus";
 import type { Withdrawal } from "@/types/withdrawal";
 
@@ -29,9 +29,16 @@ describe("DistributionStatus — payout pipeline states", () => {
     vi.clearAllMocks();
   });
 
+  /** The pipeline lives in a collapsed accordion — open it before asserting rows. */
+  function openAccordion() {
+    fireEvent.click(screen.getByTestId("dist-accordion-toggle"));
+  }
+
   it("shows eligible, requested, scheduled and paid-out from distinct sources", () => {
     render(<DistributionStatus withdrawals={[withdrawal({})]} withdrawableUsd={3_000} />);
     expect(screen.getByTestId("dist-status")).toBeInTheDocument();
+    expect(screen.queryByTestId("dist-eligible")).not.toBeInTheDocument();
+    openAccordion();
     expect(screen.getByTestId("dist-eligible")).toHaveTextContent("$30.00");
     expect(screen.getByTestId("dist-requested")).toHaveTextContent("$100.00");
     expect(screen.getByTestId("dist-requested")).toHaveTextContent("1 open requests");
@@ -49,12 +56,14 @@ describe("DistributionStatus — payout pipeline states", () => {
         withdrawableUsd={3_000}
       />,
     );
+    openAccordion();
     expect(screen.getByText("No payout requested")).toBeInTheDocument();
     expect(within(screen.getByTestId("dist-scheduled")).getByText("Not scheduled")).toBeInTheDocument();
   });
 
   it("unknown withdrawable stays Pending, never $0", () => {
     render(<DistributionStatus withdrawals={[]} withdrawableUsd={null} />);
+    openAccordion();
     expect(screen.getByTestId("dist-eligible")).toHaveTextContent("Pending");
   });
 
@@ -68,6 +77,7 @@ describe("DistributionStatus — payout pipeline states", () => {
     render(
       <DistributionStatus withdrawals={[withdrawal({})]} withdrawableUsd={3_000} accruedUsd={4_200} />,
     );
+    openAccordion();
     expect(screen.getByTestId("dist-accrued")).toHaveTextContent("$42.00");
     // Callout answers the next event: the upcoming installment, not the total.
     expect(screen.getByTestId("dist-next")).toHaveTextContent("$24.75");
@@ -82,6 +92,7 @@ describe("DistributionStatus — payout pipeline states", () => {
 
   it("next callout is honest when nothing is scheduled", () => {
     render(<DistributionStatus withdrawals={[]} withdrawableUsd={3_000} />);
+    openAccordion();
     expect(screen.getByTestId("dist-next")).toHaveTextContent("Not scheduled");
   });
 });

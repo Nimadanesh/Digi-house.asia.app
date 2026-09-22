@@ -4,7 +4,7 @@ import { useState } from "react";
 import type { Transaction, TxKind } from "@/types/transaction";
 import { Row } from "@/components/common/Row";
 import { StatusPill } from "@/components/common/StatusPill";
-import { isRealTxHash, canShowExplorerLink, buildExplorerTxUrl } from "@/lib/settlement/honesty";
+import { canShowExplorerLink, buildExplorerTxUrl } from "@/lib/settlement/honesty";
 import { env } from "@/lib/env";
 import { usd, ton } from "@/lib/format";
 import { ArrowDownCircle, ArrowUpCircle, DollarSign, ArrowLeft, ChevronDown, ChevronUp, ExternalLink } from "lucide-react";
@@ -47,15 +47,6 @@ const KIND_LABEL: Record<TxKind, string> = {
   yield_weekly: "Yield",
 };
 
-function showSimulatedTxBadge(
-  txHash: string | undefined | null,
-  status: string,
-): boolean {
-  if (status !== "success") return false;
-  if (!txHash) return true;
-  return !isRealTxHash(txHash);
-}
-
 type TransactionRowProps = {
   transaction: Transaction;
 };
@@ -66,7 +57,6 @@ export function TransactionRow({ transaction }: TransactionRowProps) {
   const network = env.network;
   const Icon = KIND_ICON[tx.kind];
   const color = KIND_COLOR[tx.kind];
-  const simulated = showSimulatedTxBadge(tx.txHash, tx.status);
   const showExplorer = tx.txHash ? canShowExplorerLink(tx.txHash, network) : false;
   const explorerUrl = tx.txHash ? buildExplorerTxUrl(tx.txHash, network) : null;
 
@@ -93,7 +83,6 @@ export function TransactionRow({ transaction }: TransactionRowProps) {
           <StatusPill
             label={tx.status === "success" ? "Success" : tx.status === "pending" ? "Pending" : "Failed"}
             variant={tx.status === "success" ? "success" : tx.status === "pending" ? "warning" : "danger"}
-            simulated={simulated}
           />
           {expanded ? (
             <ChevronUp className="h-4 w-4 shrink-0 text-muted-foreground" />

@@ -5,7 +5,6 @@
 // Paid streak stays a subtle trust signal derived from paid entries. Figures come
 // straight from the repo contract; no new math.
 import { useTranslations } from "next-intl";
-import { CalendarClock } from "lucide-react";
 import { Block } from "@/components/common/Block";
 import { usd } from "@/lib/format";
 import { nextPayoutDate, formatPayoutDate } from "@/lib/payout-display";
@@ -22,7 +21,7 @@ export function EarningsHeroCard({ summary }: { summary: EarningsSummary }) {
   const when = formatPayoutDate(date);
 
   return (
-    <Block className="p-4 space-y-4" data-testid="earnings-hero">
+    <Block className="p-5 space-y-5" data-testid="earnings-hero">
       <div className="text-center space-y-1.5 min-w-0">
         <p className="text-xs font-medium text-muted-foreground">{t("totalEarned")}</p>
         <p
@@ -48,7 +47,21 @@ export function EarningsHeroCard({ summary }: { summary: EarningsSummary }) {
         >
           <div className="flex min-w-0 items-center gap-2.5">
             <div className="flex size-8 shrink-0 items-center justify-center rounded-[8px] bg-primary/12 text-primary">
-              <CalendarClock size={16} strokeWidth={1.75} aria-hidden />
+              <svg
+                viewBox="0 0 16 16"
+                width="16"
+                height="16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.75"
+                strokeLinecap="round"
+                aria-hidden
+              >
+                <circle cx="8" cy="8" r="6.25" />
+                <line x1="8" y1="8" x2="8" y2="5.25" />
+                <line x1="8" y1="8" x2="11" y2="8" className="dh-clock-hand" />
+                <circle cx="8" cy="8" r="0.9" fill="currentColor" stroke="none" />
+              </svg>
             </div>
             <div className="min-w-0">
               <p className="text-[0.6875rem] leading-snug text-muted-foreground">{t("nextPayoutIn")}</p>

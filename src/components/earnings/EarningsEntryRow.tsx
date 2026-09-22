@@ -14,7 +14,6 @@ import { haptics } from "@/lib/telegram/haptics";
 import { cn } from "@/lib/utils";
 import {
   canShowExplorerLink,
-  shouldShowSimulatedBadge,
   buildExplorerTxUrl,
 } from "@/lib/settlement/honesty";
 import { env } from "@/lib/env";
@@ -36,7 +35,6 @@ export function EarningsEntryRow({
 }) {
   const [open, setOpen] = useState(false);
   const network = env.network;
-  const showSimulated = shouldShowSimulatedBadge(entry.txHash, entry.status, network);
   const showExplorer = canShowExplorerLink(entry.txHash, network);
   const explorerUrl = entry.txHash ? buildExplorerTxUrl(entry.txHash, network) : null;
 
@@ -71,7 +69,7 @@ export function EarningsEntryRow({
               {usd(entry.amountUsd)}
             </div>
             {entry.status === "paid" ? (
-              <StatusPill label="Paid" variant="success" simulated={showSimulated} />
+              <StatusPill label="Paid" variant="success" />
             ) : (
               <StatusPill label="Pending" variant="warning" />
             )}

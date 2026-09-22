@@ -811,7 +811,16 @@
     "chartLegendPaid": "भुगतान किया गया",
     "chartLegendProjected": "अनुमानित",
     "byEstateTitle": "संपत्ति के अनुसार आय",
-    "byEstateReceived": "प्राप्त"
+    "byEstateReceived": "प्राप्त",
+    "giftShares": "Gift shares",
+    "txHistoryTitle": "Transaction history",
+    "txHistoryViewAll": "View all",
+    "withdrawEligible": "Available to withdraw",
+    "lockedShares": "Locked shares",
+    "lockedSharesSub": "Earning monthly yield",
+    "lockedSharesValue": "{count} shares",
+    "withdrawButton": "Withdraw",
+    "withdrawAvailable": "available: {amount}"
   },
   "portfolio": {
     "loadError": "पोर्टफ़ोलियो लोड नहीं हो सका।",
@@ -875,7 +884,10 @@
     "nftStatusTransferring": "स्थानांतरित हो रहा",
     "nftStatusDelivered": "वितरित",
     "nftStatusFailed": "विफल",
-    "orderQueued": "कतार में"
+    "orderQueued": "कतार में",
+    "giftShares": "Gift shares",
+    "sharesBreakdown": "{total} {shares} · {earning} earning · {idle} idle",
+    "viewHistory": "View full transaction history"
   },
   "settings": {
     "title": "सेटिंग्स",

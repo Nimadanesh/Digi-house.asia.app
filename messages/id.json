@@ -811,7 +811,16 @@
     "chartLegendPaid": "Dibayar",
     "chartLegendProjected": "Perkiraan",
     "byEstateTitle": "Pendapatan per properti",
-    "byEstateReceived": "Diterima"
+    "byEstateReceived": "Diterima",
+    "giftShares": "Gift shares",
+    "txHistoryTitle": "Transaction history",
+    "txHistoryViewAll": "View all",
+    "withdrawEligible": "Available to withdraw",
+    "lockedShares": "Locked shares",
+    "lockedSharesSub": "Earning monthly yield",
+    "lockedSharesValue": "{count} shares",
+    "withdrawButton": "Withdraw",
+    "withdrawAvailable": "available: {amount}"
   },
   "portfolio": {
     "loadError": "Tidak dapat memuat portofolio.",
@@ -875,7 +884,10 @@
     "nftStatusTransferring": "Mentransfer",
     "nftStatusDelivered": "Terkirim",
     "nftStatusFailed": "Gagal",
-    "orderQueued": "Antre"
+    "orderQueued": "Antre",
+    "giftShares": "Gift shares",
+    "sharesBreakdown": "{total} {shares} · {earning} earning · {idle} idle",
+    "viewHistory": "View full transaction history"
   },
   "settings": {
     "title": "Pengaturan",

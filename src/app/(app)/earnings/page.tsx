@@ -8,13 +8,14 @@
 // explainer → secondary Withdraw entry. Rental-income semantics per §7.3: status
 // words only, never frequency promises. UI via hooks only; property metadata from
 // the existing marketplace contract (no API changes).
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { useEarnings } from "@/hooks/useEarnings";
 import { useMarketplace } from "@/hooks/useMarketplace";
 import { useLocks, useMeSummary } from "@/hooks/useLocks";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { useWithdrawals } from "@/hooks/useWithdrawals";
+import { useTransactions } from "@/hooks/useTransactions";
 import { haptics } from "@/lib/telegram/haptics";
 import { secondaryGains } from "@/lib/income-view-model";
 import {
@@ -32,6 +33,7 @@ import { IncomeByEstate } from "@/components/earnings/IncomeByEstate";
 import { DistributionStatus } from "@/components/earnings/DistributionStatus";
 import { OtherReturns } from "@/components/earnings/OtherReturns";
 import { OperatingIncomeExplainer } from "@/components/earnings/OperatingIncomeExplainer";
+import { EarningsTransactionHistory } from "@/components/earnings/EarningsTransactionHistory";
 import { EarningsWithdrawEntry } from "@/components/earnings/EarningsWithdrawEntry";
 import { EarningsSkeleton } from "@/components/earnings/EarningsSkeleton";
 
@@ -43,6 +45,8 @@ export default function EarningsPage() {
   const meSummary = useMeSummary();
   const portfolio = usePortfolio();
   const withdrawals = useWithdrawals();
+  const { transactions, isLoading: txLoading } = useTransactions();
+  const heroRef = useRef<HTMLElement>(null);
 
   // PROMPT 03-C: canonical display identity (ESTATE-24 / canonical layer) for
   // the Income surfaces. Economics (gains below) keep the listing facts.
@@ -108,7 +112,7 @@ export default function EarningsPage() {
   }
 
   return (
-    <div className="mt-3 space-y-4 pb-2" data-testid="earnings-page">
+    <div className="mt-3 space-y-6 pb-6 sm:space-y-8" data-testid="earnings-page">
       <header className="pt-1">
         <h1 className="text-[1.375rem] font-semibold tracking-tight text-foreground">
           {t("title")}
@@ -118,31 +122,45 @@ export default function EarningsPage() {
         </p>
       </header>
 
-      <EarningsHeroCard summary={earnings.data} />
-      {earnings.data.yield ? <YieldSummaryCard summary={earnings.data.yield} /> : null}
+      {/* 1. Hero Summary */}
+      <section ref={heroRef} aria-label={t("totalEarned")}>
+        <EarningsHeroCard summary={earnings.data} />
+      </section>
+      {/* 2. Quick Snapshot */}
+      {earnings.data.yield ? (
+        <YieldSummaryCard summary={earnings.data.yield} />
+      ) : null}
+      {/* 3. Income Journey */}
       <IncomeJourneyChart
         entries={earnings.data.entries}
         propertyById={estateIdentityById}
         accruedUsd={earnings.data.yield?.accruedUnpaidUsd}
       />
+      {/* 4. Your Income Flow */}
       <IncomeTimeline
         entries={earnings.data.entries}
         projectedNextUsd={earnings.data.projectedNextWeekUsd}
         accruedUsd={earnings.data.yield?.accruedUnpaidUsd}
       />
+      {/* 5. Income by Estate */}
       <IncomeByEstate
         entries={earnings.data.entries}
         propertyById={estateIdentityById}
         holdings={portfolio.data?.holdings}
         locks={locksQuery.data?.locks}
       />
+      {/* 7. Payout Status (accordion) */}
       <DistributionStatus
         withdrawals={withdrawals.data}
         withdrawableUsd={meSummary.data?.balances.withdrawableUsd ?? null}
       />
+      {/* 8. Other Returns (accordion) */}
       <OtherReturns gains={listingGains} />
       <OperatingIncomeExplainer />
-      <EarningsWithdrawEntry />
+      {/* 6. Recent Activity */}
+      <EarningsTransactionHistory transactions={transactions} isLoading={txLoading} />
+      {/* Sticky Withdraw bar (appears past the hero) */}
+      <EarningsWithdrawEntry heroRef={heroRef} />
     </div>
   );
 }
