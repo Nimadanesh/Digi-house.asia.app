@@ -88,6 +88,7 @@ export function ClubReferralProgress() {
                     <span className="block truncate text-sm font-medium text-foreground">
                       {t(REWARD_KEYS[i]!)}
                     </span>
+                    <span className="sr-only">{reached ? t("unlocked") : t("locked")}</span>
                     <span className="block text-[11px] leading-tight text-muted-foreground tnum">
                       {t("referralMilestoneCount", { count: milestone.referrals })}
                     </span>

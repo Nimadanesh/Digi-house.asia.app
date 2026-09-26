@@ -18,6 +18,7 @@ import styles from "./referral-glass.module.css";
 
 export function ClubReferralView() {
   const t = useTranslations("referral");
+  const tc = useTranslations("club");
   const { successfulReferrals } = useReferralProgress();
   const progress = referralProgress(successfulReferrals);
   const stayNights = referralStayNights(successfulReferrals);
@@ -62,6 +63,7 @@ export function ClubReferralView() {
           <div
             className={styles.progressTrack}
             role="progressbar"
+            aria-label={t("clubProgressTitle")}
             aria-valuemin={0}
             aria-valuemax={10}
             aria-valuenow={Math.min(progress.successfulReferrals, 10)}
@@ -101,6 +103,7 @@ export function ClubReferralView() {
                     <span className="block truncate text-sm font-medium text-foreground tnum">
                       {t("clubMilestoneCount", { count: milestone.referrals })}
                     </span>
+                    <span className="sr-only">{reached ? tc("unlocked") : tc("locked")}</span>
                     {milestone.unlocksPlusLayer ? (
                       <span className="block truncate text-[11px] leading-tight text-[#D4AF77]">
                         {t("plusTitle")}

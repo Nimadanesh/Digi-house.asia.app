@@ -91,6 +91,16 @@ describe("Club page", () => {
     expect(section).toHaveTextContent("Private Plus Experience Layer");
     expect(screen.getByTestId("club-referral-progress-cta")).toHaveTextContent("Invite a Friend");
     expect(screen.getByTestId("club-referral-progress-cta")).toHaveAttribute("href", "/referral");
+    // A11y: locked milestone states exposed to screen readers.
+    screen.getAllByTestId("referral-milestone").forEach((m) => {
+      expect(m).toHaveTextContent(/locked/i);
+    });
+    // A11y: header progressbar has an accessible name.
+    expect(screen.getByRole("progressbar").getAttribute("aria-label")).toMatch(/to unlock/i);
+    // A11y: tier rows expose their state.
+    screen.getAllByTestId("club-tier").forEach((row) => {
+      expect(row.getAttribute("aria-label")).toBeTruthy();
+    });
   });
   it("standard members do not enter the stay journey", () => {
     loaded(750_000);
@@ -136,6 +146,9 @@ describe("Club page", () => {
     render(<ClubPage />);
     fireEvent.click(screen.getAllByTestId("club-benefit")[0]!);
     const panel = screen.getByTestId("sheet-panel");
+    // A11y: dialog carries the sheet title as its accessible name.
+    expect(panel.getAttribute("aria-labelledby")).toBe("club-benefit-sheet-title");
+    expect(document.getElementById("club-benefit-sheet-title")).not.toBeNull();
     expect(panel).toHaveTextContent("Villa Stay");
     expect(panel).toHaveTextContent("What it is");
     expect(panel).toHaveTextContent("Who can access it");

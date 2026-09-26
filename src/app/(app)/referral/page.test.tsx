@@ -120,6 +120,11 @@ describe("Referral hub page", () => {
     expect(screen.getByTestId("referral-club-progress")).toBeInTheDocument();
     // Zero-state honesty: no "next" reward when the next milestone changes nothing.
     expect(screen.queryByText(/Next: 4-night/)).not.toBeInTheDocument();
+    // A11y: locked milestone states + named progressbar.
+    screen.getAllByTestId("referral-milestone").forEach((m) => {
+      expect(m).toHaveTextContent(/locked/i);
+    });
+    expect(screen.getByRole("progressbar").getAttribute("aria-label")).toBeTruthy();
     expect(screen.getAllByTestId("referral-milestone")).toHaveLength(5);
     expect(screen.getByTestId("referral-stay")).toHaveTextContent(/7/);
     expect(screen.getByTestId("referral-stay")).not.toHaveTextContent(/Your Club stay: 7/);

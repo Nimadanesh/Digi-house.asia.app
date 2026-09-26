@@ -13,6 +13,7 @@ const TITLES: Record<string, string> = {
   "/marketplace": "Marketplace",
   "/earnings": "Earnings",
   "/portfolio": "Portfolio",
+  "/club": "Club",
   "/referral": "Referral",
   "/settings": "Settings",
   "/onboarding": "Welcome",
