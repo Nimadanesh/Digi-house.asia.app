@@ -38,6 +38,19 @@ describe("useInviteLink", () => {
     expect(result.current.inviteLink).toBe("https://t.me/TestBot?startapp=ref_u1");
   });
 
+  it("reports login state separately from link availability", () => {
+    const { result } = renderHook(() => useInviteLink());
+    expect(result.current.isLoggedIn).toBe(true);
+    expect(result.current.canInvite).toBe(true);
+  });
+
+  it("reports logged-out without a user", () => {
+    useAuthStore.getState().setUser(null);
+    const { result } = renderHook(() => useInviteLink());
+    expect(result.current.isLoggedIn).toBe(false);
+    expect(result.current.canInvite).toBe(false);
+  });
+
   it("reports not-invitable without a user and never throws on copy", async () => {
     useAuthStore.getState().setUser(null);
     const { result } = renderHook(() => useInviteLink());

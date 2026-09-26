@@ -967,7 +967,14 @@
     "coOwnShare": "Undang untuk co-own",
     "coOwnCopy": "Salin tautan",
     "coOwnCopied": "Tersalin!",
-    "coOwnSignIn": "Masuk untuk mengundang"
+    "coOwnSignIn": "Masuk untuk mengundang",
+    "ownerLabel": "Kepemilikan",
+    "ownerStatement": "Saya memiliki bagian dari",
+    "ownerShare": "Bagikan kepemilikan",
+    "ownerCopy": "Salin tautan",
+    "ownerCopied": "Tersalin!",
+    "ownerSignIn": "Masuk untuk mengundang",
+    "shareText": "Saya memiliki bagian dari {estate} di FractionalLuxe"
   },
   "settings": {
     "title": "Pengaturan",

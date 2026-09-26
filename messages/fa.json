@@ -967,7 +967,14 @@
     "coOwnShare": "دعوت به مالکیت مشترک",
     "coOwnCopy": "کپی لینک",
     "coOwnCopied": "کپی شد!",
-    "coOwnSignIn": "برای دعوت وارد شوید"
+    "coOwnSignIn": "برای دعوت وارد شوید",
+    "ownerLabel": "مالکیت",
+    "ownerStatement": "بخشی از",
+    "ownerShare": "اشتراک مالکیت",
+    "ownerCopy": "کپی لینک",
+    "ownerCopied": "کپی شد!",
+    "ownerSignIn": "برای دعوت وارد شوید",
+    "shareText": "بخشی از {estate} در FractionalLuxe دارم"
   },
   "settings": {
     "title": "تنظیمات",

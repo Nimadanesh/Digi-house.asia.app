@@ -967,7 +967,14 @@
     "coOwnShare": "邀请共同拥有",
     "coOwnCopy": "复制链接",
     "coOwnCopied": "已复制！",
-    "coOwnSignIn": "登录后邀请"
+    "coOwnSignIn": "登录后邀请",
+    "ownerLabel": "所有权",
+    "ownerStatement": "我拥有其中一部分",
+    "ownerShare": "分享所有权",
+    "ownerCopy": "复制链接",
+    "ownerCopied": "已复制！",
+    "ownerSignIn": "登录后邀请",
+    "shareText": "我在 FractionalLuxe 拥有 {estate} 的一部分"
   },
   "settings": {
     "title": "设置",

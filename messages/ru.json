@@ -967,7 +967,14 @@
     "coOwnShare": "Пригласить к совладению",
     "coOwnCopy": "Скопировать ссылку",
     "coOwnCopied": "Скопировано!",
-    "coOwnSignIn": "Войдите, чтобы приглашать"
+    "coOwnSignIn": "Войдите, чтобы приглашать",
+    "ownerLabel": "Владение",
+    "ownerStatement": "Мне принадлежит часть",
+    "ownerShare": "Поделиться владением",
+    "ownerCopy": "Скопировать ссылку",
+    "ownerCopied": "Скопировано!",
+    "ownerSignIn": "Войдите, чтобы приглашать",
+    "shareText": "Мне принадлежит часть {estate} на FractionalLuxe"
   },
   "settings": {
     "title": "Настройки",

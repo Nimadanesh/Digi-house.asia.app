@@ -1150,7 +1150,14 @@
     "coOwnShare": "Invite to Co-Own",
     "coOwnCopy": "Copy link",
     "coOwnCopied": "Copied!",
-    "coOwnSignIn": "Sign in to invite"
+    "coOwnSignIn": "Sign in to invite",
+    "ownerLabel": "Ownership",
+    "ownerStatement": "I own a piece of",
+    "ownerShare": "Share Ownership",
+    "ownerCopy": "Copy link",
+    "ownerCopied": "Copied!",
+    "ownerSignIn": "Sign in to invite",
+    "shareText": "I own a piece of {estate} on FractionalLuxe"
   },
   "settings": {
     "title": "Settings",

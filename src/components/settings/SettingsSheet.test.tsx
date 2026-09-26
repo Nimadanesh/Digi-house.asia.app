@@ -94,11 +94,13 @@ describe("SettingsSheet", () => {
     });
   });
 
-  it("disables invite when session user is missing", () => {
+  it("logged-out invite row is an active sign-in entry, never disabled", () => {
     useAuthStore.setState({ user: null });
     render(<SettingsSheet />);
-    expect(screen.getByTestId("settings-invite-friends")).toBeDisabled();
-    expect(screen.getByText(/sign in to invite/i)).toBeInTheDocument();
+    const row = screen.getByTestId("settings-invite-friends");
+    expect(row).toHaveTextContent(/sign in to invite/i);
+    expect(row).not.toBeDisabled();
+    expect(row).toHaveAttribute("href", "/recovery-login");
   });
 
   it("renders wallet status and disconnect when connected", () => {

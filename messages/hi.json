@@ -967,7 +967,14 @@
     "coOwnShare": "सह-स्वामित्व हेतु आमंत्रित करें",
     "coOwnCopy": "लिंक कॉपी करें",
     "coOwnCopied": "कॉपी हुआ!",
-    "coOwnSignIn": "आमंत्रित करने हेतु साइन इन करें"
+    "coOwnSignIn": "आमंत्रित करने हेतु साइन इन करें",
+    "ownerLabel": "स्वामित्व",
+    "ownerStatement": "मेरा एक हिस्सा है",
+    "ownerShare": "स्वामित्व साझा करें",
+    "ownerCopy": "लिंक कॉपी करें",
+    "ownerCopied": "कॉपी हुआ!",
+    "ownerSignIn": "आमंत्रित करने हेतु साइन इन करें",
+    "shareText": "FractionalLuxe पर {estate} में मेरा एक हिस्सा है"
   },
   "settings": {
     "title": "सेटिंग्स",

@@ -967,7 +967,14 @@
     "coOwnShare": "Invitar a ser copropietario",
     "coOwnCopy": "Copiar enlace",
     "coOwnCopied": "¡Copiado!",
-    "coOwnSignIn": "Inicia sesión para invitar"
+    "coOwnSignIn": "Inicia sesión para invitar",
+    "ownerLabel": "Propiedad",
+    "ownerStatement": "Poseo una parte de",
+    "ownerShare": "Compartir propiedad",
+    "ownerCopy": "Copiar enlace",
+    "ownerCopied": "¡Copiado!",
+    "ownerSignIn": "Inicia sesión para invitar",
+    "shareText": "Poseo una parte de {estate} en FractionalLuxe"
   },
   "settings": {
     "title": "Ajustes",

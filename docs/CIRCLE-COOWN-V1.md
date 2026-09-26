@@ -17,17 +17,22 @@ Estates the member owns and has shared, or is exploring with Circle members. No 
 
 Product action: "I found an estate we could own together." Entry points: the Estate page card (`estate-coown`, below metrics, above tabs) and the Luxe Circle section (routes to `/marketplace` to pick an estate first). The shared object identifies the estate: `https://t.me/<bot>?startapp=coown_<estateId>_ref_<inviterId>` (`buildCoOwnLink`; null on missing/blank inputs). The future attribution model can know inviter + estate + invite context. NOT implemented: parsing, ledger, attribution settlement, payment, wallet, blockchain, anti-fraud, tax.
 
-## 4. Separation (LOCKED)
+## 4. Ownership Card (PROTOTYPE)
+
+Premium minimal statement of a real ownership relationship: micro label OWNERSHIP, "I own a piece of" + estate name + location, and Share Ownership. Renders only when the current user has an actual holding (`ownedShares > 0`) for the estate — otherwise hidden entirely, never fabricated. Canonical context: the estate detail page (owned estates), placed between the metrics and the co-own card. Contains no amounts, yields, points, tiers, or referral mechanics. Share uses the explicit `ownership` link context with estate text ("I own a piece of {estate} on FractionalLuxe"); Web Share first, clipboard fallback, clear copied state.
+
+## 5. Separation (LOCKED)
 
 - Club Referral: referral mechanics + milestone rewards (points, stays). Canonical home: `/referral`.
+- Ownership share: statement of existing ownership + estate link (explicit `ownership` context). No rewards, no ladder, no attribution settlement.
 - Luxe Circle: social ownership network (members, shared properties). No points, no dollars.
 - Co-Own: sharing one specific estate. No points, no dollars.
 - Forbidden: points-to-dollar conversion, combined referral balance, multi-level commissions, recursive payouts, MLM hierarchy, fake ownership, fake financial rewards.
 
-## 5. NOT IMPLEMENTED
+## 6. NOT IMPLEMENTED
 
 Ownership Card, Circle Milestones, Private Opportunities, public leaderboard, real referral ledger, real attribution settlement, payment, withdrawal, wallet, blockchain, anti-fraud, tax, real booking, real Circle backend.
 
-## 6. COMPLIANCE-GATED
+## 7. COMPLIANCE-GATED
 
 Co-own invitations must never be presented as investment advice, guaranteed returns, or shared-ownership contracts. Copy stays at "share/explore together" until separately approved.

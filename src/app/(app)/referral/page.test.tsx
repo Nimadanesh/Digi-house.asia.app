@@ -2,17 +2,19 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, within } from "@testing-library/react";
 import type { PortfolioSummary } from "@/types/position";
 
-const { copyInviteMock, shareInviteMock, usePortfolioMock } = vi.hoisted(() => ({
+const { copyInviteMock, shareInviteMock, usePortfolioMock, inviteLinkState } = vi.hoisted(() => ({
   copyInviteMock: vi.fn(),
   shareInviteMock: vi.fn(),
   usePortfolioMock: vi.fn(),
+  inviteLinkState: { isLoggedIn: true },
 }));
 
 vi.mock("@/hooks/usePortfolio", () => ({ usePortfolio: () => usePortfolioMock() }));
 vi.mock("@/hooks/useInviteLink", () => ({
   useInviteLink: () => ({
-    inviteLink: "https://t.me/Bot?startapp=ref_u1",
-    canInvite: true,
+    inviteLink: inviteLinkState.isLoggedIn ? "https://t.me/Bot?startapp=ref_u1" : null,
+    canInvite: inviteLinkState.isLoggedIn,
+    isLoggedIn: inviteLinkState.isLoggedIn,
     copied: false,
     copyInvite: copyInviteMock,
     shareInvite: shareInviteMock,
@@ -43,6 +45,7 @@ function loaded(totalInvestedUsd: number) {
 describe("Referral hub page", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    inviteLinkState.isLoggedIn = true;
   });
 
   it("hero: eyebrow, headline, support copy, and both CTAs", () => {
@@ -103,6 +106,21 @@ describe("Referral hub page", () => {
     expect(screen.getByTestId("referral-lock")).toHaveTextContent(/6-month/i);
     fireEvent.click(screen.getByTestId("referral-nudge-club"));
     expect(screen.getByTestId("referral-club-view")).toBeInTheDocument();
+  });
+
+  it("logged-out user sees an active sign-in entry, never a disabled button", () => {
+    inviteLinkState.isLoggedIn = false;
+    loaded(240_000);
+    render(<ReferralPage />);
+    const heroCta = screen.getByTestId("referral-hero-invite");
+    expect(heroCta).toHaveTextContent(/sign in/i);
+    expect(heroCta).not.toBeDisabled();
+    expect(heroCta).toHaveAttribute("href", "/recovery-login");
+    const cta = screen.getByTestId("referral-cta-invite");
+    expect(cta).toHaveTextContent(/sign in/i);
+    expect(cta).not.toBeDisabled();
+    expect(cta).toHaveAttribute("href", "/recovery-login");
+    expect(screen.queryByTestId("referral-cta-share")).not.toBeInTheDocument();
   });
 
   it("standard CTAs invoke copy and share", () => {

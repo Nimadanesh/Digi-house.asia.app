@@ -1,6 +1,7 @@
 "use client";
 // File responsibility: Settings bottom sheet shell — body (TON/settings) mounts only while open.
 import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { ChevronRight } from "lucide-react";
@@ -77,7 +78,7 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
   const user = useAuthStore((s) => s.user);
   const { data: withdrawals, isLoading: withdrawalsLoading, error: withdrawalsError } =
     useWithdrawals();
-  const { copied, canInvite, copyInvite } = useInviteLink();
+  const { copied, copyInvite } = useInviteLink();
 
   const closeAll = useCallback(() => {
     setAboutOpen(false);
@@ -263,23 +264,40 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
         <section className="space-y-2">
           <SectionLabel className="px-0.5">{t("referrals")}</SectionLabel>
           <Block>
-            <button
-              type="button"
-              onClick={() => void onInviteFriends()}
-              className={`flex w-full min-h-[56px] items-center gap-2 px-4 py-3.5 text-start ${NAV_ROW} disabled:opacity-50 disabled:pointer-events-none`}
-              data-testid="settings-invite-friends"
-              disabled={!canInvite}
-              aria-disabled={!canInvite}
-            >
-              <span className="flex-1 text-sm font-medium leading-snug text-foreground">
-                {copied ? t("copied") : !user?.id ? t("signInToInvite") : t("inviteFriends")}
-              </span>
-              {copied ? (
-                <Check size={20} strokeWidth={1.75} className="shrink-0 text-success" aria-hidden />
-              ) : (
-                <Copy size={20} strokeWidth={1.75} className="shrink-0 text-muted-foreground" aria-hidden />
-              )}
-            </button>
+            {!user?.id ? (
+              <Link
+                href={ROUTES.recoveryLogin}
+                onClick={() => haptics.selection()}
+                className={`flex w-full min-h-[56px] items-center gap-2 px-4 py-3.5 text-start ${NAV_ROW}`}
+                data-testid="settings-invite-friends"
+              >
+                <span className="flex-1 text-sm font-medium leading-snug text-foreground">
+                  {t("signInToInvite")}
+                </span>
+                <ChevronRight
+                  size={20}
+                  strokeWidth={1.75}
+                  className="shrink-0 text-muted-foreground rtl:rotate-180"
+                  aria-hidden
+                />
+              </Link>
+            ) : (
+              <button
+                type="button"
+                onClick={() => void onInviteFriends()}
+                className={`flex w-full min-h-[56px] items-center gap-2 px-4 py-3.5 text-start ${NAV_ROW}`}
+                data-testid="settings-invite-friends"
+              >
+                <span className="flex-1 text-sm font-medium leading-snug text-foreground">
+                  {copied ? t("copied") : t("inviteFriends")}
+                </span>
+                {copied ? (
+                  <Check size={20} strokeWidth={1.75} className="shrink-0 text-success" aria-hidden />
+                ) : (
+                  <Copy size={20} strokeWidth={1.75} className="shrink-0 text-muted-foreground" aria-hidden />
+                )}
+              </button>
+            )}
           </Block>
         </section>
 

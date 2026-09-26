@@ -20,6 +20,7 @@ describe("CoOwnEstateCard", () => {
     useCoOwnInviteMock.mockReturnValue({
       coOwnLink: "https://t.me/Bot?startapp=coown_re-1_ref_u1",
       canShare: true,
+      isLoggedIn: true,
       copied: false,
       shareCoOwn: shareCoOwnMock,
       copyCoOwn: copyCoOwnMock,
@@ -41,6 +42,7 @@ describe("CoOwnEstateCard", () => {
     useCoOwnInviteMock.mockReturnValue({
       coOwnLink: "https://t.me/Bot?startapp=coown_re-1_ref_u1",
       canShare: true,
+      isLoggedIn: true,
       copied: true,
       shareCoOwn: shareCoOwnMock,
       copyCoOwn: copyCoOwnMock,
@@ -49,17 +51,20 @@ describe("CoOwnEstateCard", () => {
     expect(screen.getByTestId("estate-coown-share")).toHaveTextContent("Copied!");
   });
 
-  it("disables actions with a sign-in label when anonymous", () => {
+  it("shows an active sign-in entry (never a disabled button) when anonymous", () => {
     useCoOwnInviteMock.mockReturnValue({
       coOwnLink: null,
       canShare: false,
+      isLoggedIn: false,
       copied: false,
       shareCoOwn: shareCoOwnMock,
       copyCoOwn: copyCoOwnMock,
     });
     render(<CoOwnEstateCard estateId="re-1" estateTitle="Test Villa" />);
-    expect(screen.getByTestId("estate-coown-share")).toBeDisabled();
-    expect(screen.getByTestId("estate-coown-share")).toHaveTextContent(/sign in/i);
-    expect(screen.getByTestId("estate-coown-copy")).toBeDisabled();
+    const cta = screen.getByTestId("estate-coown-share");
+    expect(cta).toHaveTextContent(/sign in/i);
+    expect(cta).not.toBeDisabled();
+    expect(cta).toHaveAttribute("href", "/recovery-login");
+    expect(screen.queryByTestId("estate-coown-copy")).not.toBeInTheDocument();
   });
 });

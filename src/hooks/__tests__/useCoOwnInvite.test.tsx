@@ -38,6 +38,19 @@ describe("useCoOwnInvite", () => {
     expect(result.current.coOwnLink).toBe("https://t.me/TestBot?startapp=coown_re-128862_ref_u1");
   });
 
+  it("reports login state separately from link availability", () => {
+    const { result } = renderHook(() => useCoOwnInvite("re-128862"));
+    expect(result.current.isLoggedIn).toBe(true);
+    expect(result.current.canShare).toBe(true);
+  });
+
+  it("logged-in but blank estate is unshareable yet still logged in", () => {
+    const { result } = renderHook(() => useCoOwnInvite("   "));
+    expect(result.current.isLoggedIn).toBe(true);
+    expect(result.current.canShare).toBe(false);
+    expect(result.current.coOwnLink).toBeNull();
+  });
+
   it("reports not-shareable without a user and never throws on copy", async () => {
     useAuthStore.getState().setUser(null);
     const { result } = renderHook(() => useCoOwnInvite("re-128862"));

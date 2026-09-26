@@ -967,7 +967,14 @@
     "coOwnShare": "ادعُ للتملك المشترك",
     "coOwnCopy": "نسخ الرابط",
     "coOwnCopied": "تم النسخ!",
-    "coOwnSignIn": "سجّل الدخول للدعوة"
+    "coOwnSignIn": "سجّل الدخول للدعوة",
+    "ownerLabel": "الملكية",
+    "ownerStatement": "أملك جزءًا من",
+    "ownerShare": "مشاركة الملكية",
+    "ownerCopy": "نسخ الرابط",
+    "ownerCopied": "تم النسخ!",
+    "ownerSignIn": "سجّل الدخول للدعوة",
+    "shareText": "أملك جزءًا من {estate} على FractionalLuxe"
   },
   "settings": {
     "title": "الإعدادات",

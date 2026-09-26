@@ -129,7 +129,12 @@ describe("PropertyDetail — Phase 9 Slice 2 (4-tab Estate Detail)", () => {
     expect(screen.getByTestId("property-tabs")).toBeInTheDocument();
     expect(screen.getByTestId("tab-estate")).toHaveAttribute("aria-selected", "true");
     expect(screen.getByTestId("panel-estate")).toBeInTheDocument();
+    // The dissolved tabs are gone.
+    expect(screen.queryByTestId("tab-overview")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("tab-performance")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("tab-holders")).not.toBeInTheDocument();
     // Co-own invite sits between the metrics grid and the tabs, tab-independent.
+    // (Ownership Card renders only with real ownership — see next test.)
     const detail = screen.getByTestId("property-detail");
     const order = ["metrics-grid", "estate-coown", "property-tabs"].map(
       (id) => detail.querySelector(`[data-testid="${id}"]`),
@@ -138,10 +143,26 @@ describe("PropertyDetail — Phase 9 Slice 2 (4-tab Estate Detail)", () => {
     for (let i = 1; i < order.length; i++) {
       expect(order[i - 1]!.compareDocumentPosition(order[i]!)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
     }
-    // The dissolved tabs are gone.
-    expect(screen.queryByTestId("tab-overview")).not.toBeInTheDocument();
-    expect(screen.queryByTestId("tab-performance")).not.toBeInTheDocument();
-    expect(screen.queryByTestId("tab-holders")).not.toBeInTheDocument();
+  });
+
+  it("owned estate shows the Ownership Card before Co-Own with no financial metrics", () => {
+    renderDetail(listing, { ownedShares: 20 });
+    const card = screen.getByTestId("estate-ownership");
+    expect(card).toHaveTextContent("I own a piece of");
+    expect(card).not.toHaveTextContent(/\$\d|%|point|yield|ROI/i);
+    const detail = screen.getByTestId("property-detail");
+    const order = ["metrics-grid", "estate-ownership", "estate-coown", "property-tabs"].map(
+      (id) => detail.querySelector(`[data-testid="${id}"]`),
+    );
+    expect(order.every(Boolean)).toBe(true);
+    for (let i = 1; i < order.length; i++) {
+      expect(order[i - 1]!.compareDocumentPosition(order[i]!)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    }
+  });
+
+  it("non-owned estate hides the Ownership Card without inventing ownership", () => {
+    renderDetail(listing);
+    expect(screen.queryByTestId("estate-ownership")).not.toBeInTheDocument();
   });
 
   it("PRIMARY Estate tab: desire sections (why/specs/amenities/location) per structure §4", async () => {

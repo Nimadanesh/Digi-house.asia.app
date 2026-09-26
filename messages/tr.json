@@ -967,7 +967,14 @@
     "coOwnShare": "Ortak sahipliğe davet et",
     "coOwnCopy": "Bağlantıyı kopyala",
     "coOwnCopied": "Kopyalandı!",
-    "coOwnSignIn": "Davet için giriş yap"
+    "coOwnSignIn": "Davet için giriş yap",
+    "ownerLabel": "Sahiplik",
+    "ownerStatement": "Bir parçasına sahibim",
+    "ownerShare": "Sahipliği paylaş",
+    "ownerCopy": "Bağlantıyı kopyala",
+    "ownerCopied": "Kopyalandı!",
+    "ownerSignIn": "Davet için giriş yap",
+    "shareText": "FractionalLuxe'te {estate} parçasına sahibim"
   },
   "settings": {
     "title": "Ayarlar",

@@ -67,6 +67,9 @@ test.describe("Estate Detail — Phase 9 4-tab model", () => {
     await skipOnboarding(page);
     await page.goto("/property/re-108924");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
+    // Owned estate (mock holding): Ownership Card with Share Ownership, no amounts.
+    await expect(page.getByTestId("estate-ownership")).toContainText("I own a piece of");
+    await expect(page.getByTestId("estate-ownership-share")).toBeVisible();
     // Let the 40+ gallery images settle: progressive loads shift layout and can
     // park low-page toggles under the fixed bottom chrome mid-click.
     await page.waitForLoadState("networkidle", { timeout: 30_000 }).catch(() => {});
