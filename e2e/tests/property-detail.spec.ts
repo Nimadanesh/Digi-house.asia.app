@@ -27,6 +27,9 @@ test.describe("Estate Detail — Phase 9 4-tab model", () => {
     // 4 tabs; Estate is the default.
     const tabs = page.getByTestId("property-tabs");
     await expect(tabs).toBeVisible();
+    // Invite to Co-Own sits between the metrics and the tabs, tab-independent.
+    await expect(page.getByTestId("estate-coown")).toBeVisible();
+    await expect(page.getByTestId("estate-coown-share")).toBeVisible();
     await expect(page.getByTestId("tab-estate")).toHaveAttribute("aria-selected", "true");
     for (const tab of ["estate", "income", "ownership", "earn", "details"]) {
       await expect(page.getByTestId(`tab-${tab}`)).toBeVisible();

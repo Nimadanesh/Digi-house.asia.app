@@ -952,6 +952,23 @@
     "clubCta": "Club-Mitglied einladen",
     "loadError": "Empfehlungsdaten konnten nicht geladen werden."
   },
+  "circle": {
+    "circleTitle": "Dein Luxe Circle",
+    "circleSub": "Dein privates Netzwerk aus Menschen und Immobilien.",
+    "circleMembers": "{count} Mitglieder",
+    "circleShared": "{count} geteilte Immobilien",
+    "circleSharedTitle": "Immobilien in deinem Circle",
+    "circleSharedEmpty": "Noch keine geteilten Immobilien.",
+    "circleSharedSub": "Finde eine Immobilie, die du mit deinem Circle teilen willst.",
+    "circleExplore": "Immobilien entdecken",
+    "circleInvite": "Zum Co-Own einladen",
+    "coOwnTitle": "Zum Co-Own einladen",
+    "coOwnSub": "Teile diese Immobilie mit jemandem, dem du vertraust.",
+    "coOwnShare": "Zum Co-Own einladen",
+    "coOwnCopy": "Link kopieren",
+    "coOwnCopied": "Kopiert!",
+    "coOwnSignIn": "Melde dich an, um einzuladen"
+  },
   "settings": {
     "title": "Einstellungen",
     "wallet": "Wallet",
@@ -1184,6 +1201,9 @@
     "referralTitle": "Invite a Friend",
     "referralSub": "Invite friends and unlock additional Club experiences.",
     "referralCta": "Invite a Friend",
+    "referralEntryTitle": "Empfehlungsprämien",
+    "referralEntrySub": "Meilensteine, Punkte und Aufenthaltsprämien findest du im Empfehlungsbereich.",
+    "referralOpen": "Empfehlungen öffnen",
     "estateBenefitTitle": "Private Member Benefit",
     "estateBenefitBody": "This estate may offer eligible Club experiences.",
     "estateBenefitCta": "Explore Club",

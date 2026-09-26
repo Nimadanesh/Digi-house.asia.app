@@ -952,6 +952,23 @@
     "clubCta": "Convidar um membro do Club",
     "loadError": "Não foi possível carregar as indicações."
   },
+  "circle": {
+    "circleTitle": "Seu Luxe Circle",
+    "circleSub": "Sua rede privada de pessoas e imóveis.",
+    "circleMembers": "{count} membros",
+    "circleShared": "{count} imóveis compartilhados",
+    "circleSharedTitle": "Imóveis do seu Circle",
+    "circleSharedEmpty": "Nenhum imóvel compartilhado ainda.",
+    "circleSharedSub": "Encontre um imóvel para compartilhar com seu Circle.",
+    "circleExplore": "Explorar imóveis",
+    "circleInvite": "Convidar para copropriedade",
+    "coOwnTitle": "Convidar para copropriedade",
+    "coOwnSub": "Compartilhe este imóvel com alguém de confiança.",
+    "coOwnShare": "Convidar para copropriedade",
+    "coOwnCopy": "Copiar link",
+    "coOwnCopied": "Copiado!",
+    "coOwnSignIn": "Entre para convidar"
+  },
   "settings": {
     "title": "Configurações",
     "wallet": "Carteira",
@@ -1184,6 +1201,9 @@
     "referralTitle": "Invite a Friend",
     "referralSub": "Invite friends and unlock additional Club experiences.",
     "referralCta": "Invite a Friend",
+    "referralEntryTitle": "Recompensas por indicação",
+    "referralEntrySub": "Marcos, pontos e estadias no centro de indicações.",
+    "referralOpen": "Abrir indicações",
     "estateBenefitTitle": "Private Member Benefit",
     "estateBenefitBody": "This estate may offer eligible Club experiences.",
     "estateBenefitCta": "Explore Club",

@@ -21,6 +21,7 @@ import { CANONICAL_BASE_PRICE_USD } from "@/lib/economics/canonical-offering";
 import { useEstateDetailViewModel } from "@/hooks/useEstateDetailViewModel";
 import { PropertyGallery } from "./PropertyGallery";
 import { PropertyHero } from "./PropertyHero";
+import { CoOwnEstateCard } from "../circle/CoOwnEstateCard";
 import { PropertyMetricsGrid } from "./PropertyMetricsGrid";
 import { PropertyTabs, type PropertyTabId } from "./PropertyTabs";
 import { EstateTabPanel } from "./estate-tab";
@@ -162,6 +163,9 @@ export function PropertyDetail({
 
       {/* ═══ L1 — fixed 4-stat section (Base-scenario presented figures) ═══ */}
       <PropertyMetricsGrid listing={listing} v1={estateVm.v1} />
+
+      {/* Invite to Co-Own — fixed, tab-independent: share this exact estate. */}
+      <CoOwnEstateCard estateId={listing.id} estateTitle={estateVm.identity?.name ?? listing.title} />
 
       {/* ═══ L2 — tabs ═══ */}
       <PropertyTabs active={tab} onChange={handleTabChange} />

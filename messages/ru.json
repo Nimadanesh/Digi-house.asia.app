@@ -952,6 +952,23 @@
     "clubCta": "Пригласить участника Club",
     "loadError": "Не удалось загрузить данные."
   },
+  "circle": {
+    "circleTitle": "Ваш Luxe Circle",
+    "circleSub": "Ваша частная сеть людей и объектов.",
+    "circleMembers": "{count} участников",
+    "circleShared": "{count} общих объектов",
+    "circleSharedTitle": "Объекты вашего Circle",
+    "circleSharedEmpty": "Пока нет общих объектов.",
+    "circleSharedSub": "Найдите объект, которым стоит поделиться.",
+    "circleExplore": "Смотреть объекты",
+    "circleInvite": "Пригласить к совладению",
+    "coOwnTitle": "Пригласить к совладению",
+    "coOwnSub": "Поделитесь этим объектом с тем, кому доверяете.",
+    "coOwnShare": "Пригласить к совладению",
+    "coOwnCopy": "Скопировать ссылку",
+    "coOwnCopied": "Скопировано!",
+    "coOwnSignIn": "Войдите, чтобы приглашать"
+  },
   "settings": {
     "title": "Настройки",
     "wallet": "Кошелёк",
@@ -1184,6 +1201,9 @@
     "referralTitle": "Invite a Friend",
     "referralSub": "Invite friends and unlock additional Club experiences.",
     "referralCta": "Invite a Friend",
+    "referralEntryTitle": "Реферальные награды",
+    "referralEntrySub": "Этапы, баллы и пребывание — в реферальном центре.",
+    "referralOpen": "Открыть рефералы",
     "estateBenefitTitle": "Private Member Benefit",
     "estateBenefitBody": "This estate may offer eligible Club experiences.",
     "estateBenefitCta": "Explore Club",

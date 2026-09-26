@@ -228,6 +228,9 @@
     "referralTitle": "Invite a Friend",
     "referralSub": "Invite friends and unlock additional Club experiences.",
     "referralCta": "Invite a Friend",
+    "referralEntryTitle": "Referral rewards",
+    "referralEntrySub": "Milestones, points, and stay rewards live in the Referral Hub.",
+    "referralOpen": "Open Referral",
     "referralProgressTitle": "Referral progress",
     "referralToPlus": "{count} referrals to unlock Private Plus Experience",
     "referralPlusUnlocked": "Private Plus Experience unlocked",
@@ -1131,6 +1134,23 @@
     "tierNote": "Referrals never change your investment tier.",
     "clubCta": "Invite a Club Member",
     "loadError": "Couldn't load referral data."
+  },
+  "circle": {
+    "circleTitle": "Your Luxe Circle",
+    "circleSub": "Your private network of people and properties.",
+    "circleMembers": "{count} Members",
+    "circleShared": "{count} Shared Properties",
+    "circleSharedTitle": "Properties in Your Circle",
+    "circleSharedEmpty": "No shared properties yet.",
+    "circleSharedSub": "Find an estate worth sharing with your Circle.",
+    "circleExplore": "Explore Estates",
+    "circleInvite": "Invite to Co-Own",
+    "coOwnTitle": "Invite to Co-Own",
+    "coOwnSub": "Share this estate with someone you trust — they open the same estate and explore it with you.",
+    "coOwnShare": "Invite to Co-Own",
+    "coOwnCopy": "Copy link",
+    "coOwnCopied": "Copied!",
+    "coOwnSignIn": "Sign in to invite"
   },
   "settings": {
     "title": "Settings",

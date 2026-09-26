@@ -952,6 +952,23 @@
     "clubCta": "邀请俱乐部会员",
     "loadError": "推荐数据加载失败。"
   },
+  "circle": {
+    "circleTitle": "您的 Luxe Circle",
+    "circleSub": "由人与房产组成的私人网络。",
+    "circleMembers": "{count} 位成员",
+    "circleShared": "{count} 处共享房产",
+    "circleSharedTitle": "您圈子中的房产",
+    "circleSharedEmpty": "暂无共享房产。",
+    "circleSharedSub": "找一处值得与圈子分享的房产。",
+    "circleExplore": "浏览房产",
+    "circleInvite": "邀请共同拥有",
+    "coOwnTitle": "邀请共同拥有",
+    "coOwnSub": "与您信任的人分享这处房产。",
+    "coOwnShare": "邀请共同拥有",
+    "coOwnCopy": "复制链接",
+    "coOwnCopied": "已复制！",
+    "coOwnSignIn": "登录后邀请"
+  },
   "settings": {
     "title": "设置",
     "wallet": "钱包",
@@ -1184,6 +1201,9 @@
     "referralTitle": "Invite a Friend",
     "referralSub": "Invite friends and unlock additional Club experiences.",
     "referralCta": "Invite a Friend",
+    "referralEntryTitle": "推荐奖励",
+    "referralEntrySub": "里程碑、积分和住宿均在推荐中心。",
+    "referralOpen": "打开推荐中心",
     "estateBenefitTitle": "Private Member Benefit",
     "estateBenefitBody": "This estate may offer eligible Club experiences.",
     "estateBenefitCta": "Explore Club",

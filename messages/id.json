@@ -952,6 +952,23 @@
     "clubCta": "Undang Anggota Club",
     "loadError": "Data referensi gagal dimuat."
   },
+  "circle": {
+    "circleTitle": "Luxe Circle Anda",
+    "circleSub": "Jaringan privat orang dan properti Anda.",
+    "circleMembers": "{count} anggota",
+    "circleShared": "{count} properti bersama",
+    "circleSharedTitle": "Properti di Circle Anda",
+    "circleSharedEmpty": "Belum ada properti bersama.",
+    "circleSharedSub": "Temukan properti yang layak dibagikan dengan Circle Anda.",
+    "circleExplore": "Jelajahi properti",
+    "circleInvite": "Undang untuk co-own",
+    "coOwnTitle": "Undang untuk co-own",
+    "coOwnSub": "Bagikan properti ini dengan orang yang Anda percaya.",
+    "coOwnShare": "Undang untuk co-own",
+    "coOwnCopy": "Salin tautan",
+    "coOwnCopied": "Tersalin!",
+    "coOwnSignIn": "Masuk untuk mengundang"
+  },
   "settings": {
     "title": "Pengaturan",
     "wallet": "Dompet",
@@ -1184,6 +1201,9 @@
     "referralTitle": "Invite a Friend",
     "referralSub": "Invite friends and unlock additional Club experiences.",
     "referralCta": "Invite a Friend",
+    "referralEntryTitle": "Hadiah referensi",
+    "referralEntrySub": "Pencapaian, poin, dan inap ada di Pusat Referensi.",
+    "referralOpen": "Buka Referensi",
     "estateBenefitTitle": "Private Member Benefit",
     "estateBenefitBody": "This estate may offer eligible Club experiences.",
     "estateBenefitCta": "Explore Club",

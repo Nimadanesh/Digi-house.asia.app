@@ -952,6 +952,23 @@
     "clubCta": "Inviter un membre Club",
     "loadError": "Données de parrainage indisponibles."
   },
+  "circle": {
+    "circleTitle": "Votre Luxe Circle",
+    "circleSub": "Votre réseau privé de personnes et de biens.",
+    "circleMembers": "{count} membres",
+    "circleShared": "{count} biens partagés",
+    "circleSharedTitle": "Biens de votre Circle",
+    "circleSharedEmpty": "Aucun bien partagé pour l'instant.",
+    "circleSharedSub": "Trouvez un bien à partager avec votre Circle.",
+    "circleExplore": "Explorer les biens",
+    "circleInvite": "Inviter à co-investir",
+    "coOwnTitle": "Inviter à co-investir",
+    "coOwnSub": "Partagez ce bien avec une personne de confiance.",
+    "coOwnShare": "Inviter à co-investir",
+    "coOwnCopy": "Copier le lien",
+    "coOwnCopied": "Copié !",
+    "coOwnSignIn": "Connectez-vous pour inviter"
+  },
   "settings": {
     "title": "Paramètres",
     "wallet": "Portefeuille",
@@ -1184,6 +1201,9 @@
     "referralTitle": "Invite a Friend",
     "referralSub": "Invite friends and unlock additional Club experiences.",
     "referralCta": "Invite a Friend",
+    "referralEntryTitle": "Récompenses de parrainage",
+    "referralEntrySub": "Paliers, points et séjours dans le hub de parrainage.",
+    "referralOpen": "Ouvrir le parrainage",
     "estateBenefitTitle": "Private Member Benefit",
     "estateBenefitBody": "This estate may offer eligible Club experiences.",
     "estateBenefitCta": "Explore Club",

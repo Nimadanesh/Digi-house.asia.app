@@ -952,6 +952,23 @@
     "clubCta": "क्लब सदस्य आमंत्रित करें",
     "loadError": "रेफ़रल डेटा लोड नहीं हुआ।"
   },
+  "circle": {
+    "circleTitle": "आपका Luxe Circle",
+    "circleSub": "लोगों और संपत्तियों का आपका निजी नेटवर्क।",
+    "circleMembers": "{count} सदस्य",
+    "circleShared": "{count} साझा संपत्तियां",
+    "circleSharedTitle": "आपके Circle की संपत्तियां",
+    "circleSharedEmpty": "अभी कोई साझा संपत्ति नहीं।",
+    "circleSharedSub": "अपने Circle से साझा करने लायक संपत्ति खोजें।",
+    "circleExplore": "संपत्तियां देखें",
+    "circleInvite": "सह-स्वामित्व हेतु आमंत्रित करें",
+    "coOwnTitle": "सह-स्वामित्व हेतु आमंत्रित करें",
+    "coOwnSub": "यह संपत्ति किसी विश्वसनीय व्यक्ति से साझा करें।",
+    "coOwnShare": "सह-स्वामित्व हेतु आमंत्रित करें",
+    "coOwnCopy": "लिंक कॉपी करें",
+    "coOwnCopied": "कॉपी हुआ!",
+    "coOwnSignIn": "आमंत्रित करने हेतु साइन इन करें"
+  },
   "settings": {
     "title": "सेटिंग्स",
     "wallet": "वॉलेट",
@@ -1184,6 +1201,9 @@
     "referralTitle": "Invite a Friend",
     "referralSub": "Invite friends and unlock additional Club experiences.",
     "referralCta": "Invite a Friend",
+    "referralEntryTitle": "रेफ़रल पुरस्कार",
+    "referralEntrySub": "मील के पत्थर, पॉइंट और प्रवास रेफ़रल केंद्र में।",
+    "referralOpen": "रेफ़रल खोलें",
     "estateBenefitTitle": "Private Member Benefit",
     "estateBenefitBody": "This estate may offer eligible Club experiences.",
     "estateBenefitCta": "Explore Club",

@@ -52,8 +52,8 @@ describe("Club page", () => {
     expect(screen.getByTestId("club-next-unlock")).toHaveTextContent("Private Plus");
     expect(screen.getAllByTestId("club-tier")).toHaveLength(5);
 
-    // Exact order: header → card → benefits → next → tiers.
-    const ids = ["club-header", "club-card", "club-benefits", "club-next-unlock", "club-tiers"];
+    // Exact order: header → card → benefits → circle → escape → referral → next → tiers.
+    const ids = ["club-header", "club-card", "club-benefits", "club-circle", "club-escape", "club-referral", "club-next-unlock", "club-tiers"];
     const els = ids.map((id) => container.querySelector(`[data-testid="${id}"]`));
     expect(els.every(Boolean)).toBe(true);
     for (let i = 1; i < els.length; i++) {
@@ -79,28 +79,37 @@ describe("Club page", () => {
     expect(container.textContent).not.toMatch(/cashback|money back| guaranteed return/i);
   });
 
-  it("referral ladder renders locked with invite entry, no invented counts", () => {
+  it("referral is a concise entry to the Hub — no ladder duplicated on Club", () => {
     loaded(1_500_000);
     render(<ClubPage />);
-    const section = screen.getByTestId("club-referral-progress");
-    expect(screen.getAllByTestId("referral-milestone")).toHaveLength(5);
-    expect(section).toHaveTextContent("0 Qualified Referrals · 0 Referral Points");
-    expect(section).toHaveTextContent("Your Club stay: 4 nights");
-    expect(section).not.toHaveTextContent("Next: 4-night Club stay");
-    expect(section).toHaveTextContent("10 referrals to unlock Private Plus Experience");
-    expect(section).toHaveTextContent("Private Plus Experience Layer");
-    expect(screen.getByTestId("club-referral-progress-cta")).toHaveTextContent("Invite a Friend");
-    expect(screen.getByTestId("club-referral-progress-cta")).toHaveAttribute("href", "/referral");
-    // A11y: locked milestone states exposed to screen readers.
-    screen.getAllByTestId("referral-milestone").forEach((m) => {
-      expect(m).toHaveTextContent(/locked/i);
-    });
+    const section = screen.getByTestId("club-referral");
+    expect(section).toHaveTextContent("Referral rewards");
+    expect(section).toHaveTextContent("Milestones, points, and stay rewards live in the Referral Hub.");
+    expect(screen.getByTestId("club-referral-cta")).toHaveTextContent("Open Referral");
+    expect(screen.getByTestId("club-referral-cta")).toHaveAttribute("href", "/referral");
+    expect(section.textContent).not.toMatch(/\$\d|%/);
+    // Full mechanics live in the Hub, not on Club.
+    expect(screen.queryByTestId("club-referral-progress")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("referral-milestone")).not.toBeInTheDocument();
     // A11y: header progressbar has an accessible name.
     expect(screen.getByRole("progressbar").getAttribute("aria-label")).toMatch(/to unlock/i);
     // A11y: tier rows expose their state.
     screen.getAllByTestId("club-tier").forEach((row) => {
       expect(row.getAttribute("aria-label")).toBeTruthy();
     });
+  });
+
+  it("luxe circle renders the honest empty network", () => {
+    loaded(1_500_000);
+    render(<ClubPage />);
+    const section = screen.getByTestId("club-circle");
+    expect(section).toHaveTextContent("Your Luxe Circle");
+    expect(screen.getByTestId("circle-counts")).toHaveTextContent("0 Members");
+    expect(screen.getByTestId("circle-counts")).toHaveTextContent("0 Shared Properties");
+    expect(screen.getByTestId("circle-invite")).toHaveAttribute("href", "/marketplace");
+    expect(screen.getByTestId("circle-shared-empty")).toHaveTextContent("No shared properties yet.");
+    expect(screen.getByTestId("circle-explore")).toHaveAttribute("href", "/marketplace");
+    expect(section.textContent).not.toMatch(/[1-9]\d* Members/);
   });
   it("standard members do not enter the stay journey", () => {
     loaded(750_000);
@@ -168,16 +177,6 @@ describe("Club page", () => {
     expect(panel).toHaveTextContent("Valentine's Day");
     expect(panel).toHaveTextContent("The destination");
     expect(panel).toHaveTextContent("The invitation");
-  });
-
-  it("referral section reuses the invite entry without reward amounts", () => {
-    loaded(1_500_000);
-    render(<ClubPage />);
-    const section = screen.getByTestId("club-referral");
-    expect(section).toHaveTextContent("Invite friends and unlock additional Club experiences.");
-    expect(screen.getByTestId("club-referral-cta")).toHaveTextContent("Invite a Friend");
-    expect(screen.getByTestId("club-referral-cta")).toHaveAttribute("href", "/referral");
-    expect(section.textContent).not.toMatch(/\$\d|%/);
   });
 
   it("tiers carry past/current/future states with a CURRENT marker", () => {

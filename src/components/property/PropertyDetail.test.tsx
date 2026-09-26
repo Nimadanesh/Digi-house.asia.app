@@ -129,6 +129,15 @@ describe("PropertyDetail — Phase 9 Slice 2 (4-tab Estate Detail)", () => {
     expect(screen.getByTestId("property-tabs")).toBeInTheDocument();
     expect(screen.getByTestId("tab-estate")).toHaveAttribute("aria-selected", "true");
     expect(screen.getByTestId("panel-estate")).toBeInTheDocument();
+    // Co-own invite sits between the metrics grid and the tabs, tab-independent.
+    const detail = screen.getByTestId("property-detail");
+    const order = ["metrics-grid", "estate-coown", "property-tabs"].map(
+      (id) => detail.querySelector(`[data-testid="${id}"]`),
+    );
+    expect(order.every(Boolean)).toBe(true);
+    for (let i = 1; i < order.length; i++) {
+      expect(order[i - 1]!.compareDocumentPosition(order[i]!)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    }
     // The dissolved tabs are gone.
     expect(screen.queryByTestId("tab-overview")).not.toBeInTheDocument();
     expect(screen.queryByTestId("tab-performance")).not.toBeInTheDocument();

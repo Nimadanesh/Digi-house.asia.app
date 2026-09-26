@@ -952,6 +952,23 @@
     "clubCta": "Invitar a un miembro del Club",
     "loadError": "No se pudieron cargar los referidos."
   },
+  "circle": {
+    "circleTitle": "Tu Luxe Circle",
+    "circleSub": "Tu red privada de personas y propiedades.",
+    "circleMembers": "{count} miembros",
+    "circleShared": "{count} propiedades compartidas",
+    "circleSharedTitle": "Propiedades de tu Circle",
+    "circleSharedEmpty": "Aún no hay propiedades compartidas.",
+    "circleSharedSub": "Encuentra una propiedad para compartir con tu Circle.",
+    "circleExplore": "Explorar propiedades",
+    "circleInvite": "Invitar a ser copropietario",
+    "coOwnTitle": "Invitar a ser copropietario",
+    "coOwnSub": "Comparte esta propiedad con alguien de confianza.",
+    "coOwnShare": "Invitar a ser copropietario",
+    "coOwnCopy": "Copiar enlace",
+    "coOwnCopied": "¡Copiado!",
+    "coOwnSignIn": "Inicia sesión para invitar"
+  },
   "settings": {
     "title": "Ajustes",
     "wallet": "Billetera",
@@ -1184,6 +1201,9 @@
     "referralTitle": "Invite a Friend",
     "referralSub": "Invite friends and unlock additional Club experiences.",
     "referralCta": "Invite a Friend",
+    "referralEntryTitle": "Recompensas por referidos",
+    "referralEntrySub": "Hitos, puntos y estancias en el centro de referidos.",
+    "referralOpen": "Abrir referidos",
     "estateBenefitTitle": "Private Member Benefit",
     "estateBenefitBody": "This estate may offer eligible Club experiences.",
     "estateBenefitCta": "Explore Club",

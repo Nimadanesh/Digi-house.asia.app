@@ -952,6 +952,23 @@
     "clubCta": "دعوت عضو کلاب",
     "loadError": "داده‌های معرفی بارگذاری نشد."
   },
+  "circle": {
+    "circleTitle": "حلقه Luxe شما",
+    "circleSub": "شبکه خصوصی افراد و املاک شما.",
+    "circleMembers": "{count} عضو",
+    "circleShared": "{count} ملک مشترک",
+    "circleSharedTitle": "املاک حلقه شما",
+    "circleSharedEmpty": "هنوز ملک مشترکی نیست.",
+    "circleSharedSub": "ملکی پیدا کنید که ارزش اشتراک با حلقه شما را دارد.",
+    "circleExplore": "مشاهده املاک",
+    "circleInvite": "دعوت به مالکیت مشترک",
+    "coOwnTitle": "دعوت به مالکیت مشترک",
+    "coOwnSub": "این ملک را با کسی که به او اعتماد دارید به اشتراک بگذارید.",
+    "coOwnShare": "دعوت به مالکیت مشترک",
+    "coOwnCopy": "کپی لینک",
+    "coOwnCopied": "کپی شد!",
+    "coOwnSignIn": "برای دعوت وارد شوید"
+  },
   "settings": {
     "title": "تنظیمات",
     "wallet": "کیف پول",
@@ -1184,6 +1201,9 @@
     "referralTitle": "Invite a Friend",
     "referralSub": "Invite friends and unlock additional Club experiences.",
     "referralCta": "Invite a Friend",
+    "referralEntryTitle": "پاداش‌های معرفی",
+    "referralEntrySub": "مراحل، امتیازها و اقامت در مرکز معرفی.",
+    "referralOpen": "باز کردن معرفی",
     "estateBenefitTitle": "Private Member Benefit",
     "estateBenefitBody": "This estate may offer eligible Club experiences.",
     "estateBenefitCta": "Explore Club",

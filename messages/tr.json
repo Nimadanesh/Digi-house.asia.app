@@ -952,6 +952,23 @@
     "clubCta": "Club üyesi davet et",
     "loadError": "Yönlendirme verileri yüklenemedi."
   },
+  "circle": {
+    "circleTitle": "Luxe Circle'ınız",
+    "circleSub": "Kişiler ve mülklerden oluşan özel ağınız.",
+    "circleMembers": "{count} üye",
+    "circleShared": "{count} paylaşılan mülk",
+    "circleSharedTitle": "Circle'ınızdaki mülkler",
+    "circleSharedEmpty": "Henüz paylaşılan mülk yok.",
+    "circleSharedSub": "Circle'ınızla paylaşmaya değer bir mülk bulun.",
+    "circleExplore": "Mülklere göz at",
+    "circleInvite": "Ortak sahipliğe davet et",
+    "coOwnTitle": "Ortak sahipliğe davet et",
+    "coOwnSub": "Bu mülkü güvendiğiniz biriyle paylaşın.",
+    "coOwnShare": "Ortak sahipliğe davet et",
+    "coOwnCopy": "Bağlantıyı kopyala",
+    "coOwnCopied": "Kopyalandı!",
+    "coOwnSignIn": "Davet için giriş yap"
+  },
   "settings": {
     "title": "Ayarlar",
     "wallet": "Cüzdan",
@@ -1184,6 +1201,9 @@
     "referralTitle": "Invite a Friend",
     "referralSub": "Invite friends and unlock additional Club experiences.",
     "referralCta": "Invite a Friend",
+    "referralEntryTitle": "Yönlendirme ödülleri",
+    "referralEntrySub": "Kilometre taşları, puanlar ve konaklamalar Yönlendirme Merkezi'nde.",
+    "referralOpen": "Merkezi aç",
     "estateBenefitTitle": "Private Member Benefit",
     "estateBenefitBody": "This estate may offer eligible Club experiences.",
     "estateBenefitCta": "Explore Club",
