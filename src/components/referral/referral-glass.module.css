@@ -1,0 +1,125 @@
+/* FractionalLuxe Referral Hub — glass material for the /referral page.
+ * Tokens ported from the Private Club canonical glass system
+ * (branch feat/private-club-uiux: src/components/club/club-glass.module.css,
+ * source of truth docs/PRIVATE-CLUB-DESIGN.md §25). Standard referral blocks
+ * use the blue-led glass; Club blocks add the champagne accent. Scoped to the
+ * Referral Hub via CSS Modules: no global selectors, no leakage. Product
+ * logic, copy, order and behavior live in the components — this file is
+ * material (color/blur/border/shadow/radius) only. */
+
+.page {
+  position: relative;
+  margin-left: -1rem;
+  margin-right: -1rem;
+  margin-top: -0.75rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 1.25rem;
+  padding-bottom: 0.5rem;
+  background: #070b14;
+  overflow: hidden;
+}
+
+.atmosphere {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 8%, rgba(75, 139, 255, 0.11), transparent 34%),
+    radial-gradient(circle at 88% 28%, rgba(212, 175, 119, 0.045), transparent 30%),
+    #070b14;
+}
+
+.content {
+  position: relative;
+}
+
+/* Standard glass: benefit rows, panels, ladder rows. */
+.glass {
+  background: rgba(255, 255, 255, 0.065);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  box-shadow:
+    0 16px 42px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+/* Highlighted glass: hero, current progress, primary panels. */
+.glassHighlight {
+  background: linear-gradient(
+    135deg,
+    rgba(75, 139, 255, 0.12),
+    rgba(255, 255, 255, 0.065) 48%,
+    rgba(255, 255, 255, 0.045)
+  );
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  border: 1px solid rgba(75, 139, 255, 0.28);
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.28),
+    0 0 28px rgba(75, 139, 255, 0.075),
+    inset 0 1px 0 rgba(255, 255, 255, 0.065);
+}
+
+/* Club glass: deeper premium panel with the champagne accent. */
+.glassClub {
+  background: linear-gradient(
+    135deg,
+    rgba(212, 175, 119, 0.1),
+    rgba(255, 255, 255, 0.06) 48%,
+    rgba(12, 23, 43, 0.5)
+  );
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  border: 1px solid rgba(212, 175, 119, 0.3);
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.28),
+    0 0 28px rgba(212, 175, 119, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.065);
+}
+
+/* Progress track + fill. */
+.progressTrack {
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.075);
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #4b8bff, rgba(75, 139, 255, 0.72));
+  box-shadow: 0 0 14px rgba(75, 139, 255, 0.24);
+  transition: width 300ms ease-out;
+}
+
+/* Primary CTA: luxury blue, 14px radius. */
+.btnPrimary {
+  background: #4b8bff;
+  color: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(75, 139, 255, 0.2);
+}
+
+/* Secondary action: quiet glass. */
+.btnSecondary {
+  background: rgba(255, 255, 255, 0.065);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  color: #ffffff;
+}
+
+/* Readability fallback when backdrop blur is unavailable. */
+@supports not (backdrop-filter: blur(20px)) {
+  .glass,
+  .glassHighlight,
+  .glassClub {
+    background: rgba(16, 25, 42, 0.92);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progressFill {
+    transition: none;
+  }
+}

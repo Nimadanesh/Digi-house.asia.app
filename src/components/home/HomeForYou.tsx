@@ -1,7 +1,7 @@
 "use client";
 // File responsibility: Home's single merchandising slot — one Featured estate card
 // from the existing featured listing, or (when featured is honestly empty) one
-// Invite card opening the existing referrals UI in SettingsSheet. Never both,
+// Invite card linking to the Referral Hub (/referral). Never both,
 // never a list. Binds to existing listing fields only; no new math.
 //
 // Empty Home passes showInvite so the Invite card also renders under the listing;
@@ -12,7 +12,6 @@ import { ChevronRight, UserPlus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { Listing } from "@/types/property";
 import { Block } from "@/components/common/Block";
-import { useUiStore } from "@/stores/ui.store";
 import { haptics } from "@/lib/telegram/haptics";
 import { ROUTES } from "@/lib/constants";
 import { usd } from "@/lib/format";
@@ -27,7 +26,6 @@ export function HomeForYou({
   const t = useTranslations("home");
   const tCommon = useTranslations("common");
   const tSettings = useTranslations("settings");
-  const openSettings = useUiStore((s) => s.openSettings);
 
   const cover = listing?.images[0] ?? "/images/properties/p1.png";
 
@@ -85,17 +83,14 @@ export function HomeForYou({
             <p className="min-w-0 flex-1 text-sm font-medium leading-snug text-foreground">
               {tSettings("inviteFriends")}
             </p>
-            <button
-              type="button"
-              onClick={() => {
-                haptics.selection();
-                openSettings();
-              }}
+            <Link
+              href={ROUTES.referral}
+              onClick={() => haptics.selection()}
               data-testid="foryou-invite-btn"
               className="inline-flex h-[44px] shrink-0 items-center justify-center rounded-[10px] bg-primary px-4 text-sm font-semibold text-primary-foreground active:scale-[0.97] transition-transform duration-[120ms] ease-out"
             >
               {t("invite")}
-            </button>
+            </Link>
           </div>
         </Block>
       ) : null}

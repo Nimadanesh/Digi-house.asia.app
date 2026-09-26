@@ -1,12 +1,11 @@
 "use client";
 // File responsibility: Home Revolut-style action row — exactly three equal circular
 // actions on the hero/content boundary. Invest → existing Marketplace route;
-// Invite → existing referrals UI inside SettingsSheet (openSettings, no new logic);
-// Card → dedicated Card page route. No tab names as labels.
+// Invite → dedicated Referral Hub route (/referral);
+// Club → Private Club nested route (the physical card lives inside Club as one benefit).
 import Link from "next/link";
-import { CreditCard, Plus, UserPlus } from "lucide-react";
+import { Crown, Plus, UserPlus } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useUiStore } from "@/stores/ui.store";
 import { haptics } from "@/lib/telegram/haptics";
 import { ROUTES } from "@/lib/constants";
 
@@ -16,7 +15,6 @@ const LABEL = "text-[11px] font-medium leading-tight text-[rgba(255,255,255,0.65
 
 export function HomeActions() {
   const t = useTranslations("home");
-  const openSettings = useUiStore((s) => s.openSettings);
 
   return (
     <div data-testid="home-actions" className="relative z-10 flex items-start justify-center gap-7">
@@ -32,12 +30,9 @@ export function HomeActions() {
         <span className={LABEL}>{t("invest")}</span>
       </Link>
 
-      <button
-        type="button"
-        onClick={() => {
-          haptics.selection();
-          openSettings();
-        }}
+      <Link
+        href={ROUTES.referral}
+        onClick={() => haptics.selection()}
         data-testid="action-invite"
         className="flex min-h-[44px] min-w-[44px] flex-col items-center gap-1.5"
       >
@@ -45,18 +40,18 @@ export function HomeActions() {
           <UserPlus size={22} strokeWidth={2} aria-hidden />
         </span>
         <span className={LABEL}>{t("invite")}</span>
-      </button>
+      </Link>
 
       <Link
-        href={ROUTES.card}
+        href={ROUTES.club}
         onClick={() => haptics.selection()}
-        data-testid="action-card"
+        data-testid="action-club"
         className="flex min-h-[44px] min-w-[44px] flex-col items-center gap-1.5"
       >
         <span className={CIRCLE}>
-          <CreditCard size={22} strokeWidth={2} aria-hidden />
+          <Crown size={22} strokeWidth={2} aria-hidden />
         </span>
-        <span className={LABEL}>{t("card")}</span>
+        <span className={LABEL}>{t("club")}</span>
       </Link>
     </div>
   );

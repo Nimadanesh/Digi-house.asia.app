@@ -21,6 +21,7 @@ import { WithdrawalAddressSection } from "@/components/settings/WithdrawalAddres
 import { WithdrawalRequestsSection } from "@/components/settings/WithdrawalRequestsSection";
 import { WithdrawalRequestSheet } from "@/components/settings/WithdrawalRequestSheet";
 import { useWithdrawals } from "@/hooks/useWithdrawals";
+import { useInviteLink } from "@/hooks/useInviteLink";
 import { useTonConnect } from "@/hooks/useTonConnect";
 import { useSettingsStore } from "@/stores/settings.store";
 import { useUiStore } from "@/stores/ui.store";
@@ -29,7 +30,6 @@ import { ROUTES } from "@/lib/constants";
 import { haptics } from "@/lib/telegram/haptics";
 import { safeBackButton } from "@/lib/telegram/chrome";
 import { closeTopSheet } from "@/components/common/Sheet";
-import { env } from "@/lib/env";
 import { useAuthStore } from "@/stores/auth.store";
 import { setApiAccessToken } from "@/lib/api/session-token";
 import { triggerAuthInvalidated } from "@/lib/api/auth-events";
@@ -77,7 +77,7 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
   const user = useAuthStore((s) => s.user);
   const { data: withdrawals, isLoading: withdrawalsLoading, error: withdrawalsError } =
     useWithdrawals();
-  const [copied, setCopied] = useState(false);
+  const { copied, canInvite, copyInvite } = useInviteLink();
 
   const closeAll = useCallback(() => {
     setAboutOpen(false);
@@ -144,19 +144,9 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
     router.push(ROUTES.onboarding);
   }
 
-  const canInvite = Boolean(env.botUsername && user?.id);
-
-  async function onInviteFriends() {
+  function onInviteFriends() {
     haptics.selection();
-    if (!env.botUsername || !user?.id) return;
-    const link = `https://t.me/${env.botUsername}?startapp=ref_${user.id}`;
-    try {
-      await navigator.clipboard.writeText(link);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // fallback for privacy-restricted contexts — silently ignore
-    }
+    void copyInvite();
   }
 
   return (
