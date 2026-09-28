@@ -7,6 +7,7 @@ import { BottomTabBar } from "./BottomTabBar";
 import { OnboardingGate } from "@/components/onboarding/OnboardingGate";
 import { ProfileGate } from "@/components/profile/ProfileGate";
 import { SettingsSheet } from "@/components/settings/SettingsSheet";
+import { WalletChooserHost } from "@/components/wallet/WalletChooserHost";
 import { ToastHost } from "@/components/common/ToastHost";
 import { useTheme } from "@/hooks/useTheme";
 import { useUiStore } from "@/stores/ui.store";
@@ -52,6 +53,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       {mainButtonActive || chromeless ? null : <BottomTabBar />}
       <ToastHost />
       <SettingsSheet />
+      <WalletChooserHost />
     </div>
   );
 }

@@ -33,4 +33,25 @@ describe("settings.store — display currency + demo badge", () => {
     useSettingsStore.getState().setShowDemoBadge(false);
     expect(useSettingsStore.getState().showDemoBadge).toBe(false);
   });
+
+  it("defaults notifications on/on/off and toggles one", () => {
+    expect(useSettingsStore.getState().notifications).toEqual({
+      payoutReceived: true,
+      withdrawalUpdates: true,
+      marketAlerts: false,
+    });
+    useSettingsStore.getState().setNotification("marketAlerts", true);
+    expect(useSettingsStore.getState().notifications.marketAlerts).toBe(true);
+  });
+
+  it("adds and removes book addresses without duplicates", () => {
+    const s = useSettingsStore.getState();
+    s.addBookAddress("EQabc", "ton");
+    s.addBookAddress("EQabc", "ton");
+    expect(useSettingsStore.getState().addressBook).toEqual([
+      { address: "EQabc", network: "ton" },
+    ]);
+    s.removeBookAddress("EQabc");
+    expect(useSettingsStore.getState().addressBook).toEqual([]);
+  });
 });

@@ -22,6 +22,8 @@ interface UiState {
   markToastLeaving: () => void;
   clearToast: () => void;
   settingsOpen: boolean;
+  /** Global wallet chooser (opened from Home wallet icon or Settings). */
+  walletChooserOpen: boolean;
   /** When true, OnboardingGate allows /onboarding even if already onboarded (Settings replay). */
   onboardingReplay: boolean;
   mainButtonActive: boolean; // true while a screen owns the Telegram MainButton
@@ -30,6 +32,8 @@ interface UiState {
   setSettingsOpen: (v: boolean) => void;
   openSettings: () => void;
   closeSettings: () => void;
+  openWalletChooser: () => void;
+  closeWalletChooser: () => void;
   setOnboardingReplay: (v: boolean) => void;
   setMainButtonActive: (v: boolean) => void;
   setStickyCtaVisible: (v: boolean) => void;
@@ -42,12 +46,15 @@ export const useUiStore = create<UiState>((set) => ({
   markToastLeaving: () => set((s) => (s.toast ? { toast: { ...s.toast, leaving: true } } : s)),
   clearToast: () => set({ toast: null }),
   settingsOpen: false,
+  walletChooserOpen: false,
   onboardingReplay: false,
   mainButtonActive: false,
   stickyCtaVisible: false,
   setSettingsOpen: (settingsOpen) => set({ settingsOpen }),
   openSettings: () => set({ settingsOpen: true }),
   closeSettings: () => set({ settingsOpen: false }),
+  openWalletChooser: () => set({ walletChooserOpen: true }),
+  closeWalletChooser: () => set({ walletChooserOpen: false }),
   setOnboardingReplay: (onboardingReplay) => set({ onboardingReplay }),
   setMainButtonActive: (mainButtonActive) => set({ mainButtonActive }),
   setStickyCtaVisible: (stickyCtaVisible) => set({ stickyCtaVisible }),

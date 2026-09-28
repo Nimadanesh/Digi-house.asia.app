@@ -20,6 +20,7 @@ const FIELD =
 
 export function SettingsProfileSection() {
   const t = useTranslations("profile");
+  const ts = useTranslations("settings");
   const user = useAuthStore((s) => s.user);
   const { updateProfile, pending } = useUpdateProfile();
   const { code, loading: codeLoading } = useRecoveryCode();
@@ -75,7 +76,7 @@ export function SettingsProfileSection() {
 
   return (
     <>
-      <section className="space-y-2">
+      <section className="space-y-2.5" data-testid="settings-profile">
         <SectionLabel className="px-0.5">{t("settingsSection")}</SectionLabel>
         <Block>
           {!editing ? (
@@ -141,8 +142,8 @@ export function SettingsProfileSection() {
         </Block>
       </section>
 
-      <section className="space-y-2">
-        <SectionLabel className="px-0.5">{t("recoveryTitle")}</SectionLabel>
+      <section className="space-y-2.5" data-testid="settings-security">
+        <SectionLabel className="px-0.5">{ts("security")}</SectionLabel>
         <Block className="p-4">
           <p className="mb-3 text-[0.8125rem] text-muted-foreground">
             {t("recoverySettingsHint")}

@@ -9,19 +9,14 @@ import { Block } from "@/components/common/Block";
 import { Row } from "@/components/common/Row";
 import { SectionLabel } from "@/components/common/SectionLabel";
 import { Toggle } from "@/components/common/Toggle";
-import { WalletBadge } from "@/components/wallet/WalletBadge";
-import { WalletConnectButton } from "@/components/wallet/TonConnectButton";
-import { CurrencySegment } from "@/components/settings/CurrencySegment";
 import { LanguageSelector } from "@/components/settings/LanguageSelector";
 import { SettingsLabelStack } from "@/components/settings/SettingsLabelStack";
 import { AboutLegalSheet } from "@/components/settings/AboutLegalSheet";
-import { ConfirmActionSheet } from "@/components/common/ConfirmActionSheet";
 import { SettingsProfileSection } from "@/components/settings/SettingsProfileSection";
-import { WithdrawalAddressSection } from "@/components/settings/WithdrawalAddressSection";
-import { WithdrawalRequestsSection } from "@/components/settings/WithdrawalRequestsSection";
-import { WithdrawalRequestSheet } from "@/components/settings/WithdrawalRequestSheet";
-import { useWithdrawals } from "@/hooks/useWithdrawals";
+import { WithdrawalAddressesSection } from "@/components/settings/WithdrawalAddressesSection";
+import { NotificationsSection } from "@/components/settings/NotificationsSection";
 import { useTonConnect } from "@/hooks/useTonConnect";
+import { useEvmWallet } from "@/hooks/useEvmWallet";
 import { useSettingsStore } from "@/stores/settings.store";
 import { useUiStore } from "@/stores/ui.store";
 import { useApiAuth } from "@/hooks/useApiAuth";
@@ -29,11 +24,9 @@ import { ROUTES } from "@/lib/constants";
 import { haptics } from "@/lib/telegram/haptics";
 import { safeBackButton } from "@/lib/telegram/chrome";
 import { closeTopSheet } from "@/components/common/Sheet";
-import { env } from "@/lib/env";
 import { useAuthStore } from "@/stores/auth.store";
 import { setApiAccessToken } from "@/lib/api/session-token";
 import { triggerAuthInvalidated } from "@/lib/api/auth-events";
-import { Copy, Check } from "lucide-react";
 
 /** Preference / wallet rows: taller touch target + vertical padding for title+hint stacks. */
 const SETTINGS_ROW = "!min-h-[64px] items-center py-3.5";
@@ -60,24 +53,16 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
   const t = useTranslations("settings");
   const router = useRouter();
   const tonc = useTonConnect();
+  const evm = useEvmWallet();
   const setOnboardingReplay = useUiStore((s) => s.setOnboardingReplay);
-  const displayCurrency = useSettingsStore((s) => s.displayCurrency);
-  const setDisplayCurrency = useSettingsStore((s) => s.setDisplayCurrency);
   const useTelegramTheme = useSettingsStore((s) => s.useTelegramTheme);
   const setUseTelegramTheme = useSettingsStore((s) => s.setUseTelegramTheme);
   const setOnboarded = useSettingsStore((s) => s.setOnboarded);
   const { reauthenticate } = useApiAuth();
   const [aboutOpen, setAboutOpen] = useState(false);
   const [signOutOpen, setSignOutOpen] = useState(false);
-  const [withdrawOpen, setWithdrawOpen] = useState(false);
-  /** Wallet disconnect is consequential (buy/payouts need it) → confirm first. */
-  const [disconnectOpen, setDisconnectOpen] = useState(false);
-  const [disconnecting, setDisconnecting] = useState(false);
 
   const user = useAuthStore((s) => s.user);
-  const { data: withdrawals, isLoading: withdrawalsLoading, error: withdrawalsError } =
-    useWithdrawals();
-  const [copied, setCopied] = useState(false);
 
   const closeAll = useCallback(() => {
     setAboutOpen(false);
@@ -87,11 +72,8 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
   useEffect(() => {
     safeBackButton.show();
     const off = safeBackButton.onClick(() => {
-      // Protected operation in flight: its sheet is non-dismissible (unregistered), so
-      // Back must fall through to NOTHING — not to the parent Settings sheet.
-      if (disconnectOpen && disconnecting) return;
       // Unified stack: Back closes the topmost dismissible sheet (sign-out, about/legal,
-      // language picker, disconnect confirm, withdrawal request) — falling through to
+      // language picker) — falling through to
       // Settings itself only when no nested sheet is open.
       if (closeTopSheet()) return;
       closeAll();
@@ -107,19 +89,7 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
         safeBackButton.hide();
       }
     };
-  }, [disconnectOpen, disconnecting, closeAll]);
-
-  async function onDisconnect() {
-    if (disconnecting) return;
-    haptics.impact("medium");
-    setDisconnecting(true);
-    try {
-      await tonc.disconnect();
-      setDisconnectOpen(false);
-    } finally {
-      setDisconnecting(false);
-    }
-  }
+  }, [closeAll]);
 
   function onSignOut() {
     haptics.impact("medium");
@@ -144,35 +114,21 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
     router.push(ROUTES.onboarding);
   }
 
-  const canInvite = Boolean(env.botUsername && user?.id);
-
-  async function onInviteFriends() {
-    haptics.selection();
-    if (!env.botUsername || !user?.id) return;
-    const link = `https://t.me/${env.botUsername}?startapp=ref_${user.id}`;
-    try {
-      await navigator.clipboard.writeText(link);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // fallback for privacy-restricted contexts — silently ignore
-    }
-  }
-
   return (
     <>
-      <div className="space-y-5 pb-4" data-testid="settings-sheet">
+      <div className="space-y-6 pb-6" data-testid="settings-sheet">
         <h2
           id="settings-sheet-title"
-          className="text-[1.0625rem] font-semibold leading-snug text-foreground"
+          className="pt-1 text-[1.0625rem] font-semibold leading-snug text-foreground"
         >
           {t("title")}
         </h2>
 
+        {/* 1–2. Profile + Security */}
         <SettingsProfileSection />
 
         {!user ? (
-          <section className="space-y-2">
+          <section className="space-y-2.5">
             <SectionLabel className="px-0.5">{t("account")}</SectionLabel>
             <Block>
               <button
@@ -199,62 +155,70 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
           </section>
         ) : null}
 
-        <section className="space-y-2">
+        {/* 3. Wallet status (read-only — connect/disconnect live in the chooser) */}
+        <section className="space-y-2.5">
           <SectionLabel className="px-0.5">{t("wallet")}</SectionLabel>
           <Block>
-            {tonc.connected ? (
-              <>
-                <Row className={SETTINGS_ROW}>
-                  <WalletBadge />
-                </Row>
-                <Row className="!min-h-[52px] py-2.5">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      haptics.selection();
-                      setDisconnectOpen(true);
-                    }}
-                    className="w-full py-1.5 text-start text-sm font-medium text-danger active:scale-[0.97] transition-transform duration-[120ms] ease-out"
-                    data-testid="settings-disconnect"
-                  >
-                    {t("disconnect")}
-                  </button>
-                </Row>
-              </>
-            ) : (
-              <Row className={SETTINGS_ROW}>
-                <SettingsLabelStack title={t("connectTitle")} hint={t("connectHint")} />
-                <WalletConnectButton />
+            {evm.connected && evm.address ? (
+              <Row className={SETTINGS_ROW} data-testid="settings-evm-status">
+                <div className="min-w-0 flex-1">
+                  <p className="truncate font-mono text-sm tnum text-foreground">
+                    {evm.short}
+                  </p>
+                  <p className="mt-0.5 truncate text-[0.6875rem] text-muted-foreground">
+                    {evm.chainName ?? ""}
+                  </p>
+                </div>
+                <span className="size-2 shrink-0 rounded-full bg-success" aria-hidden />
               </Row>
-            )}
+            ) : null}
+            {tonc.connected ? (
+              <Row className={SETTINGS_ROW} data-testid="settings-ton-status">
+                <div className="min-w-0 flex-1">
+                  <p className="truncate font-mono text-sm tnum text-foreground">
+                    {tonc.short}
+                  </p>
+                  <p className="mt-0.5 truncate text-[0.6875rem] uppercase text-muted-foreground">
+                    {tonc.network}
+                  </p>
+                </div>
+                <span className="size-2 shrink-0 rounded-full bg-success" aria-hidden />
+              </Row>
+            ) : null}
+            {!evm.connected && !tonc.connected ? (
+              <Row className="!min-h-[56px]">
+                <span className="text-sm text-muted-foreground" data-testid="settings-wallet-empty">
+                  {t("connectHint")}
+                </span>
+              </Row>
+            ) : null}
+            {evm.connecting ? (
+              <Row className="!min-h-[52px] py-2.5">
+                <span className="text-sm text-muted-foreground" data-testid="settings-evm-connecting">
+                  {evm.connectingTo
+                    ? t("evmConnectingTo", { name: evm.connectingTo })
+                    : t("evmConnecting")}
+                </span>
+              </Row>
+            ) : null}
+            {evm.error ? (
+              <Row className="!min-h-[52px] py-2.5">
+                <span className="text-sm text-danger" data-testid="settings-evm-error">
+                  {evm.error === "setup" ? t("evmSetupNeeded") : t("evmConnectFailed")}
+                </span>
+              </Row>
+            ) : null}
           </Block>
         </section>
 
-        <WithdrawalAddressSection />
+        {/* 4. Withdrawal addresses (account primary + local book; no financial activity) */}
+        <WithdrawalAddressesSection />
 
-        <WithdrawalRequestsSection
-          withdrawals={withdrawals}
-          loading={withdrawalsLoading}
-          error={withdrawalsError ? t("withdrawalsError") : null}
-          onRequest={() => {
-            haptics.selection();
-            setWithdrawOpen(true);
-          }}
-        />
-
-        <section className="space-y-2">
+        {/* 5. Preferences (language + theme; no currency switcher) */}
+        <section className="space-y-2.5">
           <SectionLabel className="px-0.5">{t("preferences")}</SectionLabel>
           <Block>
-            <Row className={SETTINGS_ROW}>
-              <SettingsLabelStack
-                title={t("displayCurrency")}
-                hint={t("displayCurrencyHint")}
-              />
-              <CurrencySegment value={displayCurrency} onChange={setDisplayCurrency} />
-            </Row>
-            <div className="border-t border-border">
-              <LanguageSelector />
-            </div>
+            <LanguageSelector />
             <Row className={SETTINGS_ROW}>
               <SettingsLabelStack
                 title={t("useTelegramTheme")}
@@ -270,30 +234,11 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
           </Block>
         </section>
 
-        <section className="space-y-2">
-          <SectionLabel className="px-0.5">{t("referrals")}</SectionLabel>
-          <Block>
-            <button
-              type="button"
-              onClick={() => void onInviteFriends()}
-              className={`flex w-full min-h-[56px] items-center gap-2 px-4 py-3.5 text-start ${NAV_ROW} disabled:opacity-50 disabled:pointer-events-none`}
-              data-testid="settings-invite-friends"
-              disabled={!canInvite}
-              aria-disabled={!canInvite}
-            >
-              <span className="flex-1 text-sm font-medium leading-snug text-foreground">
-                {copied ? t("copied") : !user?.id ? t("signInToInvite") : t("inviteFriends")}
-              </span>
-              {copied ? (
-                <Check size={20} strokeWidth={1.75} className="shrink-0 text-success" aria-hidden />
-              ) : (
-                <Copy size={20} strokeWidth={1.75} className="shrink-0 text-muted-foreground" aria-hidden />
-              )}
-            </button>
-          </Block>
-        </section>
+        {/* 6. Notifications */}
+        <NotificationsSection />
 
-        <section className="space-y-2">
+        {/* 7. Help & Legal (+ link-only transaction history) */}
+        <section className="space-y-2.5">
           <SectionLabel className="px-0.5">{t("help")}</SectionLabel>
           <Block>
             <button
@@ -331,10 +276,31 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
                 aria-hidden
               />
             </button>
+            <button
+              type="button"
+              onClick={() => {
+                haptics.selection();
+                closeAll();
+                router.push(ROUTES.transactions);
+              }}
+              className={`flex w-full min-h-[56px] items-center gap-2 border-t border-border px-4 py-3.5 text-start ${NAV_ROW}`}
+              data-testid="settings-transaction-history"
+            >
+              <span className="flex-1 text-sm font-medium leading-snug text-foreground">
+                {t("transactionHistory")}
+              </span>
+              <ChevronRight
+                size={20}
+                strokeWidth={1.75}
+                className="shrink-0 text-muted-foreground rtl:rotate-180"
+                aria-hidden
+              />
+            </button>
           </Block>
         </section>
 
-        <section className="space-y-2">
+        {/* 8. Sign out (always confirmed) */}
+        <section className="space-y-2.5">
           <SectionLabel className="px-0.5">{t("signOut")}</SectionLabel>
           <Block>
             <button
@@ -362,26 +328,10 @@ function SettingsSheetBody({ onClose }: { onClose: () => void }) {
       </div>
 
       <AboutLegalSheet open={aboutOpen} onClose={() => setAboutOpen(false)} />
-      <ConfirmActionSheet
-        open={disconnectOpen}
-        onClose={() => setDisconnectOpen(false)}
-        title="Disconnect wallet"
-        description="You'll need to reconnect to buy shares or receive payouts. Your investments aren't affected."
-        details={[{ label: "Wallet", value: tonc.short ?? "" }]}
-        confirmLabel="Disconnect"
-        pendingLabel="Disconnecting…"
-        pending={disconnecting}
-        onConfirm={() => void onDisconnect()}
-        testId="disconnect-confirm"
-      />
       <SignOutConfirmSheet
         open={signOutOpen}
         onConfirm={onSignOut}
         onCancel={onSignOutCancel}
-      />
-      <WithdrawalRequestSheet
-        open={withdrawOpen}
-        onClose={() => setWithdrawOpen(false)}
       />
     </>
   );

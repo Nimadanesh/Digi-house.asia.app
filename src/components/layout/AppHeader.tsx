@@ -1,6 +1,7 @@
 "use client";
 // File responsibility: shared bottom-tab header — circular avatar (opens SettingsSheet),
-// search capsule (flex-1), existing TonConnect wallet control. Rendered by AppShell on
+// search capsule (flex-1), wallet button (opens the global chooser; green dot when any
+// rail is connected). Rendered by AppShell on
 // every bottom-tab route. Search submits to the Marketplace route with ?query=; while
 // ON Marketplace it rewrites the same ?query= in place (no navigation) so the page's
 // existing filter query follows the header capsule. No greeting, no gear.
@@ -11,6 +12,7 @@ import { Search, Wallet } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useTelegramUser } from "@/hooks/useTelegramUser";
 import { useTonConnect } from "@/hooks/useTonConnect";
+import { useEvmWallet } from "@/hooks/useEvmWallet";
 import { useUiStore } from "@/stores/ui.store";
 import { haptics } from "@/lib/telegram/haptics";
 import { ROUTES } from "@/lib/constants";
@@ -71,7 +73,11 @@ function HeaderSearch() {
 export function AppHeader() {
   const tCommon = useTranslations("common");
   const { firstName, photoUrl } = useTelegramUser();
-  const { connected, openModal } = useTonConnect();
+  const { connected: tonConnected } = useTonConnect();
+  const { connected: evmConnected } = useEvmWallet();
+  /** Green dot when either rail is connected — TON-only state hid EVM sessions. */
+  const connected = tonConnected || evmConnected;
+  const openWalletChooser = useUiStore((s) => s.openWalletChooser);
   const openSettings = useUiStore((s) => s.openSettings);
   const initial = firstName.charAt(0).toUpperCase() || "D";
 
@@ -115,7 +121,7 @@ export function AppHeader() {
           aria-label={connected ? tCommon("walletConnected") : tCommon("connectWallet")}
           onClick={() => {
             haptics.selection();
-            openModal();
+            openWalletChooser();
           }}
           data-testid="home-nav-wallet"
           className="relative flex size-11 shrink-0 items-center justify-center rounded-full text-foreground active:scale-[0.97] transition-transform duration-[120ms] ease-out"

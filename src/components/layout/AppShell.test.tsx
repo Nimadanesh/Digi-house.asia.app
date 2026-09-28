@@ -18,6 +18,7 @@ vi.mock("@/components/profile/ProfileGate", () => ({
   ProfileGate: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 vi.mock("@/components/settings/SettingsSheet", () => ({ SettingsSheet: () => null }));
+vi.mock("@/components/wallet/WalletChooserHost", () => ({ WalletChooserHost: () => null }));
 vi.mock("@/components/common/ToastHost", () => ({ ToastHost: () => null }));
 vi.mock("@/components/layout/Header", () => ({ Header: () => null }));
 vi.mock("@/components/layout/AppHeader", () => ({ AppHeader: () => null }));

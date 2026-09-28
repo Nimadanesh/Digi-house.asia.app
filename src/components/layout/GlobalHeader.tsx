@@ -6,6 +6,7 @@ import { Settings, Wallet } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useTelegramUser } from "@/hooks/useTelegramUser";
 import { useTonConnect } from "@/hooks/useTonConnect";
+import { useEvmWallet } from "@/hooks/useEvmWallet";
 import { useUiStore } from "@/stores/ui.store";
 import { haptics } from "@/lib/telegram/haptics";
 import { cn } from "@/lib/utils";
@@ -14,8 +15,12 @@ function GlobalHeaderInner() {
   const t = useTranslations("header");
   const tCommon = useTranslations("common");
   const { firstName, photoUrl } = useTelegramUser();
-  const { connected, openModal } = useTonConnect();
+  const { connected: tonConnected } = useTonConnect();
+  const { connected: evmConnected } = useEvmWallet();
+  /** Green dot when either rail is connected — TON-only state hid EVM sessions. */
+  const connected = tonConnected || evmConnected;
   const openSettings = useUiStore((s) => s.openSettings);
+  const openWalletChooser = useUiStore((s) => s.openWalletChooser);
   const initial = firstName.charAt(0).toUpperCase() || "D";
 
   const onSettingsClick = useCallback(
@@ -55,7 +60,7 @@ function GlobalHeaderInner() {
             aria-label={connected ? tCommon("walletConnected") : tCommon("connectWallet")}
             onClick={() => {
               haptics.selection();
-              openModal();
+              openWalletChooser();
             }}
             className="relative flex size-11 items-center justify-center rounded-full active:scale-[0.97] transition-transform duration-[120ms] ease-out text-foreground"
             data-testid="global-wallet-btn"

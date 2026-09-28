@@ -12,6 +12,21 @@ const backShow = vi.fn();
 const backHide = vi.fn();
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const backOnClick = vi.fn((..._args: unknown[]) => () => {});
+const tonConnected = vi.hoisted(() => ({ value: true }));
+const evmState = vi.hoisted(() => ({
+  value: {
+    address: null as string | null,
+    short: "",
+    connected: false,
+    chainName: null as string | null,
+    connecting: false,
+    error: null as string | null,
+    ready: false,
+    connectWallet: vi.fn(),
+    disconnect: vi.fn(),
+    clearError: vi.fn(),
+  },
+}));
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ push, replace }),
@@ -19,15 +34,19 @@ vi.mock("next/navigation", () => ({
 
 vi.mock("@/hooks/useTonConnect", () => ({
   useTonConnect: () => ({
-    connected: true,
-    address: "EQabc",
-    short: "EQab…xyz0",
+    connected: tonConnected.value,
+    address: tonConnected.value ? "EQabc" : null,
+    short: tonConnected.value ? "EQab…xyz0" : "",
     network: "testnet",
     openModal: vi.fn(),
     disconnect,
     restoring: false,
     send: vi.fn(),
   }),
+}));
+
+vi.mock("@/hooks/useEvmWallet", () => ({
+  useEvmWallet: () => evmState.value,
 }));
 
 vi.mock("@/lib/telegram/haptics", () => ({
@@ -45,11 +64,6 @@ vi.mock("@/hooks/useRecoveryCode", () => ({
     error: null,
     refresh: vi.fn(),
   }),
-}));
-
-vi.mock("@/hooks/useWithdrawals", () => ({
-  useWithdrawals: () => ({ data: [], isLoading: false, error: null }),
-  useRequestWithdrawal: () => ({ mutate: vi.fn(), isPending: false }),
 }));
 
 vi.mock("@/lib/telegram/chrome", () => ({
@@ -70,6 +84,19 @@ import { SettingsSheet } from "@/components/settings/SettingsSheet";
 describe("SettingsSheet", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    tonConnected.value = true;
+    evmState.value = {
+      address: null,
+      short: "",
+      connected: false,
+      chainName: null,
+      connecting: false,
+      error: null,
+      ready: false,
+      connectWallet: vi.fn(),
+      disconnect: vi.fn(),
+      clearError: vi.fn(),
+    };
     useUiStore.setState({ settingsOpen: true, onboardingReplay: false });
     useSettingsStore.setState({
       displayCurrency: "usd",
@@ -94,26 +121,73 @@ describe("SettingsSheet", () => {
     });
   });
 
-  it("disables invite when session user is missing", () => {
-    useAuthStore.setState({ user: null });
+  it("Help & Legal offers a link-only transaction history (no list here)", () => {
     render(<SettingsSheet />);
-    expect(screen.getByTestId("settings-invite-friends")).toBeDisabled();
-    expect(screen.getByText(/sign in to invite/i)).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId("settings-transaction-history"));
+    expect(push).toHaveBeenCalledWith("/transactions");
+    expect(screen.queryByTestId("withdrawal-requests")).not.toBeInTheDocument();
   });
 
-  it("renders wallet status and disconnect when connected", () => {
+  it("disconnected state is status-only: hint text, no connect button (chooser lives on Home)", () => {
+    tonConnected.value = false;
+    render(<SettingsSheet />);
+    expect(screen.getByTestId("settings-wallet-empty")).toBeInTheDocument();
+    expect(screen.queryByTestId("settings-connect")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("wallet-chooser")).not.toBeInTheDocument();
+  });
+
+  it("shows the connected EVM address + network as status (disconnect lives in the chooser)", () => {
+    tonConnected.value = false;
+    evmState.value = {
+      address: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+      short: "0x742d…f44e",
+      connected: true,
+      chainName: "Ethereum",
+      connecting: false,
+      error: null,
+      ready: true,
+      connectWallet: vi.fn(),
+      disconnect: vi.fn(),
+      clearError: vi.fn(),
+    };
+    render(<SettingsSheet />);
+    expect(screen.getByText("0x742d…f44e")).toBeInTheDocument();
+    expect(screen.getByText("Ethereum")).toBeInTheDocument();
+    expect(screen.queryByTestId("settings-evm-disconnect")).not.toBeInTheDocument();
+  });
+
+  it("surfaces EVM setup guidance instead of crashing without a Project ID", () => {
+    tonConnected.value = false;
+    evmState.value = {
+      address: null,
+      short: "",
+      connected: false,
+      chainName: null,
+      connecting: false,
+      error: "setup",
+      ready: false,
+      connectWallet: vi.fn(),
+      disconnect: vi.fn(),
+      clearError: vi.fn(),
+    };
+    render(<SettingsSheet />);
+    expect(screen.getByTestId("settings-evm-error")).toHaveTextContent(
+      "WalletConnect Project ID",
+    );
+  });
+
+  it("renders wallet status without a disconnect button when connected", () => {
     render(<SettingsSheet />);
     expect(screen.getByTestId("settings-sheet")).toBeInTheDocument();
     expect(screen.getByText("EQab…xyz0")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /disconnect wallet/i })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /disconnect wallet/i })).not.toBeInTheDocument();
   });
 
-  it("offers display currency USD / TON", () => {
+  it("Preferences keeps language and theme (no currency switcher)", () => {
     render(<SettingsSheet />);
-    expect(screen.getByRole("radio", { name: "USD" })).toBeInTheDocument();
-    expect(screen.getByRole("radio", { name: "TON" })).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("radio", { name: "TON" }));
-    expect(useSettingsStore.getState().displayCurrency).toBe("ton");
+    expect(screen.getByTestId("language-selector")).toBeInTheDocument();
+    expect(screen.queryByRole("radio", { name: "USD" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("radio", { name: "TON" })).not.toBeInTheDocument();
   });
 
   it("shows language row with Auto default and opens picker in configured order", () => {
@@ -203,23 +277,10 @@ describe("SettingsSheet", () => {
     expect(replace).not.toHaveBeenCalled();
   });
 
-  it("Back cannot dismiss the protected disconnect while it is in flight", async () => {
-    disconnect.mockReturnValue(new Promise(() => {})); // never resolves → pending
+  it("no disconnect flow lives in Settings anymore (moved to the wallet chooser)", () => {
     render(<SettingsSheet />);
-    fireEvent.click(screen.getByTestId("settings-disconnect"));
-    expect(screen.getByTestId("disconnect-confirm")).toBeInTheDocument();
-    await act(async () => {
-      fireEvent.click(screen.getByTestId("disconnect-confirm-confirm"));
-    });
-    expect(disconnect).toHaveBeenCalledTimes(1);
-    expect(screen.getByTestId("disconnect-confirm-confirm")).toBeDisabled();
-    const back = backOnClick.mock.calls.at(-1)?.[0] as (() => void) | undefined;
-    await act(async () => {
-      back?.();
-    });
-    // Non-dismissible sheet: neither the confirm sheet nor Settings may close.
-    expect(screen.getByTestId("disconnect-confirm")).toBeInTheDocument();
-    expect(screen.getByTestId("settings-sheet")).toBeInTheDocument();
-    expect(replace).not.toHaveBeenCalled();
+    expect(screen.queryByTestId("settings-disconnect")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("disconnect-confirm")).not.toBeInTheDocument();
+    expect(disconnect).not.toHaveBeenCalled();
   });
 });
