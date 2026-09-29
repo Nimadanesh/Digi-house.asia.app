@@ -1,29 +1,9 @@
----
-docId: fifi.glossary.glossary.referral.v1
-docType: glossary
-domain: glossary
-title: "Referral"
-locale: en
-source: implementation audit FIFI-01 (referral page, standard-referral-model.ts, useReferrals.ts)
-sourceTier: 1
-status: ACTIVE
-defaultProvenance: MIXED
-effectiveDate: 2026-09-29
-lastVerified: 2026-09-29
-retrievalEligibility: eligible
-answerAuthority: authoritative
-entities:
-  - {kind: glossary-term, id: referral}
-related:
-  - fifi.glossary.glossary.membership.v1
----
-
 # Referral
 
-**FractionalLuxe meaning:** inviting others via invite links (`action.open-invite`).
-Standard model: amount bands at 5% / 7.5% / 10% with a 6-month lock; Club referral
-view exists alongside. Current implementation is **prototype / compliance-gated**:
-progress reads zero, no ledger, persistence, or settlement claims. Never invent
-reward amounts, payouts, or guarantees.
+**FractionalLuxe meaning:** Referral is the system for inviting other people through your personal invite link.
+
+The current Standard model uses 5%, 7.5%, and 10% percentage bands with a six-month lock. The current implementation is compliance-gated, so these model percentages should not be treated as a guaranteed reward balance or guaranteed payment.
+
+**In simple terms:** Referral connects an invitation with the referral information associated with it.
 
 **Related:** Membership, Club.
