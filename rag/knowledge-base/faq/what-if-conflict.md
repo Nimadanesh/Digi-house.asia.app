@@ -15,13 +15,10 @@ answerAuthority: authoritative
 related:
   - fifi.glossary.glossary.conflicted.v1
 ---
-
 # What happens if information conflicts?
 
 **Q:** What happens if information conflicts?
 
-**A:** If two sources give different information, Fifi first checks whether one source is authoritative for that particular fact. If there is a clear authoritative source, that information is used.
+**A:** If two sources give different information, the product uses the approved source for that particular fact when one has been established as the reference. If the disagreement has not been resolved, the information should be presented as disputed rather than choosing a figure simply because it appeared first.
 
-If the product itself has not resolved the disagreement, Fifi should tell you that the information is still disputed instead of choosing a number just because it appeared first.
-
-**Next step:** If you show Fifi the two conflicting figures, it can explain what each one represents and which source is authoritative, when that is established.
+**Next step:** If you see two conflicting figures, share both and I can explain what each one represents and whether the difference has an established resolution.
