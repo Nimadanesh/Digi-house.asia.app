@@ -2,9 +2,9 @@
 docId: fifi.troubleshooting.troubleshooting.demo-vs-real.v1
 docType: troubleshooting
 domain: troubleshooting
-title: "Demo data vs real data"
+title: "How to tell demo data from real product data"
 locale: en
-source: docs/product/rebuild/PRODUCT-DECISION-LOCK.md §2E; implementation audit FIFI-01 (DemoModeBadge, simulated labels)
+source: implementation audit FIFI-01
 sourceTier: 1
 status: ACTIVE
 defaultProvenance: OBSERVED
@@ -14,18 +14,25 @@ retrievalEligibility: eligible
 answerAuthority: authoritative
 ---
 
-# Demo data vs real data
+# Demo Data vs Real Data
 
-**Symptom:** uncertainty about whether a figure is real.
+## What does Demo mode mean?
 
-**Verified guidance:**
-- The current build is a company-review prototype with a discreet **"Demo mode"**
-  pill. Paid rows with synthetic hashes carry **"simulated"** badges; price history is
-  marked "(simulated)". This is honest demo data for showing the complete loop.
-- Rule: anything labeled Demo/simulated is illustrative, never history. Anything
-  unlabeled (property facts, calculations, market/ownership/income states) is truthful
-  to its configured source.
-- No fake users, no trades-as-real, no payouts-as-history, no partnerships, no
-  performance history — if something looks like one, report it; do not trust it.
+The current build includes a **Demo mode** indicator so users can tell that parts of the experience are being demonstrated rather than treated as a live production transaction history.
 
-When in doubt, ask what the badge next to the figure says.
+Paid rows or price history that are explicitly marked **simulated** are demonstration data. They should not be treated as real historical payments or market history.
+
+## What is still meaningful in demo mode?
+
+Demo mode does not mean that every number on every screen is fake.
+
+Property facts, configured calculations, and displayed product states remain tied to their configured sources unless the screen explicitly labels something as Demo or simulated.
+
+## How do I check?
+
+Look at the label next to the figure or activity.
+
+- **Demo / simulated** → demonstration data.
+- No such label → use the product's stated source and status; Fifi should explain any provenance or uncertainty that matters to the user.
+
+If a figure looks inconsistent with its label, ask Fifi about that specific figure or report it through support.
