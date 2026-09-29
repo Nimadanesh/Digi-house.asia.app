@@ -13,7 +13,6 @@ lastVerified: 2026-09-29
 retrievalEligibility: eligible
 answerAuthority: authoritative
 ---
-
 # Referral — Inviting People
 
 ## What is Referral?
@@ -35,10 +34,10 @@ The basic journey is:
 
 The documented Standard model uses reward percentage bands of **5%, 7.5%, and 10%** with a **6-month lock**.
 
-These figures describe the documented model. The current implementation is prototype/compliance-gated and does not currently provide a settled reward ledger. Therefore the model percentages must not be presented as money already earned or guaranteed to a particular user.
+These figures describe the documented model. The current implementation is prototype/compliance-gated and does not currently provide a settled reward ledger, so the percentages should not be presented as money already earned or as a guaranteed payout.
 
-## What is personal/current?
+## Current referral status
 
-A user's referral progress, eligibility, and any actual reward state are current account information. They must come from the live product state rather than a static explanation.
+A user's referral progress, eligibility, and actual reward state are account-specific and can change. Current values must come from the current product state rather than from this general explanation.
 
-Fifi can explain the referral model and the invite flow without promising a payout.
+The invite model explains how referrals are intended to work; it does not promise a payout.
