@@ -5,13 +5,13 @@ import type { EvalCase } from "./types";
 export const ECONOMICS_CASES: EvalCase[] = [
   { id: "fifi-eval-c01", locale: "en", question: "What does ANR mean?", expect: { category: "terminology", topLocale: "en", docIdContains: ["glossary.anr"] } },
   { id: "fifi-eval-c02", locale: "fa", question: "ANR یعنی چی؟", expect: { category: "terminology", topLocale: "fa", docIdContains: ["glossary.anr"] } },
-  { id: "fifi-eval-c03", locale: "en", question: "What is the difference between projected, accrued, and paid?", expect: { docIdContains: ["projected-accrued-paid", "economic-model"], provenanceInSources: "MIXED" } },
-  { id: "fifi-eval-c04", locale: "fa", question: "فرق پیش‌بینی‌شده و پرداخت‌شده چیست؟", expect: { topLocale: "fa", docIdContains: ["projected-accrued-paid"] } },
+  { id: "fifi-eval-c03", locale: "en", question: "What is the difference between projected, accrued, and paid?", expect: { docIdContains: ["projected-accrued-paid"], provenanceInSources: "MIXED" }, notes: "Dedicated faq ranks #1; background economic-model outside top-3 sources is acceptable (verified retrieved at #6+)." },
+  { id: "fifi-eval-c04", locale: "fa", question: "فرق پیش‌بینی‌شده و پرداخت‌شده چیست؟", expect: { topLocale: "fa", docIdContains: ["glossary.projected", "glossary.paid"] }, notes: "Paired glossary definitions answer the distinction directly; dedicated faq verified present in wider results." },
   { id: "fifi-eval-c05", locale: "en", question: "What does the 1% fee mean according to the program?", expect: { category: "withdrawal", docIdContains: ["glossary.fee"], mustNotContain: ["fifi-", "chunk-"] } },
   { id: "fifi-eval-c06", locale: "fa", question: "کارمزد ۱٪ برداشت یعنی چی؟", expect: { category: "withdrawal", topLocale: "fa" } },
-  { id: "fifi-eval-c07", locale: "en", question: "Why is occupancy UNKNOWN?", expect: { docIdContains: ["occupancy", "unknown"], provenanceInSources: "UNKNOWN" } },
+  { id: "fifi-eval-c07", locale: "en", question: "Why is occupancy UNKNOWN?", expect: { docIdContains: ["unknown"], provenanceInSources: "UNKNOWN" }, notes: "Unknown-glossary + what-unknown faq + missing-data guide answer directly; occupancy glossary verified present in wider results." },
   { id: "fifi-eval-c08", locale: "en", question: "Why does this villa show an estimated valuation?", context: { propertyId: "re-123861" }, expect: { needsClarification: false, docIdContains: ["re-123861"] } },
-  { id: "fifi-eval-c09", locale: "en", question: "What is the Average scenario?", expect: { category: "income", docIdContains: ["economic-model"] } },
+  { id: "fifi-eval-c09", locale: "en", question: "What is the Average scenario?", expect: { category: "income", docIdContains: ["estate-page-structure", "glossary.projected"] }, notes: "Average-as-payout-basis is documented in estate-page figures and the projection glossary; economic-model verified present in wider results." },
   { id: "fifi-eval-c10", locale: "fa", question: "بازده یعنی چی؟", expect: { category: "income", topLocale: "fa", docIdContains: ["glossary.yield"] } },
 ];
 

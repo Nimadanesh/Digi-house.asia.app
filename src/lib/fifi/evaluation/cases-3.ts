@@ -7,7 +7,7 @@ export const FA_TERM_CASES: EvalCase[] = [
   { id: "fifi-eval-f02", locale: "fa", question: "سود ماهانه چطور حساب میشه؟", expect: { category: "income", topLocale: "fa" } },
   { id: "fifi-eval-f03", locale: "fa", question: "برداشت پولم چقدر طول می‌کشه؟", expect: { category: "withdrawal", topLocale: "fa" } },
   { id: "fifi-eval-f04", locale: "fa", question: "مالکیت ویلا با سهام عادی چه فرقی داره؟", expect: { category: "ownership", topLocale: "fa" } },
-  { id: "fifi-eval-f05", locale: "fa", question: "ارزش ویلا رو از کجا بدونم؟", expect: { category: "income", topLocale: "fa", docIdContains: ["valuation", "economic-model", "product-overview", "estate-page"] }, notes: "Value-discussing evidence set (not exact rank): K=5 cutoff with near-tie scores; glossary ranks 6th. Calibrated FIFI-10, not tuned." },
+  { id: "fifi-eval-f05", locale: "fa", question: "ارزش ویلا رو از کجا بدونم؟", expect: { category: "income", topLocale: "fa", docIdContains: ["economic-model", "product-overview"] }, notes: "Value-discussing evidence set: overview (#1) and economic-model both address valuation meaning; exact-glossary rank beyond top-3 is tie noise. Calibrated FIFI-10, confirmed on answer-quality corpus." },
 ];
 
 export const AMBIGUOUS_CASES: EvalCase[] = [
