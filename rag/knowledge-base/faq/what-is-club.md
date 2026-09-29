@@ -1,27 +1,11 @@
----
-docId: fifi.faq.faq.what-is-club.v1
-docType: faq
-domain: faq
-title: "What is the Club?"
-locale: en
-source: implementation audit FIFI-01 (club page, club-tiers.ts); docs/PRIVATE-CLUB-PRODUCT-RULES-V1.md
-sourceTier: 1
-status: ACTIVE
-defaultProvenance: MIXED
-effectiveDate: 2026-09-29
-lastVerified: 2026-09-29
-retrievalEligibility: eligible
-answerAuthority: authoritative
-related:
-  - fifi.glossary.glossary.club.v1
----
-
 # What is the Club?
 
 **Q:** What is the Club?
 
-**A:** The **Club** is FractionalLuxe's private membership area. It is designed to give members a more exclusive experience, with different membership levels and benefits. The levels are **Standard, Private, Private+, Elite, and Signature**.
+**A:** **Club is the private membership area of the app.** It gives members a more exclusive layer of the FractionalLuxe experience, with membership levels and benefits that become available according to the level shown for the account.
 
-The Club page brings those levels and their available benefits together in one place. Some benefits and services are still prototype or scope-limited, so Fifi will explain only what is currently published rather than inventing extra privileges.
+The current levels are **Standard, Private, Private+, Elite, and Signature**. The Club page is where you can see the levels and the benefits currently presented for them.
 
-**Next step:** Open the **Club** to see the membership levels and benefits currently shown to you.
+**In simple terms:** Marketplace helps you explore estates; Club is about your membership experience around the product.
+
+**Next step:** Open **Club** to see the membership level and benefits available to you.
