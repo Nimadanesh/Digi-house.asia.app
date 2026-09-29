@@ -112,3 +112,162 @@ For a question such as “این دکمه چیه؟”, answer in this order:
 4. **What happens next:** name the destination or next step when documented.
 
 Do not answer a UI question by exposing implementation names, component names, internal identifiers, retrieval terminology, or other engineering details.
+
+
+## Earnings: small elements
+
+### Received in total
+This is the total of income that has been marked as paid. It should not be confused with projected or accrued income.
+
+### Next payout
+This area gives the next payout timing when the app has a value to show. A displayed expected amount is a projection, not a guarantee.
+
+### Distribution journey
+The distribution journey explains the path an amount can move through: **Accrued → Eligible → Requested → Scheduled → Paid out**. A stage that has not been reached is not evidence that the money is lost; it simply has not reached that stage.
+
+### Payments
+The Payments section lists individual income payment entries. The summary above it can show how many payments have been received compared with the total number of entries.
+
+### Income by estate
+This section groups displayed income by villa/estate. Selecting an estate row can take the user to that estate's page.
+
+### Income comparison bar
+When shown, the horizontal bar compares the contribution of the displayed estates to the total shown in that section. It is a visual comparison, not a separate income calculation.
+
+### Yield summary
+The Yield summary can show **accrued unpaid income**, **projected monthly income**, and **locked shares**. These are separate pieces of information and should not be added together unless the app explicitly provides a total.
+
+### No locks
+If there are no active locked shares, the Yield area explains that there are currently no locked shares rather than displaying a fabricated earning amount.
+
+## Portfolio: small elements
+
+### Portfolio summary
+The summary area gives a quick view of the portfolio, while the holding cards below provide estate-level detail.
+
+### Holding card
+A holding card represents one estate in the portfolio. It can show the number of shares, displayed value, and gain/loss information.
+
+### Allocation bar
+The Allocation bar visually shows how the portfolio is distributed among estates. It helps answer “How much of my portfolio is in each estate?”
+
+### Holding detail sheet
+Tapping a holding can open a detail sheet with more information about that position without leaving the Portfolio page.
+
+### Locked / free shares
+Where shown, **Locked** means shares currently participating in the earning program. **Free** means shares not locked and therefore available for eligible sale flows.
+
+### Idle shares
+An Idle Shares message highlights shares that are currently not locked. It can point the user toward the Earn flow when the relevant action is available.
+
+### Open Orders
+Open Orders contains buy or sell orders that have not filled yet. An open order is different from a completed transaction.
+
+## Property page: small elements
+
+### Photo gallery
+The gallery lets the user browse the villa images. Selecting an image can open a larger image view.
+
+### Compact top bar
+The compact property header keeps the estate identity available while the user moves through the page.
+
+### Funding ring
+The circular funding indicator gives a compact visual view of Primary Offering progress. The percentage in its center is the readable progress value.
+
+### Funding bar
+The larger funding bar gives the same kind of offering-progress context in a more prominent format. It answers how much of the Primary Offering has been sold.
+
+### Property metrics grid
+The metrics grid can show **Monthly Income**, **Annual**, **Average Nightly Rate**, and **Est. Growth**. These values have different meanings: income figures relate to the model, ANR relates to the rental-rate basis, and Est. Growth is a forward-looking estimate.
+
+### Icon points
+Small icon-and-label points summarize selected property facts or highlights. They are quick-scan information, not separate financial metrics.
+
+### About section
+The About area provides the property's descriptive information and helps answer what the villa is like beyond its headline numbers.
+
+### Income calculator
+The Income calculator lets the user change the number of shares and see the corresponding displayed income estimate. The **minus** and **plus** buttons change the share quantity; the numeric field allows direct quantity entry.
+
+### Scenario selector
+The calculator can show **Conservative, Base, and Optimistic** scenario choices. A selected scenario is the scenario currently displayed by the calculator. If multiple scenarios use the same configured values in a prototype, Fifi should not describe them as meaningfully different.
+
+### Your Position
+For an owned estate, the Position area can show **Total shares, Locked shares, Free shares, Accrued income, and displayed position value**.
+
+### Lock button
+The Lock button starts the flow for placing eligible free shares into the earning program.
+
+### Sell button
+The Sell button starts the selling flow when selling is available for the current estate and position. Locked shares must first be unlocked.
+
+### Current ownership value per share
+In the resale area, this is the displayed current value per share used by the market summary. It is a current market-context figure, not a guarantee of a future sale price.
+
+### Best asking price
+The Best Asking Price is the lowest visible price at which a seller is currently asking to sell, when an ask exists.
+
+### Best offer
+The Best Offer is the highest visible price a buyer is currently offering, when a bid exists.
+
+### Spread
+The Spread is the difference between the displayed best asking price and best offer when both are available.
+
+### Order Book
+The Order Book lists visible buy and sell interest at different prices. It helps the user understand the current order flow.
+
+### Recent Trades
+Recent Trades shows recent executed trades when trade data is available. Demo-labelled activity must be understood as demonstration data.
+
+### Sticky Buy / Sell bar
+After the main hero is no longer visible, a sticky action bar keeps the relevant Buy or Buy/Sell actions available without requiring the user to scroll back to the top.
+
+### Scarcity line
+During a Primary Offering, a small line above the sticky Buy button can show how many shares remain at the displayed base price. It describes remaining offering inventory, not sales speed or future price movement.
+
+## Property tabs: what each tab is for
+
+### Estate / Overview
+Answers: **What is this villa?** It contains the property's core facts, highlights, description, location, amenities, and other overview information.
+
+### Income
+Answers: **How is rental income modeled?** It explains the rental-rate basis, scenarios, modeled nights, revenue, costs, and the resulting income presentation.
+
+### Ownership
+Answers: **What does my share represent?** It focuses on estate value, shares, ownership position, growth presentation, and market/exit context.
+
+### Earn
+Answers: **How do I use my shares in the earning program?** It is where eligible shares can be locked or unlocked and where the lock state and accrued income are presented.
+
+### Details
+Answers: **What supporting information is available?** It contains operator, structural/legal notes, valuation information, documents, and disclosures where available.
+
+## Common sheets and overlays
+
+### Buy sheet
+The Buy sheet collects the purchase quantity and shows the purchase summary before the user confirms and approves the wallet transaction.
+
+### Sell sheet
+The Sell sheet collects the quantity and selling terms for an eligible sale flow.
+
+### Lock sheet
+The Lock sheet is the focused control for choosing how many eligible shares to lock.
+
+### Sort sheet
+The Sort sheet lets the user choose how Marketplace results are ordered. A checkmark indicates the current choice.
+
+### Fee schedule sheet
+The Fee Schedule sheet explains the applicable buy/sell commission schedule rather than requiring the user to remember rates.
+
+### Confirmation sheet
+A confirmation sheet asks the user to review an action before it is submitted. It is a final check, not a new transaction by itself.
+
+### Image lightbox
+An image lightbox enlarges a selected property photo so details can be viewed more comfortably.
+
+### Wallet chooser
+The wallet chooser is the interface used to select a supported wallet connection route when a transaction requires a wallet.
+
+## Fifi coverage rule
+
+If a user points to a visible element and asks “What is this?”, Fifi should first identify the element using the wording visible to the user, then explain its purpose, then describe the immediate result of interacting with it when that behavior is documented. If the element's behavior is not documented, explain its visible meaning without inventing an action.
