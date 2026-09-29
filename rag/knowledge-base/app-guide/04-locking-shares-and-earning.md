@@ -22,33 +22,43 @@ related:
 
 ## What locking does
 
-Locking a share makes it eligible to earn rental profit under the earning program.
+**Locking** means placing shares into the earning program.
 
-A locked share cannot be sold until it is unlocked.
+A locked share is eligible to earn rental profit under the program, but it cannot be sold until it is unlocked.
+
+This creates a simple trade-off:
+
+**Locked = eligible for earning, not available for sale.**
+
+**Unlocked = not earning, available for eligible sale flows.**
 
 ## How to lock shares
 
 1. Open the Property page for a villa you own.
 2. Open the **Earn** tab.
-3. Choose the number of shares to lock.
-4. Confirm the lock.
-5. The holding then shows its locked state and accrual can begin.
+3. Choose how many shares to lock.
+4. Review the lock information.
+5. Confirm the lock.
+6. The holding then shows its locked state and accrual can begin.
 
 New locks are **monthly-only**.
 
-## What the Earn tab shows
+## The Earn tab, element by element
 
-The Earn tab is the place to:
-- lock shares;
-- see which shares are locked;
-- see accrued income associated with locked shares;
-- request an unlock.
+The Earn tab is the control center for the lock-to-earn journey.
+
+- **Lock control** — chooses the number of shares entering the program.
+- **Locked-share status** — shows which part of the holding is currently locked.
+- **Accrued income** — shows income earned on locked shares that has not yet been paid.
+- **Unlock control** — starts the process of removing shares from the earning program.
+
+The exact values in these elements depend on your current account state.
 
 ## Monthly income
 
-For new locks, the program uses a monthly amount per locked share based on the Average scenario.
+For new locks, the program uses a monthly amount per locked share based on the **Average scenario**.
 
-Amounts labeled **Projected** are estimates of future income. They are not the same as money already paid.
+A **Projected** figure is an estimate of future income. It is not the same as money already paid.
 
 Historical weekly lock records, where shown, are labeled **Legacy**. Weekly locking is not offered for new locks.
 
@@ -56,19 +66,27 @@ Historical weekly lock records, where shown, are labeled **Legacy**. Weekly lock
 
 Unlocked shares do not accrue or receive rental profit.
 
-The benefit of being unlocked is that the shares are available for an eligible sale flow.
+Their main practical advantage is flexibility: an unlocked share can be used in an eligible sale flow.
 
 ## Unlocking
 
-Request an unlock from the Earn tab.
+Request an unlock from the **Earn** tab.
 
-Accrual stops when the unlock is requested, and the shares become sellable after the applicable processing period shown by the app.
+When an unlock is requested, accrual stops and the shares become sellable after the applicable processing period shown by the app.
 
-If you want to sell locked shares, unlock them first.
+If your goal is to sell a locked share, unlocking it is the required first step.
+
+## Earnings vs Earn
+
+These two areas answer different questions:
+
+- **Earn** = control your locked/unlocked shares.
+- **Earnings** = review income that has accrued or been paid.
+
+That distinction helps explain why an action belongs on Earn while a payment history belongs on Earnings.
 
 ## Withdrawals
 
 A withdrawal request has a **1% fee at request time**. The remaining amount is paid in **exactly four weekly installments**.
 
-The four-week payment schedule describes when the withdrawal is paid. It does not mean that new earning is calculated weekly.
-
+The four-week schedule describes the timing of withdrawal payments. It does **not** mean that new rental earning is calculated weekly.
