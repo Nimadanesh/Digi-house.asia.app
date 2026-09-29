@@ -16,15 +16,9 @@ entities:
   - {kind: glossary-term, id: anr}
 related:
   - fifi.glossary.glossary.adr.v1
-  - fifi.glossary.glossary.rental-income.v1
----
 
 # ANR (Average Nightly Rate)
 
-**FractionalLuxe meaning:** the mean of the distinct **full-buyout listed rates**
-for a villa, as listed by the source. ANR is the rental basis used in villa
-documents and the V1 economic model — **never ADR**. When the user asks about the
-"average nightly rate," use the villa's ANR and state that it is the mean of
-full-buyout listed rates, not an occupancy metric.
+**ANR** is the average of the distinct full-buyout nightly rates listed for a villa.
 
-**Related:** ADR, Rental Income, Rates.
+It is the rental-rate basis used in the estate model. ANR does not tell you how many nights were actually sold; that is why ANR and ADR are different.
