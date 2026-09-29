@@ -12,7 +12,6 @@ lastVerified: 2026-09-30
 retrievalEligibility: eligible
 answerAuthority: authoritative
 ---
-
 # Understanding Estate Economics
 
 This guide explains the main numbers users see around an estate.
@@ -23,31 +22,32 @@ This guide explains the main numbers users see around an estate.
 
 **Reference value per share** is the estate's displayed valuation divided across its total shares. It is a derived reference, not a market quote.
 
-**Secondary Market price** is the price at which existing shares are offered or requested. It is determined by the market's buy and sell orders.
+**Secondary Market price** is the price at which existing shares are offered or requested. It is determined by current buy and sell orders.
 
 These values answer different questions.
 
 ## Estate valuation
 
-The app's approved valuation is a current reference value for the estate, based conservatively on comparable properties in the relevant region.
+The app's approved valuation is a current reference value for the estate, based on the documented valuation method.
 
-Some pages also show **Est. Growth**. This is the difference between the current valuation and the upper end of the documented valuation range.
+Some pages also show **Est. Growth**. This represents the difference between the current valuation and the upper end of the documented valuation range.
 
-Est. Growth is estimated potential within that range. It is **not an annual return forecast and not rental income**.
+Est. Growth is an estimate within that range. It is **not an annual return forecast and not rental income**.
 
-If an official valuation cannot be verified, it should be treated as unknown rather than replaced by an unsupported estimate.
+If an official valuation cannot be verified, it remains unavailable rather than being replaced by an unsupported figure.
 
 ## Rental-rate basis
 
 **ANR (Average Nightly Rate)** is the average of the distinct full-buyout nightly rates listed for the villa.
 
-**ADR is different:** it depends on nights actually sold. Occupancy is currently unknown for the 24-estate catalog, so Fifi should not invent an occupancy or ADR figure.
+**ADR is different:** it depends on nights actually sold. Occupancy is currently unavailable for the 24-estate catalog, so an ADR figure should not be invented.
 
 ## Projected rental income
 
 The model uses rental-rate information and modeled nights for different scenarios.
 
 A scenario can show:
+
 - modeled nights;
 - whole-estate gross revenue;
 - income attributable to a share.
@@ -59,9 +59,10 @@ Until income is earned and distributed, these figures are **projected**.
 ## Costs
 
 The V1 model includes documented assumptions such as:
+
 - 5% agency / Rental Escapes / OTA cost from gross revenue;
 - 7.5% operator operating costs from gross revenue;
-- 1.5% repair, insurance and maintenance reserve based on property value.
+- 1.5% repair, insurance, and maintenance reserve based on property value.
 
 These are model assumptions, not universal real-world costs for every villa.
 
