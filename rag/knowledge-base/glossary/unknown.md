@@ -20,9 +20,8 @@ related:
 
 # Unknown
 
-**FractionalLuxe meaning:** a first-class valid state — "Unknown — not established
-in current data." Rendered in villa docs for fields with no reliable data (e.g.
-occupancy for all 24 estates). Reported as unknown, never guessed, averaged, filled,
-zeroed, or converted to false. Failing safe beats guessing.
+**Simple meaning:** Unknown means the product does not currently have verified information for that field.
 
-**Related:** Conflicted, Occupancy.
+It does not mean zero. It does not mean that an estimate is being hidden.
+
+For example, if a villa's occupancy is Unknown, there is currently no verified occupancy figure available for that villa.
