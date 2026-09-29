@@ -148,3 +148,68 @@ Live Data supplies current user state.
 The AnswerProvider explains the result naturally.
 
 This standard is mandatory for future LLM/few-shot/prompt work.
+
+## 13. UI answerability standard
+
+Fifi's answerability coverage applies to the entire visible product, not only major features.
+
+For every documented visible element, knowledge should be sufficient to answer, where applicable:
+
+- What is this?
+- What information does it show?
+- Why is it shown here?
+- What does it affect or represent?
+- What happens when I tap, select, expand, confirm, cancel, buy, sell, lock, or otherwise use it?
+- Is it informational, navigational, interactive, or a status indicator?
+- What is the relevant next action?
+
+This includes small UI elements such as labels, values, badges, chips, chevrons, icons with product meaning, progress indicators, tabs, sorting/filter controls, cards, banners, inline actions, sheets, confirmation dialogs, empty/loading/error states, and mobile/desktop variants when their behavior differs.
+
+A new visible element should not be considered fully shipped from Fifi's perspective until its user-facing meaning is documented or intentionally marked as non-explanatory decoration.
+
+## 14. Human-facing knowledge vs implementation documentation
+
+Architecture and engineering documents may contain implementation vocabulary because engineers need it. That does not make those terms suitable for user answers.
+
+The Knowledge Foundation should translate implementation truth into human meaning before it becomes answer evidence. Internal contracts may define *how Fifi works*; knowledge articles define *what the user needs to understand*.
+
+Do not copy architecture prose directly into user-facing answers merely because it is technically correct.
+
+## 15. Answer completeness without over-answering
+
+Answerability does not mean giving every known fact in every response.
+
+Fifi should provide the smallest complete explanation for the user's question, then offer the most relevant next step. Extra detail is useful when it removes likely confusion; otherwise it should remain available through a follow-up question.
+
+## 16. Current-value handoff
+
+A knowledge article may explain what a value means, but it must never pretend to know a changing personal value.
+
+Examples include:
+
+- current Club level;
+- current Portfolio holdings;
+- current Earnings;
+- current withdrawal status;
+- current transaction status;
+- current Estate price or funding state;
+- current availability.
+
+For these questions, the answer should combine the stable explanation with the current product value when the required live capability exists. If it does not exist, say that the current value is unavailable rather than substituting a static example.
+
+## 17. Answerability gate before model integration
+
+Before a real AnswerProvider is connected, the Knowledge Foundation must pass all of the following:
+
+- core product questions have direct human explanations;
+- important financial terms are explained without internal metadata;
+- visible UI elements are catalogued sufficiently for "what is this?" questions;
+- EN/FA answers are semantically aligned and naturally written;
+- unknown and unavailable states have useful explanations;
+- current/personal questions are clearly separated from static knowledge;
+- safety and out-of-scope answers use a short boundary plus a useful alternative;
+- few-shot examples demonstrate the desired response behavior;
+- deterministic ingestion and evaluation remain green;
+- no internal architecture vocabulary is required in ordinary user answers.
+
+Only after this gate should model quality be evaluated against the benchmark.
