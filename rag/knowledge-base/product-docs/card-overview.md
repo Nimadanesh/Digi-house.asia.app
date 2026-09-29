@@ -13,7 +13,6 @@ lastVerified: 2026-09-29
 retrievalEligibility: eligible
 answerAuthority: authoritative
 ---
-
 # Card — What You See
 
 ## What is Card?
@@ -24,9 +23,10 @@ In the current product scope, it is a **preview/presentation surface**, not a fu
 
 ## What does the Card screen do?
 
-The screen can present your portfolio balance context with premium card styling. Its current call-to-action is visual/haptic feedback rather than a card-order or payment operation.
+The screen can present portfolio balance context with premium card styling. Its current call-to-action is visual/haptic feedback rather than a card-order or payment operation.
 
 There is currently no verified flow for:
+
 - ordering a physical or virtual card;
 - card issuance;
 - card shipping;
@@ -34,4 +34,4 @@ There is currently no verified flow for:
 - card limits;
 - card-specific fees.
 
-If you see a Card button or visual element, think of it as the entry to the current Card experience, not as proof that a payment-card service is already available.
+So the current Card screen should be understood as a presentation experience, not as proof that a payment-card service is available.
