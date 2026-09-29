@@ -22,8 +22,8 @@ test.describe("Card page", () => {
     const heroAmount = (await page.getByTestId("home-hero-amount").textContent())?.trim();
     expect(heroAmount).toBeTruthy();
 
-    // Home Card action navigates to the Card page.
-    await page.getByTestId("action-card").click();
+    // The Card page remains a direct route (/card still renders; Home now links to Club).
+    await page.goto("/card");
     await page.waitForSelector('[data-testid="card-page"]', { timeout: 15_000 });
 
     // Reference composition: badge, headline, live balance, brand, benefits, CTA.

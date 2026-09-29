@@ -13,6 +13,8 @@ const TITLES: Record<string, string> = {
   "/marketplace": "Marketplace",
   "/earnings": "Earnings",
   "/portfolio": "Portfolio",
+  "/club": "Club",
+  "/referral": "Referral",
   "/settings": "Settings",
   "/onboarding": "Welcome",
   "/profile-setup": "Your profile",
@@ -40,12 +42,12 @@ export function Header() {
 
   return (
     <header
-      className="h-[calc(44px+max(env(safe-area-inset-top),0px))] shrink-0 bg-background px-4 pt-[max(env(safe-area-inset-top),0px)]"
+      className="flex h-[calc(44px+max(env(safe-area-inset-top),12px))] shrink-0 flex-col justify-center bg-background px-4"
       data-testid="app-header"
     >
       <div
         className={cn(
-          "relative flex h-[44px] items-center",
+          "relative flex h-[44px] w-full items-center",
           isRoot ? "justify-start" : "justify-center",
         )}
       >

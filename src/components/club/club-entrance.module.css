@@ -1,0 +1,89 @@
+/* File responsibility: Club entrance experience — scoped, removable styles.
+   Midnight navy atmosphere with a restrained blue wash + faint champagne
+   warmth (CSS gradients only, no blur filters). Decorative overlay only:
+   pointer-events none so it never blocks the Club page underneath. */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 52% at 50% 40%, rgba(122, 158, 255, 0.1) 0%, rgba(7, 11, 20, 0) 68%),
+    radial-gradient(ellipse 62% 46% at 50% 62%, rgba(214, 183, 124, 0.055) 0%, rgba(7, 11, 20, 0) 70%),
+    linear-gradient(180deg, #0a1020 0%, #070b14 52%, #05080f 100%);
+  opacity: 1;
+  transition: opacity 700ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity;
+}
+
+.closing {
+  opacity: 0;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.copy {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 0 28px;
+  text-align: center;
+}
+
+.brand {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.46em;
+  text-transform: uppercase;
+  color: rgba(214, 183, 124, 0.78);
+  opacity: 0;
+  animation: entranceFade 1500ms cubic-bezier(0.22, 0.61, 0.36, 1) 1500ms both;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.375rem, 6vw, 2.125rem);
+  font-weight: 500;
+  letter-spacing: 0.34em;
+  /* tracking adds trailing space — nudge for optical centering */
+  padding-inline-start: 0.34em;
+  text-transform: uppercase;
+  color: rgba(243, 246, 252, 0.95);
+  opacity: 0;
+  animation: entranceFade 1700ms cubic-bezier(0.22, 0.61, 0.36, 1) 2300ms both;
+}
+
+@keyframes entranceFade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay {
+    transition-duration: 550ms;
+  }
+  .brand,
+  .title {
+    animation: none;
+    opacity: 1;
+  }
+}

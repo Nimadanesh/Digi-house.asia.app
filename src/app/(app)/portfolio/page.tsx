@@ -19,6 +19,7 @@ import { ErrorState } from "@/components/common/ErrorState";
 import { BrowseMarketplaceCta } from "@/components/common/BrowseMarketplaceCta";
 import { ConfirmActionSheet } from "@/components/common/ConfirmActionSheet";
 import { PortfolioHeaderCard } from "@/components/portfolio/PortfolioHeaderCard";
+import { ClubPortfolioStrip } from "@/components/club/ClubPortfolioStrip";
 import { IdleSharesBanner } from "@/components/portfolio/IdleSharesBanner";
 import { AllocationBar } from "@/components/portfolio/AllocationBar";
 import { HoldingCard } from "@/components/portfolio/HoldingCard";
@@ -154,6 +155,8 @@ export default function PortfolioPage() {
   return (
     <div className="mt-3 space-y-6 pb-2" data-testid="portfolio-page">
       <PortfolioHeaderCard summary={data} lockedShares={totalLocked} freeShares={totalFree} />
+      {/* Club touchpoint: supplementary membership status only. */}
+      <ClubPortfolioStrip investedUsd={data.totalInvestedUsd} />
       <IdleSharesBanner freeShares={totalFree} nudgePropertyId={nudgePropertyId} />
       <AllocationBar slices={slices} nameById={nameById} />
 

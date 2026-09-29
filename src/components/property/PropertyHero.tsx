@@ -168,11 +168,6 @@ export function PropertyHero({
   const valueProvenance =
     estateValueDisplay?.provenance ?? estateValueProvenance ?? null;
 
-  // Funding-scarcity module (Layer 1): the demo-ledger progress is the ONLY
-  // honest urgency signal — bar + real remaining count, never invented pace.
-  const fundingPct = fractionTotal > 0 ? listing.sharesSold / fractionTotal : 0;
-  const fundingRemaining = fractionTotal - listing.sharesSold;
-
   return (
     <div className="space-y-3" data-testid="property-hero">
       {/* Estate name — restrained single-line treatment (never the visual dominant;
@@ -211,9 +206,9 @@ export function PropertyHero({
       </div>
 
       {/* Price block — the heart of the page. Price and fraction share one
-          baseline; the scarcity bar breathes below it (extra top gap, DEC-013
-          spacing feedback). No basis caption anywhere: the metrics label names
-          the basis and the hero repeats nothing. */}
+          baseline; funded% lives on the gallery ring above. No basis caption
+          anywhere: the metrics label names the basis and the hero repeats
+          nothing. */}
       <div className="space-y-3">
         <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
           <span className="text-[2rem] font-bold leading-none tracking-tight text-foreground tnum break-words" data-testid="hero-price">
@@ -226,33 +221,8 @@ export function PropertyHero({
           </span>
         </div>
 
-        {/* Funding-scarcity bar (primary only): replaces the old status banner.
-            Real demo-ledger facts under the global DEMO disclosure — the bar is
-            the pre-attentive scarcity signal, the count is the readable one. */}
-        {isPrimary && !soldOut ? (
-          <div
-            className="rounded-[10px] bg-warning/12 px-3 py-2.5 shadow-sm ring-1 ring-border/50"
-            data-testid="funding-bar"
-          >
-            <div className="flex items-baseline justify-between gap-2">
-              <span className="text-[0.8125rem] font-semibold text-warning tnum" data-testid="funding-bar-pct">
-                {t("fundedCaptionShort", { pct: Math.round(fundingPct * 100) })}
-              </span>
-              <span className="text-xs text-muted-foreground tnum" data-testid="funding-bar-left">
-                {t("fundingBarLeft", {
-                  count: Math.max(0, fundingRemaining).toLocaleString(),
-                  total: fractionTotal.toLocaleString(),
-                })}
-              </span>
-            </div>
-            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-warning/20">
-              <div
-                className="h-full rounded-full bg-warning"
-                style={{ width: `${Math.min(100, Math.max(0, fundingPct * 100))}%` }}
-              />
-            </div>
-          </div>
-        ) : null}
+        {/* Funding-scarcity bar removed: the gallery ring carries funded%.
+            The sold-out notice below stays — it has no bar, just the fact. */}
         {isPrimary && soldOut ? (
           <div
             className="rounded-[10px] bg-warning/12 px-3 py-2.5 text-[0.8125rem] font-semibold leading-relaxed text-warning"

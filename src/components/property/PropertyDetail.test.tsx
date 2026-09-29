@@ -133,6 +133,40 @@ describe("PropertyDetail — Phase 9 Slice 2 (4-tab Estate Detail)", () => {
     expect(screen.queryByTestId("tab-overview")).not.toBeInTheDocument();
     expect(screen.queryByTestId("tab-performance")).not.toBeInTheDocument();
     expect(screen.queryByTestId("tab-holders")).not.toBeInTheDocument();
+    // Co-own invite sits between the metrics grid and the tabs, tab-independent.
+    // (Ownership Card renders only with real ownership — see next test.)
+    // Funding ring replaces the gallery pill + hero bar on primary estates.
+    expect(screen.getByTestId("funding-ring")).toBeInTheDocument();
+    expect(screen.queryByTestId("funding-bar")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("gallery-status-pill")).not.toBeInTheDocument();
+    const detail = screen.getByTestId("property-detail");
+    const order = ["metrics-grid", "estate-coown", "property-tabs"].map(
+      (id) => detail.querySelector(`[data-testid="${id}"]`),
+    );
+    expect(order.every(Boolean)).toBe(true);
+    for (let i = 1; i < order.length; i++) {
+      expect(order[i - 1]!.compareDocumentPosition(order[i]!)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    }
+  });
+
+  it("owned estate shows the Ownership Card before Co-Own with no financial metrics", () => {
+    renderDetail(listing, { ownedShares: 20 });
+    const card = screen.getByTestId("estate-ownership");
+    expect(card).toHaveTextContent("I own a piece of");
+    expect(card).not.toHaveTextContent(/\$\d|%|point|yield|ROI/i);
+    const detail = screen.getByTestId("property-detail");
+    const order = ["metrics-grid", "estate-ownership", "estate-coown", "property-tabs"].map(
+      (id) => detail.querySelector(`[data-testid="${id}"]`),
+    );
+    expect(order.every(Boolean)).toBe(true);
+    for (let i = 1; i < order.length; i++) {
+      expect(order[i - 1]!.compareDocumentPosition(order[i]!)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    }
+  });
+
+  it("non-owned estate hides the Ownership Card without inventing ownership", () => {
+    renderDetail(listing);
+    expect(screen.queryByTestId("estate-ownership")).not.toBeInTheDocument();
   });
 
   it("PRIMARY Estate tab: desire sections (why/specs/amenities/location) per structure §4", async () => {
@@ -172,6 +206,10 @@ describe("PropertyDetail — Phase 9 Slice 2 (4-tab Estate Detail)", () => {
   it("SECONDARY Estate tab: desire sections + resale block collapsed by default", () => {
     renderDetail(secondaryListing, { orderBook });
     expect(screen.queryByTestId("funding-panel")).not.toBeInTheDocument();
+    // Secondary keeps the green gallery pill; no funding ring, no hero bar.
+    expect(screen.getByTestId("gallery-status-pill")).toBeInTheDocument();
+    expect(screen.queryByTestId("funding-ring")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("funding-bar")).not.toBeInTheDocument();
     expect(screen.getByTestId("resale-block")).toBeInTheDocument();
     // Collapsed: only the header renders; market content is hidden from the default scroll.
     expect(screen.queryByTestId("resale-block-content")).not.toBeInTheDocument();

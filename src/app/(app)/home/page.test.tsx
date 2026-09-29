@@ -115,9 +115,13 @@ describe("Home page — prod strip (no next payout)", () => {
     expect(screen.getByTestId("home-hero")).toBeInTheDocument();
     expect(screen.getByTestId("home-actions")).toBeInTheDocument();
 
-    // Details action is replaced by the Card action → /card route.
-    expect(screen.getByTestId("action-card")).toHaveAttribute("href", "/card");
+    // Card action is replaced by the Club action → /club route.
+    expect(screen.getByTestId("action-club")).toHaveAttribute("href", "/club");
+    expect(screen.queryByTestId("action-card")).not.toBeInTheDocument();
     expect(screen.queryByTestId("action-details")).not.toBeInTheDocument();
+
+    // Invite action routes to the Referral Hub — never Settings.
+    expect(screen.getByTestId("action-invite")).toHaveAttribute("href", "/referral");
 
     // Activity capsule stays, payout row is gone.
     expect(screen.getByTestId("home-activity")).toBeInTheDocument();
@@ -157,6 +161,8 @@ describe("Home page — prod strip (no next payout)", () => {
     expect(screen.queryByText(/next payout/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/next distribution/i)).not.toBeInTheDocument();
     expect(screen.getByTestId("home-foryou")).toBeInTheDocument();
+    expect(screen.getByTestId("foryou-invite")).toBeInTheDocument();
+    expect(screen.getByTestId("foryou-invite-btn")).toHaveAttribute("href", "/referral");
   });
 
   it("loaded page has wallet-free content (global header is shell-owned)", () => {

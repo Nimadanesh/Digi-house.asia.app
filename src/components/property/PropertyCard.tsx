@@ -8,7 +8,7 @@
 import { memo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeftRight, Info, MapPin, Plus } from "lucide-react";
+import { ArrowLeftRight, Crown, Info, MapPin, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { usd, usdCompact } from "@/lib/format";
@@ -152,6 +152,14 @@ function PropertyCardInner({
             {tCommon("new")}
           </span>
         ) : null}
+        {/* Club touchpoint: one quiet chip, no per-estate promise. */}
+        <span
+          className="absolute bottom-2 left-2 inline-flex items-center gap-1 rounded-full bg-black/55 px-2.5 py-0.5 text-[0.6875rem] font-medium text-white/85"
+          data-testid="card-club-chip"
+        >
+          <Crown size={11} strokeWidth={2} aria-hidden />
+          {t("clubChip")}
+        </span>
       </div>
 
       <div className="px-3.5 pb-3.5 pt-3">

@@ -54,6 +54,7 @@ describe("PropertyCard — marketplace villa card with phase variant", () => {
     expect(screen.getByText("Price / share")).toBeInTheDocument();
     expect(screen.getByTestId("card-price")).toHaveTextContent("$125.00");
     expect(screen.getByTestId("card-availability")).toHaveTextContent("92% funded · 80 shares remaining");
+    expect(screen.getByTestId("card-club-chip")).toHaveTextContent("Club Experience");
     expect(screen.queryByTestId("card-growth-potential")).not.toBeInTheDocument();
     expect(screen.queryByText("Estimated growth potential")).not.toBeInTheDocument();
     expect(screen.queryByTestId("card-view")).not.toBeInTheDocument();

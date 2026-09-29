@@ -1,0 +1,18 @@
+/* File responsibility: persistent Club particle background — a background-only
+   layer that sits behind every Club component. No layout impact, no pointer
+   events, clipped by the Club page. Material only. */
+
+.ambient {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}

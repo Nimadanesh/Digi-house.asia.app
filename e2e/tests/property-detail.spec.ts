@@ -27,6 +27,9 @@ test.describe("Estate Detail — Phase 9 4-tab model", () => {
     // 4 tabs; Estate is the default.
     const tabs = page.getByTestId("property-tabs");
     await expect(tabs).toBeVisible();
+    // Invite to Co-Own sits between the metrics and the tabs, tab-independent.
+    await expect(page.getByTestId("estate-coown")).toBeVisible();
+    await expect(page.getByTestId("estate-coown-share")).toBeVisible();
     await expect(page.getByTestId("tab-estate")).toHaveAttribute("aria-selected", "true");
     for (const tab of ["estate", "income", "ownership", "earn", "details"]) {
       await expect(page.getByTestId(`tab-${tab}`)).toBeVisible();
@@ -64,6 +67,9 @@ test.describe("Estate Detail — Phase 9 4-tab model", () => {
     await skipOnboarding(page);
     await page.goto("/property/re-108924");
     await page.waitForSelector('[data-testid="property-detail"]', { timeout: 15_000 });
+    // Owned estate (mock holding): Ownership Card with Share Ownership, no amounts.
+    await expect(page.getByTestId("estate-ownership")).toContainText("I own a piece of");
+    await expect(page.getByTestId("estate-ownership-share")).toBeVisible();
     // Let the 40+ gallery images settle: progressive loads shift layout and can
     // park low-page toggles under the fixed bottom chrome mid-click.
     await page.waitForLoadState("networkidle", { timeout: 30_000 }).catch(() => {});

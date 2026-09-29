@@ -154,6 +154,7 @@ describe("Portfolio page", () => {
     // Allocation is always visible (premium hierarchy — scannable in under 3s).
     expect(screen.getByTestId("portfolio-allocation")).toBeInTheDocument();
     expect(screen.getByTestId("allocation-legend")).toBeInTheDocument();
+    expect(screen.getByTestId("club-portfolio-strip")).toHaveAttribute("href", "/club");
 
     expect(
       screen.getByTestId("holding-card-re-108924"),

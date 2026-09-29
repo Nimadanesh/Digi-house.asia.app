@@ -6,16 +6,20 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { haptics } from "@/lib/telegram/haptics";
 import { ImageLightbox } from "./ImageLightbox";
+import { FundingRing } from "./FundingRing";
 
 export function PropertyGallery({
   images,
   title,
   statusPill,
+  fundingRing,
 }: {
   images: string[];
   title: string;
-  /** Layer-1 status pill overlay (top-start): amber funded% (primary) / green Resale (secondary). */
-  statusPill?: { label: string; tone: "amber" | "green" } | null;
+  /** Layer-1 status pill overlay (top-start): green Resale (secondary). */
+  statusPill?: { label: string; tone: "green" } | null;
+  /** Layer-1 circular funding progress (top-start, primary only). Wins over the pill. */
+  fundingRing?: { progress: number; label: string } | null;
 }) {
   const t = useTranslations("property");
   const slides = images.length > 0 ? images : ["/images/properties/p1.png"];
@@ -88,13 +92,11 @@ export function PropertyGallery({
         className="pointer-events-none absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-background/85 to-transparent"
         data-testid="gallery-gradient"
       />
-      {statusPill ? (
+      {fundingRing ? (
+        <FundingRing progress={fundingRing.progress} label={fundingRing.label} />
+      ) : statusPill ? (
         <span
-          className={
-            statusPill.tone === "amber"
-              ? "absolute start-3 top-3 rounded-full bg-warning/90 px-2.5 py-1 text-[0.6875rem] font-semibold tabular-nums text-primary-foreground shadow-sm backdrop-blur-sm"
-              : "absolute start-3 top-3 rounded-full bg-success/90 px-2.5 py-1 text-[0.6875rem] font-semibold tabular-nums text-primary-foreground shadow-sm backdrop-blur-sm"
-          }
+          className="absolute start-3 top-3 rounded-full bg-success/90 px-2.5 py-1 text-[0.6875rem] font-semibold tabular-nums text-primary-foreground shadow-sm backdrop-blur-sm"
           data-testid="gallery-status-pill"
         >
           {statusPill.label}

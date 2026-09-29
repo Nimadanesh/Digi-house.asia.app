@@ -8,8 +8,10 @@ import { OnboardingGate } from "@/components/onboarding/OnboardingGate";
 import { ProfileGate } from "@/components/profile/ProfileGate";
 import { SettingsSheet } from "@/components/settings/SettingsSheet";
 import { WalletChooserHost } from "@/components/wallet/WalletChooserHost";
+import { ClubEntranceExperience } from "@/components/club/ClubEntranceExperience";
 import { ToastHost } from "@/components/common/ToastHost";
 import { useTheme } from "@/hooks/useTheme";
+import { useEstateStartParamRedirect } from "@/hooks/useEstateStartParamRedirect";
 import { useUiStore } from "@/stores/ui.store";
 import { ROUTES, TABS } from "@/lib/constants";
 
@@ -28,6 +30,8 @@ const HOME_BACKGROUND =
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   useTheme();
+  // Share-link recipients land on the shared estate (Telegram launch start_param).
+  useEstateStartParamRedirect();
   const mainButtonActive = useUiStore((s) => s.mainButtonActive);
   const pathname = usePathname();
   const chromeless = CHROMELESS.has(pathname);
@@ -54,6 +58,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <ToastHost />
       <SettingsSheet />
       <WalletChooserHost />
+      {/* Additive: Home → Club entrance overlay (decorative, self-contained). */}
+      <ClubEntranceExperience />
     </div>
   );
 }

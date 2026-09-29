@@ -12,6 +12,7 @@ import { getEstateEditorial } from "@/lib/economics/estates/estate-editorial";
 import { getEstateHighlights } from "@/lib/economics/estates/estate-highlights";
 import { getLocationDetailByPropertyId } from "@/lib/economics/estates/location-details-24";
 import { ResaleBlock } from "@/components/property/ResaleBlock";
+import { ClubEstateBlock } from "@/components/club/ClubEstateBlock";
 import { EstateWhySection } from "@/components/property/estate-tab/EstateWhySection";
 import { EstateSpecsSection } from "@/components/property/estate-tab/EstateSpecsSection";
 import { EstateAmenitiesSection } from "@/components/property/estate-tab/EstateAmenitiesSection";
@@ -75,6 +76,8 @@ export function EstateTabPanel({
       <EstateAmenitiesSection record={record} />
       <EstateLocationSection detail={locationDetail} reserveUrl={estateVm.rentalEscapesUrl} />
       <EstateMapSection propertyId={listing.id} />
+      {/* Club touchpoint: contextual benefit block, no promises or values. */}
+      <ClubEstateBlock />
 
       {/* Protected: secondary/sold-out resale market surface (hero CTA target). */}
       {hasResaleSurface ? (

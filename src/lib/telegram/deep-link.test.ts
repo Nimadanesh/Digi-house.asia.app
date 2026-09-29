@@ -4,7 +4,7 @@
 // routing stays testable.
 import { describe, expect, it } from "vitest";
 
-import { parseEstateStartParam } from "@/lib/telegram/deep-link";
+import { parseEstateStartParam, parseShareStartParam } from "@/lib/telegram/deep-link";
 
 describe("parseEstateStartParam — canonical ids only", () => {
   it("resolves Grand 2 BDM (JOALI Being) from its canonical id", () => {
@@ -50,5 +50,57 @@ describe("parseEstateStartParam — canonical ids only", () => {
     expect(parseEstateStartParam("re-does-not-exist")).toBeNull();
     expect(parseEstateStartParam("re_")).toBeNull();
     expect(parseEstateStartParam("~utm_site")).toBeNull();
+  });
+});
+
+describe("parseShareStartParam — shared estates land on the SAME estate", () => {
+  it("resolves an ownership-share link to the estate + inviter context", () => {
+    expect(parseShareStartParam("own_re-128862_ref_u1")).toEqual({
+      estateId: "re-128862",
+      context: "ownership",
+      inviterId: "u1",
+    });
+  });
+
+  it("resolves a co-own invite link to the estate + inviter context", () => {
+    expect(parseShareStartParam("coown_re-128862_ref_u1")).toEqual({
+      estateId: "re-128862",
+      context: "coown",
+      inviterId: "u1",
+    });
+  });
+
+  it("carries the estate context without an inviter when the ref part is missing", () => {
+    expect(parseShareStartParam("coown_re-128862")).toEqual({
+      estateId: "re-128862",
+      context: "coown",
+      inviterId: null,
+    });
+  });
+
+  it("falls back to the plain estate deep link with an estate context", () => {
+    expect(parseShareStartParam("re_128862")).toEqual({
+      estateId: "re-128862",
+      context: "estate",
+      inviterId: null,
+    });
+  });
+
+  it("strips a ~utm suffix on share links", () => {
+    expect(parseShareStartParam("own_re-128862_ref_u1~utm_x")).toEqual({
+      estateId: "re-128862",
+      context: "ownership",
+      inviterId: "u1",
+    });
+  });
+
+  it("never routes to a generic destination for malformed/unknown links", () => {
+    expect(parseShareStartParam(null)).toBeNull();
+    expect(parseShareStartParam("")).toBeNull();
+    expect(parseShareStartParam("coown_re-does-not-exist_ref_u1")).toBeNull();
+    expect(parseShareStartParam("own__ref_u1")).toBeNull();
+    expect(parseShareStartParam("ref_123")).toBeNull();
+    expect(parseShareStartParam("coown_prop_old_ref_u1")).toBeNull();
+    expect(parseShareStartParam("~utm_site")).toBeNull();
   });
 });

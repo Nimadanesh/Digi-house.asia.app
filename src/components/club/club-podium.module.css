@@ -1,0 +1,470 @@
+/* FractionalLuxe Private Club — three-card tier podium (header only).
+ * Visual spec: header redesign brief — champagne Signature hero flanked by
+ * Elite (rose/mauve) and Private+ (deep sapphire), layered with physical
+ * depth. Scoped via CSS Modules: no global selectors, no leakage. Material
+ * only — copy, data and behavior live in ClubTierPodium.tsx.
+ *
+ * Scroll contract: the component exposes scroll progress as --podium-p
+ * (0..1) on .stage and each side card's open translate as --podium-open-x;
+ * interpolation happens in CSS custom-property math (no per-frame React). */
+
+.stage {
+  position: relative;
+  height: 296px;
+  margin-top: 12px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Each card is an absolutely positioned, centered layer transformed from the
+ * stage center. Custom-property interpolation keeps the scroll effect off the
+ * main thread (no React state per frame). */
+.card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* Side cards: slightly smaller than the hero (spec §8). */
+  width: clamp(140px, 38vw, 152px);
+  aspect-ratio: 0.72 / 1;
+  border-radius: 22px;
+  overflow: hidden;
+  isolation: isolate;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+/* Backdrop-filter break-out guard: a transformed element carrying its own
+ * backdrop-filter would escape the stage's overflow clip, so the blur lives
+ * on an inner shell and the surface tint with it. */
+.shell {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* ---- Elite (left / behind) ------------------------------------------- */
+
+.elite {
+  z-index: 1;
+  background:
+    radial-gradient(
+      ellipse 80% 48% at 36% 22%,
+      rgba(255, 208, 228, 0.6) 0%,
+      rgba(240, 160, 195, 0.32) 30%,
+      transparent 62%
+    ),
+    radial-gradient(
+      ellipse 90% 60% at 50% 46%,
+      rgba(255, 138, 186, 0.32) 0%,
+      rgba(214, 100, 150, 0.16) 42%,
+      transparent 70%
+    ),
+    radial-gradient(
+      circle at 22% 20%,
+      rgba(255, 194, 218, 0.52) 0%,
+      rgba(194, 117, 174, 0.24) 30%,
+      transparent 68%
+    ),
+    linear-gradient(155deg, rgba(61, 33, 69, 0.88) 0%, rgba(138, 74, 114, 0.78) 18%, rgba(201, 130, 166, 0.82) 34%, rgba(156, 90, 126, 0.8) 52%, rgba(74, 42, 78, 0.86) 78%, rgba(51, 41, 67, 0.92) 100%);
+  box-shadow:
+    0 16px 38px rgba(0, 0, 0, 0.32),
+    0 0 54px rgba(220, 120, 170, 0.2),
+    0 8px 30px rgba(184, 101, 159, 0.16);
+  transform: translate(
+      calc(-50% + var(--podium-open-x, clamp(-104px, -24vw, -64px)) + var(--podium-p, 0) * 49px),
+      -50%
+    )
+    rotate(calc(-6deg + var(--podium-p, 0) * 5deg))
+    scale(calc(0.92 - var(--podium-p, 0) * 0.02));
+  opacity: calc(1 - var(--podium-p, 0) * 0.55);
+}
+
+.eliteShell {
+  background: rgba(51, 41, 67, 0.3);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 235, 244, 0.5),
+    inset 1px 0 1px rgba(255, 224, 238, 0.22),
+    inset -1px 0 2px rgba(20, 10, 26, 0.5),
+    inset 0 -12px 24px rgba(24, 12, 32, 0.42),
+    inset 0 0 0 1px rgba(255, 190, 218, 0.32);
+}
+
+.eliteEdge {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(255, 214, 233, 0.24);
+  pointer-events: none;
+}
+
+.eliteSheen {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      118deg,
+      transparent 50%,
+      rgba(255, 226, 240, 0.14) 66%,
+      rgba(255, 214, 233, 0.05) 78%,
+      transparent 90%
+    ),
+    linear-gradient(
+      150deg,
+      rgba(255, 224, 238, 0.14) 0%,
+      transparent 34%,
+      transparent 72%,
+      rgba(40, 26, 52, 0.3) 100%
+    );
+  pointer-events: none;
+}
+
+/* Bias side-card content outward so names clear the hero. */
+.elite .content {
+  padding-right: 26px;
+}
+
+/* ---- Private+ (right / behind) --------------------------------------- */
+
+.private {
+  z-index: 1;
+  background:
+    radial-gradient(
+      ellipse 80% 48% at 64% 20%,
+      rgba(190, 220, 255, 0.55) 0%,
+      rgba(130, 175, 230, 0.28) 32%,
+      transparent 62%
+    ),
+    radial-gradient(
+      ellipse 90% 60% at 50% 46%,
+      rgba(120, 175, 255, 0.3) 0%,
+      rgba(80, 130, 200, 0.15) 42%,
+      transparent 70%
+    ),
+    radial-gradient(
+      circle at 72% 18%,
+      rgba(104, 171, 255, 0.38) 0%,
+      rgba(60, 116, 190, 0.2) 30%,
+      transparent 70%
+    ),
+    linear-gradient(155deg, rgba(13, 33, 66, 0.88) 0%, rgba(49, 94, 145, 0.8) 20%, rgba(110, 163, 216, 0.82) 36%, rgba(74, 122, 178, 0.8) 50%, rgba(26, 58, 96, 0.86) 80%, rgba(12, 28, 50, 0.92) 100%);
+  box-shadow:
+    0 16px 38px rgba(0, 0, 0, 0.32),
+    0 0 54px rgba(90, 150, 230, 0.2),
+    0 8px 30px rgba(57, 125, 205, 0.16);
+  transform: translate(
+      calc(-50% + var(--podium-open-x, clamp(64px, 24vw, 104px)) - var(--podium-p, 0) * 49px),
+      -50%
+    )
+    rotate(calc(6deg - var(--podium-p, 0) * 5deg))
+    scale(calc(0.92 - var(--podium-p, 0) * 0.02));
+  opacity: calc(1 - var(--podium-p, 0) * 0.55);
+}
+
+.privateShell {
+  background: rgba(12, 28, 50, 0.3);
+  box-shadow:
+    inset 0 1px 1px rgba(224, 238, 255, 0.5),
+    inset -1px 0 1px rgba(214, 233, 255, 0.2),
+    inset 1px 0 2px rgba(3, 10, 22, 0.5),
+    inset 0 -12px 24px rgba(4, 12, 26, 0.42),
+    inset 0 0 0 1px rgba(150, 195, 255, 0.3);
+}
+
+.privateEdge {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(177, 212, 255, 0.22);
+  pointer-events: none;
+}
+
+.privateSheen {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      62deg,
+      transparent 50%,
+      rgba(208, 230, 255, 0.13) 66%,
+      rgba(177, 212, 255, 0.05) 78%,
+      transparent 90%
+    ),
+    linear-gradient(
+      150deg,
+      rgba(214, 233, 255, 0.13) 0%,
+      transparent 34%,
+      transparent 72%,
+      rgba(4, 14, 28, 0.32) 100%
+    );
+  pointer-events: none;
+}
+
+/* Bias side-card content outward so names clear the hero. */
+.private .content {
+  padding-left: 34px;
+}
+
+/* ---- Signature (center / dominant) ----------------------------------- */
+
+.signature {
+  z-index: 3;
+  /* Hero card is larger than the side cards (spec §8). */
+  width: clamp(158px, 45vw, 182px);
+  background:
+    /* Hot core — internal champagne light, upper-left to center. */
+    radial-gradient(
+      ellipse 75% 45% at 34% 22%,
+      rgba(255, 252, 238, 0.95) 0%,
+      rgba(255, 241, 196, 0.75) 26%,
+      rgba(255, 214, 130, 0.32) 52%,
+      transparent 72%
+    ),
+    /* Flame aura — warm energy blooming around the number + label zone. */
+    radial-gradient(
+      ellipse 88% 62% at 50% 44%,
+      rgba(255, 186, 96, 0.5) 0%,
+      rgba(255, 166, 77, 0.26) 38%,
+      rgba(214, 130, 40, 0.1) 58%,
+      transparent 74%
+    ),
+    /* Ambient mood light, upper area. */
+    radial-gradient(
+      circle at 28% 18%,
+      rgba(255, 245, 205, 0.8) 0%,
+      rgba(255, 225, 153, 0.4) 18%,
+      rgba(220, 169, 75, 0.15) 42%,
+      transparent 68%
+    ),
+    /* Warm bounce from below the card edge. */
+    radial-gradient(
+      ellipse 100% 40% at 50% 112%,
+      rgba(255, 170, 80, 0.22) 0%,
+      transparent 60%
+    ),
+    /* Glass body — dark stage background shows through the tint, like the
+     * reference plaques: antique gold depth, bright upper-left → amber base. */
+    linear-gradient(155deg, rgba(138, 90, 30, 0.85) 0%, rgba(201, 150, 63, 0.75) 16%, rgba(247, 217, 140, 0.85) 32%, rgba(255, 237, 184, 0.9) 44%, rgba(230, 185, 95, 0.78) 58%, rgba(138, 90, 30, 0.85) 78%, rgba(61, 37, 9, 0.9) 100%);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.45),
+    0 0 72px rgba(255, 196, 110, 0.3),
+    0 0 26px rgba(255, 224, 160, 0.28),
+    0 8px 40px rgba(220, 171, 76, 0.18);
+  transform: translate(-50%, -50%) scale(calc(1 + var(--podium-p, 0) * 0.07));
+}
+
+.signatureShell {
+  background: rgba(70, 42, 12, 0.22);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 252, 240, 0.85),
+    inset 1px 0 1px rgba(255, 244, 210, 0.35),
+    inset -1px 0 2px rgba(48, 26, 5, 0.5),
+    inset 0 -14px 28px rgba(58, 32, 7, 0.4),
+    inset 0 0 0 1px rgba(255, 229, 166, 0.5);
+}
+
+/* Layered champagne reflections: a soft diagonal streak plus the broad
+ * top-left → lower-right light falloff. */
+.signatureSheen {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      115deg,
+      transparent 52%,
+      rgba(255, 255, 244, 0.16) 66%,
+      rgba(255, 244, 208, 0.05) 76%,
+      transparent 88%
+    ),
+    linear-gradient(
+      150deg,
+      rgba(255, 245, 205, 0.22) 0%,
+      rgba(255, 236, 190, 0.08) 26%,
+      transparent 46%,
+      transparent 64%,
+      rgba(70, 44, 12, 0.18) 100%
+    );
+  pointer-events: none;
+}
+
+/* ---- Numbers / labels ------------------------------------------------- */
+
+.content {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  text-align: center;
+}
+
+.crown {
+  margin-bottom: 4px;
+  color: rgba(255, 233, 173, 0.85);
+  filter: drop-shadow(0 0 6px rgba(255, 214, 130, 0.55));
+}
+
+.elite .crown {
+  color: rgba(255, 205, 225, 0.8);
+  filter: drop-shadow(0 0 6px rgba(255, 160, 200, 0.45));
+}
+
+.private .crown {
+  color: rgba(200, 225, 255, 0.8);
+  filter: drop-shadow(0 0 6px rgba(140, 190, 255, 0.45));
+}
+
+.number {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.signatureNumber {
+  font-size: clamp(54px, 15vw, 68px);
+  color: #fff6d8;
+  text-shadow:
+    0 0 10px rgba(255, 244, 200, 0.95),
+    0 0 32px rgba(255, 198, 112, 0.6),
+    0 0 72px rgba(255, 168, 80, 0.4),
+    0 2px 8px rgba(80, 45, 8, 0.55);
+}
+
+.eliteNumber,
+.privateNumber {
+  font-size: clamp(34px, 9.5vw, 44px);
+}
+
+.eliteNumber {
+  color: #f7eaf3;
+  text-shadow:
+    0 0 10px rgba(255, 214, 232, 0.7),
+    0 0 28px rgba(240, 140, 185, 0.45),
+    0 0 60px rgba(200, 100, 155, 0.3),
+    0 2px 6px rgba(40, 18, 40, 0.5);
+}
+
+.privateNumber {
+  color: #e8f1fc;
+  text-shadow:
+    0 0 10px rgba(210, 232, 255, 0.7),
+    0 0 28px rgba(130, 180, 240, 0.45),
+    0 0 60px rgba(90, 145, 220, 0.3),
+    0 2px 6px rgba(4, 12, 26, 0.5);
+}
+
+.label {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.signatureLabel {
+  font-size: clamp(22px, 6.2vw, 28px);
+  color: #fdf3da;
+  letter-spacing: -0.01em;
+  text-shadow:
+    0 0 12px rgba(255, 222, 150, 0.55),
+    0 0 36px rgba(255, 180, 90, 0.3),
+    0 1px 10px rgba(91, 58, 22, 0.35);
+}
+
+.eliteLabel {
+  font-size: clamp(19px, 5.4vw, 24px);
+  color: #f2e4ee;
+  text-shadow:
+    0 0 10px rgba(255, 200, 222, 0.4),
+    0 0 28px rgba(220, 130, 175, 0.25);
+}
+
+.privateLabel {
+  font-size: clamp(19px, 5.4vw, 24px);
+  color: #e6f0fb;
+  text-shadow:
+    0 0 10px rgba(190, 220, 255, 0.4),
+    0 0 28px rgba(120, 170, 240, 0.25);
+}
+
+/* Threshold sits in the luminous lower atmosphere of the hero card and
+ * fades toward the lower edge (§19) — never a plain footer label. */
+.signatureThreshold {
+  position: absolute;
+  right: 0;
+  bottom: 18px;
+  left: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: #f9e9c0;
+  text-shadow: 0 0 14px rgba(255, 236, 170, 0.3);
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.7) 55%,
+    rgba(0, 0, 0, 0.25) 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.7) 55%,
+    rgba(0, 0, 0, 0.25) 100%
+  );
+}
+
+/* ---- Headline / tagline ------------------------------------------------ */
+
+.headline {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(30px, 8.5vw, 38px);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  text-align: center;
+  color: #f4e8d2;
+  text-shadow: 0 0 24px rgba(231, 191, 112, 0.1);
+}
+
+.tagline {
+  margin: 0 auto;
+  max-width: 305px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.55;
+  letter-spacing: -0.01em;
+  text-align: center;
+  color: rgba(232, 226, 216, 0.72);
+}
+
+/* ---- Reduced motion: final composition, no scroll collapse ------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    will-change: auto;
+  }
+
+  /* Final composition, frozen: side cards at their responsive open offsets,
+   * flat rotation, hero at scale 1. No scroll interpolation. */
+  .elite {
+    transform: translate(calc(-50% + clamp(-104px, -24vw, -64px)), -50%) rotate(0deg) scale(0.92);
+  }
+
+  .private {
+    transform: translate(calc(-50% + clamp(64px, 24vw, 104px)), -50%) rotate(0deg) scale(0.92);
+  }
+
+  .signature {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
