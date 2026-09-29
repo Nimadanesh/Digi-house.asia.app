@@ -44,6 +44,19 @@ The app guide is intentionally moving beyond major features. It should describe 
 
 When a new visible product element is added, the Knowledge Foundation should be updated in the same development cycle or before Fifi is expected to explain it.
 
+## Verification pass — 2026-09-30
+
+The answer-quality review found and corrected several cases of internal assistant language leaking into retrievable human-facing knowledge:
+
+- removed direct "Fifi should..." wording from core product explanations;
+- removed internal/live-data wording from transaction and troubleshooting explanations;
+- removed assistant/meta wording from Club and Referral product explanations;
+- aligned Persian product documents with the human-facing standard;
+- corrected the ANR/ADR few-shot example so ANR is described as Average Nightly Rate;
+- simplified conflict and estimated-value explanations so they describe the user-facing meaning rather than the knowledge machinery.
+
+The architecture/contract documents remain intentionally technical. They are not part of the human-facing answer corpus.
+
 ## Remaining verification work
 
 This audit does not claim that every rendered pixel or every transient UI state has been exhaustively catalogued. Before the first real Fifi model integration, the implementation should be re-inspected for:
