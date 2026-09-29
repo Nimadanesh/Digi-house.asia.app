@@ -18,112 +18,112 @@ related:
 
 # App Overview & Navigation
 
-FractionalLuxe is organized so a user can move from discovering a villa to buying shares, managing holdings, earning from locked shares, and tracking activity.
+FractionalLuxe is arranged around a simple journey: discover a villa, understand it, buy shares, manage those shares, and follow income and activity.
 
 ## Home
 
-Home is the starting point for the main journey.
+**Home** is your starting point and a quick summary of your account.
 
-You can use it to:
-- see your current portfolio value and balance information;
-- see the next payout information when available;
-- open a villa directly from a property card;
-- reach the Marketplace to discover more estates;
-- open **Invite** and **Club** from the Home actions.
+Depending on your current account state, the screen can show:
+- **Portfolio value** — the current value presented for your holdings;
+- **Balance information** — available account-level amounts shown by the app;
+- **Next payout** — payout information when there is a scheduled or available value to show;
+- **Property cards** — shortcuts into individual villa pages;
+- **Invest** — entry into the investment/marketplace journey;
+- **Invite** — entry into the referral experience;
+- **Club** — entry into private membership.
 
-A property card is a shortcut: tapping it takes you to that property's page.
+A property card is more than a picture: it is a shortcut. Tapping the card opens that villa's full Property page.
 
 ## Marketplace
 
-Marketplace is where the available estates are presented as cards.
+**Marketplace** is the discovery screen for estates available through the product.
 
-A card can show:
-- the villa image;
-- villa name and location;
-- share price;
-- funding or offering status;
-- projected income information;
-- other key property information.
+A property card can contain:
+- **Villa image** — the visual preview;
+- **Name and location** — identifies the estate;
+- **Share price** — the current displayed price for a share;
+- **Funding / offering status** — shows where the offering currently stands;
+- **Projected income** — a forward-looking model figure when available;
+- **Key property facts** — useful summary information.
 
-Search and filters help narrow the list. When you find a villa you want to understand, tap its card to open the full Property page.
+Search and filters narrow the list. The card is designed for scanning; the Property page is where you investigate the villa in depth.
 
 ## Property page
 
-The Property page is the detailed view for one villa.
+The **Property page** is the detailed workspace for one villa.
 
-The top area can contain:
-- photo gallery;
-- villa name and location;
-- current share price;
-- total-share information;
-- funding progress;
-- estate value;
-- key statistics;
-- **Buy** entry;
-- **Sell** entry when selling is available.
+The upper section can include:
+- a **photo gallery** for browsing villa images;
+- **name and location** for identifying the estate;
+- **share price** and share information;
+- a **funding bar** showing offering progress;
+- **estate value** and key metrics;
+- **Buy**, when purchasing is available;
+- **Sell**, when the relevant selling flow is available.
 
-Below that are five tabs:
+The five tabs below divide the information so each question has a clear home:
 
-1. **Estate / Overview** — what the villa is and its main characteristics.
-2. **Income** — how rental income is modeled and what the scenarios mean.
-3. **Ownership** — shares, valuation, growth information, and exit/liquidity information.
-4. **Earn** — locking shares, earning, accrued income, and unlocking.
-5. **Details** — factual, structural, document, and disclosure information.
+1. **Estate / Overview** — “What is this villa?”
+2. **Income** — “How is rental income modeled?”
+3. **Ownership** — “What does my share represent?”
+4. **Earn** — “How do I lock shares and follow earnings?”
+5. **Details** — “What supporting facts and documents are available?”
 
 ## Earnings
 
-Earnings is the place to understand income associated with your holdings.
+**Earnings** is your income view.
 
-It can show:
-- income that has already been paid;
-- income that has accrued but has not yet been paid;
-- income history by estate.
+It can separate:
+- **Paid** — income already distributed;
+- **Accrued** — income earned on locked shares but not yet paid;
+- **Income by estate** — a way to see where the displayed income belongs.
 
-**Paid** and **accrued** are intentionally different: an amount can be accrued without having been paid yet.
+This separation matters: accrued income is not the same as money already received.
 
 ## Portfolio
 
-Portfolio is your ownership and activity area.
+**Portfolio** is your ownership and activity workspace.
 
 It can show:
-- your holdings;
-- allocation across estates;
-- holding quantity and value;
-- gain/loss information where available;
-- open orders.
+- **Holdings** — what you own;
+- **Allocation** — how your holdings are distributed across estates;
+- **Quantity and value** — how many shares you hold and their displayed value;
+- **Gain / loss** — where the product has enough information to calculate it;
+- **Open Orders** — orders that have not filled yet.
 
-An open order is an order that has not filled yet. An eligible order can be cancelled before it fills.
+An open order is not the same as a completed trade. Where cancellation is available, an eligible open order can be cancelled before it fills.
 
 ## Settings
 
-Settings is opened from the header rather than the bottom tab bar.
+**Settings** opens from the header rather than the bottom navigation.
 
-It contains account and app preferences such as:
-- wallet;
-- language;
-- theme;
-- about and legal information.
+It contains app and account controls such as:
+- **Wallet**;
+- **Language**;
+- **Theme**;
+- **About and legal information**.
+
+These controls affect how you use or understand the app; Settings is not another marketplace or portfolio section.
 
 ## Club and Invite
 
-**Club** is the membership area, where membership levels and their benefits are presented.
+**Club** is the private membership area. It presents membership levels and the benefits associated with them.
 
-**Invite** is the referral area, where the app's invitation flow is presented.
+**Invite** is the referral area. It gives you access to the app's invitation flow and your referral experience.
 
 ## Bottom navigation
 
-The main bottom navigation switches between:
-- Home;
-- Marketplace;
-- Earnings;
-- Portfolio.
+The main bottom bar switches between:
+- **Home**
+- **Marketplace**
+- **Earnings**
+- **Portfolio**
 
-Settings is not a bottom-navigation tab.
+The bottom bar is for the app's four primary workspaces. **Settings, Club, and Invite are reached through other entry points.**
 
 ## Typical journey
 
-A simple journey through the app is:
+**Discover → Review a villa → Buy shares → Lock eligible shares if you want to earn → Follow Portfolio and Earnings → Withdraw or sell when eligible.**
 
-**Discover → Review a villa → Buy shares → Lock shares if you want to earn → Track income and holdings → Withdraw or sell when eligible.**
-
-When you are unsure what an element means, Fifi can explain the element itself, what it does, and what to do next.
+If you point Fifi to any visible element — even a small icon, label, number, badge, button, tab, or status — it should explain what the element means, why it is there, and what action it leads to when that behavior is documented.
