@@ -12,7 +12,6 @@ lastVerified: 2026-09-30
 retrievalEligibility: eligible
 answerAuthority: authoritative
 ---
-
 # Estate Page — Five Tabs
 
 The Estate page is the detailed view for one villa. Its five tabs move from understanding the property to understanding its economics and the user's position.
@@ -20,6 +19,7 @@ The Estate page is the detailed view for one villa. Its five tabs move from unde
 ## Top of the page
 
 The page can show:
+
 - photo gallery;
 - villa name and location;
 - share price and total shares;
@@ -27,25 +27,26 @@ The page can show:
 - estate value;
 - Buy and Sell actions when available.
 
-Four key statistics can remain visible:
+Key statistics can include:
+
 - **Monthly income** — projected per-share monthly amount based on the Average scenario;
 - **Proj. / year** — projected per-share annual amount based on the Average scenario;
 - **Avg. nightly rate** — ANR;
 - **Est. growth** — estimated potential within the documented valuation range.
 
-Unknown values should appear as unavailable, not zero.
+Unavailable values should appear as unavailable, not zero.
 
 ## Estate / Overview
 
 Answers: **“What is this villa?”**
 
-It can contain the introduction, highlights, property type, size, bedrooms, bathrooms, guest capacity, amenities, location, sourced transfer information and the original listing link when available.
+It can contain the introduction, highlights, property type, size, bedrooms, bathrooms, guest capacity, amenities, location, sourced transfer information, and the original listing link when available.
 
 ## Income
 
 Answers: **“How is rental income modeled?”**
 
-It can contain ANR, projected scenarios, modeled nights, gross revenue, per-share income, modeled costs, guest-paid charges, net distributable income, owner share and estimated owner-side tax where modeled.
+It can contain ANR, projected scenarios, modeled nights, gross revenue, per-share income, modeled costs, guest-paid charges, net distributable income, owner share, and estimated owner-side tax where modeled.
 
 The Average scenario is the payout basis.
 
@@ -53,13 +54,13 @@ The Average scenario is the payout basis.
 
 Answers: **“What does my share represent?”**
 
-It can show estate value, reference value per share, total shares, proportional ownership, estimated growth, market stage, exit/liquidity information and the user's position preview when available.
+It can show estate value, reference value per share, total shares, proportional ownership, estimated growth, market stage, exit/liquidity information, and the user's position preview when available.
 
 ## Earn
 
 Answers: **“How do I put eligible shares into the earning program?”**
 
-It contains lock/unlock controls and status information, including locked-share state and accrued income.
+It contains lock and unlock controls and status information, including locked-share state and accrued income.
 
 New locks are monthly-only.
 
@@ -67,7 +68,9 @@ New locks are monthly-only.
 
 Answers: **“What supporting information is available?”**
 
-It can contain operator information, legal or structural notes, valuation date and method, documents, distribution information and tax disclosures.
+It can contain operator information, legal or structural notes, valuation date and method, available documents, distribution information, and tax disclosures.
+
+Historical performance should only appear when real historical data exists; simulated values should not be presented as historical performance.
 
 ## Why the tabs are separate
 
@@ -81,4 +84,4 @@ It can contain operator information, legal or structural notes, valuation date a
 
 **Details** provides supporting information.
 
-When a user asks where to find something, point them to the tab that owns that information instead of mixing unrelated sections.
+When you want to find something, start with the tab that owns that information.
