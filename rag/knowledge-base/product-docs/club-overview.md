@@ -13,12 +13,11 @@ lastVerified: 2026-09-29
 retrievalEligibility: eligible
 answerAuthority: authoritative
 ---
-
 # Club — Membership Levels and Benefits
 
 ## What is Club?
 
-Club is FractionalLuxe's private membership area. It brings membership levels and their published benefits into one place, so a user can understand what membership level they have and what that level includes.
+Club is FractionalLuxe's private membership area. It brings membership levels and their published benefits into one place.
 
 The Club presents five levels:
 
@@ -28,11 +27,12 @@ The Club presents five levels:
 - **Elite** — a higher membership presentation.
 - **Signature** — the highest membership presentation.
 
-The level shown for a particular user depends on their current membership state. That personal state is current account information, not a fixed description.
+Your current level is account-specific and can change with your membership state.
 
 ## What can I do in Club?
 
 The Club page lets you:
+
 - see the membership levels;
 - understand the benefits presented for those levels;
 - see your position in the membership progression when that information is available;
@@ -42,8 +42,4 @@ Benefits currently presented include **Villa Stay access**, **Priority Access**,
 
 The Club also contains a Luxe Circle presentation. It is currently an empty/prototype presentation, so it should not be described as an active member community or as a source of additional benefits.
 
-## What Fifi can explain
-
-Fifi can explain what each visible Club element means, what a membership benefit is intended to provide when its scope is published, and where to find it.
-
-Fifi should not invent unlisted benefits, booking rules, service costs, response times, member counts, or guarantees.
+Only published benefits and behaviors should be treated as available; unlisted benefits, booking rules, service costs, response times, member counts, and guarantees should not be assumed.
