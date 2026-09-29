@@ -18,37 +18,112 @@ related:
 
 # App Overview & Navigation
 
-## What the platform is
+FractionalLuxe is organized so a user can move from discovering a villa to buying shares, managing holdings, earning from locked shares, and tracking activity.
 
-FractionalLuxe is the fractional-ownership branch of the parent company Rental Escapes.
-It runs on its own website and app across multiple blockchains (TON + EVM). Users buy fractional
-shares of luxury villas, lock shares to earn monthly rental profit, and trade shares on the
-Secondary Market.
+## Home
 
-## Main sections
+Home is the starting point for the main journey.
 
-| Section | Action | What you find there |
-|---|---|---|
-| **Home** | `action.open-home` | Balance / portfolio value, next payout, property cards. Empty state points to the Marketplace. |
-| **Marketplace** | `action.open-marketplace` | The estates as cards — price, funding state, projected income per share. Search and filters included. |
-| **Property detail** | `action.open-estate {propertyId}` | One villa at `/property/[id]`: photos, price, funding bar, value, stats, and five tabs. Buy and Sell entry points live here. |
-| **Earnings** | `action.open-earnings` | Income screen: received totals (paid only), accrued income, per-estate income history. |
-| **Portfolio** | `action.open-portfolio` | Holdings, allocation, and open orders (including cancel before fill). |
-| **Settings** | `action.open-settings` | Reached from the header (not a tab): wallet, language, theme, about/legal. |
-| **Club** | `action.open-club` | Membership tiers and benefits (prototype scope). |
-| **Referral** | `action.open-invite` | Invite flows (prototype scope). |
+You can use it to:
+- see your current portfolio value and balance information;
+- see the next payout information when available;
+- open a villa directly from a property card;
+- reach the Marketplace to discover more estates;
+- open **Invite** and **Club** from the Home actions.
 
-## How to navigate
+A property card is a shortcut: tapping it takes you to that property's page.
 
-- The bottom tab bar switches between Home, Marketplace, Earnings, and Portfolio.
-- Tapping a Marketplace card (or a Home property card) opens that villa's Property page.
-- Tapping back returns within the current tab; each tab keeps its own place.
-- Buy and Sell actions always start from the Property page of the villa concerned.
+## Marketplace
 
-## High-level user journey
+Marketplace is where the available estates are presented as cards.
 
-1. **Discover:** browse the Marketplace, open a villa, read its tabs.
-2. **Buy:** choose a quantity, review total cost and projected income, confirm, approve in the wallet.
-3. **Lock to earn:** lock shares (Earn tab) so monthly profit (Average scenario) accrues to them.
-4. **Track:** watch Earnings (received + accrued) and Portfolio (holdings + orders).
-5. **Withdraw or exit:** request withdrawal (1% fee, net in 4 weekly installments), or unlock then sell — back to the platform during Primary Offering (7% discount), or to other users on the Secondary Market.
+A card can show:
+- the villa image;
+- villa name and location;
+- share price;
+- funding or offering status;
+- projected income information;
+- other key property information.
+
+Search and filters help narrow the list. When you find a villa you want to understand, tap its card to open the full Property page.
+
+## Property page
+
+The Property page is the detailed view for one villa.
+
+The top area can contain:
+- photo gallery;
+- villa name and location;
+- current share price;
+- total-share information;
+- funding progress;
+- estate value;
+- key statistics;
+- **Buy** entry;
+- **Sell** entry when selling is available.
+
+Below that are five tabs:
+
+1. **Estate / Overview** — what the villa is and its main characteristics.
+2. **Income** — how rental income is modeled and what the scenarios mean.
+3. **Ownership** — shares, valuation, growth information, and exit/liquidity information.
+4. **Earn** — locking shares, earning, accrued income, and unlocking.
+5. **Details** — factual, structural, document, and disclosure information.
+
+## Earnings
+
+Earnings is the place to understand income associated with your holdings.
+
+It can show:
+- income that has already been paid;
+- income that has accrued but has not yet been paid;
+- income history by estate.
+
+**Paid** and **accrued** are intentionally different: an amount can be accrued without having been paid yet.
+
+## Portfolio
+
+Portfolio is your ownership and activity area.
+
+It can show:
+- your holdings;
+- allocation across estates;
+- holding quantity and value;
+- gain/loss information where available;
+- open orders.
+
+An open order is an order that has not filled yet. An eligible order can be cancelled before it fills.
+
+## Settings
+
+Settings is opened from the header rather than the bottom tab bar.
+
+It contains account and app preferences such as:
+- wallet;
+- language;
+- theme;
+- about and legal information.
+
+## Club and Invite
+
+**Club** is the membership area, where membership levels and their benefits are presented.
+
+**Invite** is the referral area, where the app's invitation flow is presented.
+
+## Bottom navigation
+
+The main bottom navigation switches between:
+- Home;
+- Marketplace;
+- Earnings;
+- Portfolio.
+
+Settings is not a bottom-navigation tab.
+
+## Typical journey
+
+A simple journey through the app is:
+
+**Discover → Review a villa → Buy shares → Lock shares if you want to earn → Track income and holdings → Withdraw or sell when eligible.**
+
+When you are unsure what an element means, Fifi can explain the element itself, what it does, and what to do next.
