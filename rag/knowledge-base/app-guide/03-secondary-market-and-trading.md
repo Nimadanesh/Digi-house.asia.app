@@ -16,40 +16,52 @@ answerAuthority: authoritative
 
 # Secondary Market & Trading
 
-## When a villa moves to the Secondary Market
+## What the Secondary Market is
 
-- After **all primary shares** of a villa are sold, the villa moves to the Secondary
-  Market. This transition is one-way: a villa never returns to Primary.
-- Statuses (`funding/funded/resale`) are demo scenario state controlling which flow
-  opens; all numbers shown are canonical or ledger-derived.
+The Secondary Market is where users trade shares with other users after a villa's Primary Offering is complete.
 
-## How buying and selling works there
+Once all primary shares are sold, the villa moves to the Secondary Market. This transition is one-way.
 
-- Price is determined by **supply and demand**: users place orders to buy from or sell
-  to **other users** (the platform is no longer the counterparty).
-- **Sell:** open a holding's Property page, use the **Sell** entry, set quantity and
-  price per share in the sell sheet, and confirm to place the order. It appears in the
-  order book and under Portfolio → **Open Orders**, where it can be cancelled any time
-  before it fills.
-- **Buy:** place a buy order at a chosen price into the order book; when a seller
-  matches, the trade fills and holdings update.
-- Shares locked in the yield program must be **unlocked** before they can be sold.
-- Secondary demo tape (order book, synthetic fills) is isolated demo data, marked as
-  demo throughout — never presented as real market history.
+## Order Book
 
-## Platform commission on trades
+The Order Book is the area where buy and sell orders are shown.
 
-- The platform takes a commission on **every** buy and sell transaction — a main
-  platform revenue source. 9-tier amount-based table plus flat 7% instant-sell note.
-- Commission tiers are amount-based per transaction. The exact current table lives in
-  `PRODUCT-PLAN.md` §0.5 (served via `GET /v1/fees`) — never quote rates from memory.
-- A fee disclosure is available in the app (fee icon / pill opens the fee schedule).
+A **sell order** says that a holder wants to sell a chosen number of shares at a chosen price.
 
-## Primary vs Secondary at a glance
+A **buy order** says that a buyer wants to purchase a chosen number of shares at a chosen price.
 
-| | Primary Offering | Secondary Market |
-|---|---|---|
-| Seller | The platform | Other users |
-| Price | Fixed ($100 base) | Supply and demand (order book) |
-| Sell-back | To the platform at 7% discount | Via orders to other users |
-| Commission | Platform commission applies | Platform commission applies |
+A trade happens when a compatible buyer and seller are matched.
+
+## Selling shares
+
+1. Open the Property page for a villa you hold.
+2. Open **Sell**.
+3. Choose the quantity.
+4. Set the price per share.
+5. Confirm the order.
+6. The order appears in the Order Book and in **Portfolio → Open Orders** while it is open.
+7. Before it fills, an eligible open order can be cancelled.
+
+Locked shares must be unlocked before they can be sold.
+
+## Buying shares
+
+1. Open the relevant Secondary Market flow.
+2. Enter the quantity and price you want to buy at.
+3. Place the order.
+4. When a seller matches the order, the trade fills and your holding updates.
+
+## Price in the Secondary Market
+
+Unlike the Primary Offering, the Secondary Market uses supply and demand between users. The price can therefore differ from the primary share price.
+
+## Fees
+
+The platform charges a commission on buy and sell transactions. The exact current rate depends on the transaction amount and should be taken from the current fee schedule shown by the app.
+
+The **7% Primary Offering buyback discount** is different: it applies to eligible sales back to the platform during Primary Offering and is not a Secondary Market trading fee.
+
+## Demo market information
+
+Where the app labels an order-book entry, fill, or market tape as demo, treat it as demonstration data rather than real market history.
+
