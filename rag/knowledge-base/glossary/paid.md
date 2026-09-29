@@ -21,9 +21,6 @@ related:
 
 # Paid
 
-**FractionalLuxe meaning:** income **actually received** (historical). The only state
-allowed in "received" totals ("Received in total", "Income by estate"). In the current
-demo build, paid entries are explicitly labeled "simulated" — honest demo data, never
-presented as real history.
+**Simple meaning:** Paid income is money that has actually been distributed to you.
 
-**Related:** Accrued, Projected.
+Paid is separate from Projected and Accrued. In the current demo build, entries explicitly marked **simulated** are demonstration data rather than real payment history.
