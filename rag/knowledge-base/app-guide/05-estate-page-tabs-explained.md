@@ -18,53 +18,106 @@ related:
 
 # Property Page Tabs Explained
 
-Above the tabs, every villa page (`/property/[id]`) shows the same fixed header: photo gallery, villa
-name, location, current share price with total shares ("1 share ≈ 1/N of the estate"),
-funding progress bar, estate value, the Buy button, and key stats (Monthly income,
-Proj. / year, Avg. nightly rate, Est. growth).
+Every villa has a Property page with a common top area followed by five tabs.
 
-## Estate (labeled "Overview")
+## The top area
 
-- The "desire" tab: why this specific estate — short description plus key highlights.
-- Key specs in clean rows (type, size, guests/bedrooms/bathrooms). Missing data shows
-  as pending, never guessed.
-- Amenities grid and location section (area description and transfer details only where
-  sourced). External reserve link to the source listing lives here.
+The top section can show:
+- **Photo gallery** — browse the villa images.
+- **Villa name** — identifies the estate.
+- **Location** — shows where the villa is located.
+- **Share price** — the current displayed price for a share.
+- **Total-share information** — explains how a share relates to the estate's total shares.
+- **Funding progress** — shows progress through the current offering.
+- **Estate value** — the value used by the product for the estate.
+- **Buy** — starts the purchase flow when buying is available.
+- Key statistics such as monthly income, projected annual income, average nightly rate, and estimated growth.
 
-## Income
+## Estate / Overview tab
 
-- The "conviction" tab: how the estate makes money and what a share earns.
-- **Rental basis:** ANR (Average Nightly Rate — mean of full-buyout listed rates, never
-  ADR) with its derivation; occupancy and ADR are Unknown for all villas.
-- **Projected revenue scenarios** plus the **Average (payout basis)**. Each card shows
-  modeled nights, whole-villa gross revenue, and per-share income (year + month).
-- **Modeled costs** (expandable rows with basis and amount) and **excluded charges**
-  (guest-paid items labeled "Not deducted from your income").
-- **Net economics** summary: distributable income, 75% owner share, owner-side tax
-  estimate (*not tax advice*), and per-share monthly net income. Projected vocabulary only.
+This tab answers: **What is this villa?**
 
-## Ownership
+It can include:
+- a short introduction;
+- key highlights;
+- property type;
+- size;
+- bedrooms;
+- bathrooms;
+- guest capacity;
+- amenities;
+- location information;
+- transfer information when sourced;
+- a link to the source listing.
 
-- The "decision" tab: valuation & shares grid (estate value, reference value per
-  share, total shares, exact ownership per share).
-- **Growth potential:** upper end of the valuation range shown as Est. Growth —
-  estimated, never annualized, never rental income.
-- **Exit & liquidity:** market stage status, secondary-market path, and the rule that
-  locked shares must be unlocked before selling.
-- **Position preview** ("if you invest today"): share stepper, investment amount,
-  projected monthly income for that quantity, always footered "Projected figures only".
+When a fact is not available, the page indicates that it is pending rather than inventing a value.
 
-## Earn
+## Income tab
 
-- The yield tab: lock shares here to start earning (monthly-only for new locks);
-  locked state and accrued income shown per holding.
-- Preserved historical weekly records are labeled Legacy.
-- Unlock entry lives here too — unlocked shares stop earning and become sellable.
+This tab answers: **How is rental income modeled for this villa?**
 
-## Details
+It can include:
+- rental-rate basis;
+- projected income scenarios;
+- the Average scenario used as the payout basis;
+- modeled nights;
+- whole-estate gross revenue;
+- per-share income for year and month;
+- modeled costs;
+- charges that are not deducted from your income;
+- distributable income and owner share;
+- an estimated owner-side tax amount where shown.
 
-- The factual record: operator facts (where sourced), legal & structure notes,
-  valuation date and method, available documents list, distribution & tax disclosure
-  ("not tax advice").
-- **Historical performance renders only when real data exists** — none exists in the
-  current dataset, so simulated data must never pose as history.
+Income figures in this section are presented as projected figures unless they are explicitly identified as something else.
+
+### ANR
+
+ANR means **Average Nightly Rate**. It is the average of the listed full-buyout nightly rates used by the product's model.
+
+ANR is not the same as ADR.
+
+### Occupancy and ADR
+
+Occupancy and ADR are currently unknown for the villas in the canonical dataset. The product should not invent these values.
+
+## Ownership tab
+
+This tab answers: **What am I buying and what could affect my exit?**
+
+It can include:
+- estate value;
+- reference value per share;
+- total shares;
+- ownership represented by a share;
+- estimated growth information;
+- market stage;
+- exit and liquidity information;
+- a position preview showing quantity, investment amount, and projected monthly income.
+
+Growth information is an estimate and is not rental income or an annual return.
+
+## Earn tab
+
+This tab answers: **How do I put shares into the earning program?**
+
+It can show:
+- lock controls;
+- locked-share status;
+- accrued income;
+- unlock controls.
+
+New locks are monthly-only. Historical weekly records, when shown, are labeled Legacy.
+
+## Details tab
+
+This tab is the factual record for the villa.
+
+It can include:
+- operator information where sourced;
+- legal and structural notes;
+- valuation date and method;
+- available documents;
+- distribution and tax disclosures.
+
+Historical performance should only be presented when real historical data exists. Simulated values must not be presented as historical performance.
+
