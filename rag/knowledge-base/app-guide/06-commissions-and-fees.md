@@ -16,37 +16,34 @@ answerAuthority: authoritative
 
 # Commissions & Fees
 
-## Platform commissions on buy/sell
+## Buy and sell commission
 
-- Commissions on buy and sell transactions are one of the platform's **main revenue
-  sources**.
-- A commission applies to **every** buy and sell transaction, in both the Primary
-  Offering and the Secondary Market.
-- 9-tier amount-based table per transaction plus a flat 7% instant-sell note. The exact
-  current table lives in `PRODUCT-PLAN.md` §0.5 (served via `GET /v1/fees`) — never
-  quote commission rates from memory.
-- A fee disclosure is available in the app (fee icon / pill opens the fee schedule
-  sheet).
+A platform commission applies to eligible buy and sell transactions. The exact current rate depends on transaction amount, so the app's current fee schedule should be used for the applicable rate.
 
-## 7% primary buyback discount — clarification
+A fee icon or fee pill can open the fee schedule.
 
-- During the **Primary Offering stage only**, a user may sell shares back **to the
-  platform at a 7% discount** (share price − 7%). Returned shares go back into primary
-  supply.
-- This 7% is a **buyback discount**, not a commission and not a secondary-market fee.
-  Never present it as applying to Secondary Market trades between users.
+## 7% Primary Offering buyback discount
 
-## Withdrawal 1% fee — clarification
+During the Primary Offering, an eligible holder may sell shares back to the platform at a **7% discount** to the share price.
 
-- Withdrawals carry a **1% fee charged at request time** (neutral wording; the
-  legal/accounting classification is reserved for advisers), with the net paid in
-  **exactly 4 weekly installments**.
-- This 1% is **not** a commission, **not** the 7% buyback discount, and **not** the
-  legacy weekly display adjustment (−1pp, preserved settlement math for historical
-  records only). The three numbers must never be conflated.
+This is a **buyback discount**, not the normal trading commission and not a Secondary Market fee.
 
-## Other fees
+## 1% withdrawal fee
 
-- No other fee is documented in the current knowledge base. If a charge is not stated
-  in a retrieved document, treat it as Unknown and point the user to the app or
-  support — never invent fees.
+A withdrawal request has a **1% fee at request time**. The remaining amount is paid in **exactly four weekly installments**.
+
+This is different from both the buy/sell commission and the 7% Primary Offering buyback discount.
+
+## Easy way to tell them apart
+
+**Trading commission:** applies to eligible buy/sell transactions.
+
+**7% buyback discount:** applies to eligible sales back to the platform during Primary Offering.
+
+**1% withdrawal fee:** applies when a withdrawal is requested.
+
+These are three separate mechanisms.
+
+## Other charges
+
+If a charge is not documented in current product information, Fifi should not invent an amount and should direct the user to the current fee information in the app or support.
