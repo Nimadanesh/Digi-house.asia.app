@@ -18,59 +18,76 @@ answerAuthority: authoritative
 
 ## What Primary Offering means
 
-Primary Offering is the first sale of a villa's fractional shares. In this stage, the platform is the seller.
+**Primary Offering** is the first sale of a villa's fractional shares. In this stage, the platform is the seller.
 
 The base share price is **$100 per share**. The funding indicator shows how much of the offering has been sold and how many shares remain.
 
-## What you see before buying
+## What the Property page is showing you
 
-On the Property page, review:
-- villa photos;
-- name and location;
-- share price;
-- total-share information;
-- funding progress;
-- estate value;
-- key property statistics;
-- projected income information.
+Before opening Buy, the Property page gives you the context for the purchase:
 
-These elements give you the context for deciding how many shares to review in the Buy flow.
+- **Photos** — what the villa looks like;
+- **Name and location** — which estate you are reviewing;
+- **Share price** — the price used for the displayed purchase calculation;
+- **Total shares** — how the estate's ownership is divided;
+- **Funding progress** — how much of the primary offering has been sold;
+- **Estate value** — the displayed value of the whole estate;
+- **Property metrics** — facts such as size, bedrooms, bathrooms, or guests when available;
+- **Projected income** — a model estimate, not money already received.
 
 ## Buying step by step
 
 1. Open **Marketplace** and select a villa.
-2. Review the Property page and its information.
+2. Review the Property page and its tabs.
 3. Tap **Buy**.
-4. Use the quantity stepper to choose the number of shares.
-5. Review the purchase summary, including total cost and projected monthly income for that quantity.
-6. Confirm in the app.
+4. Use the **quantity stepper** to choose how many shares you want.
+5. Review the **purchase summary**, including total cost and projected monthly income for that quantity.
+6. Confirm the purchase in the app.
 7. Approve the transaction in your connected wallet.
-8. After a successful purchase, the new holding appears in **Portfolio** and Home.
+8. After a successful purchase, the holding appears in **Portfolio** and the relevant Home summary.
 
 ## Quantity stepper
 
-The quantity stepper controls how many shares you want to purchase. Changing the quantity changes the total purchase amount and the projected income shown in the summary.
+The **quantity stepper** is the small increase/decrease control used to change the number of shares.
+
+It is useful because the summary updates with the quantity:
+- more shares → higher total purchase amount;
+- fewer shares → lower total purchase amount;
+- the displayed projected income changes with the selected quantity.
 
 ## Funding progress
 
-The funding bar gives a visual indication of how much of the Primary Offering has been sold and what remains available.
+The **funding bar** is a visual progress indicator for the Primary Offering.
+
+It answers two simple questions:
+- How much of the offering has already been sold?
+- How much remains?
+
+It is not a statement about future price performance.
+
+## Purchase summary
+
+The **purchase summary** is the final on-screen check before confirmation. It brings the selected quantity and resulting purchase amount together, along with the projected monthly income shown for that selection.
+
+Review this summary before approving the wallet transaction.
 
 ## After purchase
 
 Your holding can show:
 - number of shares;
-- value;
+- displayed value;
 - gain/loss relative to acquisition, where available.
 
 Newly purchased shares do not earn rental profit until they are locked.
 
-During the Primary Offering stage, eligible shares can be sold back to the platform at a **7% discount** to the share price.
+During Primary Offering, eligible shares can be sold back to the platform at a **7% discount** to the share price.
 
 When all primary shares are sold, the villa moves to the Secondary Market.
 
-## A useful distinction
+## Primary vs Secondary
 
-**Buying in Primary Offering** means buying from the platform at the primary share price.
+**Primary Offering:** you buy shares from the platform.
 
-**Buying in Secondary Market** means placing an order to buy shares from another user.
+**Secondary Market:** you buy shares from another user through the market's order flow.
 
+That distinction explains why the two screens can have different price and order behavior.
