@@ -20,45 +20,55 @@ related:
 
 # Locking Shares & Earning
 
-## Why locking is required
+## What locking does
 
-- Only **locked** shares earn rental profit. This prevents selling on the Secondary
-  Market while earning yield.
-- Locked shares are **not sellable** until unlocked.
+Locking a share makes it eligible to earn rental profit under the earning program.
+
+A locked share cannot be sold until it is unlocked.
 
 ## How to lock shares
 
-1. Open the Property page of a villa you hold (`action.open-estate`).
-2. Use the lock entry in the Earn tab and choose the quantity to lock.
-3. Confirm. Accrual starts from locking; the holding shows its locked state.
-   New locks are **monthly-only**.
+1. Open the Property page for a villa you own.
+2. Open the **Earn** tab.
+3. Choose the number of shares to lock.
+4. Confirm the lock.
+5. The holding then shows its locked state and accrual can begin.
 
-## Monthly profit
+New locks are **monthly-only**.
 
-- Profit is calculated and communicated as a **MONTHLY amount per locked share, on
-  the full monthly rate**, grounded in the **Average scenario**.
-- Projected figures are labeled **Projected**; they are never paid income.
-- Preserved historical weekly lock records exist and are labeled **Legacy** where
-  shown. Their settlement math is preserved — weekly is not offered for new locks.
+## What the Earn tab shows
 
-## What happens if shares stay unlocked
+The Earn tab is the place to:
+- lock shares;
+- see which shares are locked;
+- see accrued income associated with locked shares;
+- request an unlock.
 
-- Unlocked shares earn **nothing** — no accrual, no payouts.
-- Unlocked shares are the sellable ones (Secondary Market orders, or platform buyback
-  at 7% discount during Primary Offering).
+## Monthly income
+
+For new locks, the program uses a monthly amount per locked share based on the Average scenario.
+
+Amounts labeled **Projected** are estimates of future income. They are not the same as money already paid.
+
+Historical weekly lock records, where shown, are labeled **Legacy**. Weekly locking is not offered for new locks.
+
+## If shares remain unlocked
+
+Unlocked shares do not accrue or receive rental profit.
+
+The benefit of being unlocked is that the shares are available for an eligible sale flow.
+
+## Unlocking
+
+Request an unlock from the Earn tab.
+
+Accrual stops when the unlock is requested, and the shares become sellable after the applicable processing period shown by the app.
+
+If you want to sell locked shares, unlock them first.
 
 ## Withdrawals
 
-- Request withdrawal at any time. A **1% fee** is charged at request time (neutral
-  wording; legal/accounting classification reserved for advisers) and the net is
-  paid in **exactly 4 weekly installments** — a payment schedule, never profit
-  frequency.
-- The legacy weekly display adjustment (−1pp, preserved settlement math for
-  historical records only) is **not** the withdrawal fee.
+A withdrawal request has a **1% fee at request time**. The remaining amount is paid in **exactly four weekly installments**.
 
-## How to unlock
+The four-week payment schedule describes when the withdrawal is paid. It does not mean that new earning is calculated weekly.
 
-- Request unlock from the Earn tab. Yield stops accruing at the request,
-  and the shares become sellable after a short processing period (see the app for the
-  current timing).
-- Unlock before placing any sell order for locked shares.
