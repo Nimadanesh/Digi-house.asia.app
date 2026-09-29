@@ -16,33 +16,61 @@ answerAuthority: authoritative
 
 # Buying Shares — Primary Offering
 
-## How the Primary Offering works
+## What Primary Offering means
 
-- When a villa is first listed for fractional sale, its shares are offered at a **fixed
-  price**: **$100 base price per share** (base = approved valuation ÷ 100).
-- The seller of these primary shares is **the platform itself**.
-- A funding progress bar ("X% funded · N shares left") shows how much of the offering
-  is still available. Figures shown are derived live from the demo ownership ledger —
-  never static claims.
+Primary Offering is the first sale of a villa's fractional shares. In this stage, the platform is the seller.
 
-## Steps to buy
+The base share price is **$100 per share**. The funding indicator shows how much of the offering has been sold and how many shares remain.
 
-1. From the **Marketplace** (`action.open-marketplace`), tap an estate card to open its Property page (`action.open-estate`).
-2. Review the fixed top section (photos, name, location, share price, funding bar,
-   estate value) and the stats (Monthly income, Proj. / year, Avg. nightly rate,
-   Est. growth).
-3. Tap **Buy** and choose the share quantity with the stepper.
-4. Review the summary: total cost and the projected monthly income for that quantity
-   (labeled **Projected**, Average scenario).
-5. Confirm in the app and approve the transaction in the wallet (TON or EVM).
-6. On success, **Portfolio** and Home update with the new holding.
+## What you see before buying
 
-## What happens after purchase
+On the Property page, review:
+- villa photos;
+- name and location;
+- share price;
+- total-share information;
+- funding progress;
+- estate value;
+- key property statistics;
+- projected income information.
 
-- The holding appears in Portfolio with quantity, value, and gain/loss vs acquisition.
-- Newly bought shares do **not** earn until locked — see
-  `fifi.product.app-guide.locking-shares-and-earning.v1`.
-- While the villa is still in its Primary Offering, the holder may sell shares back
-  **to the platform at a 7% discount** (share price − 7%).
-- Once all primary shares are sold, the villa moves to the Secondary Market — see
-  `fifi.product.app-guide.secondary-market-and-trading.v1`.
+These elements give you the context for deciding how many shares to review in the Buy flow.
+
+## Buying step by step
+
+1. Open **Marketplace** and select a villa.
+2. Review the Property page and its information.
+3. Tap **Buy**.
+4. Use the quantity stepper to choose the number of shares.
+5. Review the purchase summary, including total cost and projected monthly income for that quantity.
+6. Confirm in the app.
+7. Approve the transaction in your connected wallet.
+8. After a successful purchase, the new holding appears in **Portfolio** and Home.
+
+## Quantity stepper
+
+The quantity stepper controls how many shares you want to purchase. Changing the quantity changes the total purchase amount and the projected income shown in the summary.
+
+## Funding progress
+
+The funding bar gives a visual indication of how much of the Primary Offering has been sold and what remains available.
+
+## After purchase
+
+Your holding can show:
+- number of shares;
+- value;
+- gain/loss relative to acquisition, where available.
+
+Newly purchased shares do not earn rental profit until they are locked.
+
+During the Primary Offering stage, eligible shares can be sold back to the platform at a **7% discount** to the share price.
+
+When all primary shares are sold, the villa moves to the Secondary Market.
+
+## A useful distinction
+
+**Buying in Primary Offering** means buying from the platform at the primary share price.
+
+**Buying in Secondary Market** means placing an order to buy shares from another user.
+
