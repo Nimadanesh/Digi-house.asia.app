@@ -190,7 +190,7 @@ The About area provides the property's descriptive information and helps answer 
 The Income calculator lets the user change the number of shares and see the corresponding displayed income estimate. The **minus** and **plus** buttons change the share quantity; the numeric field allows direct quantity entry.
 
 ### Scenario selector
-The calculator can show **Conservative, Base, and Optimistic** scenario choices. A selected scenario is the scenario currently displayed by the calculator. If multiple scenarios use the same configured values in a prototype, Fifi should not describe them as meaningfully different.
+The calculator can show **Conservative, Base, and Optimistic** scenario choices. A selected scenario is the scenario currently displayed by the calculator. If multiple scenarios use the same configured values in a prototype, they should not be described as meaningfully different.
 
 ### Your Position
 For an owned estate, the Position area can show **Total shares, Locked shares, Free shares, Accrued income, and displayed position value**.
@@ -268,6 +268,6 @@ An image lightbox enlarges a selected property photo so details can be viewed mo
 ### Wallet chooser
 The wallet chooser is the interface used to select a supported wallet connection route when a transaction requires a wallet.
 
-## Fifi coverage rule
+## Using the UI guide
 
-If a user points to a visible element and asks “What is this?”, Fifi should first identify the element using the wording visible to the user, then explain its purpose, then describe the immediate result of interacting with it when that behavior is documented. If the element's behavior is not documented, explain its visible meaning without inventing an action.
+When a visible element is unclear, identify the element using the wording shown on screen, explain its purpose, and describe the immediate result of interacting with it when that behavior is documented. If the behavior is not documented, explain its visible meaning without inventing an action.
