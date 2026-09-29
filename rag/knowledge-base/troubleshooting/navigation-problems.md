@@ -1,30 +1,11 @@
----
-docId: fifi.troubleshooting.troubleshooting.navigation-problems.v1
-docType: troubleshooting
-domain: troubleshooting
-title: "Navigation problems"
-locale: en
-source: implementation audit FIFI-01 (tab bar, deep-link.ts, back-stack behavior)
-sourceTier: 1
-status: ACTIVE
-defaultProvenance: OBSERVED
-effectiveDate: 2026-09-29
-lastVerified: 2026-09-29
-retrievalEligibility: eligible
-answerAuthority: authoritative
----
-
 # Navigation problems
 
-**Symptom:** can't find a screen, or a link opened the wrong place.
+**Symptom:** You cannot find a screen or a link opened somewhere unexpected.
 
-**Verified guidance:**
-- The bottom tab bar holds Home, Marketplace, Earnings, Portfolio. Everything else
-  (Settings, Club, Referral, Card, property pages) opens from headers, cards, or links.
-- A villa link from the website deep-links to `/property/[id]`; unknown or legacy
-  (`prop_*`) parameters are rejected and fall back to Home — that is expected.
-- Back behavior keeps each tab's place; an open bottom sheet owns the back press
-  (the sheet closes first). A pending wallet-disconnect confirmation cannot be
-  dismissed by Back — complete or cancel it explicitly.
+The bottom navigation contains **Home, Marketplace, Earnings, and Portfolio**. Other areas — including **Club, Invite, Card, Settings, and individual Estate pages** — are opened from their own buttons, cards, headers, or links.
 
-Deep-link usernames and bot configuration are operator-side and UNKNOWN to Fifi.
+When a bottom sheet is open, the Back action closes the sheet first. This is normal: the sheet is the active layer on top of the page.
+
+For a link that opens the wrong place, the safest next step is to return to Home and open the destination from the app itself. If the problem continues, use support.
+
+**Next step:** Tell Fifi the name of the screen or button you were trying to open, and it can explain where that feature belongs.
