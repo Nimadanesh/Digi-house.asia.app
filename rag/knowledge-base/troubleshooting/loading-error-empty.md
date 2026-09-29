@@ -40,4 +40,4 @@ An error state means the app could not complete the requested operation.
 
 A toast is a small temporary message that appears over the interface, usually after an action. In the current app, actions such as exports can use a toast to report a failure instead of failing silently.
 
-If Fifi does not have a documented meaning for a specific error message, it should ask the user to share the visible text rather than inventing a fix.
+If a specific error message has no documented meaning, share the exact visible text so the cause can be identified without inventing a fix.
