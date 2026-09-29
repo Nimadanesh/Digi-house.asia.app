@@ -22,8 +22,12 @@ related:
 
 **Q:** What is the difference between projected, accrued, and paid income?
 
-**A:** Three separate states, never blended: **Projected** = forward calculation from
-scenarios (only the Average scenario grounds payouts; never a promise). **Accrued** =
-earned on your locked shares but not yet distributed (paid with the next monthly
-distribution). **Paid** = actually received — the only number allowed in "received"
-totals. Your current accrued/paid values are live data from the Earnings screen.
+**A:** These are three different stages of income:
+
+- **Projected:** an estimate of future income based on the product's scenarios. It is not money you have received and is not a guarantee.
+- **Accrued:** income that has been earned on your locked shares but has not yet been paid to you.
+- **Paid:** money that has actually been distributed to you.
+
+Keeping these three separate prevents an estimate or an amount still waiting for payment from being mistaken for money already received.
+
+**Next step:** Use **Earnings** when you want to see the current amounts associated with your account.

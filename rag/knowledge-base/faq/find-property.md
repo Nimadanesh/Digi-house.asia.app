@@ -18,7 +18,8 @@ answerAuthority: authoritative
 
 **Q:** Where can I find a property?
 
-**A:** Browse the **Marketplace** (`action.open-marketplace`) with search and filters,
-or open a villa link from the website — it deep-links straight to that estate's page
-(`action.open-estate {propertyId}`). Every estate has one canonical id
-(`re-<listingId>`); names alone are not identifiers.
+**A:** Open the **Marketplace** to browse the available estates. You can search and filter the listings, then tap a property card to open that villa's page.
+
+If you already have a direct villa link, opening it takes you straight to the relevant estate page.
+
+**Next step:** Go to **Marketplace** and choose the villa you want to explore.
