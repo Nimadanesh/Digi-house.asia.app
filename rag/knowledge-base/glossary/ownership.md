@@ -16,14 +16,11 @@ entities:
   - {kind: glossary-term, id: ownership}
 related:
   - fifi.glossary.glossary.fractional-ownership.v1
-  - fifi.glossary.glossary.fraction.v1
----
 
 # Ownership
 
-**FractionalLuxe meaning:** your proportional position in an estate:
-`ownershipPerShare = 1 / totalShares`, shown exactly. Ownership-backed positions
-(participation in operating income + potential appreciation) are a different product
-from non-ownership yield positions and must never be conflated.
+**Ownership** means your proportional position in an estate.
 
-**Related:** Fractional Ownership, Fraction, Earnings.
+If an estate is divided into a fixed number of shares, each share represents a corresponding portion of that estate. Your total position depends on how many shares you hold.
+
+Ownership should not be confused with a separate product that provides a return without ownership.
