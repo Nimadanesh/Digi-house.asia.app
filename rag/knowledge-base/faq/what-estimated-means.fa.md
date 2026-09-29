@@ -13,7 +13,6 @@ lastVerified: 2026-09-29
 retrievalEligibility: eligible
 answerAuthority: authoritative
 ---
-
 # «برآوردی» یعنی چه؟
 
 **سؤال:** «برآوردی» یعنی چه؟
