@@ -23,10 +23,8 @@ related:
 
 # Provenance
 
-**FractionalLuxe meaning:** the label telling you *what kind of claim* a number is:
-OBSERVED (listed fact) · ESTIMATED (range with method) · DERIVED (calculated, basis
-shown) · PROJECTED (scenario forecast) · UNKNOWN (no verified data) · CONFLICTED
-(sources disagree). Provenance is different from confidence and is never collapsed
-into a single "trust score". Every economic figure Fifi cites carries its label.
+**Simple meaning:** Provenance describes where a piece of information comes from and what kind of information it is.
 
-**Related:** Observed, Estimated, Derived, Unknown, Conflicted.
+In FractionalLuxe, labels such as **Observed, Estimated, Derived, Projected, Unknown,** and **Conflicted** help you understand whether a figure is directly listed, calculated, estimated, projected, unavailable, or disputed.
+
+These labels help distinguish a known fact from a calculation or estimate.
