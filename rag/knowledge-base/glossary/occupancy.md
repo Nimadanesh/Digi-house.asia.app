@@ -1,29 +1,9 @@
----
-docId: fifi.glossary.glossary.occupancy.v1
-docType: glossary
-domain: glossary
-title: "Occupancy"
-locale: en
-source: docs/product/rebuild/ESTATE-24-DATA.json (estimates.occupancy)
-sourceTier: 1
-status: ACTIVE
-defaultProvenance: UNKNOWN
-effectiveDate: 2026-09-29
-lastVerified: 2026-09-29
-retrievalEligibility: eligible
-answerAuthority: authoritative
-entities:
-  - {kind: glossary-term, id: occupancy}
-related:
-  - fifi.glossary.glossary.adr.v1
-  - fifi.glossary.glossary.anr.v1
----
-
 # Occupancy
 
-**FractionalLuxe meaning:** the share of nights a villa is actually rented. Currently
-**Unknown for all 24 estates** — it is never invented. Revenue is modeled from
-modeled nights per scenario instead. Because occupancy is unknown, no ADR can exist
-in answers.
+**FractionalLuxe meaning:** the share of nights during which a villa is rented.
 
-**Related:** ADR, ANR, Scenarios.
+For the current 24 canonical estates, verified occupancy is not available. The app therefore does not invent an occupancy percentage. Income scenarios instead use their modeled number of nights.
+
+**In simple terms:** if a villa is available for 100 nights and is rented for 60 of them, its occupancy would be 60%.
+
+**Related:** ADR, ANR, Rental Income.
