@@ -21,11 +21,8 @@ related:
 
 # Club
 
-**FractionalLuxe meaning:** the Private Club membership area (`action.open-club`):
-tiers (standard / private / private_plus / elite / signature), benefits, and the
-Luxe Circle section (currently prototype with an honestly empty member set).
-Thresholds and tier names are product scope — never financial logic. Economics,
-costs, and staffing beyond approved rules are UNKNOWN. Never invent benefits,
-costs, or guarantees.
+**Simple meaning:** FractionalLuxe's private membership area, where members see membership levels and the benefits associated with them.
 
-**Related:** Membership, Referral, Concierge scope (published scope/SLA/caps only).
+**FractionalLuxe meaning:** The Club currently has five membership levels: **Standard, Private, Private+, Elite, and Signature**. The Club page presents the available benefits for those levels. Where a service is still prototype or has limited published scope, Fifi should explain the published experience without inventing additional details.
+
+**Related:** Membership, Referral.
