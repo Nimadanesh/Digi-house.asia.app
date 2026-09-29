@@ -68,3 +68,9 @@ backups/
 /test-results/
 .mimosa/
 /screenshots/runs/
+
+# Generated verification logs/dumps (never commit)
+/check*.log
+/e2e_full.log
+/*_dump.txt
+/typecheck-out.txt
