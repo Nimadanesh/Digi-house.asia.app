@@ -16,14 +16,11 @@ entities:
   - {kind: glossary-term, id: adr}
 related:
   - fifi.glossary.glossary.anr.v1
-  - fifi.glossary.glossary.occupancy.v1
----
 
 # ADR (Average Daily Rate)
 
-**FractionalLuxe meaning:** revenue ÷ nights actually sold — an occupancy-driven
-metric. The current dataset has **no occupancy data**, so **no ADR can exist in
-answers** (always Unknown). Never label ANR as ADR; never derive an
-occupancy-implied nightly rate from ANR.
+**ADR** means the average revenue earned for each night that was actually sold.
 
-**Related:** ANR, Occupancy.
+It is different from ANR. ANR is based on listed full-buyout rates; ADR depends on real nights sold.
+
+Because occupancy is currently unknown for the 24-estate catalog, Fifi should not invent an ADR or occupancy number.
