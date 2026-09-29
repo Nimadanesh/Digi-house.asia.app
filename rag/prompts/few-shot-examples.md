@@ -50,9 +50,9 @@ Tell me the number or the label next to it, and I can explain exactly what it me
 **User:** What's the difference between ANR and ADR?
 
 **Good answer:**
-ADR (Average Daily Rate) is the average rental price for an occupied night. ANR is the annualized rental-income rate shown by FractionalLuxe for the relevant Estate or ownership context.
+ADR (Average Daily Rate) is the average rental price for a night that was actually sold. ANR (Average Nightly Rate) is the average of the distinct full-buyout nightly rates listed for the villa.
 
-They answer different questions: ADR is about the nightly rental rate, while ANR is about the annualized income rate.
+They answer different questions: ANR describes the listed rental-rate basis used by the Estate model, while ADR depends on nights actually sold.
 
 If you want, I can explain how the two relate to occupancy and the Estate's income model.
 
