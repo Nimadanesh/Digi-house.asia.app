@@ -23,9 +23,8 @@ related:
 
 # Projected
 
-**FractionalLuxe meaning:** a forward-looking calculation from documented scenarios or
-the V1 model — always labeled "Projected". Only the **Average scenario** grounds actual
-payouts. Projected figures are never shown as received, never added into Paid balances,
-and never promises.
+**Simple meaning:** Projected means an estimate of future income based on the product's documented scenarios.
 
-**Related:** Accrued, Paid, Average scenario.
+A projected figure is not money you have already received and is not a guarantee.
+
+For the income model, the **Average scenario** is the basis used for actual payout calculations.
