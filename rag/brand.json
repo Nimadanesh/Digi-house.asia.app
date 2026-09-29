@@ -1,0 +1,13 @@
+{
+  "$comment": "Fifi brand/product identity — single source of truth (FIFI-05 §0/§1). A future rename changes THIS file, never the corpus. Internal identity is brand-neutral; display names are per-locale; legacy names are aliases only.",
+  "platformId": "platform",
+  "displayName": {
+    "en": "FractionalLuxe",
+    "fa": "فرکشنال‌لوکس"
+  },
+  "displayNameRule": "First use per answer pairs the Latin token: فرکشنال‌لوکس (FractionalLuxe). The Latin token is always preserved verbatim.",
+  "legacyAliases": ["DigiHouse", "دیجی‌هاوس"],
+  "legacyNote": "DigiHouse is a legacy alias only — valid for historical/migration context (e.g. answering 'What is DigiHouse?'), never a current product name, never an authority source.",
+  "legacyTechnicalNamespace": "digihouse (frozen repo infra: npm package names, storage keys, trace prefixes — never user-facing, never renamed per repo rules; NOT a brand signal)",
+  "version": 1
+}

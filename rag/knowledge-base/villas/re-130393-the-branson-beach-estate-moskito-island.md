@@ -1,0 +1,99 @@
+---
+docType: villa
+propertyId: re-130393
+name: "The Branson Beach Estate"
+destination: "British Virgin Islands"
+dataConfidence: "MEDIUM"
+---
+
+# The Branson Beach Estate
+
+> Canonical property id: `re-130393` · Source listing: <https://www.rentalescapes.com/rentals/luxury-villa-rentals-caribbean/british-virgin-islands/moskito-island/the-branson-beach-estate-130393>
+
+## Description
+
+Three spectacular standalone villas connected by elevated walkways on Moskito Island with private beach.
+
+The 125-acre Moskito Island is a jewel of the British Virgin Islands... Perched on a dramatic outcrop commanding elevated sea views... The Branson Beach Estate. Made up of three spectacular standalone villas... cleverly connected by elevated wooden walkways... own private beach – the epitome of barefoot luxury living. The Estate’s three villas - Headland House, Mangrove Villa and Beach Villa - sleep 6, 8 and 8 guests... total of 22 guests across all 11 bedrooms.
+
+### Key highlights
+
+- Private Island Estate (3 connected villas) in Moskito Island
+- 22 guests · 11 bedrooms · 11 bathrooms
+- Grounds: 125 ha
+- Nov–Apr and holidays busier.
+- Personal service by the villa staff including Chef
+- Outdoor: Private Tennis Court, Infinity Pool, Dining Table
+- Activities: Sailing, Tennis, Swimming
+
+## Stay rules
+
+- Check-in: 16:00
+- Check-out: 10:00
+- Minimum stay: 4 night(s)
+
+## Rates
+
+- Listed rate: ~$35,000 (APPROXIMATE, USD)
+- Rate observation period: Sep–Oct 2026
+- Rate notes: Inquire for Thanksgiving and Festive season. Environmental and tourism levy $10/pp on arrival. $50 departure tax/pp.
+
+### Season rate summary
+
+| Season | Basis | Listed rate | Min stay (nights) | Periods |
+|---|---|---|---|---|
+| High Season | NIGHTLY | $48,000 | 4 | 2025-01-06 → 2025-05-31; 2025-11-01 → 2025-11-20; 2025-12-01 → 2025-12-18 |
+| High Season | NIGHTLY | $50,500 | 4 | 2026-01-07 → 2026-05-31; 2026-11-01 → 2026-11-20; 2026-12-01 → 2026-12-18 |
+| Low Season | NIGHTLY | $33,250 | 4 | 2025-06-01 → 2025-10-31 |
+| Low Season | NIGHTLY | $35,000 | 4 | 2026-06-01 → 2026-10-31 |
+
+## Taxes & fees
+
+- **Tourism tax:** 10% (Hotel Accommodation Tax (BVI standard); site shows BVI Hotel Tax 3% + Service Fee 2.5%)
+- **Service charge:** 2.5% (Service Fee)
+
+## Valuation & data provenance
+
+All valuation figures in USD.
+
+Valuation status: **ADOPT**
+
+- **Approved:** $30,000,000 — Source: pm-decision-2026-09-09 lowest-valid-value rule: research $30-40M band low = $30M canonical Current Estimated Value (ESTIMATED/MODELED; research range preserved as evidence)
+- **Research estimate:** $35,000,000 (range $24,000,000–$48,000,000) — confidence MEDIUM — Source: 24-PROPERTY-RESEARCH-DATASET.md (ESTIMATED / FRACTIONALLUXE)
+- Occupancy: Unknown — not established in current data
+
+## Cost-structure defaults (model assumptions, not observed facts)
+
+- Tourism tax: 10%
+- Service charge: 2.5%
+- Agency + Rental + OTA: 5%
+- Operator operating costs: 7.5%
+- Green tax: $null per guest-night
+- Repair/insurance/maintenance reserve: 1.5% of property value
+
+## Services & amenities
+
+- **Services included:** Personal service by the villa staff including Chef; All meals and drinks (including all alcoholic beverages); Return launch transfers from airports at Beef Island (EIS) and Virgin Gorda (VIJ)
+- **Staff:** Chef
+- **Extra-cost services:** Babysitter (optional)
+- **Amenities (general):** Pool; Hot Tub; Wifi
+- **Amenities (outdoor):** Private Tennis Court; Infinity Pool; Dining Table; Lounging Area; Poolside Lounge Chairs; Private Pool
+- **Amenities (indoor):** Bed Linens; Toiletries; Gym/Fitness Room; Breakfast Bar; Bath Towels
+- **Amenities (kitchen):** Fully Equipped Kitchen; Microwave; Stove Top Burners; Oven; Refrigerator; Cooking Utensils; Freezer; Dining Area
+- **Amenities (entertainment):** Television
+- **Activities nearby:** Sailing; Tennis; Swimming; Eco Tourism; Beachcombing; Snorkeling; Bird Watching; Hiking; Stand-up Paddle Board
+- **Nearby:** Fitness Center
+
+## Data quality & open conflicts
+
+- Research confidence: MEDIUM (last updated 2026-09-05)
+- Research sources: Rental Escapes listing 130393; BVI Hotel Accommodation Tax
+- Consolidation status: READY_WITH_GAPS (updated 2026-09-09)
+  - C-RATE-06 PM-adopted 2026-09-09 (live table canonical; prior approximation retired)
+  - Festive/Thanksgiving amounts on-inquiry (source design)
+  - Occupancy/annual revenue intentionally UNKNOWN
+- Conflict C-RATE-06 (rates.nightly scope): Dataset ~$35,000 (Low only) vs live Low 33,250–35,000 + High 48,000–50,500. Treatment: PM-ADOPTED 2026-09-09: the live table (Low $33,250-$35,000 + High $48,000-$50,500, +5.2% YoY High observed) is canonical. The prior ~$35,000 Low-only approximation is RETIRED from active evidence (see git history).
+- Conflict C-TAX-06 (tourism tax value): Dataset 10% BVI standard vs listing-observed BVI Hotel Tax 3% + Service Fee 2.5%. Treatment: Listing 3%+2.5% OBSERVED wins; 10% stays research ESTIMATED.
+
+---
+*Generated by rag/scripts/prepare-villa-docs.ts from docs/product/rebuild/ESTATE-24-DATA.json. Do not hand-edit; provenance labels are contractual.*
