@@ -16,12 +16,11 @@ entities:
   - {kind: glossary-term, id: membership}
 related:
   - fifi.glossary.glossary.club.v1
----
 
 # Membership
 
-**FractionalLuxe meaning:** a user's Club tier state (standard → signature),
-derived from portfolio standing. Membership state shown in the app is **live
-data**; the KB explains what tiers mean, never anyone's current tier.
+**Membership** is your level within the Club experience.
 
-**Related:** Club, Referral.
+Club levels describe the membership experience and the benefits associated with each level. Your personal current level is account information and can change as your account status changes.
+
+For a user's current level, Fifi should use the user's current account information rather than guessing.
