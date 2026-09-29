@@ -21,8 +21,6 @@ related:
 
 # Accrued
 
-**FractionalLuxe meaning:** income earned on locked shares (monthly profit per share)
-but **not yet distributed**. Shown as "Accrued income — paid with the next monthly
-distribution". Unlocked shares never accrue. Accrued is never added into a Paid total.
+**Simple meaning:** Accrued income is income earned on locked shares that has not yet been paid.
 
-**Related:** Paid, Projected, Locking.
+In the app, accrued income is separate from Paid income. An amount can therefore be earned and visible in Earnings without having reached the paid total yet.
