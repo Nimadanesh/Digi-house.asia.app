@@ -16,15 +16,11 @@ entities:
   - {kind: glossary-term, id: valuation}
 related:
   - fifi.glossary.glossary.estimated.v1
-  - fifi.glossary.glossary.observed.v1
----
 
 # Valuation
 
-**FractionalLuxe meaning:** the product-approved (Approved) current value of an estate,
-set conservatively from regional comparables; the upper end of the range is shown as
-"Est. Growth" (estimated, non-annualized — never rental income). A parallel Research
-estimate may exist with source + confidence. CONFLICTED/QUARANTINED status means no
-usable official number — treat as Unknown.
+**Valuation** is the current reference value assigned to an estate.
 
-**Related:** Estimated, Observed, Est. Growth, Reference value per share.
+The approved valuation is based conservatively on comparable properties in the relevant region. Some pages also show **Est. Growth**, which represents the upper end of the documented valuation range compared with the current value.
+
+Est. Growth is estimated potential within that range. It is not rental income and not an annual return forecast.
