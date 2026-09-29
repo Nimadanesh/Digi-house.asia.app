@@ -22,102 +22,46 @@ Every villa has a Property page with a common top area followed by five tabs.
 
 ## The top area
 
-The top section can show:
-- **Photo gallery** — browse the villa images.
-- **Villa name** — identifies the estate.
-- **Location** — shows where the villa is located.
-- **Share price** — the current displayed price for a share.
-- **Total-share information** — explains how a share relates to the estate's total shares.
-- **Funding progress** — shows progress through the current offering.
-- **Estate value** — the value used by the product for the estate.
-- **Buy** — starts the purchase flow when buying is available.
-- Key statistics such as monthly income, projected annual income, average nightly rate, and estimated growth.
+The top area can show the **photo gallery** (villa images), **villa name**, **location**, **share price**, **total-share information**, **funding progress**, **estate value**, and key statistics such as monthly income, projected annual income, average nightly rate, and estimated growth.
 
-## Estate / Overview tab
+**Buy** starts the purchase flow when available. **Sell** starts the sale flow when available.
 
-This tab answers: **What is this villa?**
+## Estate / Overview
 
-It can include:
-- a short introduction;
-- key highlights;
-- property type;
-- size;
-- bedrooms;
-- bathrooms;
-- guest capacity;
-- amenities;
-- location information;
-- transfer information when sourced;
-- a link to the source listing.
+This tab answers **“What is this villa?”**
 
-When a fact is not available, the page indicates that it is pending rather than inventing a value.
+It can contain the introduction, highlights, property type, size, bedrooms, bathrooms, guest capacity, amenities, location information, sourced transfer information, and a link to the source listing.
 
-## Income tab
+If a fact is unavailable, the page indicates that instead of inventing a value.
 
-This tab answers: **How is rental income modeled for this villa?**
+## Income
 
-It can include:
-- rental-rate basis;
-- projected income scenarios;
-- the Average scenario used as the payout basis;
-- modeled nights;
-- whole-estate gross revenue;
-- per-share income for year and month;
-- modeled costs;
-- charges that are not deducted from your income;
-- distributable income and owner share;
-- an estimated owner-side tax amount where shown.
+This tab answers **“How is rental income modeled?”**
 
-Income figures in this section are presented as projected figures unless they are explicitly identified as something else.
+It can show the rental-rate basis, projected scenarios, Average scenario, modeled nights, whole-estate gross revenue, per-share income, modeled costs, excluded guest-paid charges, distributable income, owner share, and an estimated owner-side tax amount where shown.
 
 ### ANR
 
-ANR means **Average Nightly Rate**. It is the average of the listed full-buyout nightly rates used by the product's model.
+ANR means **Average Nightly Rate**: the average of the listed full-buyout nightly rates used by the product model. ANR is not ADR.
 
-ANR is not the same as ADR.
+Occupancy and ADR are currently unknown for the canonical villas and should not be guessed.
 
-### Occupancy and ADR
+## Ownership
 
-Occupancy and ADR are currently unknown for the villas in the canonical dataset. The product should not invent these values.
+This tab explains what the share represents and information relevant to exit and liquidity.
 
-## Ownership tab
+It can show estate value, reference value per share, total shares, ownership per share, estimated growth, market stage, exit/liquidity information, and a position preview with quantity, investment amount, and projected monthly income.
 
-This tab answers: **What am I buying and what could affect my exit?**
+Estimated growth is not rental income and is not an annual return.
 
-It can include:
-- estate value;
-- reference value per share;
-- total shares;
-- ownership represented by a share;
-- estimated growth information;
-- market stage;
-- exit and liquidity information;
-- a position preview showing quantity, investment amount, and projected monthly income.
+## Earn
 
-Growth information is an estimate and is not rental income or an annual return.
+This tab is where you lock shares into the earning program.
 
-## Earn tab
+It can show lock controls, locked-share status, accrued income, and unlock controls. New locks are monthly-only. Historical weekly records, when shown, are labeled Legacy.
 
-This tab answers: **How do I put shares into the earning program?**
+## Details
 
-It can show:
-- lock controls;
-- locked-share status;
-- accrued income;
-- unlock controls.
+This is the factual record for the villa. It can include sourced operator information, legal and structural notes, valuation date and method, available documents, and distribution/tax disclosures.
 
-New locks are monthly-only. Historical weekly records, when shown, are labeled Legacy.
-
-## Details tab
-
-This tab is the factual record for the villa.
-
-It can include:
-- operator information where sourced;
-- legal and structural notes;
-- valuation date and method;
-- available documents;
-- distribution and tax disclosures.
-
-Historical performance should only be presented when real historical data exists. Simulated values must not be presented as historical performance.
-
+Historical performance should only appear when real historical data exists; simulated values must not be presented as historical performance.
