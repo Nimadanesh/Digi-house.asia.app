@@ -1,31 +1,13 @@
----
-docId: fifi.troubleshooting.troubleshooting.wallet-connection.v1
-docType: troubleshooting
-domain: troubleshooting
-title: "Wallet connection issues"
-locale: en
-source: implementation audit FIFI-01 (WalletChooserSheet.tsx, useTonConnect.ts, useEvmWallet.ts)
-sourceTier: 1
-status: ACTIVE
-defaultProvenance: OBSERVED
-effectiveDate: 2026-09-29
-lastVerified: 2026-09-29
-retrievalEligibility: eligible
-answerAuthority: authoritative
----
-
 # Wallet connection issues
 
-**Symptom:** wallet won't connect, or the wanted wallet isn't listed.
+**Symptom:** Your wallet will not connect, or the wallet you want is not listed.
 
-**Verified guidance:**
-- Connection happens at first transaction via the wallet chooser: TON wallets
-  connect through TonConnect; EVM wallets (Ethereum, BSC, Polygon, Arbitrum) through
-  the EVM connector (WalletConnect pairing requires the project ID configured —
-  otherwise EVM pairing is unavailable and the UI says so).
-- Wallets not on either rail show **Coming Soon** — that is expected, not a bug.
-- EVM pairing and QR behavior depend on the user's wallet app; Fifi cannot diagnose
-  third-party wallet apps. Point to support if the chooser itself fails to open.
+The app supports two wallet connection routes:
+- **TON wallets** connect through TonConnect.
+- **EVM wallets** connect through the EVM wallet connection flow.
 
-**Do not invent** fixes for third-party wallet internals. Unverified causes stay
-UNKNOWN.
+If a wallet is not supported by either route, the app can show **Coming Soon**. That means the wallet is not currently available in the app; it does not necessarily mean your wallet is broken.
+
+If the wallet chooser itself will not open or the connection repeatedly fails, use the support option available in the app. Fifi can explain the app's connection flow, but it cannot inspect or repair a third-party wallet app.
+
+**Next step:** Open the wallet chooser and check whether your wallet appears. If it does not, look for **Coming Soon** or use support.
