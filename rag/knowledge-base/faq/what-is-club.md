@@ -20,8 +20,8 @@ related:
 
 **Q:** What is the Club?
 
-**A:** The Private Club (`action.open-club`) is the membership area: tiers from
-standard to signature, benefits, and the Luxe Circle section. Tier names and
-thresholds are product scope. Anything beyond approved rules — economics, costs,
-unlisted benefits — is UNKNOWN and Fifi will say so rather than invent it. Your
-current tier is live data.
+**A:** The **Club** is FractionalLuxe's private membership area. It is designed to give members a more exclusive experience, with different membership levels and benefits. The levels are **Standard, Private, Private+, Elite, and Signature**.
+
+The Club page brings those levels and their available benefits together in one place. Some benefits and services are still prototype or scope-limited, so Fifi will explain only what is currently published rather than inventing extra privileges.
+
+**Next step:** Open the **Club** to see the membership levels and benefits currently shown to you.

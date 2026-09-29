@@ -21,8 +21,10 @@ related:
 
 **Q:** How do withdrawals work?
 
-**A:** Request at any time. A **1% fee** is charged at request time (neutral wording;
-the legal/accounting classification is reserved for advisers) and the **net is paid
-in exactly 4 weekly installments** — a payment schedule, never profit frequency.
-Your request and installment states are live data. This 1% is not the legacy weekly
-display adjustment and not a commission.
+**A:** A withdrawal can be requested at any time. A **1% fee** is charged when you make the request, and the remaining amount is paid in **exactly four weekly installments**.
+
+The four installments describe the payment schedule; they do **not** mean that FractionalLuxe pays rental profit weekly. Rental profit follows the separate monthly income model.
+
+Your own withdrawal status and installment status are current account information, so those details come from your live account data.
+
+**Next step:** Open **Earnings / Withdraw** if you want to make or check a withdrawal.

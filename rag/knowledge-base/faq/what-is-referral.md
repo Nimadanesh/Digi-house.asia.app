@@ -20,8 +20,10 @@ related:
 
 **Q:** What is a referral? How do invites work?
 
-**A:** You share an invite link (`action.open-invite`); the standard model uses
-amount bands (5% / 7.5% / 10%) with a 6-month lock, plus a Club referral view. The
-implementation is prototype / compliance-gated with no ledger or settlement — so
-Fifi explains mechanics only and never states reward payouts or guarantees. Your
-referral state is live data.
+**A:** A **referral** is the invite system: you share your personal invite link with someone who may want to use FractionalLuxe. The Referral area currently has Standard and Club views.
+
+The Standard referral model is defined around percentage bands of **5%, 7.5%, and 10%**, with a **6-month lock**. However, the current implementation is still prototype/compliance-gated and does not provide a settled reward ledger.
+
+So the percentages describe the current referral model, not a promise that a specific reward is payable to a particular user.
+
+**Next step:** Open **Referral / Invite** to see the invite flow available in the app.

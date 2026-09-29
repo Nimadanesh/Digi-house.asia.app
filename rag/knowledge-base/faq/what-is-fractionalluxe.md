@@ -20,8 +20,10 @@ related:
 
 **Q:** What is FractionalLuxe?
 
-**A:** FractionalLuxe is the fractional-ownership branch of Rental Escapes. It lets
-you buy shares (from $100 each at the primary offering) of 24 luxury villas, lock
-shares to earn monthly rental profit, and resell shares later. Capital raised funds
-more villa acquisitions. It runs on its own website and app across multiple
-blockchains (TON + EVM) — not Telegram-only.
+**A:** **FractionalLuxe** is a fractional-ownership platform built around luxury villas operated by Rental Escapes. Instead of buying an entire villa, users can buy shares of participating estates.
+
+The product combines three main pieces: a **Marketplace** where estates are discovered, **fractional shares** that make smaller entry possible, and a **rental-income model** in which locked shares can receive monthly profit according to the approved product rules.
+
+The current catalog contains **24 estates**. The platform also includes areas such as Portfolio, Earnings, Club, and Referral.
+
+**Next step:** Start in the Marketplace if you want to see the estates and compare their information.

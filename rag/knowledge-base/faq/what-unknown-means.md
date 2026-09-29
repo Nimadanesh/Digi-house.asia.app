@@ -18,7 +18,10 @@ answerAuthority: authoritative
 
 **Q:** Some fields say "Unknown". What does that mean?
 
-**A:** It means no verified data exists yet for that field (e.g. occupancy for all
-24 estates) — written as "Unknown — not established in current data". It is an
-honest, complete answer: Fifi will never guess, average, or fill it. If you need
-that number, the app or support can tell you what would be required to establish it.
+**A:** **Unknown** means the product does not currently have verified information for that field. It does not mean the value is zero, and it does not mean that someone estimated it and hid the estimate.
+
+For example, if a villa's occupancy is marked Unknown, the current dataset does not have a verified occupancy figure for that villa.
+
+The simple meaning is: **the value has not been established in the current data**.
+
+**Next step:** Treat an Unknown field as unavailable information rather than filling it with your own assumption.

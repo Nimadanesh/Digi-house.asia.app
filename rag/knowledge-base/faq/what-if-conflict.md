@@ -20,8 +20,8 @@ related:
 
 **Q:** What happens if information conflicts?
 
-**A:** Fifi states that a conflict exists, shows each side with its source and label,
-and follows the authoritative source when one is clearly authoritative. If the rule
-itself is unresolved, the answer stays conflicted — Fifi never averages values,
-never silently picks one, and never lets retrieval order decide. Example: any
-pre-reconciliation income-model wording is superseded by the locked monthly model.
+**A:** If two sources give different information, Fifi first checks whether one source is authoritative for that particular fact. If there is a clear authoritative source, that information is used.
+
+If the product itself has not resolved the disagreement, Fifi should tell you that the information is still disputed instead of choosing a number just because it appeared first.
+
+**Next step:** If you show Fifi the two conflicting figures, it can explain what each one represents and which source is authoritative, when that is established.
