@@ -2,109 +2,106 @@
 docId: fifi.guide.product-doc.how-to-use-the-app.v1
 docType: product-doc
 domain: guide
-title: "How to use the app — a simple user guide"
+title: "How to use the app"
 locale: en
-source: implementation audit FIFI-01 (routes, tabs, hooks); docs/product/rebuild/PRODUCT-DECISION-LOCK.md
 sourceTier: 1
 status: ACTIVE
 defaultProvenance: OBSERVED
-effectiveDate: 2026-09-29
-lastVerified: 2026-09-29
+effectiveDate: 2026-09-30
+lastVerified: 2026-09-30
 retrievalEligibility: eligible
 answerAuthority: authoritative
-related:
-  - fifi.product.app-guide.app-overview-and-navigation.v1
 ---
 
 # How to Use the App
 
-A simple guide for users. Locked model throughout: monthly profit per locked share,
-Average scenario = payout basis, $100 base share price, five estate tabs, route
-`/property/[id]`.
+## Four main areas
 
-## Getting started
+The bottom navigation gives quick access to:
 
-1. **Open the app** — FractionalLuxe runs on its own website and app
-   (`app.fractionalluxe.com`, via `fractionalluxe.com`), across multiple blockchains.
-2. **First-time onboarding** — a few short intro slides explain the product ("Receive
-   your rental share every month"); pick your role (Investor or Owner) with one tap.
-   Returning users skip straight to Home.
-3. **Connect a wallet** — TON (TonConnect) or EVM (Ethereum, BSC, Polygon, Arbitrum)
-   when you first transact. The wallet is your identity for buying and selling.
+**Home** — your main summary and shortcuts.
 
-## Navigating
+**Marketplace** — discover estates.
 
-The app has a bottom tab bar:
+**Earnings** — review income.
 
-| Tab | What you find there |
-|---|---|
-| **Home** | Your balance/portfolio value, next payout, and your property cards. Empty state points you to the Marketplace. |
-| **Marketplace** | The 24 estates as cards — price, funding state, projected income per share. Search and filters included. |
-| **Earnings** | Your income screen: received totals, accrued income, and per-estate income history. |
-| **Portfolio** | Your holdings, allocation, and open orders. |
+**Portfolio** — review holdings and open orders.
 
-Other screens (Settings, Club, Referral, Card, property detail) open from the header,
-cards, or deep links — not from the tab bar.
+Club, Invite, Card, Settings and individual Estate pages have their own entry points.
 
-Design principles to expect: one primary action per screen, numbers presented before
-words, and every screen shipping loaded/loading/empty/error states.
+## Home
 
-## Buying shares (the main flow)
+Home can show your main balance/value, rental-income information, a featured estate, your estates, activity and shortcuts to Invest, Invite and Club.
 
-1. From **Marketplace**, tap an estate card to open its page (`/property/[id]`).
-2. The page shows the fixed top section (photos, name, location, share price, funding
-   bar, estate value) plus four always-visible stats: **Monthly income**, **Proj. / year**
-   (both projected per-share, Average scenario = payout basis), **Avg. nightly rate**
-   (ANR), and **Est. growth** (upper end of the valuation range).
-3. Explore the five tabs — **Estate** (labeled "Overview": why this estate, specs,
-   amenities, location), **Income** (rental basis, scenarios, modeled costs, net income),
-   **Ownership** (valuation & shares, growth, exit & liquidity, position preview),
-   **Earn** (lock/unlock), **Details** (operator, legal, documents, distribution & tax).
-4. Tap **Buy**, choose your share quantity with the stepper, and review the summary:
-   total cost and the projected monthly income for that quantity (labeled **Projected**,
-   Average scenario).
-5. Confirm in the app and approve the transaction in your wallet.
-6. On success, your **Portfolio** and Home update with your new holding.
-7. **Lock your shares** (Earn tab) to receive the monthly profit per share. Unlocked
-   shares earn nothing.
+When there is no portfolio data, the empty state points toward a useful next action instead of pretending that holdings exist.
 
-## Checking your earnings
+## Marketplace
 
-1. Open the **Earnings** tab. The hero shows **received in total** (paid money only).
-2. Below it: **Accrued income** — earned on your locked shares, paid with the next
-   monthly distribution — and **Expected** entries for pending distributions.
-3. **Income by estate** lists paid income per estate; tap through to an estate page.
-4. Profit is **per locked share, monthly** (Average scenario). Only **locked** shares
-   earn — unlocked shares earn nothing.
-5. In the current demo build, paid entries are **labeled "simulated"** — honest demo
-   data, never presented as real history.
+Use Marketplace to find an estate. Search, filter and sort the catalog, then select an estate card to open its detailed page.
 
-Projected, accrued, and paid are always shown as **separate numbers** — never blended.
+## Reviewing an estate
+
+The Estate page is where you investigate before buying.
+
+Start with photographs, location, share information and key statistics. Then use:
+
+- **Estate / Overview** — property and amenities;
+- **Income** — rental model and projections;
+- **Ownership** — share and ownership information;
+- **Earn** — locking controls;
+- **Details** — supporting information.
+
+## Buying
+
+When a Primary Offering is available:
+1. Open the estate.
+2. Tap **Buy**.
+3. Choose the number of shares.
+4. Review the purchase summary.
+5. Confirm and approve the wallet transaction.
+6. Check Portfolio after the purchase.
+
+The purchase summary is the final on-screen check of quantity and total amount before wallet approval.
+
+## Earning
+
+To participate in rental profit from eligible shares, open **Earn** and lock them.
+
+New locks are monthly-only. Locked shares are eligible for rental profit; unlocked shares do not earn rental profit.
+
+## Following income
+
+Open **Earnings** to distinguish:
+- money already paid;
+- income accrued but not yet paid;
+- pending/expected distributions.
+
+Projected income is a model estimate and is not paid income.
+
+## Selling
+
+Open an estate you own and use **Sell** when the relevant flow is available.
+
+The app can show quantity, price, sale value and gain/loss before an order is placed.
+
+An open order is waiting for a compatible counter-order. It is not a completed trade.
 
 ## Withdrawing
 
-Request withdrawal at any time. A **1% fee** is charged at request time and the net is
-paid in **exactly 4 weekly installments**. Installments are a payment schedule, not
-profit frequency.
+A withdrawal request has a 1% fee at request time. The remaining amount is paid in exactly four weekly installments.
 
-## Selling shares
+## Simple mental map
 
-1. Open an estate you hold and use the **Sell** entry.
-2. The sell sheet shows quantity, price, total sale value, and gain/loss vs your
-   acquisition — before you confirm.
-3. Confirm to create your listing; it appears in the order book and in Portfolio →
-   **Open Orders**, where you can cancel it any time before it fills.
-4. Shares locked in the yield program must be unlocked before they can be sold — and
-   once unlocked they stop earning. During the Primary Offering, shares may be sold
-   back to the platform at a 7% discount. No UI implies instant liquidity unless a real
-   mechanism provides it.
+**Want to discover? → Marketplace**
 
-## Other useful things
+**Want to understand a villa? → Estate page**
 
-- **Settings** (bottom sheet): wallet, demo-badge toggle, language, theme, about/legal.
-- **Demo mode badge**: the current build shows a discreet "Demo mode" pill so demo data
-  is never mistaken for the real thing.
-- **Deep links**: tapping a specific villa link on the website opens that estate's page
-  directly.
-- **Support topics** (payments, account issues, legal advice) are outside the chatbot's
-  scope — the app and official support channels handle those.
+**Want to see what you own? → Portfolio**
+
+**Want to lock shares? → Earn**
+
+**Want to see income? → Earnings**
+
+**Want membership benefits? → Club**
+
+**Want to invite someone? → Invite**
