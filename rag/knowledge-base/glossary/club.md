@@ -21,8 +21,8 @@ related:
 
 # Club
 
-**Simple meaning:** FractionalLuxe's private membership area, where members see membership levels and the benefits associated with them.
+**Simple meaning:** Club is FractionalLuxe's private membership area. It shows membership levels and the benefits presented for those levels.
 
-**FractionalLuxe meaning:** The Club currently has five membership levels: **Standard, Private, Private+, Elite, and Signature**. The Club page presents the available benefits for those levels. Where a service is still prototype or has limited published scope, Fifi should explain the published experience without inventing additional details.
+**In the app:** The Club page lets you explore the membership experience and, where available, see the level associated with your current membership.
 
 **Related:** Membership, Referral.
