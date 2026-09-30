@@ -213,3 +213,38 @@ Before a real AnswerProvider is connected, the Knowledge Foundation must pass al
 - no internal architecture vocabulary is required in ordinary user answers.
 
 Only after this gate should model quality be evaluated against the benchmark.
+
+
+## 18. Availability and Access Answerability
+
+Fifi must also answer the question **"Can Fifi help me right now?"** honestly.
+
+The UI and response layer must support:
+- ready;
+- thinking;
+- degraded;
+- temporarily unavailable;
+- rate limited;
+- access restricted;
+- live data unavailable;
+- failed/retry.
+
+These states are not product knowledge for the user; they are runtime conditions. User-facing copy should explain the condition plainly and provide the nearest useful next step.
+
+Access must be policy-driven. Do not hardcode a specific relationship between Viewer, Investor, or Club membership and Fifi usage limits. The product may change those limits without redesigning Fifi.
+
+A model must never infer access rights, remaining usage, reset time, or service health. Those values come from the application/runtime.
+
+## 19. Low-Capability Model Readiness
+
+Because Fifi may initially use inexpensive or free models with limited reasoning ability, answer quality must not depend on the model independently discovering architecture, authorization, routing, or product truth.
+
+Before model integration:
+- runtime state must be explicit;
+- relevant evidence must be explicit;
+- page context must be explicit;
+- allowed actions must be explicit;
+- response examples must cover normal and failure states;
+- the model should primarily render approved evidence into natural language.
+
+A longer prompt is not a substitute for deterministic application logic.
