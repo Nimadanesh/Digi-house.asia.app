@@ -8,6 +8,31 @@
 
 ---
 
+# Current Baseline — 2026-09-30
+
+The roadmap below contains the original planning sequence. The implemented state is now ahead of that historical sequence. The following is the authoritative current status for planning the next phase.
+
+## Completed and validated
+
+- FIFI-01 through FIFI-10: Knowledge audit, schema, rewrite, safety hardening, validation, deterministic ingestion, DecisionEngine, retrieval, live-data boundary, answer orchestration, and evaluation.
+- Answer Quality rewrite and audit: completed on `fifi/answer-quality-v1`.
+- Retrieval expectations finalized; Answer Quality baseline frozen at commit `a3490ed` on that branch.
+- Canonical 24-Estate knowledge remains authoritative and dynamic values remain outside static knowledge.
+- The Knowledge Foundation, human-facing answer standards, UI answerability, and few-shot response examples are in place.
+- Final model framework audit added explicit contracts for low-capability models and runtime availability/access/limits.
+
+## Next implementation sequence
+
+1. Fifi UI Prototype / global assistant surface.
+2. UI runtime states: ready, thinking, degraded, unavailable, rate-limited, access-restricted, live-data-unavailable, failed/retry.
+3. Real AnswerProvider integration using the frozen Knowledge/Answer Quality baseline.
+4. Only when real integration requires it: provision server-side model access and any LLM/Laya credentials or infrastructure.
+5. Validate against the frozen benchmark before production rollout.
+
+## Important planning rule
+
+The historical phase labels below must not be interpreted as evidence that unfinished infrastructure should be implemented automatically. The next Slice must follow the current baseline above and must preserve the existing contracts.
+
 # 1. Product Vision
 
 Fifi is the single AI interface through which a FractionalLuxe user can:
