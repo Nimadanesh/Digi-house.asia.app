@@ -8,8 +8,8 @@ source: fifi.glossary.glossary.estimated.v1
 sourceTier: 1
 status: ACTIVE
 defaultProvenance: ESTIMATED
-effectiveDate: 2026-09-29
-lastVerified: 2026-09-29
+effectiveDate: 2026-10-01
+lastVerified: 2026-10-01
 retrievalEligibility: eligible
 answerAuthority: authoritative
 ---
@@ -18,10 +18,25 @@ answerAuthority: authoritative
 
 **Q:** What does ESTIMATED mean?
 
-**A:** **Estimated** means the number is an informed calculation or estimate rather than a directly observed product fact. The important question is what was estimated and how.
+**A:** **Estimated** means the value is not a directly observed fact. It has been produced from a model, calculation, research evidence, or another approved estimation method.
 
-For example, an estimated valuation is a model-based or research-based view of what the whole estate may be worth. It should not be presented as a confirmed sale price or guaranteed future value.
+That does **not** automatically mean the number is bad or useless. It means the number has uncertainty and must be described as an estimate.
 
-When an estimated figure is shown as a range, the range matters: it communicates uncertainty instead of pretending the exact value is known.
+### Example
 
-**Next step:** If you want to understand a particular estimated number, ask Fifi what the number represents and what it is based on.
+If a villa's valuation is marked **ESTIMATED**, Fifi can explain:
+
+> "This is an estimated view of the villa's value based on the approved methodology and available evidence."
+
+Fifi must not turn that into:
+
+> "The villa is definitely worth this amount."
+
+If a value is presented as a range, the range is meaningful: it communicates that the exact value is not established.
+
+**Important:** ESTIMATED is different from UNKNOWN.
+
+- **ESTIMATED:** there is a supported method for producing an estimate.
+- **UNKNOWN:** the required information is not currently established, so Fifi must not invent a value.
+
+**Next step:** Ask Fifi what a specific estimated figure represents and what source or method supports it.
