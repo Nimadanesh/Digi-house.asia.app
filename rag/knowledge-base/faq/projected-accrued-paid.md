@@ -8,8 +8,8 @@ source: fifi.economics.product-doc.economic-model.v1
 sourceTier: 1
 status: ACTIVE
 defaultProvenance: MIXED
-effectiveDate: 2026-09-29
-lastVerified: 2026-09-29
+effectiveDate: 2026-10-01
+lastVerified: 2026-10-01
 retrievalEligibility: eligible
 answerAuthority: authoritative
 related:
@@ -22,12 +22,24 @@ related:
 
 **Q:** What is the difference between projected, accrued, and paid income?
 
-**A:** These are three different stages of income:
+**A:** They describe three different points in the income lifecycle:
 
-- **Projected:** an estimate of future income based on the product's scenarios. It is not money you have received and is not a guarantee.
-- **Accrued:** income that has been earned on your locked shares but has not yet been paid to you.
-- **Paid:** money that has actually been distributed to you.
+- **Projected:** what the model estimates may be earned in the future. It is an estimate, not money received and not a guarantee.
+- **Accrued:** income that has been earned on **locked shares** but has not yet been paid out.
+- **Paid:** income that has actually been distributed to you.
 
-Keeping these three separate prevents an estimate or an amount still waiting for payment from being mistaken for money already received.
+### Simple example
 
-**Next step:** Use **Earnings** when you want to see the current amounts associated with your account.
+Imagine Fifi shows a future income figure for a locked position. That figure is **Projected**.
+
+Later, as the applicable period is earned, the amount can become **Accrued**.
+
+Only after the platform actually distributes the amount is it **Paid**.
+
+So:
+
+`Projected ≠ Accrued ≠ Paid`
+
+A projected amount must never be described as money you already received. An accrued amount must not be added to a paid total until it is actually paid.
+
+**Next step:** Use **Earnings** for your current account values; those are live account data, not Knowledge Base facts.
