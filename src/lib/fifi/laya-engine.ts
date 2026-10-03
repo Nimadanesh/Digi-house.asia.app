@@ -3,9 +3,12 @@
 // (or any future model) stays replaceable without touching Fifi orchestration:
 //   Fifi → DecisionEngine → LayaDecisionEngine
 // Server-side only: reads `FIFI_LAYA_ENDPOINT` (+ optional `FIFI_LAYA_API_KEY`).
-// When unconfigured, it transparently delegates to the deterministic engine and
-// reports source `fallback`. No model weights are bundled; no new dependencies
-// (fetch only). $0-compatible: nothing is called unless configured.
+// The endpoint is parsed once at module load and accepted only as an https URL
+// without embedded credentials (SSRF hardening): a misconfigured or non-https
+// value is treated as unconfigured, keeping the deterministic fallback. When
+// unconfigured, the engine transparently delegates to the deterministic engine
+// and reports source `fallback`. No model weights are bundled; no new
+// dependencies (fetch only). $0-compatible: nothing is called unless configured.
 
 import type {
   DecisionInput,
@@ -14,7 +17,28 @@ import type {
 import type { DecisionEngine } from "./decision-engine";
 import { RuleBasedDecisionEngine } from "./rule-engine";
 
-const ENDPOINT = process.env.FIFI_LAYA_ENDPOINT ?? "";
+/**
+ * https-only endpoint parse (SSRF hardening). The URL is operator-supplied
+ * configuration, never user input; accepting only https without embedded
+ * credentials keeps the outgoing request pinned to an explicit secure origin.
+ * Null → provider treated as unconfigured (deterministic fallback).
+ */
+function safeEndpointUrl(raw: string): URL | null {
+  if (raw.length === 0) return null;
+  try {
+    const url = new URL(raw);
+    return url.protocol === "https:" && url.username === "" && url.password === ""
+      ? url
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+const ENDPOINT_URL = safeEndpointUrl(process.env.FIFI_LAYA_ENDPOINT ?? "");
+/** Resolved once at load: `${origin+path}/decide`. Null when unconfigured. */
+const DECIDE_URL =
+  ENDPOINT_URL !== null ? new URL("/decide", ENDPOINT_URL) : null;
 const API_KEY = process.env.FIFI_LAYA_API_KEY ?? "";
 
 /** Minimal shape of a Laya typed-decision response (mapped, never trusted blindly). */
@@ -35,18 +59,18 @@ export class LayaDecisionEngine implements DecisionEngine {
   readonly providerName = "laya-v1";
   private readonly fallback = new RuleBasedDecisionEngine();
 
-  /** True when a self-hosted Laya endpoint is configured. */
+  /** True when a self-hosted Laya endpoint is configured (https, no credentials). */
   static isConfigured(): boolean {
-    return ENDPOINT.length > 0;
+    return DECIDE_URL !== null;
   }
 
   async decide(input: DecisionInput): Promise<FifiDecision> {
-    if (!LayaDecisionEngine.isConfigured()) {
+    if (DECIDE_URL === null) {
       const decision = this.fallback.decide(input);
       return { ...decision, source: "fallback", fallback: "provider_unavailable" };
     }
     try {
-      const response = await fetch(`${ENDPOINT}/decide`, {
+      const response = await fetch(DECIDE_URL, {
         method: "POST",
         headers: {
           "content-type": "application/json",
