@@ -36,9 +36,16 @@ function safeEndpointUrl(raw: string): URL | null {
 }
 
 const ENDPOINT_URL = safeEndpointUrl(process.env.FIFI_LAYA_ENDPOINT ?? "");
-/** Resolved once at load: `${origin+path}/decide`. Null when unconfigured. */
+/**
+ * Resolved once at load, preserving the original `${ENDPOINT}/decide` string-
+ * append semantics (base path kept: `https://example.com/api/laya` →
+ * `https://example.com/api/laya/decide`), then re-validated as a URL. An
+ * absolute-path relative resolution here would wrongly drop the base path.
+ */
 const DECIDE_URL =
-  ENDPOINT_URL !== null ? new URL("/decide", ENDPOINT_URL) : null;
+  ENDPOINT_URL !== null
+    ? new URL(`${ENDPOINT_URL.toString().replace(/\/+$/, "")}/decide`)
+    : null;
 const API_KEY = process.env.FIFI_LAYA_API_KEY ?? "";
 
 /** Minimal shape of a Laya typed-decision response (mapped, never trusted blindly). */
