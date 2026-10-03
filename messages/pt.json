@@ -1,4 +1,50 @@
 {
+  "fifi": {
+    "entry": {
+      "open": "Perguntar à Fifi"
+    },
+    "sheet": {
+      "suggestedLabel": "Sugestões",
+      "title": "Fifi",
+      "tagline": "Assistente do FractionalLuxe",
+      "close": "Fechar",
+      "newConversation": "Nova conversa",
+      "inputPlaceholder": "Pergunte sobre cotas, renda, Estates…",
+      "send": "Enviar",
+      "exampleLabel": "Exemplo"
+    },
+    "state": {
+      "available": "Disponível",
+      "degraded": "Capacidade reduzida",
+      "rate_limited": "Limite atingido",
+      "unavailable": "Indisponível",
+      "live_unavailable": "Dados em vivo desligados"
+    },
+    "banner": {
+      "degraded": "A Fifi está respondendo com capacidade reduzida; as respostas são resumidas.",
+      "rate_limited": "Muitas perguntas seguidas. Tente novamente em instantes.",
+      "unavailable": "A Fifi está temporariamente indisponível.",
+      "live_unavailable": "Não é possível obter números atuais agora; a Fifi não cita números em vivo.",
+      "retry": "Tentar novamente"
+    },
+    "context": {
+      "home": "Explorando — Início",
+      "marketplace": "Explorando — Marketplace",
+      "estate": "Vendo",
+      "portfolio": "Gerenciando — Portfólio",
+      "earnings": "Gerenciando — Ganhos",
+      "club": "Explorando — Clube Privado",
+      "card": "Vendo — Cartão F.Luxe",
+      "referral": "Vendo — Indicações",
+      "transactions": "Revisando — Transações",
+      "settings": "Ajustando — Configurações"
+    },
+    "message": {
+      "error": "Algo deu errado ao obter uma resposta.",
+      "retry": "Tentar novamente",
+      "restrictedLabel": "Conta necessária"
+    }
+  },
   "common": {
     "appName": "FractionalLuxe",
     "buyShare": "Comprar cota",

@@ -1,4 +1,50 @@
 {
+  "fifi": {
+    "entry": {
+      "open": "询问 Fifi"
+    },
+    "sheet": {
+      "suggestedLabel": "推荐提问",
+      "title": "Fifi",
+      "tagline": "FractionalLuxe 助手",
+      "close": "关闭",
+      "newConversation": "新对话",
+      "inputPlaceholder": "询问份额、收益或 Estate…",
+      "send": "发送",
+      "exampleLabel": "示例"
+    },
+    "state": {
+      "available": "可用",
+      "degraded": "降级运行",
+      "rate_limited": "已达频率上限",
+      "unavailable": "不可用",
+      "live_unavailable": "实时数据关闭"
+    },
+    "banner": {
+      "degraded": "Fifi 正在以降级模式回答，回答已精简。",
+      "rate_limited": "连续提问过多，请稍后再试。",
+      "unavailable": "Fifi 暂时不可用。",
+      "live_unavailable": "暂时无法获取实时数字，Fifi 不会引用实时数值。",
+      "retry": "重试"
+    },
+    "context": {
+      "home": "正在浏览 — 首页",
+      "marketplace": "正在浏览 — 市场",
+      "estate": "正在查看",
+      "portfolio": "正在管理 — 投资组合",
+      "earnings": "正在管理 — 收益",
+      "club": "正在浏览 — 私人俱乐部",
+      "card": "正在查看 — F.Luxe 卡",
+      "referral": "正在查看 — 推荐",
+      "transactions": "正在查看 — 交易记录",
+      "settings": "正在调整 — 设置"
+    },
+    "message": {
+      "error": "获取回答时出现问题。",
+      "retry": "重试",
+      "restrictedLabel": "需要账户"
+    }
+  },
   "common": {
     "appName": "FractionalLuxe",
     "buyShare": "购买份额",

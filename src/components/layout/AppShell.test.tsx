@@ -23,6 +23,8 @@ vi.mock("@/components/common/ToastHost", () => ({ ToastHost: () => null }));
 vi.mock("@/components/layout/Header", () => ({ Header: () => null }));
 vi.mock("@/components/layout/AppHeader", () => ({ AppHeader: () => null }));
 vi.mock("@/components/layout/BottomTabBar", () => ({ BottomTabBar: () => null }));
+vi.mock("@/components/fifi/FifiEntry", () => ({ FifiEntry: () => null }));
+vi.mock("@/components/fifi/FifiChatSheet", () => ({ FifiChatSheet: () => null }));
 
 import { AppShell } from "@/components/layout/AppShell";
 

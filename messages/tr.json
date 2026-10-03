@@ -1,4 +1,50 @@
 {
+  "fifi": {
+    "entry": {
+      "open": "Fifi'ye sor"
+    },
+    "sheet": {
+      "suggestedLabel": "Öneriler",
+      "title": "Fifi",
+      "tagline": "FractionalLuxe asistanı",
+      "close": "Kapat",
+      "newConversation": "Yeni sohbet",
+      "inputPlaceholder": "Hisseler, gelir, Estate'ler hakkında sorun…",
+      "send": "Gönder",
+      "exampleLabel": "Örnek"
+    },
+    "state": {
+      "available": "Uygun",
+      "degraded": "Düşük kapasite",
+      "rate_limited": "Limit aşıldı",
+      "unavailable": "Kullanılamıyor",
+      "live_unavailable": "Canlı veri kapalı"
+    },
+    "banner": {
+      "degraded": "Fifi düşük kapasiteyle yanıtlıyor; yanıtlar kısaltılmış.",
+      "rate_limited": "Üst üste çok fazla soru gönderdiniz. Birazdan tekrar deneyin.",
+      "unavailable": "Fifi geçici olarak kullanılamıyor.",
+      "live_unavailable": "Şu an güncel rakamlar alınamıyor, bu yüzden Fifi canlı rakam vermez.",
+      "retry": "Tekrar dene"
+    },
+    "context": {
+      "home": "Şu an keşif — Ana Sayfa",
+      "marketplace": "Şu an keşif — Marketplace",
+      "estate": "Şu an görüntüleme",
+      "portfolio": "Şu an yönetim — Portföy",
+      "earnings": "Şu an yönetim — Kazançlar",
+      "club": "Şu an keşif — Özel Kulüp",
+      "card": "Şu an görüntüleme — F.Luxe Kartı",
+      "referral": "Şu an görüntüleme — Davetler",
+      "transactions": "Şu an inceleme — İşlemler",
+      "settings": "Şu an düzenleme — Ayarlar"
+    },
+    "message": {
+      "error": "Yanıt alınırken bir sorun oluştu.",
+      "retry": "Tekrar dene",
+      "restrictedLabel": "Hesap gerekli"
+    }
+  },
   "common": {
     "appName": "FractionalLuxe",
     "buyShare": "Pay satın al",

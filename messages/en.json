@@ -1,4 +1,50 @@
 {
+  "fifi": {
+    "entry": {
+      "open": "Ask Fifi"
+    },
+    "sheet": {
+      "suggestedLabel": "Suggested",
+      "title": "Fifi",
+      "tagline": "FractionalLuxe assistant",
+      "close": "Close",
+      "newConversation": "New conversation",
+      "inputPlaceholder": "Ask about shares, income, Estates…",
+      "send": "Send",
+      "exampleLabel": "Example"
+    },
+    "state": {
+      "available": "Available",
+      "degraded": "Reduced capacity",
+      "rate_limited": "Rate limited",
+      "unavailable": "Unavailable",
+      "live_unavailable": "Live data off"
+    },
+    "banner": {
+      "degraded": "Fifi is answering with reduced capacity; answers are shortened.",
+      "rate_limited": "Too many questions in a row. Try again in a moment.",
+      "unavailable": "Fifi is temporarily unavailable.",
+      "live_unavailable": "Current figures can't be fetched right now, so Fifi won't quote live numbers.",
+      "retry": "Retry"
+    },
+    "context": {
+      "home": "Currently exploring — Home",
+      "marketplace": "Currently exploring — Marketplace",
+      "estate": "Currently viewing",
+      "portfolio": "Currently managing — Portfolio",
+      "earnings": "Currently managing — Earnings",
+      "club": "Currently exploring — Private Club",
+      "card": "Currently viewing — F.Luxe Card",
+      "referral": "Currently viewing — Referrals",
+      "transactions": "Currently reviewing — Transactions",
+      "settings": "Currently adjusting — Settings"
+    },
+    "message": {
+      "error": "Something went wrong getting an answer.",
+      "retry": "Retry",
+      "restrictedLabel": "Account needed"
+    }
+  },
   "common": {
     "appName": "FractionalLuxe",
     "buyShare": "Buy Share",

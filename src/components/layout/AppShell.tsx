@@ -13,15 +13,11 @@ import { ToastHost } from "@/components/common/ToastHost";
 import { useTheme } from "@/hooks/useTheme";
 import { useEstateStartParamRedirect } from "@/hooks/useEstateStartParamRedirect";
 import { useUiStore } from "@/stores/ui.store";
-import { ROUTES, TABS } from "@/lib/constants";
+import { ROUTES, TABS, CHROMELESS_ROUTES } from "@/lib/constants";
+import { FifiEntry } from "@/components/fifi/FifiEntry";
+import { FifiChatSheet } from "@/components/fifi/FifiChatSheet";
 
 const TAB_HREFS = new Set(TABS.map((t) => t.href));
-
-const CHROMELESS = new Set<string>([
-  ROUTES.onboarding,
-  ROUTES.profileSetup,
-  ROUTES.recoveryLogin,
-]);
 
 // Home canvas background (single source with the Home route): it must paint from the
 // top of the viewport so the transparent tab header shows the blue fade, not a slab.
@@ -34,7 +30,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   useEstateStartParamRedirect();
   const mainButtonActive = useUiStore((s) => s.mainButtonActive);
   const pathname = usePathname();
-  const chromeless = CHROMELESS.has(pathname);
+  const chromeless = CHROMELESS_ROUTES.has(pathname);
   const isTab = TAB_HREFS.has(pathname);
 
   return (
@@ -55,6 +51,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </OnboardingGate>
       </main>
       {mainButtonActive || chromeless ? null : <BottomTabBar />}
+      {/* Fifi: ONE global entry point + ONE global ChatSheet (FIFI-05). */}
+      <FifiEntry />
+      <FifiChatSheet />
       <ToastHost />
       <SettingsSheet />
       <WalletChooserHost />

@@ -268,6 +268,100 @@
   }
 }
 
+/* Fifi presence — a slow breathing glow behind the assistant avatar (FAB, sheet
+   header, empty state). Luxury-quiet: ~4.5s cycle, opacity-only feel via a blurred
+   underlay. The global reduced-motion rule already collapses the animation; the
+   explicit block below rests the glow at a calm static opacity instead. */
+@keyframes dh-fifi-breathe {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.12);
+  }
+}
+.fifi-breathe {
+  animation: dh-fifi-breathe 4.5s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .fifi-breathe {
+    animation: none;
+    opacity: 0.35;
+    transform: none;
+  }
+}
+
+/* Context badge — one soft fade/rise when the sheet opens or the page changes. */
+@keyframes dh-fifi-badge-in {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.fifi-badge-in {
+  animation: dh-fifi-badge-in 240ms cubic-bezier(0.23, 1, 0.32, 1) backwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .fifi-badge-in {
+    animation: none;
+  }
+}
+
+/* Fifi sheen — the home balance amount's light pass, retold for the round mark:
+   two quick passes back-to-back, then a hold; same 4.5s family as
+   .balance-shimmer. A skewed white band sweeps across the avatar surface. */
+@keyframes dh-fifi-sheen {
+  0% {
+    transform: translateX(-140%) skewX(-16deg);
+    opacity: 0;
+  }
+  3% {
+    opacity: 1;
+  }
+  13% {
+    transform: translateX(260%) skewX(-16deg);
+    opacity: 1;
+  }
+  15% {
+    transform: translateX(260%) skewX(-16deg);
+    opacity: 0;
+  }
+  17% {
+    transform: translateX(-140%) skewX(-16deg);
+    opacity: 0;
+  }
+  19% {
+    opacity: 1;
+  }
+  29% {
+    transform: translateX(260%) skewX(-16deg);
+    opacity: 1;
+  }
+  31% {
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(260%) skewX(-16deg);
+    opacity: 0;
+  }
+}
+.fifi-sheen-band {
+  animation: dh-fifi-sheen 4.5s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .fifi-sheen-band {
+    animation: none;
+    opacity: 0;
+  }
+}
+
 /* Page enter — ONE shared, restrained transition for in-app navigation (AppShell keys
    its content wrapper by pathname, so this replays on every route change). Fast fade +
    6px rise; the global reduced-motion rule collapses it to a near-instant opacity step. */

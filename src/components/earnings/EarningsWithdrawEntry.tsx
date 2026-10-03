@@ -9,6 +9,7 @@ import { useTranslations } from "next-intl";
 import { usd } from "@/lib/format";
 import { haptics } from "@/lib/telegram/haptics";
 import { useMeSummary } from "@/hooks/useLocks";
+import { useUiStore } from "@/stores/ui.store";
 import { WithdrawalRequestSheet } from "@/components/settings/WithdrawalRequestSheet";
 import { cn } from "@/lib/utils";
 
@@ -19,6 +20,7 @@ export function EarningsWithdrawEntry({
   heroRef?: RefObject<HTMLElement | null>;
 }) {
   const t = useTranslations("earnings");
+  const setStickyCtaVisible = useUiStore((s) => s.setStickyCtaVisible);
   const { data: summary } = useMeSummary();
   const [open, setOpen] = useState(false);
   const [pastHero, setPastHero] = useState(false);
@@ -35,6 +37,13 @@ export function EarningsWithdrawEntry({
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [heroRef]);
+
+  // Floating chrome (demo badge, Fifi entry) yields while the bar is on screen —
+  // same contract as the property page's sticky buy CTA.
+  useEffect(() => {
+    setStickyCtaVisible(pastHero);
+    return () => setStickyCtaVisible(false);
+  }, [pastHero, setStickyCtaVisible]);
 
   return (
     <>

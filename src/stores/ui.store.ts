@@ -22,6 +22,8 @@ interface UiState {
   markToastLeaving: () => void;
   clearToast: () => void;
   settingsOpen: boolean;
+  /** Global Fifi assistant ChatSheet (one assistant, one sheet). */
+  fifiOpen: boolean;
   /** Global wallet chooser (opened from Home wallet icon or Settings). */
   walletChooserOpen: boolean;
   /** When true, OnboardingGate allows /onboarding even if already onboarded (Settings replay). */
@@ -32,6 +34,9 @@ interface UiState {
   setSettingsOpen: (v: boolean) => void;
   openSettings: () => void;
   closeSettings: () => void;
+  setFifiOpen: (v: boolean) => void;
+  openFifi: () => void;
+  closeFifi: () => void;
   openWalletChooser: () => void;
   closeWalletChooser: () => void;
   setOnboardingReplay: (v: boolean) => void;
@@ -46,6 +51,7 @@ export const useUiStore = create<UiState>((set) => ({
   markToastLeaving: () => set((s) => (s.toast ? { toast: { ...s.toast, leaving: true } } : s)),
   clearToast: () => set({ toast: null }),
   settingsOpen: false,
+  fifiOpen: false,
   walletChooserOpen: false,
   onboardingReplay: false,
   mainButtonActive: false,
@@ -53,6 +59,9 @@ export const useUiStore = create<UiState>((set) => ({
   setSettingsOpen: (settingsOpen) => set({ settingsOpen }),
   openSettings: () => set({ settingsOpen: true }),
   closeSettings: () => set({ settingsOpen: false }),
+  setFifiOpen: (fifiOpen) => set({ fifiOpen }),
+  openFifi: () => set({ fifiOpen: true }),
+  closeFifi: () => set({ fifiOpen: false }),
   openWalletChooser: () => set({ walletChooserOpen: true }),
   closeWalletChooser: () => set({ walletChooserOpen: false }),
   setOnboardingReplay: (onboardingReplay) => set({ onboardingReplay }),

@@ -1,4 +1,50 @@
 {
+  "fifi": {
+    "entry": {
+      "open": "Demander à Fifi"
+    },
+    "sheet": {
+      "suggestedLabel": "Suggestions",
+      "title": "Fifi",
+      "tagline": "Assistant FractionalLuxe",
+      "close": "Fermer",
+      "newConversation": "Nouvelle conversation",
+      "inputPlaceholder": "Posez une question sur les parts, les revenus, les Estates…",
+      "send": "Envoyer",
+      "exampleLabel": "Exemple"
+    },
+    "state": {
+      "available": "Disponible",
+      "degraded": "Capacité réduite",
+      "rate_limited": "Limite atteinte",
+      "unavailable": "Indisponible",
+      "live_unavailable": "Données en direct désactivées"
+    },
+    "banner": {
+      "degraded": "Fifi répond avec une capacité réduite ; les réponses sont raccourcies.",
+      "rate_limited": "Trop de questions d'affilée. Réessayez dans un instant.",
+      "unavailable": "Fifi est temporairement indisponible.",
+      "live_unavailable": "Impossible de récupérer les chiffres actuels ; Fifi ne cite pas de chiffres en direct.",
+      "retry": "Réessayer"
+    },
+    "context": {
+      "home": "Exploration — Accueil",
+      "marketplace": "Exploration — Marketplace",
+      "estate": "En cours de consultation",
+      "portfolio": "Gestion — Portefeuille",
+      "earnings": "Gestion — Revenus",
+      "club": "Exploration — Club Privé",
+      "card": "Consultation — Carte F.Luxe",
+      "referral": "Consultation — Parrainages",
+      "transactions": "Révision — Transactions",
+      "settings": "Réglage — Paramètres"
+    },
+    "message": {
+      "error": "Une erreur est survenue lors de l'obtention d'une réponse.",
+      "retry": "Réessayer",
+      "restrictedLabel": "Compte requis"
+    }
+  },
   "common": {
     "appName": "FractionalLuxe",
     "buyShare": "Acheter une part",

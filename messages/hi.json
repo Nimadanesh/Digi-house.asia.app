@@ -1,4 +1,50 @@
 {
+  "fifi": {
+    "entry": {
+      "open": "Fifi से पूछें"
+    },
+    "sheet": {
+      "suggestedLabel": "सुझाव",
+      "title": "Fifi",
+      "tagline": "FractionalLuxe असिस्टेंट",
+      "close": "बंद करें",
+      "newConversation": "नई बातचीत",
+      "inputPlaceholder": "शेयर, आय या Estates के बारे में पूछें…",
+      "send": "भेजें",
+      "exampleLabel": "उदाहरण"
+    },
+    "state": {
+      "available": "उपलब्ध",
+      "degraded": "सीमित क्षमता",
+      "rate_limited": "सीमा पार",
+      "unavailable": "अनुपलब्ध",
+      "live_unavailable": "लाइव डेटा बंद"
+    },
+    "banner": {
+      "degraded": "Fifi सीमित क्षमता से उत्तर दे रहा है; उत्तर छोटे हैं।",
+      "rate_limited": "लगातार बहुत सारे प्रश्न। कुछ देर बाद फिर कोशिश करें।",
+      "unavailable": "Fifi अस्थायी रूप से अनुपलब्ध है।",
+      "live_unavailable": "अभी वर्तमान आंकड़े नहीं मिल सकते, इसलिए Fifi लाइव आंकड़े नहीं बताएगा।",
+      "retry": "पुनः प्रयास"
+    },
+    "context": {
+      "home": "ब्राउज़ कर रहे हैं — होम",
+      "marketplace": "ब्राउज़ कर रहे हैं — मार्केटप्लेस",
+      "estate": "देख रहे हैं",
+      "portfolio": "प्रबंधित कर रहे हैं — पोर्टफोलियो",
+      "earnings": "प्रबंधित कर रहे हैं — कमाई",
+      "club": "ब्राउज़ कर रहे हैं — प्राइवेट क्लब",
+      "card": "देख रहे हैं — F.Luxe कार्ड",
+      "referral": "देख रहे हैं — रेफ़रल",
+      "transactions": "समीक्षा कर रहे हैं — लेनदेन",
+      "settings": "समायोजित कर रहे हैं — सेटिंग्स"
+    },
+    "message": {
+      "error": "उत्तर प्राप्त करने में समस्या हुई।",
+      "retry": "पुनः प्रयास",
+      "restrictedLabel": "खाता आवश्यक"
+    }
+  },
   "common": {
     "appName": "FractionalLuxe",
     "buyShare": "हिस्सा खरीदें",

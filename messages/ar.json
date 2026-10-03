@@ -1,4 +1,50 @@
 {
+  "fifi": {
+    "entry": {
+      "open": "اسأل فيفي"
+    },
+    "sheet": {
+      "suggestedLabel": "مقترح",
+      "title": "فيفي",
+      "tagline": "مساعد FractionalLuxe",
+      "close": "إغلاق",
+      "newConversation": "محادثة جديدة",
+      "inputPlaceholder": "اسأل عن الأسهم أو الدخل أو العقارات…",
+      "send": "إرسال",
+      "exampleLabel": "مثال"
+    },
+    "state": {
+      "available": "متاح",
+      "degraded": "قدرة منخفضة",
+      "rate_limited": "تم تجاوز الحد",
+      "unavailable": "غير متاح",
+      "live_unavailable": "البيانات الحية معطلة"
+    },
+    "banner": {
+      "degraded": "يجيب فيفي بقدرة منخفضة؛ الإجابات مختصرة.",
+      "rate_limited": "أرسلت عدة أسئلة متتالية. حاول بعد قليل.",
+      "unavailable": "فيفي غير متاح مؤقتًا.",
+      "live_unavailable": "لا يمكن جلب الأرقام الحالية الآن، لذلك لن يذكر فيفي أرقامًا حية.",
+      "retry": "إعادة المحاولة"
+    },
+    "context": {
+      "home": "تستكشف الآن — الرئيسية",
+      "marketplace": "تستكشف الآن — السوق",
+      "estate": "تشاهد الآن",
+      "portfolio": "تدير الآن — المحفظة",
+      "earnings": "تدير الآن — الأرباح",
+      "club": "تستكشف الآن — النادي الخاص",
+      "card": "تشاهد الآن — بطاقة F.Luxe",
+      "referral": "تشاهد الآن — الإحالات",
+      "transactions": "تراجع الآن — المعاملات",
+      "settings": "تعدل الآن — الإعدادات"
+    },
+    "message": {
+      "error": "حدث خطأ أثناء الحصول على إجابة.",
+      "retry": "إعادة المحاولة",
+      "restrictedLabel": "يلزم الحساب"
+    }
+  },
   "common": {
     "appName": "ديجي هاوس",
     "buyShare": "شراء حصة",

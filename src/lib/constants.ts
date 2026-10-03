@@ -26,6 +26,13 @@ export const TABS: readonly TabDef[] = [
   { href: ROUTES.portfolio,  label: "Portfolio",   icon: PieChart },
 ] as const;
 
+/** Routes rendered without app chrome (header, tab bar, Fifi entry point). */
+export const CHROMELESS_ROUTES: ReadonlySet<string> = new Set<string>([
+  ROUTES.onboarding,
+  ROUTES.profileSetup,
+  ROUTES.recoveryLogin,
+]);
+
 export const PAYOUT_DISCLAIMER = "simulated monthly payout · on-chain verifiable post-MVP";
 
 /** Shown once on Property detail About and Buy success (MVP honesty). */

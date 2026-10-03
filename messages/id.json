@@ -1,4 +1,50 @@
 {
+  "fifi": {
+    "entry": {
+      "open": "Tanya Fifi"
+    },
+    "sheet": {
+      "suggestedLabel": "Saran",
+      "title": "Fifi",
+      "tagline": "Asisten FractionalLuxe",
+      "close": "Tutup",
+      "newConversation": "Percakapan baru",
+      "inputPlaceholder": "Tanya tentang saham, pendapatan, Estate…",
+      "send": "Kirim",
+      "exampleLabel": "Contoh"
+    },
+    "state": {
+      "available": "Tersedia",
+      "degraded": "Kapasitas terbatas",
+      "rate_limited": "Batas tercapai",
+      "unavailable": "Tidak tersedia",
+      "live_unavailable": "Data langsung mati"
+    },
+    "banner": {
+      "degraded": "Fifi menjawab dengan kapasitas terbatas; jawaban dipersingkat.",
+      "rate_limited": "Terlalu banyak pertanyaan berturut-turut. Coba lagi sebentar lagi.",
+      "unavailable": "Fifi sementara tidak tersedia.",
+      "live_unavailable": "Angka terkini tidak bisa diambil sekarang; Fifi tidak menyebut angka langsung.",
+      "retry": "Coba lagi"
+    },
+    "context": {
+      "home": "Sedang menjelajah — Beranda",
+      "marketplace": "Sedang menjelajah — Marketplace",
+      "estate": "Sedang melihat",
+      "portfolio": "Sedang mengelola — Portofolio",
+      "earnings": "Sedang mengelola — Pendapatan",
+      "club": "Sedang menjelajah — Klub Pribadi",
+      "card": "Sedang melihat — Kartu F.Luxe",
+      "referral": "Sedang melihat — Referral",
+      "transactions": "Sedang meninjau — Transaksi",
+      "settings": "Sedang menyesuaikan — Pengaturan"
+    },
+    "message": {
+      "error": "Terjadi masalah saat mendapatkan jawaban.",
+      "retry": "Coba lagi",
+      "restrictedLabel": "Perlu akun"
+    }
+  },
   "common": {
     "appName": "FractionalLuxe",
     "buyShare": "Beli saham",
