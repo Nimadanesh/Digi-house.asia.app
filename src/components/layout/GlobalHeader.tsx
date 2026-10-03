@@ -1,6 +1,6 @@
 "use client";
 // File responsibility: global tab header — avatar, greeting, wallet, settings. Memoized; haptics-only TG.
-import { memo, useCallback } from "react";
+import { memo, useCallback, useSyncExternalStore } from "react";
 import Image from "next/image";
 import { Settings, Wallet } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -11,14 +11,22 @@ import { useUiStore } from "@/stores/ui.store";
 import { haptics } from "@/lib/telegram/haptics";
 import { cn } from "@/lib/utils";
 
+/** Hydration-safe client marker (Sheet.tsx idiom): false on server + first render. */
+const subscribeNoop = () => () => {};
+const clientMounted = () => true;
+const serverMounted = () => false;
+
 function GlobalHeaderInner() {
   const t = useTranslations("header");
   const tCommon = useTranslations("common");
   const { firstName, photoUrl } = useTelegramUser();
   const { connected: tonConnected } = useTonConnect();
   const { connected: evmConnected } = useEvmWallet();
+  // Same hydration gate as AppHeader: TonConnect restores synchronously from
+  // localStorage on the client, so the first render must match the SSR output.
+  const walletChromeMounted = useSyncExternalStore(subscribeNoop, clientMounted, serverMounted);
   /** Green dot when either rail is connected — TON-only state hid EVM sessions. */
-  const connected = tonConnected || evmConnected;
+  const connected = walletChromeMounted && (tonConnected || evmConnected);
   const openSettings = useUiStore((s) => s.openSettings);
   const openWalletChooser = useUiStore((s) => s.openWalletChooser);
   const initial = firstName.charAt(0).toUpperCase() || "D";

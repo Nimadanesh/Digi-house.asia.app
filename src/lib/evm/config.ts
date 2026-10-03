@@ -38,8 +38,15 @@ export function createEvmConfig() {
     },
     connectors: [
       injected(),
-      metaMask(),
-      coinbaseWallet({ appName: "FractionalLuxe" }),
+      // MetaMask SDK telemetry posts batches to mm-sdk-analytics from the page;
+      // off: it fails uncaught in restricted networks (console "Failed to fetch").
+      metaMask({ enableAnalytics: false }),
+      coinbaseWallet({
+        appName: "FractionalLuxe",
+        // Coinbase SDK telemetry posts to cca-lite.coinbase.com from the page;
+        // off: it fails uncaught in restricted networks (console "Failed to fetch").
+        preference: { options: "all", telemetry: false },
+      }),
       // QR pairing without it is impossible — omit the connector so the UI
       // can explain setup instead of crashing on an empty project id.
       ...(projectId ? [walletConnect({ projectId, showQrModal: false })] : []),

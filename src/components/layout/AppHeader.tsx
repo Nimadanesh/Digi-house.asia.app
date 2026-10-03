@@ -5,7 +5,7 @@
 // every bottom-tab route. Search submits to the Marketplace route with ?query=; while
 // ON Marketplace it rewrites the same ?query= in place (no navigation) so the page's
 // existing filter query follows the header capsule. No greeting, no gear.
-import { Suspense, useCallback, useState } from "react";
+import { Suspense, useCallback, useState, useSyncExternalStore } from "react";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Search, Wallet } from "lucide-react";
@@ -17,6 +17,11 @@ import { useUiStore } from "@/stores/ui.store";
 import { haptics } from "@/lib/telegram/haptics";
 import { ROUTES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+
+/** Hydration-safe client marker (Sheet.tsx idiom): false on server + first render. */
+const subscribeNoop = () => () => {};
+const clientMounted = () => true;
+const serverMounted = () => false;
 
 function HeaderSearch() {
   const t = useTranslations("home");
@@ -75,8 +80,14 @@ export function AppHeader() {
   const { firstName, photoUrl } = useTelegramUser();
   const { connected: tonConnected } = useTonConnect();
   const { connected: evmConnected } = useEvmWallet();
+  // The TonConnect SDK restores a saved session synchronously from localStorage,
+  // so `connected` can already be true on the client's first (hydration) render
+  // while the SSR HTML said false — a hydration mismatch. Gate the indicator on
+  // hydration via useSyncExternalStore (Sheet.tsx idiom): server snapshot false,
+  // and React uses that same snapshot for the first client render, then flips.
+  const walletChromeMounted = useSyncExternalStore(subscribeNoop, clientMounted, serverMounted);
   /** Green dot when either rail is connected — TON-only state hid EVM sessions. */
-  const connected = tonConnected || evmConnected;
+  const connected = walletChromeMounted && (tonConnected || evmConnected);
   const openWalletChooser = useUiStore((s) => s.openWalletChooser);
   const openSettings = useUiStore((s) => s.openSettings);
   const initial = firstName.charAt(0).toUpperCase() || "D";
